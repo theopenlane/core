@@ -1287,6 +1287,63 @@ func (c *ActionPlanClient) GetX(ctx context.Context, id string) *ActionPlan {
 	return obj
 }
 
+// QueryApprover queries the approver edge of a ActionPlan.
+func (c *ActionPlanClient) QueryApprover(ap *ActionPlan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ApproverTable, actionplan.ApproverColumn),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a ActionPlan.
+func (c *ActionPlanClient) QueryDelegate(ap *ActionPlan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.DelegateTable, actionplan.DelegateColumn),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOwner queries the owner edge of a ActionPlan.
+func (c *ActionPlanClient) QueryOwner(ap *ActionPlan) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, actionplan.OwnerTable, actionplan.OwnerColumn),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRisk queries the risk edge of a ActionPlan.
 func (c *ActionPlanClient) QueryRisk(ap *ActionPlan) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()
@@ -1505,7 +1562,8 @@ func (c *ActionPlanHistoryClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *ActionPlanHistoryClient) Interceptors() []Interceptor {
-	return c.inters.ActionPlanHistory
+	inters := c.inters.ActionPlanHistory
+	return append(inters[:len(inters):len(inters)], actionplanhistory.Interceptors[:]...)
 }
 
 func (c *ActionPlanHistoryClient) mutate(ctx context.Context, m *ActionPlanHistoryMutation) (Value, error) {
@@ -8097,6 +8155,44 @@ func (c *InternalPolicyClient) QueryEditors(ip *InternalPolicy) *GroupQuery {
 	return query
 }
 
+// QueryApprover queries the approver edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryApprover(ip *InternalPolicy) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.ApproverTable, internalpolicy.ApproverColumn),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryDelegate(ip *InternalPolicy) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.DelegateTable, internalpolicy.DelegateColumn),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlObjectives queries the control_objectives edge of a InternalPolicy.
 func (c *InternalPolicyClient) QueryControlObjectives(ip *InternalPolicy) *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: c.config}).Query()
@@ -11215,6 +11311,25 @@ func (c *OrganizationClient) QueryStandards(o *Organization) *StandardQuery {
 	return query
 }
 
+// QueryActionPlans queries the action_plans edge of a Organization.
+func (c *OrganizationClient) QueryActionPlans(o *Organization) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ActionPlansTable, organization.ActionPlansColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -12207,6 +12322,44 @@ func (c *ProcedureClient) QueryEditors(pr *Procedure) *GroupQuery {
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProcedureEditors
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryApprover queries the approver edge of a Procedure.
+func (c *ProcedureClient) QueryApprover(pr *Procedure) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ApproverTable, procedure.ApproverColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a Procedure.
+func (c *ProcedureClient) QueryDelegate(pr *Procedure) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.DelegateTable, procedure.DelegateColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13679,6 +13832,44 @@ func (c *RiskClient) QueryPrograms(r *Risk) *ProgramQuery {
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStakeholder queries the stakeholder edge of a Risk.
+func (c *RiskClient) QueryStakeholder(r *Risk) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderTable, risk.StakeholderColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegate queries the delegate edge of a Risk.
+func (c *RiskClient) QueryDelegate(r *Risk) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateTable, risk.DelegateColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}

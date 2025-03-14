@@ -101,6 +101,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_isAutomated(ctx, field)
 			case "url":
 				return ec.fieldContext_Evidence_url(ctx, field)
+			case "status":
+				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
@@ -197,6 +199,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_isAutomated(ctx, field)
 			case "url":
 				return ec.fieldContext_Evidence_url(ctx, field)
+			case "status":
+				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
@@ -337,6 +341,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_isAutomated(ctx, field)
 			case "url":
 				return ec.fieldContext_Evidence_url(ctx, field)
+			case "status":
+				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":

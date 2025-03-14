@@ -81,6 +81,8 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
@@ -91,6 +93,8 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
+			case "governingBodyLogoURL":
+				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
 			case "governingBody":
 				return ec.fieldContext_Standard_governingBody(ctx, field)
 			case "domains":
@@ -109,8 +113,6 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
@@ -177,6 +179,8 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
@@ -187,6 +191,8 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
+			case "governingBodyLogoURL":
+				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
 			case "governingBody":
 				return ec.fieldContext_Standard_governingBody(ctx, field)
 			case "domains":
@@ -205,8 +211,6 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
@@ -317,6 +321,8 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
@@ -327,6 +333,8 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
+			case "governingBodyLogoURL":
+				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
 			case "governingBody":
 				return ec.fieldContext_Standard_governingBody(ctx, field)
 			case "domains":
@@ -345,8 +353,6 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":

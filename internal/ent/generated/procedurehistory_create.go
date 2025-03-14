@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -111,6 +112,12 @@ func (phc *ProcedureHistoryCreate) SetNillableUpdatedBy(s *string) *ProcedureHis
 	return phc
 }
 
+// SetTags sets the "tags" field.
+func (phc *ProcedureHistoryCreate) SetTags(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetTags(s)
+	return phc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (phc *ProcedureHistoryCreate) SetDeletedAt(t time.Time) *ProcedureHistoryCreate {
 	phc.mutation.SetDeletedAt(t)
@@ -145,12 +152,6 @@ func (phc *ProcedureHistoryCreate) SetDisplayID(s string) *ProcedureHistoryCreat
 	return phc
 }
 
-// SetTags sets the "tags" field.
-func (phc *ProcedureHistoryCreate) SetTags(s []string) *ProcedureHistoryCreate {
-	phc.mutation.SetTags(s)
-	return phc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (phc *ProcedureHistoryCreate) SetOwnerID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetOwnerID(s)
@@ -171,30 +172,16 @@ func (phc *ProcedureHistoryCreate) SetName(s string) *ProcedureHistoryCreate {
 	return phc
 }
 
-// SetDescription sets the "description" field.
-func (phc *ProcedureHistoryCreate) SetDescription(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetDescription(s)
-	return phc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableDescription(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetDescription(*s)
-	}
-	return phc
-}
-
 // SetStatus sets the "status" field.
-func (phc *ProcedureHistoryCreate) SetStatus(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetStatus(s)
+func (phc *ProcedureHistoryCreate) SetStatus(es enums.DocumentStatus) *ProcedureHistoryCreate {
+	phc.mutation.SetStatus(es)
 	return phc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableStatus(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetStatus(*s)
+func (phc *ProcedureHistoryCreate) SetNillableStatus(es *enums.DocumentStatus) *ProcedureHistoryCreate {
+	if es != nil {
+		phc.SetStatus(*es)
 	}
 	return phc
 }
@@ -213,6 +200,34 @@ func (phc *ProcedureHistoryCreate) SetNillableProcedureType(s *string) *Procedur
 	return phc
 }
 
+// SetDetails sets the "details" field.
+func (phc *ProcedureHistoryCreate) SetDetails(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetDetails(s)
+	return phc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableDetails(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetDetails(*s)
+	}
+	return phc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (phc *ProcedureHistoryCreate) SetApprovalRequired(b bool) *ProcedureHistoryCreate {
+	phc.mutation.SetApprovalRequired(b)
+	return phc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableApprovalRequired(b *bool) *ProcedureHistoryCreate {
+	if b != nil {
+		phc.SetApprovalRequired(*b)
+	}
+	return phc
+}
+
 // SetReviewDue sets the "review_due" field.
 func (phc *ProcedureHistoryCreate) SetReviewDue(t time.Time) *ProcedureHistoryCreate {
 	phc.mutation.SetReviewDue(t)
@@ -227,65 +242,31 @@ func (phc *ProcedureHistoryCreate) SetNillableReviewDue(t *time.Time) *Procedure
 	return phc
 }
 
-// SetVersion sets the "version" field.
-func (phc *ProcedureHistoryCreate) SetVersion(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (phc *ProcedureHistoryCreate) SetReviewFrequency(e enums.Frequency) *ProcedureHistoryCreate {
+	phc.mutation.SetReviewFrequency(e)
 	return phc
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableVersion(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureHistoryCreate {
+	if e != nil {
+		phc.SetReviewFrequency(*e)
 	}
 	return phc
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (phc *ProcedureHistoryCreate) SetPurposeAndScope(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (phc *ProcedureHistoryCreate) SetRevision(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetRevision(s)
 	return phc
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillablePurposeAndScope(s *string) *ProcedureHistoryCreate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableRevision(s *string) *ProcedureHistoryCreate {
 	if s != nil {
-		phc.SetPurposeAndScope(*s)
+		phc.SetRevision(*s)
 	}
-	return phc
-}
-
-// SetBackground sets the "background" field.
-func (phc *ProcedureHistoryCreate) SetBackground(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetBackground(s)
-	return phc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableBackground(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetBackground(*s)
-	}
-	return phc
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (phc *ProcedureHistoryCreate) SetSatisfies(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetSatisfies(s)
-	return phc
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableSatisfies(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetSatisfies(*s)
-	}
-	return phc
-}
-
-// SetDetails sets the "details" field.
-func (phc *ProcedureHistoryCreate) SetDetails(m map[string]interface{}) *ProcedureHistoryCreate {
-	phc.mutation.SetDetails(m)
 	return phc
 }
 
@@ -354,9 +335,25 @@ func (phc *ProcedureHistoryCreate) defaults() {
 		v := procedurehistory.DefaultTags
 		phc.mutation.SetTags(v)
 	}
+	if _, ok := phc.mutation.Status(); !ok {
+		v := procedurehistory.DefaultStatus
+		phc.mutation.SetStatus(v)
+	}
+	if _, ok := phc.mutation.ApprovalRequired(); !ok {
+		v := procedurehistory.DefaultApprovalRequired
+		phc.mutation.SetApprovalRequired(v)
+	}
 	if _, ok := phc.mutation.ReviewDue(); !ok {
 		v := procedurehistory.DefaultReviewDue
 		phc.mutation.SetReviewDue(v)
+	}
+	if _, ok := phc.mutation.ReviewFrequency(); !ok {
+		v := procedurehistory.DefaultReviewFrequency
+		phc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := phc.mutation.Revision(); !ok {
+		v := procedurehistory.DefaultRevision
+		phc.mutation.SetRevision(v)
 	}
 	if _, ok := phc.mutation.ID(); !ok {
 		v := procedurehistory.DefaultID()
@@ -382,6 +379,16 @@ func (phc *ProcedureHistoryCreate) check() error {
 	}
 	if _, ok := phc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ProcedureHistory.name"`)}
+	}
+	if v, ok := phc.mutation.Status(); ok {
+		if err := procedurehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := phc.mutation.ReviewFrequency(); ok {
+		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -447,6 +454,10 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := phc.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
 	if value, ok := phc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -459,10 +470,6 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := phc.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := phc.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -471,41 +478,33 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := phc.mutation.Description(); ok {
-		_spec.SetField(procedurehistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := phc.mutation.Status(); ok {
-		_spec.SetField(procedurehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := phc.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
 		_node.ProcedureType = value
 	}
+	if value, ok := phc.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
+		_node.Details = value
+	}
+	if value, ok := phc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
 	if value, ok := phc.mutation.ReviewDue(); ok {
 		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
 		_node.ReviewDue = value
 	}
-	if value, ok := phc.mutation.Version(); ok {
-		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)
-		_node.Version = value
+	if value, ok := phc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
 	}
-	if value, ok := phc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedurehistory.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
-	}
-	if value, ok := phc.mutation.Background(); ok {
-		_spec.SetField(procedurehistory.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
-	if value, ok := phc.mutation.Satisfies(); ok {
-		_spec.SetField(procedurehistory.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
-	if value, ok := phc.mutation.Details(); ok {
-		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if value, ok := phc.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	return _node, _spec
 }

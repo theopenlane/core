@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -33,34 +34,32 @@ type InternalPolicyHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the policy
 	Name string `json:"name,omitempty"`
-	// description of the policy
-	Description string `json:"description,omitempty"`
-	// status of the policy
-	Status string `json:"status,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue time.Time `json:"review_due,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType string `json:"policy_type,omitempty"`
-	// version of the policy
-	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the policy
-	Background string `json:"background,omitempty"`
-	// json data for the policy document
-	Details      map[string]interface{} `json:"details,omitempty"`
+	// details of the policy
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue time.Time `json:"review_due,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision     string `json:"revision,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -69,11 +68,13 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldDetails:
+		case internalpolicyhistory.FieldTags:
 			values[i] = new([]byte)
 		case internalpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldDescription, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldVersion, internalpolicyhistory.FieldPurposeAndScope, internalpolicyhistory.FieldBackground:
+		case internalpolicyhistory.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldRevision:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -140,6 +141,14 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.UpdatedBy = value.String
 			}
+		case internalpolicyhistory.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
 		case internalpolicyhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -158,14 +167,6 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.DisplayID = value.String
 			}
-		case internalpolicyhistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &iph.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case internalpolicyhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -178,23 +179,11 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.Name = value.String
 			}
-		case internalpolicyhistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				iph.Description = value.String
-			}
 		case internalpolicyhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				iph.Status = value.String
-			}
-		case internalpolicyhistory.FieldReviewDue:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field review_due", values[i])
-			} else if value.Valid {
-				iph.ReviewDue = value.Time
+				iph.Status = enums.DocumentStatus(value.String)
 			}
 		case internalpolicyhistory.FieldPolicyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -202,31 +191,35 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.PolicyType = value.String
 			}
-		case internalpolicyhistory.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				iph.Version = value.String
-			}
-		case internalpolicyhistory.FieldPurposeAndScope:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
-			} else if value.Valid {
-				iph.PurposeAndScope = value.String
-			}
-		case internalpolicyhistory.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				iph.Background = value.String
-			}
 		case internalpolicyhistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &iph.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				iph.Details = value.String
+			}
+		case internalpolicyhistory.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				iph.ApprovalRequired = value.Bool
+			}
+		case internalpolicyhistory.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				iph.ReviewDue = value.Time
+			}
+		case internalpolicyhistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				iph.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case internalpolicyhistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				iph.Revision = value.String
 			}
 		default:
 			iph.selectValues.Set(columns[i], values[i])
@@ -285,6 +278,9 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(iph.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", iph.Tags))
+	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(iph.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -294,38 +290,32 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(iph.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", iph.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(iph.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(iph.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(iph.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(iph.Status)
-	builder.WriteString(", ")
-	builder.WriteString("review_due=")
-	builder.WriteString(iph.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", iph.Status))
 	builder.WriteString(", ")
 	builder.WriteString("policy_type=")
 	builder.WriteString(iph.PolicyType)
 	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(iph.Version)
-	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(iph.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(iph.Background)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", iph.Details))
+	builder.WriteString(iph.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", iph.ApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(iph.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", iph.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(iph.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

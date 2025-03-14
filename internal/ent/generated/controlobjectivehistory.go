@@ -38,6 +38,8 @@ type ControlObjectiveHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
@@ -54,8 +56,6 @@ type ControlObjectiveHistory struct {
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
-	// version of the control objective
-	Version string `json:"version,omitempty"`
 	// category of the control
 	Category string `json:"category,omitempty"`
 	// subcategory of the control
@@ -72,7 +72,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -151,6 +151,12 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.DeletedBy = value.String
 			}
+		case controlobjectivehistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				coh.Revision = value.String
+			}
 		case controlobjectivehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
@@ -200,12 +206,6 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 				return fmt.Errorf("unexpected type %T for field control_objective_type", values[i])
 			} else if value.Valid {
 				coh.ControlObjectiveType = value.String
-			}
-		case controlobjectivehistory.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				coh.Version = value.String
 			}
 		case controlobjectivehistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -282,6 +282,9 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(coh.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(coh.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(coh.DisplayID)
 	builder.WriteString(", ")
@@ -305,9 +308,6 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("control_objective_type=")
 	builder.WriteString(coh.ControlObjectiveType)
-	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(coh.Version)
 	builder.WriteString(", ")
 	builder.WriteString("category=")
 	builder.WriteString(coh.Category)

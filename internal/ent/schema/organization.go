@@ -199,6 +199,8 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("standards", Standard.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("action_plans", ActionPlan.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
 	}
 }
 

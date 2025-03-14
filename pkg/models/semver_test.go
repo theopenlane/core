@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -46,7 +47,7 @@ func TestSemverVersionString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.version.String()
-			assert.Equal(t, &tt.expected, got)
+			assert.Equal(t, tt.expected, got)
 		})
 	}
 }
@@ -136,228 +137,136 @@ func TestToSemverVersion(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := models.ToSemverVersion(&tt.input)
+			got, err := models.ToSemverVersion(&tt.input)
+
+			require.NoError(t, err)
 			assert.Equal(t, tt.expected, got)
 		})
 	}
 }
-func TestSemverVersionBumpMajor(t *testing.T) {
+func TestBumpMajor(t *testing.T) {
 	tests := []struct {
 		name     string
-		version  models.SemverVersion
-		expected models.SemverVersion
-	}{
-		{
-			name: "Bump major version",
-			version: models.SemverVersion{
-				Major: 1,
-				Minor: 2,
-				Patch: 3,
-			},
-			expected: models.SemverVersion{
-				Major: 2,
-				Minor: 0,
-				Patch: 0,
-			},
-		},
-		{
-			name: "Bump major version with pre-release",
-			version: models.SemverVersion{
-				Major:      1,
-				Minor:      2,
-				Patch:      3,
-				PreRelease: "alpha",
-			},
-			expected: models.SemverVersion{
-				Major: 2,
-				Minor: 0,
-				Patch: 0,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.version.BumpMajor()
-			assert.Equal(t, tt.expected, tt.version)
-		})
-	}
-}
-
-func TestSemverVersion_BumpMinor(t *testing.T) {
-	tests := []struct {
-		name     string
-		version  models.SemverVersion
-		expected models.SemverVersion
-	}{
-		{
-			name: "Bump minor version",
-			version: models.SemverVersion{
-				Major: 1,
-				Minor: 2,
-				Patch: 3,
-			},
-			expected: models.SemverVersion{
-				Major: 1,
-				Minor: 3,
-				Patch: 0,
-			},
-		},
-		{
-			name: "Bump minor version with pre-release",
-			version: models.SemverVersion{
-				Major:      1,
-				Minor:      2,
-				Patch:      3,
-				PreRelease: "alpha",
-			},
-			expected: models.SemverVersion{
-				Major: 1,
-				Minor: 3,
-				Patch: 0,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.version.BumpMinor()
-			assert.Equal(t, tt.expected, tt.version)
-		})
-	}
-}
-
-func TestSemverVersion_BumpPatch(t *testing.T) {
-	tests := []struct {
-		name     string
-		version  models.SemverVersion
-		expected models.SemverVersion
-	}{
-		{
-			name: "Bump patch version",
-			version: models.SemverVersion{
-				Major: 1,
-				Minor: 2,
-				Patch: 3,
-			},
-			expected: models.SemverVersion{
-				Major: 1,
-				Minor: 2,
-				Patch: 4,
-			},
-		},
-		{
-			name: "Bump patch version with pre-release",
-			version: models.SemverVersion{
-				Major:      1,
-				Minor:      2,
-				Patch:      3,
-				PreRelease: "alpha",
-			},
-			expected: models.SemverVersion{
-				Major: 1,
-				Minor: 2,
-				Patch: 4,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.version.BumpPatch()
-			assert.Equal(t, tt.expected, tt.version)
-		})
-	}
-}
-func TestBumpMajorVersionString(t *testing.T) {
-	tests := []struct {
-		name     string
-		input    string
+		version  string
 		expected string
 	}{
 		{
 			name:     "Bump major version",
-			input:    "v1.2.3",
+			version:  "v1.2.3",
 			expected: "v2.0.0",
 		},
 		{
 			name:     "Bump major version with pre-release",
-			input:    "v1.2.3-alpha",
-			expected: "v2.0.0",
-		},
-		{
-			name:     "Bump major version without v prefix",
-			input:    "1.2.3",
+			version:  "v1.2.3-alpha",
 			expected: "v2.0.0",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := models.BumpMajorVersionString(&tt.input)
-			assert.Equal(t, &tt.expected, got)
+			version, err := models.BumpMajor(tt.version)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, version)
 		})
 	}
 }
 
-func TestBumpMinorVersionString(t *testing.T) {
+func TestBumpMinor(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    string
+		version  string
 		expected string
 	}{
 		{
 			name:     "Bump minor version",
-			input:    "v1.2.3",
+			version:  "v1.2.3",
 			expected: "v1.3.0",
 		},
 		{
 			name:     "Bump minor version with pre-release",
-			input:    "v1.2.3-alpha",
-			expected: "v1.3.0",
-		},
-		{
-			name:     "Bump minor version without v prefix",
-			input:    "1.2.3",
+			version:  "v1.2.3-alpha",
 			expected: "v1.3.0",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := models.BumpMinorVersionString(&tt.input)
-			assert.Equal(t, &tt.expected, got)
+			version, err := models.BumpMinor(tt.version)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, version)
 		})
 	}
 }
 
-func TestBumpPatchVersionString(t *testing.T) {
+func TestBumpPatch(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    string
+		version  string
 		expected string
 	}{
 		{
 			name:     "Bump patch version",
-			input:    "v1.2.3",
+			version:  "v1.2.3",
 			expected: "v1.2.4",
 		},
 		{
 			name:     "Bump patch version with pre-release",
-			input:    "v1.2.3-alpha",
-			expected: "v1.2.4",
-		},
-		{
-			name:     "Bump patch version without v prefix",
-			input:    "1.2.3",
-			expected: "v1.2.4",
+			version:  "v1.2.3-alpha",
+			expected: "v1.2.3",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := models.BumpPatchVersionString(&tt.input)
-			assert.Equal(t, &tt.expected, got)
+			version, err := models.BumpPatch(tt.version)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, version)
+		})
+	}
+}
+func TestSetPreRelease(t *testing.T) {
+	tests := []struct {
+		name     string
+		version  string
+		expected string
+	}{
+		{
+			name:     "Set pre-release on version without pre-release",
+			version:  "v1.2.3",
+			expected: "v1.2.4-draft",
+		},
+		{
+			name:     "Set pre-release on version with pre-release",
+			version:  "v1.2.3-draft",
+			expected: "v1.2.3-draft-1",
+		},
+		{
+			name:     "Set pre-release on version with pre-release",
+			version:  "v1.2.3-draft-1",
+			expected: "v1.2.3-draft-2",
+		},
+		{
+			name:     "Set pre-release on version with no patch",
+			version:  "v1.2.0",
+			expected: "v1.2.1-draft",
+		},
+		{
+			name:     "Set pre-release on version with no minor and patch",
+			version:  "v1.0.0",
+			expected: "v1.0.1-draft",
+		},
+		{
+			name:     "Set pre-release on version with no major, minor and patch",
+			version:  "v0.0.0",
+			expected: "v0.0.1-draft",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			version, err := models.SetPreRelease(tt.version)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, version)
 		})
 	}
 }

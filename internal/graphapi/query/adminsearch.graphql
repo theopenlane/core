@@ -22,6 +22,7 @@ query AdminSearch($query: String!) {
           actionPlanType
           details
           revision
+          ownerID
           source
         }
       }
@@ -302,13 +303,11 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           name
-          description
-          status
           riskType
-          businessCosts
+          category
           mitigation
-          satisfies
           details
+          businessCosts
         }
       }
       ... on StandardSearchResult {
@@ -322,10 +321,10 @@ query AdminSearch($query: String!) {
           shortName
           framework
           description
+          governingBodyLogoURL
           governingBody
           domains
           link
-          status
           standardType
           version
         }

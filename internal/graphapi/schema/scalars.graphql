@@ -33,3 +33,7 @@ scalar Reference
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
 """
 scalar ImplementationGuidance
+"""
+VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
+"""
+scalar VersionBump

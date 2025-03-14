@@ -35,6 +35,9 @@ models:
   ExampleEvidence:
     model:
       - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  VersionBump:
+    model:
+      - github.com/theopenlane/core/pkg/models.VersionBump
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

@@ -105,6 +105,26 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearDeletedBy() *ControlObjectiveHis
 	return cohu
 }
 
+// SetRevision sets the "revision" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetRevision(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetRevision(s)
+	return cohu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableRevision(s *string) *ControlObjectiveHistoryUpdate {
+	if s != nil {
+		cohu.SetRevision(*s)
+	}
+	return cohu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearRevision() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearRevision()
+	return cohu
+}
+
 // SetTags sets the "tags" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetTags(s []string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetTags(s)
@@ -214,26 +234,6 @@ func (cohu *ControlObjectiveHistoryUpdate) SetNillableControlObjectiveType(s *st
 // ClearControlObjectiveType clears the value of the "control_objective_type" field.
 func (cohu *ControlObjectiveHistoryUpdate) ClearControlObjectiveType() *ControlObjectiveHistoryUpdate {
 	cohu.mutation.ClearControlObjectiveType()
-	return cohu
-}
-
-// SetVersion sets the "version" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetVersion(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetVersion(s)
-	return cohu
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableVersion(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetVersion(*s)
-	}
-	return cohu
-}
-
-// ClearVersion clears the value of the "version" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearVersion() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearVersion()
 	return cohu
 }
 
@@ -379,6 +379,12 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := cohu.mutation.Revision(); ok {
+		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
+	}
+	if cohu.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
+	}
 	if value, ok := cohu.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
 	}
@@ -419,12 +425,6 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	}
 	if cohu.mutation.ControlObjectiveTypeCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString)
-	}
-	if value, ok := cohu.mutation.Version(); ok {
-		_spec.SetField(controlobjectivehistory.FieldVersion, field.TypeString, value)
-	}
-	if cohu.mutation.VersionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Category(); ok {
 		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)
@@ -531,6 +531,26 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableDeletedBy(s *string) *
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDeletedBy() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearDeletedBy()
+	return cohuo
+}
+
+// SetRevision sets the "revision" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetRevision(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetRevision(s)
+	return cohuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableRevision(s *string) *ControlObjectiveHistoryUpdateOne {
+	if s != nil {
+		cohuo.SetRevision(*s)
+	}
+	return cohuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearRevision() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearRevision()
 	return cohuo
 }
 
@@ -643,26 +663,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableControlObjectiveType(s
 // ClearControlObjectiveType clears the value of the "control_objective_type" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearControlObjectiveType() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearControlObjectiveType()
-	return cohuo
-}
-
-// SetVersion sets the "version" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetVersion(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetVersion(s)
-	return cohuo
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableVersion(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetVersion(*s)
-	}
-	return cohuo
-}
-
-// ClearVersion clears the value of the "version" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearVersion() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearVersion()
 	return cohuo
 }
 
@@ -838,6 +838,12 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := cohuo.mutation.Revision(); ok {
+		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
+	}
+	if cohuo.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
+	}
 	if value, ok := cohuo.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
 	}
@@ -878,12 +884,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if cohuo.mutation.ControlObjectiveTypeCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString)
-	}
-	if value, ok := cohuo.mutation.Version(); ok {
-		_spec.SetField(controlobjectivehistory.FieldVersion, field.TypeString, value)
-	}
-	if cohuo.mutation.VersionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Category(); ok {
 		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)

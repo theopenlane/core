@@ -40,6 +40,8 @@ type RiskQuery struct {
 	withProcedure          *ProcedureQuery
 	withActionPlans        *ActionPlanQuery
 	withPrograms           *ProgramQuery
+	withStakeholder        *GroupQuery
+	withDelegate           *GroupQuery
 	withFKs                bool
 	loadTotal              []func(context.Context, []*Risk) error
 	modifiers              []func(*sql.Selector)
@@ -286,6 +288,56 @@ func (rq *RiskQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryStakeholder chains the current query on the "stakeholder" edge.
+func (rq *RiskQuery) QueryStakeholder() *GroupQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderTable, risk.StakeholderColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegate chains the current query on the "delegate" edge.
+func (rq *RiskQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateTable, risk.DelegateColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Risk entity from the query.
 // Returns a *NotFoundError when no Risk was found.
 func (rq *RiskQuery) First(ctx context.Context) (*Risk, error) {
@@ -486,6 +538,8 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		withProcedure:     rq.withProcedure.Clone(),
 		withActionPlans:   rq.withActionPlans.Clone(),
 		withPrograms:      rq.withPrograms.Clone(),
+		withStakeholder:   rq.withStakeholder.Clone(),
+		withDelegate:      rq.withDelegate.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -581,6 +635,28 @@ func (rq *RiskQuery) WithPrograms(opts ...func(*ProgramQuery)) *RiskQuery {
 	return rq
 }
 
+// WithStakeholder tells the query-builder to eager-load the nodes that are connected to
+// the "stakeholder" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithStakeholder(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withStakeholder = query
+	return rq
+}
+
+// WithDelegate tells the query-builder to eager-load the nodes that are connected to
+// the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withDelegate = query
+	return rq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -666,7 +742,7 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [10]bool{
 			rq.withOwner != nil,
 			rq.withBlockedGroups != nil,
 			rq.withEditors != nil,
@@ -675,8 +751,13 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			rq.withProcedure != nil,
 			rq.withActionPlans != nil,
 			rq.withPrograms != nil,
+			rq.withStakeholder != nil,
+			rq.withDelegate != nil,
 		}
 	)
+	if rq.withStakeholder != nil || rq.withDelegate != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.ForeignKeys...)
 	}
@@ -755,6 +836,18 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadPrograms(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Programs = []*Program{} },
 			func(n *Risk, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withStakeholder; query != nil {
+		if err := rq.loadStakeholder(ctx, query, nodes, nil,
+			func(n *Risk, e *Group) { n.Edges.Stakeholder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withDelegate; query != nil {
+		if err := rq.loadDelegate(ctx, query, nodes, nil,
+			func(n *Risk, e *Group) { n.Edges.Delegate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1274,6 +1367,70 @@ func (rq *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		if nodes[i].risk_stakeholder == nil {
+			continue
+		}
+		fk := *nodes[i].risk_stakeholder
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "risk_stakeholder" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		if nodes[i].risk_delegate == nil {
+			continue
+		}
+		fk := *nodes[i].risk_delegate
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "risk_delegate" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

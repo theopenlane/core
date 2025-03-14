@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -14,6 +15,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -29,6 +32,9 @@ type ActionPlanQuery struct {
 	order            []actionplan.OrderOption
 	inters           []Interceptor
 	predicates       []predicate.ActionPlan
+	withApprover     *GroupQuery
+	withDelegate     *GroupQuery
+	withOwner        *OrganizationQuery
 	withRisk         *RiskQuery
 	withControl      *ControlQuery
 	withUser         *UserQuery
@@ -74,6 +80,81 @@ func (apq *ActionPlanQuery) Unique(unique bool) *ActionPlanQuery {
 func (apq *ActionPlanQuery) Order(o ...actionplan.OrderOption) *ActionPlanQuery {
 	apq.order = append(apq.order, o...)
 	return apq
+}
+
+// QueryApprover chains the current query on the "approver" edge.
+func (apq *ActionPlanQuery) QueryApprover() *GroupQuery {
+	query := (&GroupClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ApproverTable, actionplan.ApproverColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegate chains the current query on the "delegate" edge.
+func (apq *ActionPlanQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.DelegateTable, actionplan.DelegateColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (apq *ActionPlanQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, actionplan.OwnerTable, actionplan.OwnerColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryRisk chains the current query on the "risk" edge.
@@ -363,20 +444,56 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:      apq.config,
-		ctx:         apq.ctx.Clone(),
-		order:       append([]actionplan.OrderOption{}, apq.order...),
-		inters:      append([]Interceptor{}, apq.inters...),
-		predicates:  append([]predicate.ActionPlan{}, apq.predicates...),
-		withRisk:    apq.withRisk.Clone(),
-		withControl: apq.withControl.Clone(),
-		withUser:    apq.withUser.Clone(),
-		withProgram: apq.withProgram.Clone(),
+		config:       apq.config,
+		ctx:          apq.ctx.Clone(),
+		order:        append([]actionplan.OrderOption{}, apq.order...),
+		inters:       append([]Interceptor{}, apq.inters...),
+		predicates:   append([]predicate.ActionPlan{}, apq.predicates...),
+		withApprover: apq.withApprover.Clone(),
+		withDelegate: apq.withDelegate.Clone(),
+		withOwner:    apq.withOwner.Clone(),
+		withRisk:     apq.withRisk.Clone(),
+		withControl:  apq.withControl.Clone(),
+		withUser:     apq.withUser.Clone(),
+		withProgram:  apq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
 		modifiers: append([]func(*sql.Selector){}, apq.modifiers...),
 	}
+}
+
+// WithApprover tells the query-builder to eager-load the nodes that are connected to
+// the "approver" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithApprover(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withApprover = query
+	return apq
+}
+
+// WithDelegate tells the query-builder to eager-load the nodes that are connected to
+// the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithDelegate(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withDelegate = query
+	return apq
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ActionPlanQuery {
+	query := (&OrganizationClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withOwner = query
+	return apq
 }
 
 // WithRisk tells the query-builder to eager-load the nodes that are connected to
@@ -494,6 +611,12 @@ func (apq *ActionPlanQuery) prepareQuery(ctx context.Context) error {
 		}
 		apq.sql = prev
 	}
+	if actionplan.Policy == nil {
+		return errors.New("generated: uninitialized actionplan.Policy (forgotten import generated/runtime?)")
+	}
+	if err := actionplan.Policy.EvalQuery(ctx, apq); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -502,13 +625,19 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*ActionPlan{}
 		withFKs     = apq.withFKs
 		_spec       = apq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [7]bool{
+			apq.withApprover != nil,
+			apq.withDelegate != nil,
+			apq.withOwner != nil,
 			apq.withRisk != nil,
 			apq.withControl != nil,
 			apq.withUser != nil,
 			apq.withProgram != nil,
 		}
 	)
+	if apq.withApprover != nil || apq.withDelegate != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, actionplan.ForeignKeys...)
 	}
@@ -534,6 +663,24 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := apq.withApprover; query != nil {
+		if err := apq.loadApprover(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *Group) { n.Edges.Approver = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withDelegate; query != nil {
+		if err := apq.loadDelegate(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *Group) { n.Edges.Delegate = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withOwner; query != nil {
+		if err := apq.loadOwner(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := apq.withRisk; query != nil {
 		if err := apq.loadRisk(ctx, query, nodes,
@@ -599,6 +746,99 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
+func (apq *ActionPlanQuery) loadApprover(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		if nodes[i].action_plan_approver == nil {
+			continue
+		}
+		fk := *nodes[i].action_plan_approver
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "action_plan_approver" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		if nodes[i].action_plan_delegate == nil {
+			continue
+		}
+		fk := *nodes[i].action_plan_delegate
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "action_plan_delegate" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
@@ -877,6 +1117,9 @@ func (apq *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != actionplan.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if apq.withOwner != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldOwnerID)
 		}
 	}
 	if ps := apq.predicates; len(ps) > 0 {

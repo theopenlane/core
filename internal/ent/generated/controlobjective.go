@@ -32,6 +32,8 @@ type ControlObjective struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
@@ -48,8 +50,6 @@ type ControlObjective struct {
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
-	// version of the control objective
-	Version string `json:"version,omitempty"`
 	// category of the control
 	Category string `json:"category,omitempty"`
 	// subcategory of the control
@@ -234,7 +234,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldRevision, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -295,6 +295,12 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.DeletedBy = value.String
 			}
+		case controlobjective.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				co.Revision = value.String
+			}
 		case controlobjective.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
@@ -344,12 +350,6 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field control_objective_type", values[i])
 			} else if value.Valid {
 				co.ControlObjectiveType = value.String
-			}
-		case controlobjective.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				co.Version = value.String
 			}
 		case controlobjective.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -482,6 +482,9 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(co.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(co.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(co.DisplayID)
 	builder.WriteString(", ")
@@ -505,9 +508,6 @@ func (co *ControlObjective) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("control_objective_type=")
 	builder.WriteString(co.ControlObjectiveType)
-	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(co.Version)
 	builder.WriteString(", ")
 	builder.WriteString("category=")
 	builder.WriteString(co.Category)

@@ -38,24 +38,24 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldRiskType holds the string denoting the risk_type field in the database.
 	FieldRiskType = "risk_type"
-	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
-	FieldBusinessCosts = "business_costs"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// FieldImpact holds the string denoting the impact field in the database.
 	FieldImpact = "impact"
 	// FieldLikelihood holds the string denoting the likelihood field in the database.
 	FieldLikelihood = "likelihood"
+	// FieldScore holds the string denoting the score field in the database.
+	FieldScore = "score"
 	// FieldMitigation holds the string denoting the mitigation field in the database.
 	FieldMitigation = "mitigation"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
+	FieldBusinessCosts = "business_costs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -72,6 +72,10 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeStakeholder holds the string denoting the stakeholder edge name in mutations.
+	EdgeStakeholder = "stakeholder"
+	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
+	EdgeDelegate = "delegate"
 	// Table holds the table name of the risk in the database.
 	Table = "risks"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -116,6 +120,20 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// StakeholderTable is the table that holds the stakeholder relation/edge.
+	StakeholderTable = "risks"
+	// StakeholderInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	StakeholderInverseTable = "groups"
+	// StakeholderColumn is the table column denoting the stakeholder relation/edge.
+	StakeholderColumn = "risk_stakeholder"
+	// DelegateTable is the table that holds the delegate relation/edge.
+	DelegateTable = "risks"
+	// DelegateInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateInverseTable = "groups"
+	// DelegateColumn is the table column denoting the delegate relation/edge.
+	DelegateColumn = "risk_delegate"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -131,21 +149,23 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldName,
-	FieldDescription,
 	FieldStatus,
 	FieldRiskType,
-	FieldBusinessCosts,
+	FieldCategory,
 	FieldImpact,
 	FieldLikelihood,
+	FieldScore,
 	FieldMitigation,
-	FieldSatisfies,
 	FieldDetails,
+	FieldBusinessCosts,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "risks"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
+	"risk_stakeholder",
+	"risk_delegate",
 	"subcontrol_risks",
 }
 
@@ -215,12 +235,24 @@ var (
 	DefaultID func() string
 )
 
+const DefaultStatus enums.RiskStatus = "OPEN"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.RiskStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("risk: invalid enum value for status field: %q", s)
+	}
+}
+
 const DefaultImpact enums.RiskImpact = "MODERATE"
 
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
 	switch i.String() {
-	case "LOW", "MODERATE", "HIGH":
+	case "LOW", "MODERATE", "HIGH", "CRITICAL":
 		return nil
 	default:
 		return fmt.Errorf("risk: invalid enum value for impact field: %q", i)
@@ -292,11 +324,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -307,9 +334,9 @@ func ByRiskType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskType, opts...).ToFunc()
 }
 
-// ByBusinessCosts orders the results by the business_costs field.
-func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 // ByImpact orders the results by the impact field.
@@ -322,14 +349,24 @@ func ByLikelihood(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLikelihood, opts...).ToFunc()
 }
 
+// ByScore orders the results by the score field.
+func ByScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScore, opts...).ToFunc()
+}
+
 // ByMitigation orders the results by the mitigation field.
 func ByMitigation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMitigation, opts...).ToFunc()
 }
 
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
+// ByBusinessCosts orders the results by the business_costs field.
+func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -436,6 +473,20 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByStakeholderField orders the results by stakeholder field.
+func ByStakeholderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStakeholderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateField orders the results by delegate field.
+func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -492,6 +543,27 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
+func newStakeholderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StakeholderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, StakeholderTable, StakeholderColumn),
+	)
+}
+func newDelegateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+
+var (
+	// enums.RiskStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskStatus)(nil)
+	// enums.RiskStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskStatus)(nil)
+)
 
 var (
 	// enums.RiskImpact must implement graphql.Marshaler.

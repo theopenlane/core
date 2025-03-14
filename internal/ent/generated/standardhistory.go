@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -39,6 +40,8 @@ type StandardHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the long name of the standard body
@@ -49,26 +52,26 @@ type StandardHistory struct {
 	Framework string `json:"framework,omitempty"`
 	// description of the standard
 	Description string `json:"description,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL string `json:"governing_body_logo_url,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody string `json:"governing_body,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
 	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
 	Link string `json:"link,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status string `json:"status,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic bool `json:"is_public,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse bool `json:"free_to_use,omitempty"`
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned bool `json:"system_owned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
-	Version string `json:"version,omitempty"`
-	// internal revision of the standard
-	Revision     string `json:"revision,omitempty"`
+	Version      string `json:"version,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -83,7 +86,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse, standardhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldOwnerID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldRevision:
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -170,6 +173,12 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case standardhistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				sh.Revision = value.String
+			}
 		case standardhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -200,6 +209,12 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.Description = value.String
 			}
+		case standardhistory.FieldGoverningBodyLogoURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field governing_body_logo_url", values[i])
+			} else if value.Valid {
+				sh.GoverningBodyLogoURL = value.String
+			}
 		case standardhistory.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
@@ -224,7 +239,7 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				sh.Status = value.String
+				sh.Status = enums.StandardStatus(value.String)
 			}
 		case standardhistory.FieldIsPublic:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -255,12 +270,6 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
 				sh.Version = value.String
-			}
-		case standardhistory.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				sh.Revision = value.String
 			}
 		default:
 			sh.selectValues.Set(columns[i], values[i])
@@ -328,6 +337,9 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(sh.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(sh.OwnerID)
 	builder.WriteString(", ")
@@ -343,6 +355,9 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(sh.Description)
 	builder.WriteString(", ")
+	builder.WriteString("governing_body_logo_url=")
+	builder.WriteString(sh.GoverningBodyLogoURL)
+	builder.WriteString(", ")
 	builder.WriteString("governing_body=")
 	builder.WriteString(sh.GoverningBody)
 	builder.WriteString(", ")
@@ -353,7 +368,7 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString(sh.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(sh.Status)
+	builder.WriteString(fmt.Sprintf("%v", sh.Status))
 	builder.WriteString(", ")
 	builder.WriteString("is_public=")
 	builder.WriteString(fmt.Sprintf("%v", sh.IsPublic))
@@ -369,9 +384,6 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(sh.Version)
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(sh.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

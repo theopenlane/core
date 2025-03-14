@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // StandardCreate is the builder for creating a Standard entity.
@@ -112,6 +113,20 @@ func (sc *StandardCreate) SetTags(s []string) *StandardCreate {
 	return sc
 }
 
+// SetRevision sets the "revision" field.
+func (sc *StandardCreate) SetRevision(s string) *StandardCreate {
+	sc.mutation.SetRevision(s)
+	return sc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableRevision(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetRevision(*s)
+	}
+	return sc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (sc *StandardCreate) SetOwnerID(s string) *StandardCreate {
 	sc.mutation.SetOwnerID(s)
@@ -174,6 +189,20 @@ func (sc *StandardCreate) SetNillableDescription(s *string) *StandardCreate {
 	return sc
 }
 
+// SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
+func (sc *StandardCreate) SetGoverningBodyLogoURL(s string) *StandardCreate {
+	sc.mutation.SetGoverningBodyLogoURL(s)
+	return sc
+}
+
+// SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableGoverningBodyLogoURL(s *string) *StandardCreate {
+	if s != nil {
+		sc.SetGoverningBodyLogoURL(*s)
+	}
+	return sc
+}
+
 // SetGoverningBody sets the "governing_body" field.
 func (sc *StandardCreate) SetGoverningBody(s string) *StandardCreate {
 	sc.mutation.SetGoverningBody(s)
@@ -209,15 +238,15 @@ func (sc *StandardCreate) SetNillableLink(s *string) *StandardCreate {
 }
 
 // SetStatus sets the "status" field.
-func (sc *StandardCreate) SetStatus(s string) *StandardCreate {
-	sc.mutation.SetStatus(s)
+func (sc *StandardCreate) SetStatus(es enums.StandardStatus) *StandardCreate {
+	sc.mutation.SetStatus(es)
 	return sc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableStatus(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetStatus(*s)
+func (sc *StandardCreate) SetNillableStatus(es *enums.StandardStatus) *StandardCreate {
+	if es != nil {
+		sc.SetStatus(*es)
 	}
 	return sc
 }
@@ -288,20 +317,6 @@ func (sc *StandardCreate) SetVersion(s string) *StandardCreate {
 func (sc *StandardCreate) SetNillableVersion(s *string) *StandardCreate {
 	if s != nil {
 		sc.SetVersion(*s)
-	}
-	return sc
-}
-
-// SetRevision sets the "revision" field.
-func (sc *StandardCreate) SetRevision(s string) *StandardCreate {
-	sc.mutation.SetRevision(s)
-	return sc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableRevision(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetRevision(*s)
 	}
 	return sc
 }
@@ -395,6 +410,14 @@ func (sc *StandardCreate) defaults() error {
 		v := standard.DefaultTags
 		sc.mutation.SetTags(v)
 	}
+	if _, ok := sc.mutation.Revision(); !ok {
+		v := standard.DefaultRevision
+		sc.mutation.SetRevision(v)
+	}
+	if _, ok := sc.mutation.Status(); !ok {
+		v := standard.DefaultStatus
+		sc.mutation.SetStatus(v)
+	}
 	if _, ok := sc.mutation.IsPublic(); !ok {
 		v := standard.DefaultIsPublic
 		sc.mutation.SetIsPublic(v)
@@ -419,12 +442,27 @@ func (sc *StandardCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *StandardCreate) check() error {
+	if v, ok := sc.mutation.Revision(); ok {
+		if err := standard.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
+		}
+	}
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Standard.name"`)}
 	}
 	if v, ok := sc.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
+	if v, ok := sc.mutation.GoverningBodyLogoURL(); ok {
+		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := sc.mutation.Status(); ok {
+		if err := standard.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
 	}
 	return nil
@@ -491,6 +529,10 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := sc.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := sc.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -507,6 +549,10 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := sc.mutation.GoverningBodyLogoURL(); ok {
+		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
+		_node.GoverningBodyLogoURL = value
+	}
 	if value, ok := sc.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 		_node.GoverningBody = value
@@ -520,7 +566,7 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_node.Link = value
 	}
 	if value, ok := sc.mutation.Status(); ok {
-		_spec.SetField(standard.FieldStatus, field.TypeString, value)
+		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := sc.mutation.IsPublic(); ok {
@@ -542,10 +588,6 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
 		_node.Version = value
-	}
-	if value, ok := sc.mutation.Revision(); ok {
-		_spec.SetField(standard.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

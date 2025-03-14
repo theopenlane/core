@@ -2,13 +2,9 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
-	"strings"
 
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
-	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/generated"
+
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -17,10 +13,10 @@ import (
 // required for a mutation to be able to handle revisions
 // It includes methods for getting and setting the revision
 type MutationWithRevision interface {
-	Revision() (*models.SemverVersion, bool)
+	Revision() (string, bool)
 	RevisionCleared() bool
-	SetRevision(mv *models.SemverVersion)
-	RevisionBump() (r models.VersionBump, exists bool)
+	OldRevision(ctx context.Context) (string, error)
+	SetRevision(s string)
 
 	GenericMutation
 }
@@ -37,39 +33,15 @@ func HookRevisionUpdate() ent.Hook {
 
 			if mut.RevisionCleared() {
 				// if the revision is cleared, set it to the default
-				mut.SetRevision(&models.SemverVersion{
-					Patch: 1,
-				})
+				mut.SetRevision(models.DefaultRevision)
 
 				return next.Mutate(ctx, m)
 			}
 
-			// if the revision is set, continue
-			_, ok := mut.Revision()
-			if ok {
-				return next.Mutate(ctx, m)
-			}
-
-			currentRevision, err := getRevisionFromDatabase(ctx, mut)
-			if err != nil {
+			// set the new revision
+			if err := SetNewRevision(ctx, mut); err != nil {
 				return nil, err
 			}
-
-			revisionBump, _ := mut.RevisionBump()
-
-			switch revisionBump {
-			case models.Major:
-				currentRevision.BumpMajor()
-			case models.Minor:
-				currentRevision.BumpMinor()
-			case models.PreRelease:
-				currentRevision.PreRelease = "draft"
-			default:
-				currentRevision.BumpPatch()
-			}
-
-			// set the revision to the current revision
-			mut.SetRevision(currentRevision)
 
 			return next.Mutate(ctx, mut.(ent.Mutation))
 		})
@@ -78,44 +50,47 @@ func HookRevisionUpdate() ent.Hook {
 	)
 }
 
-// getRevisionFromDatabase retrieves the current revision of an object from the database.
-// It takes a context and a MutationWithRevision as parameters and returns a SemverVersion model and an error
-// if the revision cannot be found
-func getRevisionFromDatabase(ctx context.Context, m MutationWithRevision) (*models.SemverVersion, error) {
-	var revision *models.SemverVersion
+// SetNewRevision sets the new revision for a mutation based on the current revision and the revision bump
+// If the revision is set, it does nothing
+// If the revision is not set, it retrieves the current revision from the database and bumps the version based on the revision bump
+// If there is no revision bump set, it bumps the patch version
+func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
+	// if the revision is set, continue
+	revision, ok := mut.Revision()
+	if ok && revision != "" {
+		// revision is already set, do nothing
+		return nil
+	}
 
-	// get current revision from the database
-	objectType := strings.ToLower(m.Type())
-
-	// get updated objectIDs
-	objectIDs, err := m.IDs(ctx)
+	currentRevision, err := mut.OldRevision(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	// table is always the pluralized version of the object type
-	table := pluralize.NewClient().Plural(objectType)
-	query := "SELECT revision FROM " + table + " WHERE id in ($1)"
-
-	var rows sql.Rows
-
-	if err := generated.FromContext(ctx).Driver().Query(ctx, query, []any{strings.Join(objectIDs, ",")}, &rows); err != nil {
-		return nil, err
+	revisionBump, ok := models.VersionBumpFromRequestContext(ctx)
+	if !ok {
+		revisionBump = &models.Patch
 	}
 
-	defer rows.Close()
+	var newVersion string
 
-	if rows.Next() {
-		var revisionValue []byte
-
-		if err := rows.Scan(&revisionValue); err != nil {
-			return nil, err
-		}
-
-		if err := json.Unmarshal(revisionValue, &revision); err != nil {
-			return nil, err
-		}
+	switch *revisionBump {
+	case models.Major:
+		newVersion, err = models.BumpMajor(currentRevision)
+	case models.Minor:
+		newVersion, err = models.BumpMinor(currentRevision)
+	case models.PreRelease:
+		newVersion, err = models.SetPreRelease(currentRevision)
+	default:
+		newVersion, err = models.BumpPatch(currentRevision)
 	}
 
-	return revision, nil
+	if err != nil {
+		return err
+	}
+
+	// set the revision to the new revision
+	mut.SetRevision(newVersion)
+
+	return nil
 }

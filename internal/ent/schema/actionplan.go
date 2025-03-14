@@ -7,7 +7,9 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -57,8 +59,10 @@ func (ActionPlan) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 
-		DocumentMixin{DocumentType: "action plan"},
+		DocumentMixin{DocumentType: "action_plan"},
 		mixin.RevisionMixin{},
+		// all action plans must be associated to an organization
+		NewOrgOwnMixinWithRef("action_plans"),
 	}
 }
 
@@ -68,6 +72,7 @@ func (ActionPlan) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -75,10 +80,11 @@ func (ActionPlan) Annotations() []schema.Annotation {
 func (ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),
 	)
 }

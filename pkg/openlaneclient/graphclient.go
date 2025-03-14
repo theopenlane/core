@@ -171,8 +171,8 @@ type OpenlaneGraphClient interface {
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
-	GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
 	GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error)
+	GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
 	UpdateInternalPolicy(ctx context.Context, updateInternalPolicyID string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateInternalPolicy, error)
 	GetAllInternalPolicyHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicyHistories, error)
 	GetInternalPolicyHistories(ctx context.Context, where *InternalPolicyHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyHistories, error)
@@ -366,21 +366,37 @@ func NewClient(cli clientv2.HttpClient, baseURL string, options *clientv2.Option
 }
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetActionPlanType() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.ActionPlanType
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.ApprovalRequired
+}
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
@@ -393,13 +409,7 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreated
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDetails() map[string]any {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
@@ -423,11 +433,29 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetName() 
 	}
 	return t.Name
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetPriority() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
 	return t.Priority
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.Revision
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetSource() *string {
 	if t == nil {
@@ -435,7 +463,7 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetSource(
 	}
 	return t.Source
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetStatus() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
@@ -472,21 +500,37 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan) GetActionPlans() []*Cr
 }
 
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetActionPlanType() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.ActionPlanType
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.ApprovalRequired
+}
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
@@ -499,13 +543,7 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
-	}
-	return t.Description
-}
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDetails() map[string]any {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
@@ -529,11 +567,29 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetName() string
 	}
 	return t.Name
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetPriority() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
 	return t.Priority
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.Revision
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetSource() *string {
 	if t == nil {
@@ -541,7 +597,7 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetSource() *str
 	}
 	return t.Source
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetStatus() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
@@ -578,21 +634,37 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 }
 
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetActionPlanType() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.ActionPlanType
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.ApprovalRequired
+}
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
@@ -605,13 +677,7 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDescription() *string {
-	if t == nil {
-		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
-	}
-	return t.Description
-}
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDetails() map[string]any {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDetails() *string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
@@ -635,11 +701,29 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetPriority() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
 	return t.Priority
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetRevision() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.Revision
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetSource() *string {
 	if t == nil {
@@ -647,7 +731,7 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetSource() *string {
 	}
 	return t.Source
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetStatus() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
@@ -695,21 +779,37 @@ func (t *DeleteActionPlan_DeleteActionPlan) GetDeletedID() string {
 }
 
 type GetAllActionPlans_ActionPlans_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetActionPlanType() *string {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ActionPlanType
+}
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
@@ -722,13 +822,7 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -752,11 +846,29 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetPriority() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
 	return t.Priority
+}
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.Revision
 }
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetSource() *string {
 	if t == nil {
@@ -764,7 +876,7 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetSource() *string {
 	}
 	return t.Source
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetStatus() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -812,21 +924,37 @@ func (t *GetAllActionPlans_ActionPlans) GetEdges() []*GetAllActionPlans_ActionPl
 }
 
 type GetActionPlanByID_ActionPlan struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetActionPlanByID_ActionPlan) GetActionPlanType() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.ActionPlanType
+}
+func (t *GetActionPlanByID_ActionPlan) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.ApprovalRequired
+}
 func (t *GetActionPlanByID_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
@@ -839,13 +967,7 @@ func (t *GetActionPlanByID_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlanByID_ActionPlan) GetDescription() *string {
-	if t == nil {
-		t = &GetActionPlanByID_ActionPlan{}
-	}
-	return t.Description
-}
-func (t *GetActionPlanByID_ActionPlan) GetDetails() map[string]any {
+func (t *GetActionPlanByID_ActionPlan) GetDetails() *string {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
@@ -869,11 +991,29 @@ func (t *GetActionPlanByID_ActionPlan) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetActionPlanByID_ActionPlan) GetPriority() *string {
+func (t *GetActionPlanByID_ActionPlan) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
 	return t.Priority
+}
+func (t *GetActionPlanByID_ActionPlan) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.ReviewDue
+}
+func (t *GetActionPlanByID_ActionPlan) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetActionPlanByID_ActionPlan) GetRevision() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.Revision
 }
 func (t *GetActionPlanByID_ActionPlan) GetSource() *string {
 	if t == nil {
@@ -881,7 +1021,7 @@ func (t *GetActionPlanByID_ActionPlan) GetSource() *string {
 	}
 	return t.Source
 }
-func (t *GetActionPlanByID_ActionPlan) GetStatus() *string {
+func (t *GetActionPlanByID_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
@@ -907,21 +1047,37 @@ func (t *GetActionPlanByID_ActionPlan) GetUpdatedBy() *string {
 }
 
 type GetActionPlans_ActionPlans_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetActionPlanType() *string {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ActionPlanType
+}
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
@@ -934,13 +1090,7 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetDetails() map[string]any {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -964,11 +1114,29 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetPriority() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
 	return t.Priority
+}
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.Revision
 }
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetSource() *string {
 	if t == nil {
@@ -976,7 +1144,7 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetSource() *string {
 	}
 	return t.Source
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetStatus() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -1024,21 +1192,37 @@ func (t *GetActionPlans_ActionPlans) GetEdges() []*GetActionPlans_ActionPlans_Ed
 }
 
 type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetActionPlanType() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.ActionPlanType
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.ApprovalRequired
+}
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
@@ -1051,13 +1235,7 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDescription() *string {
-	if t == nil {
-		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
-	}
-	return t.Description
-}
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDetails() map[string]any {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDetails() *string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
@@ -1081,11 +1259,29 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetName() string {
 	}
 	return t.Name
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetPriority() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
 	return t.Priority
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetRevision() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.Revision
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetSource() *string {
 	if t == nil {
@@ -1093,7 +1289,7 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetSource() *string {
 	}
 	return t.Source
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetStatus() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
@@ -1130,24 +1326,40 @@ func (t *UpdateActionPlan_UpdateActionPlan) GetActionPlan() *UpdateActionPlan_Up
 }
 
 type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetActionPlanType() *string {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ActionPlanType
+}
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
@@ -1160,13 +1372,7 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1202,7 +1408,7 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetOperation(
 	}
 	return &t.Operation
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetPriority() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1214,13 +1420,31 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetRef() *str
 	}
 	return t.Ref
 }
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetSource() *string {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
 	return t.Source
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1268,24 +1492,40 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories) GetEdges() []*GetAllActi
 }
 
 type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DueDate     *time.Time     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetActionPlanType() *string {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ActionPlanType
+}
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
@@ -1298,13 +1538,7 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1340,7 +1574,7 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetOperation() *
 	}
 	return &t.Operation
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetPriority() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetPriority() *enums.Priority {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1352,13 +1586,31 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetRef() *string
 	}
 	return t.Ref
 }
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetSource() *string {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
 	return t.Source
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetStatus() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1477,30 +1729,30 @@ func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult) GetAPITokens() []*A
 }
 
 type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
-	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	Name        string         "json:\"name\" graphql:\"name\""
-	Priority    *string        "json:\"priority,omitempty\" graphql:\"priority\""
-	Source      *string        "json:\"source,omitempty\" graphql:\"source\""
-	Status      *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	ActionPlanType *string  "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Details        *string  "json:\"details,omitempty\" graphql:\"details\""
+	ID             string   "json:\"id\" graphql:\"id\""
+	Name           string   "json:\"name\" graphql:\"name\""
+	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision       *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	Source         *string  "json:\"source,omitempty\" graphql:\"source\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetActionPlanType() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+	}
+	return t.ActionPlanType
+}
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDescription() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
-	}
-	return t.Description
-}
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() map[string]any {
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
@@ -1518,23 +1770,23 @@ func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetNa
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetPriority() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetOwnerID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
-	return t.Priority
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetRevision() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+	}
+	return t.Revision
 }
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetSource() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
 	return t.Source
-}
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetTags() []string {
 	if t == nil {
@@ -1791,7 +2043,6 @@ type AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImpl
 	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
 	ID        string   "json:\"id\" graphql:\"id\""
-	Status    *string  "json:\"status,omitempty\" graphql:\"status\""
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -1812,12 +2063,6 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_Control
 		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
 	}
 	return t.ID
-}
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetTags() []string {
 	if t == nil {
@@ -1846,10 +2091,10 @@ type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjective
 	ID                   string   "json:\"id\" graphql:\"id\""
 	Name                 string   "json:\"name\" graphql:\"name\""
 	OwnerID              *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string  "json:\"revision,omitempty\" graphql:\"revision\""
 	Status               *string  "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string  "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string "json:\"tags,omitempty\" graphql:\"tags\""
-	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetCategory() *string {
@@ -1900,6 +2145,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 	}
 	return t.OwnerID
 }
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetRevision() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+	}
+	return t.Revision
+}
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetStatus() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
@@ -1917,12 +2168,6 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
 	return t.Tags
-}
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetVersion() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
-	}
-	return t.Version
 }
 
 type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult struct {
@@ -2505,40 +2750,24 @@ func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult) GetIntegrations(
 }
 
 type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	DeletedBy  *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Details    *string  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID  string   "json:\"displayID\" graphql:\"displayID\""
+	ID         string   "json:\"id\" graphql:\"id\""
+	Name       string   "json:\"name\" graphql:\"name\""
+	OwnerID    *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType *string  "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	Tags       []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() map[string]any {
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
@@ -2574,29 +2803,17 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolici
 	}
 	return t.PolicyType
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetPurposeAndScope() *string {
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
-	return t.PurposeAndScope
-}
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
-	}
-	return t.Status
+	return t.Revision
 }
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetTags() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
 	return t.Tags
-}
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult struct {
@@ -3058,41 +3275,24 @@ func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult) GetPerso
 }
 
 type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	DeletedBy       *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType *string  "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
-	}
-	return t.Background
-}
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
-	}
-	return t.Description
-}
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDetails() map[string]any {
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
@@ -3128,35 +3328,17 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetProc
 	}
 	return t.ProcedureType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetPurposeAndScope() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
-	return t.PurposeAndScope
-}
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetSatisfies() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
-	}
-	return t.Satisfies
-}
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
-	}
-	return t.Status
+	return t.Revision
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetTags() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
 	return t.Tags
-}
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
-	}
-	return t.Version
 }
 
 type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult struct {
@@ -3235,19 +3417,17 @@ func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult) GetPrograms() []*Adm
 }
 
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
-	BusinessCosts *string        "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	DeletedBy     *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description   *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID     string         "json:\"displayID\" graphql:\"displayID\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Mitigation    *string        "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string         "json:\"name\" graphql:\"name\""
-	OwnerID       *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RiskType      *string        "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	BusinessCosts *string  "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	Category      *string  "json:\"category,omitempty\" graphql:\"category\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Mitigation    *string  "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RiskType      *string  "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetBusinessCosts() *string {
@@ -3256,19 +3436,19 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetBusinessCosts(
 	}
 	return t.BusinessCosts
 }
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetCategory() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+	}
+	return t.Category
+}
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDescription() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Description
-}
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() map[string]any {
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
@@ -3310,18 +3490,6 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetRiskType() *st
 	}
 	return t.RiskType
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetSatisfies() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Satisfies
-}
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Status
-}
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetTags() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
@@ -3341,21 +3509,21 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult) GetRisks() []*AdminSear
 }
 
 type AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description   *string  "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string  "json:\"framework,omitempty\" graphql:\"framework\""
-	GoverningBody *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string   "json:\"id\" graphql:\"id\""
-	Link          *string  "json:\"link,omitempty\" graphql:\"link\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string  "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string  "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
-	Version       *string  "json:\"version,omitempty\" graphql:\"version\""
+	DeletedBy            *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework            *string  "json:\"framework,omitempty\" graphql:\"framework\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	ID                   string   "json:\"id\" graphql:\"id\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	OwnerID              *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Tags                 []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDeletedBy() *string {
@@ -3387,6 +3555,12 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetGovern
 		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
 	}
 	return t.GoverningBody
+}
+func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+	}
+	return t.GoverningBodyLogoURL
 }
 func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetID() string {
 	if t == nil {
@@ -3429,12 +3603,6 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetStanda
 		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
 	}
 	return t.StandardType
-}
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetTags() []string {
 	if t == nil {
@@ -8683,17 +8851,17 @@ func (t *GetControlHistories_ControlHistories) GetEdges() []*GetControlHistories
 }
 
 type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetCreatedAt() *time.Time {
@@ -8726,7 +8894,7 @@ func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_C
 	}
 	return t.ImplementationDate
 }
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetStatus() *string {
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
 	}
@@ -8775,17 +8943,17 @@ func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation) 
 }
 
 type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetCreatedAt() *time.Time {
@@ -8818,7 +8986,7 @@ func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_Control
 	}
 	return t.ImplementationDate
 }
-func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetStatus() *string {
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
 	}
@@ -8867,17 +9035,17 @@ func (t *CreateBulkControlImplementation_CreateBulkControlImplementation) GetCon
 }
 
 type CreateControlImplementation_CreateControlImplementation_ControlImplementation struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetCreatedAt() *time.Time {
@@ -8910,7 +9078,7 @@ func (t *CreateControlImplementation_CreateControlImplementation_ControlImplemen
 	}
 	return t.ImplementationDate
 }
-func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetStatus() *string {
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
 	}
@@ -8970,17 +9138,17 @@ func (t *DeleteControlImplementation_DeleteControlImplementation) GetDeletedID()
 }
 
 type GetAllControlImplementations_ControlImplementations_Edges_Node struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetCreatedAt() *time.Time {
@@ -9013,7 +9181,7 @@ func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetImpl
 	}
 	return t.ImplementationDate
 }
-func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetStatus() *string {
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllControlImplementations_ControlImplementations_Edges_Node{}
 	}
@@ -9073,17 +9241,17 @@ func (t *GetAllControlImplementations_ControlImplementations) GetEdges() []*GetA
 }
 
 type GetControlImplementationByID_ControlImplementation struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *GetControlImplementationByID_ControlImplementation) GetCreatedAt() *time.Time {
@@ -9116,7 +9284,7 @@ func (t *GetControlImplementationByID_ControlImplementation) GetImplementationDa
 	}
 	return t.ImplementationDate
 }
-func (t *GetControlImplementationByID_ControlImplementation) GetStatus() *string {
+func (t *GetControlImplementationByID_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetControlImplementationByID_ControlImplementation{}
 	}
@@ -9154,17 +9322,17 @@ func (t *GetControlImplementationByID_ControlImplementation) GetVerified() *bool
 }
 
 type GetControlImplementations_ControlImplementations_Edges_Node struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetCreatedAt() *time.Time {
@@ -9197,7 +9365,7 @@ func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetImpleme
 	}
 	return t.ImplementationDate
 }
-func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetStatus() *string {
+func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetControlImplementations_ControlImplementations_Edges_Node{}
 	}
@@ -9257,17 +9425,17 @@ func (t *GetControlImplementations_ControlImplementations) GetEdges() []*GetCont
 }
 
 type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation struct {
-	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string    "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string     "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool      "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetCreatedAt() *time.Time {
@@ -9300,7 +9468,7 @@ func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplemen
 	}
 	return t.ImplementationDate
 }
-func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetStatus() *string {
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
 	}
@@ -9349,20 +9517,20 @@ func (t *UpdateControlImplementation_UpdateControlImplementation) GetControlImpl
 }
 
 type GetAllControlImplementationHistories_ControlImplementationHistories_Edges_Node struct {
-	CreatedAt          *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string        "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime        time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID                 string         "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time     "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Operation          history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref                *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Status             *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time     "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool          "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	HistoryTime        time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Operation          history.OpType        "json:\"operation\" graphql:\"operation\""
+	Ref                *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *GetAllControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -9413,7 +9581,7 @@ func (t *GetAllControlImplementationHistories_ControlImplementationHistories_Edg
 	}
 	return t.Ref
 }
-func (t *GetAllControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllControlImplementationHistories_ControlImplementationHistories_Edges_Node{}
 	}
@@ -9473,20 +9641,20 @@ func (t *GetAllControlImplementationHistories_ControlImplementationHistories) Ge
 }
 
 type GetControlImplementationHistories_ControlImplementationHistories_Edges_Node struct {
-	CreatedAt          *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string        "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime        time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID                 string         "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time     "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Operation          history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref                *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Status             *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time     "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool          "json:\"verified,omitempty\" graphql:\"verified\""
+	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
+	HistoryTime        time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string                "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Operation          history.OpType        "json:\"operation\" graphql:\"operation\""
+	Ref                *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
 func (t *GetControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -9537,7 +9705,7 @@ func (t *GetControlImplementationHistories_ControlImplementationHistories_Edges_
 	}
 	return t.Ref
 }
-func (t *GetControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetStatus() *string {
+func (t *GetControlImplementationHistories_ControlImplementationHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetControlImplementationHistories_ControlImplementationHistories_Edges_Node{}
 	}
@@ -9606,13 +9774,13 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	ID                   string               "json:\"id\" graphql:\"id\""
 	Name                 string               "json:\"name\" graphql:\"name\""
 	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string              "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCategory() *string {
@@ -9669,6 +9837,12 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.OwnerID
 }
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Revision
+}
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
@@ -9705,12 +9879,6 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.UpdatedBy
 }
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Version
-}
 
 type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective struct {
 	ControlObjectives []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
@@ -9733,13 +9901,13 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	ID                   string               "json:\"id\" graphql:\"id\""
 	Name                 string               "json:\"name\" graphql:\"name\""
 	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string              "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetCategory() *string {
@@ -9796,6 +9964,12 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.OwnerID
 }
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
+	}
+	return t.Revision
+}
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
@@ -9831,12 +10005,6 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
-	}
-	return t.Version
 }
 
 type CreateBulkControlObjective_CreateBulkControlObjective struct {
@@ -9975,13 +10143,13 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	Name                 string                                                                          "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs             []*CreateControlObjective_CreateControlObjective_ControlObjective_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Revision             *string                                                                         "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                            "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                                         "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string                                                                         "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*CreateControlObjective_CreateControlObjective_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -10063,6 +10231,12 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetProg
 	}
 	return t.Programs
 }
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetRevision() *string {
+	if t == nil {
+		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
+	}
+	return t.Revision
+}
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
@@ -10098,12 +10272,6 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetUpda
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetVersion() *string {
-	if t == nil {
-		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
-	}
-	return t.Version
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetViewers() []*CreateControlObjective_CreateControlObjective_ControlObjective_Viewers {
 	if t == nil {
@@ -10259,13 +10427,13 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	Name                 string                                                                "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs             []*GetAllControlObjectives_ControlObjectives_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Revision             *string                                                               "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                  "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                                                               "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                               "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string                                                               "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetAllControlObjectives_ControlObjectives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -10347,6 +10515,12 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetPrograms() []*
 	}
 	return t.Programs
 }
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
@@ -10382,12 +10556,6 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetUpdatedBy() *s
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Version
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetViewers() []*GetAllControlObjectives_ControlObjectives_Edges_Node_Viewers {
 	if t == nil {
@@ -10543,13 +10711,13 @@ type GetControlObjectiveByID_ControlObjective struct {
 	Name                 string                                                    "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs             []*GetControlObjectiveByID_ControlObjective_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Revision             *string                                                   "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                      "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                                                   "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string                                                   "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetControlObjectiveByID_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -10631,6 +10799,12 @@ func (t *GetControlObjectiveByID_ControlObjective) GetPrograms() []*GetControlOb
 	}
 	return t.Programs
 }
+func (t *GetControlObjectiveByID_ControlObjective) GetRevision() *string {
+	if t == nil {
+		t = &GetControlObjectiveByID_ControlObjective{}
+	}
+	return t.Revision
+}
 func (t *GetControlObjectiveByID_ControlObjective) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
@@ -10666,12 +10840,6 @@ func (t *GetControlObjectiveByID_ControlObjective) GetUpdatedBy() *string {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetControlObjectiveByID_ControlObjective) GetVersion() *string {
-	if t == nil {
-		t = &GetControlObjectiveByID_ControlObjective{}
-	}
-	return t.Version
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetViewers() []*GetControlObjectiveByID_ControlObjective_Viewers {
 	if t == nil {
@@ -10805,13 +10973,13 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	Name                 string                                                             "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs             []*GetControlObjectives_ControlObjectives_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Revision             *string                                                            "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                               "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                                                            "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                            "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                           "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string                                                            "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*GetControlObjectives_ControlObjectives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -10893,6 +11061,12 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetPrograms() []*Get
 	}
 	return t.Programs
 }
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
@@ -10928,12 +11102,6 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetUpdatedBy() *stri
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Version
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetViewers() []*GetControlObjectives_ControlObjectives_Edges_Node_Viewers {
 	if t == nil {
@@ -11089,13 +11257,13 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	Name                 string                                                                          "json:\"name\" graphql:\"name\""
 	OwnerID              *string                                                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs             []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Revision             *string                                                                         "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                            "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                                         "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string                                                                         "json:\"version,omitempty\" graphql:\"version\""
 	Viewers              []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
@@ -11177,6 +11345,12 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetProg
 	}
 	return t.Programs
 }
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetRevision() *string {
+	if t == nil {
+		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
+	}
+	return t.Revision
+}
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
@@ -11213,12 +11387,6 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetUpda
 	}
 	return t.UpdatedBy
 }
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetVersion() *string {
-	if t == nil {
-		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
-	}
-	return t.Version
-}
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetViewers() []*UpdateControlObjective_UpdateControlObjective_ControlObjective_Viewers {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
@@ -11250,13 +11418,13 @@ type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct
 	Operation            history.OpType       "json:\"operation\" graphql:\"operation\""
 	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref                  *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string              "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCategory() *string {
@@ -11331,6 +11499,12 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 	}
 	return t.Ref
 }
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
@@ -11366,12 +11540,6 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges struct {
@@ -11409,13 +11577,13 @@ type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
 	Operation            history.OpType       "json:\"operation\" graphql:\"operation\""
 	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref                  *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version              *string              "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCategory() *string {
@@ -11490,6 +11658,12 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetR
 	}
 	return t.Ref
 }
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Revision
+}
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetSource() *enums.ControlSource {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
@@ -11525,12 +11699,6 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetU
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetControlObjectiveHistories_ControlObjectiveHistories_Edges struct {
@@ -15908,6 +16076,7 @@ type CreateEvidence_CreateEvidence_Evidence struct {
 	Programs            []*CreateEvidence_CreateEvidence_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
 	RenewalDate         *time.Time                                                  "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                     "json:\"source,omitempty\" graphql:\"source\""
+	Status              *enums.EvidenceStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols         []*CreateEvidence_CreateEvidence_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags                []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	Tasks               []*CreateEvidence_CreateEvidence_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
@@ -16011,6 +16180,12 @@ func (t *CreateEvidence_CreateEvidence_Evidence) GetSource() *string {
 		t = &CreateEvidence_CreateEvidence_Evidence{}
 	}
 	return t.Source
+}
+func (t *CreateEvidence_CreateEvidence_Evidence) GetStatus() *enums.EvidenceStatus {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return t.Status
 }
 func (t *CreateEvidence_CreateEvidence_Evidence) GetSubcontrols() []*CreateEvidence_CreateEvidence_Evidence_Subcontrols {
 	if t == nil {
@@ -16224,6 +16399,7 @@ type GetAllEvidences_Evidences_Edges_Node struct {
 	Programs            []*GetAllEvidences_Evidences_Edges_Node_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
 	RenewalDate         *time.Time                                                "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                   "json:\"source,omitempty\" graphql:\"source\""
+	Status              *enums.EvidenceStatus                                     "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols         []*GetAllEvidences_Evidences_Edges_Node_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags                []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	Tasks               []*GetAllEvidences_Evidences_Edges_Node_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
@@ -16327,6 +16503,12 @@ func (t *GetAllEvidences_Evidences_Edges_Node) GetSource() *string {
 		t = &GetAllEvidences_Evidences_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *GetAllEvidences_Evidences_Edges_Node) GetStatus() *enums.EvidenceStatus {
+	if t == nil {
+		t = &GetAllEvidences_Evidences_Edges_Node{}
+	}
+	return t.Status
 }
 func (t *GetAllEvidences_Evidences_Edges_Node) GetSubcontrols() []*GetAllEvidences_Evidences_Edges_Node_Subcontrols {
 	if t == nil {
@@ -16540,6 +16722,7 @@ type GetEvidenceByID_Evidence struct {
 	Programs            []*GetEvidenceByID_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
 	RenewalDate         *time.Time                                    "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                       "json:\"source,omitempty\" graphql:\"source\""
+	Status              *enums.EvidenceStatus                         "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols         []*GetEvidenceByID_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags                []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	Tasks               []*GetEvidenceByID_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
@@ -16643,6 +16826,12 @@ func (t *GetEvidenceByID_Evidence) GetSource() *string {
 		t = &GetEvidenceByID_Evidence{}
 	}
 	return t.Source
+}
+func (t *GetEvidenceByID_Evidence) GetStatus() *enums.EvidenceStatus {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.Status
 }
 func (t *GetEvidenceByID_Evidence) GetSubcontrols() []*GetEvidenceByID_Evidence_Subcontrols {
 	if t == nil {
@@ -16834,6 +17023,7 @@ type GetEvidences_Evidences_Edges_Node struct {
 	Programs            []*GetEvidences_Evidences_Edges_Node_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
 	RenewalDate         *time.Time                                             "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                "json:\"source,omitempty\" graphql:\"source\""
+	Status              *enums.EvidenceStatus                                  "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols         []*GetEvidences_Evidences_Edges_Node_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags                []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	Tasks               []*GetEvidences_Evidences_Edges_Node_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
@@ -16937,6 +17127,12 @@ func (t *GetEvidences_Evidences_Edges_Node) GetSource() *string {
 		t = &GetEvidences_Evidences_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *GetEvidences_Evidences_Edges_Node) GetStatus() *enums.EvidenceStatus {
+	if t == nil {
+		t = &GetEvidences_Evidences_Edges_Node{}
+	}
+	return t.Status
 }
 func (t *GetEvidences_Evidences_Edges_Node) GetSubcontrols() []*GetEvidences_Evidences_Edges_Node_Subcontrols {
 	if t == nil {
@@ -17150,6 +17346,7 @@ type UpdateEvidence_UpdateEvidence_Evidence struct {
 	Programs            []*UpdateEvidence_UpdateEvidence_Evidence_Programs          "json:\"programs,omitempty\" graphql:\"programs\""
 	RenewalDate         *time.Time                                                  "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                     "json:\"source,omitempty\" graphql:\"source\""
+	Status              *enums.EvidenceStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols         []*UpdateEvidence_UpdateEvidence_Evidence_Subcontrols       "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Tags                []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	Tasks               []*UpdateEvidence_UpdateEvidence_Evidence_Tasks             "json:\"tasks,omitempty\" graphql:\"tasks\""
@@ -17253,6 +17450,12 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetSource() *string {
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
 	}
 	return t.Source
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetStatus() *enums.EvidenceStatus {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return t.Status
 }
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetSubcontrols() []*UpdateEvidence_UpdateEvidence_Evidence_Subcontrols {
 	if t == nil {
@@ -24222,28 +24425,29 @@ func (t *GetIntegrationHistories_IntegrationHistories) GetEdges() []*GetIntegrat
 }
 
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetBackground() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -24257,13 +24461,7 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDetails() map[string]any {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
@@ -24287,19 +24485,37 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.Name
 }
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.OwnerID
+}
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetPolicyType() *string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
 	return t.PolicyType
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetPurposeAndScope() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetStatus() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.Revision
+}
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
@@ -24323,12 +24539,6 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.UpdatedBy
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
-	}
-	return t.Version
-}
 
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy struct {
 	InternalPolicies []*CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
@@ -24342,28 +24552,29 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy) GetInternalPol
 }
 
 type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetBackground() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -24377,13 +24588,7 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDetails() map[string]any {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
@@ -24407,19 +24612,37 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.Name
 }
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.OwnerID
+}
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetPolicyType() *string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.PolicyType
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetPurposeAndScope() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetStatus() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Revision
+}
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
@@ -24442,12 +24665,6 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type CreateBulkInternalPolicy_CreateBulkInternalPolicy struct {
@@ -24498,30 +24715,31 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups)
 }
 
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
-	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                                    "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                                    "json:\"id\" graphql:\"id\""
-	Name            string                                                                    "json:\"name\" graphql:\"name\""
-	PolicyType      *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                                                                   "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                                     "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                                   "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                                    "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                                    "json:\"id\" graphql:\"id\""
+	Name             string                                                                    "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                                "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                          "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetBackground() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetBlockedGroups() []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups {
 	if t == nil {
@@ -24541,13 +24759,7 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDescription() *string {
-	if t == nil {
-		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
-	}
-	return t.Description
-}
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDetails() map[string]any {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDetails() *string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
@@ -24577,19 +24789,37 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetName() str
 	}
 	return t.Name
 }
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.OwnerID
+}
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetPolicyType() *string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.PolicyType
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetPurposeAndScope() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetStatus() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetRevision() *string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.Revision
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
@@ -24612,12 +24842,6 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetUpdatedBy(
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetVersion() *string {
-	if t == nil {
-		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
-	}
-	return t.Version
 }
 
 type CreateInternalPolicy_CreateInternalPolicy struct {
@@ -24679,30 +24903,31 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetNa
 }
 
 type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
-	Background      *string                                                             "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                             "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                                      "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                              "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                              "json:\"id\" graphql:\"id\""
-	Name            string                                                              "json:\"name\" graphql:\"name\""
-	PolicyType      *string                                                             "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                                                             "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                                                             "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                             "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                               "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                              "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                              "json:\"id\" graphql:\"id\""
+	Name             string                                                              "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                             "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                          "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                    "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                             "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                               "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetBackground() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetBlockedGroups() []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups {
 	if t == nil {
@@ -24722,13 +24947,7 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
@@ -24758,19 +24977,37 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetPolicyType() *string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.PolicyType
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetPurposeAndScope() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
@@ -24794,12 +25031,6 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedBy() *str
 	}
 	return t.UpdatedBy
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Version
-}
 
 type GetAllInternalPolicies_InternalPolicies_Edges struct {
 	Node *GetAllInternalPolicies_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -24819,187 +25050,6 @@ type GetAllInternalPolicies_InternalPolicies struct {
 func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPolicies_InternalPolicies_Edges {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies{}
-	}
-	return t.Edges
-}
-
-type GetInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetID() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
-	}
-	return t.ID
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetName() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
-	}
-	return t.Name
-}
-
-type GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetID() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
-	}
-	return t.ID
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetName() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
-	}
-	return t.Name
-}
-
-type GetInternalPolicies_InternalPolicies_Edges_Node struct {
-	Background      *string                                                          "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                          "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                                   "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                           "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                           "json:\"id\" graphql:\"id\""
-	Name            string                                                           "json:\"name\" graphql:\"name\""
-	PolicyType      *string                                                          "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                                                          "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                                                          "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                          "json:\"version,omitempty\" graphql:\"version\""
-}
-
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetBackground() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Background
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetBlockedGroups() []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.BlockedGroups
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[string]any {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Details
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Editors
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Name
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetPolicyType() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.PolicyType
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetPurposeAndScope() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.PurposeAndScope
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Status
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Tags
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Version
-}
-
-type GetInternalPolicies_InternalPolicies_Edges struct {
-	Node *GetInternalPolicies_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetInternalPolicies_InternalPolicies_Edges) GetNode() *GetInternalPolicies_InternalPolicies_Edges_Node {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges{}
-	}
-	return t.Node
-}
-
-type GetInternalPolicies_InternalPolicies struct {
-	Edges []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies_InternalPolicies_Edges {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies{}
 	}
 	return t.Edges
 }
@@ -25041,30 +25091,31 @@ func (t *GetInternalPolicyByID_InternalPolicy_BlockedGroups) GetName() string {
 }
 
 type GetInternalPolicyByID_InternalPolicy struct {
-	Background      *string                                               "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetInternalPolicyByID_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                               "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                        "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetInternalPolicyByID_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                "json:\"id\" graphql:\"id\""
-	Name            string                                                "json:\"name\" graphql:\"name\""
-	PolicyType      *string                                               "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                                               "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                                               "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                               "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetInternalPolicyByID_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetInternalPolicyByID_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                "json:\"id\" graphql:\"id\""
+	Name             string                                                "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                 "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetInternalPolicyByID_InternalPolicy) GetBackground() *string {
+func (t *GetInternalPolicyByID_InternalPolicy) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetBlockedGroups() []*GetInternalPolicyByID_InternalPolicy_BlockedGroups {
 	if t == nil {
@@ -25084,13 +25135,7 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetDescription() *string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Description
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() map[string]any {
+func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() *string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
@@ -25120,19 +25165,37 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetName() string {
 	}
 	return t.Name
 }
+func (t *GetInternalPolicyByID_InternalPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.OwnerID
+}
 func (t *GetInternalPolicyByID_InternalPolicy) GetPolicyType() *string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
 	return t.PolicyType
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetPurposeAndScope() *string {
+func (t *GetInternalPolicyByID_InternalPolicy) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetStatus() *string {
+func (t *GetInternalPolicyByID_InternalPolicy) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetRevision() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Revision
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
@@ -25156,11 +25219,193 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetVersion() *string {
+
+type GetInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetID() string {
 	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
 	}
-	return t.Version
+	return t.ID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
+type GetInternalPolicies_InternalPolicies_Edges_Node struct {
+	ApprovalRequired *bool                                                            "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                           "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                           "json:\"id\" graphql:\"id\""
+	Name             string                                                           "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                          "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                       "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                 "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                          "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                            "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetBlockedGroups() []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetPolicyType() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.PolicyType
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Status
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetInternalPolicies_InternalPolicies_Edges struct {
+	Node *GetInternalPolicies_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_Edges) GetNode() *GetInternalPolicies_InternalPolicies_Edges_Node {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type GetInternalPolicies_InternalPolicies struct {
+	Edges []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies_InternalPolicies_Edges {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies{}
+	}
+	return t.Edges
 }
 
 type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors struct {
@@ -25200,30 +25445,31 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups)
 }
 
 type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
-	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                                            "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                                    "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                                    "json:\"id\" graphql:\"id\""
-	Name            string                                                                    "json:\"name\" graphql:\"name\""
-	PolicyType      *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                                                                   "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                                     "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                                   "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                                    "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                                    "json:\"id\" graphql:\"id\""
+	Name             string                                                                    "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                                "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                          "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetBackground() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetBlockedGroups() []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups {
 	if t == nil {
@@ -25243,13 +25489,7 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDescription() *string {
-	if t == nil {
-		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
-	}
-	return t.Description
-}
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDetails() map[string]any {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDetails() *string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
@@ -25279,19 +25519,37 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetName() str
 	}
 	return t.Name
 }
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.OwnerID
+}
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetPolicyType() *string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.PolicyType
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetPurposeAndScope() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetStatus() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetRevision() *string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.Revision
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
@@ -25315,12 +25573,6 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetUpdatedBy(
 	}
 	return t.UpdatedBy
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetVersion() *string {
-	if t == nil {
-		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
-	}
-	return t.Version
-}
 
 type UpdateInternalPolicy_UpdateInternalPolicy struct {
 	InternalPolicy UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
@@ -25334,30 +25586,31 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy) GetInternalPolicy() *UpdateI
 }
 
 type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetBackground() *string {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -25371,17 +25624,17 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCr
 	}
 	return t.CreatedBy
 }
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -25407,17 +25660,17 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetOp
 	}
 	return &t.Operation
 }
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetPolicyType() *string {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.PolicyType
-}
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetPurposeAndScope() *string {
-	if t == nil {
-		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.PurposeAndScope
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -25425,7 +25678,19 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetRe
 	}
 	return t.Ref
 }
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
@@ -25448,12 +25713,6 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUp
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges struct {
@@ -25479,30 +25738,31 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories) GetEdges() []*Ge
 }
 
 type GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetBackground() *string {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -25516,17 +25776,17 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreat
 	}
 	return t.CreatedBy
 }
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -25552,17 +25812,17 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetOpera
 	}
 	return &t.Operation
 }
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetPolicyType() *string {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.PolicyType
-}
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetPurposeAndScope() *string {
-	if t == nil {
-		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.PurposeAndScope
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -25570,7 +25830,19 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetRef()
 	}
 	return t.Ref
 }
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetStatus() *string {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.ReviewDue
+}
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
@@ -25593,12 +25865,6 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetUpdat
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetInternalPolicyHistories_InternalPolicyHistories_Edges struct {
@@ -35332,29 +35598,29 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 }
 
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetBackground() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -35368,13 +35634,7 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDetails() map[string]any {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
@@ -35398,25 +35658,37 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetName() str
 	}
 	return t.Name
 }
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.OwnerID
+}
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetProcedureType() *string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
 	return t.ProcedureType
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetPurposeAndScope() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetSatisfies() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetStatus() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.Revision
+}
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
@@ -35440,12 +35712,6 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetUpdatedBy(
 	}
 	return t.UpdatedBy
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
-	}
-	return t.Version
-}
 
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure struct {
 	Procedures []*CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
@@ -35459,29 +35725,29 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure) GetProcedures() []*Creat
 }
 
 type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetBackground() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -35495,13 +35761,7 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
-	}
-	return t.Description
-}
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDetails() map[string]any {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
@@ -35525,25 +35785,37 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetName() string {
 	}
 	return t.Name
 }
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.OwnerID
+}
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetProcedureType() *string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
 	return t.ProcedureType
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetPurposeAndScope() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetSatisfies() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetStatus() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.Revision
+}
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
@@ -35566,12 +35838,6 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetUpdatedBy() *str
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
-	}
-	return t.Version
 }
 
 type CreateBulkProcedure_CreateBulkProcedure struct {
@@ -35622,31 +35888,31 @@ func (t *CreateProcedure_CreateProcedure_Procedure_BlockedGroups) GetName() stri
 }
 
 type CreateProcedure_CreateProcedure_Procedure struct {
-	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                     "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*CreateProcedure_CreateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                     "json:\"id\" graphql:\"id\""
-	Name            string                                                     "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                                                    "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                    "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                     "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*CreateProcedure_CreateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                     "json:\"id\" graphql:\"id\""
+	Name             string                                                     "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                                 "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                           "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                    "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateProcedure_CreateProcedure_Procedure) GetBackground() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetBlockedGroups() []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups {
 	if t == nil {
@@ -35666,13 +35932,7 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetDescription() *string {
-	if t == nil {
-		t = &CreateProcedure_CreateProcedure_Procedure{}
-	}
-	return t.Description
-}
-func (t *CreateProcedure_CreateProcedure_Procedure) GetDetails() map[string]any {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetDetails() *string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
@@ -35702,25 +35962,37 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetName() string {
 	}
 	return t.Name
 }
+func (t *CreateProcedure_CreateProcedure_Procedure) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.OwnerID
+}
 func (t *CreateProcedure_CreateProcedure_Procedure) GetProcedureType() *string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.ProcedureType
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetPurposeAndScope() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetSatisfies() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *CreateProcedure_CreateProcedure_Procedure) GetStatus() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure) GetRevision() *string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.Revision
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
@@ -35743,12 +36015,6 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetUpdatedBy() *string {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateProcedure_CreateProcedure_Procedure) GetVersion() *string {
-	if t == nil {
-		t = &CreateProcedure_CreateProcedure_Procedure{}
-	}
-	return t.Version
 }
 
 type CreateProcedure_CreateProcedure struct {
@@ -35810,31 +36076,31 @@ func (t *GetAllProcedures_Procedures_Edges_Node_BlockedGroups) GetName() string 
 }
 
 type GetAllProcedures_Procedures_Edges_Node struct {
-	Background      *string                                                 "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                          "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                  "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetAllProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                  "json:\"id\" graphql:\"id\""
-	Name            string                                                  "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                                                 "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                                                 "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                                                 "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                                                 "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                 "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                   "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                 "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                  "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetAllProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                  "json:\"id\" graphql:\"id\""
+	Name             string                                                  "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                 "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                              "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                        "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                 "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                   "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllProcedures_Procedures_Edges_Node) GetBackground() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetBlockedGroups() []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups {
 	if t == nil {
@@ -35854,13 +36120,7 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllProcedures_Procedures_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllProcedures_Procedures_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
@@ -35890,25 +36150,37 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
+func (t *GetAllProcedures_Procedures_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetAllProcedures_Procedures_Edges_Node) GetProcedureType() *string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
 	return t.ProcedureType
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetPurposeAndScope() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetSatisfies() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *GetAllProcedures_Procedures_Edges_Node) GetStatus() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetAllProcedures_Procedures_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
@@ -35931,12 +36203,6 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetUpdatedBy() *string {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllProcedures_Procedures_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllProcedures_Procedures_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetAllProcedures_Procedures_Edges struct {
@@ -35998,31 +36264,31 @@ func (t *GetProcedureByID_Procedure_BlockedGroups) GetName() string {
 }
 
 type GetProcedureByID_Procedure struct {
-	Background      *string                                     "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetProcedureByID_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                      "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetProcedureByID_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                      "json:\"id\" graphql:\"id\""
-	Name            string                                      "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                                     "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                                     "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                                     "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                     "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                       "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetProcedureByID_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                     "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                      "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetProcedureByID_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                      "json:\"id\" graphql:\"id\""
+	Name             string                                      "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                     "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                  "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                            "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                     "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                       "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetProcedureByID_Procedure) GetBackground() *string {
+func (t *GetProcedureByID_Procedure) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetProcedureByID_Procedure) GetBlockedGroups() []*GetProcedureByID_Procedure_BlockedGroups {
 	if t == nil {
@@ -36042,13 +36308,7 @@ func (t *GetProcedureByID_Procedure) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetProcedureByID_Procedure) GetDescription() *string {
-	if t == nil {
-		t = &GetProcedureByID_Procedure{}
-	}
-	return t.Description
-}
-func (t *GetProcedureByID_Procedure) GetDetails() map[string]any {
+func (t *GetProcedureByID_Procedure) GetDetails() *string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
@@ -36078,25 +36338,37 @@ func (t *GetProcedureByID_Procedure) GetName() string {
 	}
 	return t.Name
 }
+func (t *GetProcedureByID_Procedure) GetOwnerID() *string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.OwnerID
+}
 func (t *GetProcedureByID_Procedure) GetProcedureType() *string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.ProcedureType
 }
-func (t *GetProcedureByID_Procedure) GetPurposeAndScope() *string {
+func (t *GetProcedureByID_Procedure) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *GetProcedureByID_Procedure) GetSatisfies() *string {
+func (t *GetProcedureByID_Procedure) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *GetProcedureByID_Procedure) GetStatus() *string {
+func (t *GetProcedureByID_Procedure) GetRevision() *string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.Revision
+}
+func (t *GetProcedureByID_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
@@ -36119,12 +36391,6 @@ func (t *GetProcedureByID_Procedure) GetUpdatedBy() *string {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetProcedureByID_Procedure) GetVersion() *string {
-	if t == nil {
-		t = &GetProcedureByID_Procedure{}
-	}
-	return t.Version
 }
 
 type GetProcedures_Procedures_Edges_Node_Editors struct {
@@ -36164,31 +36430,31 @@ func (t *GetProcedures_Procedures_Edges_Node_BlockedGroups) GetName() string {
 }
 
 type GetProcedures_Procedures_Edges_Node struct {
-	Background      *string                                              "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*GetProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                              "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                       "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                               "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*GetProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                               "json:\"id\" graphql:\"id\""
-	Name            string                                               "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                                              "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                                              "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                                              "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                              "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*GetProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                              "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                               "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*GetProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                               "json:\"id\" graphql:\"id\""
+	Name             string                                               "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                              "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                           "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                     "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                              "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetProcedures_Procedures_Edges_Node) GetBackground() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetProcedures_Procedures_Edges_Node) GetBlockedGroups() []*GetProcedures_Procedures_Edges_Node_BlockedGroups {
 	if t == nil {
@@ -36208,13 +36474,7 @@ func (t *GetProcedures_Procedures_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetProcedures_Procedures_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetProcedures_Procedures_Edges_Node) GetDetails() map[string]any {
+func (t *GetProcedures_Procedures_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
@@ -36244,25 +36504,37 @@ func (t *GetProcedures_Procedures_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
+func (t *GetProcedures_Procedures_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetProcedures_Procedures_Edges_Node) GetProcedureType() *string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
 	return t.ProcedureType
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetPurposeAndScope() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetSatisfies() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *GetProcedures_Procedures_Edges_Node) GetStatus() *string {
+func (t *GetProcedures_Procedures_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetProcedures_Procedures_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
@@ -36285,12 +36557,6 @@ func (t *GetProcedures_Procedures_Edges_Node) GetUpdatedBy() *string {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetProcedures_Procedures_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetProcedures_Procedures_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetProcedures_Procedures_Edges struct {
@@ -36352,31 +36618,31 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups) GetName() stri
 }
 
 type UpdateProcedure_UpdateProcedure_Procedure struct {
-	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
-	BlockedGroups   []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any                                             "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string                                                     "json:\"displayID\" graphql:\"displayID\""
-	Editors         []*UpdateProcedure_UpdateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ID              string                                                     "json:\"id\" graphql:\"id\""
-	Name            string                                                     "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                                                    "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                                                      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	BlockedGroups    []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string                                                    "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                     "json:\"displayID\" graphql:\"displayID\""
+	Editors          []*UpdateProcedure_UpdateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	ID               string                                                     "json:\"id\" graphql:\"id\""
+	Name             string                                                     "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                                 "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                           "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                    "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetBackground() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetBlockedGroups() []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups {
 	if t == nil {
@@ -36396,13 +36662,7 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDescription() *string {
-	if t == nil {
-		t = &UpdateProcedure_UpdateProcedure_Procedure{}
-	}
-	return t.Description
-}
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDetails() map[string]any {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDetails() *string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
@@ -36432,25 +36692,37 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetName() string {
 	}
 	return t.Name
 }
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.OwnerID
+}
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetProcedureType() *string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.ProcedureType
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetPurposeAndScope() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
-	return t.PurposeAndScope
+	return t.ReviewDue
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetSatisfies() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetReviewFrequency() *enums.Frequency {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
-	return t.Satisfies
+	return t.ReviewFrequency
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetStatus() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetRevision() *string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.Revision
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
@@ -36474,12 +36746,6 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetVersion() *string {
-	if t == nil {
-		t = &UpdateProcedure_UpdateProcedure_Procedure{}
-	}
-	return t.Version
-}
 
 type UpdateProcedure_UpdateProcedure struct {
 	Procedure UpdateProcedure_UpdateProcedure_Procedure "json:\"procedure\" graphql:\"procedure\""
@@ -36493,31 +36759,32 @@ func (t *UpdateProcedure_UpdateProcedure) GetProcedure() *UpdateProcedure_Update
 }
 
 type GetAllProcedureHistories_ProcedureHistories_Edges_Node struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Satisfies       *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetBackground() *string {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36531,17 +36798,17 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedBy() 
 	}
 	return t.CreatedBy
 }
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -36567,17 +36834,17 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetOperation() 
 	}
 	return &t.Operation
 }
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetProcedureType() *string {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.ProcedureType
-}
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetPurposeAndScope() *string {
-	if t == nil {
-		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.PurposeAndScope
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -36585,13 +36852,25 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetRef() *strin
 	}
 	return t.Ref
 }
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetSatisfies() *string {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.ReviewDue
 }
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
@@ -36614,12 +36893,6 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedBy() 
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetAllProcedureHistories_ProcedureHistories_Edges struct {
@@ -36645,31 +36918,32 @@ func (t *GetAllProcedureHistories_ProcedureHistories) GetEdges() []*GetAllProced
 }
 
 type GetProcedureHistories_ProcedureHistories_Edges_Node struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Satisfies       *string        "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime      time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Operation        history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID          *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Ref              *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetBackground() *string {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetApprovalRequired() *bool {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.Background
+	return t.ApprovalRequired
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36683,17 +36957,17 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetCreatedBy() *st
 	}
 	return t.CreatedBy
 }
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -36719,17 +36993,17 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetOperation() *hi
 	}
 	return &t.Operation
 }
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetProcedureType() *string {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.ProcedureType
-}
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetPurposeAndScope() *string {
-	if t == nil {
-		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.PurposeAndScope
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -36737,13 +37011,25 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetRef() *string {
 	}
 	return t.Ref
 }
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetSatisfies() *string {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetReviewDue() *time.Time {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.ReviewDue
 }
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetStatus() *string {
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.ReviewFrequency
+}
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.Revision
+}
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
@@ -36766,12 +37052,6 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetUpdatedBy() *st
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetVersion() *string {
-	if t == nil {
-		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Version
 }
 
 type GetProcedureHistories_ProcedureHistories_Edges struct {
@@ -37305,29 +37585,20 @@ func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_Cr
 }
 
 type CreateProgram_CreateProgram_Program_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	ProcedureType *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status        *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_Procedures{}
-	}
-	return t.Background
-}
 func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
@@ -37340,13 +37611,7 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedBy() *string 
 	}
 	return t.CreatedBy
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_Procedures{}
-	}
-	return t.Description
-}
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetDetails() map[string]any {
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
@@ -37376,13 +37641,13 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetProcedureType() *str
 	}
 	return t.ProcedureType
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetPurposeAndScope() *string {
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetStatus() *string {
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures{}
 	}
@@ -37406,37 +37671,22 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedBy() *string 
 	}
 	return t.UpdatedBy
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_Procedures{}
-	}
-	return t.Version
-}
 
 type CreateProgram_CreateProgram_Program_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details    *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID  string                "json:\"displayID\" graphql:\"displayID\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Name       string                "json:\"name\" graphql:\"name\""
+	PolicyType *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status     *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
@@ -37449,13 +37699,7 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetCreatedBy() *s
 	}
 	return t.CreatedBy
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDetails() map[string]any {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
@@ -37485,13 +37729,13 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetPolicyType() *
 	}
 	return t.PolicyType
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetPurposeAndScope() *string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetStatus() *string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
@@ -37514,12 +37758,6 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetUpdatedBy() *s
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type CreateProgram_CreateProgram_Program_Editors struct {
@@ -37836,29 +38074,20 @@ func (t *DeleteProgram_DeleteProgram) GetDeletedID() string {
 }
 
 type GetAllPrograms_Programs_Edges_Node_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	ProcedureType *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status        *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Background
-}
 func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
@@ -37871,13 +38100,7 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Description
-}
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]any {
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
@@ -37907,13 +38130,13 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetProcedureType() *stri
 	}
 	return t.ProcedureType
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetPurposeAndScope() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetStatus() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
 	}
@@ -37937,37 +38160,22 @@ func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Version
-}
 
 type GetAllPrograms_Programs_Edges_Node_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details    *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID  string                "json:\"displayID\" graphql:\"displayID\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Name       string                "json:\"name\" graphql:\"name\""
+	PolicyType *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status     *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
@@ -37980,13 +38188,7 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedBy() *st
 	}
 	return t.CreatedBy
 }
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() map[string]any {
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
@@ -38016,13 +38218,13 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetPolicyType() *s
 	}
 	return t.PolicyType
 }
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetPurposeAndScope() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetStatus() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
@@ -38045,12 +38247,6 @@ func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedBy() *st
 		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllPrograms_Programs_Edges_Node_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type GetAllPrograms_Programs_Edges_Node_Editors struct {
@@ -38331,29 +38527,20 @@ func (t *GetAllPrograms_Programs) GetEdges() []*GetAllPrograms_Programs_Edges {
 }
 
 type GetProgramByID_Program_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	ProcedureType *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status        *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetProgramByID_Program_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_Procedures{}
-	}
-	return t.Background
-}
 func (t *GetProgramByID_Program_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
@@ -38366,13 +38553,7 @@ func (t *GetProgramByID_Program_Procedures) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetProgramByID_Program_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_Procedures{}
-	}
-	return t.Description
-}
-func (t *GetProgramByID_Program_Procedures) GetDetails() map[string]any {
+func (t *GetProgramByID_Program_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
 	}
@@ -38402,13 +38583,13 @@ func (t *GetProgramByID_Program_Procedures) GetProcedureType() *string {
 	}
 	return t.ProcedureType
 }
-func (t *GetProgramByID_Program_Procedures) GetPurposeAndScope() *string {
+func (t *GetProgramByID_Program_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetProgramByID_Program_Procedures) GetStatus() *string {
+func (t *GetProgramByID_Program_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures{}
 	}
@@ -38432,37 +38613,22 @@ func (t *GetProgramByID_Program_Procedures) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetProgramByID_Program_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_Procedures{}
-	}
-	return t.Version
-}
 
 type GetProgramByID_Program_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details    *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID  string                "json:\"displayID\" graphql:\"displayID\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Name       string                "json:\"name\" graphql:\"name\""
+	PolicyType *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status     *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetProgramByID_Program_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *GetProgramByID_Program_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
@@ -38475,13 +38641,7 @@ func (t *GetProgramByID_Program_InternalPolicies) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetProgramByID_Program_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *GetProgramByID_Program_InternalPolicies) GetDetails() map[string]any {
+func (t *GetProgramByID_Program_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
@@ -38511,13 +38671,13 @@ func (t *GetProgramByID_Program_InternalPolicies) GetPolicyType() *string {
 	}
 	return t.PolicyType
 }
-func (t *GetProgramByID_Program_InternalPolicies) GetPurposeAndScope() *string {
+func (t *GetProgramByID_Program_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetProgramByID_Program_InternalPolicies) GetStatus() *string {
+func (t *GetProgramByID_Program_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
@@ -38540,12 +38700,6 @@ func (t *GetProgramByID_Program_InternalPolicies) GetUpdatedBy() *string {
 		t = &GetProgramByID_Program_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetProgramByID_Program_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type GetProgramByID_Program_Editors struct {
@@ -38804,29 +38958,20 @@ func (t *GetProgramByID_Program) GetViewers() []*GetProgramByID_Program_Viewers 
 }
 
 type GetPrograms_Programs_Edges_Node_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	ProcedureType *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status        *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Background
-}
 func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
@@ -38839,13 +38984,7 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Description
-}
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]any {
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
@@ -38875,13 +39014,13 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetProcedureType() *string 
 	}
 	return t.ProcedureType
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetPurposeAndScope() *string {
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetStatus() *string {
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_Procedures{}
 	}
@@ -38905,37 +39044,22 @@ func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_Procedures{}
-	}
-	return t.Version
-}
 
 type GetPrograms_Programs_Edges_Node_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID       string         "json:\"displayID\" graphql:\"displayID\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details    *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID  string                "json:\"displayID\" graphql:\"displayID\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Name       string                "json:\"name\" graphql:\"name\""
+	PolicyType *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status     *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
@@ -38948,13 +39072,7 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetCreatedBy() *strin
 	}
 	return t.CreatedBy
 }
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() map[string]any {
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
@@ -38984,13 +39102,13 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetPolicyType() *stri
 	}
 	return t.PolicyType
 }
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetPurposeAndScope() *string {
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetStatus() *string {
+func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
@@ -39013,12 +39131,6 @@ func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetUpdatedBy() *strin
 		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetPrograms_Programs_Edges_Node_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type GetPrograms_Programs_Edges_Node_Editors struct {
@@ -39299,28 +39411,19 @@ func (t *GetPrograms_Programs) GetEdges() []*GetPrograms_Programs_Edges {
 }
 
 type UpdateProgram_UpdateProgram_Program_Procedures struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	ProcedureType   *string        "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	ProcedureType *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status        *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetBackground() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
-	}
-	return t.Background
-}
 func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
@@ -39333,13 +39436,7 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedBy() *string 
 	}
 	return t.CreatedBy
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDescription() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
-	}
-	return t.Description
-}
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDetails() map[string]any {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
 	}
@@ -39363,13 +39460,13 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetProcedureType() *str
 	}
 	return t.ProcedureType
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetPurposeAndScope() *string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetRevision() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetStatus() *string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
 	}
@@ -39393,36 +39490,21 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedBy() *string 
 	}
 	return t.UpdatedBy
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetVersion() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
-	}
-	return t.Version
-}
 
 type UpdateProgram_UpdateProgram_Program_InternalPolicies struct {
-	Background      *string        "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]any "json:\"details,omitempty\" graphql:\"details\""
-	ID              string         "json:\"id\" graphql:\"id\""
-	Name            string         "json:\"name\" graphql:\"name\""
-	PolicyType      *string        "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string        "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string        "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details    *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Name       string                "json:\"name\" graphql:\"name\""
+	PolicyType *string               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision   *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status     *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetBackground() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
-	}
-	return t.Background
-}
 func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
@@ -39435,13 +39517,7 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetCreatedBy() *s
 	}
 	return t.CreatedBy
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetDescription() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
-	}
-	return t.Description
-}
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetDetails() map[string]any {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
@@ -39465,13 +39541,13 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetPolicyType() *
 	}
 	return t.PolicyType
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetPurposeAndScope() *string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetRevision() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
-	return t.PurposeAndScope
+	return t.Revision
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetStatus() *string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
@@ -39494,12 +39570,6 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetUpdatedBy() *s
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
 	}
 	return t.UpdatedBy
-}
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies) GetVersion() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies{}
-	}
-	return t.Version
 }
 
 type UpdateProgram_UpdateProgram_Program_Editors struct {
@@ -41386,8 +41456,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
@@ -41395,8 +41464,8 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	Mitigation    *string               "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                "json:\"name\" graphql:\"name\""
 	RiskType      *string               "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string               "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -41420,13 +41489,7 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDetails() map[string]any {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
@@ -41474,13 +41537,13 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSatisfies() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetScore() *int64 {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetStatus() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
@@ -41520,8 +41583,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
@@ -41529,8 +41591,8 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	Mitigation    *string               "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                "json:\"name\" graphql:\"name\""
 	RiskType      *string               "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string               "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -41554,13 +41616,7 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
-	}
-	return t.Description
-}
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDetails() map[string]any {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDetails() *string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
@@ -41608,13 +41664,13 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSatisfies() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetScore() *int64 {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetStatus() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
@@ -41727,8 +41783,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string                                     "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*CreateRisk_CreateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                      "json:\"id\" graphql:\"id\""
@@ -41738,8 +41793,8 @@ type CreateRisk_CreateRisk_Risk struct {
 	Name          string                                      "json:\"name\" graphql:\"name\""
 	Programs      []*CreateRisk_CreateRisk_Risk_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
 	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                                      "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus                           "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -41770,13 +41825,7 @@ func (t *CreateRisk_CreateRisk_Risk) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateRisk_CreateRisk_Risk) GetDescription() *string {
-	if t == nil {
-		t = &CreateRisk_CreateRisk_Risk{}
-	}
-	return t.Description
-}
-func (t *CreateRisk_CreateRisk_Risk) GetDetails() map[string]any {
+func (t *CreateRisk_CreateRisk_Risk) GetDetails() *string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
@@ -41836,13 +41885,13 @@ func (t *CreateRisk_CreateRisk_Risk) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *CreateRisk_CreateRisk_Risk) GetSatisfies() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetScore() *int64 {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *CreateRisk_CreateRisk_Risk) GetStatus() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
@@ -41972,8 +42021,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	BusinessCosts *string                                       "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any                                "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string                                       "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                                        "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetAllRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                        "json:\"id\" graphql:\"id\""
@@ -41983,8 +42031,8 @@ type GetAllRisks_Risks_Edges_Node struct {
 	Name          string                                        "json:\"name\" graphql:\"name\""
 	Programs      []*GetAllRisks_Risks_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
 	RiskType      *string                                       "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                                       "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                                       "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                                        "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus                             "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -42015,13 +42063,7 @@ func (t *GetAllRisks_Risks_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllRisks_Risks_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllRisks_Risks_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllRisks_Risks_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
@@ -42081,13 +42123,13 @@ func (t *GetAllRisks_Risks_Edges_Node) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetSatisfies() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetScore() *int64 {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetStatus() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
@@ -42217,8 +42259,7 @@ type GetRiskByID_Risk struct {
 	BusinessCosts *string                           "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any                    "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string                           "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                            "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetRiskByID_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                            "json:\"id\" graphql:\"id\""
@@ -42228,8 +42269,8 @@ type GetRiskByID_Risk struct {
 	Name          string                            "json:\"name\" graphql:\"name\""
 	Programs      []*GetRiskByID_Risk_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
 	RiskType      *string                           "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                           "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                           "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                            "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus                 "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -42260,13 +42301,7 @@ func (t *GetRiskByID_Risk) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetRiskByID_Risk) GetDescription() *string {
-	if t == nil {
-		t = &GetRiskByID_Risk{}
-	}
-	return t.Description
-}
-func (t *GetRiskByID_Risk) GetDetails() map[string]any {
+func (t *GetRiskByID_Risk) GetDetails() *string {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
@@ -42326,13 +42361,13 @@ func (t *GetRiskByID_Risk) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *GetRiskByID_Risk) GetSatisfies() *string {
+func (t *GetRiskByID_Risk) GetScore() *int64 {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *GetRiskByID_Risk) GetStatus() *string {
+func (t *GetRiskByID_Risk) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
@@ -42440,8 +42475,7 @@ type GetRisks_Risks_Edges_Node struct {
 	BusinessCosts *string                                    "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                                    "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any                             "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string                                    "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                                     "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*GetRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                     "json:\"id\" graphql:\"id\""
@@ -42451,8 +42485,8 @@ type GetRisks_Risks_Edges_Node struct {
 	Name          string                                     "json:\"name\" graphql:\"name\""
 	Programs      []*GetRisks_Risks_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
 	RiskType      *string                                    "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                                    "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                                     "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus                          "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -42483,13 +42517,7 @@ func (t *GetRisks_Risks_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetRisks_Risks_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetRisks_Risks_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetRisks_Risks_Edges_Node) GetDetails() map[string]any {
+func (t *GetRisks_Risks_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
@@ -42549,13 +42577,13 @@ func (t *GetRisks_Risks_Edges_Node) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *GetRisks_Risks_Edges_Node) GetSatisfies() *string {
+func (t *GetRisks_Risks_Edges_Node) GetScore() *int64 {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *GetRisks_Risks_Edges_Node) GetStatus() *string {
+func (t *GetRisks_Risks_Edges_Node) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
@@ -42685,8 +42713,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any                              "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string                                     "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string                                      "json:\"displayID\" graphql:\"displayID\""
 	Editors       []*UpdateRisk_UpdateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
 	ID            string                                      "json:\"id\" graphql:\"id\""
@@ -42696,8 +42723,8 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	Name          string                                      "json:\"name\" graphql:\"name\""
 	Programs      []*UpdateRisk_UpdateRisk_Risk_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
 	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                                      "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus                           "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -42728,13 +42755,7 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetDescription() *string {
-	if t == nil {
-		t = &UpdateRisk_UpdateRisk_Risk{}
-	}
-	return t.Description
-}
-func (t *UpdateRisk_UpdateRisk_Risk) GetDetails() map[string]any {
+func (t *UpdateRisk_UpdateRisk_Risk) GetDetails() *string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
@@ -42794,13 +42815,13 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetSatisfies() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetScore() *int64 {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetStatus() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
@@ -42844,10 +42865,11 @@ func (t *UpdateRisk_UpdateRisk) GetRisk() *UpdateRisk_UpdateRisk_Risk {
 
 type GetAllRiskHistories_RiskHistories_Edges_Node struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	Category      *string               "json:\"category,omitempty\" graphql:\"category\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
@@ -42855,10 +42877,11 @@ type GetAllRiskHistories_RiskHistories_Edges_Node struct {
 	Mitigation    *string               "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                "json:\"name\" graphql:\"name\""
 	Operation     history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string               "json:\"ref,omitempty\" graphql:\"ref\""
 	RiskType      *string               "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string               "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -42869,6 +42892,12 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetBusinessCosts() *strin
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.BusinessCosts
+}
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCategory() *string {
+	if t == nil {
+		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.Category
 }
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -42882,17 +42911,17 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -42936,6 +42965,12 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetOperation() *history.O
 	}
 	return &t.Operation
 }
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
@@ -42948,13 +42983,13 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetSatisfies() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetScore() *int64 {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
@@ -43003,10 +43038,11 @@ func (t *GetAllRiskHistories_RiskHistories) GetEdges() []*GetAllRiskHistories_Ri
 
 type GetRiskHistories_RiskHistories_Edges_Node struct {
 	BusinessCosts *string               "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	Category      *string               "json:\"category,omitempty\" graphql:\"category\""
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]any        "json:\"details,omitempty\" graphql:\"details\""
+	Details       *string               "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                "json:\"id\" graphql:\"id\""
 	Impact        *enums.RiskImpact     "json:\"impact,omitempty\" graphql:\"impact\""
@@ -43014,10 +43050,11 @@ type GetRiskHistories_RiskHistories_Edges_Node struct {
 	Mitigation    *string               "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                "json:\"name\" graphql:\"name\""
 	Operation     history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string               "json:\"ref,omitempty\" graphql:\"ref\""
 	RiskType      *string               "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string               "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string               "json:\"status,omitempty\" graphql:\"status\""
+	Score         *int64                "json:\"score,omitempty\" graphql:\"score\""
+	Status        *enums.RiskStatus     "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -43028,6 +43065,12 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetBusinessCosts() *string {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.BusinessCosts
+}
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCategory() *string {
+	if t == nil {
+		t = &GetRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.Category
 }
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -43041,17 +43084,17 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDetails() map[string]any {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Details
+}
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.DisplayID
 }
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -43095,6 +43138,12 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetOperation() *history.OpTy
 	}
 	return &t.Operation
 }
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
@@ -43107,13 +43156,13 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetRiskType() *string {
 	}
 	return t.RiskType
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetSatisfies() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetScore() *int64 {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
-	return t.Satisfies
+	return t.Score
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetStatus() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetStatus() *enums.RiskStatus {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
@@ -43190,15 +43239,29 @@ func (t *GlobalSearch_Search_Nodes_APITokenSearchResult) GetAPITokens() []*Globa
 }
 
 type GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Details *string  "json:\"details,omitempty\" graphql:\"details\""
+	ID      string   "json:\"id\" graphql:\"id\""
+	Name    string   "json:\"name\" graphql:\"name\""
+	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+	}
+	return t.Details
+}
 func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetID() string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+	}
+	return t.Name
 }
 func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetTags() []string {
 	if t == nil {
@@ -43693,18 +43756,18 @@ func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult) GetIntegrations() []
 }
 
 type GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies struct {
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	Name        string   "json:\"name\" graphql:\"name\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDescription() *string {
+func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() *string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
-	return t.Description
+	return t.Details
 }
 func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDisplayID() string {
 	if t == nil {
@@ -43952,18 +44015,18 @@ func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult) GetPersonalA
 }
 
 type GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures struct {
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	Name        string   "json:\"name\" graphql:\"name\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDescription() *string {
+func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDetails() *string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
 	}
-	return t.Description
+	return t.Details
 }
 func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDisplayID() string {
 	if t == nil {
@@ -44052,19 +44115,12 @@ func (t *GlobalSearch_Search_Nodes_ProgramSearchResult) GetPrograms() []*GlobalS
 }
 
 type GlobalSearch_Search_Nodes_RiskSearchResult_Risks struct {
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	Name        string   "json:\"name\" graphql:\"name\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetDescription() *string {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Description
-}
 func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetDisplayID() string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
@@ -44642,27 +44698,27 @@ func (t *GlobalSearch_Search) GetNodes() []*GlobalSearch_Search_Nodes {
 }
 
 type CreateStandard_CreateStandard_Standard struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string    "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool      "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string    "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsPublic      *bool      "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string    "json:\"link,omitempty\" graphql:\"link\""
-	Name          string     "json:\"name\" graphql:\"name\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string    "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string    "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string    "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string    "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string    "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateStandard_CreateStandard_Standard) GetCreatedAt() *time.Time {
@@ -44755,7 +44811,7 @@ func (t *CreateStandard_CreateStandard_Standard) GetStandardType() *string {
 	}
 	return t.StandardType
 }
-func (t *CreateStandard_CreateStandard_Standard) GetStatus() *string {
+func (t *CreateStandard_CreateStandard_Standard) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard{}
 	}
@@ -44815,27 +44871,27 @@ func (t *DeleteStandard_DeleteStandard) GetDeletedID() string {
 }
 
 type GetAllStandards_Standards_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string    "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool      "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string    "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsPublic      *bool      "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string    "json:\"link,omitempty\" graphql:\"link\""
-	Name          string     "json:\"name\" graphql:\"name\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string    "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string    "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string    "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string    "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string    "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetAllStandards_Standards_Edges_Node) GetCreatedAt() *time.Time {
@@ -44928,7 +44984,7 @@ func (t *GetAllStandards_Standards_Edges_Node) GetStandardType() *string {
 	}
 	return t.StandardType
 }
-func (t *GetAllStandards_Standards_Edges_Node) GetStatus() *string {
+func (t *GetAllStandards_Standards_Edges_Node) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node{}
 	}
@@ -44988,27 +45044,27 @@ func (t *GetAllStandards_Standards) GetEdges() []*GetAllStandards_Standards_Edge
 }
 
 type GetStandardByID_Standard struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string    "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool      "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string    "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsPublic      *bool      "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string    "json:\"link,omitempty\" graphql:\"link\""
-	Name          string     "json:\"name\" graphql:\"name\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string    "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string    "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string    "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string    "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string    "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetStandardByID_Standard) GetCreatedAt() *time.Time {
@@ -45101,7 +45157,7 @@ func (t *GetStandardByID_Standard) GetStandardType() *string {
 	}
 	return t.StandardType
 }
-func (t *GetStandardByID_Standard) GetStatus() *string {
+func (t *GetStandardByID_Standard) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &GetStandardByID_Standard{}
 	}
@@ -45139,27 +45195,27 @@ func (t *GetStandardByID_Standard) GetVersion() *string {
 }
 
 type GetStandards_Standards_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string    "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool      "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string    "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsPublic      *bool      "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string    "json:\"link,omitempty\" graphql:\"link\""
-	Name          string     "json:\"name\" graphql:\"name\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string    "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string    "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string    "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string    "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string    "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetStandards_Standards_Edges_Node) GetCreatedAt() *time.Time {
@@ -45252,7 +45308,7 @@ func (t *GetStandards_Standards_Edges_Node) GetStandardType() *string {
 	}
 	return t.StandardType
 }
-func (t *GetStandards_Standards_Edges_Node) GetStatus() *string {
+func (t *GetStandards_Standards_Edges_Node) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node{}
 	}
@@ -45312,27 +45368,27 @@ func (t *GetStandards_Standards) GetEdges() []*GetStandards_Standards_Edges {
 }
 
 type UpdateStandard_UpdateStandard_Standard struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string    "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string    "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool      "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string    "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsPublic      *bool      "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string    "json:\"link,omitempty\" graphql:\"link\""
-	Name          string     "json:\"name\" graphql:\"name\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision      *string    "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string    "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string    "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string    "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string    "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *UpdateStandard_UpdateStandard_Standard) GetCreatedAt() *time.Time {
@@ -45425,7 +45481,7 @@ func (t *UpdateStandard_UpdateStandard_Standard) GetStandardType() *string {
 	}
 	return t.StandardType
 }
-func (t *UpdateStandard_UpdateStandard_Standard) GetStatus() *string {
+func (t *UpdateStandard_UpdateStandard_Standard) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard{}
 	}
@@ -45474,30 +45530,30 @@ func (t *UpdateStandard_UpdateStandard) GetStandard() *UpdateStandard_UpdateStan
 }
 
 type GetAllStandardHistories_StandardHistories_Edges_Node struct {
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string        "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string       "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string        "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool          "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string        "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	IsPublic      *bool          "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string        "json:\"link,omitempty\" graphql:\"link\""
-	Name          string         "json:\"name\" graphql:\"name\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID       *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Revision      *string        "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string        "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string        "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string        "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	Operation     history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -45608,7 +45664,7 @@ func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetStandardType()
 	}
 	return t.StandardType
 }
-func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
 	}
@@ -45668,30 +45724,30 @@ func (t *GetAllStandardHistories_StandardHistories) GetEdges() []*GetAllStandard
 }
 
 type GetStandardHistories_StandardHistories_Edges_Node struct {
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string        "json:\"description,omitempty\" graphql:\"description\""
-	Domains       []string       "json:\"domains,omitempty\" graphql:\"domains\""
-	Framework     *string        "json:\"framework,omitempty\" graphql:\"framework\""
-	FreeToUse     *bool          "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
-	GoverningBody *string        "json:\"governingBody,omitempty\" graphql:\"governingBody\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	IsPublic      *bool          "json:\"isPublic,omitempty\" graphql:\"isPublic\""
-	Link          *string        "json:\"link,omitempty\" graphql:\"link\""
-	Name          string         "json:\"name\" graphql:\"name\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID       *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Revision      *string        "json:\"revision,omitempty\" graphql:\"revision\""
-	ShortName     *string        "json:\"shortName,omitempty\" graphql:\"shortName\""
-	StandardType  *string        "json:\"standardType,omitempty\" graphql:\"standardType\""
-	Status        *string        "json:\"status,omitempty\" graphql:\"status\""
-	SystemOwned   *bool          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version       *string        "json:\"version,omitempty\" graphql:\"version\""
+	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string               "json:\"description,omitempty\" graphql:\"description\""
+	Domains       []string              "json:\"domains,omitempty\" graphql:\"domains\""
+	Framework     *string               "json:\"framework,omitempty\" graphql:\"framework\""
+	FreeToUse     *bool                 "json:\"freeToUse,omitempty\" graphql:\"freeToUse\""
+	GoverningBody *string               "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	HistoryTime   time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                "json:\"id\" graphql:\"id\""
+	IsPublic      *bool                 "json:\"isPublic,omitempty\" graphql:\"isPublic\""
+	Link          *string               "json:\"link,omitempty\" graphql:\"link\""
+	Name          string                "json:\"name\" graphql:\"name\""
+	Operation     history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision      *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	ShortName     *string               "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType  *string               "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Status        *enums.StandardStatus "json:\"status,omitempty\" graphql:\"status\""
+	SystemOwned   *bool                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version       *string               "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetStandardHistories_StandardHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -45802,7 +45858,7 @@ func (t *GetStandardHistories_StandardHistories_Edges_Node) GetStandardType() *s
 	}
 	return t.StandardType
 }
-func (t *GetStandardHistories_StandardHistories_Edges_Node) GetStatus() *string {
+func (t *GetStandardHistories_StandardHistories_Edges_Node) GetStatus() *enums.StandardStatus {
 	if t == nil {
 		t = &GetStandardHistories_StandardHistories_Edges_Node{}
 	}
@@ -56044,17 +56100,6 @@ func (t *GetAllInternalPolicies) GetInternalPolicies() *GetAllInternalPolicies_I
 	return &t.InternalPolicies
 }
 
-type GetInternalPolicies struct {
-	InternalPolicies GetInternalPolicies_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
-}
-
-func (t *GetInternalPolicies) GetInternalPolicies() *GetInternalPolicies_InternalPolicies {
-	if t == nil {
-		t = &GetInternalPolicies{}
-	}
-	return &t.InternalPolicies
-}
-
 type GetInternalPolicyByID struct {
 	InternalPolicy GetInternalPolicyByID_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
 }
@@ -56064,6 +56109,17 @@ func (t *GetInternalPolicyByID) GetInternalPolicy() *GetInternalPolicyByID_Inter
 		t = &GetInternalPolicyByID{}
 	}
 	return &t.InternalPolicy
+}
+
+type GetInternalPolicies struct {
+	InternalPolicies GetInternalPolicies_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
+}
+
+func (t *GetInternalPolicies) GetInternalPolicies() *GetInternalPolicies_InternalPolicies {
+	if t == nil {
+		t = &GetInternalPolicies{}
+	}
+	return &t.InternalPolicies
 }
 
 type UpdateInternalPolicy struct {
@@ -58071,14 +58127,18 @@ func (t *GetUserSettingHistories) GetUserSettingHistories() *GetUserSettingHisto
 const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($input: Upload!) {
 	createBulkCSVActionPlan(input: $input) {
 		actionPlans {
+			actionPlanType
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
 			dueDate
 			id
 			name
 			priority
+			reviewDue
+			reviewFrequency
+			revision
 			source
 			status
 			tags
@@ -58109,14 +58169,18 @@ func (c *Client) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Uplo
 const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 	createBulkActionPlan(input: $input) {
 		actionPlans {
+			actionPlanType
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
 			dueDate
 			id
 			name
 			priority
+			reviewDue
+			reviewFrequency
+			revision
 			source
 			status
 			tags
@@ -58147,14 +58211,18 @@ func (c *Client) CreateBulkActionPlan(ctx context.Context, input []*CreateAction
 const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 	createActionPlan(input: $input) {
 		actionPlan {
+			actionPlanType
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
 			dueDate
 			id
 			name
 			priority
+			reviewDue
+			reviewFrequency
+			revision
 			source
 			status
 			tags
@@ -58210,14 +58278,18 @@ const GetAllActionPlansDocument = `query GetAllActionPlans {
 	actionPlans {
 		edges {
 			node {
+				actionPlanType
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
 				dueDate
 				id
 				name
 				priority
+				reviewDue
+				reviewFrequency
+				revision
 				source
 				status
 				tags
@@ -58246,14 +58318,18 @@ func (c *Client) GetAllActionPlans(ctx context.Context, interceptors ...clientv2
 
 const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) {
 	actionPlan(id: $actionPlanId) {
+		actionPlanType
+		approvalRequired
 		createdAt
 		createdBy
-		description
 		details
 		dueDate
 		id
 		name
 		priority
+		reviewDue
+		reviewFrequency
+		revision
 		source
 		status
 		tags
@@ -58284,14 +58360,18 @@ const GetActionPlansDocument = `query GetActionPlans ($where: ActionPlanWhereInp
 	actionPlans(where: $where) {
 		edges {
 			node {
+				actionPlanType
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
 				dueDate
 				id
 				name
 				priority
+				reviewDue
+				reviewFrequency
+				revision
 				source
 				status
 				tags
@@ -58323,14 +58403,18 @@ func (c *Client) GetActionPlans(ctx context.Context, where *ActionPlanWhereInput
 const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInput!) {
 	updateActionPlan(id: $updateActionPlanId, input: $input) {
 		actionPlan {
+			actionPlanType
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
 			dueDate
 			id
 			name
 			priority
+			reviewDue
+			reviewFrequency
+			revision
 			source
 			status
 			tags
@@ -58363,9 +58447,10 @@ const GetAllActionPlanHistoriesDocument = `query GetAllActionPlanHistories {
 	actionPlanHistories {
 		edges {
 			node {
+				actionPlanType
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
 				dueDate
 				historyTime
@@ -58374,6 +58459,9 @@ const GetAllActionPlanHistoriesDocument = `query GetAllActionPlanHistories {
 				operation
 				priority
 				ref
+				reviewDue
+				reviewFrequency
+				revision
 				source
 				status
 				tags
@@ -58404,9 +58492,10 @@ const GetActionPlanHistoriesDocument = `query GetActionPlanHistories ($where: Ac
 	actionPlanHistories(where: $where) {
 		edges {
 			node {
+				actionPlanType
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
 				dueDate
 				historyTime
@@ -58415,6 +58504,9 @@ const GetActionPlanHistoriesDocument = `query GetActionPlanHistories ($where: Ac
 				operation
 				priority
 				ref
+				reviewDue
+				reviewFrequency
+				revision
 				source
 				status
 				tags
@@ -58464,11 +58556,11 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					tags
 					name
-					description
-					status
-					priority
-					source
+					actionPlanType
 					details
+					revision
+					ownerID
+					source
 				}
 			}
 			... on ContactSearchResult {
@@ -58513,13 +58605,13 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					deletedBy
 					tags
-					status
 					details
 				}
 			}
 			... on ControlObjectiveSearchResult {
 				controlObjectives {
 					deletedBy
+					revision
 					id
 					displayID
 					tags
@@ -58528,7 +58620,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					desiredOutcome
 					status
 					controlObjectiveType
-					version
 					category
 					subcategory
 				}
@@ -58631,19 +58722,15 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on InternalPolicySearchResult {
 				internalPolicies {
+					tags
 					deletedBy
 					id
 					displayID
-					tags
 					ownerID
 					name
-					description
-					status
 					policyType
-					version
-					purposeAndScope
-					background
 					details
+					revision
 				}
 			}
 			... on MappedControlSearchResult {
@@ -58723,20 +58810,15 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			... on ProcedureSearchResult {
 				procedures {
+					tags
 					deletedBy
 					id
 					displayID
-					tags
 					ownerID
 					name
-					description
-					status
 					procedureType
-					version
-					purposeAndScope
-					background
-					satisfies
 					details
+					revision
 				}
 			}
 			... on ProgramSearchResult {
@@ -58758,13 +58840,11 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					ownerID
 					name
-					description
-					status
 					riskType
-					businessCosts
+					category
 					mitigation
-					satisfies
 					details
+					businessCosts
 				}
 			}
 			... on StandardSearchResult {
@@ -58772,18 +58852,18 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					revision
 					ownerID
 					name
 					shortName
 					framework
 					description
+					governingBodyLogoURL
 					governingBody
 					domains
 					link
-					status
 					standardType
 					version
-					revision
 				}
 			}
 			... on SubcontrolSearchResult {
@@ -60511,7 +60591,7 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 		}
 	}
 }
@@ -60552,7 +60632,7 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 		}
 	}
 }
@@ -60593,7 +60673,7 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 			controls {
 				id
 				displayID
@@ -60682,7 +60762,7 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 				controls {
 					id
 					displayID
@@ -60744,7 +60824,7 @@ const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($control
 		tags
 		updatedAt
 		updatedBy
-		version
+		revision
 		controls {
 			id
 			displayID
@@ -60808,7 +60888,7 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 				controls {
 					id
 					displayID
@@ -60873,7 +60953,7 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 			controls {
 				id
 				displayID
@@ -60936,13 +61016,13 @@ const GetAllControlObjectiveHistoriesDocument = `query GetAllControlObjectiveHis
 				operation
 				ownerID
 				ref
+				revision
 				source
 				status
 				subcategory
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -60980,13 +61060,13 @@ const GetControlObjectiveHistoriesDocument = `query GetControlObjectiveHistories
 				operation
 				ownerID
 				ref
+				revision
 				source
 				status
 				subcategory
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -62470,6 +62550,7 @@ const CreateEvidenceDocument = `mutation CreateEvidence ($input: CreateEvidenceI
 			ownerID
 			renewalDate
 			source
+			status
 			tags
 			updatedAt
 			updatedBy
@@ -62565,6 +62646,7 @@ const GetAllEvidencesDocument = `query GetAllEvidences {
 				ownerID
 				renewalDate
 				source
+				status
 				tags
 				updatedAt
 				updatedBy
@@ -62632,6 +62714,7 @@ const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 		ownerID
 		renewalDate
 		source
+		status
 		tags
 		updatedAt
 		updatedBy
@@ -62701,6 +62784,7 @@ const GetEvidencesDocument = `query GetEvidences ($where: EvidenceWhereInput) {
 				ownerID
 				renewalDate
 				source
+				status
 				tags
 				updatedAt
 				updatedBy
@@ -62771,6 +62855,7 @@ const UpdateEvidenceDocument = `mutation UpdateEvidence ($updateEvidenceId: ID!,
 			ownerID
 			renewalDate
 			source
+			status
 			tags
 			updatedAt
 			updatedBy
@@ -65061,21 +65146,22 @@ func (c *Client) GetIntegrationHistories(ctx context.Context, where *Integration
 const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 	createBulkCSVInternalPolicy(input: $input) {
 		internalPolicies {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			policyType
-			purposeAndScope
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 		}
 	}
 }
@@ -65101,21 +65187,22 @@ func (c *Client) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.
 const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 	createBulkInternalPolicy(input: $input) {
 		internalPolicies {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			policyType
-			purposeAndScope
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 		}
 	}
 }
@@ -65141,21 +65228,22 @@ func (c *Client) CreateBulkInternalPolicy(ctx context.Context, input []*CreateIn
 const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 	createInternalPolicy(input: $input) {
 		internalPolicy {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			policyType
-			purposeAndScope
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 			editors {
 				id
 				name
@@ -65214,21 +65302,22 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 	internalPolicies {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
-				id
 				displayID
+				id
 				name
+				ownerID
 				policyType
-				purposeAndScope
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 				editors {
 					id
 					name
@@ -65258,25 +65347,73 @@ func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...cli
 	return &res, nil
 }
 
+const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPolicyId: ID!) {
+	internalPolicy(id: $internalPolicyId) {
+		approvalRequired
+		createdAt
+		createdBy
+		details
+		displayID
+		id
+		name
+		ownerID
+		policyType
+		reviewDue
+		reviewFrequency
+		revision
+		status
+		tags
+		updatedAt
+		updatedBy
+		editors {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
+	}
+}
+`
+
+func (c *Client) GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error) {
+	vars := map[string]any{
+		"internalPolicyId": internalPolicyID,
+	}
+
+	var res GetInternalPolicyByID
+	if err := c.Client.Post(ctx, "GetInternalPolicyByID", GetInternalPolicyByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: InternalPolicyWhereInput) {
 	internalPolicies(where: $where) {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
-				id
 				displayID
+				id
 				name
+				ownerID
 				policyType
-				purposeAndScope
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 				editors {
 					id
 					name
@@ -65308,70 +65445,25 @@ func (c *Client) GetInternalPolicies(ctx context.Context, where *InternalPolicyW
 	return &res, nil
 }
 
-const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPolicyId: ID!) {
-	internalPolicy(id: $internalPolicyId) {
-		background
-		createdAt
-		createdBy
-		description
-		details
-		id
-		displayID
-		name
-		policyType
-		purposeAndScope
-		status
-		tags
-		updatedAt
-		updatedBy
-		version
-		editors {
-			id
-			name
-		}
-		blockedGroups {
-			id
-			name
-		}
-	}
-}
-`
-
-func (c *Client) GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error) {
-	vars := map[string]any{
-		"internalPolicyId": internalPolicyID,
-	}
-
-	var res GetInternalPolicyByID
-	if err := c.Client.Post(ctx, "GetInternalPolicyByID", GetInternalPolicyByIDDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
 	updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
 		internalPolicy {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			policyType
-			purposeAndScope
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 			editors {
 				id
 				name
@@ -65407,23 +65499,24 @@ const GetAllInternalPolicyHistoriesDocument = `query GetAllInternalPolicyHistori
 	internalPolicyHistories {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				name
 				operation
+				ownerID
 				policyType
-				purposeAndScope
 				ref
+				reviewDue
+				reviewFrequency
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -65449,23 +65542,24 @@ const GetInternalPolicyHistoriesDocument = `query GetInternalPolicyHistories ($w
 	internalPolicyHistories(where: $where) {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				name
 				operation
+				ownerID
 				policyType
-				purposeAndScope
 				ref
+				reviewDue
+				reviewFrequency
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -68403,22 +68497,22 @@ func (c *Client) UpdatePersonalAccessToken(ctx context.Context, updatePersonalAc
 const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input: Upload!) {
 	createBulkCSVProcedure(input: $input) {
 		procedures {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			procedureType
-			purposeAndScope
-			satisfies
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 		}
 	}
 }
@@ -68444,22 +68538,22 @@ func (c *Client) CreateBulkCSVProcedure(ctx context.Context, input graphql.Uploa
 const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 	createBulkProcedure(input: $input) {
 		procedures {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			procedureType
-			purposeAndScope
-			satisfies
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 		}
 	}
 }
@@ -68485,22 +68579,22 @@ func (c *Client) CreateBulkProcedure(ctx context.Context, input []*CreateProcedu
 const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedureInput!) {
 	createProcedure(input: $input) {
 		procedure {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			procedureType
-			purposeAndScope
-			satisfies
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 			editors {
 				id
 				name
@@ -68559,22 +68653,22 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 	procedures {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
-				id
 				displayID
+				id
 				name
+				ownerID
 				procedureType
-				purposeAndScope
-				satisfies
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 				editors {
 					id
 					name
@@ -68606,22 +68700,22 @@ func (c *Client) GetAllProcedures(ctx context.Context, interceptors ...clientv2.
 
 const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 	procedure(id: $procedureId) {
-		background
+		approvalRequired
 		createdAt
 		createdBy
-		description
 		details
-		id
 		displayID
+		id
 		name
+		ownerID
 		procedureType
-		purposeAndScope
-		satisfies
+		reviewDue
+		reviewFrequency
+		revision
 		status
 		tags
 		updatedAt
 		updatedBy
-		version
 		editors {
 			id
 			name
@@ -68655,22 +68749,22 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 	procedures(where: $where) {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
-				id
 				displayID
+				id
 				name
+				ownerID
 				procedureType
-				purposeAndScope
-				satisfies
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 				editors {
 					id
 					name
@@ -68705,22 +68799,22 @@ func (c *Client) GetProcedures(ctx context.Context, where *ProcedureWhereInput, 
 const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
 	updateProcedure(id: $updateProcedureId, input: $input) {
 		procedure {
-			background
+			approvalRequired
 			createdAt
 			createdBy
-			description
 			details
-			id
 			displayID
+			id
 			name
+			ownerID
 			procedureType
-			purposeAndScope
-			satisfies
+			reviewDue
+			reviewFrequency
+			revision
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
 			editors {
 				id
 				name
@@ -68756,24 +68850,25 @@ const GetAllProcedureHistoriesDocument = `query GetAllProcedureHistories {
 	procedureHistories {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				name
 				operation
+				ownerID
 				procedureType
-				purposeAndScope
 				ref
-				satisfies
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -68799,24 +68894,25 @@ const GetProcedureHistoriesDocument = `query GetProcedureHistories ($where: Proc
 	procedureHistories(where: $where) {
 		edges {
 			node {
-				background
+				approvalRequired
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				name
 				operation
+				ownerID
 				procedureType
-				purposeAndScope
 				ref
-				satisfies
+				reviewDue
+				reviewFrequency
+				revision
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
 			}
 		}
 	}
@@ -69027,38 +69123,32 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			updatedAt
 			updatedBy
 			procedures {
-				background
 				createdAt
 				createdBy
-				description
 				details
 				id
 				displayID
 				name
 				procedureType
-				purposeAndScope
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 			}
 			internalPolicies {
-				background
 				createdAt
 				createdBy
-				description
 				details
 				id
 				displayID
 				name
 				policyType
-				purposeAndScope
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 			}
 			editors {
 				id
@@ -69175,38 +69265,32 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				updatedAt
 				updatedBy
 				procedures {
-					background
 					createdAt
 					createdBy
-					description
 					details
 					id
 					displayID
 					name
 					procedureType
-					purposeAndScope
 					status
 					tags
 					updatedAt
 					updatedBy
-					version
+					revision
 				}
 				internalPolicies {
-					background
 					createdAt
 					createdBy
-					description
 					details
 					id
 					displayID
 					name
 					policyType
-					purposeAndScope
 					status
 					tags
 					updatedAt
 					updatedBy
-					version
+					revision
 				}
 				editors {
 					id
@@ -69268,38 +69352,32 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		updatedAt
 		updatedBy
 		procedures {
-			background
 			createdAt
 			createdBy
-			description
 			details
 			id
 			displayID
 			name
 			procedureType
-			purposeAndScope
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 		}
 		internalPolicies {
-			background
 			createdAt
 			createdBy
-			description
 			details
 			id
 			displayID
 			name
 			policyType
-			purposeAndScope
 			status
 			tags
 			updatedAt
 			updatedBy
-			version
+			revision
 		}
 		editors {
 			id
@@ -69363,38 +69441,32 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				updatedAt
 				updatedBy
 				procedures {
-					background
 					createdAt
 					createdBy
-					description
 					details
 					id
 					displayID
 					name
 					procedureType
-					purposeAndScope
 					status
 					tags
 					updatedAt
 					updatedBy
-					version
+					revision
 				}
 				internalPolicies {
-					background
 					createdAt
 					createdBy
-					description
 					details
 					id
 					displayID
 					name
 					policyType
-					purposeAndScope
 					status
 					tags
 					updatedAt
 					updatedBy
-					version
+					revision
 				}
 				editors {
 					id
@@ -69458,36 +69530,30 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			updatedAt
 			updatedBy
 			procedures {
-				background
 				createdAt
 				createdBy
-				description
 				details
 				id
 				name
 				procedureType
-				purposeAndScope
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 			}
 			internalPolicies {
-				background
 				createdAt
 				createdBy
-				description
 				details
 				id
 				name
 				policyType
-				purposeAndScope
 				status
 				tags
 				updatedAt
 				updatedBy
-				version
+				revision
 			}
 			editors {
 				id
@@ -70183,7 +70249,6 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			businessCosts
 			createdAt
 			createdBy
-			description
 			details
 			id
 			displayID
@@ -70192,8 +70257,8 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			mitigation
 			name
 			riskType
-			satisfies
 			status
+			score
 			tags
 			updatedAt
 			updatedBy
@@ -70225,7 +70290,6 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			businessCosts
 			createdAt
 			createdBy
-			description
 			details
 			id
 			displayID
@@ -70234,8 +70298,8 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			mitigation
 			name
 			riskType
-			satisfies
 			status
+			score
 			tags
 			updatedAt
 			updatedBy
@@ -70267,7 +70331,6 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			businessCosts
 			createdAt
 			createdBy
-			description
 			details
 			id
 			displayID
@@ -70276,8 +70339,8 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			mitigation
 			name
 			riskType
-			satisfies
 			status
+			score
 			tags
 			updatedAt
 			updatedBy
@@ -70350,17 +70413,17 @@ const GetAllRisksDocument = `query GetAllRisks {
 				businessCosts
 				createdAt
 				createdBy
-				description
 				details
 				id
 				displayID
 				impact
 				likelihood
+				score
 				mitigation
 				name
 				riskType
-				satisfies
 				status
+				score
 				tags
 				updatedAt
 				updatedBy
@@ -70406,7 +70469,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		businessCosts
 		createdAt
 		createdBy
-		description
+		score
 		details
 		id
 		displayID
@@ -70415,8 +70478,8 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		mitigation
 		name
 		riskType
-		satisfies
 		status
+		score
 		tags
 		updatedAt
 		updatedBy
@@ -70464,7 +70527,7 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				businessCosts
 				createdAt
 				createdBy
-				description
+				score
 				details
 				id
 				displayID
@@ -70473,8 +70536,8 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				mitigation
 				name
 				riskType
-				satisfies
 				status
+				score
 				tags
 				updatedAt
 				updatedBy
@@ -70523,7 +70586,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			businessCosts
 			createdAt
 			createdBy
-			description
+			score
 			details
 			id
 			displayID
@@ -70532,8 +70595,8 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			mitigation
 			name
 			riskType
-			satisfies
 			status
+			score
 			tags
 			updatedAt
 			updatedBy
@@ -70581,10 +70644,11 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 		edges {
 			node {
 				businessCosts
+				category
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				impact
@@ -70592,9 +70656,10 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 				mitigation
 				name
 				operation
+				ownerID
 				ref
 				riskType
-				satisfies
+				score
 				status
 				tags
 				updatedAt
@@ -70625,10 +70690,11 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 		edges {
 			node {
 				businessCosts
+				category
 				createdAt
 				createdBy
-				description
 				details
+				displayID
 				historyTime
 				id
 				impact
@@ -70636,9 +70702,10 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 				mitigation
 				name
 				operation
+				ownerID
 				ref
 				riskType
-				satisfies
+				score
 				status
 				tags
 				updatedAt
@@ -70677,7 +70744,9 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on ActionPlanSearchResult {
 				actionPlans {
+					details
 					id
+					name
 					tags
 				}
 			}
@@ -70773,7 +70842,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on InternalPolicySearchResult {
 				internalPolicies {
-					description
+					details
 					displayID
 					id
 					name
@@ -70823,7 +70892,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on ProcedureSearchResult {
 				procedures {
-					description
+					details
 					displayID
 					id
 					name
@@ -70841,7 +70910,6 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on RiskSearchResult {
 				risks {
-					description
 					displayID
 					id
 					name
@@ -73946,8 +74014,8 @@ var DocumentOperationNames = map[string]string{
 	CreateInternalPolicyDocument:                 "CreateInternalPolicy",
 	DeleteInternalPolicyDocument:                 "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:               "GetAllInternalPolicies",
-	GetInternalPoliciesDocument:                  "GetInternalPolicies",
 	GetInternalPolicyByIDDocument:                "GetInternalPolicyByID",
+	GetInternalPoliciesDocument:                  "GetInternalPolicies",
 	UpdateInternalPolicyDocument:                 "UpdateInternalPolicy",
 	GetAllInternalPolicyHistoriesDocument:        "GetAllInternalPolicyHistories",
 	GetInternalPolicyHistoriesDocument:           "GetInternalPolicyHistories",

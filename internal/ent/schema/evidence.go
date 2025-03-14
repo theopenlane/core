@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Evidence holds the schema definition for the Evidence entity
@@ -55,6 +56,11 @@ func (Evidence) Fields() []ent.Field {
 			Optional().
 			Validate(validator.ValidateURL()).
 			Comment("the url of the evidence if not uploaded directly to the system"),
+		field.Enum("status").
+			GoType(enums.EvidenceStatus("")).
+			Default(enums.EvidenceReady.String()).
+			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
+			Optional(),
 	}
 }
 

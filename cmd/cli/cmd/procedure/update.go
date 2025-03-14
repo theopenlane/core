@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -25,13 +26,10 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the procedure")
-	updateCmd.Flags().StringP("description", "d", "", "description of the procedure")
+	updateCmd.Flags().StringP("details", "d", "", "description of the procedure")
 	updateCmd.Flags().StringP("status", "s", "", "status of the procedure")
 	updateCmd.Flags().StringP("type", "t", "", "type of the procedure")
-	updateCmd.Flags().StringP("version", "v", "v0.1", "version of the procedure")
-	updateCmd.Flags().StringP("purpose", "p", "", "purpose and scope of the procedure")
-	updateCmd.Flags().StringP("background", "b", "", "background information of the procedure")
-	updateCmd.Flags().StringP("satisfies", "S", "", "satisfies which controls")
+	updateCmd.Flags().StringP("revision", "v", "v0.1", "revision of the procedure")
 	updateCmd.Flags().StringP("editor-group-id", "g", "", "editor group id")
 }
 
@@ -49,14 +47,14 @@ func updateValidation() (id string, input openlaneclient.UpdateProcedureInput, e
 		input.Name = &name
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToDocumentStatus(status)
 	}
 
 	procedureType := cmd.Config.String("type")
@@ -64,24 +62,9 @@ func updateValidation() (id string, input openlaneclient.UpdateProcedureInput, e
 		input.ProcedureType = &procedureType
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
-	}
-
-	purpose := cmd.Config.String("purpose")
-	if purpose != "" {
-		input.PurposeAndScope = &purpose
-	}
-
-	background := cmd.Config.String("background")
-	if background != "" {
-		input.Background = &background
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
+	revision := cmd.Config.String("revision")
+	if revision != "" {
+		input.Revision = &revision
 	}
 
 	editorGroupID := cmd.Config.String("editor-group-id")

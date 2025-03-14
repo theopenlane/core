@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Standard is the model entity for the Standard schema.
@@ -33,6 +34,8 @@ type Standard struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the long name of the standard body
@@ -43,26 +46,26 @@ type Standard struct {
 	Framework string `json:"framework,omitempty"`
 	// description of the standard
 	Description string `json:"description,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL string `json:"governing_body_logo_url,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody string `json:"governing_body,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
 	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
 	Link string `json:"link,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status string `json:"status,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic bool `json:"is_public,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse bool `json:"free_to_use,omitempty"`
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned bool `json:"system_owned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
-	// internal revision of the standard
-	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StandardQuery when eager-loading is set.
 	Edges        StandardEdges `json:"edges"`
@@ -113,7 +116,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standard.FieldIsPublic, standard.FieldFreeToUse, standard.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldOwnerID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldRevision:
+		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldRevision, standard.FieldOwnerID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBodyLogoURL, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -182,6 +185,12 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case standard.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				s.Revision = value.String
+			}
 		case standard.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -212,6 +221,12 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Description = value.String
 			}
+		case standard.FieldGoverningBodyLogoURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field governing_body_logo_url", values[i])
+			} else if value.Valid {
+				s.GoverningBodyLogoURL = value.String
+			}
 		case standard.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
@@ -236,7 +251,7 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				s.Status = value.String
+				s.Status = enums.StandardStatus(value.String)
 			}
 		case standard.FieldIsPublic:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -267,12 +282,6 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
 				s.Version = value.String
-			}
-		case standard.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				s.Revision = value.String
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -341,6 +350,9 @@ func (s *Standard) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(s.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(s.OwnerID)
 	builder.WriteString(", ")
@@ -356,6 +368,9 @@ func (s *Standard) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)
 	builder.WriteString(", ")
+	builder.WriteString("governing_body_logo_url=")
+	builder.WriteString(s.GoverningBodyLogoURL)
+	builder.WriteString(", ")
 	builder.WriteString("governing_body=")
 	builder.WriteString(s.GoverningBody)
 	builder.WriteString(", ")
@@ -366,7 +381,7 @@ func (s *Standard) String() string {
 	builder.WriteString(s.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(s.Status)
+	builder.WriteString(fmt.Sprintf("%v", s.Status))
 	builder.WriteString(", ")
 	builder.WriteString("is_public=")
 	builder.WriteString(fmt.Sprintf("%v", s.IsPublic))
@@ -382,9 +397,6 @@ func (s *Standard) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(s.Version)
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(s.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

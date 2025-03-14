@@ -11,6 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ActionPlan is the model entity for the ActionPlan schema.
@@ -32,29 +35,47 @@ type ActionPlan struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name string `json:"name,omitempty"`
-	// description of the action plan
-	Description string `json:"description,omitempty"`
-	// status of the action plan
-	Status string `json:"status,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType string `json:"action_plan_type,omitempty"`
+	// details of the action_plan
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue time.Time `json:"review_due,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
 	DueDate time.Time `json:"due_date,omitempty"`
 	// priority of the action plan
-	Priority string `json:"priority,omitempty"`
+	Priority enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
 	Source string `json:"source,omitempty"`
-	// json data including details of the action plan
-	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges                   ActionPlanEdges `json:"edges"`
+	action_plan_approver    *string
+	action_plan_delegate    *string
 	subcontrol_action_plans *string
 	selectValues            sql.SelectValues
 }
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
 type ActionPlanEdges struct {
+	// the group of users who are responsible for approving the action_plan
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the action_plan, used for temporary approval
+	Delegate *Group `json:"delegate,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Risk holds the value of the risk edge.
 	Risk []*Risk `json:"risk,omitempty"`
 	// Control holds the value of the control edge.
@@ -65,9 +86,9 @@ type ActionPlanEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [7]map[string]int
 
 	namedRisk    map[string][]*Risk
 	namedControl map[string][]*Control
@@ -75,10 +96,43 @@ type ActionPlanEdges struct {
 	namedProgram map[string][]*Program
 }
 
+// ApproverOrErr returns the Approver value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) ApproverOrErr() (*Group, error) {
+	if e.Approver != nil {
+		return e.Approver, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "approver"}
+}
+
+// DelegateOrErr returns the Delegate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) DelegateOrErr() (*Group, error) {
+	if e.Delegate != nil {
+		return e.Delegate, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate"}
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
 // RiskOrErr returns the Risk value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[3] {
 		return e.Risk, nil
 	}
 	return nil, &NotLoadedError{edge: "risk"}
@@ -87,7 +141,7 @@ func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -96,7 +150,7 @@ func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -105,7 +159,7 @@ func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[6] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -116,13 +170,19 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplan.FieldTags, actionplan.FieldDetails:
+		case actionplan.FieldTags:
 			values[i] = new([]byte)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldRevision, actionplan.FieldOwnerID, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
+		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
-		case actionplan.ForeignKeys[0]: // subcontrol_action_plans
+		case actionplan.ForeignKeys[0]: // action_plan_approver
+			values[i] = new(sql.NullString)
+		case actionplan.ForeignKeys[1]: // action_plan_delegate
+			values[i] = new(sql.NullString)
+		case actionplan.ForeignKeys[2]: // subcontrol_action_plans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -195,17 +255,53 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.Name = value.String
 			}
-		case actionplan.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				ap.Description = value.String
-			}
 		case actionplan.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ap.Status = value.String
+				ap.Status = enums.DocumentStatus(value.String)
+			}
+		case actionplan.FieldActionPlanType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_type", values[i])
+			} else if value.Valid {
+				ap.ActionPlanType = value.String
+			}
+		case actionplan.FieldDetails:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field details", values[i])
+			} else if value.Valid {
+				ap.Details = value.String
+			}
+		case actionplan.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				ap.ApprovalRequired = value.Bool
+			}
+		case actionplan.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				ap.ReviewDue = value.Time
+			}
+		case actionplan.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				ap.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case actionplan.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				ap.Revision = value.String
+			}
+		case actionplan.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				ap.OwnerID = value.String
 			}
 		case actionplan.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -217,7 +313,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
-				ap.Priority = value.String
+				ap.Priority = enums.Priority(value.String)
 			}
 		case actionplan.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -225,15 +321,21 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.Source = value.String
 			}
-		case actionplan.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
-			}
 		case actionplan.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_approver", values[i])
+			} else if value.Valid {
+				ap.action_plan_approver = new(string)
+				*ap.action_plan_approver = value.String
+			}
+		case actionplan.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_delegate", values[i])
+			} else if value.Valid {
+				ap.action_plan_delegate = new(string)
+				*ap.action_plan_delegate = value.String
+			}
+		case actionplan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_action_plans", values[i])
 			} else if value.Valid {
@@ -251,6 +353,21 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (ap *ActionPlan) Value(name string) (ent.Value, error) {
 	return ap.selectValues.Get(name)
+}
+
+// QueryApprover queries the "approver" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryApprover() *GroupQuery {
+	return NewActionPlanClient(ap.config).QueryApprover(ap)
+}
+
+// QueryDelegate queries the "delegate" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryDelegate() *GroupQuery {
+	return NewActionPlanClient(ap.config).QueryDelegate(ap)
+}
+
+// QueryOwner queries the "owner" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryOwner() *OrganizationQuery {
+	return NewActionPlanClient(ap.config).QueryOwner(ap)
 }
 
 // QueryRisk queries the "risk" edge of the ActionPlan entity.
@@ -320,23 +437,38 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(ap.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(ap.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(ap.Status)
+	builder.WriteString(fmt.Sprintf("%v", ap.Status))
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_type=")
+	builder.WriteString(ap.ActionPlanType)
+	builder.WriteString(", ")
+	builder.WriteString("details=")
+	builder.WriteString(ap.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", ap.ApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(ap.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", ap.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(ap.Revision)
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(ap.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(ap.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
-	builder.WriteString(ap.Priority)
+	builder.WriteString(fmt.Sprintf("%v", ap.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(ap.Source)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", ap.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

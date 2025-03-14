@@ -75,40 +75,42 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "description":
-				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
-			case "version":
-				return ec.fieldContext_InternalPolicy_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_InternalPolicy_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_InternalPolicy_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_InternalPolicy_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
@@ -177,40 +179,42 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "description":
-				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
-			case "version":
-				return ec.fieldContext_InternalPolicy_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_InternalPolicy_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_InternalPolicy_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_InternalPolicy_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
@@ -323,40 +327,42 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "description":
-				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
-			case "version":
-				return ec.fieldContext_InternalPolicy_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_InternalPolicy_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_InternalPolicy_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_InternalPolicy_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":

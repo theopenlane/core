@@ -14,13 +14,13 @@ query GetAllControlObjectiveHistories {
         operation
         ownerID
         ref
+        revision
         source
         status
         subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }
@@ -42,13 +42,13 @@ query GetControlObjectiveHistories($where: ControlObjectiveHistoryWhereInput) {
         operation
         ownerID
         ref
+        revision
         source
         status
         subcategory
         tags
         updatedAt
         updatedBy
-        version
       }
     }
   }

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -97,6 +98,7 @@ type OrganizationQuery struct {
 	withSubcontrols                   *SubcontrolQuery
 	withEvidence                      *EvidenceQuery
 	withStandards                     *StandardQuery
+	withActionPlans                   *ActionPlanQuery
 	withMembers                       *OrgMembershipQuery
 	loadTotal                         []func(context.Context, []*Organization) error
 	modifiers                         []func(*sql.Selector)
@@ -138,6 +140,7 @@ type OrganizationQuery struct {
 	withNamedSubcontrols              map[string]*SubcontrolQuery
 	withNamedEvidence                 map[string]*EvidenceQuery
 	withNamedStandards                map[string]*StandardQuery
+	withNamedActionPlans              map[string]*ActionPlanQuery
 	withNamedMembers                  map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1200,6 +1203,31 @@ func (oq *OrganizationQuery) QueryStandards() *StandardQuery {
 	return query
 }
 
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (oq *OrganizationQuery) QueryActionPlans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ActionPlansTable, organization.ActionPlansColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1458,6 +1486,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withSubcontrols:              oq.withSubcontrols.Clone(),
 		withEvidence:                 oq.withEvidence.Clone(),
 		withStandards:                oq.withStandards.Clone(),
+		withActionPlans:              oq.withActionPlans.Clone(),
 		withMembers:                  oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1917,6 +1946,17 @@ func (oq *OrganizationQuery) WithStandards(opts ...func(*StandardQuery)) *Organi
 	return oq
 }
 
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *OrganizationQuery {
+	query := (&ActionPlanClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withActionPlans = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -2012,7 +2052,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [42]bool{
+		loadedTypes = [43]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -2054,6 +2094,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withSubcontrols != nil,
 			oq.withEvidence != nil,
 			oq.withStandards != nil,
+			oq.withActionPlans != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -2376,6 +2417,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withActionPlans; query != nil {
+		if err := oq.loadActionPlans(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *Organization, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2646,6 +2694,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadStandards(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedStandards(name) },
 			func(n *Organization, e *Standard) { n.appendNamedStandards(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedActionPlans {
+		if err := oq.loadActionPlans(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedActionPlans(name) },
+			func(n *Organization, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4071,6 +4126,37 @@ func (oq *OrganizationQuery) loadStandards(ctx context.Context, query *StandardQ
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ActionPlan)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(actionplan.FieldOwnerID)
+	}
+	query.Where(predicate.ActionPlan(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ActionPlansColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -4735,6 +4821,20 @@ func (oq *OrganizationQuery) WithNamedStandards(name string, opts ...func(*Stand
 		oq.withNamedStandards = make(map[string]*StandardQuery)
 	}
 	oq.withNamedStandards[name] = query
+	return oq
+}
+
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *OrganizationQuery {
+	query := (&ActionPlanClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedActionPlans == nil {
+		oq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
+	}
+	oq.withNamedActionPlans[name] = query
 	return oq
 }
 

@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -103,11 +104,6 @@ func DeletedAt(v time.Time) predicate.ControlImplementationHistory {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // ImplementationDate applies equality check predicate on the "implementation_date" field. It's identical to ImplementationDateEQ.
@@ -651,58 +647,33 @@ func TagsNotNil() predicate.ControlImplementationHistory {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.DocumentStatus) predicate.ControlImplementationHistory {
+	vc := v
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.DocumentStatus) predicate.ControlImplementationHistory {
+	vc := v
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.DocumentStatus) predicate.ControlImplementationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.DocumentStatus) predicate.ControlImplementationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -713,16 +684,6 @@ func StatusIsNil() predicate.ControlImplementationHistory {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.ControlImplementationHistory {
-	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // ImplementationDateEQ applies the EQ predicate on the "implementation_date" field.

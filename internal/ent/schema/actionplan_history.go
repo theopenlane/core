@@ -11,8 +11,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // ActionPlanHistory holds the schema definition for the ActionPlanHistory entity.
@@ -33,6 +35,11 @@ func (ActionPlanHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "action_plan",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -86,5 +93,12 @@ func (ActionPlanHistory) Fields() []ent.Field {
 func (ActionPlanHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
+	}
+}
+
+// Interceptors of the ActionPlanHistory
+func (ActionPlanHistory) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
 	}
 }

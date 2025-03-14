@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -1288,6 +1289,46 @@ func URLEqualFold(v string) predicate.EvidenceHistory {
 // URLContainsFold applies the ContainsFold predicate on the "url" field.
 func URLContainsFold(v string) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldContainsFold(FieldURL, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.EvidenceStatus) predicate.EvidenceHistory {
+	vc := v
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.EvidenceStatus) predicate.EvidenceHistory {
+	vc := v
+	return predicate.EvidenceHistory(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.EvidenceStatus) predicate.EvidenceHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EvidenceHistory(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.EvidenceStatus) predicate.EvidenceHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EvidenceHistory(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotNull(FieldStatus))
 }
 
 // And groups predicates with the AND operator between them.

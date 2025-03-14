@@ -12,9 +12,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ActionPlanCreate is the builder for creating a ActionPlan entity.
@@ -120,30 +123,114 @@ func (apc *ActionPlanCreate) SetName(s string) *ActionPlanCreate {
 	return apc
 }
 
-// SetDescription sets the "description" field.
-func (apc *ActionPlanCreate) SetDescription(s string) *ActionPlanCreate {
-	apc.mutation.SetDescription(s)
-	return apc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableDescription(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetDescription(*s)
-	}
-	return apc
-}
-
 // SetStatus sets the "status" field.
-func (apc *ActionPlanCreate) SetStatus(s string) *ActionPlanCreate {
-	apc.mutation.SetStatus(s)
+func (apc *ActionPlanCreate) SetStatus(es enums.DocumentStatus) *ActionPlanCreate {
+	apc.mutation.SetStatus(es)
 	return apc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableStatus(s *string) *ActionPlanCreate {
+func (apc *ActionPlanCreate) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanCreate {
+	if es != nil {
+		apc.SetStatus(*es)
+	}
+	return apc
+}
+
+// SetActionPlanType sets the "action_plan_type" field.
+func (apc *ActionPlanCreate) SetActionPlanType(s string) *ActionPlanCreate {
+	apc.mutation.SetActionPlanType(s)
+	return apc
+}
+
+// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableActionPlanType(s *string) *ActionPlanCreate {
 	if s != nil {
-		apc.SetStatus(*s)
+		apc.SetActionPlanType(*s)
+	}
+	return apc
+}
+
+// SetDetails sets the "details" field.
+func (apc *ActionPlanCreate) SetDetails(s string) *ActionPlanCreate {
+	apc.mutation.SetDetails(s)
+	return apc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableDetails(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetDetails(*s)
+	}
+	return apc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (apc *ActionPlanCreate) SetApprovalRequired(b bool) *ActionPlanCreate {
+	apc.mutation.SetApprovalRequired(b)
+	return apc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableApprovalRequired(b *bool) *ActionPlanCreate {
+	if b != nil {
+		apc.SetApprovalRequired(*b)
+	}
+	return apc
+}
+
+// SetReviewDue sets the "review_due" field.
+func (apc *ActionPlanCreate) SetReviewDue(t time.Time) *ActionPlanCreate {
+	apc.mutation.SetReviewDue(t)
+	return apc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableReviewDue(t *time.Time) *ActionPlanCreate {
+	if t != nil {
+		apc.SetReviewDue(*t)
+	}
+	return apc
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (apc *ActionPlanCreate) SetReviewFrequency(e enums.Frequency) *ActionPlanCreate {
+	apc.mutation.SetReviewFrequency(e)
+	return apc
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanCreate {
+	if e != nil {
+		apc.SetReviewFrequency(*e)
+	}
+	return apc
+}
+
+// SetRevision sets the "revision" field.
+func (apc *ActionPlanCreate) SetRevision(s string) *ActionPlanCreate {
+	apc.mutation.SetRevision(s)
+	return apc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableRevision(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetRevision(*s)
+	}
+	return apc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (apc *ActionPlanCreate) SetOwnerID(s string) *ActionPlanCreate {
+	apc.mutation.SetOwnerID(s)
+	return apc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableOwnerID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetOwnerID(*s)
 	}
 	return apc
 }
@@ -163,15 +250,15 @@ func (apc *ActionPlanCreate) SetNillableDueDate(t *time.Time) *ActionPlanCreate 
 }
 
 // SetPriority sets the "priority" field.
-func (apc *ActionPlanCreate) SetPriority(s string) *ActionPlanCreate {
-	apc.mutation.SetPriority(s)
+func (apc *ActionPlanCreate) SetPriority(e enums.Priority) *ActionPlanCreate {
+	apc.mutation.SetPriority(e)
 	return apc
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillablePriority(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetPriority(*s)
+func (apc *ActionPlanCreate) SetNillablePriority(e *enums.Priority) *ActionPlanCreate {
+	if e != nil {
+		apc.SetPriority(*e)
 	}
 	return apc
 }
@@ -190,12 +277,6 @@ func (apc *ActionPlanCreate) SetNillableSource(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetDetails sets the "details" field.
-func (apc *ActionPlanCreate) SetDetails(m map[string]interface{}) *ActionPlanCreate {
-	apc.mutation.SetDetails(m)
-	return apc
-}
-
 // SetID sets the "id" field.
 func (apc *ActionPlanCreate) SetID(s string) *ActionPlanCreate {
 	apc.mutation.SetID(s)
@@ -208,6 +289,49 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 		apc.SetID(*s)
 	}
 	return apc
+}
+
+// SetApproverID sets the "approver" edge to the Group entity by ID.
+func (apc *ActionPlanCreate) SetApproverID(id string) *ActionPlanCreate {
+	apc.mutation.SetApproverID(id)
+	return apc
+}
+
+// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableApproverID(id *string) *ActionPlanCreate {
+	if id != nil {
+		apc = apc.SetApproverID(*id)
+	}
+	return apc
+}
+
+// SetApprover sets the "approver" edge to the Group entity.
+func (apc *ActionPlanCreate) SetApprover(g *Group) *ActionPlanCreate {
+	return apc.SetApproverID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (apc *ActionPlanCreate) SetDelegateID(id string) *ActionPlanCreate {
+	apc.mutation.SetDelegateID(id)
+	return apc
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableDelegateID(id *string) *ActionPlanCreate {
+	if id != nil {
+		apc = apc.SetDelegateID(*id)
+	}
+	return apc
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (apc *ActionPlanCreate) SetDelegate(g *Group) *ActionPlanCreate {
+	return apc.SetDelegateID(g.ID)
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (apc *ActionPlanCreate) SetOwner(o *Organization) *ActionPlanCreate {
+	return apc.SetOwnerID(o.ID)
 }
 
 // AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
@@ -325,6 +449,26 @@ func (apc *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultTags
 		apc.mutation.SetTags(v)
 	}
+	if _, ok := apc.mutation.Status(); !ok {
+		v := actionplan.DefaultStatus
+		apc.mutation.SetStatus(v)
+	}
+	if _, ok := apc.mutation.ApprovalRequired(); !ok {
+		v := actionplan.DefaultApprovalRequired
+		apc.mutation.SetApprovalRequired(v)
+	}
+	if _, ok := apc.mutation.ReviewDue(); !ok {
+		v := actionplan.DefaultReviewDue
+		apc.mutation.SetReviewDue(v)
+	}
+	if _, ok := apc.mutation.ReviewFrequency(); !ok {
+		v := actionplan.DefaultReviewFrequency
+		apc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := apc.mutation.Revision(); !ok {
+		v := actionplan.DefaultRevision
+		apc.mutation.SetRevision(v)
+	}
 	if _, ok := apc.mutation.ID(); !ok {
 		if actionplan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.DefaultID (forgotten import generated/runtime?)")
@@ -339,6 +483,36 @@ func (apc *ActionPlanCreate) defaults() error {
 func (apc *ActionPlanCreate) check() error {
 	if _, ok := apc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlan.name"`)}
+	}
+	if v, ok := apc.mutation.Name(); ok {
+		if err := actionplan.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.name": %w`, err)}
+		}
+	}
+	if v, ok := apc.mutation.Status(); ok {
+		if err := actionplan.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.status": %w`, err)}
+		}
+	}
+	if v, ok := apc.mutation.ReviewFrequency(); ok {
+		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := apc.mutation.Revision(); ok {
+		if err := actionplan.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
+		}
+	}
+	if v, ok := apc.mutation.OwnerID(); ok {
+		if err := actionplan.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := apc.mutation.Priority(); ok {
+		if err := actionplan.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -408,29 +582,99 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := apc.mutation.Description(); ok {
-		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := apc.mutation.Status(); ok {
-		_spec.SetField(actionplan.FieldStatus, field.TypeString, value)
+		_spec.SetField(actionplan.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := apc.mutation.ActionPlanType(); ok {
+		_spec.SetField(actionplan.FieldActionPlanType, field.TypeString, value)
+		_node.ActionPlanType = value
+	}
+	if value, ok := apc.mutation.Details(); ok {
+		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)
+		_node.Details = value
+	}
+	if value, ok := apc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
+	if value, ok := apc.mutation.ReviewDue(); ok {
+		_spec.SetField(actionplan.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
+	}
+	if value, ok := apc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(actionplan.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := apc.mutation.Revision(); ok {
+		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := apc.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
 	if value, ok := apc.mutation.Priority(); ok {
-		_spec.SetField(actionplan.FieldPriority, field.TypeString, value)
+		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 		_node.Priority = value
 	}
 	if value, ok := apc.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
 		_node.Source = value
 	}
-	if value, ok := apc.mutation.Details(); ok {
-		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if nodes := apc.mutation.ApproverIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.ApproverTable,
+			Columns: []string{actionplan.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.action_plan_approver = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.DelegateTable,
+			Columns: []string{actionplan.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.action_plan_delegate = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   actionplan.OwnerTable,
+			Columns: []string{actionplan.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.RiskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

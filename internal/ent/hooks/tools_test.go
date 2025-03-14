@@ -115,7 +115,9 @@ func (suite *HookTestSuite) seedUser() *generated.User {
 	require.NoError(t, err)
 
 	// get user and their org memberships
-	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).WithOrgMemberships().Only(ctx)
+	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).
+		WithSetting().
+		WithOrgMemberships().Only(ctx)
 	require.NoError(t, err)
 
 	return newUser

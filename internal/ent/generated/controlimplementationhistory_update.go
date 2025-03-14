@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -123,15 +124,15 @@ func (cihu *ControlImplementationHistoryUpdate) ClearTags() *ControlImplementati
 }
 
 // SetStatus sets the "status" field.
-func (cihu *ControlImplementationHistoryUpdate) SetStatus(s string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetStatus(s)
+func (cihu *ControlImplementationHistoryUpdate) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryUpdate {
+	cihu.mutation.SetStatus(es)
 	return cihu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableStatus(s *string) *ControlImplementationHistoryUpdate {
-	if s != nil {
-		cihu.SetStatus(*s)
+func (cihu *ControlImplementationHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryUpdate {
+	if es != nil {
+		cihu.SetStatus(*es)
 	}
 	return cihu
 }
@@ -263,6 +264,16 @@ func (cihu *ControlImplementationHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cihu *ControlImplementationHistoryUpdate) check() error {
+	if v, ok := cihu.mutation.Status(); ok {
+		if err := controlimplementationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cihu *ControlImplementationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdate {
 	cihu.modifiers = append(cihu.modifiers, modifiers...)
@@ -270,6 +281,9 @@ func (cihu *ControlImplementationHistoryUpdate) Modify(modifiers ...func(u *sql.
 }
 
 func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cihu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	if ps := cihu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -323,10 +337,10 @@ func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n 
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := cihu.mutation.Status(); ok {
-		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if cihu.mutation.StatusCleared() {
-		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cihu.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
@@ -467,15 +481,15 @@ func (cihuo *ControlImplementationHistoryUpdateOne) ClearTags() *ControlImplemen
 }
 
 // SetStatus sets the "status" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetStatus(s string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetStatus(s)
+func (cihuo *ControlImplementationHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
+	cihuo.mutation.SetStatus(es)
 	return cihuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableStatus(s *string) *ControlImplementationHistoryUpdateOne {
-	if s != nil {
-		cihuo.SetStatus(*s)
+func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
+	if es != nil {
+		cihuo.SetStatus(*es)
 	}
 	return cihuo
 }
@@ -620,6 +634,16 @@ func (cihuo *ControlImplementationHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cihuo *ControlImplementationHistoryUpdateOne) check() error {
+	if v, ok := cihuo.mutation.Status(); ok {
+		if err := controlimplementationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cihuo *ControlImplementationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdateOne {
 	cihuo.modifiers = append(cihuo.modifiers, modifiers...)
@@ -627,6 +651,9 @@ func (cihuo *ControlImplementationHistoryUpdateOne) Modify(modifiers ...func(u *
 }
 
 func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementationHistory, err error) {
+	if err := cihuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	id, ok := cihuo.mutation.ID()
 	if !ok {
@@ -697,10 +724,10 @@ func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context)
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := cihuo.mutation.Status(); ok {
-		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if cihuo.mutation.StatusCleared() {
-		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cihuo.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)

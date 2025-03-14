@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // EvidenceCreate is the builder for creating a Evidence entity.
@@ -241,6 +242,20 @@ func (ec *EvidenceCreate) SetNillableURL(s *string) *EvidenceCreate {
 	return ec
 }
 
+// SetStatus sets the "status" field.
+func (ec *EvidenceCreate) SetStatus(es enums.EvidenceStatus) *EvidenceCreate {
+	ec.mutation.SetStatus(es)
+	return ec
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ec *EvidenceCreate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceCreate {
+	if es != nil {
+		ec.SetStatus(*es)
+	}
+	return ec
+}
+
 // SetID sets the "id" field.
 func (ec *EvidenceCreate) SetID(s string) *EvidenceCreate {
 	ec.mutation.SetID(s)
@@ -420,6 +435,10 @@ func (ec *EvidenceCreate) defaults() error {
 		v := evidence.DefaultIsAutomated
 		ec.mutation.SetIsAutomated(v)
 	}
+	if _, ok := ec.mutation.Status(); !ok {
+		v := evidence.DefaultStatus
+		ec.mutation.SetStatus(v)
+	}
 	if _, ok := ec.mutation.ID(); !ok {
 		if evidence.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized evidence.DefaultID (forgotten import generated/runtime?)")
@@ -459,6 +478,11 @@ func (ec *EvidenceCreate) check() error {
 	if v, ok := ec.mutation.URL(); ok {
 		if err := evidence.URLValidator(v); err != nil {
 			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
+		}
+	}
+	if v, ok := ec.mutation.Status(); ok {
+		if err := evidence.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
 		}
 	}
 	return nil
@@ -560,6 +584,10 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.URL(); ok {
 		_spec.SetField(evidence.FieldURL, field.TypeString, value)
 		_node.URL = value
+	}
+	if value, ok := ec.mutation.Status(); ok {
+		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if nodes := ec.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

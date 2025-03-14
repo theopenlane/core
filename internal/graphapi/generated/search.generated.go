@@ -168,18 +168,34 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ActionPlan_description(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
+			case "actionPlanType":
+				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
+			case "details":
+				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
 				return ec.fieldContext_ActionPlan_priority(ctx, field)
 			case "source":
 				return ec.fieldContext_ActionPlan_source(ctx, field)
-			case "details":
-				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approver":
+				return ec.fieldContext_ActionPlan_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_ActionPlan_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_ActionPlan_owner(ctx, field)
 			case "risk":
 				return ec.fieldContext_ActionPlan_risk(ctx, field)
 			case "control":
@@ -397,6 +413,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ControlObjective_displayID(ctx, field)
 			case "tags":
@@ -413,8 +431,6 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
-			case "version":
-				return ec.fieldContext_ControlObjective_version(ctx, field)
 			case "category":
 				return ec.fieldContext_ControlObjective_category(ctx, field)
 			case "subcategory":
@@ -969,6 +985,8 @@ func (ec *executionContext) fieldContext_EvidenceSearchResult_evidences(_ contex
 				return ec.fieldContext_Evidence_isAutomated(ctx, field)
 			case "url":
 				return ec.fieldContext_Evidence_url(ctx, field)
+			case "status":
+				return ec.fieldContext_Evidence_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
@@ -1351,40 +1369,42 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "description":
-				return ec.fieldContext_InternalPolicy_description(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "policyType":
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
-			case "version":
-				return ec.fieldContext_InternalPolicy_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_InternalPolicy_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_InternalPolicy_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_InternalPolicy_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
@@ -1799,6 +1819,8 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "standards":
 				return ec.fieldContext_Organization_standards(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Organization_actionPlans(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -2022,42 +2044,42 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Procedure_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Procedure_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "version":
-				return ec.fieldContext_Procedure_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Procedure_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Procedure_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Procedure_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_Procedure_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
@@ -2250,24 +2272,24 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Risk_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
 			case "riskType":
 				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "category":
+				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
 				return ec.fieldContext_Risk_likelihood(ctx, field)
+			case "score":
+				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "businessCosts":
+				return ec.fieldContext_Risk_businessCosts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -2284,6 +2306,10 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "stakeholder":
+				return ec.fieldContext_Risk_stakeholder(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Risk_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -2485,6 +2511,8 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "name":
@@ -2495,6 +2523,8 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_framework(ctx, field)
 			case "description":
 				return ec.fieldContext_Standard_description(ctx, field)
+			case "governingBodyLogoURL":
+				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
 			case "governingBody":
 				return ec.fieldContext_Standard_governingBody(ctx, field)
 			case "domains":
@@ -2513,8 +2543,6 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":

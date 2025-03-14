@@ -16,6 +16,7 @@ query GetAllProcedureHistories {
         ref
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt
@@ -43,6 +44,7 @@ query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
         ref
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt

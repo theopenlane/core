@@ -13,6 +13,7 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       policyType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
@@ -35,6 +36,7 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       policyType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
@@ -57,10 +59,19 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       policyType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
+      editors {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -86,10 +97,19 @@ query GetAllInternalPolicies {
         policyType
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
+        editors {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -107,10 +127,19 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     policyType
     reviewDue
     reviewFrequency
+    revision
     status
     tags
     updatedAt
     updatedBy
+    editors {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
   }
 }
 
@@ -129,10 +158,19 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
         policyType
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
+        editors {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -151,10 +189,19 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       policyType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
+      editors {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }

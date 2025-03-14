@@ -2226,6 +2226,35 @@ func HasStandardsWith(preds ...predicate.Standard) predicate.Organization {
 	})
 }
 
+// HasActionPlans applies the HasEdge predicate on the "action_plans" edge.
+func HasActionPlans() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlansWith applies the HasEdge predicate on the "action_plans" edge with a given conditions (other predicates).
+func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newActionPlansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

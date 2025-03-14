@@ -2,23 +2,11 @@ package models
 
 import (
 	"fmt"
-	"io"
 	"strings"
 )
 
-// VersionBump is a custom type for version bumping
-// It is used to represent the type of version bumping
-type VersionBump string
-
-var (
-	// Major is the major version
-	Major VersionBump = "MAJOR"
-	// Minor is the minor version
-	Minor VersionBump = "MINOR"
-	// Patch is the patch version
-	Patch VersionBump = "PATCH"
-	// PreRelease is the pre-release version
-	PreRelease VersionBump = "DRAFT"
+const (
+	DefaultRevision = "v0.0.1"
 )
 
 // SemverVersion is a custom type for semantic versioning
@@ -35,16 +23,16 @@ type SemverVersion struct {
 }
 
 // String returns a string representation of the version
-func (s SemverVersion) String() *string {
+func (s SemverVersion) String() string {
 	base := fmt.Sprintf("v%d.%d.%d", s.Major, s.Minor, s.Patch)
 
 	if s.PreRelease != "" {
 		ver := fmt.Sprintf("%s-%s", base, s.PreRelease)
 
-		return &ver
+		return ver
 	}
 
-	return &base
+	return base
 }
 
 // ToSemverVersion converts a string to a SemverVersion
@@ -55,13 +43,13 @@ func (s SemverVersion) String() *string {
 // - v1.0.0-alpha
 // - 1.0.0-alpha
 // anything after the first "-" is considered a pre-release version
-func ToSemverVersion(version *string) *SemverVersion {
+func ToSemverVersion(version *string) (*SemverVersion, error) {
 	var semver SemverVersion
 
 	if version == nil {
 		semver.Patch = 1
 
-		return &semver
+		return &semver, nil
 	}
 
 	ver := *version
@@ -71,8 +59,7 @@ func ToSemverVersion(version *string) *SemverVersion {
 	ver = strings.TrimPrefix(ver, "v")
 
 	if strings.Contains(ver, "-") {
-		versionParts := strings.Split(ver, "-")
-		ver = versionParts[0]
+		versionParts := strings.SplitN(ver, "-", 2)
 
 		// set pre-release version if it exists
 		semver.PreRelease = versionParts[1]
@@ -80,102 +67,120 @@ func ToSemverVersion(version *string) *SemverVersion {
 
 	parts := strings.Split(ver, ".")
 
-	if len(parts) < 3 {
-		return &semver
+	// formatted as 1.0.0 after the `v` prefix is removed
+	semverParts := 3
+	if len(parts) < semverParts {
+		return &semver, nil
 	}
 
 	// Parse the major, minor, and patch versions
-	fmt.Sscanf(parts[0], "%d", &semver.Major)
-	fmt.Sscanf(parts[1], "%d", &semver.Minor)
-	fmt.Sscanf(parts[2], "%d", &semver.Patch)
+	if _, err := fmt.Sscanf(parts[0], "%d", &semver.Major); err != nil {
+		return nil, err
+	}
 
-	return &semver
+	if _, err := fmt.Sscanf(parts[1], "%d", &semver.Minor); err != nil {
+		return nil, err
+	}
+
+	if _, err := fmt.Sscanf(parts[2], "%d", &semver.Patch); err != nil {
+		return nil, err
+	}
+
+	return &semver, nil
 }
 
 // BumpMajor increments the major version by 1
 // It resets the minor and patch versions to 0
 // For example if the version is v1.7.1 the new version will be v2.0.0
 // It resets the pre-release version to empty
-func (s *SemverVersion) BumpMajor() {
-	s.Major++
-	s.Patch = 0
-	s.Minor = 0
-	if s.PreRelease != "" {
-		s.PreRelease = ""
+func BumpMajor(v string) (string, error) {
+	semver, err := ToSemverVersion(&v)
+	if err != nil {
+		return "", err
 	}
+
+	semver.Major++
+	semver.Patch = 0
+	semver.Minor = 0
+
+	if semver.PreRelease != "" {
+		semver.PreRelease = ""
+	}
+
+	return semver.String(), nil
 }
 
 // BumpMinor increments the minor version by 1
 // It resets the patch version to 0
 // For example if the version is v1.7.1 the new version will be v1.8.0
 // It resets the pre-release version to empty
-func (s *SemverVersion) BumpMinor() {
-	s.Minor++
-	s.Patch = 0
-	if s.PreRelease != "" {
-		s.PreRelease = ""
+func BumpMinor(v string) (string, error) {
+	semver, err := ToSemverVersion(&v)
+	if err != nil {
+		return "", err
 	}
+
+	semver.Minor++
+
+	semver.Patch = 0
+	if semver.PreRelease != "" {
+		semver.PreRelease = ""
+	}
+
+	return semver.String(), nil
+}
+
+// BumpPatch increments the patch version by 1
+// For example if the version is v1.7.1 the new version will be v1.7.2
+// If the version has a pre-release version, it clears the pre-release version
+func BumpPatch(v string) (string, error) {
+	semver, err := ToSemverVersion(&v)
+	if err != nil {
+		return "", err
+	}
+
+	semver.BumpPatchSemver()
+
+	return semver.String(), nil
 }
 
 // BumpPatch increments the patch version by 1
 // For example if the version is v1.7.1 the new version will be v1.7.2
 // It resets the pre-release version to empty
-func (s *SemverVersion) BumpPatch() {
-	s.Patch++
+func (s *SemverVersion) BumpPatchSemver() {
+	//  if its prerelease just clear the prerelease
 	if s.PreRelease != "" {
 		s.PreRelease = ""
+	} else {
+		// otherwise increment the patch
+		s.Patch++
 	}
 }
 
-// BumpMajorVersionString increments the major version by 1 of a string version
-func BumpMajorVersionString(version *string) *string {
-	semver := ToSemverVersion(version)
-	semver.BumpMajor()
-	return semver.String()
-}
-
-// BumpMinorVersionString increments the minor version by 1 of a string version
-func BumpMinorVersionString(version *string) *string {
-	semver := ToSemverVersion(version)
-	semver.BumpMinor()
-	return semver.String()
-}
-
-// BumpPatchVersionString increments the patch version by 1 of a string version
-func BumpPatchVersionString(version *string) *string {
-	semver := ToSemverVersion(version)
-	semver.BumpPatch()
-	return semver.String()
-}
-
-// String returns the role as a string
-func (v VersionBump) String() string {
-	return string(v)
-}
-
-// Values returns a slice of strings that represents all the possible values of the VersionBump enum.
-// Possible default values are "MAJOR", "MINOR", "PATCH", "DRAFT"
-func (VersionBump) Values() (kinds []string) {
-	for _, s := range []VersionBump{Major, Minor, Patch, PreRelease} {
-		kinds = append(kinds, string(s))
+// SetPreRelease sets the pre-release version to "draft"
+// For example if the version is v1.7.1 the new version will be v1.7.2-draft
+func SetPreRelease(v string) (string, error) {
+	semver, err := ToSemverVersion(&v)
+	if err != nil {
+		return "", err
 	}
 
-	return
-}
-
-// MarshalGQL implement the Marshaler interface for gqlgen
-func (r VersionBump) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-// UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *VersionBump) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for VersionBump, got: %T", v) //nolint:err113
+	if semver.PreRelease != "" {
+		preRelease := strings.Split(semver.PreRelease, "-")
+		if len(preRelease) > 1 {
+			// increment the pre-release version
+			var preReleaseVersion int
+			if _, err := fmt.Sscanf(preRelease[1], "%d", &preReleaseVersion); err != nil {
+				return "", err
+			}
+			semver.PreRelease = fmt.Sprintf("%s-%d", preRelease[0], preReleaseVersion+1)
+		} else {
+			semver.PreRelease = fmt.Sprintf("%s-%d", semver.PreRelease, 1)
+		}
+	} else {
+		semver.BumpPatchSemver() // update patch version
+		semver.PreRelease = "draft"
 	}
 
-	*r = VersionBump(str)
-
-	return nil
+	return semver.String(), nil
 }

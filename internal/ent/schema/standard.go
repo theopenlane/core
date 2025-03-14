@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"net/url"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -15,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Standard defines the standard schema.
@@ -44,6 +47,14 @@ func (Standard) Fields() []ent.Field {
 		field.String("description").
 			Optional().
 			Comment("description of the standard"),
+		field.String("governing_body_logo_url").
+			Comment("URL to the logo of the governing body").
+			MaxLen(urlMaxLen).
+			Validate(func(s string) error {
+				_, err := url.Parse(s)
+				return err
+			}).
+			Optional(),
 		field.String("governing_body").
 			Optional().
 			Comment("governing body of the standard, e.g. AICPA, etc."),
@@ -53,9 +64,11 @@ func (Standard) Fields() []ent.Field {
 		field.String("link").
 			Optional().
 			Comment("link to the official standard documentation"),
-		field.String("status").
+		field.Enum("status").
+			GoType(enums.StandardStatus("")).
+			Default(enums.StandardActive.String()).
 			Optional().
-			Comment("status of the standard - active, deprecated, etc."),
+			Comment("status of the standard - active, draft, and archived"),
 		field.Bool("is_public").
 			Optional().
 			Default(false).
@@ -70,7 +83,7 @@ func (Standard) Fields() []ent.Field {
 			Comment("indicates if the standard is owned by the the openlane system"),
 		field.String("standard_type").
 			Optional().
-			Comment("type of the standard - security, privacy, etc."),
+			Comment("type of the standard - cybersecurity, healthcare , financial, etc."),
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),

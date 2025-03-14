@@ -13,6 +13,7 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       procedureType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
@@ -35,6 +36,7 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       procedureType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
@@ -57,10 +59,19 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       procedureType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
     }
   }
 }
@@ -86,10 +97,19 @@ query GetAllProcedures {
         procedureType
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
@@ -107,10 +127,19 @@ query GetProcedureByID($procedureId: ID!) {
     procedureType
     reviewDue
     reviewFrequency
+    revision
     status
     tags
     updatedAt
     updatedBy
+    editors{
+      id
+      name
+    }
+    blockedGroups{
+      id
+      name
+    }
   }
 }
 
@@ -129,10 +158,19 @@ query GetProcedures($where: ProcedureWhereInput) {
         procedureType
         reviewDue
         reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
@@ -151,10 +189,19 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       procedureType
       reviewDue
       reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
     }
   }
 }

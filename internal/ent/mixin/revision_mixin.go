@@ -1,14 +1,16 @@
 package mixin
 
 import (
-	"entgo.io/contrib/entgql"
+	"fmt"
+
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"golang.org/x/mod/semver"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/utils/rout"
 )
 
 // RevisionMixin implements the revision pattern for schemas.
@@ -19,26 +21,29 @@ type RevisionMixin struct {
 // Fields of the RevisionMixin.
 func (RevisionMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.JSON("revision", &models.SemverVersion{}).
-			Default(&models.SemverVersion{
-				Patch: 1, // default to v0.0.1
+		field.String("revision").
+			Default(models.DefaultRevision).
+			Validate(func(s string) error {
+				ok := semver.IsValid(s)
+				if !ok {
+					return fmt.Errorf("%w, invalid semver value", rout.InvalidField("revision"))
+				}
+
+				return nil
 			}).
-			Annotations(entgql.Type("String")).
 			Optional().
-			Comment("revision of the object, by default any update will bump the patch version, unless the revision_bump field is set"),
-		field.Enum("revision_bump").
-			Optional().
-			GoType(models.VersionBump("")).
-			Comment("revision bump type - major, minor, patch, or draft").
-			Annotations(
-				entgql.Skip(
-					^entgql.SkipEnumField & ^entgql.SkipMutationUpdateInput,
-					// only allow updates to update the revision field
-					// entgql.SkipMutationCreateInput, entgql.SkipMutationCreateInput,
-					// entgql.SkipOrderField, entgql.SkipWhereInput,
-				),
-				entsql.Skip(), // this is not a database field
-			),
+			Comment("revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set"),
+		// field.Enum("revision_bump").
+		// 	Optional().
+		// 	GoType(models.VersionBump("")).
+		// 	Comment("revision bump type - major, minor, patch, or draft").
+		// 	StorageKey("revision").
+		// 	Annotations(
+		// 		entgql.Skip(
+		// 			^entgql.SkipEnumField & ^entgql.SkipMutationUpdateInput,
+		// 		),
+		// 		entsql.Skip(), // this is not a database field
+		// 	),
 	}
 }
 

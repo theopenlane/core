@@ -172,30 +172,16 @@ func (rhc *RiskHistoryCreate) SetName(s string) *RiskHistoryCreate {
 	return rhc
 }
 
-// SetDescription sets the "description" field.
-func (rhc *RiskHistoryCreate) SetDescription(s string) *RiskHistoryCreate {
-	rhc.mutation.SetDescription(s)
-	return rhc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableDescription(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetDescription(*s)
-	}
-	return rhc
-}
-
 // SetStatus sets the "status" field.
-func (rhc *RiskHistoryCreate) SetStatus(s string) *RiskHistoryCreate {
-	rhc.mutation.SetStatus(s)
+func (rhc *RiskHistoryCreate) SetStatus(es enums.RiskStatus) *RiskHistoryCreate {
+	rhc.mutation.SetStatus(es)
 	return rhc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableStatus(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetStatus(*s)
+func (rhc *RiskHistoryCreate) SetNillableStatus(es *enums.RiskStatus) *RiskHistoryCreate {
+	if es != nil {
+		rhc.SetStatus(*es)
 	}
 	return rhc
 }
@@ -214,16 +200,16 @@ func (rhc *RiskHistoryCreate) SetNillableRiskType(s *string) *RiskHistoryCreate 
 	return rhc
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (rhc *RiskHistoryCreate) SetBusinessCosts(s string) *RiskHistoryCreate {
-	rhc.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (rhc *RiskHistoryCreate) SetCategory(s string) *RiskHistoryCreate {
+	rhc.mutation.SetCategory(s)
 	return rhc
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableBusinessCosts(s *string) *RiskHistoryCreate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableCategory(s *string) *RiskHistoryCreate {
 	if s != nil {
-		rhc.SetBusinessCosts(*s)
+		rhc.SetCategory(*s)
 	}
 	return rhc
 }
@@ -256,6 +242,20 @@ func (rhc *RiskHistoryCreate) SetNillableLikelihood(el *enums.RiskLikelihood) *R
 	return rhc
 }
 
+// SetScore sets the "score" field.
+func (rhc *RiskHistoryCreate) SetScore(i int) *RiskHistoryCreate {
+	rhc.mutation.SetScore(i)
+	return rhc
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableScore(i *int) *RiskHistoryCreate {
+	if i != nil {
+		rhc.SetScore(*i)
+	}
+	return rhc
+}
+
 // SetMitigation sets the "mitigation" field.
 func (rhc *RiskHistoryCreate) SetMitigation(s string) *RiskHistoryCreate {
 	rhc.mutation.SetMitigation(s)
@@ -270,23 +270,31 @@ func (rhc *RiskHistoryCreate) SetNillableMitigation(s *string) *RiskHistoryCreat
 	return rhc
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (rhc *RiskHistoryCreate) SetSatisfies(s string) *RiskHistoryCreate {
-	rhc.mutation.SetSatisfies(s)
+// SetDetails sets the "details" field.
+func (rhc *RiskHistoryCreate) SetDetails(s string) *RiskHistoryCreate {
+	rhc.mutation.SetDetails(s)
 	return rhc
 }
 
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableSatisfies(s *string) *RiskHistoryCreate {
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableDetails(s *string) *RiskHistoryCreate {
 	if s != nil {
-		rhc.SetSatisfies(*s)
+		rhc.SetDetails(*s)
 	}
 	return rhc
 }
 
-// SetDetails sets the "details" field.
-func (rhc *RiskHistoryCreate) SetDetails(m map[string]interface{}) *RiskHistoryCreate {
-	rhc.mutation.SetDetails(m)
+// SetBusinessCosts sets the "business_costs" field.
+func (rhc *RiskHistoryCreate) SetBusinessCosts(s string) *RiskHistoryCreate {
+	rhc.mutation.SetBusinessCosts(s)
+	return rhc
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableBusinessCosts(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetBusinessCosts(*s)
+	}
 	return rhc
 }
 
@@ -355,6 +363,10 @@ func (rhc *RiskHistoryCreate) defaults() {
 		v := riskhistory.DefaultTags
 		rhc.mutation.SetTags(v)
 	}
+	if _, ok := rhc.mutation.Status(); !ok {
+		v := riskhistory.DefaultStatus
+		rhc.mutation.SetStatus(v)
+	}
 	if _, ok := rhc.mutation.Impact(); !ok {
 		v := riskhistory.DefaultImpact
 		rhc.mutation.SetImpact(v)
@@ -387,6 +399,11 @@ func (rhc *RiskHistoryCreate) check() error {
 	}
 	if _, ok := rhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "RiskHistory.name"`)}
+	}
+	if v, ok := rhc.mutation.Status(); ok {
+		if err := riskhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.status": %w`, err)}
+		}
 	}
 	if v, ok := rhc.mutation.Impact(); ok {
 		if err := riskhistory.ImpactValidator(v); err != nil {
@@ -486,21 +503,17 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := rhc.mutation.Description(); ok {
-		_spec.SetField(riskhistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := rhc.mutation.Status(); ok {
-		_spec.SetField(riskhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := rhc.mutation.RiskType(); ok {
 		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
 		_node.RiskType = value
 	}
-	if value, ok := rhc.mutation.BusinessCosts(); ok {
-		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
-		_node.BusinessCosts = value
+	if value, ok := rhc.mutation.Category(); ok {
+		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
 	if value, ok := rhc.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
@@ -510,17 +523,21 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 		_node.Likelihood = value
 	}
+	if value, ok := rhc.mutation.Score(); ok {
+		_spec.SetField(riskhistory.FieldScore, field.TypeInt, value)
+		_node.Score = value
+	}
 	if value, ok := rhc.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
 		_node.Mitigation = value
 	}
-	if value, ok := rhc.mutation.Satisfies(); ok {
-		_spec.SetField(riskhistory.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
 	if value, ok := rhc.mutation.Details(); ok {
-		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(riskhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := rhc.mutation.BusinessCosts(); ok {
+		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
+		_node.BusinessCosts = value
 	}
 	return _node, _spec
 }

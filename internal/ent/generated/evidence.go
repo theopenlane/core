@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Evidence is the model entity for the Evidence schema.
@@ -53,6 +54,8 @@ type Evidence struct {
 	IsAutomated bool `json:"is_automated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
 	URL string `json:"url,omitempty"`
+	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	Status enums.EvidenceStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EvidenceQuery when eager-loading is set.
 	Edges        EvidenceEdges `json:"edges"`
@@ -163,7 +166,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDisplayID, evidence.FieldDeletedBy, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDisplayID, evidence.FieldDeletedBy, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
@@ -292,6 +295,12 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.URL = value.String
 			}
+		case evidence.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				e.Status = enums.EvidenceStatus(value.String)
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -413,6 +422,9 @@ func (e *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("url=")
 	builder.WriteString(e.URL)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", e.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -273,6 +274,26 @@ func (eu *EvidenceUpdate) SetNillableURL(s *string) *EvidenceUpdate {
 // ClearURL clears the value of the "url" field.
 func (eu *EvidenceUpdate) ClearURL() *EvidenceUpdate {
 	eu.mutation.ClearURL()
+	return eu
+}
+
+// SetStatus sets the "status" field.
+func (eu *EvidenceUpdate) SetStatus(es enums.EvidenceStatus) *EvidenceUpdate {
+	eu.mutation.SetStatus(es)
+	return eu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (eu *EvidenceUpdate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceUpdate {
+	if es != nil {
+		eu.SetStatus(*es)
+	}
+	return eu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (eu *EvidenceUpdate) ClearStatus() *EvidenceUpdate {
+	eu.mutation.ClearStatus()
 	return eu
 }
 
@@ -551,6 +572,11 @@ func (eu *EvidenceUpdate) check() error {
 			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
 		}
 	}
+	if v, ok := eu.mutation.Status(); ok {
+		if err := evidence.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -654,6 +680,12 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
+	}
+	if value, ok := eu.mutation.Status(); ok {
+		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
+	}
+	if eu.mutation.StatusCleared() {
+		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
 	}
 	if eu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1205,6 +1237,26 @@ func (euo *EvidenceUpdateOne) ClearURL() *EvidenceUpdateOne {
 	return euo
 }
 
+// SetStatus sets the "status" field.
+func (euo *EvidenceUpdateOne) SetStatus(es enums.EvidenceStatus) *EvidenceUpdateOne {
+	euo.mutation.SetStatus(es)
+	return euo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (euo *EvidenceUpdateOne) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceUpdateOne {
+	if es != nil {
+		euo.SetStatus(*es)
+	}
+	return euo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (euo *EvidenceUpdateOne) ClearStatus() *EvidenceUpdateOne {
+	euo.mutation.ClearStatus()
+	return euo
+}
+
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (euo *EvidenceUpdateOne) AddControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
 	euo.mutation.AddControlObjectiveIDs(ids...)
@@ -1493,6 +1545,11 @@ func (euo *EvidenceUpdateOne) check() error {
 			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
 		}
 	}
+	if v, ok := euo.mutation.Status(); ok {
+		if err := evidence.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1613,6 +1670,12 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 	}
 	if euo.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
+	}
+	if value, ok := euo.mutation.Status(); ok {
+		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
+	}
+	if euo.mutation.StatusCleared() {
+		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
 	}
 	if euo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{

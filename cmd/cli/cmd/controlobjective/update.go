@@ -28,7 +28,7 @@ func init() {
 	updateCmd.Flags().StringP("name", "n", "", "name of the control objective")
 	updateCmd.Flags().StringP("desired-outcome", "o", "", "desired outcome of the control objective")
 	updateCmd.Flags().StringP("source", "s", "", "source of the control objective, e.g. framework, template, custom, etc.")
-	updateCmd.Flags().StringP("version", "v", "", "version of the control objective")
+	updateCmd.Flags().StringP("revision", "v", "", "revision of the control objective")
 	updateCmd.Flags().StringP("status", "t", "", "status of the control objective")
 	updateCmd.Flags().StringP("control-objective-type", "y", "", "type of the control objective e.g. compliance, operational, strategic, or reporting")
 
@@ -64,9 +64,9 @@ func updateValidation() (id string, input openlaneclient.UpdateControlObjectiveI
 		input.Source = enums.ToControlSource(source)
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
+	revision := cmd.Config.String("revision")
+	if revision != "" {
+		input.Revision = &revision
 	}
 
 	status := cmd.Config.String("status")

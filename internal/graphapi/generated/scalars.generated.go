@@ -406,4 +406,20 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return res
 }
 
+func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐVersionBump(ctx context.Context, v any) (*models.VersionBump, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.VersionBump)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐVersionBump(ctx context.Context, sel ast.SelectionSet, v *models.VersionBump) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 // endregion ***************************** type.gotpl *****************************

@@ -37,6 +37,8 @@ type ProcedureQuery struct {
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
+	withApprover              *GroupQuery
+	withDelegate              *GroupQuery
 	withControls              *ControlQuery
 	withInternalPolicies      *InternalPolicyQuery
 	withNarratives            *NarrativeQuery
@@ -159,6 +161,56 @@ func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProcedureEditors
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryApprover chains the current query on the "approver" edge.
+func (pq *ProcedureQuery) QueryApprover() *GroupQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ApproverTable, procedure.ApproverColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegate chains the current query on the "delegate" edge.
+func (pq *ProcedureQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.DelegateTable, procedure.DelegateColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -510,6 +562,8 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		withOwner:            pq.withOwner.Clone(),
 		withBlockedGroups:    pq.withBlockedGroups.Clone(),
 		withEditors:          pq.withEditors.Clone(),
+		withApprover:         pq.withApprover.Clone(),
+		withDelegate:         pq.withDelegate.Clone(),
 		withControls:         pq.withControls.Clone(),
 		withInternalPolicies: pq.withInternalPolicies.Clone(),
 		withNarratives:       pq.withNarratives.Clone(),
@@ -553,6 +607,28 @@ func (pq *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery
 		opt(query)
 	}
 	pq.withEditors = query
+	return pq
+}
+
+// WithApprover tells the query-builder to eager-load the nodes that are connected to
+// the "approver" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithApprover(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withApprover = query
+	return pq
+}
+
+// WithDelegate tells the query-builder to eager-load the nodes that are connected to
+// the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithDelegate(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withDelegate = query
 	return pq
 }
 
@@ -707,10 +783,12 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
+			pq.withApprover != nil,
+			pq.withDelegate != nil,
 			pq.withControls != nil,
 			pq.withInternalPolicies != nil,
 			pq.withNarratives != nil,
@@ -719,6 +797,9 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			pq.withPrograms != nil,
 		}
 	)
+	if pq.withApprover != nil || pq.withDelegate != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, procedure.ForeignKeys...)
 	}
@@ -762,6 +843,18 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := pq.loadEditors(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Editors = []*Group{} },
 			func(n *Procedure, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withApprover; query != nil {
+		if err := pq.loadApprover(ctx, query, nodes, nil,
+			func(n *Procedure, e *Group) { n.Edges.Approver = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withDelegate; query != nil {
+		if err := pq.loadDelegate(ctx, query, nodes, nil,
+			func(n *Procedure, e *Group) { n.Edges.Delegate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1020,6 +1113,70 @@ func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		if nodes[i].procedure_approver == nil {
+			continue
+		}
+		fk := *nodes[i].procedure_approver
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "procedure_approver" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		if nodes[i].procedure_delegate == nil {
+			continue
+		}
+		fk := *nodes[i].procedure_delegate
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "procedure_delegate" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

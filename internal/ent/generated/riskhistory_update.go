@@ -137,36 +137,16 @@ func (rhu *RiskHistoryUpdate) SetNillableName(s *string) *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetDescription sets the "description" field.
-func (rhu *RiskHistoryUpdate) SetDescription(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetDescription(s)
-	return rhu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDescription(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetDescription(*s)
-	}
-	return rhu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (rhu *RiskHistoryUpdate) ClearDescription() *RiskHistoryUpdate {
-	rhu.mutation.ClearDescription()
-	return rhu
-}
-
 // SetStatus sets the "status" field.
-func (rhu *RiskHistoryUpdate) SetStatus(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetStatus(s)
+func (rhu *RiskHistoryUpdate) SetStatus(es enums.RiskStatus) *RiskHistoryUpdate {
+	rhu.mutation.SetStatus(es)
 	return rhu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableStatus(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetStatus(*s)
+func (rhu *RiskHistoryUpdate) SetNillableStatus(es *enums.RiskStatus) *RiskHistoryUpdate {
+	if es != nil {
+		rhu.SetStatus(*es)
 	}
 	return rhu
 }
@@ -197,23 +177,23 @@ func (rhu *RiskHistoryUpdate) ClearRiskType() *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (rhu *RiskHistoryUpdate) SetBusinessCosts(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (rhu *RiskHistoryUpdate) SetCategory(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetCategory(s)
 	return rhu
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableBusinessCosts(s *string) *RiskHistoryUpdate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableCategory(s *string) *RiskHistoryUpdate {
 	if s != nil {
-		rhu.SetBusinessCosts(*s)
+		rhu.SetCategory(*s)
 	}
 	return rhu
 }
 
-// ClearBusinessCosts clears the value of the "business_costs" field.
-func (rhu *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
-	rhu.mutation.ClearBusinessCosts()
+// ClearCategory clears the value of the "category" field.
+func (rhu *RiskHistoryUpdate) ClearCategory() *RiskHistoryUpdate {
+	rhu.mutation.ClearCategory()
 	return rhu
 }
 
@@ -257,6 +237,33 @@ func (rhu *RiskHistoryUpdate) ClearLikelihood() *RiskHistoryUpdate {
 	return rhu
 }
 
+// SetScore sets the "score" field.
+func (rhu *RiskHistoryUpdate) SetScore(i int) *RiskHistoryUpdate {
+	rhu.mutation.ResetScore()
+	rhu.mutation.SetScore(i)
+	return rhu
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableScore(i *int) *RiskHistoryUpdate {
+	if i != nil {
+		rhu.SetScore(*i)
+	}
+	return rhu
+}
+
+// AddScore adds i to the "score" field.
+func (rhu *RiskHistoryUpdate) AddScore(i int) *RiskHistoryUpdate {
+	rhu.mutation.AddScore(i)
+	return rhu
+}
+
+// ClearScore clears the value of the "score" field.
+func (rhu *RiskHistoryUpdate) ClearScore() *RiskHistoryUpdate {
+	rhu.mutation.ClearScore()
+	return rhu
+}
+
 // SetMitigation sets the "mitigation" field.
 func (rhu *RiskHistoryUpdate) SetMitigation(s string) *RiskHistoryUpdate {
 	rhu.mutation.SetMitigation(s)
@@ -277,35 +284,43 @@ func (rhu *RiskHistoryUpdate) ClearMitigation() *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (rhu *RiskHistoryUpdate) SetSatisfies(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetSatisfies(s)
-	return rhu
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableSatisfies(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetSatisfies(*s)
-	}
-	return rhu
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (rhu *RiskHistoryUpdate) ClearSatisfies() *RiskHistoryUpdate {
-	rhu.mutation.ClearSatisfies()
-	return rhu
-}
-
 // SetDetails sets the "details" field.
-func (rhu *RiskHistoryUpdate) SetDetails(m map[string]interface{}) *RiskHistoryUpdate {
-	rhu.mutation.SetDetails(m)
+func (rhu *RiskHistoryUpdate) SetDetails(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetDetails(s)
+	return rhu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableDetails(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetDetails(*s)
+	}
 	return rhu
 }
 
 // ClearDetails clears the value of the "details" field.
 func (rhu *RiskHistoryUpdate) ClearDetails() *RiskHistoryUpdate {
 	rhu.mutation.ClearDetails()
+	return rhu
+}
+
+// SetBusinessCosts sets the "business_costs" field.
+func (rhu *RiskHistoryUpdate) SetBusinessCosts(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetBusinessCosts(s)
+	return rhu
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableBusinessCosts(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetBusinessCosts(*s)
+	}
+	return rhu
+}
+
+// ClearBusinessCosts clears the value of the "business_costs" field.
+func (rhu *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
+	rhu.mutation.ClearBusinessCosts()
 	return rhu
 }
 
@@ -352,6 +367,11 @@ func (rhu *RiskHistoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rhu *RiskHistoryUpdate) check() error {
+	if v, ok := rhu.mutation.Status(); ok {
+		if err := riskhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := rhu.mutation.Impact(); ok {
 		if err := riskhistory.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
@@ -433,17 +453,11 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := rhu.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := rhu.mutation.Description(); ok {
-		_spec.SetField(riskhistory.FieldDescription, field.TypeString, value)
-	}
-	if rhu.mutation.DescriptionCleared() {
-		_spec.ClearField(riskhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := rhu.mutation.Status(); ok {
-		_spec.SetField(riskhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if rhu.mutation.StatusCleared() {
-		_spec.ClearField(riskhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(riskhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := rhu.mutation.RiskType(); ok {
 		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
@@ -451,11 +465,11 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.RiskTypeCleared() {
 		_spec.ClearField(riskhistory.FieldRiskType, field.TypeString)
 	}
-	if value, ok := rhu.mutation.BusinessCosts(); ok {
-		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
+	if value, ok := rhu.mutation.Category(); ok {
+		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
 	}
-	if rhu.mutation.BusinessCostsCleared() {
-		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
+	if rhu.mutation.CategoryCleared() {
+		_spec.ClearField(riskhistory.FieldCategory, field.TypeString)
 	}
 	if value, ok := rhu.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
@@ -469,23 +483,32 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.LikelihoodCleared() {
 		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
+	if value, ok := rhu.mutation.Score(); ok {
+		_spec.SetField(riskhistory.FieldScore, field.TypeInt, value)
+	}
+	if value, ok := rhu.mutation.AddedScore(); ok {
+		_spec.AddField(riskhistory.FieldScore, field.TypeInt, value)
+	}
+	if rhu.mutation.ScoreCleared() {
+		_spec.ClearField(riskhistory.FieldScore, field.TypeInt)
+	}
 	if value, ok := rhu.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
 	}
 	if rhu.mutation.MitigationCleared() {
 		_spec.ClearField(riskhistory.FieldMitigation, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Satisfies(); ok {
-		_spec.SetField(riskhistory.FieldSatisfies, field.TypeString, value)
-	}
-	if rhu.mutation.SatisfiesCleared() {
-		_spec.ClearField(riskhistory.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := rhu.mutation.Details(); ok {
-		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(riskhistory.FieldDetails, field.TypeString, value)
 	}
 	if rhu.mutation.DetailsCleared() {
-		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
+		_spec.ClearField(riskhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := rhu.mutation.BusinessCosts(); ok {
+		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
+	}
+	if rhu.mutation.BusinessCostsCleared() {
+		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
 	_spec.Node.Schema = rhu.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhu.schemaConfig)
@@ -615,36 +638,16 @@ func (rhuo *RiskHistoryUpdateOne) SetNillableName(s *string) *RiskHistoryUpdateO
 	return rhuo
 }
 
-// SetDescription sets the "description" field.
-func (rhuo *RiskHistoryUpdateOne) SetDescription(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDescription(s)
-	return rhuo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDescription(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetDescription(*s)
-	}
-	return rhuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDescription() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDescription()
-	return rhuo
-}
-
 // SetStatus sets the "status" field.
-func (rhuo *RiskHistoryUpdateOne) SetStatus(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetStatus(s)
+func (rhuo *RiskHistoryUpdateOne) SetStatus(es enums.RiskStatus) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetStatus(es)
 	return rhuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableStatus(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetStatus(*s)
+func (rhuo *RiskHistoryUpdateOne) SetNillableStatus(es *enums.RiskStatus) *RiskHistoryUpdateOne {
+	if es != nil {
+		rhuo.SetStatus(*es)
 	}
 	return rhuo
 }
@@ -675,23 +678,23 @@ func (rhuo *RiskHistoryUpdateOne) ClearRiskType() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (rhuo *RiskHistoryUpdateOne) SetBusinessCosts(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (rhuo *RiskHistoryUpdateOne) SetCategory(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetCategory(s)
 	return rhuo
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableBusinessCosts(s *string) *RiskHistoryUpdateOne {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableCategory(s *string) *RiskHistoryUpdateOne {
 	if s != nil {
-		rhuo.SetBusinessCosts(*s)
+		rhuo.SetCategory(*s)
 	}
 	return rhuo
 }
 
-// ClearBusinessCosts clears the value of the "business_costs" field.
-func (rhuo *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearBusinessCosts()
+// ClearCategory clears the value of the "category" field.
+func (rhuo *RiskHistoryUpdateOne) ClearCategory() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearCategory()
 	return rhuo
 }
 
@@ -735,6 +738,33 @@ func (rhuo *RiskHistoryUpdateOne) ClearLikelihood() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
+// SetScore sets the "score" field.
+func (rhuo *RiskHistoryUpdateOne) SetScore(i int) *RiskHistoryUpdateOne {
+	rhuo.mutation.ResetScore()
+	rhuo.mutation.SetScore(i)
+	return rhuo
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableScore(i *int) *RiskHistoryUpdateOne {
+	if i != nil {
+		rhuo.SetScore(*i)
+	}
+	return rhuo
+}
+
+// AddScore adds i to the "score" field.
+func (rhuo *RiskHistoryUpdateOne) AddScore(i int) *RiskHistoryUpdateOne {
+	rhuo.mutation.AddScore(i)
+	return rhuo
+}
+
+// ClearScore clears the value of the "score" field.
+func (rhuo *RiskHistoryUpdateOne) ClearScore() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearScore()
+	return rhuo
+}
+
 // SetMitigation sets the "mitigation" field.
 func (rhuo *RiskHistoryUpdateOne) SetMitigation(s string) *RiskHistoryUpdateOne {
 	rhuo.mutation.SetMitigation(s)
@@ -755,35 +785,43 @@ func (rhuo *RiskHistoryUpdateOne) ClearMitigation() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (rhuo *RiskHistoryUpdateOne) SetSatisfies(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetSatisfies(s)
-	return rhuo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableSatisfies(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetSatisfies(*s)
-	}
-	return rhuo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (rhuo *RiskHistoryUpdateOne) ClearSatisfies() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearSatisfies()
-	return rhuo
-}
-
 // SetDetails sets the "details" field.
-func (rhuo *RiskHistoryUpdateOne) SetDetails(m map[string]interface{}) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDetails(m)
+func (rhuo *RiskHistoryUpdateOne) SetDetails(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetDetails(s)
+	return rhuo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableDetails(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetDetails(*s)
+	}
 	return rhuo
 }
 
 // ClearDetails clears the value of the "details" field.
 func (rhuo *RiskHistoryUpdateOne) ClearDetails() *RiskHistoryUpdateOne {
 	rhuo.mutation.ClearDetails()
+	return rhuo
+}
+
+// SetBusinessCosts sets the "business_costs" field.
+func (rhuo *RiskHistoryUpdateOne) SetBusinessCosts(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetBusinessCosts(s)
+	return rhuo
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableBusinessCosts(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetBusinessCosts(*s)
+	}
+	return rhuo
+}
+
+// ClearBusinessCosts clears the value of the "business_costs" field.
+func (rhuo *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearBusinessCosts()
 	return rhuo
 }
 
@@ -843,6 +881,11 @@ func (rhuo *RiskHistoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rhuo *RiskHistoryUpdateOne) check() error {
+	if v, ok := rhuo.mutation.Status(); ok {
+		if err := riskhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := rhuo.mutation.Impact(); ok {
 		if err := riskhistory.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
@@ -941,17 +984,11 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if value, ok := rhuo.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := rhuo.mutation.Description(); ok {
-		_spec.SetField(riskhistory.FieldDescription, field.TypeString, value)
-	}
-	if rhuo.mutation.DescriptionCleared() {
-		_spec.ClearField(riskhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := rhuo.mutation.Status(); ok {
-		_spec.SetField(riskhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if rhuo.mutation.StatusCleared() {
-		_spec.ClearField(riskhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(riskhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := rhuo.mutation.RiskType(); ok {
 		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
@@ -959,11 +996,11 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.RiskTypeCleared() {
 		_spec.ClearField(riskhistory.FieldRiskType, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.BusinessCosts(); ok {
-		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
+	if value, ok := rhuo.mutation.Category(); ok {
+		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
 	}
-	if rhuo.mutation.BusinessCostsCleared() {
-		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
+	if rhuo.mutation.CategoryCleared() {
+		_spec.ClearField(riskhistory.FieldCategory, field.TypeString)
 	}
 	if value, ok := rhuo.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
@@ -977,23 +1014,32 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.LikelihoodCleared() {
 		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
+	if value, ok := rhuo.mutation.Score(); ok {
+		_spec.SetField(riskhistory.FieldScore, field.TypeInt, value)
+	}
+	if value, ok := rhuo.mutation.AddedScore(); ok {
+		_spec.AddField(riskhistory.FieldScore, field.TypeInt, value)
+	}
+	if rhuo.mutation.ScoreCleared() {
+		_spec.ClearField(riskhistory.FieldScore, field.TypeInt)
+	}
 	if value, ok := rhuo.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
 	}
 	if rhuo.mutation.MitigationCleared() {
 		_spec.ClearField(riskhistory.FieldMitigation, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Satisfies(); ok {
-		_spec.SetField(riskhistory.FieldSatisfies, field.TypeString, value)
-	}
-	if rhuo.mutation.SatisfiesCleared() {
-		_spec.ClearField(riskhistory.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := rhuo.mutation.Details(); ok {
-		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(riskhistory.FieldDetails, field.TypeString, value)
 	}
 	if rhuo.mutation.DetailsCleared() {
-		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
+		_spec.ClearField(riskhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := rhuo.mutation.BusinessCosts(); ok {
+		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
+	}
+	if rhuo.mutation.BusinessCostsCleared() {
+		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
 	_spec.Node.Schema = rhuo.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhuo.schemaConfig)

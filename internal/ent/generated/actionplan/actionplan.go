@@ -3,11 +3,14 @@
 package actionplan
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -31,18 +34,34 @@ const (
 	FieldTags = "tags"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldActionPlanType holds the string denoting the action_plan_type field in the database.
+	FieldActionPlanType = "action_plan_type"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
+	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
+	FieldApprovalRequired = "approval_required"
+	// FieldReviewDue holds the string denoting the review_due field in the database.
+	FieldReviewDue = "review_due"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
+	// EdgeApprover holds the string denoting the approver edge name in mutations.
+	EdgeApprover = "approver"
+	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
+	EdgeDelegate = "delegate"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeRisk holds the string denoting the risk edge name in mutations.
 	EdgeRisk = "risk"
 	// EdgeControl holds the string denoting the control edge name in mutations.
@@ -53,6 +72,27 @@ const (
 	EdgeProgram = "program"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
+	// ApproverTable is the table that holds the approver relation/edge.
+	ApproverTable = "action_plans"
+	// ApproverInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ApproverInverseTable = "groups"
+	// ApproverColumn is the table column denoting the approver relation/edge.
+	ApproverColumn = "action_plan_approver"
+	// DelegateTable is the table that holds the delegate relation/edge.
+	DelegateTable = "action_plans"
+	// DelegateInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateInverseTable = "groups"
+	// DelegateColumn is the table column denoting the delegate relation/edge.
+	DelegateColumn = "action_plan_delegate"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "action_plans"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// RiskTable is the table that holds the risk relation/edge. The primary key declared below.
 	RiskTable = "risk_action_plans"
 	// RiskInverseTable is the table name for the Risk entity.
@@ -86,17 +126,24 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldName,
-	FieldDescription,
 	FieldStatus,
+	FieldActionPlanType,
+	FieldDetails,
+	FieldApprovalRequired,
+	FieldReviewDue,
+	FieldReviewFrequency,
+	FieldRevision,
+	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
-	FieldDetails,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "action_plans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"action_plan_approver",
+	"action_plan_delegate",
 	"subcontrol_action_plans",
 }
 
@@ -136,8 +183,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [5]ent.Hook
+	Interceptors [2]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -146,9 +194,55 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
+	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
+	DefaultApprovalRequired bool
+	// DefaultReviewDue holds the default value on creation for the "review_due" field.
+	DefaultReviewDue time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.DocumentStatus = "DRAFT"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.DocumentStatus) error {
+	switch s.String() {
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("actionplan: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+		return nil
+	default:
+		return fmt.Errorf("actionplan: invalid enum value for review_frequency field: %q", rf)
+	}
+}
+
+// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
+func PriorityValidator(pr enums.Priority) error {
+	switch pr.String() {
+	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("actionplan: invalid enum value for priority field: %q", pr)
+	}
+}
 
 // OrderOption defines the ordering options for the ActionPlan queries.
 type OrderOption func(*sql.Selector)
@@ -193,14 +287,44 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByActionPlanType orders the results by the action_plan_type field.
+func ByActionPlanType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanType, opts...).ToFunc()
+}
+
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
+// ByApprovalRequired orders the results by the approval_required field.
+func ByApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovalRequired, opts...).ToFunc()
+}
+
+// ByReviewDue orders the results by the review_due field.
+func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByDueDate orders the results by the due_date field.
@@ -216,6 +340,27 @@ func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByApproverField orders the results by approver field.
+func ByApproverField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newApproverStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateField orders the results by delegate field.
+func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByRiskCount orders the results by risk count.
@@ -273,6 +418,27 @@ func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newApproverStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ApproverInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ApproverTable, ApproverColumn),
+	)
+}
+func newDelegateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
 func newRiskStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -301,3 +467,24 @@ func newProgramStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
 	)
 }
+
+var (
+	// enums.DocumentStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
+	// enums.DocumentStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)
+
+var (
+	// enums.Priority must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Priority)(nil)
+	// enums.Priority must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Priority)(nil)
+)
