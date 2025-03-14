@@ -161,6 +161,8 @@ func registerExampleCSVHandler(router *Router) (err error) {
 		Path:        path,
 		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
+			c.Response().Header().Set(httpsling.HeaderContentType, "text/csv")
+
 			return router.Handler.ExampleCSV(c)
 		},
 	}
