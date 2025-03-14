@@ -1,21 +1,23 @@
+
 mutation CreateBulkCSVInternalPolicy($input: Upload!) {
   createBulkCSVInternalPolicy(input: $input) {
     internalPolicies {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       policyType
-      purposeAndScope
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -23,21 +25,22 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
 mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
   createBulkInternalPolicy(input: $input) {
     internalPolicies {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       policyType
-      purposeAndScope
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -45,21 +48,22 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
 mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   createInternalPolicy(input: $input) {
     internalPolicy {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       policyType
-      purposeAndScope
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
       editors {
         id
         name
@@ -82,21 +86,22 @@ query GetAllInternalPolicies {
   internalPolicies {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
-        id
         displayID
+        id
         name
+        ownerID
         policyType
-        purposeAndScope
+        reviewDue
+        reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
-        version
         editors {
           id
           name
@@ -109,56 +114,24 @@ query GetAllInternalPolicies {
     }
   }
 }
-
-query GetInternalPolicies($where: InternalPolicyWhereInput) {
-  internalPolicies(where: $where) {
-    edges {
-      node {
-        background
-        createdAt
-        createdBy
-        description
-        details
-        id
-        displayID
-        name
-        policyType
-        purposeAndScope
-        status
-        tags
-        updatedAt
-        updatedBy
-        version
-        editors {
-          id
-          name
-        }
-        blockedGroups {
-          id
-          name
-        }
-      }
-    }
-  }
-}
-
 query GetInternalPolicyByID($internalPolicyId: ID!) {
   internalPolicy(id: $internalPolicyId) {
-    background
+    approvalRequired
     createdAt
     createdBy
-    description
     details
-    id
     displayID
+    id
     name
+    ownerID
     policyType
-    purposeAndScope
+    reviewDue
+    reviewFrequency
+    revision
     status
     tags
     updatedAt
     updatedBy
-    version
     editors {
       id
       name
@@ -170,24 +143,57 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
   }
 }
 
+query GetInternalPolicies($where: InternalPolicyWhereInput) {
+  internalPolicies(where: $where) {
+    edges {
+      node {
+        approvalRequired
+        createdAt
+        createdBy
+        details
+        displayID
+        id
+        name
+        ownerID
+        policyType
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        tags
+        updatedAt
+        updatedBy
+        editors {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}
 mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
   updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
     internalPolicy {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       policyType
-      purposeAndScope
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
       editors {
         id
         name

@@ -67,6 +67,7 @@ type OrgSubscription struct {
 	Edges        OrgSubscriptionEdges `json:"edges"`
 	selectValues sql.SelectValues
 
+	// SubscriptionURL is the URL to the stripe checkout session
 	SubscriptionURL      string `json:"subscriptionURL,omitempty"`
 	ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
 	Cancellation         string `json:"cancellation,omitempty"`

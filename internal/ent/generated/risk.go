@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/pkg/enums"
@@ -40,28 +41,30 @@ type Risk struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
-	// description of the risk
-	Description string `json:"description,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status string `json:"status,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType string `json:"risk_type,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts string `json:"business_costs,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category string `json:"category,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score int `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation string `json:"mitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the risk document
-	Details map[string]interface{} `json:"details,omitempty"`
+	// details of the risk
+	Details string `json:"details,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts string `json:"business_costs,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
+	risk_stakeholder        *string
+	risk_delegate           *string
 	subcontrol_risks        *string
 	selectValues            sql.SelectValues
 }
@@ -84,11 +87,15 @@ type RiskEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// the group of users who are responsible for risk oversight
+	Stakeholder *Group `json:"stakeholder,omitempty"`
+	// temporary delegates for the risk, used for temporary ownership
+	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [10]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
@@ -173,20 +180,48 @@ func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// StakeholderOrErr returns the Stakeholder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) StakeholderOrErr() (*Group, error) {
+	if e.Stakeholder != nil {
+		return e.Stakeholder, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "stakeholder"}
+}
+
+// DelegateOrErr returns the Delegate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) DelegateOrErr() (*Group, error) {
+	if e.Delegate != nil {
+		return e.Delegate, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Risk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case risk.FieldTags, risk.FieldDetails:
+		case risk.FieldTags:
 			values[i] = new([]byte)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
+		case risk.FieldScore:
+			values[i] = new(sql.NullInt64)
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldName, risk.FieldStatus, risk.FieldRiskType, risk.FieldCategory, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
 			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[1]: // subcontrol_risks
+		case risk.ForeignKeys[1]: // risk_stakeholder
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[2]: // risk_delegate
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[3]: // subcontrol_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -271,17 +306,11 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.Name = value.String
 			}
-		case risk.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				r.Description = value.String
-			}
 		case risk.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				r.Status = value.String
+				r.Status = enums.RiskStatus(value.String)
 			}
 		case risk.FieldRiskType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -289,11 +318,11 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.RiskType = value.String
 			}
-		case risk.FieldBusinessCosts:
+		case risk.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				r.BusinessCosts = value.String
+				r.Category = value.String
 			}
 		case risk.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -307,25 +336,29 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.Likelihood = enums.RiskLikelihood(value.String)
 			}
+		case risk.FieldScore:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field score", values[i])
+			} else if value.Valid {
+				r.Score = int(value.Int64)
+			}
 		case risk.FieldMitigation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mitigation", values[i])
 			} else if value.Valid {
 				r.Mitigation = value.String
 			}
-		case risk.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				r.Satisfies = value.String
-			}
 		case risk.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &r.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				r.Details = value.String
+			}
+		case risk.FieldBusinessCosts:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
+			} else if value.Valid {
+				r.BusinessCosts = value.String
 			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -335,6 +368,20 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 				*r.control_objective_risks = value.String
 			}
 		case risk.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_stakeholder", values[i])
+			} else if value.Valid {
+				r.risk_stakeholder = new(string)
+				*r.risk_stakeholder = value.String
+			}
+		case risk.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_delegate", values[i])
+			} else if value.Valid {
+				r.risk_delegate = new(string)
+				*r.risk_delegate = value.String
+			}
+		case risk.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_risks", values[i])
 			} else if value.Valid {
@@ -394,6 +441,16 @@ func (r *Risk) QueryPrograms() *ProgramQuery {
 	return NewRiskClient(r.config).QueryPrograms(r)
 }
 
+// QueryStakeholder queries the "stakeholder" edge of the Risk entity.
+func (r *Risk) QueryStakeholder() *GroupQuery {
+	return NewRiskClient(r.config).QueryStakeholder(r)
+}
+
+// QueryDelegate queries the "delegate" edge of the Risk entity.
+func (r *Risk) QueryDelegate() *GroupQuery {
+	return NewRiskClient(r.config).QueryDelegate(r)
+}
+
 // Update returns a builder for updating this Risk.
 // Note that you need to call Risk.Unwrap() before calling this method if this Risk
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -447,17 +504,14 @@ func (r *Risk) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(r.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(r.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(r.Status)
+	builder.WriteString(fmt.Sprintf("%v", r.Status))
 	builder.WriteString(", ")
 	builder.WriteString("risk_type=")
 	builder.WriteString(r.RiskType)
 	builder.WriteString(", ")
-	builder.WriteString("business_costs=")
-	builder.WriteString(r.BusinessCosts)
+	builder.WriteString("category=")
+	builder.WriteString(r.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
 	builder.WriteString(fmt.Sprintf("%v", r.Impact))
@@ -465,14 +519,17 @@ func (r *Risk) String() string {
 	builder.WriteString("likelihood=")
 	builder.WriteString(fmt.Sprintf("%v", r.Likelihood))
 	builder.WriteString(", ")
+	builder.WriteString("score=")
+	builder.WriteString(fmt.Sprintf("%v", r.Score))
+	builder.WriteString(", ")
 	builder.WriteString("mitigation=")
 	builder.WriteString(r.Mitigation)
 	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(r.Satisfies)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", r.Details))
+	builder.WriteString(r.Details)
+	builder.WriteString(", ")
+	builder.WriteString("business_costs=")
+	builder.WriteString(r.BusinessCosts)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -26,14 +26,15 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("name", "n", "", "name of the risk")
-	updateCmd.Flags().StringP("description", "d", "", "description of the risk")
+	updateCmd.Flags().StringP("details", "d", "", "details of the risk")
 	updateCmd.Flags().StringP("status", "s", "", "status of the risk")
 	updateCmd.Flags().StringP("type", "t", "", "type of the risk")
 	updateCmd.Flags().StringP("business-costs", "b", "", "business costs associated with the risk")
 	updateCmd.Flags().StringP("impact", "m", "", "impact of the risk")
 	updateCmd.Flags().StringP("likelihood", "l", "", "likelihood of the risk")
 	updateCmd.Flags().StringP("mitigation", "g", "", "mitigation for the risk")
-	updateCmd.Flags().StringP("satisfies", "a", "", "which controls are satisfied by the risk")
+	updateCmd.Flags().Int64P("score", "o", 0, "score of the risk")
+
 	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the risk")
 	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the risk")
 }
@@ -52,14 +53,14 @@ func updateValidation() (id string, input openlaneclient.UpdateRiskInput, err er
 		input.Name = &name
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToRiskStatus(status)
 	}
 
 	riskType := cmd.Config.String("type")
@@ -87,9 +88,9 @@ func updateValidation() (id string, input openlaneclient.UpdateRiskInput, err er
 		input.Mitigation = &mitigation
 	}
 
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
+	score := cmd.Config.Int64("score")
+	if score != 0 {
+		input.Score = &score
 	}
 
 	addPrograms := cmd.Config.Strings("add-programs")

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -39,20 +40,30 @@ type ActionPlanHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name string `json:"name,omitempty"`
-	// description of the action plan
-	Description string `json:"description,omitempty"`
-	// status of the action plan
-	Status string `json:"status,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType string `json:"action_plan_type,omitempty"`
+	// details of the action_plan
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue time.Time `json:"review_due,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
 	DueDate time.Time `json:"due_date,omitempty"`
 	// priority of the action plan
-	Priority string `json:"priority,omitempty"`
+	Priority enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
-	Source string `json:"source,omitempty"`
-	// json data including details of the action plan
-	Details      map[string]interface{} `json:"details,omitempty"`
+	Source       string `json:"source,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -61,13 +72,15 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplanhistory.FieldTags, actionplanhistory.FieldDetails:
+		case actionplanhistory.FieldTags:
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldRevision, actionplanhistory.FieldOwnerID, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldDueDate:
+		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -158,17 +171,53 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.Name = value.String
 			}
-		case actionplanhistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				aph.Description = value.String
-			}
 		case actionplanhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				aph.Status = value.String
+				aph.Status = enums.DocumentStatus(value.String)
+			}
+		case actionplanhistory.FieldActionPlanType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_type", values[i])
+			} else if value.Valid {
+				aph.ActionPlanType = value.String
+			}
+		case actionplanhistory.FieldDetails:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field details", values[i])
+			} else if value.Valid {
+				aph.Details = value.String
+			}
+		case actionplanhistory.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				aph.ApprovalRequired = value.Bool
+			}
+		case actionplanhistory.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				aph.ReviewDue = value.Time
+			}
+		case actionplanhistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				aph.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case actionplanhistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				aph.Revision = value.String
+			}
+		case actionplanhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				aph.OwnerID = value.String
 			}
 		case actionplanhistory.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -180,21 +229,13 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
-				aph.Priority = value.String
+				aph.Priority = enums.Priority(value.String)
 			}
 		case actionplanhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				aph.Source = value.String
-			}
-		case actionplanhistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
 			}
 		default:
 			aph.selectValues.Set(columns[i], values[i])
@@ -265,23 +306,38 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(aph.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(aph.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(aph.Status)
+	builder.WriteString(fmt.Sprintf("%v", aph.Status))
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_type=")
+	builder.WriteString(aph.ActionPlanType)
+	builder.WriteString(", ")
+	builder.WriteString("details=")
+	builder.WriteString(aph.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", aph.ApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(aph.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", aph.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(aph.Revision)
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(aph.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(aph.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
-	builder.WriteString(aph.Priority)
+	builder.WriteString(fmt.Sprintf("%v", aph.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(aph.Source)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

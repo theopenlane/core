@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -23,13 +25,10 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the procedure")
-	createCmd.Flags().StringP("description", "d", "", "description of the procedure")
-	createCmd.Flags().StringP("status", "s", "", "status of the procedure")
+	createCmd.Flags().StringP("details", "d", "", "details of the procedure")
+	createCmd.Flags().StringP("status", "s", "", "status of the procedure e.g. draft, published, archived, etc.")
 	createCmd.Flags().StringP("type", "t", "", "type of the procedure")
-	createCmd.Flags().StringP("version", "v", "v0.1", "version of the procedure")
-	createCmd.Flags().StringP("purpose", "p", "", "purpose and scope of the procedure")
-	createCmd.Flags().StringP("background", "b", "", "background information of the procedure")
-	createCmd.Flags().StringP("satisfies", "S", "", "satisfies which controls")
+	createCmd.Flags().StringP("revision", "v", models.DefaultRevision, "revision of the procedure")
 }
 
 // createValidation validates the required fields for the command
@@ -41,14 +40,14 @@ func createValidation() (input openlaneclient.CreateProcedureInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToDocumentStatus(status)
 	}
 
 	procedureType := cmd.Config.String("type")
@@ -56,24 +55,9 @@ func createValidation() (input openlaneclient.CreateProcedureInput, err error) {
 		input.ProcedureType = &procedureType
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
-	}
-
-	purpose := cmd.Config.String("purpose")
-	if purpose != "" {
-		input.PurposeAndScope = &purpose
-	}
-
-	background := cmd.Config.String("background")
-	if background != "" {
-		input.Background = &background
-	}
-
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
+	revision := cmd.Config.String("revision")
+	if revision != "" {
+		input.Revision = &revision
 	}
 
 	return input, nil

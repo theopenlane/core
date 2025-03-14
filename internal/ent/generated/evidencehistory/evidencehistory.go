@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -57,6 +58,8 @@ const (
 	FieldIsAutomated = "is_automated"
 	// FieldURL holds the string denoting the url field in the database.
 	FieldURL = "url"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// Table holds the table name of the evidencehistory in the database.
 	Table = "evidence_history"
 )
@@ -84,6 +87,7 @@ var Columns = []string{
 	FieldSource,
 	FieldIsAutomated,
 	FieldURL,
+	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -130,6 +134,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("evidencehistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultStatus enums.EvidenceStatus = "READY"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.EvidenceStatus) error {
+	switch s.String() {
+	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL":
+		return nil
+	default:
+		return fmt.Errorf("evidencehistory: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -236,9 +252,21 @@ func ByURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldURL, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.EvidenceStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.EvidenceStatus)(nil)
+	// enums.EvidenceStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.EvidenceStatus)(nil)
 )

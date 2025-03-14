@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -204,7 +205,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				DesiredOutcome:       lo.ToPtr("Desired Outcome"),
 				Status:               lo.ToPtr("mitigated"),
 				ControlObjectiveType: lo.ToPtr("operational"),
-				Version:              lo.ToPtr("1.0"),
+				Revision:             lo.ToPtr("v1.0.0"),
 				ProgramIDs:           []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
@@ -353,10 +354,10 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				assert.Empty(t, resp.CreateControlObjective.ControlObjective.ControlObjectiveType)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.CreateControlObjective.ControlObjective.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.CreateControlObjective.ControlObjective.Revision)
 			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Version)
+				assert.Equal(t, models.DefaultRevision, *resp.CreateControlObjective.ControlObjective.Revision)
 			}
 
 			if tc.request.Source != nil {
@@ -420,10 +421,28 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 				ControlObjectiveType: lo.ToPtr("operational"),
 				Source:               &enums.ControlSourceUserDefined,
 				DesiredOutcome:       lo.ToPtr("Updated outcome again"),
-				Version:              lo.ToPtr("1.1"),
+				Revision:             lo.ToPtr("v1.1.0"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, revision bump",
+			request: openlaneclient.UpdateControlObjectiveInput{
+				Status:       lo.ToPtr("open"),
+				RevisionBump: &models.Major,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "invalid revision",
+			request: openlaneclient.UpdateControlObjectiveInput{
+				Revision: lo.ToPtr("1.1"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "revision, invalid semver value",
 		},
 		{
 			name: "update not allowed, not permissions in same org",
@@ -471,8 +490,12 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateControlObjective.ControlObjective.Tags)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.UpdateControlObjective.ControlObjective.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.UpdateControlObjective.ControlObjective.Revision)
+			}
+
+			if tc.request.RevisionBump == &models.Major {
+				assert.NotEqual(t, "v1.0.0", *resp.UpdateControlObjective.ControlObjective.Revision)
 			}
 
 			if tc.request.Category != nil {

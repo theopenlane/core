@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -23,12 +25,10 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the policy")
-	createCmd.Flags().StringP("description", "d", "", "description of the policy")
-	createCmd.Flags().StringP("status", "s", "", "status of the policy")
+	createCmd.Flags().StringP("details", "d", "", "details of the policy")
+	createCmd.Flags().StringP("status", "s", "", "status of the policy e.g. draft, published, archived, etc.")
 	createCmd.Flags().StringP("type", "t", "", "type of the policy")
-	createCmd.Flags().StringP("version", "v", "v0.1", "version of the policy")
-	createCmd.Flags().StringP("purpose", "p", "", "purpose and scope of the policy")
-	createCmd.Flags().StringP("background", "b", "", "background information of the policy")
+	createCmd.Flags().StringP("revision", "v", models.DefaultRevision, "revision of the policy")
 }
 
 // createValidation validates the required fields for the command
@@ -40,14 +40,9 @@ func createValidation() (input openlaneclient.CreateInternalPolicyInput, err err
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
-	}
-
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToDocumentStatus(status)
 	}
 
 	policyType := cmd.Config.String("type")
@@ -55,19 +50,14 @@ func createValidation() (input openlaneclient.CreateInternalPolicyInput, err err
 		input.PolicyType = &policyType
 	}
 
-	version := cmd.Config.String("version")
-	if version != "" {
-		input.Version = &version
+	revision := cmd.Config.String("revision")
+	if revision != "" {
+		input.Revision = &revision
 	}
 
-	purpose := cmd.Config.String("purpose")
-	if purpose != "" {
-		input.PurposeAndScope = &purpose
-	}
-
-	background := cmd.Config.String("background")
-	if background != "" {
-		input.Background = &background
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	return input, nil

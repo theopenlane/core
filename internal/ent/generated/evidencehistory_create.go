@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -269,6 +270,20 @@ func (ehc *EvidenceHistoryCreate) SetNillableURL(s *string) *EvidenceHistoryCrea
 	return ehc
 }
 
+// SetStatus sets the "status" field.
+func (ehc *EvidenceHistoryCreate) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryCreate {
+	ehc.mutation.SetStatus(es)
+	return ehc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ehc *EvidenceHistoryCreate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryCreate {
+	if es != nil {
+		ehc.SetStatus(*es)
+	}
+	return ehc
+}
+
 // SetID sets the "id" field.
 func (ehc *EvidenceHistoryCreate) SetID(s string) *EvidenceHistoryCreate {
 	ehc.mutation.SetID(s)
@@ -346,6 +361,10 @@ func (ehc *EvidenceHistoryCreate) defaults() {
 		v := evidencehistory.DefaultIsAutomated
 		ehc.mutation.SetIsAutomated(v)
 	}
+	if _, ok := ehc.mutation.Status(); !ok {
+		v := evidencehistory.DefaultStatus
+		ehc.mutation.SetStatus(v)
+	}
 	if _, ok := ehc.mutation.ID(); !ok {
 		v := evidencehistory.DefaultID()
 		ehc.mutation.SetID(v)
@@ -373,6 +392,11 @@ func (ehc *EvidenceHistoryCreate) check() error {
 	}
 	if _, ok := ehc.mutation.CreationDate(); !ok {
 		return &ValidationError{Name: "creation_date", err: errors.New(`generated: missing required field "EvidenceHistory.creation_date"`)}
+	}
+	if v, ok := ehc.mutation.Status(); ok {
+		if err := evidencehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -489,6 +513,10 @@ func (ehc *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Crea
 	if value, ok := ehc.mutation.URL(); ok {
 		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 		_node.URL = value
+	}
+	if value, ok := ehc.mutation.Status(); ok {
+		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	return _node, _spec
 }

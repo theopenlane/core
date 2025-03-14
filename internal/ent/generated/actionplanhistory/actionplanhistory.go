@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -38,18 +40,28 @@ const (
 	FieldTags = "tags"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldActionPlanType holds the string denoting the action_plan_type field in the database.
+	FieldActionPlanType = "action_plan_type"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
+	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
+	FieldApprovalRequired = "approval_required"
+	// FieldReviewDue holds the string denoting the review_due field in the database.
+	FieldReviewDue = "review_due"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldDetails holds the string denoting the details field in the database.
-	FieldDetails = "details"
 	// Table holds the table name of the actionplanhistory in the database.
 	Table = "action_plan_history"
 )
@@ -68,12 +80,17 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldName,
-	FieldDescription,
 	FieldStatus,
+	FieldActionPlanType,
+	FieldDetails,
+	FieldApprovalRequired,
+	FieldReviewDue,
+	FieldReviewFrequency,
+	FieldRevision,
+	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
-	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -86,7 +103,13 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Interceptors [1]ent.Interceptor
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -97,6 +120,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
+	DefaultApprovalRequired bool
+	// DefaultReviewDue holds the default value on creation for the "review_due" field.
+	DefaultReviewDue time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -108,6 +137,40 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("actionplanhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultStatus enums.DocumentStatus = "DRAFT"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.DocumentStatus) error {
+	switch s.String() {
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("actionplanhistory: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+		return nil
+	default:
+		return fmt.Errorf("actionplanhistory: invalid enum value for review_frequency field: %q", rf)
+	}
+}
+
+// PriorityValidator is a validator for the "priority" field enum values. It is called by the builders before save.
+func PriorityValidator(pr enums.Priority) error {
+	switch pr.String() {
+	case "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("actionplanhistory: invalid enum value for priority field: %q", pr)
 	}
 }
 
@@ -169,14 +232,44 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByActionPlanType orders the results by the action_plan_type field.
+func ByActionPlanType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanType, opts...).ToFunc()
+}
+
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
+// ByApprovalRequired orders the results by the approval_required field.
+func ByApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovalRequired, opts...).ToFunc()
+}
+
+// ByReviewDue orders the results by the review_due field.
+func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByDueDate orders the results by the due_date field.
@@ -199,4 +292,25 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.DocumentStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
+	// enums.DocumentStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)
+
+var (
+	// enums.Priority must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Priority)(nil)
+	// enums.Priority must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Priority)(nil)
 )

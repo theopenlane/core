@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -167,17 +168,11 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 		{
 			name: "happy path, all input except edges",
 			request: openlaneclient.CreateProcedureInput{
-				Name:            "Releasing a new version",
-				Description:     lo.ToPtr("instructions on how to release a new version"),
-				Status:          lo.ToPtr("draft"),
-				ProcedureType:   lo.ToPtr("sop"),
-				Version:         lo.ToPtr("v1.0"),
-				PurposeAndScope: lo.ToPtr("This procedure is used to release a new version of the software"),
-				Background:      lo.ToPtr("The background of the procedure"),
-				Satisfies:       lo.ToPtr("The procedure satisfies the requirements"),
-				Details: map[string]interface{}{
-					"details": "do stuff",
-				},
+				Name:          "Releasing a new version",
+				Details:       lo.ToPtr("instructions on how to release a new version"),
+				Status:        &enums.DocumentDraft,
+				ProcedureType: lo.ToPtr("sop"),
+				Revision:      lo.ToPtr("v1.0.0"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -240,7 +235,7 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 		{
 			name: "missing required field",
 			request: openlaneclient.CreateProcedureInput{
-				Description: lo.ToPtr("instructions on how to release a new version"),
+				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -277,16 +272,11 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			assert.Contains(t, resp.CreateProcedure.Procedure.DisplayID, "PRD-")
 
 			// check optional fields with if checks if they were provided or not
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateProcedure.Procedure.Description)
-			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Description)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateProcedure.Procedure.Status)
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Status)
+				// default status is draft
+				assert.Equal(t, enums.DocumentDraft, *resp.CreateProcedure.Procedure.Status)
 			}
 
 			if tc.request.ProcedureType != nil {
@@ -295,28 +285,11 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 				assert.Empty(t, resp.CreateProcedure.Procedure.ProcedureType)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.CreateProcedure.Procedure.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.CreateProcedure.Procedure.Revision)
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Version)
-			}
-
-			if tc.request.PurposeAndScope != nil {
-				assert.Equal(t, *tc.request.PurposeAndScope, *resp.CreateProcedure.Procedure.PurposeAndScope)
-			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.PurposeAndScope)
-			}
-
-			if tc.request.Background != nil {
-				assert.Equal(t, *tc.request.Background, *resp.CreateProcedure.Procedure.Background)
-			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Background)
-			}
-
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.CreateProcedure.Procedure.Satisfies)
-			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Satisfies)
+				// default revision is v0.0.1
+				assert.Equal(t, models.DefaultRevision, *resp.CreateProcedure.Procedure.Revision)
 			}
 
 			if tc.request.Details != nil {
@@ -384,9 +357,9 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateProcedureInput{
-				Status:      lo.ToPtr("published"),
-				Description: lo.ToPtr("Updated description"),
-				Version:     lo.ToPtr("v2.0"),
+				Status:       &enums.DocumentPublished,
+				Details:      lo.ToPtr("Updated description"),
+				RevisionBump: &models.Minor,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -462,7 +435,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateProcedureInput{
-				Description: lo.ToPtr("Updated description"),
+				Details: lo.ToPtr("Updated details"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -489,10 +462,6 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 				assert.Equal(t, *tc.request.Name, resp.UpdateProcedure.Procedure.Name)
 			}
 
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateProcedure.Procedure.Description)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.UpdateProcedure.Procedure.Status)
 			}
@@ -501,20 +470,12 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 				assert.Equal(t, *tc.request.ProcedureType, *resp.UpdateProcedure.Procedure.ProcedureType)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.UpdateProcedure.Procedure.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.UpdateProcedure.Procedure.Revision)
 			}
 
-			if tc.request.PurposeAndScope != nil {
-				assert.Equal(t, *tc.request.PurposeAndScope, *resp.UpdateProcedure.Procedure.PurposeAndScope)
-			}
-
-			if tc.request.Background != nil {
-				assert.Equal(t, *tc.request.Background, *resp.UpdateProcedure.Procedure.Background)
-			}
-
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.UpdateProcedure.Procedure.Satisfies)
+			if tc.request.RevisionBump == &models.Minor {
+				assert.Equal(t, "v0.1.0", *resp.UpdateProcedure.Procedure.Revision)
 			}
 
 			if tc.request.Details != nil {

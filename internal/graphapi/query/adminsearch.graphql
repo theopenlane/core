@@ -19,11 +19,11 @@ query AdminSearch($query: String!) {
           id
           tags
           name
-          description
-          status
-          priority
-          source
+          actionPlanType
           details
+          revision
+          ownerID
+          source
         }
       }
       ... on ContactSearchResult {
@@ -68,13 +68,13 @@ query AdminSearch($query: String!) {
           id
           deletedBy
           tags
-          status
           details
         }
       }
       ... on ControlObjectiveSearchResult {
         controlObjectives {
           deletedBy
+          revision
           id
           displayID
           tags
@@ -83,7 +83,6 @@ query AdminSearch($query: String!) {
           desiredOutcome
           status
           controlObjectiveType
-          version
           category
           subcategory
         }
@@ -186,19 +185,15 @@ query AdminSearch($query: String!) {
       }
       ... on InternalPolicySearchResult {
         internalPolicies {
+          tags
           deletedBy
           id
           displayID
-          tags
           ownerID
           name
-          description
-          status
           policyType
-          version
-          purposeAndScope
-          background
           details
+          revision
         }
       }
       ... on MappedControlSearchResult {
@@ -278,20 +273,15 @@ query AdminSearch($query: String!) {
       }
       ... on ProcedureSearchResult {
         procedures {
+          tags
           deletedBy
           id
           displayID
-          tags
           ownerID
           name
-          description
-          status
           procedureType
-          version
-          purposeAndScope
-          background
-          satisfies
           details
+          revision
         }
       }
       ... on ProgramSearchResult {
@@ -313,13 +303,11 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           name
-          description
-          status
           riskType
-          businessCosts
+          category
           mitigation
-          satisfies
           details
+          businessCosts
         }
       }
       ... on StandardSearchResult {
@@ -327,18 +315,18 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          revision
           ownerID
           name
           shortName
           framework
           description
+          governingBodyLogoURL
           governingBody
           domains
           link
-          status
           standardType
           version
-          revision
         }
       }
       ... on SubcontrolSearchResult {

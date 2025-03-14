@@ -16,7 +16,7 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the RiskLikelihood enum.
-// Possible default values are "UNLIKELY", "LIKELY", and "HIGHLY_LIKELY".
+// Possible default values are "UNLIKELY", "LIKELY", and "HIGHLY_LIKELY"
 func (RiskLikelihood) Values() (kinds []string) {
 	for _, s := range []RiskLikelihood{RiskLikelihoodLow, RiskLikelihoodMid, RiskLikelihoodHigh} {
 		kinds = append(kinds, string(s))

@@ -115,6 +115,26 @@ func (cou *ControlObjectiveUpdate) ClearDeletedBy() *ControlObjectiveUpdate {
 	return cou
 }
 
+// SetRevision sets the "revision" field.
+func (cou *ControlObjectiveUpdate) SetRevision(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetRevision(s)
+	return cou
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableRevision(s *string) *ControlObjectiveUpdate {
+	if s != nil {
+		cou.SetRevision(*s)
+	}
+	return cou
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (cou *ControlObjectiveUpdate) ClearRevision() *ControlObjectiveUpdate {
+	cou.mutation.ClearRevision()
+	return cou
+}
+
 // SetTags sets the "tags" field.
 func (cou *ControlObjectiveUpdate) SetTags(s []string) *ControlObjectiveUpdate {
 	cou.mutation.SetTags(s)
@@ -224,26 +244,6 @@ func (cou *ControlObjectiveUpdate) SetNillableControlObjectiveType(s *string) *C
 // ClearControlObjectiveType clears the value of the "control_objective_type" field.
 func (cou *ControlObjectiveUpdate) ClearControlObjectiveType() *ControlObjectiveUpdate {
 	cou.mutation.ClearControlObjectiveType()
-	return cou
-}
-
-// SetVersion sets the "version" field.
-func (cou *ControlObjectiveUpdate) SetVersion(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetVersion(s)
-	return cou
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableVersion(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetVersion(*s)
-	}
-	return cou
-}
-
-// ClearVersion clears the value of the "version" field.
-func (cou *ControlObjectiveUpdate) ClearVersion() *ControlObjectiveUpdate {
-	cou.mutation.ClearVersion()
 	return cou
 }
 
@@ -768,6 +768,11 @@ func (cou *ControlObjectiveUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cou *ControlObjectiveUpdate) check() error {
+	if v, ok := cou.mutation.Revision(); ok {
+		if err := controlobjective.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.revision": %w`, err)}
+		}
+	}
 	if v, ok := cou.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
@@ -829,6 +834,12 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := cou.mutation.Revision(); ok {
+		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
+	}
+	if cou.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
+	}
 	if value, ok := cou.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
 	}
@@ -866,12 +877,6 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if cou.mutation.ControlObjectiveTypeCleared() {
 		_spec.ClearField(controlobjective.FieldControlObjectiveType, field.TypeString)
-	}
-	if value, ok := cou.mutation.Version(); ok {
-		_spec.SetField(controlobjective.FieldVersion, field.TypeString, value)
-	}
-	if cou.mutation.VersionCleared() {
-		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
 	if value, ok := cou.mutation.Category(); ok {
 		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)
@@ -1557,6 +1562,26 @@ func (couo *ControlObjectiveUpdateOne) ClearDeletedBy() *ControlObjectiveUpdateO
 	return couo
 }
 
+// SetRevision sets the "revision" field.
+func (couo *ControlObjectiveUpdateOne) SetRevision(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetRevision(s)
+	return couo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableRevision(s *string) *ControlObjectiveUpdateOne {
+	if s != nil {
+		couo.SetRevision(*s)
+	}
+	return couo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (couo *ControlObjectiveUpdateOne) ClearRevision() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearRevision()
+	return couo
+}
+
 // SetTags sets the "tags" field.
 func (couo *ControlObjectiveUpdateOne) SetTags(s []string) *ControlObjectiveUpdateOne {
 	couo.mutation.SetTags(s)
@@ -1666,26 +1691,6 @@ func (couo *ControlObjectiveUpdateOne) SetNillableControlObjectiveType(s *string
 // ClearControlObjectiveType clears the value of the "control_objective_type" field.
 func (couo *ControlObjectiveUpdateOne) ClearControlObjectiveType() *ControlObjectiveUpdateOne {
 	couo.mutation.ClearControlObjectiveType()
-	return couo
-}
-
-// SetVersion sets the "version" field.
-func (couo *ControlObjectiveUpdateOne) SetVersion(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetVersion(s)
-	return couo
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableVersion(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetVersion(*s)
-	}
-	return couo
-}
-
-// ClearVersion clears the value of the "version" field.
-func (couo *ControlObjectiveUpdateOne) ClearVersion() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearVersion()
 	return couo
 }
 
@@ -2223,6 +2228,11 @@ func (couo *ControlObjectiveUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (couo *ControlObjectiveUpdateOne) check() error {
+	if v, ok := couo.mutation.Revision(); ok {
+		if err := controlobjective.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.revision": %w`, err)}
+		}
+	}
 	if v, ok := couo.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
@@ -2301,6 +2311,12 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := couo.mutation.Revision(); ok {
+		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
+	}
+	if couo.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
+	}
 	if value, ok := couo.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
 	}
@@ -2338,12 +2354,6 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	}
 	if couo.mutation.ControlObjectiveTypeCleared() {
 		_spec.ClearField(controlobjective.FieldControlObjectiveType, field.TypeString)
-	}
-	if value, ok := couo.mutation.Version(); ok {
-		_spec.SetField(controlobjective.FieldVersion, field.TypeString, value)
-	}
-	if couo.mutation.VersionCleared() {
-		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
 	if value, ok := couo.mutation.Category(); ok {
 		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)

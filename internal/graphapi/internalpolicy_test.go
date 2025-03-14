@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -167,16 +168,11 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 		{
 			name: "happy path, all input except edges",
 			request: openlaneclient.CreateInternalPolicyInput{
-				Name:            "Releasing a new version",
-				Description:     lo.ToPtr("instructions on how to release a new version"),
-				Status:          lo.ToPtr("draft"),
-				PolicyType:      lo.ToPtr("sop"),
-				Version:         lo.ToPtr("v1.0"),
-				PurposeAndScope: lo.ToPtr("This internal policy is used to release a new version of the software"),
-				Background:      lo.ToPtr("The background of the internal policy"),
-				Details: map[string]interface{}{
-					"details": "do stuff",
-				},
+				Name:       "Releasing a new version",
+				Status:     &enums.DocumentDraft,
+				PolicyType: lo.ToPtr("sop"),
+				Revision:   lo.ToPtr("v1.1.0"),
+				Details:    lo.ToPtr("do stuff"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -238,7 +234,7 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 		{
 			name: "missing required field",
 			request: openlaneclient.CreateInternalPolicyInput{
-				Description: lo.ToPtr("instructions on how to release a new version"),
+				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -275,16 +271,10 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			assert.Contains(t, resp.CreateInternalPolicy.InternalPolicy.DisplayID, "PLC-")
 
 			// check optional fields with if checks if they were provided or not
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateInternalPolicy.InternalPolicy.Description)
-			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Description)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateInternalPolicy.InternalPolicy.Status)
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Status)
+				assert.Equal(t, enums.DocumentDraft, *resp.CreateInternalPolicy.InternalPolicy.Status)
 			}
 
 			if tc.request.PolicyType != nil {
@@ -293,22 +283,10 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.PolicyType)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.CreateInternalPolicy.InternalPolicy.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.CreateInternalPolicy.InternalPolicy.Revision)
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Version)
-			}
-
-			if tc.request.PurposeAndScope != nil {
-				assert.Equal(t, *tc.request.PurposeAndScope, *resp.CreateInternalPolicy.InternalPolicy.PurposeAndScope)
-			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.PurposeAndScope)
-			}
-
-			if tc.request.Background != nil {
-				assert.Equal(t, *tc.request.Background, *resp.CreateInternalPolicy.InternalPolicy.Background)
-			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Background)
+				assert.Equal(t, models.DefaultRevision, *resp.CreateInternalPolicy.InternalPolicy.Revision)
 			}
 
 			if tc.request.Details != nil {
@@ -363,9 +341,9 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateInternalPolicyInput{
-				Status:      lo.ToPtr("published"),
-				Description: lo.ToPtr("Updated description"),
-				Version:     lo.ToPtr("v2.0"),
+				Status:       &enums.DocumentPublished,
+				Details:      lo.ToPtr("Updated details"),
+				RevisionBump: &models.Major,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -432,7 +410,7 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateInternalPolicyInput{
-				Description: lo.ToPtr("Updated description"),
+				Details: lo.ToPtr("Updated details"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
@@ -459,10 +437,6 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 				assert.Equal(t, *tc.request.Name, resp.UpdateInternalPolicy.InternalPolicy.Name)
 			}
 
-			if tc.request.Description != nil {
-				assert.Equal(t, tc.request.Description, resp.UpdateInternalPolicy.InternalPolicy.Description)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status)
 			}
@@ -471,16 +445,12 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 				assert.Equal(t, *tc.request.PolicyType, *resp.UpdateInternalPolicy.InternalPolicy.PolicyType)
 			}
 
-			if tc.request.Version != nil {
-				assert.Equal(t, *tc.request.Version, *resp.UpdateInternalPolicy.InternalPolicy.Version)
+			if tc.request.Revision != nil {
+				assert.Equal(t, *tc.request.Revision, *resp.UpdateInternalPolicy.InternalPolicy.Revision)
 			}
 
-			if tc.request.PurposeAndScope != nil {
-				assert.Equal(t, *tc.request.PurposeAndScope, *resp.UpdateInternalPolicy.InternalPolicy.PurposeAndScope)
-			}
-
-			if tc.request.Background != nil {
-				assert.Equal(t, *tc.request.Background, *resp.UpdateInternalPolicy.InternalPolicy.Background)
+			if tc.request.RevisionBump == &models.Major {
+				assert.Equal(t, "v1.0.0", *resp.UpdateInternalPolicy.InternalPolicy.Revision)
 			}
 
 			if tc.request.Details != nil {

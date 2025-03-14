@@ -75,42 +75,42 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Procedure_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Procedure_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "version":
-				return ec.fieldContext_Procedure_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Procedure_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Procedure_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Procedure_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_Procedure_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
@@ -179,42 +179,42 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Procedure_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Procedure_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "version":
-				return ec.fieldContext_Procedure_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Procedure_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Procedure_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Procedure_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_Procedure_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
@@ -327,42 +327,42 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Procedure_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Procedure_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
 			case "procedureType":
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "version":
-				return ec.fieldContext_Procedure_version(ctx, field)
-			case "purposeAndScope":
-				return ec.fieldContext_Procedure_purposeAndScope(ctx, field)
-			case "background":
-				return ec.fieldContext_Procedure_background(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_Procedure_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Procedure_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_Procedure_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":

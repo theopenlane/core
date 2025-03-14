@@ -77,12 +77,36 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetName(name)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
+	}
+
+	if actionPlanType, exists := m.ActionPlanType(); exists {
+		create = create.SetActionPlanType(actionPlanType)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	if approvalRequired, exists := m.ApprovalRequired(); exists {
+		create = create.SetApprovalRequired(approvalRequired)
+	}
+
+	if reviewDue, exists := m.ReviewDue(); exists {
+		create = create.SetReviewDue(reviewDue)
+	}
+
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if dueDate, exists := m.DueDate(); exists {
@@ -95,10 +119,6 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
-	}
-
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -179,16 +199,52 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetName(actionplan.Name)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(actionplan.Description)
-		}
-
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(actionplan.Status)
+		}
+
+		if actionPlanType, exists := m.ActionPlanType(); exists {
+			create = create.SetActionPlanType(actionPlanType)
+		} else {
+			create = create.SetActionPlanType(actionplan.ActionPlanType)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(actionplan.Details)
+		}
+
+		if approvalRequired, exists := m.ApprovalRequired(); exists {
+			create = create.SetApprovalRequired(approvalRequired)
+		} else {
+			create = create.SetApprovalRequired(actionplan.ApprovalRequired)
+		}
+
+		if reviewDue, exists := m.ReviewDue(); exists {
+			create = create.SetReviewDue(reviewDue)
+		} else {
+			create = create.SetReviewDue(actionplan.ReviewDue)
+		}
+
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(actionplan.ReviewFrequency)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(actionplan.Revision)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(actionplan.OwnerID)
 		}
 
 		if dueDate, exists := m.DueDate(); exists {
@@ -207,12 +263,6 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSource(source)
 		} else {
 			create = create.SetSource(actionplan.Source)
-		}
-
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
-		} else {
-			create = create.SetDetails(actionplan.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -255,12 +305,17 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(actionplan.DeletedBy).
 			SetTags(actionplan.Tags).
 			SetName(actionplan.Name).
-			SetDescription(actionplan.Description).
 			SetStatus(actionplan.Status).
+			SetActionPlanType(actionplan.ActionPlanType).
+			SetDetails(actionplan.Details).
+			SetApprovalRequired(actionplan.ApprovalRequired).
+			SetReviewDue(actionplan.ReviewDue).
+			SetReviewFrequency(actionplan.ReviewFrequency).
+			SetRevision(actionplan.Revision).
+			SetOwnerID(actionplan.OwnerID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
 			SetSource(actionplan.Source).
-			SetDetails(actionplan.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -1139,6 +1194,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
 	if displayID, exists := m.DisplayID(); exists {
 		create = create.SetDisplayID(displayID)
 	}
@@ -1169,10 +1228,6 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if controlObjectiveType, exists := m.ControlObjectiveType(); exists {
 		create = create.SetControlObjectiveType(controlObjectiveType)
-	}
-
-	if version, exists := m.Version(); exists {
-		create = create.SetVersion(version)
 	}
 
 	if category, exists := m.Category(); exists {
@@ -1249,6 +1304,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDeletedBy(controlobjective.DeletedBy)
 		}
 
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(controlobjective.Revision)
+		}
+
 		if displayID, exists := m.DisplayID(); exists {
 			create = create.SetDisplayID(displayID)
 		} else {
@@ -1295,12 +1356,6 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetControlObjectiveType(controlObjectiveType)
 		} else {
 			create = create.SetControlObjectiveType(controlobjective.ControlObjectiveType)
-		}
-
-		if version, exists := m.Version(); exists {
-			create = create.SetVersion(version)
-		} else {
-			create = create.SetVersion(controlobjective.Version)
 		}
 
 		if category, exists := m.Category(); exists {
@@ -1353,6 +1408,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedBy(controlobjective.UpdatedBy).
 			SetDeletedAt(controlobjective.DeletedAt).
 			SetDeletedBy(controlobjective.DeletedBy).
+			SetRevision(controlobjective.Revision).
 			SetDisplayID(controlobjective.DisplayID).
 			SetTags(controlobjective.Tags).
 			SetOwnerID(controlobjective.OwnerID).
@@ -1361,7 +1417,6 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetStatus(controlobjective.Status).
 			SetSource(controlobjective.Source).
 			SetControlObjectiveType(controlobjective.ControlObjectiveType).
-			SetVersion(controlobjective.Version).
 			SetCategory(controlobjective.Category).
 			SetSubcategory(controlobjective.Subcategory).
 			Save(ctx)
@@ -2262,6 +2317,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetURL(url)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2394,6 +2453,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetURL(evidence.URL)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(evidence.Status)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2443,6 +2508,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSource(evidence.Source).
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
+			SetStatus(evidence.Status).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -3857,6 +3923,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -3869,10 +3939,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDisplayID(displayID)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -3881,36 +3947,32 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetName(name)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
-	}
-
-	if reviewDue, exists := m.ReviewDue(); exists {
-		create = create.SetReviewDue(reviewDue)
 	}
 
 	if policyType, exists := m.PolicyType(); exists {
 		create = create.SetPolicyType(policyType)
 	}
 
-	if version, exists := m.Version(); exists {
-		create = create.SetVersion(version)
-	}
-
-	if purposeAndScope, exists := m.PurposeAndScope(); exists {
-		create = create.SetPurposeAndScope(purposeAndScope)
-	}
-
-	if background, exists := m.Background(); exists {
-		create = create.SetBackground(background)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
+	}
+
+	if approvalRequired, exists := m.ApprovalRequired(); exists {
+		create = create.SetApprovalRequired(approvalRequired)
+	}
+
+	if reviewDue, exists := m.ReviewDue(); exists {
+		create = create.SetReviewDue(reviewDue)
+	}
+
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -3967,6 +4029,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(internalpolicy.UpdatedBy)
 		}
 
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(internalpolicy.Tags)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -3985,12 +4053,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDisplayID(internalpolicy.DisplayID)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(internalpolicy.Tags)
-		}
-
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -4003,22 +4065,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetName(internalpolicy.Name)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(internalpolicy.Description)
-		}
-
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(internalpolicy.Status)
-		}
-
-		if reviewDue, exists := m.ReviewDue(); exists {
-			create = create.SetReviewDue(reviewDue)
-		} else {
-			create = create.SetReviewDue(internalpolicy.ReviewDue)
 		}
 
 		if policyType, exists := m.PolicyType(); exists {
@@ -4027,28 +4077,34 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetPolicyType(internalpolicy.PolicyType)
 		}
 
-		if version, exists := m.Version(); exists {
-			create = create.SetVersion(version)
-		} else {
-			create = create.SetVersion(internalpolicy.Version)
-		}
-
-		if purposeAndScope, exists := m.PurposeAndScope(); exists {
-			create = create.SetPurposeAndScope(purposeAndScope)
-		} else {
-			create = create.SetPurposeAndScope(internalpolicy.PurposeAndScope)
-		}
-
-		if background, exists := m.Background(); exists {
-			create = create.SetBackground(background)
-		} else {
-			create = create.SetBackground(internalpolicy.Background)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
 			create = create.SetDetails(internalpolicy.Details)
+		}
+
+		if approvalRequired, exists := m.ApprovalRequired(); exists {
+			create = create.SetApprovalRequired(approvalRequired)
+		} else {
+			create = create.SetApprovalRequired(internalpolicy.ApprovalRequired)
+		}
+
+		if reviewDue, exists := m.ReviewDue(); exists {
+			create = create.SetReviewDue(reviewDue)
+		} else {
+			create = create.SetReviewDue(internalpolicy.ReviewDue)
+		}
+
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(internalpolicy.ReviewFrequency)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(internalpolicy.Revision)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -4087,20 +4143,19 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(internalpolicy.UpdatedAt).
 			SetCreatedBy(internalpolicy.CreatedBy).
 			SetUpdatedBy(internalpolicy.UpdatedBy).
+			SetTags(internalpolicy.Tags).
 			SetDeletedAt(internalpolicy.DeletedAt).
 			SetDeletedBy(internalpolicy.DeletedBy).
 			SetDisplayID(internalpolicy.DisplayID).
-			SetTags(internalpolicy.Tags).
 			SetOwnerID(internalpolicy.OwnerID).
 			SetName(internalpolicy.Name).
-			SetDescription(internalpolicy.Description).
 			SetStatus(internalpolicy.Status).
-			SetReviewDue(internalpolicy.ReviewDue).
 			SetPolicyType(internalpolicy.PolicyType).
-			SetVersion(internalpolicy.Version).
-			SetPurposeAndScope(internalpolicy.PurposeAndScope).
-			SetBackground(internalpolicy.Background).
 			SetDetails(internalpolicy.Details).
+			SetApprovalRequired(internalpolicy.ApprovalRequired).
+			SetReviewDue(internalpolicy.ReviewDue).
+			SetReviewFrequency(internalpolicy.ReviewFrequency).
+			SetRevision(internalpolicy.Revision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5766,6 +5821,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -5778,20 +5837,12 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDisplayID(displayID)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
 
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
-	}
-
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -5802,28 +5853,24 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetProcedureType(procedureType)
 	}
 
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	if approvalRequired, exists := m.ApprovalRequired(); exists {
+		create = create.SetApprovalRequired(approvalRequired)
+	}
+
 	if reviewDue, exists := m.ReviewDue(); exists {
 		create = create.SetReviewDue(reviewDue)
 	}
 
-	if version, exists := m.Version(); exists {
-		create = create.SetVersion(version)
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
-	if purposeAndScope, exists := m.PurposeAndScope(); exists {
-		create = create.SetPurposeAndScope(purposeAndScope)
-	}
-
-	if background, exists := m.Background(); exists {
-		create = create.SetBackground(background)
-	}
-
-	if satisfies, exists := m.Satisfies(); exists {
-		create = create.SetSatisfies(satisfies)
-	}
-
-	if details, exists := m.Details(); exists {
-		create = create.SetDetails(details)
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -5880,6 +5927,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(procedure.UpdatedBy)
 		}
 
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(procedure.Tags)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5898,12 +5951,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDisplayID(procedure.DisplayID)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(procedure.Tags)
-		}
-
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -5914,12 +5961,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetName(name)
 		} else {
 			create = create.SetName(procedure.Name)
-		}
-
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(procedure.Description)
 		}
 
 		if status, exists := m.Status(); exists {
@@ -5934,40 +5975,34 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetProcedureType(procedure.ProcedureType)
 		}
 
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(procedure.Details)
+		}
+
+		if approvalRequired, exists := m.ApprovalRequired(); exists {
+			create = create.SetApprovalRequired(approvalRequired)
+		} else {
+			create = create.SetApprovalRequired(procedure.ApprovalRequired)
+		}
+
 		if reviewDue, exists := m.ReviewDue(); exists {
 			create = create.SetReviewDue(reviewDue)
 		} else {
 			create = create.SetReviewDue(procedure.ReviewDue)
 		}
 
-		if version, exists := m.Version(); exists {
-			create = create.SetVersion(version)
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
 		} else {
-			create = create.SetVersion(procedure.Version)
+			create = create.SetReviewFrequency(procedure.ReviewFrequency)
 		}
 
-		if purposeAndScope, exists := m.PurposeAndScope(); exists {
-			create = create.SetPurposeAndScope(purposeAndScope)
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
 		} else {
-			create = create.SetPurposeAndScope(procedure.PurposeAndScope)
-		}
-
-		if background, exists := m.Background(); exists {
-			create = create.SetBackground(background)
-		} else {
-			create = create.SetBackground(procedure.Background)
-		}
-
-		if satisfies, exists := m.Satisfies(); exists {
-			create = create.SetSatisfies(satisfies)
-		} else {
-			create = create.SetSatisfies(procedure.Satisfies)
-		}
-
-		if details, exists := m.Details(); exists {
-			create = create.SetDetails(details)
-		} else {
-			create = create.SetDetails(procedure.Details)
+			create = create.SetRevision(procedure.Revision)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6006,21 +6041,19 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(procedure.UpdatedAt).
 			SetCreatedBy(procedure.CreatedBy).
 			SetUpdatedBy(procedure.UpdatedBy).
+			SetTags(procedure.Tags).
 			SetDeletedAt(procedure.DeletedAt).
 			SetDeletedBy(procedure.DeletedBy).
 			SetDisplayID(procedure.DisplayID).
-			SetTags(procedure.Tags).
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
-			SetDescription(procedure.Description).
 			SetStatus(procedure.Status).
 			SetProcedureType(procedure.ProcedureType).
-			SetReviewDue(procedure.ReviewDue).
-			SetVersion(procedure.Version).
-			SetPurposeAndScope(procedure.PurposeAndScope).
-			SetBackground(procedure.Background).
-			SetSatisfies(procedure.Satisfies).
 			SetDetails(procedure.Details).
+			SetApprovalRequired(procedure.ApprovalRequired).
+			SetReviewDue(procedure.ReviewDue).
+			SetReviewFrequency(procedure.ReviewFrequency).
+			SetRevision(procedure.Revision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6543,10 +6576,6 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetName(name)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -6555,8 +6584,8 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRiskType(riskType)
 	}
 
-	if businessCosts, exists := m.BusinessCosts(); exists {
-		create = create.SetBusinessCosts(businessCosts)
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
 	if impact, exists := m.Impact(); exists {
@@ -6567,16 +6596,20 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetLikelihood(likelihood)
 	}
 
+	if score, exists := m.Score(); exists {
+		create = create.SetScore(score)
+	}
+
 	if mitigation, exists := m.Mitigation(); exists {
 		create = create.SetMitigation(mitigation)
 	}
 
-	if satisfies, exists := m.Satisfies(); exists {
-		create = create.SetSatisfies(satisfies)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
+	}
+
+	if businessCosts, exists := m.BusinessCosts(); exists {
+		create = create.SetBusinessCosts(businessCosts)
 	}
 
 	_, err := create.Save(ctx)
@@ -6669,12 +6702,6 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetName(risk.Name)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(risk.Description)
-		}
-
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -6687,10 +6714,10 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRiskType(risk.RiskType)
 		}
 
-		if businessCosts, exists := m.BusinessCosts(); exists {
-			create = create.SetBusinessCosts(businessCosts)
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
 		} else {
-			create = create.SetBusinessCosts(risk.BusinessCosts)
+			create = create.SetCategory(risk.Category)
 		}
 
 		if impact, exists := m.Impact(); exists {
@@ -6705,22 +6732,28 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetLikelihood(risk.Likelihood)
 		}
 
+		if score, exists := m.Score(); exists {
+			create = create.SetScore(score)
+		} else {
+			create = create.SetScore(risk.Score)
+		}
+
 		if mitigation, exists := m.Mitigation(); exists {
 			create = create.SetMitigation(mitigation)
 		} else {
 			create = create.SetMitigation(risk.Mitigation)
 		}
 
-		if satisfies, exists := m.Satisfies(); exists {
-			create = create.SetSatisfies(satisfies)
-		} else {
-			create = create.SetSatisfies(risk.Satisfies)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
 			create = create.SetDetails(risk.Details)
+		}
+
+		if businessCosts, exists := m.BusinessCosts(); exists {
+			create = create.SetBusinessCosts(businessCosts)
+		} else {
+			create = create.SetBusinessCosts(risk.BusinessCosts)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6765,15 +6798,15 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(risk.Tags).
 			SetOwnerID(risk.OwnerID).
 			SetName(risk.Name).
-			SetDescription(risk.Description).
 			SetStatus(risk.Status).
 			SetRiskType(risk.RiskType).
-			SetBusinessCosts(risk.BusinessCosts).
+			SetCategory(risk.Category).
 			SetImpact(risk.Impact).
 			SetLikelihood(risk.Likelihood).
+			SetScore(risk.Score).
 			SetMitigation(risk.Mitigation).
-			SetSatisfies(risk.Satisfies).
 			SetDetails(risk.Details).
+			SetBusinessCosts(risk.BusinessCosts).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6826,6 +6859,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -6844,6 +6881,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
+	}
+
+	if governingBodyLogoURL, exists := m.GoverningBodyLogoURL(); exists {
+		create = create.SetGoverningBodyLogoURL(governingBodyLogoURL)
 	}
 
 	if governingBody, exists := m.GoverningBody(); exists {
@@ -6880,10 +6921,6 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if version, exists := m.Version(); exists {
 		create = create.SetVersion(version)
-	}
-
-	if revision, exists := m.Revision(); exists {
-		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -6958,6 +6995,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(standard.Tags)
 		}
 
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(standard.Revision)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -6986,6 +7029,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(description)
 		} else {
 			create = create.SetDescription(standard.Description)
+		}
+
+		if governingBodyLogoURL, exists := m.GoverningBodyLogoURL(); exists {
+			create = create.SetGoverningBodyLogoURL(governingBodyLogoURL)
+		} else {
+			create = create.SetGoverningBodyLogoURL(standard.GoverningBodyLogoURL)
 		}
 
 		if governingBody, exists := m.GoverningBody(); exists {
@@ -7042,12 +7091,6 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVersion(standard.Version)
 		}
 
-		if revision, exists := m.Revision(); exists {
-			create = create.SetRevision(revision)
-		} else {
-			create = create.SetRevision(standard.Revision)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7087,11 +7130,13 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(standard.DeletedAt).
 			SetDeletedBy(standard.DeletedBy).
 			SetTags(standard.Tags).
+			SetRevision(standard.Revision).
 			SetOwnerID(standard.OwnerID).
 			SetName(standard.Name).
 			SetShortName(standard.ShortName).
 			SetFramework(standard.Framework).
 			SetDescription(standard.Description).
+			SetGoverningBodyLogoURL(standard.GoverningBodyLogoURL).
 			SetGoverningBody(standard.GoverningBody).
 			SetDomains(standard.Domains).
 			SetLink(standard.Link).
@@ -7101,7 +7146,6 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(standard.SystemOwned).
 			SetStandardType(standard.StandardType).
 			SetVersion(standard.Version).
-			SetRevision(standard.Revision).
 			Save(ctx)
 		if err != nil {
 			return err

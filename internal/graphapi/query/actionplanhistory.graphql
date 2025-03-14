@@ -4,9 +4,10 @@ query GetAllActionPlanHistories {
   actionPlanHistories {
     edges {
       node {
+        actionPlanType
+        approvalRequired
         createdAt
         createdBy
-        description
         details
         dueDate
         historyTime
@@ -15,6 +16,9 @@ query GetAllActionPlanHistories {
         operation
         priority
         ref
+        reviewDue
+        reviewFrequency
+        revision
         source
         status
         tags
@@ -29,9 +33,10 @@ query GetActionPlanHistories($where: ActionPlanHistoryWhereInput) {
   actionPlanHistories(where: $where) {
     edges {
       node {
+        actionPlanType
+        approvalRequired
         createdAt
         createdBy
-        description
         details
         dueDate
         historyTime
@@ -40,6 +45,9 @@ query GetActionPlanHistories($where: ActionPlanHistoryWhereInput) {
         operation
         priority
         ref
+        reviewDue
+        reviewFrequency
+        revision
         source
         status
         tags

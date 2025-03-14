@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlImplementationCreate is the builder for creating a ControlImplementation entity.
@@ -111,15 +112,15 @@ func (cic *ControlImplementationCreate) SetTags(s []string) *ControlImplementati
 }
 
 // SetStatus sets the "status" field.
-func (cic *ControlImplementationCreate) SetStatus(s string) *ControlImplementationCreate {
-	cic.mutation.SetStatus(s)
+func (cic *ControlImplementationCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationCreate {
+	cic.mutation.SetStatus(es)
 	return cic
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableStatus(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetStatus(*s)
+func (cic *ControlImplementationCreate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationCreate {
+	if es != nil {
+		cic.SetStatus(*es)
 	}
 	return cic
 }
@@ -264,6 +265,10 @@ func (cic *ControlImplementationCreate) defaults() error {
 		v := controlimplementation.DefaultTags
 		cic.mutation.SetTags(v)
 	}
+	if _, ok := cic.mutation.Status(); !ok {
+		v := controlimplementation.DefaultStatus
+		cic.mutation.SetStatus(v)
+	}
 	if _, ok := cic.mutation.ID(); !ok {
 		if controlimplementation.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementation.DefaultID (forgotten import generated/runtime?)")
@@ -276,6 +281,11 @@ func (cic *ControlImplementationCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cic *ControlImplementationCreate) check() error {
+	if v, ok := cic.mutation.Status(); ok {
+		if err := controlimplementation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -341,7 +351,7 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 		_node.Tags = value
 	}
 	if value, ok := cic.mutation.Status(); ok {
-		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementation.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := cic.mutation.ImplementationDate(); ok {

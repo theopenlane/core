@@ -30,6 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
@@ -46,8 +48,6 @@ const (
 	FieldSource = "source"
 	// FieldControlObjectiveType holds the string denoting the control_objective_type field in the database.
 	FieldControlObjectiveType = "control_objective_type"
-	// FieldVersion holds the string denoting the version field in the database.
-	FieldVersion = "version"
 	// FieldCategory holds the string denoting the category field in the database.
 	FieldCategory = "category"
 	// FieldSubcategory holds the string denoting the subcategory field in the database.
@@ -164,6 +164,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldRevision,
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
@@ -172,7 +173,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldSource,
 	FieldControlObjectiveType,
-	FieldVersion,
 	FieldCategory,
 	FieldSubcategory,
 }
@@ -223,7 +223,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -232,6 +232,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
@@ -294,6 +298,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByDisplayID orders the results by the display_id field.
 func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
@@ -327,11 +336,6 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByControlObjectiveType orders the results by the control_objective_type field.
 func ByControlObjectiveType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlObjectiveType, opts...).ToFunc()
-}
-
-// ByVersion orders the results by the version field.
-func ByVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
 // ByCategory orders the results by the category field.

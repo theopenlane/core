@@ -17,7 +17,7 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       tags
       updatedAt
       updatedBy
-      version
+      revision
     }
   }
 }
@@ -40,7 +40,7 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
       tags
       updatedAt
       updatedBy
-      version
+      revision
     }
   }
 }
@@ -63,7 +63,7 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       tags
       updatedAt
       updatedBy
-      version
+      revision
       controls {
         id
         displayID
@@ -116,7 +116,7 @@ query GetAllControlObjectives {
         tags
         updatedAt
         updatedBy
-        version
+        revision
         controls {
           id
           displayID
@@ -161,7 +161,7 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     tags
     updatedAt
     updatedBy
-    version
+    revision
     controls {
         id
         displayID
@@ -207,7 +207,7 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         tags
         updatedAt
         updatedBy
-        version
+        revision
         controls {
           id
           displayID
@@ -254,7 +254,7 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       tags
       updatedAt
       updatedBy
-      version
+      revision
       controls {
         id
         displayID

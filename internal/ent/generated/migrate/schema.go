@@ -63,12 +63,19 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "action_plan_type", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
-		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
 		{Name: "source", Type: field.TypeString, Nullable: true},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "action_plan_approver", Type: field.TypeString, Nullable: true},
+		{Name: "action_plan_delegate", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_action_plans", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
@@ -78,8 +85,26 @@ var (
 		PrimaryKey: []*schema.Column{ActionPlansColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "action_plans_groups_approver",
+				Columns:    []*schema.Column{ActionPlansColumns[19]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_groups_delegate",
+				Columns:    []*schema.Column{ActionPlansColumns[20]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_organizations_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[21]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[15]},
+				Columns:    []*schema.Column{ActionPlansColumns[22]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -99,12 +124,17 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "action_plan_type", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
-		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
 		{Name: "source", Type: field.TypeString, Nullable: true},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ActionPlanHistoryTable holds the schema information for the "action_plan_history" table.
 	ActionPlanHistoryTable = &schema.Table{
@@ -327,7 +357,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "implementation_date", Type: field.TypeTime, Nullable: true},
 		{Name: "verified", Type: field.TypeBool, Nullable: true},
 		{Name: "verification_date", Type: field.TypeTime, Nullable: true},
@@ -352,7 +382,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "implementation_date", Type: field.TypeTime, Nullable: true},
 		{Name: "verified", Type: field.TypeBool, Nullable: true},
 		{Name: "verification_date", Type: field.TypeTime, Nullable: true},
@@ -380,6 +410,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -387,7 +418,6 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "subcategory", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -409,7 +439,7 @@ var (
 			{
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[17]},
+				Columns: []*schema.Column{ControlObjectivesColumns[8], ControlObjectivesColumns[17]},
 			},
 		},
 	}
@@ -425,6 +455,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -433,7 +464,6 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
 		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "subcategory", Type: field.TypeString, Nullable: true},
 	}
@@ -775,6 +805,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL"}, Default: "READY"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
@@ -785,7 +816,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "evidences_organizations_evidence",
-				Columns:    []*schema.Column{EvidencesColumns[17]},
+				Columns:    []*schema.Column{EvidencesColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -794,7 +825,7 @@ var (
 			{
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EvidencesColumns[5], EvidencesColumns[17]},
+				Columns: []*schema.Column{EvidencesColumns[5], EvidencesColumns[18]},
 			},
 		},
 	}
@@ -821,6 +852,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL"}, Default: "READY"},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -1318,20 +1350,21 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
-		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "policy_type", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "control_internal_policies", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_approver", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_delegate", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_internal_policies", Type: field.TypeString, Nullable: true},
 	}
@@ -1343,19 +1376,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "internal_policies_controls_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_organizations_internal_policies",
+				Symbol:     "internal_policies_groups_approver",
+				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_groups_delegate",
 				Columns:    []*schema.Column{InternalPoliciesColumns[19]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_organizations_internal_policies",
+				Columns:    []*schema.Column{InternalPoliciesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_subcontrols_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[20]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[21]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1364,7 +1409,7 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[19]},
+				Columns: []*schema.Column{InternalPoliciesColumns[8], InternalPoliciesColumns[20]},
 			},
 		},
 	}
@@ -1378,20 +1423,19 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
-		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "policy_type", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "review_due", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -2103,22 +2147,22 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_approver", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_delegate", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_procedures", Type: field.TypeString, Nullable: true},
 	}
 	// ProceduresTable holds the schema information for the "procedures" table.
@@ -2129,14 +2173,26 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[19]},
+				Columns:    []*schema.Column{ProceduresColumns[17]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[20]},
+				Columns:    []*schema.Column{ProceduresColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_groups_approver",
+				Columns:    []*schema.Column{ProceduresColumns[19]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_groups_delegate",
+				Columns:    []*schema.Column{ProceduresColumns[20]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2150,7 +2206,7 @@ var (
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[20]},
+				Columns: []*schema.Column{ProceduresColumns[8], ProceduresColumns[18]},
 			},
 		},
 	}
@@ -2164,21 +2220,19 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
 		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -2363,17 +2417,19 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED"}, Default: "OPEN"},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
-		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}, Default: "MODERATE"},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
 		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
+		{Name: "score", Type: field.TypeInt, Nullable: true},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "risk_stakeholder", Type: field.TypeString, Nullable: true},
+		{Name: "risk_delegate", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_risks", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
@@ -2395,8 +2451,20 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_subcontrols_risks",
+				Symbol:     "risks_groups_stakeholder",
 				Columns:    []*schema.Column{RisksColumns[21]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_groups_delegate",
+				Columns:    []*schema.Column{RisksColumns[22]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_subcontrols_risks",
+				Columns:    []*schema.Column{RisksColumns[23]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2425,15 +2493,15 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED"}, Default: "OPEN"},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
-		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}, Default: "MODERATE"},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
 		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
+		{Name: "score", Type: field.TypeInt, Nullable: true},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{
@@ -2458,20 +2526,21 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "short_name", Type: field.TypeString, Nullable: true},
 		{Name: "framework", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "governing_body_logo_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "governing_body", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "link", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"ACTIVE", "DRAFT", "ARCHIVED"}, Default: "ACTIVE"},
 		{Name: "is_public", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "revision", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
@@ -2482,7 +2551,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "standards_organizations_standards",
-				Columns:    []*schema.Column{StandardsColumns[22]},
+				Columns:    []*schema.Column{StandardsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2501,21 +2570,22 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "short_name", Type: field.TypeString, Nullable: true},
 		{Name: "framework", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "governing_body_logo_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "governing_body", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "link", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"ACTIVE", "DRAFT", "ARCHIVED"}, Default: "ACTIVE"},
 		{Name: "is_public", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "revision", Type: field.TypeString, Nullable: true},
 	}
 	// StandardHistoryTable holds the schema information for the "standard_history" table.
 	StandardHistoryTable = &schema.Table{
@@ -5287,7 +5357,10 @@ var (
 
 func init() {
 	APITokensTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ActionPlansTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	ActionPlansTable.ForeignKeys[0].RefTable = GroupsTable
+	ActionPlansTable.ForeignKeys[1].RefTable = GroupsTable
+	ActionPlansTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ActionPlansTable.ForeignKeys[3].RefTable = SubcontrolsTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
@@ -5368,8 +5441,10 @@ func init() {
 		Table: "integration_history",
 	}
 	InternalPoliciesTable.ForeignKeys[0].RefTable = ControlsTable
-	InternalPoliciesTable.ForeignKeys[1].RefTable = OrganizationsTable
-	InternalPoliciesTable.ForeignKeys[2].RefTable = SubcontrolsTable
+	InternalPoliciesTable.ForeignKeys[1].RefTable = GroupsTable
+	InternalPoliciesTable.ForeignKeys[2].RefTable = GroupsTable
+	InternalPoliciesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	InternalPoliciesTable.ForeignKeys[4].RefTable = SubcontrolsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
@@ -5415,7 +5490,9 @@ func init() {
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ProceduresTable.ForeignKeys[2].RefTable = SubcontrolsTable
+	ProceduresTable.ForeignKeys[2].RefTable = GroupsTable
+	ProceduresTable.ForeignKeys[3].RefTable = GroupsTable
+	ProceduresTable.ForeignKeys[4].RefTable = SubcontrolsTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
@@ -5431,7 +5508,9 @@ func init() {
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[2].RefTable = SubcontrolsTable
+	RisksTable.ForeignKeys[2].RefTable = GroupsTable
+	RisksTable.ForeignKeys[3].RefTable = GroupsTable
+	RisksTable.ForeignKeys[4].RefTable = SubcontrolsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}

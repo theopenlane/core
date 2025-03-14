@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -105,6 +106,11 @@ func DeletedBy(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -130,6 +136,11 @@ func Description(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// GoverningBodyLogoURL applies equality check predicate on the "governing_body_logo_url" field. It's identical to GoverningBodyLogoURLEQ.
+func GoverningBodyLogoURL(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBodyLogoURL, v))
+}
+
 // GoverningBody applies equality check predicate on the "governing_body" field. It's identical to GoverningBodyEQ.
 func GoverningBody(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBody, v))
@@ -138,11 +149,6 @@ func GoverningBody(v string) predicate.StandardHistory {
 // Link applies equality check predicate on the "link" field. It's identical to LinkEQ.
 func Link(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldLink, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // IsPublic applies equality check predicate on the "is_public" field. It's identical to IsPublicEQ.
@@ -168,11 +174,6 @@ func StandardType(v string) predicate.StandardHistory {
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
 func Version(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldVersion, v))
-}
-
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -695,6 +696,81 @@ func TagsNotNil() predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldNotNull(FieldTags))
 }
 
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldRevision, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -1060,6 +1136,81 @@ func DescriptionContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// GoverningBodyLogoURLEQ applies the EQ predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLNEQ applies the NEQ predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLNEQ(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLIn applies the In predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldGoverningBodyLogoURL, vs...))
+}
+
+// GoverningBodyLogoURLNotIn applies the NotIn predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLNotIn(vs ...string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldGoverningBodyLogoURL, vs...))
+}
+
+// GoverningBodyLogoURLGT applies the GT predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLGT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLGTE applies the GTE predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLGTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLLT applies the LT predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLLT(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLLTE applies the LTE predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLLTE(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLContains applies the Contains predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLContains(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContains(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLHasPrefix applies the HasPrefix predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLHasPrefix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasPrefix(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLHasSuffix applies the HasSuffix predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLHasSuffix(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldHasSuffix(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLIsNil applies the IsNil predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldGoverningBodyLogoURL))
+}
+
+// GoverningBodyLogoURLNotNil applies the NotNil predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldGoverningBodyLogoURL))
+}
+
+// GoverningBodyLogoURLEqualFold applies the EqualFold predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLEqualFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEqualFold(FieldGoverningBodyLogoURL, v))
+}
+
+// GoverningBodyLogoURLContainsFold applies the ContainsFold predicate on the "governing_body_logo_url" field.
+func GoverningBodyLogoURLContainsFold(v string) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldContainsFold(FieldGoverningBodyLogoURL, v))
+}
+
 // GoverningBodyEQ applies the EQ predicate on the "governing_body" field.
 func GoverningBodyEQ(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldGoverningBody, v))
@@ -1221,58 +1372,33 @@ func LinkContainsFold(v string) predicate.StandardHistory {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.StandardStatus) predicate.StandardHistory {
+	vc := v
+	return predicate.StandardHistory(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.StandardStatus) predicate.StandardHistory {
+	vc := v
+	return predicate.StandardHistory(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.StandardStatus) predicate.StandardHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.StandardHistory(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.StandardStatus) predicate.StandardHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.StandardHistory(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -1283,16 +1409,6 @@ func StatusIsNil() predicate.StandardHistory {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // IsPublicEQ applies the EQ predicate on the "is_public" field.
@@ -1503,81 +1619,6 @@ func VersionEqualFold(v string) predicate.StandardHistory {
 // VersionContainsFold applies the ContainsFold predicate on the "version" field.
 func VersionContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldVersion, v))
-}
-
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // And groups predicates with the AND operator between them.

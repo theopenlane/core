@@ -32,40 +32,39 @@ func (Risk) Fields() []ent.Field {
 				entx.FieldSearchable(),
 			).
 			Comment("the name of the risk"),
-		field.Text("description").
+		field.Enum("status").
+			GoType(enums.RiskStatus("")).
+			Default(enums.RiskOpen.String()).
 			Optional().
-			Annotations(
-				entx.FieldSearchable(),
-			).
-			Comment("description of the risk"),
-		field.String("status").
-			Optional().
-			Comment("status of the risk - mitigated or not, inflight, etc."),
+			Comment("status of the risk - open, mitigated, ongoing, in-progress, and archived."),
 		field.String("risk_type").
 			Optional().
 			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
-		field.Text("business_costs").
+		field.String("category").
 			Optional().
-			Comment("business costs associated with the risk"),
+			Comment("category of the risk, e.g. human resources, operations, IT, etc."),
 		field.Enum("impact").
 			GoType(enums.RiskImpact("")).
 			Default(enums.RiskImpactModerate.String()).
 			Optional().
-			Comment("impact of the risk - high, medium, low"),
+			Comment("impact of the risk -critical, high, medium, low"),
 		field.Enum("likelihood").
 			GoType(enums.RiskLikelihood("")).
 			Default(enums.RiskLikelihoodMid.String()).
 			Optional().
 			Comment("likelihood of the risk occurring; unlikely, likely, highly likely"),
+		field.Int("score").
+			Optional().
+			Comment("score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
 		field.Text("mitigation").
 			Optional().
 			Comment("mitigation for the risk"),
-		field.Text("satisfies").
+		field.Text("details").
 			Optional().
-			Comment("which controls are satisfied by the risk"),
-		field.JSON("details", map[string]any{}).
+			Comment("details of the risk"),
+		field.Text("business_costs").
 			Optional().
-			Comment("json data for the risk document"),
+			Comment("business costs associated with the risk"),
 	}
 }
 
@@ -79,6 +78,13 @@ func (Risk) Edges() []ent.Edge {
 		edge.To("action_plans", ActionPlan.Type),
 		edge.From("programs", Program.Type).
 			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
+
+		edge.To("stakeholder", Group.Type).
+			Unique().
+			Comment("the group of users who are responsible for risk oversight"),
+		edge.To("delegate", Group.Type).
+			Unique().
+			Comment("temporary delegates for the risk, used for temporary ownership"),
 	}
 }
 

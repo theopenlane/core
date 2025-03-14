@@ -46,9 +46,6 @@ func (ControlObjective) Fields() []ent.Field {
 		field.String("control_objective_type").
 			Optional().
 			Comment("type of the control objective e.g. compliance, financial, operational, etc."),
-		field.String("version").
-			Optional().
-			Comment("version of the control objective"),
 		field.String("category").
 			Optional().
 			Annotations(
@@ -95,6 +92,7 @@ func (ControlObjective) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
+		mixin.RevisionMixin{},
 		emixin.NewIDMixinWithPrefixedID("CLO"),
 		emixin.TagMixin{},
 		// control objectives inherit permissions from the associated programs, but must have an organization as well

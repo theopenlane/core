@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -112,6 +113,18 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultStatus enums.DocumentStatus = "DRAFT"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.DocumentStatus) error {
+	switch s.String() {
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("controlimplementationhistory: invalid enum value for status field: %q", s)
+	}
+}
+
 // OrderOption defines the ordering options for the ControlImplementationHistory queries.
 type OrderOption func(*sql.Selector)
 
@@ -195,4 +208,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.DocumentStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
+	// enums.DocumentStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
 )

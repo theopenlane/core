@@ -6288,18 +6288,34 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ActionPlan_description(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
+			case "actionPlanType":
+				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
+			case "details":
+				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
 				return ec.fieldContext_ActionPlan_priority(ctx, field)
 			case "source":
 				return ec.fieldContext_ActionPlan_source(ctx, field)
-			case "details":
-				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approver":
+				return ec.fieldContext_ActionPlan_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_ActionPlan_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_ActionPlan_owner(ctx, field)
 			case "risk":
 				return ec.fieldContext_ActionPlan_risk(ctx, field)
 			case "control":
@@ -6372,18 +6388,34 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ActionPlan_description(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
+			case "actionPlanType":
+				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
+			case "details":
+				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
 				return ec.fieldContext_ActionPlan_priority(ctx, field)
 			case "source":
 				return ec.fieldContext_ActionPlan_source(ctx, field)
-			case "details":
-				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approver":
+				return ec.fieldContext_ActionPlan_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_ActionPlan_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_ActionPlan_owner(ctx, field)
 			case "risk":
 				return ec.fieldContext_ActionPlan_risk(ctx, field)
 			case "control":
@@ -6500,18 +6532,34 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
-			case "description":
-				return ec.fieldContext_ActionPlan_description(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
+			case "actionPlanType":
+				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
+			case "details":
+				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
 				return ec.fieldContext_ActionPlan_priority(ctx, field)
 			case "source":
 				return ec.fieldContext_ActionPlan_source(ctx, field)
-			case "details":
-				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "approver":
+				return ec.fieldContext_ActionPlan_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_ActionPlan_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_ActionPlan_owner(ctx, field)
 			case "risk":
 				return ec.fieldContext_ActionPlan_risk(ctx, field)
 			case "control":

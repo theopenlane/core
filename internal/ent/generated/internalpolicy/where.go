@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -112,14 +113,19 @@ func Name(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldName, v))
 }
 
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldDescription, v))
+// PolicyType applies equality check predicate on the "policy_type" field. It's identical to PolicyTypeEQ.
+func PolicyType(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldPolicyType, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldStatus, v))
+// Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
+func Details(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldDetails, v))
+}
+
+// ApprovalRequired applies equality check predicate on the "approval_required" field. It's identical to ApprovalRequiredEQ.
+func ApprovalRequired(v bool) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldApprovalRequired, v))
 }
 
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
@@ -127,24 +133,9 @@ func ReviewDue(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
 }
 
-// PolicyType applies equality check predicate on the "policy_type" field. It's identical to PolicyTypeEQ.
-func PolicyType(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldPolicyType, v))
-}
-
-// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
-func Version(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldVersion, v))
-}
-
-// PurposeAndScope applies equality check predicate on the "purpose_and_scope" field. It's identical to PurposeAndScopeEQ.
-func PurposeAndScope(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldPurposeAndScope, v))
-}
-
-// Background applies equality check predicate on the "background" field. It's identical to BackgroundEQ.
-func Background(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldBackground, v))
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -397,6 +388,16 @@ func UpdatedByContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldTags))
+}
+
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldDeletedAt, v))
@@ -587,16 +588,6 @@ func DisplayIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldOwnerID, v))
@@ -737,134 +728,34 @@ func NameContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldName, v))
 }
 
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldDescription, v))
-}
-
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldDescription, v))
-}
-
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldDescription, vs...))
-}
-
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldDescription, vs...))
-}
-
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldDescription, v))
-}
-
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldDescription, v))
-}
-
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldDescription, v))
-}
-
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldDescription, v))
-}
-
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldDescription, v))
-}
-
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldDescription, v))
-}
-
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldDescription, v))
-}
-
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldDescription))
-}
-
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldDescription))
-}
-
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldDescription, v))
-}
-
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldDescription, v))
-}
-
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.DocumentStatus) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.DocumentStatus) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.DocumentStatus) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.DocumentStatus) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -875,66 +766,6 @@ func StatusIsNil() predicate.InternalPolicy {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldStatus, v))
-}
-
-// ReviewDueEQ applies the EQ predicate on the "review_due" field.
-func ReviewDueEQ(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
-}
-
-// ReviewDueNEQ applies the NEQ predicate on the "review_due" field.
-func ReviewDueNEQ(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldReviewDue, v))
-}
-
-// ReviewDueIn applies the In predicate on the "review_due" field.
-func ReviewDueIn(vs ...time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldReviewDue, vs...))
-}
-
-// ReviewDueNotIn applies the NotIn predicate on the "review_due" field.
-func ReviewDueNotIn(vs ...time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldReviewDue, vs...))
-}
-
-// ReviewDueGT applies the GT predicate on the "review_due" field.
-func ReviewDueGT(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldReviewDue, v))
-}
-
-// ReviewDueGTE applies the GTE predicate on the "review_due" field.
-func ReviewDueGTE(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldReviewDue, v))
-}
-
-// ReviewDueLT applies the LT predicate on the "review_due" field.
-func ReviewDueLT(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldReviewDue, v))
-}
-
-// ReviewDueLTE applies the LTE predicate on the "review_due" field.
-func ReviewDueLTE(v time.Time) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldReviewDue, v))
-}
-
-// ReviewDueIsNil applies the IsNil predicate on the "review_due" field.
-func ReviewDueIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldReviewDue))
-}
-
-// ReviewDueNotNil applies the NotNil predicate on the "review_due" field.
-func ReviewDueNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldReviewDue))
 }
 
 // PolicyTypeEQ applies the EQ predicate on the "policy_type" field.
@@ -1012,229 +843,59 @@ func PolicyTypeContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldPolicyType, v))
 }
 
-// VersionEQ applies the EQ predicate on the "version" field.
-func VersionEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldVersion, v))
+// DetailsEQ applies the EQ predicate on the "details" field.
+func DetailsEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldDetails, v))
 }
 
-// VersionNEQ applies the NEQ predicate on the "version" field.
-func VersionNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldVersion, v))
+// DetailsNEQ applies the NEQ predicate on the "details" field.
+func DetailsNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldDetails, v))
 }
 
-// VersionIn applies the In predicate on the "version" field.
-func VersionIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldVersion, vs...))
+// DetailsIn applies the In predicate on the "details" field.
+func DetailsIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldDetails, vs...))
 }
 
-// VersionNotIn applies the NotIn predicate on the "version" field.
-func VersionNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldVersion, vs...))
+// DetailsNotIn applies the NotIn predicate on the "details" field.
+func DetailsNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldDetails, vs...))
 }
 
-// VersionGT applies the GT predicate on the "version" field.
-func VersionGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldVersion, v))
+// DetailsGT applies the GT predicate on the "details" field.
+func DetailsGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldDetails, v))
 }
 
-// VersionGTE applies the GTE predicate on the "version" field.
-func VersionGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldVersion, v))
+// DetailsGTE applies the GTE predicate on the "details" field.
+func DetailsGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldDetails, v))
 }
 
-// VersionLT applies the LT predicate on the "version" field.
-func VersionLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldVersion, v))
+// DetailsLT applies the LT predicate on the "details" field.
+func DetailsLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldDetails, v))
 }
 
-// VersionLTE applies the LTE predicate on the "version" field.
-func VersionLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldVersion, v))
+// DetailsLTE applies the LTE predicate on the "details" field.
+func DetailsLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldDetails, v))
 }
 
-// VersionContains applies the Contains predicate on the "version" field.
-func VersionContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldVersion, v))
+// DetailsContains applies the Contains predicate on the "details" field.
+func DetailsContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldDetails, v))
 }
 
-// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
-func VersionHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldVersion, v))
+// DetailsHasPrefix applies the HasPrefix predicate on the "details" field.
+func DetailsHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldDetails, v))
 }
 
-// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
-func VersionHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldVersion, v))
-}
-
-// VersionIsNil applies the IsNil predicate on the "version" field.
-func VersionIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldVersion))
-}
-
-// VersionNotNil applies the NotNil predicate on the "version" field.
-func VersionNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldVersion))
-}
-
-// VersionEqualFold applies the EqualFold predicate on the "version" field.
-func VersionEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldVersion, v))
-}
-
-// VersionContainsFold applies the ContainsFold predicate on the "version" field.
-func VersionContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldVersion, v))
-}
-
-// PurposeAndScopeEQ applies the EQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeNEQ applies the NEQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeIn applies the In predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldPurposeAndScope, vs...))
-}
-
-// PurposeAndScopeNotIn applies the NotIn predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldPurposeAndScope, vs...))
-}
-
-// PurposeAndScopeGT applies the GT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeGTE applies the GTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeLT applies the LT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeLTE applies the LTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeContains applies the Contains predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeHasPrefix applies the HasPrefix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeHasSuffix applies the HasSuffix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeIsNil applies the IsNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldPurposeAndScope))
-}
-
-// PurposeAndScopeNotNil applies the NotNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldPurposeAndScope))
-}
-
-// PurposeAndScopeEqualFold applies the EqualFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeContainsFold applies the ContainsFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldPurposeAndScope, v))
-}
-
-// BackgroundEQ applies the EQ predicate on the "background" field.
-func BackgroundEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldBackground, v))
-}
-
-// BackgroundNEQ applies the NEQ predicate on the "background" field.
-func BackgroundNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldBackground, v))
-}
-
-// BackgroundIn applies the In predicate on the "background" field.
-func BackgroundIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldBackground, vs...))
-}
-
-// BackgroundNotIn applies the NotIn predicate on the "background" field.
-func BackgroundNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldBackground, vs...))
-}
-
-// BackgroundGT applies the GT predicate on the "background" field.
-func BackgroundGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldBackground, v))
-}
-
-// BackgroundGTE applies the GTE predicate on the "background" field.
-func BackgroundGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldBackground, v))
-}
-
-// BackgroundLT applies the LT predicate on the "background" field.
-func BackgroundLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldBackground, v))
-}
-
-// BackgroundLTE applies the LTE predicate on the "background" field.
-func BackgroundLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldBackground, v))
-}
-
-// BackgroundContains applies the Contains predicate on the "background" field.
-func BackgroundContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldBackground, v))
-}
-
-// BackgroundHasPrefix applies the HasPrefix predicate on the "background" field.
-func BackgroundHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldBackground, v))
-}
-
-// BackgroundHasSuffix applies the HasSuffix predicate on the "background" field.
-func BackgroundHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldBackground, v))
-}
-
-// BackgroundIsNil applies the IsNil predicate on the "background" field.
-func BackgroundIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldBackground))
-}
-
-// BackgroundNotNil applies the NotNil predicate on the "background" field.
-func BackgroundNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldBackground))
-}
-
-// BackgroundEqualFold applies the EqualFold predicate on the "background" field.
-func BackgroundEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldBackground, v))
-}
-
-// BackgroundContainsFold applies the ContainsFold predicate on the "background" field.
-func BackgroundContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldBackground, v))
+// DetailsHasSuffix applies the HasSuffix predicate on the "details" field.
+func DetailsHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldDetails, v))
 }
 
 // DetailsIsNil applies the IsNil predicate on the "details" field.
@@ -1245,6 +906,201 @@ func DetailsIsNil() predicate.InternalPolicy {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldDetails))
+}
+
+// DetailsEqualFold applies the EqualFold predicate on the "details" field.
+func DetailsEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldDetails, v))
+}
+
+// DetailsContainsFold applies the ContainsFold predicate on the "details" field.
+func DetailsContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldDetails, v))
+}
+
+// ApprovalRequiredEQ applies the EQ predicate on the "approval_required" field.
+func ApprovalRequiredEQ(v bool) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldApprovalRequired, v))
+}
+
+// ApprovalRequiredNEQ applies the NEQ predicate on the "approval_required" field.
+func ApprovalRequiredNEQ(v bool) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldApprovalRequired, v))
+}
+
+// ApprovalRequiredIsNil applies the IsNil predicate on the "approval_required" field.
+func ApprovalRequiredIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldApprovalRequired))
+}
+
+// ApprovalRequiredNotNil applies the NotNil predicate on the "approval_required" field.
+func ApprovalRequiredNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldApprovalRequired))
+}
+
+// ReviewDueEQ applies the EQ predicate on the "review_due" field.
+func ReviewDueEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
+}
+
+// ReviewDueNEQ applies the NEQ predicate on the "review_due" field.
+func ReviewDueNEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldReviewDue, v))
+}
+
+// ReviewDueIn applies the In predicate on the "review_due" field.
+func ReviewDueIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueNotIn applies the NotIn predicate on the "review_due" field.
+func ReviewDueNotIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldReviewDue, vs...))
+}
+
+// ReviewDueGT applies the GT predicate on the "review_due" field.
+func ReviewDueGT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldReviewDue, v))
+}
+
+// ReviewDueGTE applies the GTE predicate on the "review_due" field.
+func ReviewDueGTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldReviewDue, v))
+}
+
+// ReviewDueLT applies the LT predicate on the "review_due" field.
+func ReviewDueLT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldReviewDue, v))
+}
+
+// ReviewDueLTE applies the LTE predicate on the "review_due" field.
+func ReviewDueLTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldReviewDue, v))
+}
+
+// ReviewDueIsNil applies the IsNil predicate on the "review_due" field.
+func ReviewDueIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldReviewDue))
+}
+
+// ReviewDueNotNil applies the NotNil predicate on the "review_due" field.
+func ReviewDueNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldReviewDue))
+}
+
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -1326,6 +1182,64 @@ func HasEditorsWith(preds ...predicate.Group) predicate.InternalPolicy {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.InternalPolicyEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasApprover applies the HasEdge predicate on the "approver" edge.
+func HasApprover() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ApproverTable, ApproverColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasApproverWith applies the HasEdge predicate on the "approver" edge with a given conditions (other predicates).
+func HasApproverWith(preds ...predicate.Group) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newApproverStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegate applies the HasEdge predicate on the "delegate" edge.
+func HasDelegate() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateWith applies the HasEdge predicate on the "delegate" edge with a given conditions (other predicates).
+func HasDelegateWith(preds ...predicate.Group) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newDelegateStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

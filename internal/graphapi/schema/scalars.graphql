@@ -1,8 +1,39 @@
+"""
+The `Upload` scalar type represents a file upload.
+This scalar is typically used to handle file uploads in GraphQL mutations.
+"""
 scalar Upload
+"""
+The `Address` scalar type represents a physical or mailing address.
+This scalar can be used to store and validate address information in the GraphQL schema.
+It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
+"""
 scalar Address
+"""
+The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)
+"""
 scalar Price
+"""
+The `AssessmentObjective` scalar type represents objectives that are validated during the audit to ensure the control is implemented
+"""
 scalar AssessmentObjective
+"""
+The `AssessmentMethod` scalar type represents methods that can be used during the audit to assess the control implementation
+"""
 scalar AssessmentMethod
+"""
+The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
+"""
 scalar ExampleEvidence
+"""
+The `Reference` represents are links to external sources that can be used to gain more information about the control
+"""
 scalar Reference
+"""
+The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
+"""
 scalar ImplementationGuidance
+"""
+VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
+"""
+scalar VersionBump

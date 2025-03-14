@@ -44,24 +44,24 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldRiskType holds the string denoting the risk_type field in the database.
 	FieldRiskType = "risk_type"
-	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
-	FieldBusinessCosts = "business_costs"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// FieldImpact holds the string denoting the impact field in the database.
 	FieldImpact = "impact"
 	// FieldLikelihood holds the string denoting the likelihood field in the database.
 	FieldLikelihood = "likelihood"
+	// FieldScore holds the string denoting the score field in the database.
+	FieldScore = "score"
 	// FieldMitigation holds the string denoting the mitigation field in the database.
 	FieldMitigation = "mitigation"
-	// FieldSatisfies holds the string denoting the satisfies field in the database.
-	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
+	FieldBusinessCosts = "business_costs"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -82,15 +82,15 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldName,
-	FieldDescription,
 	FieldStatus,
 	FieldRiskType,
-	FieldBusinessCosts,
+	FieldCategory,
 	FieldImpact,
 	FieldLikelihood,
+	FieldScore,
 	FieldMitigation,
-	FieldSatisfies,
 	FieldDetails,
+	FieldBusinessCosts,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -134,12 +134,24 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultStatus enums.RiskStatus = "OPEN"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.RiskStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("riskhistory: invalid enum value for status field: %q", s)
+	}
+}
+
 const DefaultImpact enums.RiskImpact = "MODERATE"
 
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
 	switch i.String() {
-	case "LOW", "MODERATE", "HIGH":
+	case "LOW", "MODERATE", "HIGH", "CRITICAL":
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for impact field: %q", i)
@@ -226,11 +238,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -241,9 +248,9 @@ func ByRiskType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskType, opts...).ToFunc()
 }
 
-// ByBusinessCosts orders the results by the business_costs field.
-func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 // ByImpact orders the results by the impact field.
@@ -256,14 +263,24 @@ func ByLikelihood(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLikelihood, opts...).ToFunc()
 }
 
+// ByScore orders the results by the score field.
+func ByScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScore, opts...).ToFunc()
+}
+
 // ByMitigation orders the results by the mitigation field.
 func ByMitigation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMitigation, opts...).ToFunc()
 }
 
-// BySatisfies orders the results by the satisfies field.
-func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
+// ByBusinessCosts orders the results by the business_costs field.
+func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
 }
 
 var (
@@ -271,6 +288,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.RiskStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskStatus)(nil)
+	// enums.RiskStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskStatus)(nil)
 )
 
 var (

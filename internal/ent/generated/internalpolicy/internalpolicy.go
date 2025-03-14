@@ -3,11 +3,14 @@
 package internalpolicy
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -23,40 +26,42 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldReviewDue holds the string denoting the review_due field in the database.
-	FieldReviewDue = "review_due"
 	// FieldPolicyType holds the string denoting the policy_type field in the database.
 	FieldPolicyType = "policy_type"
-	// FieldVersion holds the string denoting the version field in the database.
-	FieldVersion = "version"
-	// FieldPurposeAndScope holds the string denoting the purpose_and_scope field in the database.
-	FieldPurposeAndScope = "purpose_and_scope"
-	// FieldBackground holds the string denoting the background field in the database.
-	FieldBackground = "background"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
+	FieldApprovalRequired = "approval_required"
+	// FieldReviewDue holds the string denoting the review_due field in the database.
+	FieldReviewDue = "review_due"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeApprover holds the string denoting the approver edge name in mutations.
+	EdgeApprover = "approver"
+	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
+	EdgeDelegate = "delegate"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
 	EdgeControlObjectives = "control_objectives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -88,6 +93,20 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// ApproverTable is the table that holds the approver relation/edge.
+	ApproverTable = "internal_policies"
+	// ApproverInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ApproverInverseTable = "groups"
+	// ApproverColumn is the table column denoting the approver relation/edge.
+	ApproverColumn = "internal_policy_approver"
+	// DelegateTable is the table that holds the delegate relation/edge.
+	DelegateTable = "internal_policies"
+	// DelegateInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateInverseTable = "groups"
+	// DelegateColumn is the table column denoting the delegate relation/edge.
+	DelegateColumn = "internal_policy_delegate"
 	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
 	ControlObjectivesTable = "internal_policy_control_objectives"
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
@@ -131,26 +150,27 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
-	FieldTags,
 	FieldOwnerID,
 	FieldName,
-	FieldDescription,
 	FieldStatus,
-	FieldReviewDue,
 	FieldPolicyType,
-	FieldVersion,
-	FieldPurposeAndScope,
-	FieldBackground,
 	FieldDetails,
+	FieldApprovalRequired,
+	FieldReviewDue,
+	FieldReviewFrequency,
+	FieldRevision,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_internal_policies",
+	"internal_policy_approver",
+	"internal_policy_delegate",
 	"subcontrol_internal_policies",
 }
 
@@ -196,7 +216,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -205,19 +225,49 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	DisplayIDValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
+	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.DocumentStatus = "DRAFT"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.DocumentStatus) error {
+	switch s.String() {
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("internalpolicy: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+		return nil
+	default:
+		return fmt.Errorf("internalpolicy: invalid enum value for review_frequency field: %q", rf)
+	}
+}
 
 // OrderOption defines the ordering options for the InternalPolicy queries.
 type OrderOption func(*sql.Selector)
@@ -272,19 +322,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByReviewDue orders the results by the review_due field.
-func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
 }
 
 // ByPolicyType orders the results by the policy_type field.
@@ -292,19 +332,29 @@ func ByPolicyType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPolicyType, opts...).ToFunc()
 }
 
-// ByVersion orders the results by the version field.
-func ByVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+// ByDetails orders the results by the details field.
+func ByDetails(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetails, opts...).ToFunc()
 }
 
-// ByPurposeAndScope orders the results by the purpose_and_scope field.
-func ByPurposeAndScope(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPurposeAndScope, opts...).ToFunc()
+// ByApprovalRequired orders the results by the approval_required field.
+func ByApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovalRequired, opts...).ToFunc()
 }
 
-// ByBackground orders the results by the background field.
-func ByBackground(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBackground, opts...).ToFunc()
+// ByReviewDue orders the results by the review_due field.
+func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewDue, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -339,6 +389,20 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByApproverField orders the results by approver field.
+func ByApproverField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newApproverStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateField orders the results by delegate field.
+func ByDelegateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -446,6 +510,20 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
+func newApproverStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ApproverInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ApproverTable, ApproverColumn),
+	)
+}
+func newDelegateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+	)
+}
 func newControlObjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -488,3 +566,17 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
+
+var (
+	// enums.DocumentStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
+	// enums.DocumentStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)

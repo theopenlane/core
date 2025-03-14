@@ -16,6 +16,30 @@ func (at *APIToken) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (ap *ActionPlan) Approver(ctx context.Context) (*Group, error) {
+	result, err := ap.Edges.ApproverOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryApprover().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) Delegate(ctx context.Context) (*Group, error) {
+	result, err := ap.Edges.DelegateOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryDelegate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) Owner(ctx context.Context) (*Organization, error) {
+	result, err := ap.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (ap *ActionPlan) Risk(ctx context.Context) (result []*Risk, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = ap.NamedRisk(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1416,6 +1440,22 @@ func (ip *InternalPolicy) Editors(ctx context.Context) (result []*Group, err err
 	return result, err
 }
 
+func (ip *InternalPolicy) Approver(ctx context.Context) (*Group, error) {
+	result, err := ip.Edges.ApproverOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryApprover().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ip *InternalPolicy) Delegate(ctx context.Context) (*Group, error) {
+	result, err := ip.Edges.DelegateOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryDelegate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (ip *InternalPolicy) ControlObjectives(ctx context.Context) (result []*ControlObjective, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = ip.NamedControlObjectives(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2161,6 +2201,18 @@ func (o *Organization) Standards(ctx context.Context) (result []*Standard, err e
 	return result, err
 }
 
+func (o *Organization) ActionPlans(ctx context.Context) (result []*ActionPlan, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedActionPlans(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.ActionPlansOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryActionPlans().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2255,6 +2307,22 @@ func (pr *Procedure) Editors(ctx context.Context) (result []*Group, err error) {
 		result, err = pr.QueryEditors().All(ctx)
 	}
 	return result, err
+}
+
+func (pr *Procedure) Approver(ctx context.Context) (*Group, error) {
+	result, err := pr.Edges.ApproverOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryApprover().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Procedure) Delegate(ctx context.Context) (*Group, error) {
+	result, err := pr.Edges.DelegateOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryDelegate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pr *Procedure) Controls(ctx context.Context) (result []*Control, err error) {
@@ -2647,6 +2715,22 @@ func (r *Risk) Programs(ctx context.Context) (result []*Program, err error) {
 		result, err = r.QueryPrograms().All(ctx)
 	}
 	return result, err
+}
+
+func (r *Risk) Stakeholder(ctx context.Context) (*Group, error) {
+	result, err := r.Edges.StakeholderOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryStakeholder().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (r *Risk) Delegate(ctx context.Context) (*Group, error) {
+	result, err := r.Edges.DelegateOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryDelegate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (s *Standard) Owner(ctx context.Context) (*Organization, error) {

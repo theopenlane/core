@@ -143,30 +143,16 @@ func (rc *RiskCreate) SetName(s string) *RiskCreate {
 	return rc
 }
 
-// SetDescription sets the "description" field.
-func (rc *RiskCreate) SetDescription(s string) *RiskCreate {
-	rc.mutation.SetDescription(s)
-	return rc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableDescription(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetDescription(*s)
-	}
-	return rc
-}
-
 // SetStatus sets the "status" field.
-func (rc *RiskCreate) SetStatus(s string) *RiskCreate {
-	rc.mutation.SetStatus(s)
+func (rc *RiskCreate) SetStatus(es enums.RiskStatus) *RiskCreate {
+	rc.mutation.SetStatus(es)
 	return rc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableStatus(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetStatus(*s)
+func (rc *RiskCreate) SetNillableStatus(es *enums.RiskStatus) *RiskCreate {
+	if es != nil {
+		rc.SetStatus(*es)
 	}
 	return rc
 }
@@ -185,16 +171,16 @@ func (rc *RiskCreate) SetNillableRiskType(s *string) *RiskCreate {
 	return rc
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (rc *RiskCreate) SetBusinessCosts(s string) *RiskCreate {
-	rc.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (rc *RiskCreate) SetCategory(s string) *RiskCreate {
+	rc.mutation.SetCategory(s)
 	return rc
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableBusinessCosts(s *string) *RiskCreate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableCategory(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetBusinessCosts(*s)
+		rc.SetCategory(*s)
 	}
 	return rc
 }
@@ -227,6 +213,20 @@ func (rc *RiskCreate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskCreat
 	return rc
 }
 
+// SetScore sets the "score" field.
+func (rc *RiskCreate) SetScore(i int) *RiskCreate {
+	rc.mutation.SetScore(i)
+	return rc
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableScore(i *int) *RiskCreate {
+	if i != nil {
+		rc.SetScore(*i)
+	}
+	return rc
+}
+
 // SetMitigation sets the "mitigation" field.
 func (rc *RiskCreate) SetMitigation(s string) *RiskCreate {
 	rc.mutation.SetMitigation(s)
@@ -241,23 +241,31 @@ func (rc *RiskCreate) SetNillableMitigation(s *string) *RiskCreate {
 	return rc
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (rc *RiskCreate) SetSatisfies(s string) *RiskCreate {
-	rc.mutation.SetSatisfies(s)
+// SetDetails sets the "details" field.
+func (rc *RiskCreate) SetDetails(s string) *RiskCreate {
+	rc.mutation.SetDetails(s)
 	return rc
 }
 
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableSatisfies(s *string) *RiskCreate {
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableDetails(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetSatisfies(*s)
+		rc.SetDetails(*s)
 	}
 	return rc
 }
 
-// SetDetails sets the "details" field.
-func (rc *RiskCreate) SetDetails(m map[string]interface{}) *RiskCreate {
-	rc.mutation.SetDetails(m)
+// SetBusinessCosts sets the "business_costs" field.
+func (rc *RiskCreate) SetBusinessCosts(s string) *RiskCreate {
+	rc.mutation.SetBusinessCosts(s)
+	return rc
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableBusinessCosts(s *string) *RiskCreate {
+	if s != nil {
+		rc.SetBusinessCosts(*s)
+	}
 	return rc
 }
 
@@ -385,6 +393,44 @@ func (rc *RiskCreate) AddPrograms(p ...*Program) *RiskCreate {
 	return rc.AddProgramIDs(ids...)
 }
 
+// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
+func (rc *RiskCreate) SetStakeholderID(id string) *RiskCreate {
+	rc.mutation.SetStakeholderID(id)
+	return rc
+}
+
+// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
+func (rc *RiskCreate) SetNillableStakeholderID(id *string) *RiskCreate {
+	if id != nil {
+		rc = rc.SetStakeholderID(*id)
+	}
+	return rc
+}
+
+// SetStakeholder sets the "stakeholder" edge to the Group entity.
+func (rc *RiskCreate) SetStakeholder(g *Group) *RiskCreate {
+	return rc.SetStakeholderID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (rc *RiskCreate) SetDelegateID(id string) *RiskCreate {
+	rc.mutation.SetDelegateID(id)
+	return rc
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (rc *RiskCreate) SetNillableDelegateID(id *string) *RiskCreate {
+	if id != nil {
+		rc = rc.SetDelegateID(*id)
+	}
+	return rc
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (rc *RiskCreate) SetDelegate(g *Group) *RiskCreate {
+	return rc.SetDelegateID(g.ID)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (rc *RiskCreate) Mutation() *RiskMutation {
 	return rc.mutation
@@ -440,6 +486,10 @@ func (rc *RiskCreate) defaults() error {
 		v := risk.DefaultTags
 		rc.mutation.SetTags(v)
 	}
+	if _, ok := rc.mutation.Status(); !ok {
+		v := risk.DefaultStatus
+		rc.mutation.SetStatus(v)
+	}
 	if _, ok := rc.mutation.Impact(); !ok {
 		v := risk.DefaultImpact
 		rc.mutation.SetImpact(v)
@@ -479,6 +529,11 @@ func (rc *RiskCreate) check() error {
 	if v, ok := rc.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
+	if v, ok := rc.mutation.Status(); ok {
+		if err := risk.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Risk.status": %w`, err)}
 		}
 	}
 	if v, ok := rc.mutation.Impact(); ok {
@@ -563,21 +618,17 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := rc.mutation.Description(); ok {
-		_spec.SetField(risk.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := rc.mutation.Status(); ok {
-		_spec.SetField(risk.FieldStatus, field.TypeString, value)
+		_spec.SetField(risk.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := rc.mutation.RiskType(); ok {
 		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
 		_node.RiskType = value
 	}
-	if value, ok := rc.mutation.BusinessCosts(); ok {
-		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
-		_node.BusinessCosts = value
+	if value, ok := rc.mutation.Category(); ok {
+		_spec.SetField(risk.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
 	if value, ok := rc.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
@@ -587,17 +638,21 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldLikelihood, field.TypeEnum, value)
 		_node.Likelihood = value
 	}
+	if value, ok := rc.mutation.Score(); ok {
+		_spec.SetField(risk.FieldScore, field.TypeInt, value)
+		_node.Score = value
+	}
 	if value, ok := rc.mutation.Mitigation(); ok {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 		_node.Mitigation = value
 	}
-	if value, ok := rc.mutation.Satisfies(); ok {
-		_spec.SetField(risk.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
 	if value, ok := rc.mutation.Details(); ok {
-		_spec.SetField(risk.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := rc.mutation.BusinessCosts(); ok {
+		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
+		_node.BusinessCosts = value
 	}
 	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -734,6 +789,42 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.StakeholderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderTable,
+			Columns: []string{risk.StakeholderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.risk_stakeholder = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateTable,
+			Columns: []string{risk.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.risk_delegate = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

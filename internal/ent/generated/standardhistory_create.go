@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -145,6 +146,20 @@ func (shc *StandardHistoryCreate) SetTags(s []string) *StandardHistoryCreate {
 	return shc
 }
 
+// SetRevision sets the "revision" field.
+func (shc *StandardHistoryCreate) SetRevision(s string) *StandardHistoryCreate {
+	shc.mutation.SetRevision(s)
+	return shc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableRevision(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetRevision(*s)
+	}
+	return shc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (shc *StandardHistoryCreate) SetOwnerID(s string) *StandardHistoryCreate {
 	shc.mutation.SetOwnerID(s)
@@ -207,6 +222,20 @@ func (shc *StandardHistoryCreate) SetNillableDescription(s *string) *StandardHis
 	return shc
 }
 
+// SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
+func (shc *StandardHistoryCreate) SetGoverningBodyLogoURL(s string) *StandardHistoryCreate {
+	shc.mutation.SetGoverningBodyLogoURL(s)
+	return shc
+}
+
+// SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableGoverningBodyLogoURL(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetGoverningBodyLogoURL(*s)
+	}
+	return shc
+}
+
 // SetGoverningBody sets the "governing_body" field.
 func (shc *StandardHistoryCreate) SetGoverningBody(s string) *StandardHistoryCreate {
 	shc.mutation.SetGoverningBody(s)
@@ -242,15 +271,15 @@ func (shc *StandardHistoryCreate) SetNillableLink(s *string) *StandardHistoryCre
 }
 
 // SetStatus sets the "status" field.
-func (shc *StandardHistoryCreate) SetStatus(s string) *StandardHistoryCreate {
-	shc.mutation.SetStatus(s)
+func (shc *StandardHistoryCreate) SetStatus(es enums.StandardStatus) *StandardHistoryCreate {
+	shc.mutation.SetStatus(es)
 	return shc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableStatus(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetStatus(*s)
+func (shc *StandardHistoryCreate) SetNillableStatus(es *enums.StandardStatus) *StandardHistoryCreate {
+	if es != nil {
+		shc.SetStatus(*es)
 	}
 	return shc
 }
@@ -325,20 +354,6 @@ func (shc *StandardHistoryCreate) SetNillableVersion(s *string) *StandardHistory
 	return shc
 }
 
-// SetRevision sets the "revision" field.
-func (shc *StandardHistoryCreate) SetRevision(s string) *StandardHistoryCreate {
-	shc.mutation.SetRevision(s)
-	return shc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableRevision(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetRevision(*s)
-	}
-	return shc
-}
-
 // SetID sets the "id" field.
 func (shc *StandardHistoryCreate) SetID(s string) *StandardHistoryCreate {
 	shc.mutation.SetID(s)
@@ -404,6 +419,14 @@ func (shc *StandardHistoryCreate) defaults() {
 		v := standardhistory.DefaultTags
 		shc.mutation.SetTags(v)
 	}
+	if _, ok := shc.mutation.Revision(); !ok {
+		v := standardhistory.DefaultRevision
+		shc.mutation.SetRevision(v)
+	}
+	if _, ok := shc.mutation.Status(); !ok {
+		v := standardhistory.DefaultStatus
+		shc.mutation.SetStatus(v)
+	}
 	if _, ok := shc.mutation.IsPublic(); !ok {
 		v := standardhistory.DefaultIsPublic
 		shc.mutation.SetIsPublic(v)
@@ -437,6 +460,11 @@ func (shc *StandardHistoryCreate) check() error {
 	}
 	if _, ok := shc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "StandardHistory.name"`)}
+	}
+	if v, ok := shc.mutation.Status(); ok {
+		if err := standardhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.status": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -514,6 +542,10 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := shc.mutation.Revision(); ok {
+		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := shc.mutation.OwnerID(); ok {
 		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -534,6 +566,10 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := shc.mutation.GoverningBodyLogoURL(); ok {
+		_spec.SetField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString, value)
+		_node.GoverningBodyLogoURL = value
+	}
 	if value, ok := shc.mutation.GoverningBody(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBody, field.TypeString, value)
 		_node.GoverningBody = value
@@ -547,7 +583,7 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_node.Link = value
 	}
 	if value, ok := shc.mutation.Status(); ok {
-		_spec.SetField(standardhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(standardhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := shc.mutation.IsPublic(); ok {
@@ -569,10 +605,6 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 	if value, ok := shc.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
-	}
-	if value, ok := shc.mutation.Revision(); ok {
-		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	return _node, _spec
 }

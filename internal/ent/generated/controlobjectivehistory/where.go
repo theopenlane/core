@@ -106,6 +106,11 @@ func DeletedBy(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldRevision, v))
+}
+
 // DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
 func DisplayID(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldDisplayID, v))
@@ -134,11 +139,6 @@ func Status(v string) predicate.ControlObjectiveHistory {
 // ControlObjectiveType applies equality check predicate on the "control_objective_type" field. It's identical to ControlObjectiveTypeEQ.
 func ControlObjectiveType(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldControlObjectiveType, v))
-}
-
-// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
-func Version(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldVersion, v))
 }
 
 // Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
@@ -661,6 +661,81 @@ func DeletedByContainsFold(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldRevision, v))
+}
+
 // DisplayIDEQ applies the EQ predicate on the "display_id" field.
 func DisplayIDEQ(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldDisplayID, v))
@@ -1139,81 +1214,6 @@ func ControlObjectiveTypeEqualFold(v string) predicate.ControlObjectiveHistory {
 // ControlObjectiveTypeContainsFold applies the ContainsFold predicate on the "control_objective_type" field.
 func ControlObjectiveTypeContainsFold(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldControlObjectiveType, v))
-}
-
-// VersionEQ applies the EQ predicate on the "version" field.
-func VersionEQ(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldVersion, v))
-}
-
-// VersionNEQ applies the NEQ predicate on the "version" field.
-func VersionNEQ(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldNEQ(FieldVersion, v))
-}
-
-// VersionIn applies the In predicate on the "version" field.
-func VersionIn(vs ...string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldIn(FieldVersion, vs...))
-}
-
-// VersionNotIn applies the NotIn predicate on the "version" field.
-func VersionNotIn(vs ...string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldNotIn(FieldVersion, vs...))
-}
-
-// VersionGT applies the GT predicate on the "version" field.
-func VersionGT(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldGT(FieldVersion, v))
-}
-
-// VersionGTE applies the GTE predicate on the "version" field.
-func VersionGTE(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldGTE(FieldVersion, v))
-}
-
-// VersionLT applies the LT predicate on the "version" field.
-func VersionLT(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldLT(FieldVersion, v))
-}
-
-// VersionLTE applies the LTE predicate on the "version" field.
-func VersionLTE(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldLTE(FieldVersion, v))
-}
-
-// VersionContains applies the Contains predicate on the "version" field.
-func VersionContains(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldContains(FieldVersion, v))
-}
-
-// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
-func VersionHasPrefix(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldHasPrefix(FieldVersion, v))
-}
-
-// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
-func VersionHasSuffix(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldHasSuffix(FieldVersion, v))
-}
-
-// VersionIsNil applies the IsNil predicate on the "version" field.
-func VersionIsNil() predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldIsNull(FieldVersion))
-}
-
-// VersionNotNil applies the NotNil predicate on the "version" field.
-func VersionNotNil() predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldNotNull(FieldVersion))
-}
-
-// VersionEqualFold applies the EqualFold predicate on the "version" field.
-func VersionEqualFold(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEqualFold(FieldVersion, v))
-}
-
-// VersionContainsFold applies the ContainsFold predicate on the "version" field.
-func VersionContainsFold(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldVersion, v))
 }
 
 // CategoryEQ applies the EQ predicate on the "category" field.

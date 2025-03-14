@@ -1,14 +1,10 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
-	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -29,42 +25,7 @@ type InternalPolicy struct {
 
 // Fields returns policy fields.
 func (InternalPolicy) Fields() []ent.Field {
-	return []ent.Field{
-		field.String("name").
-			Comment("the name of the policy").
-			Annotations(
-				entx.FieldSearchable(),
-			).
-			NotEmpty(),
-		field.Text("description").
-			Annotations(
-				entx.FieldSearchable(),
-			).
-			Optional().
-			Comment("description of the policy"),
-		field.String("status").
-			Optional().
-			Comment("status of the policy"),
-		field.Time("review_due").
-			Comment("the date the policy should be reviewed, defaults to a year from creation date").
-			Default(time.Now().AddDate(1, 0, 0)).
-			Optional(),
-		field.String("policy_type").
-			Optional().
-			Comment("type of the policy"),
-		field.String("version").
-			Optional().
-			Comment("version of the policy"),
-		field.Text("purpose_and_scope").
-			Optional().
-			Comment("purpose and scope"),
-		field.Text("background").
-			Optional().
-			Comment("background of the policy"),
-		field.JSON("details", map[string]any{}).
-			Optional().
-			Comment("json data for the policy document"),
-	}
+	return []ent.Field{} // fields are defined in the mixins
 }
 
 // Edges of the InternalPolicy
@@ -84,13 +45,16 @@ func (InternalPolicy) Edges() []ent.Edge {
 func (InternalPolicy) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
+		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.NewIDMixinWithPrefixedID("PLC"),
-		emixin.TagMixin{},
 		// all policies must be associated to an organization
 		NewOrgOwnMixinWithRef("internal_policies"),
 		// add group edit permissions to the procedure
 		NewGroupPermissionsMixin(false),
+
+		DocumentMixin{DocumentType: "policy"}, // policies are documents
+		mixin.RevisionMixin{},                 // include revisions on all documents
 	}
 }
 

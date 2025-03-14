@@ -168,18 +168,43 @@ func init() {
 	// apitoken.DefaultID holds the default value on creation for the id field.
 	apitoken.DefaultID = apitokenDescID.Default.(func() string)
 	actionplanMixin := schema.ActionPlan{}.Mixin()
+	actionplan.Policy = privacy.NewPolicies(schema.ActionPlan{})
+	actionplan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := actionplan.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	actionplanMixinHooks0 := actionplanMixin[0].Hooks()
 	actionplanMixinHooks1 := actionplanMixin[1].Hooks()
-	actionplan.Hooks[0] = actionplanMixinHooks0[0]
-	actionplan.Hooks[1] = actionplanMixinHooks1[0]
+	actionplanMixinHooks5 := actionplanMixin[5].Hooks()
+	actionplanMixinHooks6 := actionplanMixin[6].Hooks()
+
+	actionplan.Hooks[1] = actionplanMixinHooks0[0]
+
+	actionplan.Hooks[2] = actionplanMixinHooks1[0]
+
+	actionplan.Hooks[3] = actionplanMixinHooks5[0]
+
+	actionplan.Hooks[4] = actionplanMixinHooks6[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
+	actionplanMixinInters6 := actionplanMixin[6].Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters1[0]
+	actionplan.Interceptors[1] = actionplanMixinInters6[0]
 	actionplanMixinFields0 := actionplanMixin[0].Fields()
 	_ = actionplanMixinFields0
 	actionplanMixinFields2 := actionplanMixin[2].Fields()
 	_ = actionplanMixinFields2
 	actionplanMixinFields3 := actionplanMixin[3].Fields()
 	_ = actionplanMixinFields3
+	actionplanMixinFields4 := actionplanMixin[4].Fields()
+	_ = actionplanMixinFields4
+	actionplanMixinFields5 := actionplanMixin[5].Fields()
+	_ = actionplanMixinFields5
+	actionplanMixinFields6 := actionplanMixin[6].Fields()
+	_ = actionplanMixinFields6
 	actionplanFields := schema.ActionPlan{}.Fields()
 	_ = actionplanFields
 	// actionplanDescCreatedAt is the schema descriptor for created_at field.
@@ -196,10 +221,34 @@ func init() {
 	actionplanDescTags := actionplanMixinFields3[0].Descriptor()
 	// actionplan.DefaultTags holds the default value on creation for the tags field.
 	actionplan.DefaultTags = actionplanDescTags.Default.([]string)
+	// actionplanDescName is the schema descriptor for name field.
+	actionplanDescName := actionplanMixinFields4[0].Descriptor()
+	// actionplan.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	actionplan.NameValidator = actionplanDescName.Validators[0].(func(string) error)
+	// actionplanDescApprovalRequired is the schema descriptor for approval_required field.
+	actionplanDescApprovalRequired := actionplanMixinFields4[4].Descriptor()
+	// actionplan.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	actionplan.DefaultApprovalRequired = actionplanDescApprovalRequired.Default.(bool)
+	// actionplanDescReviewDue is the schema descriptor for review_due field.
+	actionplanDescReviewDue := actionplanMixinFields4[5].Descriptor()
+	// actionplan.DefaultReviewDue holds the default value on creation for the review_due field.
+	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(time.Time)
+	// actionplanDescRevision is the schema descriptor for revision field.
+	actionplanDescRevision := actionplanMixinFields5[0].Descriptor()
+	// actionplan.DefaultRevision holds the default value on creation for the revision field.
+	actionplan.DefaultRevision = actionplanDescRevision.Default.(string)
+	// actionplan.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	actionplan.RevisionValidator = actionplanDescRevision.Validators[0].(func(string) error)
+	// actionplanDescOwnerID is the schema descriptor for owner_id field.
+	actionplanDescOwnerID := actionplanMixinFields6[0].Descriptor()
+	// actionplan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	actionplan.OwnerIDValidator = actionplanDescOwnerID.Validators[0].(func(string) error)
 	// actionplanDescID is the schema descriptor for id field.
 	actionplanDescID := actionplanMixinFields2[0].Descriptor()
 	// actionplan.DefaultID holds the default value on creation for the id field.
 	actionplan.DefaultID = actionplanDescID.Default.(func() string)
+	actionplanhistoryInters := schema.ActionPlanHistory{}.Interceptors()
+	actionplanhistory.Interceptors[0] = actionplanhistoryInters[0]
 	actionplanhistoryFields := schema.ActionPlanHistory{}.Fields()
 	_ = actionplanhistoryFields
 	// actionplanhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -220,6 +269,18 @@ func init() {
 	actionplanhistoryDescTags := actionplanhistoryFields[10].Descriptor()
 	// actionplanhistory.DefaultTags holds the default value on creation for the tags field.
 	actionplanhistory.DefaultTags = actionplanhistoryDescTags.Default.([]string)
+	// actionplanhistoryDescApprovalRequired is the schema descriptor for approval_required field.
+	actionplanhistoryDescApprovalRequired := actionplanhistoryFields[15].Descriptor()
+	// actionplanhistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	actionplanhistory.DefaultApprovalRequired = actionplanhistoryDescApprovalRequired.Default.(bool)
+	// actionplanhistoryDescReviewDue is the schema descriptor for review_due field.
+	actionplanhistoryDescReviewDue := actionplanhistoryFields[16].Descriptor()
+	// actionplanhistory.DefaultReviewDue holds the default value on creation for the review_due field.
+	actionplanhistory.DefaultReviewDue = actionplanhistoryDescReviewDue.Default.(time.Time)
+	// actionplanhistoryDescRevision is the schema descriptor for revision field.
+	actionplanhistoryDescRevision := actionplanhistoryFields[18].Descriptor()
+	// actionplanhistory.DefaultRevision holds the default value on creation for the revision field.
+	actionplanhistory.DefaultRevision = actionplanhistoryDescRevision.Default.(string)
 	// actionplanhistoryDescID is the schema descriptor for id field.
 	actionplanhistoryDescID := actionplanhistoryFields[9].Descriptor()
 	// actionplanhistory.DefaultID holds the default value on creation for the id field.
@@ -520,8 +581,9 @@ func init() {
 	controlobjectiveMixinHooks0 := controlobjectiveMixin[0].Hooks()
 	controlobjectiveMixinHooks1 := controlobjectiveMixin[1].Hooks()
 	controlobjectiveMixinHooks2 := controlobjectiveMixin[2].Hooks()
-	controlobjectiveMixinHooks4 := controlobjectiveMixin[4].Hooks()
+	controlobjectiveMixinHooks3 := controlobjectiveMixin[3].Hooks()
 	controlobjectiveMixinHooks5 := controlobjectiveMixin[5].Hooks()
+	controlobjectiveMixinHooks6 := controlobjectiveMixin[6].Hooks()
 
 	controlobjective.Hooks[1] = controlobjectiveMixinHooks0[0]
 
@@ -529,21 +591,23 @@ func init() {
 
 	controlobjective.Hooks[3] = controlobjectiveMixinHooks2[0]
 
-	controlobjective.Hooks[4] = controlobjectiveMixinHooks4[0]
+	controlobjective.Hooks[4] = controlobjectiveMixinHooks3[0]
 
-	controlobjective.Hooks[5] = controlobjectiveMixinHooks4[1]
+	controlobjective.Hooks[5] = controlobjectiveMixinHooks5[0]
 
-	controlobjective.Hooks[6] = controlobjectiveMixinHooks4[2]
+	controlobjective.Hooks[6] = controlobjectiveMixinHooks5[1]
 
-	controlobjective.Hooks[7] = controlobjectiveMixinHooks5[0]
+	controlobjective.Hooks[7] = controlobjectiveMixinHooks5[2]
 
-	controlobjective.Hooks[8] = controlobjectiveMixinHooks5[1]
+	controlobjective.Hooks[8] = controlobjectiveMixinHooks6[0]
 
-	controlobjective.Hooks[9] = controlobjectiveMixinHooks5[2]
+	controlobjective.Hooks[9] = controlobjectiveMixinHooks6[1]
+
+	controlobjective.Hooks[10] = controlobjectiveMixinHooks6[2]
 	controlobjectiveMixinInters1 := controlobjectiveMixin[1].Interceptors()
-	controlobjectiveMixinInters4 := controlobjectiveMixin[4].Interceptors()
+	controlobjectiveMixinInters5 := controlobjectiveMixin[5].Interceptors()
 	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
-	controlobjective.Interceptors[1] = controlobjectiveMixinInters4[0]
+	controlobjective.Interceptors[1] = controlobjectiveMixinInters5[0]
 	controlobjectiveMixinFields0 := controlobjectiveMixin[0].Fields()
 	_ = controlobjectiveMixinFields0
 	controlobjectiveMixinFields2 := controlobjectiveMixin[2].Fields()
@@ -552,6 +616,8 @@ func init() {
 	_ = controlobjectiveMixinFields3
 	controlobjectiveMixinFields4 := controlobjectiveMixin[4].Fields()
 	_ = controlobjectiveMixinFields4
+	controlobjectiveMixinFields5 := controlobjectiveMixin[5].Fields()
+	_ = controlobjectiveMixinFields5
 	controlobjectiveFields := schema.ControlObjective{}.Fields()
 	_ = controlobjectiveFields
 	// controlobjectiveDescCreatedAt is the schema descriptor for created_at field.
@@ -564,16 +630,22 @@ func init() {
 	controlobjective.DefaultUpdatedAt = controlobjectiveDescUpdatedAt.Default.(func() time.Time)
 	// controlobjective.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	controlobjective.UpdateDefaultUpdatedAt = controlobjectiveDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlobjectiveDescRevision is the schema descriptor for revision field.
+	controlobjectiveDescRevision := controlobjectiveMixinFields2[0].Descriptor()
+	// controlobjective.DefaultRevision holds the default value on creation for the revision field.
+	controlobjective.DefaultRevision = controlobjectiveDescRevision.Default.(string)
+	// controlobjective.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	controlobjective.RevisionValidator = controlobjectiveDescRevision.Validators[0].(func(string) error)
 	// controlobjectiveDescDisplayID is the schema descriptor for display_id field.
-	controlobjectiveDescDisplayID := controlobjectiveMixinFields2[1].Descriptor()
+	controlobjectiveDescDisplayID := controlobjectiveMixinFields3[1].Descriptor()
 	// controlobjective.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	controlobjective.DisplayIDValidator = controlobjectiveDescDisplayID.Validators[0].(func(string) error)
 	// controlobjectiveDescTags is the schema descriptor for tags field.
-	controlobjectiveDescTags := controlobjectiveMixinFields3[0].Descriptor()
+	controlobjectiveDescTags := controlobjectiveMixinFields4[0].Descriptor()
 	// controlobjective.DefaultTags holds the default value on creation for the tags field.
 	controlobjective.DefaultTags = controlobjectiveDescTags.Default.([]string)
 	// controlobjectiveDescOwnerID is the schema descriptor for owner_id field.
-	controlobjectiveDescOwnerID := controlobjectiveMixinFields4[0].Descriptor()
+	controlobjectiveDescOwnerID := controlobjectiveMixinFields5[0].Descriptor()
 	// controlobjective.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	controlobjective.OwnerIDValidator = controlobjectiveDescOwnerID.Validators[0].(func(string) error)
 	// controlobjectiveDescName is the schema descriptor for name field.
@@ -581,7 +653,7 @@ func init() {
 	// controlobjective.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	controlobjective.NameValidator = controlobjectiveDescName.Validators[0].(func(string) error)
 	// controlobjectiveDescID is the schema descriptor for id field.
-	controlobjectiveDescID := controlobjectiveMixinFields2[0].Descriptor()
+	controlobjectiveDescID := controlobjectiveMixinFields3[0].Descriptor()
 	// controlobjective.DefaultID holds the default value on creation for the id field.
 	controlobjective.DefaultID = controlobjectiveDescID.Default.(func() string)
 	controlobjectivehistoryInters := schema.ControlObjectiveHistory{}.Interceptors()
@@ -602,12 +674,16 @@ func init() {
 	controlobjectivehistory.DefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.Default.(func() time.Time)
 	// controlobjectivehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	controlobjectivehistory.UpdateDefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlobjectivehistoryDescRevision is the schema descriptor for revision field.
+	controlobjectivehistoryDescRevision := controlobjectivehistoryFields[9].Descriptor()
+	// controlobjectivehistory.DefaultRevision holds the default value on creation for the revision field.
+	controlobjectivehistory.DefaultRevision = controlobjectivehistoryDescRevision.Default.(string)
 	// controlobjectivehistoryDescTags is the schema descriptor for tags field.
-	controlobjectivehistoryDescTags := controlobjectivehistoryFields[11].Descriptor()
+	controlobjectivehistoryDescTags := controlobjectivehistoryFields[12].Descriptor()
 	// controlobjectivehistory.DefaultTags holds the default value on creation for the tags field.
 	controlobjectivehistory.DefaultTags = controlobjectivehistoryDescTags.Default.([]string)
 	// controlobjectivehistoryDescID is the schema descriptor for id field.
-	controlobjectivehistoryDescID := controlobjectivehistoryFields[9].Descriptor()
+	controlobjectivehistoryDescID := controlobjectivehistoryFields[10].Descriptor()
 	// controlobjectivehistory.DefaultID holds the default value on creation for the id field.
 	controlobjectivehistory.DefaultID = controlobjectivehistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
@@ -1696,17 +1772,18 @@ func init() {
 		})
 	}
 	internalpolicyMixinHooks0 := internalpolicyMixin[0].Hooks()
-	internalpolicyMixinHooks1 := internalpolicyMixin[1].Hooks()
 	internalpolicyMixinHooks2 := internalpolicyMixin[2].Hooks()
+	internalpolicyMixinHooks3 := internalpolicyMixin[3].Hooks()
 	internalpolicyMixinHooks4 := internalpolicyMixin[4].Hooks()
 	internalpolicyMixinHooks5 := internalpolicyMixin[5].Hooks()
+	internalpolicyMixinHooks7 := internalpolicyMixin[7].Hooks()
 	internalpolicyHooks := schema.InternalPolicy{}.Hooks()
 
 	internalpolicy.Hooks[1] = internalpolicyMixinHooks0[0]
 
-	internalpolicy.Hooks[2] = internalpolicyMixinHooks1[0]
+	internalpolicy.Hooks[2] = internalpolicyMixinHooks2[0]
 
-	internalpolicy.Hooks[3] = internalpolicyMixinHooks2[0]
+	internalpolicy.Hooks[3] = internalpolicyMixinHooks3[0]
 
 	internalpolicy.Hooks[4] = internalpolicyMixinHooks4[0]
 
@@ -1714,21 +1791,27 @@ func init() {
 
 	internalpolicy.Hooks[6] = internalpolicyMixinHooks5[1]
 
-	internalpolicy.Hooks[7] = internalpolicyHooks[0]
-	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
+	internalpolicy.Hooks[7] = internalpolicyMixinHooks7[0]
+
+	internalpolicy.Hooks[8] = internalpolicyHooks[0]
+	internalpolicyMixinInters2 := internalpolicyMixin[2].Interceptors()
 	internalpolicyMixinInters4 := internalpolicyMixin[4].Interceptors()
 	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
-	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
+	internalpolicy.Interceptors[0] = internalpolicyMixinInters2[0]
 	internalpolicy.Interceptors[1] = internalpolicyMixinInters4[0]
 	internalpolicy.Interceptors[2] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
-	internalpolicyMixinFields2 := internalpolicyMixin[2].Fields()
-	_ = internalpolicyMixinFields2
+	internalpolicyMixinFields1 := internalpolicyMixin[1].Fields()
+	_ = internalpolicyMixinFields1
 	internalpolicyMixinFields3 := internalpolicyMixin[3].Fields()
 	_ = internalpolicyMixinFields3
 	internalpolicyMixinFields4 := internalpolicyMixin[4].Fields()
 	_ = internalpolicyMixinFields4
+	internalpolicyMixinFields6 := internalpolicyMixin[6].Fields()
+	_ = internalpolicyMixinFields6
+	internalpolicyMixinFields7 := internalpolicyMixin[7].Fields()
+	_ = internalpolicyMixinFields7
 	internalpolicyFields := schema.InternalPolicy{}.Fields()
 	_ = internalpolicyFields
 	// internalpolicyDescCreatedAt is the schema descriptor for created_at field.
@@ -1741,28 +1824,38 @@ func init() {
 	internalpolicy.DefaultUpdatedAt = internalpolicyDescUpdatedAt.Default.(func() time.Time)
 	// internalpolicy.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	internalpolicy.UpdateDefaultUpdatedAt = internalpolicyDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// internalpolicyDescDisplayID is the schema descriptor for display_id field.
-	internalpolicyDescDisplayID := internalpolicyMixinFields2[1].Descriptor()
-	// internalpolicy.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	internalpolicy.DisplayIDValidator = internalpolicyDescDisplayID.Validators[0].(func(string) error)
 	// internalpolicyDescTags is the schema descriptor for tags field.
-	internalpolicyDescTags := internalpolicyMixinFields3[0].Descriptor()
+	internalpolicyDescTags := internalpolicyMixinFields1[0].Descriptor()
 	// internalpolicy.DefaultTags holds the default value on creation for the tags field.
 	internalpolicy.DefaultTags = internalpolicyDescTags.Default.([]string)
+	// internalpolicyDescDisplayID is the schema descriptor for display_id field.
+	internalpolicyDescDisplayID := internalpolicyMixinFields3[1].Descriptor()
+	// internalpolicy.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	internalpolicy.DisplayIDValidator = internalpolicyDescDisplayID.Validators[0].(func(string) error)
 	// internalpolicyDescOwnerID is the schema descriptor for owner_id field.
 	internalpolicyDescOwnerID := internalpolicyMixinFields4[0].Descriptor()
 	// internalpolicy.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	internalpolicy.OwnerIDValidator = internalpolicyDescOwnerID.Validators[0].(func(string) error)
 	// internalpolicyDescName is the schema descriptor for name field.
-	internalpolicyDescName := internalpolicyFields[0].Descriptor()
+	internalpolicyDescName := internalpolicyMixinFields6[0].Descriptor()
 	// internalpolicy.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	internalpolicy.NameValidator = internalpolicyDescName.Validators[0].(func(string) error)
+	// internalpolicyDescApprovalRequired is the schema descriptor for approval_required field.
+	internalpolicyDescApprovalRequired := internalpolicyMixinFields6[4].Descriptor()
+	// internalpolicy.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	internalpolicy.DefaultApprovalRequired = internalpolicyDescApprovalRequired.Default.(bool)
 	// internalpolicyDescReviewDue is the schema descriptor for review_due field.
-	internalpolicyDescReviewDue := internalpolicyFields[3].Descriptor()
+	internalpolicyDescReviewDue := internalpolicyMixinFields6[5].Descriptor()
 	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
+	// internalpolicyDescRevision is the schema descriptor for revision field.
+	internalpolicyDescRevision := internalpolicyMixinFields7[0].Descriptor()
+	// internalpolicy.DefaultRevision holds the default value on creation for the revision field.
+	internalpolicy.DefaultRevision = internalpolicyDescRevision.Default.(string)
+	// internalpolicy.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	internalpolicy.RevisionValidator = internalpolicyDescRevision.Validators[0].(func(string) error)
 	// internalpolicyDescID is the schema descriptor for id field.
-	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
+	internalpolicyDescID := internalpolicyMixinFields3[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
 	internalpolicy.DefaultID = internalpolicyDescID.Default.(func() string)
 	internalpolicyhistoryInters := schema.InternalPolicyHistory{}.Interceptors()
@@ -1784,15 +1877,23 @@ func init() {
 	// internalpolicyhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	internalpolicyhistory.UpdateDefaultUpdatedAt = internalpolicyhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// internalpolicyhistoryDescTags is the schema descriptor for tags field.
-	internalpolicyhistoryDescTags := internalpolicyhistoryFields[11].Descriptor()
+	internalpolicyhistoryDescTags := internalpolicyhistoryFields[7].Descriptor()
 	// internalpolicyhistory.DefaultTags holds the default value on creation for the tags field.
 	internalpolicyhistory.DefaultTags = internalpolicyhistoryDescTags.Default.([]string)
+	// internalpolicyhistoryDescApprovalRequired is the schema descriptor for approval_required field.
+	internalpolicyhistoryDescApprovalRequired := internalpolicyhistoryFields[17].Descriptor()
+	// internalpolicyhistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	internalpolicyhistory.DefaultApprovalRequired = internalpolicyhistoryDescApprovalRequired.Default.(bool)
 	// internalpolicyhistoryDescReviewDue is the schema descriptor for review_due field.
-	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[16].Descriptor()
+	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[18].Descriptor()
 	// internalpolicyhistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(time.Time)
+	// internalpolicyhistoryDescRevision is the schema descriptor for revision field.
+	internalpolicyhistoryDescRevision := internalpolicyhistoryFields[20].Descriptor()
+	// internalpolicyhistory.DefaultRevision holds the default value on creation for the revision field.
+	internalpolicyhistory.DefaultRevision = internalpolicyhistoryDescRevision.Default.(string)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
-	internalpolicyhistoryDescID := internalpolicyhistoryFields[9].Descriptor()
+	internalpolicyhistoryDescID := internalpolicyhistoryFields[10].Descriptor()
 	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
 	internalpolicyhistory.DefaultID = internalpolicyhistoryDescID.Default.(func() string)
 	inviteMixin := schema.Invite{}.Mixin()
@@ -2748,17 +2849,18 @@ func init() {
 		})
 	}
 	procedureMixinHooks0 := procedureMixin[0].Hooks()
-	procedureMixinHooks1 := procedureMixin[1].Hooks()
 	procedureMixinHooks2 := procedureMixin[2].Hooks()
+	procedureMixinHooks3 := procedureMixin[3].Hooks()
 	procedureMixinHooks4 := procedureMixin[4].Hooks()
 	procedureMixinHooks5 := procedureMixin[5].Hooks()
+	procedureMixinHooks7 := procedureMixin[7].Hooks()
 	procedureHooks := schema.Procedure{}.Hooks()
 
 	procedure.Hooks[1] = procedureMixinHooks0[0]
 
-	procedure.Hooks[2] = procedureMixinHooks1[0]
+	procedure.Hooks[2] = procedureMixinHooks2[0]
 
-	procedure.Hooks[3] = procedureMixinHooks2[0]
+	procedure.Hooks[3] = procedureMixinHooks3[0]
 
 	procedure.Hooks[4] = procedureMixinHooks4[0]
 
@@ -2766,21 +2868,27 @@ func init() {
 
 	procedure.Hooks[6] = procedureMixinHooks5[1]
 
-	procedure.Hooks[7] = procedureHooks[0]
-	procedureMixinInters1 := procedureMixin[1].Interceptors()
+	procedure.Hooks[7] = procedureMixinHooks7[0]
+
+	procedure.Hooks[8] = procedureHooks[0]
+	procedureMixinInters2 := procedureMixin[2].Interceptors()
 	procedureMixinInters4 := procedureMixin[4].Interceptors()
 	procedureInters := schema.Procedure{}.Interceptors()
-	procedure.Interceptors[0] = procedureMixinInters1[0]
+	procedure.Interceptors[0] = procedureMixinInters2[0]
 	procedure.Interceptors[1] = procedureMixinInters4[0]
 	procedure.Interceptors[2] = procedureInters[0]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
-	procedureMixinFields2 := procedureMixin[2].Fields()
-	_ = procedureMixinFields2
+	procedureMixinFields1 := procedureMixin[1].Fields()
+	_ = procedureMixinFields1
 	procedureMixinFields3 := procedureMixin[3].Fields()
 	_ = procedureMixinFields3
 	procedureMixinFields4 := procedureMixin[4].Fields()
 	_ = procedureMixinFields4
+	procedureMixinFields6 := procedureMixin[6].Fields()
+	_ = procedureMixinFields6
+	procedureMixinFields7 := procedureMixin[7].Fields()
+	_ = procedureMixinFields7
 	procedureFields := schema.Procedure{}.Fields()
 	_ = procedureFields
 	// procedureDescCreatedAt is the schema descriptor for created_at field.
@@ -2793,28 +2901,38 @@ func init() {
 	procedure.DefaultUpdatedAt = procedureDescUpdatedAt.Default.(func() time.Time)
 	// procedure.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	procedure.UpdateDefaultUpdatedAt = procedureDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// procedureDescDisplayID is the schema descriptor for display_id field.
-	procedureDescDisplayID := procedureMixinFields2[1].Descriptor()
-	// procedure.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	procedure.DisplayIDValidator = procedureDescDisplayID.Validators[0].(func(string) error)
 	// procedureDescTags is the schema descriptor for tags field.
-	procedureDescTags := procedureMixinFields3[0].Descriptor()
+	procedureDescTags := procedureMixinFields1[0].Descriptor()
 	// procedure.DefaultTags holds the default value on creation for the tags field.
 	procedure.DefaultTags = procedureDescTags.Default.([]string)
+	// procedureDescDisplayID is the schema descriptor for display_id field.
+	procedureDescDisplayID := procedureMixinFields3[1].Descriptor()
+	// procedure.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	procedure.DisplayIDValidator = procedureDescDisplayID.Validators[0].(func(string) error)
 	// procedureDescOwnerID is the schema descriptor for owner_id field.
 	procedureDescOwnerID := procedureMixinFields4[0].Descriptor()
 	// procedure.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	procedure.OwnerIDValidator = procedureDescOwnerID.Validators[0].(func(string) error)
 	// procedureDescName is the schema descriptor for name field.
-	procedureDescName := procedureFields[0].Descriptor()
+	procedureDescName := procedureMixinFields6[0].Descriptor()
 	// procedure.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	procedure.NameValidator = procedureDescName.Validators[0].(func(string) error)
+	// procedureDescApprovalRequired is the schema descriptor for approval_required field.
+	procedureDescApprovalRequired := procedureMixinFields6[4].Descriptor()
+	// procedure.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	procedure.DefaultApprovalRequired = procedureDescApprovalRequired.Default.(bool)
 	// procedureDescReviewDue is the schema descriptor for review_due field.
-	procedureDescReviewDue := procedureFields[4].Descriptor()
+	procedureDescReviewDue := procedureMixinFields6[5].Descriptor()
 	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
+	// procedureDescRevision is the schema descriptor for revision field.
+	procedureDescRevision := procedureMixinFields7[0].Descriptor()
+	// procedure.DefaultRevision holds the default value on creation for the revision field.
+	procedure.DefaultRevision = procedureDescRevision.Default.(string)
+	// procedure.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	procedure.RevisionValidator = procedureDescRevision.Validators[0].(func(string) error)
 	// procedureDescID is the schema descriptor for id field.
-	procedureDescID := procedureMixinFields2[0].Descriptor()
+	procedureDescID := procedureMixinFields3[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
 	procedure.DefaultID = procedureDescID.Default.(func() string)
 	procedurehistoryInters := schema.ProcedureHistory{}.Interceptors()
@@ -2836,15 +2954,23 @@ func init() {
 	// procedurehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	procedurehistory.UpdateDefaultUpdatedAt = procedurehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// procedurehistoryDescTags is the schema descriptor for tags field.
-	procedurehistoryDescTags := procedurehistoryFields[11].Descriptor()
+	procedurehistoryDescTags := procedurehistoryFields[7].Descriptor()
 	// procedurehistory.DefaultTags holds the default value on creation for the tags field.
 	procedurehistory.DefaultTags = procedurehistoryDescTags.Default.([]string)
+	// procedurehistoryDescApprovalRequired is the schema descriptor for approval_required field.
+	procedurehistoryDescApprovalRequired := procedurehistoryFields[17].Descriptor()
+	// procedurehistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	procedurehistory.DefaultApprovalRequired = procedurehistoryDescApprovalRequired.Default.(bool)
 	// procedurehistoryDescReviewDue is the schema descriptor for review_due field.
-	procedurehistoryDescReviewDue := procedurehistoryFields[17].Descriptor()
+	procedurehistoryDescReviewDue := procedurehistoryFields[18].Descriptor()
 	// procedurehistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(time.Time)
+	// procedurehistoryDescRevision is the schema descriptor for revision field.
+	procedurehistoryDescRevision := procedurehistoryFields[20].Descriptor()
+	// procedurehistory.DefaultRevision holds the default value on creation for the revision field.
+	procedurehistory.DefaultRevision = procedurehistoryDescRevision.Default.(string)
 	// procedurehistoryDescID is the schema descriptor for id field.
-	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
+	procedurehistoryDescID := procedurehistoryFields[10].Descriptor()
 	// procedurehistory.DefaultID holds the default value on creation for the id field.
 	procedurehistory.DefaultID = procedurehistoryDescID.Default.(func() string)
 	programMixin := schema.Program{}.Mixin()
@@ -3158,6 +3284,7 @@ func init() {
 	standardMixinHooks0 := standardMixin[0].Hooks()
 	standardMixinHooks1 := standardMixin[1].Hooks()
 	standardMixinHooks4 := standardMixin[4].Hooks()
+	standardMixinHooks5 := standardMixin[5].Hooks()
 	standardHooks := schema.Standard{}.Hooks()
 
 	standard.Hooks[1] = standardMixinHooks0[0]
@@ -3166,12 +3293,14 @@ func init() {
 
 	standard.Hooks[3] = standardMixinHooks4[0]
 
-	standard.Hooks[4] = standardHooks[0]
+	standard.Hooks[4] = standardMixinHooks5[0]
+
+	standard.Hooks[5] = standardHooks[0]
 	standardMixinInters1 := standardMixin[1].Interceptors()
-	standardMixinInters4 := standardMixin[4].Interceptors()
+	standardMixinInters5 := standardMixin[5].Interceptors()
 	standardInters := schema.Standard{}.Interceptors()
 	standard.Interceptors[0] = standardMixinInters1[0]
-	standard.Interceptors[1] = standardMixinInters4[0]
+	standard.Interceptors[1] = standardMixinInters5[0]
 	standard.Interceptors[2] = standardInters[0]
 	standardMixinFields0 := standardMixin[0].Fields()
 	_ = standardMixinFields0
@@ -3179,6 +3308,8 @@ func init() {
 	_ = standardMixinFields2
 	standardMixinFields3 := standardMixin[3].Fields()
 	_ = standardMixinFields3
+	standardMixinFields4 := standardMixin[4].Fields()
+	_ = standardMixinFields4
 	standardFields := schema.Standard{}.Fields()
 	_ = standardFields
 	// standardDescCreatedAt is the schema descriptor for created_at field.
@@ -3195,20 +3326,44 @@ func init() {
 	standardDescTags := standardMixinFields3[0].Descriptor()
 	// standard.DefaultTags holds the default value on creation for the tags field.
 	standard.DefaultTags = standardDescTags.Default.([]string)
+	// standardDescRevision is the schema descriptor for revision field.
+	standardDescRevision := standardMixinFields4[0].Descriptor()
+	// standard.DefaultRevision holds the default value on creation for the revision field.
+	standard.DefaultRevision = standardDescRevision.Default.(string)
+	// standard.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	standard.RevisionValidator = standardDescRevision.Validators[0].(func(string) error)
 	// standardDescName is the schema descriptor for name field.
 	standardDescName := standardFields[0].Descriptor()
 	// standard.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	standard.NameValidator = standardDescName.Validators[0].(func(string) error)
+	// standardDescGoverningBodyLogoURL is the schema descriptor for governing_body_logo_url field.
+	standardDescGoverningBodyLogoURL := standardFields[4].Descriptor()
+	// standard.GoverningBodyLogoURLValidator is a validator for the "governing_body_logo_url" field. It is called by the builders before save.
+	standard.GoverningBodyLogoURLValidator = func() func(string) error {
+		validators := standardDescGoverningBodyLogoURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(governing_body_logo_url string) error {
+			for _, fn := range fns {
+				if err := fn(governing_body_logo_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// standardDescIsPublic is the schema descriptor for is_public field.
-	standardDescIsPublic := standardFields[8].Descriptor()
+	standardDescIsPublic := standardFields[9].Descriptor()
 	// standard.DefaultIsPublic holds the default value on creation for the is_public field.
 	standard.DefaultIsPublic = standardDescIsPublic.Default.(bool)
 	// standardDescFreeToUse is the schema descriptor for free_to_use field.
-	standardDescFreeToUse := standardFields[9].Descriptor()
+	standardDescFreeToUse := standardFields[10].Descriptor()
 	// standard.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standard.DefaultFreeToUse = standardDescFreeToUse.Default.(bool)
 	// standardDescSystemOwned is the schema descriptor for system_owned field.
-	standardDescSystemOwned := standardFields[10].Descriptor()
+	standardDescSystemOwned := standardFields[11].Descriptor()
 	// standard.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	standard.DefaultSystemOwned = standardDescSystemOwned.Default.(bool)
 	// standardDescID is the schema descriptor for id field.
@@ -3237,16 +3392,20 @@ func init() {
 	standardhistoryDescTags := standardhistoryFields[10].Descriptor()
 	// standardhistory.DefaultTags holds the default value on creation for the tags field.
 	standardhistory.DefaultTags = standardhistoryDescTags.Default.([]string)
+	// standardhistoryDescRevision is the schema descriptor for revision field.
+	standardhistoryDescRevision := standardhistoryFields[11].Descriptor()
+	// standardhistory.DefaultRevision holds the default value on creation for the revision field.
+	standardhistory.DefaultRevision = standardhistoryDescRevision.Default.(string)
 	// standardhistoryDescIsPublic is the schema descriptor for is_public field.
-	standardhistoryDescIsPublic := standardhistoryFields[20].Descriptor()
+	standardhistoryDescIsPublic := standardhistoryFields[22].Descriptor()
 	// standardhistory.DefaultIsPublic holds the default value on creation for the is_public field.
 	standardhistory.DefaultIsPublic = standardhistoryDescIsPublic.Default.(bool)
 	// standardhistoryDescFreeToUse is the schema descriptor for free_to_use field.
-	standardhistoryDescFreeToUse := standardhistoryFields[21].Descriptor()
+	standardhistoryDescFreeToUse := standardhistoryFields[23].Descriptor()
 	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
 	// standardhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	standardhistoryDescSystemOwned := standardhistoryFields[22].Descriptor()
+	standardhistoryDescSystemOwned := standardhistoryFields[24].Descriptor()
 	// standardhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	standardhistory.DefaultSystemOwned = standardhistoryDescSystemOwned.Default.(bool)
 	// standardhistoryDescID is the schema descriptor for id field.

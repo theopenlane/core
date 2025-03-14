@@ -10,8 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // InternalPolicy is the model entity for the InternalPolicy schema.
@@ -27,38 +29,38 @@ type InternalPolicy struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the policy
 	Name string `json:"name,omitempty"`
-	// description of the policy
-	Description string `json:"description,omitempty"`
-	// status of the policy
-	Status string `json:"status,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue time.Time `json:"review_due,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType string `json:"policy_type,omitempty"`
-	// version of the policy
-	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the policy
-	Background string `json:"background,omitempty"`
-	// json data for the policy document
-	Details map[string]interface{} `json:"details,omitempty"`
+	// details of the policy
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue time.Time `json:"review_due,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                        InternalPolicyEdges `json:"edges"`
 	control_internal_policies    *string
+	internal_policy_approver     *string
+	internal_policy_delegate     *string
 	subcontrol_internal_policies *string
 	selectValues                 sql.SelectValues
 }
@@ -71,6 +73,10 @@ type InternalPolicyEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
+	// the group of users who are responsible for approving the policy
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the policy, used for temporary approval
+	Delegate *Group `json:"delegate,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -85,9 +91,9 @@ type InternalPolicyEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [11]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -128,10 +134,32 @@ func (e InternalPolicyEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
+// ApproverOrErr returns the Approver value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) ApproverOrErr() (*Group, error) {
+	if e.Approver != nil {
+		return e.Approver, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "approver"}
+}
+
+// DelegateOrErr returns the Delegate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) DelegateOrErr() (*Group, error) {
+	if e.Delegate != nil {
+		return e.Delegate, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate"}
+}
+
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -140,7 +168,7 @@ func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, erro
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -149,7 +177,7 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -158,7 +186,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -167,7 +195,7 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -176,7 +204,7 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -187,15 +215,21 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags, internalpolicy.FieldDetails:
+		case internalpolicy.FieldTags:
 			values[i] = new([]byte)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
+		case internalpolicy.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldRevision:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case internalpolicy.ForeignKeys[0]: // control_internal_policies
 			values[i] = new(sql.NullString)
-		case internalpolicy.ForeignKeys[1]: // subcontrol_internal_policies
+		case internalpolicy.ForeignKeys[1]: // internal_policy_approver
+			values[i] = new(sql.NullString)
+		case internalpolicy.ForeignKeys[2]: // internal_policy_delegate
+			values[i] = new(sql.NullString)
+		case internalpolicy.ForeignKeys[3]: // subcontrol_internal_policies
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -242,6 +276,14 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.UpdatedBy = value.String
 			}
+		case internalpolicy.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
 		case internalpolicy.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -260,14 +302,6 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.DisplayID = value.String
 			}
-		case internalpolicy.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case internalpolicy.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -280,23 +314,11 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.Name = value.String
 			}
-		case internalpolicy.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				ip.Description = value.String
-			}
 		case internalpolicy.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ip.Status = value.String
-			}
-		case internalpolicy.FieldReviewDue:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field review_due", values[i])
-			} else if value.Valid {
-				ip.ReviewDue = value.Time
+				ip.Status = enums.DocumentStatus(value.String)
 			}
 		case internalpolicy.FieldPolicyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -304,31 +326,35 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.PolicyType = value.String
 			}
-		case internalpolicy.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				ip.Version = value.String
-			}
-		case internalpolicy.FieldPurposeAndScope:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
-			} else if value.Valid {
-				ip.PurposeAndScope = value.String
-			}
-		case internalpolicy.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				ip.Background = value.String
-			}
 		case internalpolicy.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				ip.Details = value.String
+			}
+		case internalpolicy.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				ip.ApprovalRequired = value.Bool
+			}
+		case internalpolicy.FieldReviewDue:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field review_due", values[i])
+			} else if value.Valid {
+				ip.ReviewDue = value.Time
+			}
+		case internalpolicy.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				ip.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case internalpolicy.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				ip.Revision = value.String
 			}
 		case internalpolicy.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -338,6 +364,20 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				*ip.control_internal_policies = value.String
 			}
 		case internalpolicy.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_approver", values[i])
+			} else if value.Valid {
+				ip.internal_policy_approver = new(string)
+				*ip.internal_policy_approver = value.String
+			}
+		case internalpolicy.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_delegate", values[i])
+			} else if value.Valid {
+				ip.internal_policy_delegate = new(string)
+				*ip.internal_policy_delegate = value.String
+			}
+		case internalpolicy.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_internal_policies", values[i])
 			} else if value.Valid {
@@ -370,6 +410,16 @@ func (ip *InternalPolicy) QueryBlockedGroups() *GroupQuery {
 // QueryEditors queries the "editors" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryEditors() *GroupQuery {
 	return NewInternalPolicyClient(ip.config).QueryEditors(ip)
+}
+
+// QueryApprover queries the "approver" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryApprover() *GroupQuery {
+	return NewInternalPolicyClient(ip.config).QueryApprover(ip)
+}
+
+// QueryDelegate queries the "delegate" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryDelegate() *GroupQuery {
+	return NewInternalPolicyClient(ip.config).QueryDelegate(ip)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the InternalPolicy entity.
@@ -437,6 +487,9 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ip.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
+	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ip.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -446,38 +499,32 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(ip.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ip.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ip.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(ip.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(ip.Status)
-	builder.WriteString(", ")
-	builder.WriteString("review_due=")
-	builder.WriteString(ip.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ip.Status))
 	builder.WriteString(", ")
 	builder.WriteString("policy_type=")
 	builder.WriteString(ip.PolicyType)
 	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(ip.Version)
-	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(ip.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(ip.Background)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Details))
+	builder.WriteString(ip.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", ip.ApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("review_due=")
+	builder.WriteString(ip.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", ip.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(ip.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

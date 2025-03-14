@@ -105,3 +105,6 @@ models:
   ExampleEvidence:
     model:
       - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  VersionBump:
+    model:
+      - github.com/theopenlane/core/pkg/models.VersionBump

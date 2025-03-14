@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -146,15 +147,15 @@ func (cihc *ControlImplementationHistoryCreate) SetTags(s []string) *ControlImpl
 }
 
 // SetStatus sets the "status" field.
-func (cihc *ControlImplementationHistoryCreate) SetStatus(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetStatus(s)
+func (cihc *ControlImplementationHistoryCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryCreate {
+	cihc.mutation.SetStatus(es)
 	return cihc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableStatus(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetStatus(*s)
+func (cihc *ControlImplementationHistoryCreate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryCreate {
+	if es != nil {
+		cihc.SetStatus(*es)
 	}
 	return cihc
 }
@@ -280,6 +281,10 @@ func (cihc *ControlImplementationHistoryCreate) defaults() {
 		v := controlimplementationhistory.DefaultTags
 		cihc.mutation.SetTags(v)
 	}
+	if _, ok := cihc.mutation.Status(); !ok {
+		v := controlimplementationhistory.DefaultStatus
+		cihc.mutation.SetStatus(v)
+	}
 	if _, ok := cihc.mutation.ID(); !ok {
 		v := controlimplementationhistory.DefaultID()
 		cihc.mutation.SetID(v)
@@ -297,6 +302,11 @@ func (cihc *ControlImplementationHistoryCreate) check() error {
 	if v, ok := cihc.mutation.Operation(); ok {
 		if err := controlimplementationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.operation": %w`, err)}
+		}
+	}
+	if v, ok := cihc.mutation.Status(); ok {
+		if err := controlimplementationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
 		}
 	}
 	return nil
@@ -376,7 +386,7 @@ func (cihc *ControlImplementationHistoryCreate) createSpec() (*ControlImplementa
 		_node.Tags = value
 	}
 	if value, ok := cihc.mutation.Status(); ok {
-		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := cihc.mutation.ImplementationDate(); ok {

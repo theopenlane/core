@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ControlObjective_displayID(ctx, field)
 			case "tags":
@@ -95,8 +97,6 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
-			case "version":
-				return ec.fieldContext_ControlObjective_version(ctx, field)
 			case "category":
 				return ec.fieldContext_ControlObjective_category(ctx, field)
 			case "subcategory":
@@ -187,6 +187,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ControlObjective_displayID(ctx, field)
 			case "tags":
@@ -203,8 +205,6 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
-			case "version":
-				return ec.fieldContext_ControlObjective_version(ctx, field)
 			case "category":
 				return ec.fieldContext_ControlObjective_category(ctx, field)
 			case "subcategory":
@@ -339,6 +339,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ControlObjective_displayID(ctx, field)
 			case "tags":
@@ -355,8 +357,6 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_source(ctx, field)
 			case "controlObjectiveType":
 				return ec.fieldContext_ControlObjective_controlObjectiveType(ctx, field)
-			case "version":
-				return ec.fieldContext_ControlObjective_version(ctx, field)
 			case "category":
 				return ec.fieldContext_ControlObjective_category(ctx, field)
 			case "subcategory":

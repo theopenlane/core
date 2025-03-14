@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -39,8 +40,8 @@ type ControlImplementationHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// status of the control implementation
-	Status string `json:"status,omitempty"`
+	// status of the %s, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
 	ImplementationDate time.Time `json:"implementation_date,omitempty"`
 	// set to true if the control implementation has been verified
@@ -154,7 +155,7 @@ func (cih *ControlImplementationHistory) assignValues(columns []string, values [
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				cih.Status = value.String
+				cih.Status = enums.DocumentStatus(value.String)
 			}
 		case controlimplementationhistory.FieldImplementationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -247,7 +248,7 @@ func (cih *ControlImplementationHistory) String() string {
 	builder.WriteString(fmt.Sprintf("%v", cih.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(cih.Status)
+	builder.WriteString(fmt.Sprintf("%v", cih.Status))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_date=")
 	builder.WriteString(cih.ImplementationDate.Format(time.ANSIC))

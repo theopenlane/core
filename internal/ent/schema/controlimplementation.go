@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/enums"
 	emixin "github.com/theopenlane/entx/mixin"
 )
 
@@ -21,9 +22,11 @@ type ControlImplementation struct {
 // Fields of the ControlImplementation
 func (ControlImplementation) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("status").
+		field.Enum("status").
+			GoType(enums.DocumentStatus("")).
+			Default(enums.DocumentDraft.String()).
 			Optional().
-			Comment("status of the control implementation"),
+			Comment("status of the %s, e.g. draft, published, archived, etc."),
 		field.Time("implementation_date").
 			Optional().
 			Comment("date the control was implemented"),

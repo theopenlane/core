@@ -1,12 +1,15 @@
+
+
 query GetAllRiskHistories {
   riskHistories {
     edges {
       node {
         businessCosts
+        category
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         impact
@@ -14,9 +17,10 @@ query GetAllRiskHistories {
         mitigation
         name
         operation
+        ownerID
         ref
         riskType
-        satisfies
+        score
         status
         tags
         updatedAt
@@ -31,10 +35,11 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
     edges {
       node {
         businessCosts
+        category
         createdAt
         createdBy
-        description
         details
+        displayID
         historyTime
         id
         impact
@@ -42,9 +47,10 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
         mitigation
         name
         operation
+        ownerID
         ref
         riskType
-        satisfies
+        score
         status
         tags
         updatedAt

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -151,30 +152,114 @@ func (aphc *ActionPlanHistoryCreate) SetName(s string) *ActionPlanHistoryCreate 
 	return aphc
 }
 
-// SetDescription sets the "description" field.
-func (aphc *ActionPlanHistoryCreate) SetDescription(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetDescription(s)
-	return aphc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableDescription(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetDescription(*s)
-	}
-	return aphc
-}
-
 // SetStatus sets the "status" field.
-func (aphc *ActionPlanHistoryCreate) SetStatus(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetStatus(s)
+func (aphc *ActionPlanHistoryCreate) SetStatus(es enums.DocumentStatus) *ActionPlanHistoryCreate {
+	aphc.mutation.SetStatus(es)
 	return aphc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableStatus(s *string) *ActionPlanHistoryCreate {
+func (aphc *ActionPlanHistoryCreate) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanHistoryCreate {
+	if es != nil {
+		aphc.SetStatus(*es)
+	}
+	return aphc
+}
+
+// SetActionPlanType sets the "action_plan_type" field.
+func (aphc *ActionPlanHistoryCreate) SetActionPlanType(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetActionPlanType(s)
+	return aphc
+}
+
+// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableActionPlanType(s *string) *ActionPlanHistoryCreate {
 	if s != nil {
-		aphc.SetStatus(*s)
+		aphc.SetActionPlanType(*s)
+	}
+	return aphc
+}
+
+// SetDetails sets the "details" field.
+func (aphc *ActionPlanHistoryCreate) SetDetails(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDetails(s)
+	return aphc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableDetails(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetDetails(*s)
+	}
+	return aphc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (aphc *ActionPlanHistoryCreate) SetApprovalRequired(b bool) *ActionPlanHistoryCreate {
+	aphc.mutation.SetApprovalRequired(b)
+	return aphc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableApprovalRequired(b *bool) *ActionPlanHistoryCreate {
+	if b != nil {
+		aphc.SetApprovalRequired(*b)
+	}
+	return aphc
+}
+
+// SetReviewDue sets the "review_due" field.
+func (aphc *ActionPlanHistoryCreate) SetReviewDue(t time.Time) *ActionPlanHistoryCreate {
+	aphc.mutation.SetReviewDue(t)
+	return aphc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableReviewDue(t *time.Time) *ActionPlanHistoryCreate {
+	if t != nil {
+		aphc.SetReviewDue(*t)
+	}
+	return aphc
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (aphc *ActionPlanHistoryCreate) SetReviewFrequency(e enums.Frequency) *ActionPlanHistoryCreate {
+	aphc.mutation.SetReviewFrequency(e)
+	return aphc
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanHistoryCreate {
+	if e != nil {
+		aphc.SetReviewFrequency(*e)
+	}
+	return aphc
+}
+
+// SetRevision sets the "revision" field.
+func (aphc *ActionPlanHistoryCreate) SetRevision(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetRevision(s)
+	return aphc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableRevision(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetRevision(*s)
+	}
+	return aphc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (aphc *ActionPlanHistoryCreate) SetOwnerID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetOwnerID(s)
+	return aphc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableOwnerID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetOwnerID(*s)
 	}
 	return aphc
 }
@@ -194,15 +279,15 @@ func (aphc *ActionPlanHistoryCreate) SetNillableDueDate(t *time.Time) *ActionPla
 }
 
 // SetPriority sets the "priority" field.
-func (aphc *ActionPlanHistoryCreate) SetPriority(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetPriority(s)
+func (aphc *ActionPlanHistoryCreate) SetPriority(e enums.Priority) *ActionPlanHistoryCreate {
+	aphc.mutation.SetPriority(e)
 	return aphc
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillablePriority(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetPriority(*s)
+func (aphc *ActionPlanHistoryCreate) SetNillablePriority(e *enums.Priority) *ActionPlanHistoryCreate {
+	if e != nil {
+		aphc.SetPriority(*e)
 	}
 	return aphc
 }
@@ -218,12 +303,6 @@ func (aphc *ActionPlanHistoryCreate) SetNillableSource(s *string) *ActionPlanHis
 	if s != nil {
 		aphc.SetSource(*s)
 	}
-	return aphc
-}
-
-// SetDetails sets the "details" field.
-func (aphc *ActionPlanHistoryCreate) SetDetails(m map[string]interface{}) *ActionPlanHistoryCreate {
-	aphc.mutation.SetDetails(m)
 	return aphc
 }
 
@@ -292,6 +371,26 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 		v := actionplanhistory.DefaultTags
 		aphc.mutation.SetTags(v)
 	}
+	if _, ok := aphc.mutation.Status(); !ok {
+		v := actionplanhistory.DefaultStatus
+		aphc.mutation.SetStatus(v)
+	}
+	if _, ok := aphc.mutation.ApprovalRequired(); !ok {
+		v := actionplanhistory.DefaultApprovalRequired
+		aphc.mutation.SetApprovalRequired(v)
+	}
+	if _, ok := aphc.mutation.ReviewDue(); !ok {
+		v := actionplanhistory.DefaultReviewDue
+		aphc.mutation.SetReviewDue(v)
+	}
+	if _, ok := aphc.mutation.ReviewFrequency(); !ok {
+		v := actionplanhistory.DefaultReviewFrequency
+		aphc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := aphc.mutation.Revision(); !ok {
+		v := actionplanhistory.DefaultRevision
+		aphc.mutation.SetRevision(v)
+	}
 	if _, ok := aphc.mutation.ID(); !ok {
 		v := actionplanhistory.DefaultID()
 		aphc.mutation.SetID(v)
@@ -313,6 +412,21 @@ func (aphc *ActionPlanHistoryCreate) check() error {
 	}
 	if _, ok := aphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlanHistory.name"`)}
+	}
+	if v, ok := aphc.mutation.Status(); ok {
+		if err := actionplanhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := aphc.mutation.ReviewFrequency(); ok {
+		if err := actionplanhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := aphc.mutation.Priority(); ok {
+		if err := actionplanhistory.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.priority": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -394,29 +508,49 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := aphc.mutation.Description(); ok {
-		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := aphc.mutation.Status(); ok {
-		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := aphc.mutation.ActionPlanType(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanType, field.TypeString, value)
+		_node.ActionPlanType = value
+	}
+	if value, ok := aphc.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
+		_node.Details = value
+	}
+	if value, ok := aphc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(actionplanhistory.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
+	if value, ok := aphc.mutation.ReviewDue(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
+	}
+	if value, ok := aphc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := aphc.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
+	if value, ok := aphc.mutation.OwnerID(); ok {
+		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := aphc.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
 	if value, ok := aphc.mutation.Priority(); ok {
-		_spec.SetField(actionplanhistory.FieldPriority, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 		_node.Priority = value
 	}
 	if value, ok := aphc.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)
 		_node.Source = value
-	}
-	if value, ok := aphc.mutation.Details(); ok {
-		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
 	}
 	return _node, _spec
 }

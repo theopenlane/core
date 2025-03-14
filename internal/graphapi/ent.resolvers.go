@@ -1460,6 +1460,16 @@ func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInpu
 	return &createOrganizationInputResolver{r}
 }
 
+// UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
+func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
+	return &updateActionPlanInputResolver{r}
+}
+
+// UpdateControlObjectiveInput returns gqlgenerated.UpdateControlObjectiveInputResolver implementation.
+func (r *Resolver) UpdateControlObjectiveInput() gqlgenerated.UpdateControlObjectiveInputResolver {
+	return &updateControlObjectiveInputResolver{r}
+}
+
 // UpdateEntityInput returns gqlgenerated.UpdateEntityInputResolver implementation.
 func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 	return &updateEntityInputResolver{r}
@@ -1470,14 +1480,29 @@ func (r *Resolver) UpdateGroupInput() gqlgenerated.UpdateGroupInputResolver {
 	return &updateGroupInputResolver{r}
 }
 
+// UpdateInternalPolicyInput returns gqlgenerated.UpdateInternalPolicyInputResolver implementation.
+func (r *Resolver) UpdateInternalPolicyInput() gqlgenerated.UpdateInternalPolicyInputResolver {
+	return &updateInternalPolicyInputResolver{r}
+}
+
 // UpdateOrganizationInput returns gqlgenerated.UpdateOrganizationInputResolver implementation.
 func (r *Resolver) UpdateOrganizationInput() gqlgenerated.UpdateOrganizationInputResolver {
 	return &updateOrganizationInputResolver{r}
 }
 
+// UpdateProcedureInput returns gqlgenerated.UpdateProcedureInputResolver implementation.
+func (r *Resolver) UpdateProcedureInput() gqlgenerated.UpdateProcedureInputResolver {
+	return &updateProcedureInputResolver{r}
+}
+
 // UpdateProgramInput returns gqlgenerated.UpdateProgramInputResolver implementation.
 func (r *Resolver) UpdateProgramInput() gqlgenerated.UpdateProgramInputResolver {
 	return &updateProgramInputResolver{r}
+}
+
+// UpdateStandardInput returns gqlgenerated.UpdateStandardInputResolver implementation.
+func (r *Resolver) UpdateStandardInput() gqlgenerated.UpdateStandardInputResolver {
+	return &updateStandardInputResolver{r}
 }
 
 // UpdateTFASettingInput returns gqlgenerated.UpdateTFASettingInputResolver implementation.
@@ -1495,9 +1520,14 @@ type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
+type updateActionPlanInputResolver struct{ *Resolver }
+type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
+type updateInternalPolicyInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
+type updateProcedureInputResolver struct{ *Resolver }
 type updateProgramInputResolver struct{ *Resolver }
+type updateStandardInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }

@@ -12,10 +12,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	generated1 "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateActionPlan is the resolver for the createActionPlan field.
 func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*model.ActionPlanCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("organization_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).ActionPlan.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "actionplan"})
@@ -48,6 +56,13 @@ func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, inpu
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request

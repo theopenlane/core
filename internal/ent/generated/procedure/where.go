@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -112,19 +113,19 @@ func Name(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldName, v))
 }
 
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldDescription, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldStatus, v))
-}
-
 // ProcedureType applies equality check predicate on the "procedure_type" field. It's identical to ProcedureTypeEQ.
 func ProcedureType(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldProcedureType, v))
+}
+
+// Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
+func Details(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldDetails, v))
+}
+
+// ApprovalRequired applies equality check predicate on the "approval_required" field. It's identical to ApprovalRequiredEQ.
+func ApprovalRequired(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldApprovalRequired, v))
 }
 
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
@@ -132,24 +133,9 @@ func ReviewDue(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldReviewDue, v))
 }
 
-// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
-func Version(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldVersion, v))
-}
-
-// PurposeAndScope applies equality check predicate on the "purpose_and_scope" field. It's identical to PurposeAndScopeEQ.
-func PurposeAndScope(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldPurposeAndScope, v))
-}
-
-// Background applies equality check predicate on the "background" field. It's identical to BackgroundEQ.
-func Background(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldBackground, v))
-}
-
-// Satisfies applies equality check predicate on the "satisfies" field. It's identical to SatisfiesEQ.
-func Satisfies(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldSatisfies, v))
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -402,6 +388,16 @@ func UpdatedByContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldTags))
+}
+
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDeletedAt, v))
@@ -592,16 +588,6 @@ func DisplayIDContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldOwnerID, v))
@@ -742,134 +728,34 @@ func NameContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldName, v))
 }
 
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldDescription, v))
-}
-
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldDescription, v))
-}
-
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldDescription, vs...))
-}
-
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldDescription, vs...))
-}
-
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldDescription, v))
-}
-
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldDescription, v))
-}
-
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldDescription, v))
-}
-
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldDescription, v))
-}
-
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldDescription, v))
-}
-
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldDescription, v))
-}
-
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldDescription, v))
-}
-
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldDescription))
-}
-
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldDescription))
-}
-
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldDescription, v))
-}
-
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldDescription, v))
-}
-
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.DocumentStatus) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.DocumentStatus) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.DocumentStatus) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.DocumentStatus) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -880,16 +766,6 @@ func StatusIsNil() predicate.Procedure {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // ProcedureTypeEQ applies the EQ predicate on the "procedure_type" field.
@@ -967,6 +843,101 @@ func ProcedureTypeContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldProcedureType, v))
 }
 
+// DetailsEQ applies the EQ predicate on the "details" field.
+func DetailsEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldDetails, v))
+}
+
+// DetailsNEQ applies the NEQ predicate on the "details" field.
+func DetailsNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldDetails, v))
+}
+
+// DetailsIn applies the In predicate on the "details" field.
+func DetailsIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldDetails, vs...))
+}
+
+// DetailsNotIn applies the NotIn predicate on the "details" field.
+func DetailsNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldDetails, vs...))
+}
+
+// DetailsGT applies the GT predicate on the "details" field.
+func DetailsGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldDetails, v))
+}
+
+// DetailsGTE applies the GTE predicate on the "details" field.
+func DetailsGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldDetails, v))
+}
+
+// DetailsLT applies the LT predicate on the "details" field.
+func DetailsLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldDetails, v))
+}
+
+// DetailsLTE applies the LTE predicate on the "details" field.
+func DetailsLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldDetails, v))
+}
+
+// DetailsContains applies the Contains predicate on the "details" field.
+func DetailsContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldDetails, v))
+}
+
+// DetailsHasPrefix applies the HasPrefix predicate on the "details" field.
+func DetailsHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldDetails, v))
+}
+
+// DetailsHasSuffix applies the HasSuffix predicate on the "details" field.
+func DetailsHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldDetails, v))
+}
+
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDetails))
+}
+
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDetails))
+}
+
+// DetailsEqualFold applies the EqualFold predicate on the "details" field.
+func DetailsEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldDetails, v))
+}
+
+// DetailsContainsFold applies the ContainsFold predicate on the "details" field.
+func DetailsContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldDetails, v))
+}
+
+// ApprovalRequiredEQ applies the EQ predicate on the "approval_required" field.
+func ApprovalRequiredEQ(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldApprovalRequired, v))
+}
+
+// ApprovalRequiredNEQ applies the NEQ predicate on the "approval_required" field.
+func ApprovalRequiredNEQ(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldApprovalRequired, v))
+}
+
+// ApprovalRequiredIsNil applies the IsNil predicate on the "approval_required" field.
+func ApprovalRequiredIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldApprovalRequired))
+}
+
+// ApprovalRequiredNotNil applies the NotNil predicate on the "approval_required" field.
+func ApprovalRequiredNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldApprovalRequired))
+}
+
 // ReviewDueEQ applies the EQ predicate on the "review_due" field.
 func ReviewDueEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldReviewDue, v))
@@ -1017,314 +988,119 @@ func ReviewDueNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldReviewDue))
 }
 
-// VersionEQ applies the EQ predicate on the "version" field.
-func VersionEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldVersion, v))
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldEQ(FieldReviewFrequency, vc))
 }
 
-// VersionNEQ applies the NEQ predicate on the "version" field.
-func VersionNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldVersion, v))
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldNEQ(FieldReviewFrequency, vc))
 }
 
-// VersionIn applies the In predicate on the "version" field.
-func VersionIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldVersion, vs...))
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldIn(FieldReviewFrequency, v...))
 }
 
-// VersionNotIn applies the NotIn predicate on the "version" field.
-func VersionNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldVersion, vs...))
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldNotIn(FieldReviewFrequency, v...))
 }
 
-// VersionGT applies the GT predicate on the "version" field.
-func VersionGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldVersion, v))
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldReviewFrequency))
 }
 
-// VersionGTE applies the GTE predicate on the "version" field.
-func VersionGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldVersion, v))
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldReviewFrequency))
 }
 
-// VersionLT applies the LT predicate on the "version" field.
-func VersionLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldVersion, v))
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
 }
 
-// VersionLTE applies the LTE predicate on the "version" field.
-func VersionLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldVersion, v))
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldRevision, v))
 }
 
-// VersionContains applies the Contains predicate on the "version" field.
-func VersionContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldVersion, v))
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldRevision, vs...))
 }
 
-// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
-func VersionHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldVersion, v))
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldRevision, vs...))
 }
 
-// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
-func VersionHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldVersion, v))
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldRevision, v))
 }
 
-// VersionIsNil applies the IsNil predicate on the "version" field.
-func VersionIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldVersion))
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldRevision, v))
 }
 
-// VersionNotNil applies the NotNil predicate on the "version" field.
-func VersionNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldVersion))
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldRevision, v))
 }
 
-// VersionEqualFold applies the EqualFold predicate on the "version" field.
-func VersionEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldVersion, v))
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldRevision, v))
 }
 
-// VersionContainsFold applies the ContainsFold predicate on the "version" field.
-func VersionContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldVersion, v))
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldRevision, v))
 }
 
-// PurposeAndScopeEQ applies the EQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldPurposeAndScope, v))
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldRevision, v))
 }
 
-// PurposeAndScopeNEQ applies the NEQ predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldPurposeAndScope, v))
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldRevision, v))
 }
 
-// PurposeAndScopeIn applies the In predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldPurposeAndScope, vs...))
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldRevision))
 }
 
-// PurposeAndScopeNotIn applies the NotIn predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldPurposeAndScope, vs...))
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldRevision))
 }
 
-// PurposeAndScopeGT applies the GT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldPurposeAndScope, v))
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldRevision, v))
 }
 
-// PurposeAndScopeGTE applies the GTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeLT applies the LT predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeLTE applies the LTE predicate on the "purpose_and_scope" field.
-func PurposeAndScopeLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeContains applies the Contains predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeHasPrefix applies the HasPrefix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeHasSuffix applies the HasSuffix predicate on the "purpose_and_scope" field.
-func PurposeAndScopeHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeIsNil applies the IsNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldPurposeAndScope))
-}
-
-// PurposeAndScopeNotNil applies the NotNil predicate on the "purpose_and_scope" field.
-func PurposeAndScopeNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldPurposeAndScope))
-}
-
-// PurposeAndScopeEqualFold applies the EqualFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldPurposeAndScope, v))
-}
-
-// PurposeAndScopeContainsFold applies the ContainsFold predicate on the "purpose_and_scope" field.
-func PurposeAndScopeContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldPurposeAndScope, v))
-}
-
-// BackgroundEQ applies the EQ predicate on the "background" field.
-func BackgroundEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldBackground, v))
-}
-
-// BackgroundNEQ applies the NEQ predicate on the "background" field.
-func BackgroundNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldBackground, v))
-}
-
-// BackgroundIn applies the In predicate on the "background" field.
-func BackgroundIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldBackground, vs...))
-}
-
-// BackgroundNotIn applies the NotIn predicate on the "background" field.
-func BackgroundNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldBackground, vs...))
-}
-
-// BackgroundGT applies the GT predicate on the "background" field.
-func BackgroundGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldBackground, v))
-}
-
-// BackgroundGTE applies the GTE predicate on the "background" field.
-func BackgroundGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldBackground, v))
-}
-
-// BackgroundLT applies the LT predicate on the "background" field.
-func BackgroundLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldBackground, v))
-}
-
-// BackgroundLTE applies the LTE predicate on the "background" field.
-func BackgroundLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldBackground, v))
-}
-
-// BackgroundContains applies the Contains predicate on the "background" field.
-func BackgroundContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldBackground, v))
-}
-
-// BackgroundHasPrefix applies the HasPrefix predicate on the "background" field.
-func BackgroundHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldBackground, v))
-}
-
-// BackgroundHasSuffix applies the HasSuffix predicate on the "background" field.
-func BackgroundHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldBackground, v))
-}
-
-// BackgroundIsNil applies the IsNil predicate on the "background" field.
-func BackgroundIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldBackground))
-}
-
-// BackgroundNotNil applies the NotNil predicate on the "background" field.
-func BackgroundNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldBackground))
-}
-
-// BackgroundEqualFold applies the EqualFold predicate on the "background" field.
-func BackgroundEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldBackground, v))
-}
-
-// BackgroundContainsFold applies the ContainsFold predicate on the "background" field.
-func BackgroundContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldBackground, v))
-}
-
-// SatisfiesEQ applies the EQ predicate on the "satisfies" field.
-func SatisfiesEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldSatisfies, v))
-}
-
-// SatisfiesNEQ applies the NEQ predicate on the "satisfies" field.
-func SatisfiesNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldSatisfies, v))
-}
-
-// SatisfiesIn applies the In predicate on the "satisfies" field.
-func SatisfiesIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldSatisfies, vs...))
-}
-
-// SatisfiesNotIn applies the NotIn predicate on the "satisfies" field.
-func SatisfiesNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldSatisfies, vs...))
-}
-
-// SatisfiesGT applies the GT predicate on the "satisfies" field.
-func SatisfiesGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldSatisfies, v))
-}
-
-// SatisfiesGTE applies the GTE predicate on the "satisfies" field.
-func SatisfiesGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldSatisfies, v))
-}
-
-// SatisfiesLT applies the LT predicate on the "satisfies" field.
-func SatisfiesLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldSatisfies, v))
-}
-
-// SatisfiesLTE applies the LTE predicate on the "satisfies" field.
-func SatisfiesLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldSatisfies, v))
-}
-
-// SatisfiesContains applies the Contains predicate on the "satisfies" field.
-func SatisfiesContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldSatisfies, v))
-}
-
-// SatisfiesHasPrefix applies the HasPrefix predicate on the "satisfies" field.
-func SatisfiesHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldSatisfies, v))
-}
-
-// SatisfiesHasSuffix applies the HasSuffix predicate on the "satisfies" field.
-func SatisfiesHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldSatisfies, v))
-}
-
-// SatisfiesIsNil applies the IsNil predicate on the "satisfies" field.
-func SatisfiesIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldSatisfies))
-}
-
-// SatisfiesNotNil applies the NotNil predicate on the "satisfies" field.
-func SatisfiesNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldSatisfies))
-}
-
-// SatisfiesEqualFold applies the EqualFold predicate on the "satisfies" field.
-func SatisfiesEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldSatisfies, v))
-}
-
-// SatisfiesContainsFold applies the ContainsFold predicate on the "satisfies" field.
-func SatisfiesContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldSatisfies, v))
-}
-
-// DetailsIsNil applies the IsNil predicate on the "details" field.
-func DetailsIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldDetails))
-}
-
-// DetailsNotNil applies the NotNil predicate on the "details" field.
-func DetailsNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldDetails))
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -1406,6 +1182,64 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Procedure {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProcedureEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasApprover applies the HasEdge predicate on the "approver" edge.
+func HasApprover() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ApproverTable, ApproverColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasApproverWith applies the HasEdge predicate on the "approver" edge with a given conditions (other predicates).
+func HasApproverWith(preds ...predicate.Group) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newApproverStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegate applies the HasEdge predicate on the "delegate" edge.
+func HasDelegate() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateTable, DelegateColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateWith applies the HasEdge predicate on the "delegate" edge with a given conditions (other predicates).
+func HasDelegateWith(preds ...predicate.Group) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newDelegateStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Procedure
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

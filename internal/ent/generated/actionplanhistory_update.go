@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -136,36 +137,16 @@ func (aphu *ActionPlanHistoryUpdate) SetNillableName(s *string) *ActionPlanHisto
 	return aphu
 }
 
-// SetDescription sets the "description" field.
-func (aphu *ActionPlanHistoryUpdate) SetDescription(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetDescription(s)
-	return aphu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableDescription(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetDescription(*s)
-	}
-	return aphu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (aphu *ActionPlanHistoryUpdate) ClearDescription() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearDescription()
-	return aphu
-}
-
 // SetStatus sets the "status" field.
-func (aphu *ActionPlanHistoryUpdate) SetStatus(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetStatus(s)
+func (aphu *ActionPlanHistoryUpdate) SetStatus(es enums.DocumentStatus) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetStatus(es)
 	return aphu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableStatus(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetStatus(*s)
+func (aphu *ActionPlanHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanHistoryUpdate {
+	if es != nil {
+		aphu.SetStatus(*es)
 	}
 	return aphu
 }
@@ -173,6 +154,146 @@ func (aphu *ActionPlanHistoryUpdate) SetNillableStatus(s *string) *ActionPlanHis
 // ClearStatus clears the value of the "status" field.
 func (aphu *ActionPlanHistoryUpdate) ClearStatus() *ActionPlanHistoryUpdate {
 	aphu.mutation.ClearStatus()
+	return aphu
+}
+
+// SetActionPlanType sets the "action_plan_type" field.
+func (aphu *ActionPlanHistoryUpdate) SetActionPlanType(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetActionPlanType(s)
+	return aphu
+}
+
+// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableActionPlanType(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetActionPlanType(*s)
+	}
+	return aphu
+}
+
+// ClearActionPlanType clears the value of the "action_plan_type" field.
+func (aphu *ActionPlanHistoryUpdate) ClearActionPlanType() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearActionPlanType()
+	return aphu
+}
+
+// SetDetails sets the "details" field.
+func (aphu *ActionPlanHistoryUpdate) SetDetails(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDetails(s)
+	return aphu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableDetails(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetDetails(*s)
+	}
+	return aphu
+}
+
+// ClearDetails clears the value of the "details" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDetails() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDetails()
+	return aphu
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (aphu *ActionPlanHistoryUpdate) SetApprovalRequired(b bool) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetApprovalRequired(b)
+	return aphu
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableApprovalRequired(b *bool) *ActionPlanHistoryUpdate {
+	if b != nil {
+		aphu.SetApprovalRequired(*b)
+	}
+	return aphu
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (aphu *ActionPlanHistoryUpdate) ClearApprovalRequired() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearApprovalRequired()
+	return aphu
+}
+
+// SetReviewDue sets the "review_due" field.
+func (aphu *ActionPlanHistoryUpdate) SetReviewDue(t time.Time) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetReviewDue(t)
+	return aphu
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableReviewDue(t *time.Time) *ActionPlanHistoryUpdate {
+	if t != nil {
+		aphu.SetReviewDue(*t)
+	}
+	return aphu
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (aphu *ActionPlanHistoryUpdate) ClearReviewDue() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearReviewDue()
+	return aphu
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (aphu *ActionPlanHistoryUpdate) SetReviewFrequency(e enums.Frequency) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetReviewFrequency(e)
+	return aphu
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanHistoryUpdate {
+	if e != nil {
+		aphu.SetReviewFrequency(*e)
+	}
+	return aphu
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (aphu *ActionPlanHistoryUpdate) ClearReviewFrequency() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearReviewFrequency()
+	return aphu
+}
+
+// SetRevision sets the "revision" field.
+func (aphu *ActionPlanHistoryUpdate) SetRevision(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetRevision(s)
+	return aphu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableRevision(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetRevision(*s)
+	}
+	return aphu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (aphu *ActionPlanHistoryUpdate) ClearRevision() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearRevision()
+	return aphu
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetOwnerID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetOwnerID(s)
+	return aphu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableOwnerID(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetOwnerID(*s)
+	}
+	return aphu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearOwnerID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearOwnerID()
 	return aphu
 }
 
@@ -197,15 +318,15 @@ func (aphu *ActionPlanHistoryUpdate) ClearDueDate() *ActionPlanHistoryUpdate {
 }
 
 // SetPriority sets the "priority" field.
-func (aphu *ActionPlanHistoryUpdate) SetPriority(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetPriority(s)
+func (aphu *ActionPlanHistoryUpdate) SetPriority(e enums.Priority) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetPriority(e)
 	return aphu
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillablePriority(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetPriority(*s)
+func (aphu *ActionPlanHistoryUpdate) SetNillablePriority(e *enums.Priority) *ActionPlanHistoryUpdate {
+	if e != nil {
+		aphu.SetPriority(*e)
 	}
 	return aphu
 }
@@ -233,18 +354,6 @@ func (aphu *ActionPlanHistoryUpdate) SetNillableSource(s *string) *ActionPlanHis
 // ClearSource clears the value of the "source" field.
 func (aphu *ActionPlanHistoryUpdate) ClearSource() *ActionPlanHistoryUpdate {
 	aphu.mutation.ClearSource()
-	return aphu
-}
-
-// SetDetails sets the "details" field.
-func (aphu *ActionPlanHistoryUpdate) SetDetails(m map[string]interface{}) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetDetails(m)
-	return aphu
-}
-
-// ClearDetails clears the value of the "details" field.
-func (aphu *ActionPlanHistoryUpdate) ClearDetails() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearDetails()
 	return aphu
 }
 
@@ -289,6 +398,26 @@ func (aphu *ActionPlanHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (aphu *ActionPlanHistoryUpdate) check() error {
+	if v, ok := aphu.mutation.Status(); ok {
+		if err := actionplanhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := aphu.mutation.ReviewFrequency(); ok {
+		if err := actionplanhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := aphu.mutation.Priority(); ok {
+		if err := actionplanhistory.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.priority": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (aphu *ActionPlanHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanHistoryUpdate {
 	aphu.modifiers = append(aphu.modifiers, modifiers...)
@@ -296,6 +425,9 @@ func (aphu *ActionPlanHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuild
 }
 
 func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := aphu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(actionplanhistory.Table, actionplanhistory.Columns, sqlgraph.NewFieldSpec(actionplanhistory.FieldID, field.TypeString))
 	if ps := aphu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -351,17 +483,53 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := aphu.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := aphu.mutation.Description(); ok {
-		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
-	}
-	if aphu.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := aphu.mutation.Status(); ok {
-		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if aphu.mutation.StatusCleared() {
-		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := aphu.mutation.ActionPlanType(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanType, field.TypeString, value)
+	}
+	if aphu.mutation.ActionPlanTypeCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanType, field.TypeString)
+	}
+	if value, ok := aphu.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
+	}
+	if aphu.mutation.DetailsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := aphu.mutation.ApprovalRequired(); ok {
+		_spec.SetField(actionplanhistory.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if aphu.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(actionplanhistory.FieldApprovalRequired, field.TypeBool)
+	}
+	if value, ok := aphu.mutation.ReviewDue(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if aphu.mutation.ReviewDueCleared() {
+		_spec.ClearField(actionplanhistory.FieldReviewDue, field.TypeTime)
+	}
+	if value, ok := aphu.mutation.ReviewFrequency(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if aphu.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := aphu.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+	}
+	if aphu.mutation.RevisionCleared() {
+		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
+	}
+	if value, ok := aphu.mutation.OwnerID(); ok {
+		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if aphu.mutation.OwnerIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := aphu.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
@@ -370,22 +538,16 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := aphu.mutation.Priority(); ok {
-		_spec.SetField(actionplanhistory.FieldPriority, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 	}
 	if aphu.mutation.PriorityCleared() {
-		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeEnum)
 	}
 	if value, ok := aphu.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)
 	}
 	if aphu.mutation.SourceCleared() {
 		_spec.ClearField(actionplanhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := aphu.mutation.Details(); ok {
-		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
-	}
-	if aphu.mutation.DetailsCleared() {
-		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = aphu.schemaConfig.ActionPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, aphu.schemaConfig)
@@ -515,36 +677,16 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableName(s *string) *ActionPlanH
 	return aphuo
 }
 
-// SetDescription sets the "description" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetDescription(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetDescription(s)
-	return aphuo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDescription(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetDescription(*s)
-	}
-	return aphuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearDescription() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearDescription()
-	return aphuo
-}
-
 // SetStatus sets the "status" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetStatus(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetStatus(s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetStatus(es)
 	return aphuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableStatus(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetStatus(*s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanHistoryUpdateOne {
+	if es != nil {
+		aphuo.SetStatus(*es)
 	}
 	return aphuo
 }
@@ -552,6 +694,146 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableStatus(s *string) *ActionPla
 // ClearStatus clears the value of the "status" field.
 func (aphuo *ActionPlanHistoryUpdateOne) ClearStatus() *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.ClearStatus()
+	return aphuo
+}
+
+// SetActionPlanType sets the "action_plan_type" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetActionPlanType(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetActionPlanType(s)
+	return aphuo
+}
+
+// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableActionPlanType(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetActionPlanType(*s)
+	}
+	return aphuo
+}
+
+// ClearActionPlanType clears the value of the "action_plan_type" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearActionPlanType() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearActionPlanType()
+	return aphuo
+}
+
+// SetDetails sets the "details" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDetails(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDetails(s)
+	return aphuo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDetails(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetDetails(*s)
+	}
+	return aphuo
+}
+
+// ClearDetails clears the value of the "details" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDetails() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDetails()
+	return aphuo
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetApprovalRequired(b bool) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetApprovalRequired(b)
+	return aphuo
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableApprovalRequired(b *bool) *ActionPlanHistoryUpdateOne {
+	if b != nil {
+		aphuo.SetApprovalRequired(*b)
+	}
+	return aphuo
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearApprovalRequired() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearApprovalRequired()
+	return aphuo
+}
+
+// SetReviewDue sets the "review_due" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetReviewDue(t time.Time) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetReviewDue(t)
+	return aphuo
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableReviewDue(t *time.Time) *ActionPlanHistoryUpdateOne {
+	if t != nil {
+		aphuo.SetReviewDue(*t)
+	}
+	return aphuo
+}
+
+// ClearReviewDue clears the value of the "review_due" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearReviewDue() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearReviewDue()
+	return aphuo
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetReviewFrequency(e enums.Frequency) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetReviewFrequency(e)
+	return aphuo
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanHistoryUpdateOne {
+	if e != nil {
+		aphuo.SetReviewFrequency(*e)
+	}
+	return aphuo
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearReviewFrequency() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearReviewFrequency()
+	return aphuo
+}
+
+// SetRevision sets the "revision" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetRevision(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetRevision(s)
+	return aphuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableRevision(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetRevision(*s)
+	}
+	return aphuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearRevision() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearRevision()
+	return aphuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetOwnerID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetOwnerID(s)
+	return aphuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableOwnerID(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetOwnerID(*s)
+	}
+	return aphuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearOwnerID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearOwnerID()
 	return aphuo
 }
 
@@ -576,15 +858,15 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearDueDate() *ActionPlanHistoryUpdate
 }
 
 // SetPriority sets the "priority" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetPriority(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetPriority(s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetPriority(e enums.Priority) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetPriority(e)
 	return aphuo
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillablePriority(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetPriority(*s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillablePriority(e *enums.Priority) *ActionPlanHistoryUpdateOne {
+	if e != nil {
+		aphuo.SetPriority(*e)
 	}
 	return aphuo
 }
@@ -612,18 +894,6 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableSource(s *string) *ActionPla
 // ClearSource clears the value of the "source" field.
 func (aphuo *ActionPlanHistoryUpdateOne) ClearSource() *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.ClearSource()
-	return aphuo
-}
-
-// SetDetails sets the "details" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetDetails(m map[string]interface{}) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetDetails(m)
-	return aphuo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearDetails() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearDetails()
 	return aphuo
 }
 
@@ -681,6 +951,26 @@ func (aphuo *ActionPlanHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (aphuo *ActionPlanHistoryUpdateOne) check() error {
+	if v, ok := aphuo.mutation.Status(); ok {
+		if err := actionplanhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := aphuo.mutation.ReviewFrequency(); ok {
+		if err := actionplanhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := aphuo.mutation.Priority(); ok {
+		if err := actionplanhistory.PriorityValidator(v); err != nil {
+			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlanHistory.priority": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (aphuo *ActionPlanHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanHistoryUpdateOne {
 	aphuo.modifiers = append(aphuo.modifiers, modifiers...)
@@ -688,6 +978,9 @@ func (aphuo *ActionPlanHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateB
 }
 
 func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlanHistory, err error) {
+	if err := aphuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(actionplanhistory.Table, actionplanhistory.Columns, sqlgraph.NewFieldSpec(actionplanhistory.FieldID, field.TypeString))
 	id, ok := aphuo.mutation.ID()
 	if !ok {
@@ -760,17 +1053,53 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if value, ok := aphuo.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := aphuo.mutation.Description(); ok {
-		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
-	}
-	if aphuo.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := aphuo.mutation.Status(); ok {
-		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if aphuo.mutation.StatusCleared() {
-		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := aphuo.mutation.ActionPlanType(); ok {
+		_spec.SetField(actionplanhistory.FieldActionPlanType, field.TypeString, value)
+	}
+	if aphuo.mutation.ActionPlanTypeCleared() {
+		_spec.ClearField(actionplanhistory.FieldActionPlanType, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
+	}
+	if aphuo.mutation.DetailsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.ApprovalRequired(); ok {
+		_spec.SetField(actionplanhistory.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if aphuo.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(actionplanhistory.FieldApprovalRequired, field.TypeBool)
+	}
+	if value, ok := aphuo.mutation.ReviewDue(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewDue, field.TypeTime, value)
+	}
+	if aphuo.mutation.ReviewDueCleared() {
+		_spec.ClearField(actionplanhistory.FieldReviewDue, field.TypeTime)
+	}
+	if value, ok := aphuo.mutation.ReviewFrequency(); ok {
+		_spec.SetField(actionplanhistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if aphuo.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := aphuo.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+	}
+	if aphuo.mutation.RevisionCleared() {
+		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.OwnerID(); ok {
+		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if aphuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
@@ -779,22 +1108,16 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := aphuo.mutation.Priority(); ok {
-		_spec.SetField(actionplanhistory.FieldPriority, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 	}
 	if aphuo.mutation.PriorityCleared() {
-		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeEnum)
 	}
 	if value, ok := aphuo.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)
 	}
 	if aphuo.mutation.SourceCleared() {
 		_spec.ClearField(actionplanhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := aphuo.mutation.Details(); ok {
-		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
-	}
-	if aphuo.mutation.DetailsCleared() {
-		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = aphuo.schemaConfig.ActionPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, aphuo.schemaConfig)

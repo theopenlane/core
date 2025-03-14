@@ -368,17 +368,41 @@ type ActionPlan implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the action plan
+	the name of the action_plan
 	"""
 	name: String!
 	"""
-	description of the action plan
+	status of the action_plan, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ActionPlanDocumentStatus
 	"""
-	status of the action plan
+	type of the action_plan, e.g. compliance, operational, health and safety, etc.
 	"""
-	status: String
+	actionPlanType: String
+	"""
+	details of the action_plan
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the action_plan
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	"""
+	reviewDue: Time
+	"""
+	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	"""
+	reviewFrequency: ActionPlanFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
 	"""
 	due date of the action plan
 	"""
@@ -386,15 +410,20 @@ type ActionPlan implements Node {
 	"""
 	priority of the action plan
 	"""
-	priority: String
+	priority: ActionPlanPriority
 	"""
 	source of the action plan
 	"""
 	source: String
 	"""
-	json data including details of the action plan
+	the group of users who are responsible for approving the action_plan
 	"""
-	details: Map
+	approver: Group
+	"""
+	temporary delegates for the action_plan, used for temporary approval
+	"""
+	delegate: Group
+	owner: Organization
 	risk: [Risk!]
 	control: [Control!]
 	user: [User!]
@@ -445,6 +474,16 @@ type ActionPlanDeletePayload {
 	deletedID: ID!
 }
 """
+ActionPlanDocumentStatus is enum for the field status
+"""
+enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type ActionPlanEdge {
@@ -456,6 +495,15 @@ type ActionPlanEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+ActionPlanFrequency is enum for the field review_frequency
+"""
+enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
 }
 type ActionPlanHistory implements Node {
 	id: ID!
@@ -473,17 +521,41 @@ type ActionPlanHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the action plan
+	the name of the action_plan
 	"""
 	name: String!
 	"""
-	description of the action plan
+	status of the action_plan, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ActionPlanHistoryDocumentStatus
 	"""
-	status of the action plan
+	type of the action_plan, e.g. compliance, operational, health and safety, etc.
 	"""
-	status: String
+	actionPlanType: String
+	"""
+	details of the action_plan
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the action_plan
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	"""
+	reviewDue: Time
+	"""
+	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	"""
+	reviewFrequency: ActionPlanHistoryFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
 	"""
 	due date of the action plan
 	"""
@@ -491,15 +563,11 @@ type ActionPlanHistory implements Node {
 	"""
 	priority of the action plan
 	"""
-	priority: String
+	priority: ActionPlanHistoryPriority
 	"""
 	source of the action plan
 	"""
 	source: String
-	"""
-	json data including details of the action plan
-	"""
-	details: Map
 }
 """
 A connection to a list of items.
@@ -519,6 +587,16 @@ type ActionPlanHistoryConnection {
 	totalCount: Int!
 }
 """
+ActionPlanHistoryDocumentStatus is enum for the field status
+"""
+enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type ActionPlanHistoryEdge {
@@ -532,12 +610,30 @@ type ActionPlanHistoryEdge {
 	cursor: Cursor!
 }
 """
+ActionPlanHistoryFrequency is enum for the field review_frequency
+"""
+enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+}
+"""
 ActionPlanHistoryOpType is enum for the field operation
 """
 enum ActionPlanHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+ActionPlanHistoryPriority is enum for the field priority
+"""
+enum ActionPlanHistoryPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 """
 ActionPlanHistoryWhereInput is used for filtering ActionPlanHistory objects.
@@ -706,41 +802,115 @@ input ActionPlanHistoryWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ActionPlanHistoryDocumentStatus
+	statusNEQ: ActionPlanHistoryDocumentStatus
+	statusIn: [ActionPlanHistoryDocumentStatus!]
+	statusNotIn: [ActionPlanHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
+	"""
+	action_plan_type field predicates
+	"""
+	actionPlanType: String
+	actionPlanTypeNEQ: String
+	actionPlanTypeIn: [String!]
+	actionPlanTypeNotIn: [String!]
+	actionPlanTypeGT: String
+	actionPlanTypeGTE: String
+	actionPlanTypeLT: String
+	actionPlanTypeLTE: String
+	actionPlanTypeContains: String
+	actionPlanTypeHasPrefix: String
+	actionPlanTypeHasSuffix: String
+	actionPlanTypeIsNil: Boolean
+	actionPlanTypeNotNil: Boolean
+	actionPlanTypeEqualFold: String
+	actionPlanTypeContainsFold: String
+	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	approval_required field predicates
+	"""
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
+	"""
+	review_due field predicates
+	"""
+	reviewDue: Time
+	reviewDueNEQ: Time
+	reviewDueIn: [Time!]
+	reviewDueNotIn: [Time!]
+	reviewDueGT: Time
+	reviewDueGTE: Time
+	reviewDueLT: Time
+	reviewDueLTE: Time
+	reviewDueIsNil: Boolean
+	reviewDueNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: ActionPlanHistoryFrequency
+	reviewFrequencyNEQ: ActionPlanHistoryFrequency
+	reviewFrequencyIn: [ActionPlanHistoryFrequency!]
+	reviewFrequencyNotIn: [ActionPlanHistoryFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	due_date field predicates
 	"""
@@ -757,21 +927,12 @@ input ActionPlanHistoryWhereInput {
 	"""
 	priority field predicates
 	"""
-	priority: String
-	priorityNEQ: String
-	priorityIn: [String!]
-	priorityNotIn: [String!]
-	priorityGT: String
-	priorityGTE: String
-	priorityLT: String
-	priorityLTE: String
-	priorityContains: String
-	priorityHasPrefix: String
-	priorityHasSuffix: String
+	priority: ActionPlanHistoryPriority
+	priorityNEQ: ActionPlanHistoryPriority
+	priorityIn: [ActionPlanHistoryPriority!]
+	priorityNotIn: [ActionPlanHistoryPriority!]
 	priorityIsNil: Boolean
 	priorityNotNil: Boolean
-	priorityEqualFold: String
-	priorityContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -790,6 +951,15 @@ input ActionPlanHistoryWhereInput {
 	sourceNotNil: Boolean
 	sourceEqualFold: String
 	sourceContainsFold: String
+}
+"""
+ActionPlanPriority is enum for the field priority
+"""
+enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 type ActionPlanSearchResult {
 	actionPlans: [ActionPlan!]
@@ -934,41 +1104,115 @@ input ActionPlanWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ActionPlanDocumentStatus
+	statusNEQ: ActionPlanDocumentStatus
+	statusIn: [ActionPlanDocumentStatus!]
+	statusNotIn: [ActionPlanDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
+	"""
+	action_plan_type field predicates
+	"""
+	actionPlanType: String
+	actionPlanTypeNEQ: String
+	actionPlanTypeIn: [String!]
+	actionPlanTypeNotIn: [String!]
+	actionPlanTypeGT: String
+	actionPlanTypeGTE: String
+	actionPlanTypeLT: String
+	actionPlanTypeLTE: String
+	actionPlanTypeContains: String
+	actionPlanTypeHasPrefix: String
+	actionPlanTypeHasSuffix: String
+	actionPlanTypeIsNil: Boolean
+	actionPlanTypeNotNil: Boolean
+	actionPlanTypeEqualFold: String
+	actionPlanTypeContainsFold: String
+	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	approval_required field predicates
+	"""
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
+	"""
+	review_due field predicates
+	"""
+	reviewDue: Time
+	reviewDueNEQ: Time
+	reviewDueIn: [Time!]
+	reviewDueNotIn: [Time!]
+	reviewDueGT: Time
+	reviewDueGTE: Time
+	reviewDueLT: Time
+	reviewDueLTE: Time
+	reviewDueIsNil: Boolean
+	reviewDueNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: ActionPlanFrequency
+	reviewFrequencyNEQ: ActionPlanFrequency
+	reviewFrequencyIn: [ActionPlanFrequency!]
+	reviewFrequencyNotIn: [ActionPlanFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
 	"""
 	due_date field predicates
 	"""
@@ -985,21 +1229,12 @@ input ActionPlanWhereInput {
 	"""
 	priority field predicates
 	"""
-	priority: String
-	priorityNEQ: String
-	priorityIn: [String!]
-	priorityNotIn: [String!]
-	priorityGT: String
-	priorityGTE: String
-	priorityLT: String
-	priorityLTE: String
-	priorityContains: String
-	priorityHasPrefix: String
-	priorityHasSuffix: String
+	priority: ActionPlanPriority
+	priorityNEQ: ActionPlanPriority
+	priorityIn: [ActionPlanPriority!]
+	priorityNotIn: [ActionPlanPriority!]
 	priorityIsNil: Boolean
 	priorityNotNil: Boolean
-	priorityEqualFold: String
-	priorityContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -1018,6 +1253,21 @@ input ActionPlanWhereInput {
 	sourceNotNil: Boolean
 	sourceEqualFold: String
 	sourceContainsFold: String
+	"""
+	approver edge predicates
+	"""
+	hasApprover: Boolean
+	hasApproverWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
 	"""
 	risk edge predicates
 	"""
@@ -1039,8 +1289,19 @@ input ActionPlanWhereInput {
 	hasProgram: Boolean
 	hasProgramWith: [ProgramWhereInput!]
 }
+"""
+The `Address` scalar type represents a physical or mailing address.
+This scalar can be used to store and validate address information in the GraphQL schema.
+It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
+"""
 scalar Address
+"""
+The `AssessmentMethod` scalar type represents methods that can be used during the audit to assess the control implementation
+"""
 scalar AssessmentMethod
+"""
+The `AssessmentObjective` scalar type represents objectives that are validated during the audit to ensure the control is implemented
+"""
 scalar AssessmentObjective
 type AuditLog implements Node {
 	table: String
@@ -2538,9 +2799,9 @@ type ControlImplementation implements Node {
 	"""
 	tags: [String!]
 	"""
-	status of the control implementation
+	status of the %s, e.g. draft, published, archived, etc.
 	"""
-	status: String
+	status: ControlImplementationDocumentStatus
 	"""
 	date the control was implemented
 	"""
@@ -2604,6 +2865,16 @@ type ControlImplementationDeletePayload {
 	deletedID: ID!
 }
 """
+ControlImplementationDocumentStatus is enum for the field status
+"""
+enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type ControlImplementationEdge {
@@ -2632,9 +2903,9 @@ type ControlImplementationHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	status of the control implementation
+	status of the %s, e.g. draft, published, archived, etc.
 	"""
-	status: String
+	status: ControlImplementationHistoryDocumentStatus
 	"""
 	date the control was implemented
 	"""
@@ -2668,6 +2939,16 @@ type ControlImplementationHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlImplementationHistoryDocumentStatus is enum for the field status
+"""
+enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
 }
 """
 An edge in a connection.
@@ -2843,21 +3124,12 @@ input ControlImplementationHistoryWhereInput {
 	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ControlImplementationHistoryDocumentStatus
+	statusNEQ: ControlImplementationHistoryDocumentStatus
+	statusIn: [ControlImplementationHistoryDocumentStatus!]
+	statusNotIn: [ControlImplementationHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	implementation_date field predicates
 	"""
@@ -3039,21 +3311,12 @@ input ControlImplementationWhereInput {
 	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ControlImplementationDocumentStatus
+	statusNEQ: ControlImplementationDocumentStatus
+	statusIn: [ControlImplementationDocumentStatus!]
+	statusNotIn: [ControlImplementationDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	implementation_date field predicates
 	"""
@@ -3120,6 +3383,10 @@ type ControlObjective implements Node {
 	deletedAt: Time
 	deletedBy: String
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
@@ -3151,10 +3418,6 @@ type ControlObjective implements Node {
 	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
-	"""
-	version of the control objective
-	"""
-	version: String
 	"""
 	category of the control
 	"""
@@ -3264,6 +3527,10 @@ type ControlObjectiveHistory implements Node {
 	deletedAt: Time
 	deletedBy: String
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
@@ -3295,10 +3562,6 @@ type ControlObjectiveHistory implements Node {
 	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
-	"""
-	version of the control objective
-	"""
-	version: String
 	"""
 	category of the control
 	"""
@@ -3506,6 +3769,24 @@ input ControlObjectiveHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	display_id field predicates
 	"""
 	displayID: String
@@ -3618,24 +3899,6 @@ input ControlObjectiveHistoryWhereInput {
 	controlObjectiveTypeNotNil: Boolean
 	controlObjectiveTypeEqualFold: String
 	controlObjectiveTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
 	"""
 	category field predicates
 	"""
@@ -3800,6 +4063,24 @@ input ControlObjectiveWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	display_id field predicates
 	"""
 	displayID: String
@@ -3912,24 +4193,6 @@ input ControlObjectiveWhereInput {
 	controlObjectiveTypeNotNil: Boolean
 	controlObjectiveTypeEqualFold: String
 	controlObjectiveTypeContainsFold: String
-	"""
-	version field predicates
-	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
 	"""
 	category field predicates
 	"""
@@ -4481,17 +4744,37 @@ input CreateActionPlanInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the action plan
+	the name of the action_plan
 	"""
 	name: String!
 	"""
-	description of the action plan
+	status of the action_plan, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ActionPlanDocumentStatus
 	"""
-	status of the action plan
+	type of the action_plan, e.g. compliance, operational, health and safety, etc.
 	"""
-	status: String
+	actionPlanType: String
+	"""
+	details of the action_plan
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the action_plan
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	"""
+	reviewDue: Time
+	"""
+	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	"""
+	reviewFrequency: ActionPlanFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	due date of the action plan
 	"""
@@ -4499,15 +4782,14 @@ input CreateActionPlanInput {
 	"""
 	priority of the action plan
 	"""
-	priority: String
+	priority: ActionPlanPriority
 	"""
 	source of the action plan
 	"""
 	source: String
-	"""
-	json data including details of the action plan
-	"""
-	details: Map
+	approverID: ID
+	delegateID: ID
+	ownerID: ID
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	userIDs: [ID!]
@@ -4564,9 +4846,9 @@ input CreateControlImplementationInput {
 	"""
 	tags: [String!]
 	"""
-	status of the control implementation
+	status of the %s, e.g. draft, published, archived, etc.
 	"""
-	status: String
+	status: ControlImplementationDocumentStatus
 	"""
 	date the control was implemented
 	"""
@@ -4680,6 +4962,10 @@ Input was generated by ent.
 """
 input CreateControlObjectiveInput {
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	tags associated with the object
 	"""
 	tags: [String!]
@@ -4703,10 +4989,6 @@ input CreateControlObjectiveInput {
 	type of the control objective e.g. compliance, financial, operational, etc.
 	"""
 	controlObjectiveType: String
-	"""
-	version of the control objective
-	"""
-	version: String
 	"""
 	category of the control
 	"""
@@ -4869,6 +5151,10 @@ input CreateEvidenceInput {
 	the url of the evidence if not uploaded directly to the system
 	"""
 	url: String
+	"""
+	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	"""
+	status: EvidenceEvidenceStatus
 	ownerID: ID
 	controlObjectiveIDs: [ID!]
 	controlIDs: [ID!]
@@ -5110,40 +5396,38 @@ input CreateInternalPolicyInput {
 	"""
 	name: String!
 	"""
-	description of the policy
+	status of the policy, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: InternalPolicyDocumentStatus
 	"""
-	status of the policy
-	"""
-	status: String
-	"""
-	the date the policy should be reviewed, defaults to a year from creation date
-	"""
-	reviewDue: Time
-	"""
-	type of the policy
+	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
 	policyType: String
 	"""
-	version of the policy
+	details of the policy
 	"""
-	version: String
+	details: String
 	"""
-	purpose and scope
+	whether approval is required for edits to the policy
 	"""
-	purposeAndScope: String
+	approvalRequired: Boolean
 	"""
-	background of the policy
+	the date the policy should be reviewed, calculated based on the review_frequency if not directly set
 	"""
-	background: String
+	reviewDue: Time
 	"""
-	json data for the policy document
+	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
-	details: Map
+	reviewFrequency: InternalPolicyFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	approverID: ID
+	delegateID: ID
 	controlObjectiveIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -5357,6 +5641,7 @@ input CreateOrganizationInput {
 	subcontrolIDs: [ID!]
 	evidenceIDs: [ID!]
 	standardIDs: [ID!]
+	actionPlanIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -5464,44 +5749,38 @@ input CreateProcedureInput {
 	"""
 	name: String!
 	"""
-	description of the procedure
+	status of the procedure, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ProcedureDocumentStatus
 	"""
-	status of the procedure
-	"""
-	status: String
-	"""
-	type of the procedure
+	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
 	procedureType: String
 	"""
-	the date the procedure should be reviewed, defaults to a year from creation date
+	details of the procedure
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the procedure
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	"""
 	reviewDue: Time
 	"""
-	version of the procedure
+	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
-	version: String
+	reviewFrequency: ProcedureFrequency
 	"""
-	purpose and scope
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
-	purposeAndScope: String
-	"""
-	background of the procedure
-	"""
-	background: String
-	"""
-	which controls are satisfied by the procedure
-	"""
-	satisfies: String
-	"""
-	json data for the procedure document
-	"""
-	details: Map
+	revision: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	approverID: ID
+	delegateID: ID
 	controlIDs: [ID!]
 	internalPolicyIDs: [ID!]
 	narrativeIDs: [ID!]
@@ -5594,23 +5873,19 @@ input CreateRiskInput {
 	"""
 	name: String!
 	"""
-	description of the risk
+	status of the risk - open, mitigated, ongoing, in-progress, and archived.
 	"""
-	description: String
-	"""
-	status of the risk - mitigated or not, inflight, etc.
-	"""
-	status: String
+	status: RiskRiskStatus
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
 	"""
 	riskType: String
 	"""
-	business costs associated with the risk
+	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	businessCosts: String
+	category: String
 	"""
-	impact of the risk - high, medium, low
+	impact of the risk -critical, high, medium, low
 	"""
 	impact: RiskRiskImpact
 	"""
@@ -5618,17 +5893,21 @@ input CreateRiskInput {
 	"""
 	likelihood: RiskRiskLikelihood
 	"""
+	score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	score: Int
+	"""
 	mitigation for the risk
 	"""
 	mitigation: String
 	"""
-	which controls are satisfied by the risk
+	details of the risk
 	"""
-	satisfies: String
+	details: String
 	"""
-	json data for the risk document
+	business costs associated with the risk
 	"""
-	details: Map
+	businessCosts: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -5637,6 +5916,8 @@ input CreateRiskInput {
 	procedureIDs: [ID!]
 	actionPlanIDs: [ID!]
 	programIDs: [ID!]
+	stakeholderID: ID
+	delegateID: ID
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -5647,6 +5928,10 @@ input CreateStandardInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the long name of the standard body
 	"""
@@ -5664,6 +5949,10 @@ input CreateStandardInput {
 	"""
 	description: String
 	"""
+	URL to the logo of the governing body
+	"""
+	governingBodyLogoURL: String
+	"""
 	governing body of the standard, e.g. AICPA, etc.
 	"""
 	governingBody: String
@@ -5676,9 +5965,9 @@ input CreateStandardInput {
 	"""
 	link: String
 	"""
-	status of the standard - active, deprecated, etc.
+	status of the standard - active, draft, and archived
 	"""
-	status: String
+	status: StandardStandardStatus
 	"""
 	indicates if the standard should be made available to all users, only for public standards
 	"""
@@ -5692,17 +5981,13 @@ input CreateStandardInput {
 	"""
 	systemOwned: Boolean
 	"""
-	type of the standard - security, privacy, etc.
+	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
 	standardType: String
 	"""
 	version of the standard
 	"""
 	version: String
-	"""
-	internal revision of the standard
-	"""
-	revision: String
 	ownerID: ID
 	controlIDs: [ID!]
 }
@@ -8350,6 +8635,10 @@ type Evidence implements Node {
 	the url of the evidence if not uploaded directly to the system
 	"""
 	url: String
+	"""
+	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	"""
+	status: EvidenceEvidenceStatus
 	owner: Organization
 	controlObjectives: [ControlObjective!]
 	controls: [Control!]
@@ -8415,6 +8704,16 @@ type EvidenceEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+EvidenceEvidenceStatus is enum for the field status
+"""
+enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+	APPROVED
+	READY
+	MISSING_ARTIFACT
+	REJECTED
+	NEEDS_RENEWAL
+}
 type EvidenceHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -8470,6 +8769,10 @@ type EvidenceHistory implements Node {
 	the url of the evidence if not uploaded directly to the system
 	"""
 	url: String
+	"""
+	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	"""
+	status: EvidenceHistoryEvidenceStatus
 }
 """
 A connection to a list of items.
@@ -8500,6 +8803,16 @@ type EvidenceHistoryEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+EvidenceHistoryEvidenceStatus is enum for the field status
+"""
+enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+	APPROVED
+	READY
+	MISSING_ARTIFACT
+	REJECTED
+	NEEDS_RENEWAL
 }
 """
 EvidenceHistoryOpType is enum for the field operation
@@ -8812,6 +9125,15 @@ input EvidenceHistoryWhereInput {
 	urlNotNil: Boolean
 	urlEqualFold: String
 	urlContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: EvidenceHistoryEvidenceStatus
+	statusNEQ: EvidenceHistoryEvidenceStatus
+	statusIn: [EvidenceHistoryEvidenceStatus!]
+	statusNotIn: [EvidenceHistoryEvidenceStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 }
 type EvidenceSearchResult {
 	evidences: [Evidence!]
@@ -9093,6 +9415,15 @@ input EvidenceWhereInput {
 	urlEqualFold: String
 	urlContainsFold: String
 	"""
+	status field predicates
+	"""
+	status: EvidenceEvidenceStatus
+	statusNEQ: EvidenceEvidenceStatus
+	statusIn: [EvidenceEvidenceStatus!]
+	statusNotIn: [EvidenceEvidenceStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -9128,6 +9459,9 @@ input EvidenceWhereInput {
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
 }
+"""
+The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
+"""
 scalar ExampleEvidence
 type File implements Node {
 	id: ID!
@@ -12560,6 +12894,9 @@ input HushWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 }
+"""
+The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
+"""
 scalar ImplementationGuidance
 type Integration implements Node {
 	id: ID!
@@ -13160,16 +13497,16 @@ type InternalPolicy implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	"""
 	the organization id that owns the object
 	"""
@@ -13179,37 +13516,33 @@ type InternalPolicy implements Node {
 	"""
 	name: String!
 	"""
-	description of the policy
+	status of the policy, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: InternalPolicyDocumentStatus
 	"""
-	status of the policy
-	"""
-	status: String
-	"""
-	the date the policy should be reviewed, defaults to a year from creation date
-	"""
-	reviewDue: Time
-	"""
-	type of the policy
+	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
 	policyType: String
 	"""
-	version of the policy
+	details of the policy
 	"""
-	version: String
+	details: String
 	"""
-	purpose and scope
+	whether approval is required for edits to the policy
 	"""
-	purposeAndScope: String
+	approvalRequired: Boolean
 	"""
-	background of the policy
+	the date the policy should be reviewed, calculated based on the review_frequency if not directly set
 	"""
-	background: String
+	reviewDue: Time
 	"""
-	json data for the policy document
+	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
-	details: Map
+	reviewFrequency: InternalPolicyFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -13219,6 +13552,14 @@ type InternalPolicy implements Node {
 	provides edit access to the risk to members of the group
 	"""
 	editors: [Group!]
+	"""
+	the group of users who are responsible for approving the policy
+	"""
+	approver: Group
+	"""
+	temporary delegates for the policy, used for temporary approval
+	"""
+	delegate: Group
 	controlObjectives: [ControlObjective!]
 	controls: [Control!]
 	procedures: [Procedure!]
@@ -13271,6 +13612,16 @@ type InternalPolicyDeletePayload {
 	deletedID: ID!
 }
 """
+InternalPolicyDocumentStatus is enum for the field status
+"""
+enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type InternalPolicyEdge {
@@ -13283,6 +13634,15 @@ type InternalPolicyEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+InternalPolicyFrequency is enum for the field review_frequency
+"""
+enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+}
 type InternalPolicyHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -13292,16 +13652,16 @@ type InternalPolicyHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	"""
 	the organization id that owns the object
 	"""
@@ -13311,37 +13671,33 @@ type InternalPolicyHistory implements Node {
 	"""
 	name: String!
 	"""
-	description of the policy
+	status of the policy, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: InternalPolicyHistoryDocumentStatus
 	"""
-	status of the policy
-	"""
-	status: String
-	"""
-	the date the policy should be reviewed, defaults to a year from creation date
-	"""
-	reviewDue: Time
-	"""
-	type of the policy
+	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
 	policyType: String
 	"""
-	version of the policy
+	details of the policy
 	"""
-	version: String
+	details: String
 	"""
-	purpose and scope
+	whether approval is required for edits to the policy
 	"""
-	purposeAndScope: String
+	approvalRequired: Boolean
 	"""
-	background of the policy
+	the date the policy should be reviewed, calculated based on the review_frequency if not directly set
 	"""
-	background: String
+	reviewDue: Time
 	"""
-	json data for the policy document
+	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
-	details: Map
+	reviewFrequency: InternalPolicyHistoryFrequency
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 }
 """
 A connection to a list of items.
@@ -13361,6 +13717,16 @@ type InternalPolicyHistoryConnection {
 	totalCount: Int!
 }
 """
+InternalPolicyHistoryDocumentStatus is enum for the field status
+"""
+enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type InternalPolicyHistoryEdge {
@@ -13372,6 +13738,15 @@ type InternalPolicyHistoryEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+InternalPolicyHistoryFrequency is enum for the field review_frequency
+"""
+enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
 }
 """
 InternalPolicyHistoryOpType is enum for the field operation
@@ -13582,54 +13957,14 @@ input InternalPolicyHistoryWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: InternalPolicyHistoryDocumentStatus
+	statusNEQ: InternalPolicyHistoryDocumentStatus
+	statusIn: [InternalPolicyHistoryDocumentStatus!]
+	statusNotIn: [InternalPolicyHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
-	"""
-	review_due field predicates
-	"""
-	reviewDue: Time
-	reviewDueNEQ: Time
-	reviewDueIn: [Time!]
-	reviewDueNotIn: [Time!]
-	reviewDueGT: Time
-	reviewDueGTE: Time
-	reviewDueLT: Time
-	reviewDueLTE: Time
-	reviewDueIsNil: Boolean
-	reviewDueNotNil: Boolean
 	"""
 	policy_type field predicates
 	"""
@@ -13649,59 +13984,70 @@ input InternalPolicyHistoryWhereInput {
 	policyTypeEqualFold: String
 	policyTypeContainsFold: String
 	"""
-	version field predicates
+	details field predicates
 	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
 	"""
-	purpose_and_scope field predicates
+	approval_required field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
 	"""
-	background field predicates
+	review_due field predicates
 	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
+	reviewDue: Time
+	reviewDueNEQ: Time
+	reviewDueIn: [Time!]
+	reviewDueNotIn: [Time!]
+	reviewDueGT: Time
+	reviewDueGTE: Time
+	reviewDueLT: Time
+	reviewDueLTE: Time
+	reviewDueIsNil: Boolean
+	reviewDueNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: InternalPolicyHistoryFrequency
+	reviewFrequencyNEQ: InternalPolicyHistoryFrequency
+	reviewFrequencyIn: [InternalPolicyHistoryFrequency!]
+	reviewFrequencyNotIn: [InternalPolicyHistoryFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 }
 type InternalPolicySearchResult {
 	internalPolicies: [InternalPolicy!]
@@ -13880,54 +14226,14 @@ input InternalPolicyWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: InternalPolicyDocumentStatus
+	statusNEQ: InternalPolicyDocumentStatus
+	statusIn: [InternalPolicyDocumentStatus!]
+	statusNotIn: [InternalPolicyDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
-	"""
-	review_due field predicates
-	"""
-	reviewDue: Time
-	reviewDueNEQ: Time
-	reviewDueIn: [Time!]
-	reviewDueNotIn: [Time!]
-	reviewDueGT: Time
-	reviewDueGTE: Time
-	reviewDueLT: Time
-	reviewDueLTE: Time
-	reviewDueIsNil: Boolean
-	reviewDueNotNil: Boolean
 	"""
 	policy_type field predicates
 	"""
@@ -13947,59 +14253,70 @@ input InternalPolicyWhereInput {
 	policyTypeEqualFold: String
 	policyTypeContainsFold: String
 	"""
-	version field predicates
+	details field predicates
 	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
 	"""
-	purpose_and_scope field predicates
+	approval_required field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
 	"""
-	background field predicates
+	review_due field predicates
 	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
+	reviewDue: Time
+	reviewDueNEQ: Time
+	reviewDueIn: [Time!]
+	reviewDueNotIn: [Time!]
+	reviewDueGT: Time
+	reviewDueGTE: Time
+	reviewDueLT: Time
+	reviewDueLTE: Time
+	reviewDueIsNil: Boolean
+	reviewDueNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: InternalPolicyFrequency
+	reviewFrequencyNEQ: InternalPolicyFrequency
+	reviewFrequencyIn: [InternalPolicyFrequency!]
+	reviewFrequencyNotIn: [InternalPolicyFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -14015,6 +14332,16 @@ input InternalPolicyWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	approver edge predicates
+	"""
+	hasApprover: Boolean
+	hasApproverWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
 	"""
 	control_objectives edge predicates
 	"""
@@ -19428,6 +19755,7 @@ type Organization implements Node {
 	subcontrols: [Subcontrol!]
 	evidence: [Evidence!]
 	standards: [Standard!]
+	actionPlans: [ActionPlan!]
 	members: [OrgMembership!]
 }
 """
@@ -20994,6 +21322,11 @@ input OrganizationWhereInput {
 	hasStandards: Boolean
 	hasStandardsWith: [StandardWhereInput!]
 	"""
+	action_plans edge predicates
+	"""
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
+	"""
 	members edge predicates
 	"""
 	hasMembers: Boolean
@@ -21377,6 +21710,9 @@ input PersonalAccessTokenWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 }
+"""
+The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)
+"""
 scalar Price
 type Procedure implements Node {
 	id: ID!
@@ -21384,16 +21720,16 @@ type Procedure implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	"""
 	the organization id that owns the object
 	"""
@@ -21403,41 +21739,33 @@ type Procedure implements Node {
 	"""
 	name: String!
 	"""
-	description of the procedure
+	status of the procedure, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ProcedureDocumentStatus
 	"""
-	status of the procedure
-	"""
-	status: String
-	"""
-	type of the procedure
+	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
 	procedureType: String
 	"""
-	the date the procedure should be reviewed, defaults to a year from creation date
+	details of the procedure
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the procedure
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	"""
 	reviewDue: Time
 	"""
-	version of the procedure
+	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
-	version: String
+	reviewFrequency: ProcedureFrequency
 	"""
-	purpose and scope
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
-	purposeAndScope: String
-	"""
-	background of the procedure
-	"""
-	background: String
-	"""
-	which controls are satisfied by the procedure
-	"""
-	satisfies: String
-	"""
-	json data for the procedure document
-	"""
-	details: Map
+	revision: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -21447,6 +21775,14 @@ type Procedure implements Node {
 	provides edit access to the risk to members of the group
 	"""
 	editors: [Group!]
+	"""
+	the group of users who are responsible for approving the procedure
+	"""
+	approver: Group
+	"""
+	temporary delegates for the procedure, used for temporary approval
+	"""
+	delegate: Group
 	controls: [Control!]
 	internalPolicies: [InternalPolicy!]
 	narratives: [Narrative!]
@@ -21499,6 +21835,16 @@ type ProcedureDeletePayload {
 	deletedID: ID!
 }
 """
+ProcedureDocumentStatus is enum for the field status
+"""
+enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type ProcedureEdge {
@@ -21511,6 +21857,15 @@ type ProcedureEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+ProcedureFrequency is enum for the field review_frequency
+"""
+enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+}
 type ProcedureHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -21520,16 +21875,16 @@ type ProcedureHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	"""
 	the organization id that owns the object
 	"""
@@ -21539,41 +21894,33 @@ type ProcedureHistory implements Node {
 	"""
 	name: String!
 	"""
-	description of the procedure
+	status of the procedure, e.g. draft, published, archived, etc.
 	"""
-	description: String
+	status: ProcedureHistoryDocumentStatus
 	"""
-	status of the procedure
-	"""
-	status: String
-	"""
-	type of the procedure
+	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
 	procedureType: String
 	"""
-	the date the procedure should be reviewed, defaults to a year from creation date
+	details of the procedure
+	"""
+	details: String
+	"""
+	whether approval is required for edits to the procedure
+	"""
+	approvalRequired: Boolean
+	"""
+	the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	"""
 	reviewDue: Time
 	"""
-	version of the procedure
+	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
-	version: String
+	reviewFrequency: ProcedureHistoryFrequency
 	"""
-	purpose and scope
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
-	purposeAndScope: String
-	"""
-	background of the procedure
-	"""
-	background: String
-	"""
-	which controls are satisfied by the procedure
-	"""
-	satisfies: String
-	"""
-	json data for the procedure document
-	"""
-	details: Map
+	revision: String
 }
 """
 A connection to a list of items.
@@ -21593,6 +21940,16 @@ type ProcedureHistoryConnection {
 	totalCount: Int!
 }
 """
+ProcedureHistoryDocumentStatus is enum for the field status
+"""
+enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+	PUBLISHED
+	DRAFT
+	NEEDS_APPROVAL
+	APPROVED
+	ARCHIVED
+}
+"""
 An edge in a connection.
 """
 type ProcedureHistoryEdge {
@@ -21604,6 +21961,15 @@ type ProcedureHistoryEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+ProcedureHistoryFrequency is enum for the field review_frequency
+"""
+enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
 }
 """
 ProcedureHistoryOpType is enum for the field operation
@@ -21814,41 +22180,14 @@ input ProcedureHistoryWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ProcedureHistoryDocumentStatus
+	statusNEQ: ProcedureHistoryDocumentStatus
+	statusIn: [ProcedureHistoryDocumentStatus!]
+	statusNotIn: [ProcedureHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	procedure_type field predicates
 	"""
@@ -21868,6 +22207,31 @@ input ProcedureHistoryWhereInput {
 	procedureTypeEqualFold: String
 	procedureTypeContainsFold: String
 	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	approval_required field predicates
+	"""
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
+	"""
 	review_due field predicates
 	"""
 	reviewDue: Time
@@ -21881,77 +22245,32 @@ input ProcedureHistoryWhereInput {
 	reviewDueIsNil: Boolean
 	reviewDueNotNil: Boolean
 	"""
-	version field predicates
+	review_frequency field predicates
 	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
+	reviewFrequency: ProcedureHistoryFrequency
+	reviewFrequencyNEQ: ProcedureHistoryFrequency
+	reviewFrequencyIn: [ProcedureHistoryFrequency!]
+	reviewFrequencyNotIn: [ProcedureHistoryFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
 	"""
-	purpose_and_scope field predicates
+	revision field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
-	"""
-	background field predicates
-	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
-	"""
-	satisfies field predicates
-	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 }
 type ProcedureSearchResult {
 	procedures: [Procedure!]
@@ -22130,41 +22449,14 @@ input ProcedureWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: ProcedureDocumentStatus
+	statusNEQ: ProcedureDocumentStatus
+	statusIn: [ProcedureDocumentStatus!]
+	statusNotIn: [ProcedureDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	procedure_type field predicates
 	"""
@@ -22184,6 +22476,31 @@ input ProcedureWhereInput {
 	procedureTypeEqualFold: String
 	procedureTypeContainsFold: String
 	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	approval_required field predicates
+	"""
+	approvalRequired: Boolean
+	approvalRequiredNEQ: Boolean
+	approvalRequiredIsNil: Boolean
+	approvalRequiredNotNil: Boolean
+	"""
 	review_due field predicates
 	"""
 	reviewDue: Time
@@ -22197,77 +22514,32 @@ input ProcedureWhereInput {
 	reviewDueIsNil: Boolean
 	reviewDueNotNil: Boolean
 	"""
-	version field predicates
+	review_frequency field predicates
 	"""
-	version: String
-	versionNEQ: String
-	versionIn: [String!]
-	versionNotIn: [String!]
-	versionGT: String
-	versionGTE: String
-	versionLT: String
-	versionLTE: String
-	versionContains: String
-	versionHasPrefix: String
-	versionHasSuffix: String
-	versionIsNil: Boolean
-	versionNotNil: Boolean
-	versionEqualFold: String
-	versionContainsFold: String
+	reviewFrequency: ProcedureFrequency
+	reviewFrequencyNEQ: ProcedureFrequency
+	reviewFrequencyIn: [ProcedureFrequency!]
+	reviewFrequencyNotIn: [ProcedureFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
 	"""
-	purpose_and_scope field predicates
+	revision field predicates
 	"""
-	purposeAndScope: String
-	purposeAndScopeNEQ: String
-	purposeAndScopeIn: [String!]
-	purposeAndScopeNotIn: [String!]
-	purposeAndScopeGT: String
-	purposeAndScopeGTE: String
-	purposeAndScopeLT: String
-	purposeAndScopeLTE: String
-	purposeAndScopeContains: String
-	purposeAndScopeHasPrefix: String
-	purposeAndScopeHasSuffix: String
-	purposeAndScopeIsNil: Boolean
-	purposeAndScopeNotNil: Boolean
-	purposeAndScopeEqualFold: String
-	purposeAndScopeContainsFold: String
-	"""
-	background field predicates
-	"""
-	background: String
-	backgroundNEQ: String
-	backgroundIn: [String!]
-	backgroundNotIn: [String!]
-	backgroundGT: String
-	backgroundGTE: String
-	backgroundLT: String
-	backgroundLTE: String
-	backgroundContains: String
-	backgroundHasPrefix: String
-	backgroundHasSuffix: String
-	backgroundIsNil: Boolean
-	backgroundNotNil: Boolean
-	backgroundEqualFold: String
-	backgroundContainsFold: String
-	"""
-	satisfies field predicates
-	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -22283,6 +22555,16 @@ input ProcedureWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	approver edge predicates
+	"""
+	hasApprover: Boolean
+	hasApproverWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -26581,6 +26863,9 @@ type Query {
 		id: ID!
 	): UserSetting!
 }
+"""
+The `Reference` represents are links to external sources that can be used to gain more information about the control
+"""
 scalar Reference
 type Risk implements Node {
 	id: ID!
@@ -26607,23 +26892,19 @@ type Risk implements Node {
 	"""
 	name: String!
 	"""
-	description of the risk
+	status of the risk - open, mitigated, ongoing, in-progress, and archived.
 	"""
-	description: String
-	"""
-	status of the risk - mitigated or not, inflight, etc.
-	"""
-	status: String
+	status: RiskRiskStatus
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
 	"""
 	riskType: String
 	"""
-	business costs associated with the risk
+	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	businessCosts: String
+	category: String
 	"""
-	impact of the risk - high, medium, low
+	impact of the risk -critical, high, medium, low
 	"""
 	impact: RiskRiskImpact
 	"""
@@ -26631,17 +26912,21 @@ type Risk implements Node {
 	"""
 	likelihood: RiskRiskLikelihood
 	"""
+	score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	score: Int
+	"""
 	mitigation for the risk
 	"""
 	mitigation: String
 	"""
-	which controls are satisfied by the risk
+	details of the risk
 	"""
-	satisfies: String
+	details: String
 	"""
-	json data for the risk document
+	business costs associated with the risk
 	"""
-	details: Map
+	businessCosts: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -26659,6 +26944,14 @@ type Risk implements Node {
 	procedure: [Procedure!]
 	actionPlans: [ActionPlan!]
 	programs: [Program!]
+	"""
+	the group of users who are responsible for risk oversight
+	"""
+	stakeholder: Group
+	"""
+	temporary delegates for the risk, used for temporary ownership
+	"""
+	delegate: Group
 }
 """
 Return response for createBulkRisk mutation
@@ -26745,23 +27038,19 @@ type RiskHistory implements Node {
 	"""
 	name: String!
 	"""
-	description of the risk
+	status of the risk - open, mitigated, ongoing, in-progress, and archived.
 	"""
-	description: String
-	"""
-	status of the risk - mitigated or not, inflight, etc.
-	"""
-	status: String
+	status: RiskHistoryRiskStatus
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
 	"""
 	riskType: String
 	"""
-	business costs associated with the risk
+	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	businessCosts: String
+	category: String
 	"""
-	impact of the risk - high, medium, low
+	impact of the risk -critical, high, medium, low
 	"""
 	impact: RiskHistoryRiskImpact
 	"""
@@ -26769,17 +27058,21 @@ type RiskHistory implements Node {
 	"""
 	likelihood: RiskHistoryRiskLikelihood
 	"""
+	score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	score: Int
+	"""
 	mitigation for the risk
 	"""
 	mitigation: String
 	"""
-	which controls are satisfied by the risk
+	details of the risk
 	"""
-	satisfies: String
+	details: String
 	"""
-	json data for the risk document
+	business costs associated with the risk
 	"""
-	details: Map
+	businessCosts: String
 }
 """
 A connection to a list of items.
@@ -26826,6 +27119,7 @@ enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enum
 	LOW
 	MODERATE
 	HIGH
+	CRITICAL
 }
 """
 RiskHistoryRiskLikelihood is enum for the field likelihood
@@ -26834,6 +27128,16 @@ enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/
 	UNLIKELY
 	LIKELY
 	HIGHLY_LIKELY
+}
+"""
+RiskHistoryRiskStatus is enum for the field status
+"""
+enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+	OPEN
+	IN_PROGRESS
+	ONGOING
+	MITIGATED
+	ARCHIVED
 }
 """
 RiskHistoryWhereInput is used for filtering RiskHistory objects.
@@ -27036,41 +27340,14 @@ input RiskHistoryWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: RiskHistoryRiskStatus
+	statusNEQ: RiskHistoryRiskStatus
+	statusIn: [RiskHistoryRiskStatus!]
+	statusNotIn: [RiskHistoryRiskStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	risk_type field predicates
 	"""
@@ -27090,23 +27367,23 @@ input RiskHistoryWhereInput {
 	riskTypeEqualFold: String
 	riskTypeContainsFold: String
 	"""
-	business_costs field predicates
+	category field predicates
 	"""
-	businessCosts: String
-	businessCostsNEQ: String
-	businessCostsIn: [String!]
-	businessCostsNotIn: [String!]
-	businessCostsGT: String
-	businessCostsGTE: String
-	businessCostsLT: String
-	businessCostsLTE: String
-	businessCostsContains: String
-	businessCostsHasPrefix: String
-	businessCostsHasSuffix: String
-	businessCostsIsNil: Boolean
-	businessCostsNotNil: Boolean
-	businessCostsEqualFold: String
-	businessCostsContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
 	impact field predicates
 	"""
@@ -27126,6 +27403,19 @@ input RiskHistoryWhereInput {
 	likelihoodIsNil: Boolean
 	likelihoodNotNil: Boolean
 	"""
+	score field predicates
+	"""
+	score: Int
+	scoreNEQ: Int
+	scoreIn: [Int!]
+	scoreNotIn: [Int!]
+	scoreGT: Int
+	scoreGTE: Int
+	scoreLT: Int
+	scoreLTE: Int
+	scoreIsNil: Boolean
+	scoreNotNil: Boolean
+	"""
 	mitigation field predicates
 	"""
 	mitigation: String
@@ -27144,23 +27434,41 @@ input RiskHistoryWhereInput {
 	mitigationEqualFold: String
 	mitigationContainsFold: String
 	"""
-	satisfies field predicates
+	details field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	business_costs field predicates
+	"""
+	businessCosts: String
+	businessCostsNEQ: String
+	businessCostsIn: [String!]
+	businessCostsNotIn: [String!]
+	businessCostsGT: String
+	businessCostsGTE: String
+	businessCostsLT: String
+	businessCostsLTE: String
+	businessCostsContains: String
+	businessCostsHasPrefix: String
+	businessCostsHasSuffix: String
+	businessCostsIsNil: Boolean
+	businessCostsNotNil: Boolean
+	businessCostsEqualFold: String
+	businessCostsContainsFold: String
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -27169,6 +27477,7 @@ enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskI
 	LOW
 	MODERATE
 	HIGH
+	CRITICAL
 }
 """
 RiskRiskLikelihood is enum for the field likelihood
@@ -27177,6 +27486,16 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 	UNLIKELY
 	LIKELY
 	HIGHLY_LIKELY
+}
+"""
+RiskRiskStatus is enum for the field status
+"""
+enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+	OPEN
+	IN_PROGRESS
+	ONGOING
+	MITIGATED
+	ARCHIVED
 }
 type RiskSearchResult {
 	risks: [Risk!]
@@ -27355,41 +27674,14 @@ input RiskWhereInput {
 	nameEqualFold: String
 	nameContainsFold: String
 	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
-	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: RiskRiskStatus
+	statusNEQ: RiskRiskStatus
+	statusIn: [RiskRiskStatus!]
+	statusNotIn: [RiskRiskStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	risk_type field predicates
 	"""
@@ -27409,23 +27701,23 @@ input RiskWhereInput {
 	riskTypeEqualFold: String
 	riskTypeContainsFold: String
 	"""
-	business_costs field predicates
+	category field predicates
 	"""
-	businessCosts: String
-	businessCostsNEQ: String
-	businessCostsIn: [String!]
-	businessCostsNotIn: [String!]
-	businessCostsGT: String
-	businessCostsGTE: String
-	businessCostsLT: String
-	businessCostsLTE: String
-	businessCostsContains: String
-	businessCostsHasPrefix: String
-	businessCostsHasSuffix: String
-	businessCostsIsNil: Boolean
-	businessCostsNotNil: Boolean
-	businessCostsEqualFold: String
-	businessCostsContainsFold: String
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryIsNil: Boolean
+	categoryNotNil: Boolean
+	categoryEqualFold: String
+	categoryContainsFold: String
 	"""
 	impact field predicates
 	"""
@@ -27445,6 +27737,19 @@ input RiskWhereInput {
 	likelihoodIsNil: Boolean
 	likelihoodNotNil: Boolean
 	"""
+	score field predicates
+	"""
+	score: Int
+	scoreNEQ: Int
+	scoreIn: [Int!]
+	scoreNotIn: [Int!]
+	scoreGT: Int
+	scoreGTE: Int
+	scoreLT: Int
+	scoreLTE: Int
+	scoreIsNil: Boolean
+	scoreNotNil: Boolean
+	"""
 	mitigation field predicates
 	"""
 	mitigation: String
@@ -27463,23 +27768,41 @@ input RiskWhereInput {
 	mitigationEqualFold: String
 	mitigationContainsFold: String
 	"""
-	satisfies field predicates
+	details field predicates
 	"""
-	satisfies: String
-	satisfiesNEQ: String
-	satisfiesIn: [String!]
-	satisfiesNotIn: [String!]
-	satisfiesGT: String
-	satisfiesGTE: String
-	satisfiesLT: String
-	satisfiesLTE: String
-	satisfiesContains: String
-	satisfiesHasPrefix: String
-	satisfiesHasSuffix: String
-	satisfiesIsNil: Boolean
-	satisfiesNotNil: Boolean
-	satisfiesEqualFold: String
-	satisfiesContainsFold: String
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	business_costs field predicates
+	"""
+	businessCosts: String
+	businessCostsNEQ: String
+	businessCostsIn: [String!]
+	businessCostsNotIn: [String!]
+	businessCostsGT: String
+	businessCostsGTE: String
+	businessCostsLT: String
+	businessCostsLTE: String
+	businessCostsContains: String
+	businessCostsHasPrefix: String
+	businessCostsHasSuffix: String
+	businessCostsIsNil: Boolean
+	businessCostsNotNil: Boolean
+	businessCostsEqualFold: String
+	businessCostsContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -27520,6 +27843,16 @@ input RiskWhereInput {
 	"""
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	stakeholder edge predicates
+	"""
+	hasStakeholder: Boolean
+	hasStakeholderWith: [GroupWhereInput!]
+	"""
+	delegate edge predicates
+	"""
+	hasDelegate: Boolean
+	hasDelegateWith: [GroupWhereInput!]
 }
 union SearchResult = APITokenSearchResult | ActionPlanSearchResult | ContactSearchResult | ControlSearchResult | ControlImplementationSearchResult | ControlObjectiveSearchResult | DocumentDataSearchResult | EntitySearchResult | EntityTypeSearchResult | EventSearchResult | EvidenceSearchResult | FileSearchResult | GroupSearchResult | IntegrationSearchResult | InternalPolicySearchResult | MappedControlSearchResult | NarrativeSearchResult | OrgSubscriptionSearchResult | OrganizationSearchResult | OrganizationSettingSearchResult | PersonalAccessTokenSearchResult | ProcedureSearchResult | ProgramSearchResult | RiskSearchResult | StandardSearchResult | SubcontrolSearchResult | SubscriberSearchResult | TaskSearchResult | TemplateSearchResult | UserSearchResult | UserSettingSearchResult
 type SearchResultConnection {
@@ -27549,6 +27882,10 @@ type Standard implements Node {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -27569,6 +27906,10 @@ type Standard implements Node {
 	"""
 	description: String
 	"""
+	URL to the logo of the governing body
+	"""
+	governingBodyLogoURL: String
+	"""
 	governing body of the standard, e.g. AICPA, etc.
 	"""
 	governingBody: String
@@ -27581,9 +27922,9 @@ type Standard implements Node {
 	"""
 	link: String
 	"""
-	status of the standard - active, deprecated, etc.
+	status of the standard - active, draft, and archived
 	"""
-	status: String
+	status: StandardStandardStatus
 	"""
 	indicates if the standard should be made available to all users, only for public standards
 	"""
@@ -27597,17 +27938,13 @@ type Standard implements Node {
 	"""
 	systemOwned: Boolean
 	"""
-	type of the standard - security, privacy, etc.
+	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
 	standardType: String
 	"""
 	version of the standard
 	"""
 	version: String
-	"""
-	internal revision of the standard
-	"""
-	revision: String
 	owner: Organization
 	controls: [Control!]
 }
@@ -27684,6 +28021,10 @@ type StandardHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: String
@@ -27704,6 +28045,10 @@ type StandardHistory implements Node {
 	"""
 	description: String
 	"""
+	URL to the logo of the governing body
+	"""
+	governingBodyLogoURL: String
+	"""
 	governing body of the standard, e.g. AICPA, etc.
 	"""
 	governingBody: String
@@ -27716,9 +28061,9 @@ type StandardHistory implements Node {
 	"""
 	link: String
 	"""
-	status of the standard - active, deprecated, etc.
+	status of the standard - active, draft, and archived
 	"""
-	status: String
+	status: StandardHistoryStandardStatus
 	"""
 	indicates if the standard should be made available to all users, only for public standards
 	"""
@@ -27732,17 +28077,13 @@ type StandardHistory implements Node {
 	"""
 	systemOwned: Boolean
 	"""
-	type of the standard - security, privacy, etc.
+	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
 	standardType: String
 	"""
 	version of the standard
 	"""
 	version: String
-	"""
-	internal revision of the standard
-	"""
-	revision: String
 }
 """
 A connection to a list of items.
@@ -27781,6 +28122,14 @@ enum StandardHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+StandardHistoryStandardStatus is enum for the field status
+"""
+enum StandardHistoryStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+	ACTIVE
+	DRAFT
+	ARCHIVED
 }
 """
 StandardHistoryWhereInput is used for filtering StandardHistory objects.
@@ -27933,6 +28282,24 @@ input StandardHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -28021,6 +28388,24 @@ input StandardHistoryWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
+	governing_body_logo_url field predicates
+	"""
+	governingBodyLogoURL: String
+	governingBodyLogoURLNEQ: String
+	governingBodyLogoURLIn: [String!]
+	governingBodyLogoURLNotIn: [String!]
+	governingBodyLogoURLGT: String
+	governingBodyLogoURLGTE: String
+	governingBodyLogoURLLT: String
+	governingBodyLogoURLLTE: String
+	governingBodyLogoURLContains: String
+	governingBodyLogoURLHasPrefix: String
+	governingBodyLogoURLHasSuffix: String
+	governingBodyLogoURLIsNil: Boolean
+	governingBodyLogoURLNotNil: Boolean
+	governingBodyLogoURLEqualFold: String
+	governingBodyLogoURLContainsFold: String
+	"""
 	governing_body field predicates
 	"""
 	governingBody: String
@@ -28059,21 +28444,12 @@ input StandardHistoryWhereInput {
 	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: StandardHistoryStandardStatus
+	statusNEQ: StandardHistoryStandardStatus
+	statusIn: [StandardHistoryStandardStatus!]
+	statusNotIn: [StandardHistoryStandardStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	is_public field predicates
 	"""
@@ -28131,27 +28507,17 @@ input StandardHistoryWhereInput {
 	versionNotNil: Boolean
 	versionEqualFold: String
 	versionContainsFold: String
-	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
 }
 type StandardSearchResult {
 	standards: [Standard!]
+}
+"""
+StandardStandardStatus is enum for the field status
+"""
+enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+	ACTIVE
+	DRAFT
+	ARCHIVED
 }
 """
 Return response for updateStandard mutation
@@ -28277,6 +28643,24 @@ input StandardWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -28365,6 +28749,24 @@ input StandardWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
+	governing_body_logo_url field predicates
+	"""
+	governingBodyLogoURL: String
+	governingBodyLogoURLNEQ: String
+	governingBodyLogoURLIn: [String!]
+	governingBodyLogoURLNotIn: [String!]
+	governingBodyLogoURLGT: String
+	governingBodyLogoURLGTE: String
+	governingBodyLogoURLLT: String
+	governingBodyLogoURLLTE: String
+	governingBodyLogoURLContains: String
+	governingBodyLogoURLHasPrefix: String
+	governingBodyLogoURLHasSuffix: String
+	governingBodyLogoURLIsNil: Boolean
+	governingBodyLogoURLNotNil: Boolean
+	governingBodyLogoURLEqualFold: String
+	governingBodyLogoURLContainsFold: String
+	"""
 	governing_body field predicates
 	"""
 	governingBody: String
@@ -28403,21 +28805,12 @@ input StandardWhereInput {
 	"""
 	status field predicates
 	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
+	status: StandardStandardStatus
+	statusNEQ: StandardStandardStatus
+	statusIn: [StandardStandardStatus!]
+	statusNotIn: [StandardStandardStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	is_public field predicates
 	"""
@@ -28475,24 +28868,6 @@ input StandardWhereInput {
 	versionNotNil: Boolean
 	versionEqualFold: String
 	versionContainsFold: String
-	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -31657,19 +32032,44 @@ input UpdateActionPlanInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the action plan
+	the name of the action_plan
 	"""
 	name: String
 	"""
-	description of the action plan
+	status of the action_plan, e.g. draft, published, archived, etc.
 	"""
-	description: String
-	clearDescription: Boolean
-	"""
-	status of the action plan
-	"""
-	status: String
+	status: ActionPlanDocumentStatus
 	clearStatus: Boolean
+	"""
+	type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	"""
+	actionPlanType: String
+	clearActionPlanType: Boolean
+	"""
+	details of the action_plan
+	"""
+	details: String
+	clearDetails: Boolean
+	"""
+	whether approval is required for edits to the action_plan
+	"""
+	approvalRequired: Boolean
+	clearApprovalRequired: Boolean
+	"""
+	the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	"""
+	reviewDue: Time
+	clearReviewDue: Boolean
+	"""
+	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	"""
+	reviewFrequency: ActionPlanFrequency
+	clearReviewFrequency: Boolean
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
 	"""
 	due date of the action plan
 	"""
@@ -31678,18 +32078,19 @@ input UpdateActionPlanInput {
 	"""
 	priority of the action plan
 	"""
-	priority: String
+	priority: ActionPlanPriority
 	clearPriority: Boolean
 	"""
 	source of the action plan
 	"""
 	source: String
 	clearSource: Boolean
-	"""
-	json data including details of the action plan
-	"""
-	details: Map
-	clearDetails: Boolean
+	approverID: ID
+	clearApprover: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
+	ownerID: ID
+	clearOwner: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisk: Boolean
@@ -31702,6 +32103,7 @@ input UpdateActionPlanInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearProgram: Boolean
+	RevisionBump: VersionBump
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -31768,9 +32170,9 @@ input UpdateControlImplementationInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	status of the control implementation
+	status of the %s, e.g. draft, published, archived, etc.
 	"""
-	status: String
+	status: ControlImplementationDocumentStatus
 	clearStatus: Boolean
 	"""
 	date the control was implemented
@@ -31946,6 +32348,11 @@ Input was generated by ent.
 """
 input UpdateControlObjectiveInput {
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
+	"""
 	tags associated with the object
 	"""
 	tags: [String!]
@@ -31975,11 +32382,6 @@ input UpdateControlObjectiveInput {
 	"""
 	controlObjectiveType: String
 	clearControlObjectiveType: Boolean
-	"""
-	version of the control objective
-	"""
-	version: String
-	clearVersion: Boolean
 	"""
 	category of the control
 	"""
@@ -32026,6 +32428,7 @@ input UpdateControlObjectiveInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	RevisionBump: VersionBump
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -32224,6 +32627,11 @@ input UpdateEvidenceInput {
 	"""
 	url: String
 	clearURL: Boolean
+	"""
+	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	"""
+	status: EvidenceEvidenceStatus
+	clearStatus: Boolean
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
@@ -32578,45 +32986,40 @@ input UpdateInternalPolicyInput {
 	"""
 	name: String
 	"""
-	description of the policy
+	status of the policy, e.g. draft, published, archived, etc.
 	"""
-	description: String
-	clearDescription: Boolean
-	"""
-	status of the policy
-	"""
-	status: String
+	status: InternalPolicyDocumentStatus
 	clearStatus: Boolean
 	"""
-	the date the policy should be reviewed, defaults to a year from creation date
-	"""
-	reviewDue: Time
-	clearReviewDue: Boolean
-	"""
-	type of the policy
+	type of the policy, e.g. compliance, operational, health and safety, etc.
 	"""
 	policyType: String
 	clearPolicyType: Boolean
 	"""
-	version of the policy
+	details of the policy
 	"""
-	version: String
-	clearVersion: Boolean
-	"""
-	purpose and scope
-	"""
-	purposeAndScope: String
-	clearPurposeAndScope: Boolean
-	"""
-	background of the policy
-	"""
-	background: String
-	clearBackground: Boolean
-	"""
-	json data for the policy document
-	"""
-	details: Map
+	details: String
 	clearDetails: Boolean
+	"""
+	whether approval is required for edits to the policy
+	"""
+	approvalRequired: Boolean
+	clearApprovalRequired: Boolean
+	"""
+	the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	"""
+	reviewDue: Time
+	clearReviewDue: Boolean
+	"""
+	the frequency at which the policy should be reviewed, used to calculate the review_due date
+	"""
+	reviewFrequency: InternalPolicyFrequency
+	clearReviewFrequency: Boolean
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -32625,6 +33028,10 @@ input UpdateInternalPolicyInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	approverID: ID
+	clearApprover: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
@@ -32643,6 +33050,7 @@ input UpdateInternalPolicyInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	RevisionBump: VersionBump
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -32906,6 +33314,9 @@ input UpdateOrganizationInput {
 	addStandardIDs: [ID!]
 	removeStandardIDs: [ID!]
 	clearStandards: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -33041,50 +33452,40 @@ input UpdateProcedureInput {
 	"""
 	name: String
 	"""
-	description of the procedure
+	status of the procedure, e.g. draft, published, archived, etc.
 	"""
-	description: String
-	clearDescription: Boolean
-	"""
-	status of the procedure
-	"""
-	status: String
+	status: ProcedureDocumentStatus
 	clearStatus: Boolean
 	"""
-	type of the procedure
+	type of the procedure, e.g. compliance, operational, health and safety, etc.
 	"""
 	procedureType: String
 	clearProcedureType: Boolean
 	"""
-	the date the procedure should be reviewed, defaults to a year from creation date
+	details of the procedure
+	"""
+	details: String
+	clearDetails: Boolean
+	"""
+	whether approval is required for edits to the procedure
+	"""
+	approvalRequired: Boolean
+	clearApprovalRequired: Boolean
+	"""
+	the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	"""
 	reviewDue: Time
 	clearReviewDue: Boolean
 	"""
-	version of the procedure
+	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
-	version: String
-	clearVersion: Boolean
+	reviewFrequency: ProcedureFrequency
+	clearReviewFrequency: Boolean
 	"""
-	purpose and scope
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
-	purposeAndScope: String
-	clearPurposeAndScope: Boolean
-	"""
-	background of the procedure
-	"""
-	background: String
-	clearBackground: Boolean
-	"""
-	which controls are satisfied by the procedure
-	"""
-	satisfies: String
-	clearSatisfies: Boolean
-	"""
-	json data for the procedure document
-	"""
-	details: Map
-	clearDetails: Boolean
+	revision: String
+	clearRevision: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -33093,6 +33494,10 @@ input UpdateProcedureInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	approverID: ID
+	clearApprover: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -33111,6 +33516,7 @@ input UpdateProcedureInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	RevisionBump: VersionBump
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -33231,14 +33637,9 @@ input UpdateRiskInput {
 	"""
 	name: String
 	"""
-	description of the risk
+	status of the risk - open, mitigated, ongoing, in-progress, and archived.
 	"""
-	description: String
-	clearDescription: Boolean
-	"""
-	status of the risk - mitigated or not, inflight, etc.
-	"""
-	status: String
+	status: RiskRiskStatus
 	clearStatus: Boolean
 	"""
 	type of the risk, e.g. strategic, operational, financial, external, etc.
@@ -33246,12 +33647,12 @@ input UpdateRiskInput {
 	riskType: String
 	clearRiskType: Boolean
 	"""
-	business costs associated with the risk
+	category of the risk, e.g. human resources, operations, IT, etc.
 	"""
-	businessCosts: String
-	clearBusinessCosts: Boolean
+	category: String
+	clearCategory: Boolean
 	"""
-	impact of the risk - high, medium, low
+	impact of the risk -critical, high, medium, low
 	"""
 	impact: RiskRiskImpact
 	clearImpact: Boolean
@@ -33261,20 +33662,25 @@ input UpdateRiskInput {
 	likelihood: RiskRiskLikelihood
 	clearLikelihood: Boolean
 	"""
+	score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	score: Int
+	clearScore: Boolean
+	"""
 	mitigation for the risk
 	"""
 	mitigation: String
 	clearMitigation: Boolean
 	"""
-	which controls are satisfied by the risk
+	details of the risk
 	"""
-	satisfies: String
-	clearSatisfies: Boolean
-	"""
-	json data for the risk document
-	"""
-	details: Map
+	details: String
 	clearDetails: Boolean
+	"""
+	business costs associated with the risk
+	"""
+	businessCosts: String
+	clearBusinessCosts: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -33296,6 +33702,10 @@ input UpdateRiskInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	stakeholderID: ID
+	clearStakeholder: Boolean
+	delegateID: ID
+	clearDelegate: Boolean
 }
 """
 UpdateStandardInput is used for update Standard object.
@@ -33308,6 +33718,11 @@ input UpdateStandardInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
 	"""
 	the long name of the standard body
 	"""
@@ -33328,6 +33743,11 @@ input UpdateStandardInput {
 	description: String
 	clearDescription: Boolean
 	"""
+	URL to the logo of the governing body
+	"""
+	governingBodyLogoURL: String
+	clearGoverningBodyLogoURL: Boolean
+	"""
 	governing body of the standard, e.g. AICPA, etc.
 	"""
 	governingBody: String
@@ -33344,9 +33764,9 @@ input UpdateStandardInput {
 	link: String
 	clearLink: Boolean
 	"""
-	status of the standard - active, deprecated, etc.
+	status of the standard - active, draft, and archived
 	"""
-	status: String
+	status: StandardStandardStatus
 	clearStatus: Boolean
 	"""
 	indicates if the standard should be made available to all users, only for public standards
@@ -33364,7 +33784,7 @@ input UpdateStandardInput {
 	systemOwned: Boolean
 	clearSystemOwned: Boolean
 	"""
-	type of the standard - security, privacy, etc.
+	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
 	standardType: String
 	clearStandardType: Boolean
@@ -33373,16 +33793,12 @@ input UpdateStandardInput {
 	"""
 	version: String
 	clearVersion: Boolean
-	"""
-	internal revision of the standard
-	"""
-	revision: String
-	clearRevision: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	RevisionBump: VersionBump
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -33825,6 +34241,10 @@ input UpdateUserSettingInput {
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
 }
+"""
+The `Upload` scalar type represents a file upload.
+This scalar is typically used to handle file uploads in GraphQL mutations.
+"""
 scalar Upload
 type User implements Node {
 	id: ID!
@@ -35480,3 +35900,7 @@ input UserWhereInput {
 	hasProgramMemberships: Boolean
 	hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
 }
+"""
+VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
+"""
+scalar VersionBump

@@ -24,15 +24,17 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "name of the risk")
-	createCmd.Flags().StringP("description", "d", "", "description of the risk")
+	createCmd.Flags().StringP("details", "d", "", "details of the risk")
 	createCmd.Flags().StringP("status", "s", "", "status of the risk")
-	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the risk")
 	createCmd.Flags().StringP("type", "t", "", "type of the risk")
 	createCmd.Flags().StringP("business-costs", "b", "", "business costs associated with the risk")
 	createCmd.Flags().StringP("impact", "m", "", "impact of the risk")
 	createCmd.Flags().StringP("likelihood", "l", "", "likelihood of the risk")
 	createCmd.Flags().StringP("mitigation", "g", "", "mitigation for the risk")
-	createCmd.Flags().StringP("satisfies", "a", "", "which controls are satisfied by the risk")
+	createCmd.Flags().Int64P("score", "o", 0, "score of the risk")
+
+	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the risk")
+
 }
 
 // createValidation validates the required fields for the command
@@ -49,6 +51,11 @@ func createValidation() (input openlaneclient.CreateRiskInput, err error) {
 	riskType := cmd.Config.String("type")
 	if riskType != "" {
 		input.RiskType = &riskType
+	}
+
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	businessCosts := cmd.Config.String("business-costs")
@@ -71,9 +78,14 @@ func createValidation() (input openlaneclient.CreateRiskInput, err error) {
 		input.Mitigation = &mitigation
 	}
 
-	satisfies := cmd.Config.String("satisfies")
-	if satisfies != "" {
-		input.Satisfies = &satisfies
+	score := cmd.Config.Int64("score")
+	if score != 0 {
+		input.Score = &score
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = enums.ToRiskStatus(status)
 	}
 
 	return input, nil

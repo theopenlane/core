@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -270,6 +271,26 @@ func (ehu *EvidenceHistoryUpdate) ClearURL() *EvidenceHistoryUpdate {
 	return ehu
 }
 
+// SetStatus sets the "status" field.
+func (ehu *EvidenceHistoryUpdate) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryUpdate {
+	ehu.mutation.SetStatus(es)
+	return ehu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ehu *EvidenceHistoryUpdate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryUpdate {
+	if es != nil {
+		ehu.SetStatus(*es)
+	}
+	return ehu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ehu *EvidenceHistoryUpdate) ClearStatus() *EvidenceHistoryUpdate {
+	ehu.mutation.ClearStatus()
+	return ehu
+}
+
 // Mutation returns the EvidenceHistoryMutation object of the builder.
 func (ehu *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
 	return ehu.mutation
@@ -311,6 +332,16 @@ func (ehu *EvidenceHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ehu *EvidenceHistoryUpdate) check() error {
+	if v, ok := ehu.mutation.Status(); ok {
+		if err := evidencehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ehu *EvidenceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdate {
 	ehu.modifiers = append(ehu.modifiers, modifiers...)
@@ -318,6 +349,9 @@ func (ehu *EvidenceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (ehu *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ehu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	if ps := ehu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -414,6 +448,12 @@ func (ehu *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ehu.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
+	}
+	if value, ok := ehu.mutation.Status(); ok {
+		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
+	}
+	if ehu.mutation.StatusCleared() {
+		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EvidenceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
@@ -677,6 +717,26 @@ func (ehuo *EvidenceHistoryUpdateOne) ClearURL() *EvidenceHistoryUpdateOne {
 	return ehuo
 }
 
+// SetStatus sets the "status" field.
+func (ehuo *EvidenceHistoryUpdateOne) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
+	ehuo.mutation.SetStatus(es)
+	return ehuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ehuo *EvidenceHistoryUpdateOne) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
+	if es != nil {
+		ehuo.SetStatus(*es)
+	}
+	return ehuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (ehuo *EvidenceHistoryUpdateOne) ClearStatus() *EvidenceHistoryUpdateOne {
+	ehuo.mutation.ClearStatus()
+	return ehuo
+}
+
 // Mutation returns the EvidenceHistoryMutation object of the builder.
 func (ehuo *EvidenceHistoryUpdateOne) Mutation() *EvidenceHistoryMutation {
 	return ehuo.mutation
@@ -731,6 +791,16 @@ func (ehuo *EvidenceHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ehuo *EvidenceHistoryUpdateOne) check() error {
+	if v, ok := ehuo.mutation.Status(); ok {
+		if err := evidencehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ehuo *EvidenceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdateOne {
 	ehuo.modifiers = append(ehuo.modifiers, modifiers...)
@@ -738,6 +808,9 @@ func (ehuo *EvidenceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuil
 }
 
 func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EvidenceHistory, err error) {
+	if err := ehuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	id, ok := ehuo.mutation.ID()
 	if !ok {
@@ -851,6 +924,12 @@ func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evide
 	}
 	if ehuo.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
+	}
+	if value, ok := ehuo.mutation.Status(); ok {
+		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
+	}
+	if ehuo.mutation.StatusCleared() {
+		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EvidenceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)

@@ -10,8 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Procedure is the model entity for the Procedure schema.
@@ -27,40 +29,38 @@ type Procedure struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
 	Name string `json:"name,omitempty"`
-	// description of the procedure
-	Description string `json:"description,omitempty"`
-	// status of the procedure
-	Status string `json:"status,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType string `json:"procedure_type,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue time.Time `json:"review_due,omitempty"`
-	// version of the procedure
-	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the procedure
-	Background string `json:"background,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the procedure document
-	Details map[string]interface{} `json:"details,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
+	procedure_approver           *string
+	procedure_delegate           *string
 	subcontrol_procedures        *string
 	selectValues                 sql.SelectValues
 }
@@ -73,6 +73,10 @@ type ProcedureEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
+	// the group of users who are responsible for approving the procedure
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the procedure, used for temporary approval
+	Delegate *Group `json:"delegate,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// InternalPolicies holds the value of the internal_policies edge.
@@ -87,9 +91,9 @@ type ProcedureEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [11]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -130,10 +134,32 @@ func (e ProcedureEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
+// ApproverOrErr returns the Approver value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) ApproverOrErr() (*Group, error) {
+	if e.Approver != nil {
+		return e.Approver, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "approver"}
+}
+
+// DelegateOrErr returns the Delegate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) DelegateOrErr() (*Group, error) {
+	if e.Delegate != nil {
+		return e.Delegate, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -142,7 +168,7 @@ func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -151,7 +177,7 @@ func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -160,7 +186,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -169,7 +195,7 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -178,7 +204,7 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -189,15 +215,21 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedure.FieldTags, procedure.FieldDetails:
+		case procedure.FieldTags:
 			values[i] = new([]byte)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldDescription, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldVersion, procedure.FieldPurposeAndScope, procedure.FieldBackground, procedure.FieldSatisfies:
+		case procedure.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldRevision:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
 			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[1]: // subcontrol_procedures
+		case procedure.ForeignKeys[1]: // procedure_approver
+			values[i] = new(sql.NullString)
+		case procedure.ForeignKeys[2]: // procedure_delegate
+			values[i] = new(sql.NullString)
+		case procedure.ForeignKeys[3]: // subcontrol_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -244,6 +276,14 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedBy = value.String
 			}
+		case procedure.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
 		case procedure.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -262,14 +302,6 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.DisplayID = value.String
 			}
-		case procedure.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case procedure.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -282,17 +314,11 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.Name = value.String
 			}
-		case procedure.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				pr.Description = value.String
-			}
 		case procedure.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				pr.Status = value.String
+				pr.Status = enums.DocumentStatus(value.String)
 			}
 		case procedure.FieldProcedureType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -300,43 +326,35 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ProcedureType = value.String
 			}
+		case procedure.FieldDetails:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field details", values[i])
+			} else if value.Valid {
+				pr.Details = value.String
+			}
+		case procedure.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				pr.ApprovalRequired = value.Bool
+			}
 		case procedure.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
 				pr.ReviewDue = value.Time
 			}
-		case procedure.FieldVersion:
+		case procedure.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				pr.Version = value.String
+				pr.ReviewFrequency = enums.Frequency(value.String)
 			}
-		case procedure.FieldPurposeAndScope:
+		case procedure.FieldRevision:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				pr.PurposeAndScope = value.String
-			}
-		case procedure.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				pr.Background = value.String
-			}
-		case procedure.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				pr.Satisfies = value.String
-			}
-		case procedure.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+				pr.Revision = value.String
 			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -346,6 +364,20 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				*pr.control_objective_procedures = value.String
 			}
 		case procedure.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_approver", values[i])
+			} else if value.Valid {
+				pr.procedure_approver = new(string)
+				*pr.procedure_approver = value.String
+			}
+		case procedure.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_delegate", values[i])
+			} else if value.Valid {
+				pr.procedure_delegate = new(string)
+				*pr.procedure_delegate = value.String
+			}
+		case procedure.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_procedures", values[i])
 			} else if value.Valid {
@@ -378,6 +410,16 @@ func (pr *Procedure) QueryBlockedGroups() *GroupQuery {
 // QueryEditors queries the "editors" edge of the Procedure entity.
 func (pr *Procedure) QueryEditors() *GroupQuery {
 	return NewProcedureClient(pr.config).QueryEditors(pr)
+}
+
+// QueryApprover queries the "approver" edge of the Procedure entity.
+func (pr *Procedure) QueryApprover() *GroupQuery {
+	return NewProcedureClient(pr.config).QueryApprover(pr)
+}
+
+// QueryDelegate queries the "delegate" edge of the Procedure entity.
+func (pr *Procedure) QueryDelegate() *GroupQuery {
+	return NewProcedureClient(pr.config).QueryDelegate(pr)
 }
 
 // QueryControls queries the "controls" edge of the Procedure entity.
@@ -445,6 +487,9 @@ func (pr *Procedure) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pr.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
+	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -454,41 +499,32 @@ func (pr *Procedure) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(pr.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(pr.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(pr.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(pr.Status)
+	builder.WriteString(fmt.Sprintf("%v", pr.Status))
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
 	builder.WriteString(pr.ProcedureType)
 	builder.WriteString(", ")
+	builder.WriteString("details=")
+	builder.WriteString(pr.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ApprovalRequired))
+	builder.WriteString(", ")
 	builder.WriteString("review_due=")
 	builder.WriteString(pr.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(pr.Version)
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ReviewFrequency))
 	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(pr.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(pr.Background)
-	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(pr.Satisfies)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Details))
+	builder.WriteString("revision=")
+	builder.WriteString(pr.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }
