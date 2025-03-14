@@ -1,0 +1,2 @@
+Expires,Recipient,Status,Role,SendAttempts,RequestorId,OwnerId,EventIDs
+example_expires,example_recipient,example_status,example_role,example_sendattempts,example_requestorid,example_ownerid,example_eventids

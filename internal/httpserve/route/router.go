@@ -211,6 +211,7 @@ func RegisterRoutes(router *Router) error {
 		registerAppleMerchantHandler,
 		registerWebhookHandler,
 		register2faHandler,
+		registerExampleCSVHandler,
 	}
 
 	if router.LocalFilePath != "" {

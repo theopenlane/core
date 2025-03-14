@@ -15,6 +15,7 @@ import (
 
 const (
 	graphapiGenDir = "internal/graphapi/generate/"
+	csvDir         = "internal/httpserve/handlers/csv"
 )
 
 func main() {
@@ -36,6 +37,7 @@ func main() {
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
+			bulkgen.WithCSVOutputPath(csvDir),
 		)), // add the bulkgen plugin
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),
