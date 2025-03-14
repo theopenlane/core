@@ -203,9 +203,9 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 		return err
 	}
 
-	log.Debug().Bool("isAdmin", isAdmin).Msg("is admin check")
-
 	if isAdmin {
+		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+
 		return nil
 	}
 

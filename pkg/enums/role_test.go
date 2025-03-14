@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-func TestEnum(t *testing.T) {
+func TestToRole(t *testing.T) {
 	testCases := []struct {
 		name     string
 		role     string
