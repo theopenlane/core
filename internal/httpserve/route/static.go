@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/httpsling"
 )
 
 // registerJwksWellKnownHandler supplies the JWKS endpoint
