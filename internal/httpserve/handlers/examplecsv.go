@@ -13,7 +13,7 @@ import (
 //go:embed csv/*.csv
 var examplecsv embed.FS
 
-// ForgotPassword will send an forgot password email if the provided email exists
+// ExampleCSV will return an example csv file that can be used for bulk uploads of the object
 func (h *Handler) ExampleCSV(ctx echo.Context) error {
 	var in models.ExampleCSVRequest
 	if err := ctx.Bind(&in); err != nil {
