@@ -115,7 +115,7 @@ func (Subscriber) Hooks() []ent.Hook {
 // Indexes of the Subscriber
 func (Subscriber) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("email", "owner_id").
+		index.Fields("email", ownerFieldName).
 			Unique().
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),

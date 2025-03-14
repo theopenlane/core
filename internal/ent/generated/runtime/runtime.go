@@ -432,6 +432,7 @@ func init() {
 	controlMixinInters4 := controlMixin[4].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters4[0]
+	control.Interceptors[2] = controlMixinInters4[1]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields2 := controlMixin[2].Fields()
@@ -608,6 +609,7 @@ func init() {
 	controlobjectiveMixinInters5 := controlobjectiveMixin[5].Interceptors()
 	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
 	controlobjective.Interceptors[1] = controlobjectiveMixinInters5[0]
+	controlobjective.Interceptors[2] = controlobjectiveMixinInters5[1]
 	controlobjectiveMixinFields0 := controlobjectiveMixin[0].Fields()
 	_ = controlobjectiveMixinFields0
 	controlobjectiveMixinFields2 := controlobjectiveMixin[2].Fields()
@@ -713,6 +715,7 @@ func init() {
 	documentdataMixinInters4 := documentdataMixin[4].Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters3[0]
 	documentdata.Interceptors[1] = documentdataMixinInters4[0]
+	documentdata.Interceptors[2] = documentdataMixinInters4[1]
 	documentdataMixinFields0 := documentdataMixin[0].Fields()
 	_ = documentdataMixinFields0
 	documentdataMixinFields1 := documentdataMixin[1].Fields()
@@ -1161,6 +1164,7 @@ func init() {
 	evidenceMixinInters4 := evidenceMixin[4].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters2[0]
 	evidence.Interceptors[1] = evidenceMixinInters4[0]
+	evidence.Interceptors[2] = evidenceMixinInters4[1]
 	evidenceMixinFields0 := evidenceMixin[0].Fields()
 	_ = evidenceMixinFields0
 	evidenceMixinFields1 := evidenceMixin[1].Fields()
@@ -2095,6 +2099,7 @@ func init() {
 	narrativeMixinInters4 := narrativeMixin[4].Interceptors()
 	narrative.Interceptors[0] = narrativeMixinInters1[0]
 	narrative.Interceptors[1] = narrativeMixinInters4[0]
+	narrative.Interceptors[2] = narrativeMixinInters4[1]
 	narrativeMixinFields0 := narrativeMixin[0].Fields()
 	_ = narrativeMixinFields0
 	narrativeMixinFields2 := narrativeMixin[2].Fields()
@@ -2191,6 +2196,7 @@ func init() {
 	noteMixinInters3 := noteMixin[3].Interceptors()
 	note.Interceptors[0] = noteMixinInters2[0]
 	note.Interceptors[1] = noteMixinInters3[0]
+	note.Interceptors[2] = noteMixinInters3[1]
 	noteMixinFields0 := noteMixin[0].Fields()
 	_ = noteMixinFields0
 	noteMixinFields1 := noteMixin[1].Fields()
@@ -3205,6 +3211,7 @@ func init() {
 	riskMixinInters4 := riskMixin[4].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
 	risk.Interceptors[1] = riskMixinInters4[0]
+	risk.Interceptors[2] = riskMixinInters4[1]
 	riskMixinFields0 := riskMixin[0].Fields()
 	_ = riskMixinFields0
 	riskMixinFields2 := riskMixin[2].Fields()
@@ -3445,6 +3452,7 @@ func init() {
 	subcontrolMixinInters4 := subcontrolMixin[4].Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
 	subcontrol.Interceptors[1] = subcontrolMixinInters4[0]
+	subcontrol.Interceptors[2] = subcontrolMixinInters4[1]
 	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
 	_ = subcontrolMixinFields0
 	subcontrolMixinFields2 := subcontrolMixin[2].Fields()
@@ -3698,6 +3706,7 @@ func init() {
 	taskMixinInters4 := taskMixin[4].Interceptors()
 	task.Interceptors[0] = taskMixinInters2[0]
 	task.Interceptors[1] = taskMixinInters4[0]
+	task.Interceptors[2] = taskMixinInters4[1]
 	taskMixinFields0 := taskMixin[0].Fields()
 	_ = taskMixinFields0
 	taskMixinFields1 := taskMixin[1].Fields()

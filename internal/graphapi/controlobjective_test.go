@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -111,6 +112,13 @@ func (suite *GraphTestSuite) TestQueryControlObjectives() {
 	// create multiple objects to be queried using testUser1
 	(&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+
+	// add control objective for the user to another org; this should not be returned for JWT auth, since it's
+	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
+	(&ControlObjectiveBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
 
 	testCases := []struct {
 		name            string

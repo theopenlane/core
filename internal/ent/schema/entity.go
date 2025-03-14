@@ -100,7 +100,7 @@ func (Entity) Edges() []ent.Edge {
 func (Entity) Indexes() []ent.Index {
 	return []ent.Index{
 		// names should be unique, but ignore deleted names
-		index.Fields("name", "owner_id").
+		index.Fields("name", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
