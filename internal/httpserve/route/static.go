@@ -159,7 +159,7 @@ func registerExampleCSVHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.ExampleCSV(c)
 		},
