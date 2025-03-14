@@ -1,11 +1,8 @@
 package models
 
 import (
-	"encoding/json"
 	"io"
 	"strings"
-
-	"github.com/rs/zerolog/log"
 )
 
 // Address is a custom type for Address
@@ -42,28 +39,10 @@ func (a Address) String() string {
 
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (a Address) MarshalGQL(w io.Writer) {
-	byteData, err := json.Marshal(a)
-	if err != nil {
-		log.Fatal().Err(err).Msg("error marshalling json object")
-	}
-
-	_, err = w.Write(byteData)
-	if err != nil {
-		log.Fatal().Err(err).Msg("error writing json object")
-	}
+	marshalGQLJSON(w, a)
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
 func (a *Address) UnmarshalGQL(v interface{}) error {
-	byteData, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(byteData, &a)
-	if err != nil {
-		return err
-	}
-
-	return err
+	return unmarshalGQLJSON(v, a)
 }

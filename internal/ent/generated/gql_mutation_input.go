@@ -171,18 +171,25 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 
 // CreateActionPlanInput represents a mutation input for creating actionplans.
 type CreateActionPlanInput struct {
-	Tags        []string
-	Name        string
-	Description *string
-	Status      *string
-	DueDate     *time.Time
-	Priority    *string
-	Source      *string
-	Details     map[string]interface{}
-	RiskIDs     []string
-	ControlIDs  []string
-	UserIDs     []string
-	ProgramIDs  []string
+	Tags             []string
+	Name             string
+	Status           *enums.DocumentStatus
+	ActionPlanType   *string
+	Details          *string
+	ApprovalRequired *bool
+	ReviewDue        *time.Time
+	ReviewFrequency  *enums.Frequency
+	Revision         *string
+	DueDate          *time.Time
+	Priority         *enums.Priority
+	Source           *string
+	ApproverID       *string
+	DelegateID       *string
+	OwnerID          *string
+	RiskIDs          []string
+	ControlIDs       []string
+	UserIDs          []string
+	ProgramIDs       []string
 }
 
 // Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
@@ -191,11 +198,26 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ActionPlanType; v != nil {
+		m.SetActionPlanType(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
@@ -206,8 +228,14 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
@@ -231,34 +259,48 @@ func (c *ActionPlanCreate) SetInput(i CreateActionPlanInput) *ActionPlanCreate {
 
 // UpdateActionPlanInput represents a mutation input for updating actionplans.
 type UpdateActionPlanInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Name             *string
-	ClearDescription bool
-	Description      *string
-	ClearStatus      bool
-	Status           *string
-	ClearDueDate     bool
-	DueDate          *time.Time
-	ClearPriority    bool
-	Priority         *string
-	ClearSource      bool
-	Source           *string
-	ClearDetails     bool
-	Details          map[string]interface{}
-	ClearRisk        bool
-	AddRiskIDs       []string
-	RemoveRiskIDs    []string
-	ClearControl     bool
-	AddControlIDs    []string
-	RemoveControlIDs []string
-	ClearUser        bool
-	AddUserIDs       []string
-	RemoveUserIDs    []string
-	ClearProgram     bool
-	AddProgramIDs    []string
-	RemoveProgramIDs []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	Name                  *string
+	ClearStatus           bool
+	Status                *enums.DocumentStatus
+	ClearActionPlanType   bool
+	ActionPlanType        *string
+	ClearDetails          bool
+	Details               *string
+	ClearApprovalRequired bool
+	ApprovalRequired      *bool
+	ClearReviewDue        bool
+	ReviewDue             *time.Time
+	ClearReviewFrequency  bool
+	ReviewFrequency       *enums.Frequency
+	ClearRevision         bool
+	Revision              *string
+	ClearDueDate          bool
+	DueDate               *time.Time
+	ClearPriority         bool
+	Priority              *enums.Priority
+	ClearSource           bool
+	Source                *string
+	ClearApprover         bool
+	ApproverID            *string
+	ClearDelegate         bool
+	DelegateID            *string
+	ClearOwner            bool
+	OwnerID               *string
+	ClearRisk             bool
+	AddRiskIDs            []string
+	RemoveRiskIDs         []string
+	ClearControl          bool
+	AddControlIDs         []string
+	RemoveControlIDs      []string
+	ClearUser             bool
+	AddUserIDs            []string
+	RemoveUserIDs         []string
+	ClearProgram          bool
+	AddProgramIDs         []string
+	RemoveProgramIDs      []string
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -275,17 +317,47 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearActionPlanType {
+		m.ClearActionPlanType()
+	}
+	if v := i.ActionPlanType; v != nil {
+		m.SetActionPlanType(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if i.ClearApprovalRequired {
+		m.ClearApprovalRequired()
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if i.ClearReviewDue {
+		m.ClearReviewDue()
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
@@ -305,11 +377,23 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if i.ClearDetails {
-		m.ClearDetails()
+	if i.ClearApprover {
+		m.ClearApprover()
 	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if i.ClearRisk {
 		m.ClearRisk()
@@ -1064,7 +1148,7 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 // CreateControlImplementationInput represents a mutation input for creating controlimplementations.
 type CreateControlImplementationInput struct {
 	Tags               []string
-	Status             *string
+	Status             *enums.DocumentStatus
 	ImplementationDate *time.Time
 	Verified           *bool
 	VerificationDate   *time.Time
@@ -1109,7 +1193,7 @@ type UpdateControlImplementationInput struct {
 	Tags                    []string
 	AppendTags              []string
 	ClearStatus             bool
-	Status                  *string
+	Status                  *enums.DocumentStatus
 	ClearImplementationDate bool
 	ImplementationDate      *time.Time
 	ClearVerified           bool
@@ -1189,13 +1273,13 @@ func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationI
 
 // CreateControlObjectiveInput represents a mutation input for creating controlobjectives.
 type CreateControlObjectiveInput struct {
+	Revision             *string
 	Tags                 []string
 	Name                 string
 	DesiredOutcome       *string
 	Status               *string
 	Source               *enums.ControlSource
 	ControlObjectiveType *string
-	Version              *string
 	Category             *string
 	Subcategory          *string
 	OwnerID              *string
@@ -1215,6 +1299,9 @@ type CreateControlObjectiveInput struct {
 
 // Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
 func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
@@ -1230,9 +1317,6 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.ControlObjectiveType; v != nil {
 		m.SetControlObjectiveType(*v)
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -1289,6 +1373,8 @@ func (c *ControlObjectiveCreate) SetInput(i CreateControlObjectiveInput) *Contro
 
 // UpdateControlObjectiveInput represents a mutation input for updating controlobjectives.
 type UpdateControlObjectiveInput struct {
+	ClearRevision             bool
+	Revision                  *string
 	ClearTags                 bool
 	Tags                      []string
 	AppendTags                []string
@@ -1301,8 +1387,6 @@ type UpdateControlObjectiveInput struct {
 	Source                    *enums.ControlSource
 	ClearControlObjectiveType bool
 	ControlObjectiveType      *string
-	ClearVersion              bool
-	Version                   *string
 	ClearCategory             bool
 	Category                  *string
 	ClearSubcategory          bool
@@ -1347,6 +1431,12 @@ type UpdateControlObjectiveInput struct {
 
 // Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
 func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if i.ClearTags {
 		m.ClearTags()
 	}
@@ -1382,12 +1472,6 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.ControlObjectiveType; v != nil {
 		m.SetControlObjectiveType(*v)
-	}
-	if i.ClearVersion {
-		m.ClearVersion()
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -2172,6 +2256,7 @@ type CreateEvidenceInput struct {
 	Source              *string
 	IsAutomated         *bool
 	URL                 *string
+	Status              *enums.EvidenceStatus
 	OwnerID             *string
 	ControlObjectiveIDs []string
 	ControlIDs          []string
@@ -2207,6 +2292,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2256,6 +2344,8 @@ type UpdateEvidenceInput struct {
 	IsAutomated               *bool
 	ClearURL                  bool
 	URL                       *string
+	ClearStatus               bool
+	Status                    *enums.EvidenceStatus
 	ClearControlObjectives    bool
 	AddControlObjectiveIDs    []string
 	RemoveControlObjectiveIDs []string
@@ -2328,6 +2418,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -3665,17 +3761,18 @@ func (c *IntegrationUpdateOne) SetInput(i UpdateIntegrationInput) *IntegrationUp
 type CreateInternalPolicyInput struct {
 	Tags                []string
 	Name                string
-	Description         *string
-	Status              *string
-	ReviewDue           *time.Time
+	Status              *enums.DocumentStatus
 	PolicyType          *string
-	Version             *string
-	PurposeAndScope     *string
-	Background          *string
-	Details             map[string]interface{}
+	Details             *string
+	ApprovalRequired    *bool
+	ReviewDue           *time.Time
+	ReviewFrequency     *enums.Frequency
+	Revision            *string
 	OwnerID             *string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
+	ApproverID          *string
+	DelegateID          *string
 	ControlObjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
@@ -3690,29 +3787,26 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ReviewDue; v != nil {
-		m.SetReviewDue(*v)
 	}
 	if v := i.PolicyType; v != nil {
 		m.SetPolicyType(*v)
 	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
-	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3722,6 +3816,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
+	}
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
@@ -3755,22 +3855,20 @@ type UpdateInternalPolicyInput struct {
 	Tags                      []string
 	AppendTags                []string
 	Name                      *string
-	ClearDescription          bool
-	Description               *string
 	ClearStatus               bool
-	Status                    *string
-	ClearReviewDue            bool
-	ReviewDue                 *time.Time
+	Status                    *enums.DocumentStatus
 	ClearPolicyType           bool
 	PolicyType                *string
-	ClearVersion              bool
-	Version                   *string
-	ClearPurposeAndScope      bool
-	PurposeAndScope           *string
-	ClearBackground           bool
-	Background                *string
 	ClearDetails              bool
-	Details                   map[string]interface{}
+	Details                   *string
+	ClearApprovalRequired     bool
+	ApprovalRequired          *bool
+	ClearReviewDue            bool
+	ReviewDue                 *time.Time
+	ClearReviewFrequency      bool
+	ReviewFrequency           *enums.Frequency
+	ClearRevision             bool
+	Revision                  *string
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearBlockedGroups        bool
@@ -3779,6 +3877,10 @@ type UpdateInternalPolicyInput struct {
 	ClearEditors              bool
 	AddEditorIDs              []string
 	RemoveEditorIDs           []string
+	ClearApprover             bool
+	ApproverID                *string
+	ClearDelegate             bool
+	DelegateID                *string
 	ClearControlObjectives    bool
 	AddControlObjectiveIDs    []string
 	RemoveControlObjectiveIDs []string
@@ -3813,23 +3915,11 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearReviewDue {
-		m.ClearReviewDue()
-	}
-	if v := i.ReviewDue; v != nil {
-		m.SetReviewDue(*v)
 	}
 	if i.ClearPolicyType {
 		m.ClearPolicyType()
@@ -3837,29 +3927,35 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.PolicyType; v != nil {
 		m.SetPolicyType(*v)
 	}
-	if i.ClearVersion {
-		m.ClearVersion()
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if i.ClearPurposeAndScope {
-		m.ClearPurposeAndScope()
-	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
-	}
-	if i.ClearBackground {
-		m.ClearBackground()
-	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
 	if i.ClearDetails {
 		m.ClearDetails()
 	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
+	}
+	if i.ClearApprovalRequired {
+		m.ClearApprovalRequired()
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if i.ClearReviewDue {
+		m.ClearReviewDue()
+	}
+	if v := i.ReviewDue; v != nil {
+		m.SetReviewDue(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -3884,6 +3980,18 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearApprover {
+		m.ClearApprover()
+	}
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 	if i.ClearControlObjectives {
 		m.ClearControlObjectives()
@@ -4530,6 +4638,7 @@ type CreateOrganizationInput struct {
 	SubcontrolIDs              []string
 	EvidenceIDs                []string
 	StandardIDs                []string
+	ActionPlanIDs              []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4673,6 +4782,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
 	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -4806,6 +4918,9 @@ type UpdateOrganizationInput struct {
 	ClearStandards                   bool
 	AddStandardIDs                   []string
 	RemoveStandardIDs                []string
+	ClearActionPlans                 bool
+	AddActionPlanIDs                 []string
+	RemoveActionPlanIDs              []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5178,6 +5293,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveStandardIDs; len(v) > 0 {
 		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 }
 
@@ -5569,18 +5693,18 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 type CreateProcedureInput struct {
 	Tags              []string
 	Name              string
-	Description       *string
-	Status            *string
+	Status            *enums.DocumentStatus
 	ProcedureType     *string
+	Details           *string
+	ApprovalRequired  *bool
 	ReviewDue         *time.Time
-	Version           *string
-	PurposeAndScope   *string
-	Background        *string
-	Satisfies         *string
-	Details           map[string]interface{}
+	ReviewFrequency   *enums.Frequency
+	Revision          *string
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
+	ApproverID        *string
+	DelegateID        *string
 	ControlIDs        []string
 	InternalPolicyIDs []string
 	NarrativeIDs      []string
@@ -5595,32 +5719,26 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
 	if v := i.ProcedureType; v != nil {
 		m.SetProcedureType(*v)
 	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
 	if v := i.ReviewDue; v != nil {
 		m.SetReviewDue(*v)
 	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
-	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -5630,6 +5748,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
+	}
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -5663,24 +5787,20 @@ type UpdateProcedureInput struct {
 	Tags                    []string
 	AppendTags              []string
 	Name                    *string
-	ClearDescription        bool
-	Description             *string
 	ClearStatus             bool
-	Status                  *string
+	Status                  *enums.DocumentStatus
 	ClearProcedureType      bool
 	ProcedureType           *string
+	ClearDetails            bool
+	Details                 *string
+	ClearApprovalRequired   bool
+	ApprovalRequired        *bool
 	ClearReviewDue          bool
 	ReviewDue               *time.Time
-	ClearVersion            bool
-	Version                 *string
-	ClearPurposeAndScope    bool
-	PurposeAndScope         *string
-	ClearBackground         bool
-	Background              *string
-	ClearSatisfies          bool
-	Satisfies               *string
-	ClearDetails            bool
-	Details                 map[string]interface{}
+	ClearReviewFrequency    bool
+	ReviewFrequency         *enums.Frequency
+	ClearRevision           bool
+	Revision                *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearBlockedGroups      bool
@@ -5689,6 +5809,10 @@ type UpdateProcedureInput struct {
 	ClearEditors            bool
 	AddEditorIDs            []string
 	RemoveEditorIDs         []string
+	ClearApprover           bool
+	ApproverID              *string
+	ClearDelegate           bool
+	DelegateID              *string
 	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
@@ -5723,12 +5847,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
@@ -5741,41 +5859,35 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.ProcedureType; v != nil {
 		m.SetProcedureType(*v)
 	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(*v)
+	}
+	if i.ClearApprovalRequired {
+		m.ClearApprovalRequired()
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
 	if i.ClearReviewDue {
 		m.ClearReviewDue()
 	}
 	if v := i.ReviewDue; v != nil {
 		m.SetReviewDue(*v)
 	}
-	if i.ClearVersion {
-		m.ClearVersion()
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
 	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
-	if i.ClearPurposeAndScope {
-		m.ClearPurposeAndScope()
+	if i.ClearRevision {
+		m.ClearRevision()
 	}
-	if v := i.PurposeAndScope; v != nil {
-		m.SetPurposeAndScope(*v)
-	}
-	if i.ClearBackground {
-		m.ClearBackground()
-	}
-	if v := i.Background; v != nil {
-		m.SetBackground(*v)
-	}
-	if i.ClearSatisfies {
-		m.ClearSatisfies()
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
-	if i.ClearDetails {
-		m.ClearDetails()
-	}
-	if v := i.Details; v != nil {
-		m.SetDetails(v)
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5800,6 +5912,18 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearApprover {
+		m.ClearApprover()
+	}
+	if v := i.ApproverID; v != nil {
+		m.SetApproverID(*v)
+	}
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -6295,15 +6419,15 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 type CreateRiskInput struct {
 	Tags            []string
 	Name            string
-	Description     *string
-	Status          *string
+	Status          *enums.RiskStatus
 	RiskType        *string
-	BusinessCosts   *string
+	Category        *string
 	Impact          *enums.RiskImpact
 	Likelihood      *enums.RiskLikelihood
+	Score           *int
 	Mitigation      *string
-	Satisfies       *string
-	Details         map[string]interface{}
+	Details         *string
+	BusinessCosts   *string
 	OwnerID         *string
 	BlockedGroupIDs []string
 	EditorIDs       []string
@@ -6312,6 +6436,8 @@ type CreateRiskInput struct {
 	ProcedureIDs    []string
 	ActionPlanIDs   []string
 	ProgramIDs      []string
+	StakeholderID   *string
+	DelegateID      *string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -6320,17 +6446,14 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
 	if v := i.RiskType; v != nil {
 		m.SetRiskType(*v)
 	}
-	if v := i.BusinessCosts; v != nil {
-		m.SetBusinessCosts(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
 	if v := i.Impact; v != nil {
 		m.SetImpact(*v)
@@ -6338,14 +6461,17 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Likelihood; v != nil {
 		m.SetLikelihood(*v)
 	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
 	if v := i.Mitigation; v != nil {
 		m.SetMitigation(*v)
 	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
+	}
+	if v := i.BusinessCosts; v != nil {
+		m.SetBusinessCosts(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6371,6 +6497,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.StakeholderID; v != nil {
+		m.SetStakeholderID(*v)
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -6385,24 +6517,24 @@ type UpdateRiskInput struct {
 	Tags                  []string
 	AppendTags            []string
 	Name                  *string
-	ClearDescription      bool
-	Description           *string
 	ClearStatus           bool
-	Status                *string
+	Status                *enums.RiskStatus
 	ClearRiskType         bool
 	RiskType              *string
-	ClearBusinessCosts    bool
-	BusinessCosts         *string
+	ClearCategory         bool
+	Category              *string
 	ClearImpact           bool
 	Impact                *enums.RiskImpact
 	ClearLikelihood       bool
 	Likelihood            *enums.RiskLikelihood
+	ClearScore            bool
+	Score                 *int
 	ClearMitigation       bool
 	Mitigation            *string
-	ClearSatisfies        bool
-	Satisfies             *string
 	ClearDetails          bool
-	Details               map[string]interface{}
+	Details               *string
+	ClearBusinessCosts    bool
+	BusinessCosts         *string
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -6424,6 +6556,10 @@ type UpdateRiskInput struct {
 	ClearPrograms         bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
+	ClearStakeholder      bool
+	StakeholderID         *string
+	ClearDelegate         bool
+	DelegateID            *string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -6440,12 +6576,6 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if i.ClearStatus {
 		m.ClearStatus()
 	}
@@ -6458,11 +6588,11 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RiskType; v != nil {
 		m.SetRiskType(*v)
 	}
-	if i.ClearBusinessCosts {
-		m.ClearBusinessCosts()
+	if i.ClearCategory {
+		m.ClearCategory()
 	}
-	if v := i.BusinessCosts; v != nil {
-		m.SetBusinessCosts(*v)
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
 	if i.ClearImpact {
 		m.ClearImpact()
@@ -6476,23 +6606,29 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Likelihood; v != nil {
 		m.SetLikelihood(*v)
 	}
+	if i.ClearScore {
+		m.ClearScore()
+	}
+	if v := i.Score; v != nil {
+		m.SetScore(*v)
+	}
 	if i.ClearMitigation {
 		m.ClearMitigation()
 	}
 	if v := i.Mitigation; v != nil {
 		m.SetMitigation(*v)
 	}
-	if i.ClearSatisfies {
-		m.ClearSatisfies()
-	}
-	if v := i.Satisfies; v != nil {
-		m.SetSatisfies(*v)
-	}
 	if i.ClearDetails {
 		m.ClearDetails()
 	}
 	if v := i.Details; v != nil {
-		m.SetDetails(v)
+		m.SetDetails(*v)
+	}
+	if i.ClearBusinessCosts {
+		m.ClearBusinessCosts()
+	}
+	if v := i.BusinessCosts; v != nil {
+		m.SetBusinessCosts(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -6557,6 +6693,18 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
 	}
+	if i.ClearStakeholder {
+		m.ClearStakeholder()
+	}
+	if v := i.StakeholderID; v != nil {
+		m.SetStakeholderID(*v)
+	}
+	if i.ClearDelegate {
+		m.ClearDelegate()
+	}
+	if v := i.DelegateID; v != nil {
+		m.SetDelegateID(*v)
+	}
 }
 
 // SetInput applies the change-set in the UpdateRiskInput on the RiskUpdate builder.
@@ -6573,29 +6721,33 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateStandardInput represents a mutation input for creating standards.
 type CreateStandardInput struct {
-	Tags          []string
-	Name          string
-	ShortName     *string
-	Framework     *string
-	Description   *string
-	GoverningBody *string
-	Domains       []string
-	Link          *string
-	Status        *string
-	IsPublic      *bool
-	FreeToUse     *bool
-	SystemOwned   *bool
-	StandardType  *string
-	Version       *string
-	Revision      *string
-	OwnerID       *string
-	ControlIDs    []string
+	Tags                 []string
+	Revision             *string
+	Name                 string
+	ShortName            *string
+	Framework            *string
+	Description          *string
+	GoverningBodyLogoURL *string
+	GoverningBody        *string
+	Domains              []string
+	Link                 *string
+	Status               *enums.StandardStatus
+	IsPublic             *bool
+	FreeToUse            *bool
+	SystemOwned          *bool
+	StandardType         *string
+	Version              *string
+	OwnerID              *string
+	ControlIDs           []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
 func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.ShortName; v != nil {
@@ -6606,6 +6758,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.GoverningBodyLogoURL; v != nil {
+		m.SetGoverningBodyLogoURL(*v)
 	}
 	if v := i.GoverningBody; v != nil {
 		m.SetGoverningBody(*v)
@@ -6634,9 +6789,6 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
-	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -6653,42 +6805,44 @@ func (c *StandardCreate) SetInput(i CreateStandardInput) *StandardCreate {
 
 // UpdateStandardInput represents a mutation input for updating standards.
 type UpdateStandardInput struct {
-	ClearTags          bool
-	Tags               []string
-	AppendTags         []string
-	Name               *string
-	ClearShortName     bool
-	ShortName          *string
-	ClearFramework     bool
-	Framework          *string
-	ClearDescription   bool
-	Description        *string
-	ClearGoverningBody bool
-	GoverningBody      *string
-	ClearDomains       bool
-	Domains            []string
-	AppendDomains      []string
-	ClearLink          bool
-	Link               *string
-	ClearStatus        bool
-	Status             *string
-	ClearIsPublic      bool
-	IsPublic           *bool
-	ClearFreeToUse     bool
-	FreeToUse          *bool
-	ClearSystemOwned   bool
-	SystemOwned        *bool
-	ClearStandardType  bool
-	StandardType       *string
-	ClearVersion       bool
-	Version            *string
-	ClearRevision      bool
-	Revision           *string
-	ClearOwner         bool
-	OwnerID            *string
-	ClearControls      bool
-	AddControlIDs      []string
-	RemoveControlIDs   []string
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	ClearRevision             bool
+	Revision                  *string
+	Name                      *string
+	ClearShortName            bool
+	ShortName                 *string
+	ClearFramework            bool
+	Framework                 *string
+	ClearDescription          bool
+	Description               *string
+	ClearGoverningBodyLogoURL bool
+	GoverningBodyLogoURL      *string
+	ClearGoverningBody        bool
+	GoverningBody             *string
+	ClearDomains              bool
+	Domains                   []string
+	AppendDomains             []string
+	ClearLink                 bool
+	Link                      *string
+	ClearStatus               bool
+	Status                    *enums.StandardStatus
+	ClearIsPublic             bool
+	IsPublic                  *bool
+	ClearFreeToUse            bool
+	FreeToUse                 *bool
+	ClearSystemOwned          bool
+	SystemOwned               *bool
+	ClearStandardType         bool
+	StandardType              *string
+	ClearVersion              bool
+	Version                   *string
+	ClearOwner                bool
+	OwnerID                   *string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -6701,6 +6855,12 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -6722,6 +6882,12 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearGoverningBodyLogoURL {
+		m.ClearGoverningBodyLogoURL()
+	}
+	if v := i.GoverningBodyLogoURL; v != nil {
+		m.SetGoverningBodyLogoURL(*v)
 	}
 	if i.ClearGoverningBody {
 		m.ClearGoverningBody()
@@ -6779,12 +6945,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
-	}
-	if i.ClearRevision {
-		m.ClearRevision()
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

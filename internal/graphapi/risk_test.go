@@ -202,15 +202,14 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 			name: "happy path, all input",
 			request: openlaneclient.CreateRiskInput{
 				Name:          "Another Risk",
-				Description:   lo.ToPtr("A description of the Risk"),
-				Status:        lo.ToPtr("mitigated"),
+				Details:       lo.ToPtr("details of the Risk"),
+				Status:        &enums.RiskMitigated,
 				RiskType:      lo.ToPtr("operational"),
 				BusinessCosts: lo.ToPtr("much money"),
-				Impact:        &enums.RiskImpactHigh,
+				Impact:        &enums.RiskImpactLow,
 				Likelihood:    &enums.RiskLikelihoodHigh,
 				Mitigation:    lo.ToPtr("did the thing"),
-				Satisfies:     lo.ToPtr("controls"),
-				Details:       map[string]interface{}{"stuff": "things"},
+				Score:         lo.ToPtr(int64(5)),
 				ProgramIDs:    []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
@@ -341,16 +340,10 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				assert.Empty(t, resp.CreateRisk.Risk.Programs)
 			}
 
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateRisk.Risk.Description)
-			} else {
-				assert.Empty(t, resp.CreateRisk.Risk.Description)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateRisk.Risk.Status)
 			} else {
-				assert.Empty(t, resp.CreateRisk.Risk.Status)
+				assert.Equal(t, enums.RiskOpen, *resp.CreateRisk.Risk.Status)
 			}
 
 			if tc.request.RiskType != nil {
@@ -383,10 +376,10 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				assert.Empty(t, resp.CreateRisk.Risk.Mitigation)
 			}
 
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.CreateRisk.Risk.Satisfies)
+			if tc.request.Score != nil {
+				assert.Equal(t, *tc.request.Score, *resp.CreateRisk.Risk.Score)
 			} else {
-				assert.Empty(t, resp.CreateRisk.Risk.Satisfies)
+				assert.Empty(t, resp.CreateRisk.Risk.Score)
 			}
 
 			if tc.request.Details != nil {
@@ -455,7 +448,7 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateRiskInput{
-				Description:  lo.ToPtr("Updated description"),
+				Details:      lo.ToPtr("Updated details"),
 				AddViewerIDs: []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
@@ -464,8 +457,7 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateRiskInput{
-				Satisfies:  lo.ToPtr("Updated controls"),
-				Status:     lo.ToPtr("mitigated"),
+				Status:     &enums.RiskArchived,
 				Tags:       []string{"tag1", "tag2"},
 				Mitigation: lo.ToPtr("Updated mitigation"),
 				Impact:     &enums.RiskImpactModerate,
@@ -508,14 +500,6 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
-			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateRisk.Risk.Description)
-			}
-
-			if tc.request.Satisfies != nil {
-				assert.Equal(t, *tc.request.Satisfies, *resp.UpdateRisk.Risk.Satisfies)
-			}
-
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.UpdateRisk.Risk.Status)
 			}
@@ -538,6 +522,10 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.UpdateRisk.Risk.Details)
+			}
+
+			if tc.request.Score != nil {
+				assert.Equal(t, *tc.request.Score, *resp.UpdateRisk.Risk.Score)
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {

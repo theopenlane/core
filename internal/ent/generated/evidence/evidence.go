@@ -3,11 +3,14 @@
 package evidence
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -49,6 +52,8 @@ const (
 	FieldIsAutomated = "is_automated"
 	// FieldURL holds the string denoting the url field in the database.
 	FieldURL = "url"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
@@ -124,6 +129,7 @@ var Columns = []string{
 	FieldSource,
 	FieldIsAutomated,
 	FieldURL,
+	FieldStatus,
 }
 
 var (
@@ -191,6 +197,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.EvidenceStatus = "READY"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.EvidenceStatus) error {
+	switch s.String() {
+	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL":
+		return nil
+	default:
+		return fmt.Errorf("evidence: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Evidence queries.
 type OrderOption func(*sql.Selector)
@@ -278,6 +296,11 @@ func ByIsAutomated(opts ...sql.OrderTermOption) OrderOption {
 // ByURL orders the results by the url field.
 func ByURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldURL, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -419,3 +442,10 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, TasksTable, TasksPrimaryKey...),
 	)
 }
+
+var (
+	// enums.EvidenceStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.EvidenceStatus)(nil)
+	// enums.EvidenceStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.EvidenceStatus)(nil)
+)

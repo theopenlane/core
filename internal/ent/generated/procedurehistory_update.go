@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -64,6 +65,24 @@ func (phu *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
 	return phu
 }
 
+// SetTags sets the "tags" field.
+func (phu *ProcedureHistoryUpdate) SetTags(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetTags(s)
+	return phu
+}
+
+// AppendTags appends s to the "tags" field.
+func (phu *ProcedureHistoryUpdate) AppendTags(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendTags(s)
+	return phu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
+	phu.mutation.ClearTags()
+	return phu
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (phu *ProcedureHistoryUpdate) SetDeletedAt(t time.Time) *ProcedureHistoryUpdate {
 	phu.mutation.SetDeletedAt(t)
@@ -104,24 +123,6 @@ func (phu *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetTags sets the "tags" field.
-func (phu *ProcedureHistoryUpdate) SetTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetTags(s)
-	return phu
-}
-
-// AppendTags appends s to the "tags" field.
-func (phu *ProcedureHistoryUpdate) AppendTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendTags(s)
-	return phu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
-	phu.mutation.ClearTags()
-	return phu
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (phu *ProcedureHistoryUpdate) SetOwnerID(s string) *ProcedureHistoryUpdate {
 	phu.mutation.SetOwnerID(s)
@@ -156,36 +157,16 @@ func (phu *ProcedureHistoryUpdate) SetNillableName(s *string) *ProcedureHistoryU
 	return phu
 }
 
-// SetDescription sets the "description" field.
-func (phu *ProcedureHistoryUpdate) SetDescription(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDescription(s)
-	return phu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDescription(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetDescription(*s)
-	}
-	return phu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (phu *ProcedureHistoryUpdate) ClearDescription() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDescription()
-	return phu
-}
-
 // SetStatus sets the "status" field.
-func (phu *ProcedureHistoryUpdate) SetStatus(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetStatus(s)
+func (phu *ProcedureHistoryUpdate) SetStatus(es enums.DocumentStatus) *ProcedureHistoryUpdate {
+	phu.mutation.SetStatus(es)
 	return phu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableStatus(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetStatus(*s)
+func (phu *ProcedureHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *ProcedureHistoryUpdate {
+	if es != nil {
+		phu.SetStatus(*es)
 	}
 	return phu
 }
@@ -216,6 +197,46 @@ func (phu *ProcedureHistoryUpdate) ClearProcedureType() *ProcedureHistoryUpdate 
 	return phu
 }
 
+// SetDetails sets the "details" field.
+func (phu *ProcedureHistoryUpdate) SetDetails(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDetails(s)
+	return phu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableDetails(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetDetails(*s)
+	}
+	return phu
+}
+
+// ClearDetails clears the value of the "details" field.
+func (phu *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDetails()
+	return phu
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (phu *ProcedureHistoryUpdate) SetApprovalRequired(b bool) *ProcedureHistoryUpdate {
+	phu.mutation.SetApprovalRequired(b)
+	return phu
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableApprovalRequired(b *bool) *ProcedureHistoryUpdate {
+	if b != nil {
+		phu.SetApprovalRequired(*b)
+	}
+	return phu
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (phu *ProcedureHistoryUpdate) ClearApprovalRequired() *ProcedureHistoryUpdate {
+	phu.mutation.ClearApprovalRequired()
+	return phu
+}
+
 // SetReviewDue sets the "review_due" field.
 func (phu *ProcedureHistoryUpdate) SetReviewDue(t time.Time) *ProcedureHistoryUpdate {
 	phu.mutation.SetReviewDue(t)
@@ -236,95 +257,43 @@ func (phu *ProcedureHistoryUpdate) ClearReviewDue() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetVersion sets the "version" field.
-func (phu *ProcedureHistoryUpdate) SetVersion(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (phu *ProcedureHistoryUpdate) SetReviewFrequency(e enums.Frequency) *ProcedureHistoryUpdate {
+	phu.mutation.SetReviewFrequency(e)
 	return phu
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableVersion(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureHistoryUpdate {
+	if e != nil {
+		phu.SetReviewFrequency(*e)
 	}
 	return phu
 }
 
-// ClearVersion clears the value of the "version" field.
-func (phu *ProcedureHistoryUpdate) ClearVersion() *ProcedureHistoryUpdate {
-	phu.mutation.ClearVersion()
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (phu *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdate {
+	phu.mutation.ClearReviewFrequency()
 	return phu
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (phu *ProcedureHistoryUpdate) SetPurposeAndScope(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (phu *ProcedureHistoryUpdate) SetRevision(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetRevision(s)
 	return phu
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillablePurposeAndScope(s *string) *ProcedureHistoryUpdate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableRevision(s *string) *ProcedureHistoryUpdate {
 	if s != nil {
-		phu.SetPurposeAndScope(*s)
+		phu.SetRevision(*s)
 	}
 	return phu
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (phu *ProcedureHistoryUpdate) ClearPurposeAndScope() *ProcedureHistoryUpdate {
-	phu.mutation.ClearPurposeAndScope()
-	return phu
-}
-
-// SetBackground sets the "background" field.
-func (phu *ProcedureHistoryUpdate) SetBackground(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetBackground(s)
-	return phu
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableBackground(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetBackground(*s)
-	}
-	return phu
-}
-
-// ClearBackground clears the value of the "background" field.
-func (phu *ProcedureHistoryUpdate) ClearBackground() *ProcedureHistoryUpdate {
-	phu.mutation.ClearBackground()
-	return phu
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (phu *ProcedureHistoryUpdate) SetSatisfies(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetSatisfies(s)
-	return phu
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableSatisfies(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetSatisfies(*s)
-	}
-	return phu
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (phu *ProcedureHistoryUpdate) ClearSatisfies() *ProcedureHistoryUpdate {
-	phu.mutation.ClearSatisfies()
-	return phu
-}
-
-// SetDetails sets the "details" field.
-func (phu *ProcedureHistoryUpdate) SetDetails(m map[string]interface{}) *ProcedureHistoryUpdate {
-	phu.mutation.SetDetails(m)
-	return phu
-}
-
-// ClearDetails clears the value of the "details" field.
-func (phu *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDetails()
+// ClearRevision clears the value of the "revision" field.
+func (phu *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
+	phu.mutation.ClearRevision()
 	return phu
 }
 
@@ -369,6 +338,21 @@ func (phu *ProcedureHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (phu *ProcedureHistoryUpdate) check() error {
+	if v, ok := phu.mutation.Status(); ok {
+		if err := procedurehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := phu.mutation.ReviewFrequency(); ok {
+		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (phu *ProcedureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdate {
 	phu.modifiers = append(phu.modifiers, modifiers...)
@@ -376,6 +360,9 @@ func (phu *ProcedureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := phu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
 	if ps := phu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -405,6 +392,17 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := phu.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTags, value)
+		})
+	}
+	if phu.mutation.TagsCleared() {
+		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
 	if value, ok := phu.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -417,17 +415,6 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := phu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
-	if phu.mutation.TagsCleared() {
-		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := phu.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
 	}
@@ -437,17 +424,11 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := phu.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phu.mutation.Description(); ok {
-		_spec.SetField(procedurehistory.FieldDescription, field.TypeString, value)
-	}
-	if phu.mutation.DescriptionCleared() {
-		_spec.ClearField(procedurehistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := phu.mutation.Status(); ok {
-		_spec.SetField(procedurehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if phu.mutation.StatusCleared() {
-		_spec.ClearField(procedurehistory.FieldStatus, field.TypeString)
+		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := phu.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
@@ -455,41 +436,35 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
 	}
+	if value, ok := phu.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
+	}
+	if phu.mutation.DetailsCleared() {
+		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := phu.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if phu.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
+	}
 	if value, ok := phu.mutation.ReviewDue(); ok {
 		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
 	}
 	if phu.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := phu.mutation.Version(); ok {
-		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)
+	if value, ok := phu.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if phu.mutation.VersionCleared() {
-		_spec.ClearField(procedurehistory.FieldVersion, field.TypeString)
+	if phu.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := phu.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedurehistory.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := phu.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
-	if phu.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(procedurehistory.FieldPurposeAndScope, field.TypeString)
-	}
-	if value, ok := phu.mutation.Background(); ok {
-		_spec.SetField(procedurehistory.FieldBackground, field.TypeString, value)
-	}
-	if phu.mutation.BackgroundCleared() {
-		_spec.ClearField(procedurehistory.FieldBackground, field.TypeString)
-	}
-	if value, ok := phu.mutation.Satisfies(); ok {
-		_spec.SetField(procedurehistory.FieldSatisfies, field.TypeString, value)
-	}
-	if phu.mutation.SatisfiesCleared() {
-		_spec.ClearField(procedurehistory.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := phu.mutation.Details(); ok {
-		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
-	}
-	if phu.mutation.DetailsCleared() {
-		_spec.ClearField(procedurehistory.FieldDetails, field.TypeJSON)
+	if phu.mutation.RevisionCleared() {
+		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -547,6 +522,24 @@ func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateO
 	return phuo
 }
 
+// SetTags sets the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) SetTags(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetTags(s)
+	return phuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendTags(s)
+	return phuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearTags()
+	return phuo
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (phuo *ProcedureHistoryUpdateOne) SetDeletedAt(t time.Time) *ProcedureHistoryUpdateOne {
 	phuo.mutation.SetDeletedAt(t)
@@ -587,24 +580,6 @@ func (phuo *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetTags sets the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) SetTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetTags(s)
-	return phuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendTags(s)
-	return phuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearTags()
-	return phuo
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (phuo *ProcedureHistoryUpdateOne) SetOwnerID(s string) *ProcedureHistoryUpdateOne {
 	phuo.mutation.SetOwnerID(s)
@@ -639,36 +614,16 @@ func (phuo *ProcedureHistoryUpdateOne) SetNillableName(s *string) *ProcedureHist
 	return phuo
 }
 
-// SetDescription sets the "description" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDescription(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDescription(s)
-	return phuo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDescription(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDescription(*s)
-	}
-	return phuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDescription() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDescription()
-	return phuo
-}
-
 // SetStatus sets the "status" field.
-func (phuo *ProcedureHistoryUpdateOne) SetStatus(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetStatus(s)
+func (phuo *ProcedureHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetStatus(es)
 	return phuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableStatus(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetStatus(*s)
+func (phuo *ProcedureHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ProcedureHistoryUpdateOne {
+	if es != nil {
+		phuo.SetStatus(*es)
 	}
 	return phuo
 }
@@ -699,6 +654,46 @@ func (phuo *ProcedureHistoryUpdateOne) ClearProcedureType() *ProcedureHistoryUpd
 	return phuo
 }
 
+// SetDetails sets the "details" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDetails(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDetails(s)
+	return phuo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableDetails(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetDetails(*s)
+	}
+	return phuo
+}
+
+// ClearDetails clears the value of the "details" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDetails()
+	return phuo
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (phuo *ProcedureHistoryUpdateOne) SetApprovalRequired(b bool) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetApprovalRequired(b)
+	return phuo
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableApprovalRequired(b *bool) *ProcedureHistoryUpdateOne {
+	if b != nil {
+		phuo.SetApprovalRequired(*b)
+	}
+	return phuo
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearApprovalRequired() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearApprovalRequired()
+	return phuo
+}
+
 // SetReviewDue sets the "review_due" field.
 func (phuo *ProcedureHistoryUpdateOne) SetReviewDue(t time.Time) *ProcedureHistoryUpdateOne {
 	phuo.mutation.SetReviewDue(t)
@@ -719,95 +714,43 @@ func (phuo *ProcedureHistoryUpdateOne) ClearReviewDue() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetVersion sets the "version" field.
-func (phuo *ProcedureHistoryUpdateOne) SetVersion(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (phuo *ProcedureHistoryUpdateOne) SetReviewFrequency(e enums.Frequency) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetReviewFrequency(e)
 	return phuo
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableVersion(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureHistoryUpdateOne {
+	if e != nil {
+		phuo.SetReviewFrequency(*e)
 	}
 	return phuo
 }
 
-// ClearVersion clears the value of the "version" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearVersion() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearVersion()
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearReviewFrequency()
 	return phuo
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (phuo *ProcedureHistoryUpdateOne) SetPurposeAndScope(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (phuo *ProcedureHistoryUpdateOne) SetRevision(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetRevision(s)
 	return phuo
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillablePurposeAndScope(s *string) *ProcedureHistoryUpdateOne {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableRevision(s *string) *ProcedureHistoryUpdateOne {
 	if s != nil {
-		phuo.SetPurposeAndScope(*s)
+		phuo.SetRevision(*s)
 	}
 	return phuo
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearPurposeAndScope() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearPurposeAndScope()
-	return phuo
-}
-
-// SetBackground sets the "background" field.
-func (phuo *ProcedureHistoryUpdateOne) SetBackground(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetBackground(s)
-	return phuo
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableBackground(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetBackground(*s)
-	}
-	return phuo
-}
-
-// ClearBackground clears the value of the "background" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearBackground() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearBackground()
-	return phuo
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (phuo *ProcedureHistoryUpdateOne) SetSatisfies(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetSatisfies(s)
-	return phuo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableSatisfies(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetSatisfies(*s)
-	}
-	return phuo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearSatisfies() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearSatisfies()
-	return phuo
-}
-
-// SetDetails sets the "details" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDetails(m map[string]interface{}) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDetails(m)
-	return phuo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDetails()
+// ClearRevision clears the value of the "revision" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearRevision()
 	return phuo
 }
 
@@ -865,6 +808,21 @@ func (phuo *ProcedureHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (phuo *ProcedureHistoryUpdateOne) check() error {
+	if v, ok := phuo.mutation.Status(); ok {
+		if err := procedurehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := phuo.mutation.ReviewFrequency(); ok {
+		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (phuo *ProcedureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdateOne {
 	phuo.modifiers = append(phuo.modifiers, modifiers...)
@@ -872,6 +830,9 @@ func (phuo *ProcedureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProcedureHistory, err error) {
+	if err := phuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
 	id, ok := phuo.mutation.ID()
 	if !ok {
@@ -918,6 +879,17 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := phuo.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTags, value)
+		})
+	}
+	if phuo.mutation.TagsCleared() {
+		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
 	if value, ok := phuo.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -930,17 +902,6 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := phuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
-	if phuo.mutation.TagsCleared() {
-		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := phuo.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
 	}
@@ -950,17 +911,11 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if value, ok := phuo.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phuo.mutation.Description(); ok {
-		_spec.SetField(procedurehistory.FieldDescription, field.TypeString, value)
-	}
-	if phuo.mutation.DescriptionCleared() {
-		_spec.ClearField(procedurehistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := phuo.mutation.Status(); ok {
-		_spec.SetField(procedurehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if phuo.mutation.StatusCleared() {
-		_spec.ClearField(procedurehistory.FieldStatus, field.TypeString)
+		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := phuo.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
@@ -968,41 +923,35 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
 	}
+	if value, ok := phuo.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
+	}
+	if phuo.mutation.DetailsCleared() {
+		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := phuo.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if phuo.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
+	}
 	if value, ok := phuo.mutation.ReviewDue(); ok {
 		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
 	}
 	if phuo.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.Version(); ok {
-		_spec.SetField(procedurehistory.FieldVersion, field.TypeString, value)
+	if value, ok := phuo.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if phuo.mutation.VersionCleared() {
-		_spec.ClearField(procedurehistory.FieldVersion, field.TypeString)
+	if phuo.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := phuo.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedurehistory.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := phuo.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
-	if phuo.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(procedurehistory.FieldPurposeAndScope, field.TypeString)
-	}
-	if value, ok := phuo.mutation.Background(); ok {
-		_spec.SetField(procedurehistory.FieldBackground, field.TypeString, value)
-	}
-	if phuo.mutation.BackgroundCleared() {
-		_spec.ClearField(procedurehistory.FieldBackground, field.TypeString)
-	}
-	if value, ok := phuo.mutation.Satisfies(); ok {
-		_spec.SetField(procedurehistory.FieldSatisfies, field.TypeString, value)
-	}
-	if phuo.mutation.SatisfiesCleared() {
-		_spec.ClearField(procedurehistory.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := phuo.mutation.Details(); ok {
-		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
-	}
-	if phuo.mutation.DetailsCleared() {
-		_spec.ClearField(procedurehistory.FieldDetails, field.TypeJSON)
+	if phuo.mutation.RevisionCleared() {
+		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

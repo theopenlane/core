@@ -53,50 +53,50 @@ type Reference struct {
 
 // MarshalGQL implements the Marshaler interface for gqlgen
 func (a AssessmentObjective) MarshalGQL(w io.Writer) {
-	marshalGQL(w, a)
+	marshalGQLJSON(w, a)
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (a *AssessmentObjective) UnmarshalGQL(v any) error {
-	return unmarshalGQL(v, a)
+	return unmarshalGQLJSON(v, a)
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen
 func (a AssessmentMethod) MarshalGQL(w io.Writer) {
-	marshalGQL(w, a)
+	marshalGQLJSON(w, a)
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (a *AssessmentMethod) UnmarshalGQL(v any) error {
-	return unmarshalGQL(v, a)
+	return unmarshalGQLJSON(v, a)
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen
 func (e ExampleEvidence) MarshalGQL(w io.Writer) {
-	marshalGQL(w, e)
+	marshalGQLJSON(w, e)
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (e *ExampleEvidence) UnmarshalGQL(v any) error {
-	return unmarshalGQL(v, e)
+	return unmarshalGQLJSON(v, e)
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen
 func (i ImplementationGuidance) MarshalGQL(w io.Writer) {
-	marshalGQL(w, i)
+	marshalGQLJSON(w, i)
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (i *ImplementationGuidance) UnmarshalGQL(v any) error {
-	return unmarshalGQL(v, i)
+	return unmarshalGQLJSON(v, i)
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen
 func (r Reference) MarshalGQL(w io.Writer) {
-	marshalGQL(w, r)
+	marshalGQLJSON(w, r)
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (r *Reference) UnmarshalGQL(v any) error {
-	return unmarshalGQL(v, r)
+	return unmarshalGQLJSON(v, r)
 }

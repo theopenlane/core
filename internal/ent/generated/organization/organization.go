@@ -129,6 +129,8 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeStandards holds the string denoting the standards edge name in mutations.
 	EdgeStandards = "standards"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -404,6 +406,13 @@ const (
 	StandardsInverseTable = "standards"
 	// StandardsColumn is the table column denoting the standards relation/edge.
 	StandardsColumn = "owner_id"
+	// ActionPlansTable is the table that holds the action_plans relation/edge.
+	ActionPlansTable = "action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
+	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
+	ActionPlansColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1135,6 +1144,20 @@ func ByStandards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
+	}
+}
+
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1433,6 +1456,13 @@ func newStandardsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(StandardsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
+	)
+}
+func newActionPlansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

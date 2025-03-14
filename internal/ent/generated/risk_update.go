@@ -142,36 +142,16 @@ func (ru *RiskUpdate) SetNillableName(s *string) *RiskUpdate {
 	return ru
 }
 
-// SetDescription sets the "description" field.
-func (ru *RiskUpdate) SetDescription(s string) *RiskUpdate {
-	ru.mutation.SetDescription(s)
-	return ru
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDescription(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetDescription(*s)
-	}
-	return ru
-}
-
-// ClearDescription clears the value of the "description" field.
-func (ru *RiskUpdate) ClearDescription() *RiskUpdate {
-	ru.mutation.ClearDescription()
-	return ru
-}
-
 // SetStatus sets the "status" field.
-func (ru *RiskUpdate) SetStatus(s string) *RiskUpdate {
-	ru.mutation.SetStatus(s)
+func (ru *RiskUpdate) SetStatus(es enums.RiskStatus) *RiskUpdate {
+	ru.mutation.SetStatus(es)
 	return ru
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableStatus(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetStatus(*s)
+func (ru *RiskUpdate) SetNillableStatus(es *enums.RiskStatus) *RiskUpdate {
+	if es != nil {
+		ru.SetStatus(*es)
 	}
 	return ru
 }
@@ -202,23 +182,23 @@ func (ru *RiskUpdate) ClearRiskType() *RiskUpdate {
 	return ru
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (ru *RiskUpdate) SetBusinessCosts(s string) *RiskUpdate {
-	ru.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (ru *RiskUpdate) SetCategory(s string) *RiskUpdate {
+	ru.mutation.SetCategory(s)
 	return ru
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableBusinessCosts(s *string) *RiskUpdate {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableCategory(s *string) *RiskUpdate {
 	if s != nil {
-		ru.SetBusinessCosts(*s)
+		ru.SetCategory(*s)
 	}
 	return ru
 }
 
-// ClearBusinessCosts clears the value of the "business_costs" field.
-func (ru *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
-	ru.mutation.ClearBusinessCosts()
+// ClearCategory clears the value of the "category" field.
+func (ru *RiskUpdate) ClearCategory() *RiskUpdate {
+	ru.mutation.ClearCategory()
 	return ru
 }
 
@@ -262,6 +242,33 @@ func (ru *RiskUpdate) ClearLikelihood() *RiskUpdate {
 	return ru
 }
 
+// SetScore sets the "score" field.
+func (ru *RiskUpdate) SetScore(i int) *RiskUpdate {
+	ru.mutation.ResetScore()
+	ru.mutation.SetScore(i)
+	return ru
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableScore(i *int) *RiskUpdate {
+	if i != nil {
+		ru.SetScore(*i)
+	}
+	return ru
+}
+
+// AddScore adds i to the "score" field.
+func (ru *RiskUpdate) AddScore(i int) *RiskUpdate {
+	ru.mutation.AddScore(i)
+	return ru
+}
+
+// ClearScore clears the value of the "score" field.
+func (ru *RiskUpdate) ClearScore() *RiskUpdate {
+	ru.mutation.ClearScore()
+	return ru
+}
+
 // SetMitigation sets the "mitigation" field.
 func (ru *RiskUpdate) SetMitigation(s string) *RiskUpdate {
 	ru.mutation.SetMitigation(s)
@@ -282,35 +289,43 @@ func (ru *RiskUpdate) ClearMitigation() *RiskUpdate {
 	return ru
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (ru *RiskUpdate) SetSatisfies(s string) *RiskUpdate {
-	ru.mutation.SetSatisfies(s)
-	return ru
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableSatisfies(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetSatisfies(*s)
-	}
-	return ru
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (ru *RiskUpdate) ClearSatisfies() *RiskUpdate {
-	ru.mutation.ClearSatisfies()
-	return ru
-}
-
 // SetDetails sets the "details" field.
-func (ru *RiskUpdate) SetDetails(m map[string]interface{}) *RiskUpdate {
-	ru.mutation.SetDetails(m)
+func (ru *RiskUpdate) SetDetails(s string) *RiskUpdate {
+	ru.mutation.SetDetails(s)
+	return ru
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableDetails(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetDetails(*s)
+	}
 	return ru
 }
 
 // ClearDetails clears the value of the "details" field.
 func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
 	ru.mutation.ClearDetails()
+	return ru
+}
+
+// SetBusinessCosts sets the "business_costs" field.
+func (ru *RiskUpdate) SetBusinessCosts(s string) *RiskUpdate {
+	ru.mutation.SetBusinessCosts(s)
+	return ru
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableBusinessCosts(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetBusinessCosts(*s)
+	}
+	return ru
+}
+
+// ClearBusinessCosts clears the value of the "business_costs" field.
+func (ru *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
+	ru.mutation.ClearBusinessCosts()
 	return ru
 }
 
@@ -417,6 +432,44 @@ func (ru *RiskUpdate) AddPrograms(p ...*Program) *RiskUpdate {
 		ids[i] = p[i].ID
 	}
 	return ru.AddProgramIDs(ids...)
+}
+
+// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
+func (ru *RiskUpdate) SetStakeholderID(id string) *RiskUpdate {
+	ru.mutation.SetStakeholderID(id)
+	return ru
+}
+
+// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
+func (ru *RiskUpdate) SetNillableStakeholderID(id *string) *RiskUpdate {
+	if id != nil {
+		ru = ru.SetStakeholderID(*id)
+	}
+	return ru
+}
+
+// SetStakeholder sets the "stakeholder" edge to the Group entity.
+func (ru *RiskUpdate) SetStakeholder(g *Group) *RiskUpdate {
+	return ru.SetStakeholderID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (ru *RiskUpdate) SetDelegateID(id string) *RiskUpdate {
+	ru.mutation.SetDelegateID(id)
+	return ru
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (ru *RiskUpdate) SetNillableDelegateID(id *string) *RiskUpdate {
+	if id != nil {
+		ru = ru.SetDelegateID(*id)
+	}
+	return ru
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (ru *RiskUpdate) SetDelegate(g *Group) *RiskUpdate {
+	return ru.SetDelegateID(g.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -571,6 +624,18 @@ func (ru *RiskUpdate) RemovePrograms(p ...*Program) *RiskUpdate {
 	return ru.RemoveProgramIDs(ids...)
 }
 
+// ClearStakeholder clears the "stakeholder" edge to the Group entity.
+func (ru *RiskUpdate) ClearStakeholder() *RiskUpdate {
+	ru.mutation.ClearStakeholder()
+	return ru
+}
+
+// ClearDelegate clears the "delegate" edge to the Group entity.
+func (ru *RiskUpdate) ClearDelegate() *RiskUpdate {
+	ru.mutation.ClearDelegate()
+	return ru
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ru *RiskUpdate) Save(ctx context.Context) (int, error) {
 	if err := ru.defaults(); err != nil {
@@ -618,6 +683,11 @@ func (ru *RiskUpdate) check() error {
 	if v, ok := ru.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
+	if v, ok := ru.mutation.Status(); ok {
+		if err := risk.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Risk.status": %w`, err)}
 		}
 	}
 	if v, ok := ru.mutation.Impact(); ok {
@@ -695,17 +765,11 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
-	if value, ok := ru.mutation.Description(); ok {
-		_spec.SetField(risk.FieldDescription, field.TypeString, value)
-	}
-	if ru.mutation.DescriptionCleared() {
-		_spec.ClearField(risk.FieldDescription, field.TypeString)
-	}
 	if value, ok := ru.mutation.Status(); ok {
-		_spec.SetField(risk.FieldStatus, field.TypeString, value)
+		_spec.SetField(risk.FieldStatus, field.TypeEnum, value)
 	}
 	if ru.mutation.StatusCleared() {
-		_spec.ClearField(risk.FieldStatus, field.TypeString)
+		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := ru.mutation.RiskType(); ok {
 		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
@@ -713,11 +777,11 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.RiskTypeCleared() {
 		_spec.ClearField(risk.FieldRiskType, field.TypeString)
 	}
-	if value, ok := ru.mutation.BusinessCosts(); ok {
-		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
+	if value, ok := ru.mutation.Category(); ok {
+		_spec.SetField(risk.FieldCategory, field.TypeString, value)
 	}
-	if ru.mutation.BusinessCostsCleared() {
-		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
+	if ru.mutation.CategoryCleared() {
+		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
 	if value, ok := ru.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
@@ -731,23 +795,32 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.LikelihoodCleared() {
 		_spec.ClearField(risk.FieldLikelihood, field.TypeEnum)
 	}
+	if value, ok := ru.mutation.Score(); ok {
+		_spec.SetField(risk.FieldScore, field.TypeInt, value)
+	}
+	if value, ok := ru.mutation.AddedScore(); ok {
+		_spec.AddField(risk.FieldScore, field.TypeInt, value)
+	}
+	if ru.mutation.ScoreCleared() {
+		_spec.ClearField(risk.FieldScore, field.TypeInt)
+	}
 	if value, ok := ru.mutation.Mitigation(); ok {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 	}
 	if ru.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
-	if value, ok := ru.mutation.Satisfies(); ok {
-		_spec.SetField(risk.FieldSatisfies, field.TypeString, value)
-	}
-	if ru.mutation.SatisfiesCleared() {
-		_spec.ClearField(risk.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := ru.mutation.Details(); ok {
-		_spec.SetField(risk.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
 	if ru.mutation.DetailsCleared() {
-		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
+		_spec.ClearField(risk.FieldDetails, field.TypeString)
+	}
+	if value, ok := ru.mutation.BusinessCosts(); ok {
+		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
+	}
+	if ru.mutation.BusinessCostsCleared() {
+		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
 	}
 	if ru.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1085,6 +1158,68 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.StakeholderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderTable,
+			Columns: []string{risk.StakeholderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.StakeholderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderTable,
+			Columns: []string{risk.StakeholderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.DelegateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateTable,
+			Columns: []string{risk.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateTable,
+			Columns: []string{risk.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = ru.schemaConfig.Risk
 	ctx = internal.NewSchemaConfigContext(ctx, ru.schemaConfig)
 	_spec.AddModifiers(ru.modifiers...)
@@ -1213,36 +1348,16 @@ func (ruo *RiskUpdateOne) SetNillableName(s *string) *RiskUpdateOne {
 	return ruo
 }
 
-// SetDescription sets the "description" field.
-func (ruo *RiskUpdateOne) SetDescription(s string) *RiskUpdateOne {
-	ruo.mutation.SetDescription(s)
-	return ruo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDescription(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetDescription(*s)
-	}
-	return ruo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (ruo *RiskUpdateOne) ClearDescription() *RiskUpdateOne {
-	ruo.mutation.ClearDescription()
-	return ruo
-}
-
 // SetStatus sets the "status" field.
-func (ruo *RiskUpdateOne) SetStatus(s string) *RiskUpdateOne {
-	ruo.mutation.SetStatus(s)
+func (ruo *RiskUpdateOne) SetStatus(es enums.RiskStatus) *RiskUpdateOne {
+	ruo.mutation.SetStatus(es)
 	return ruo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableStatus(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetStatus(*s)
+func (ruo *RiskUpdateOne) SetNillableStatus(es *enums.RiskStatus) *RiskUpdateOne {
+	if es != nil {
+		ruo.SetStatus(*es)
 	}
 	return ruo
 }
@@ -1273,23 +1388,23 @@ func (ruo *RiskUpdateOne) ClearRiskType() *RiskUpdateOne {
 	return ruo
 }
 
-// SetBusinessCosts sets the "business_costs" field.
-func (ruo *RiskUpdateOne) SetBusinessCosts(s string) *RiskUpdateOne {
-	ruo.mutation.SetBusinessCosts(s)
+// SetCategory sets the "category" field.
+func (ruo *RiskUpdateOne) SetCategory(s string) *RiskUpdateOne {
+	ruo.mutation.SetCategory(s)
 	return ruo
 }
 
-// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableBusinessCosts(s *string) *RiskUpdateOne {
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableCategory(s *string) *RiskUpdateOne {
 	if s != nil {
-		ruo.SetBusinessCosts(*s)
+		ruo.SetCategory(*s)
 	}
 	return ruo
 }
 
-// ClearBusinessCosts clears the value of the "business_costs" field.
-func (ruo *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
-	ruo.mutation.ClearBusinessCosts()
+// ClearCategory clears the value of the "category" field.
+func (ruo *RiskUpdateOne) ClearCategory() *RiskUpdateOne {
+	ruo.mutation.ClearCategory()
 	return ruo
 }
 
@@ -1333,6 +1448,33 @@ func (ruo *RiskUpdateOne) ClearLikelihood() *RiskUpdateOne {
 	return ruo
 }
 
+// SetScore sets the "score" field.
+func (ruo *RiskUpdateOne) SetScore(i int) *RiskUpdateOne {
+	ruo.mutation.ResetScore()
+	ruo.mutation.SetScore(i)
+	return ruo
+}
+
+// SetNillableScore sets the "score" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableScore(i *int) *RiskUpdateOne {
+	if i != nil {
+		ruo.SetScore(*i)
+	}
+	return ruo
+}
+
+// AddScore adds i to the "score" field.
+func (ruo *RiskUpdateOne) AddScore(i int) *RiskUpdateOne {
+	ruo.mutation.AddScore(i)
+	return ruo
+}
+
+// ClearScore clears the value of the "score" field.
+func (ruo *RiskUpdateOne) ClearScore() *RiskUpdateOne {
+	ruo.mutation.ClearScore()
+	return ruo
+}
+
 // SetMitigation sets the "mitigation" field.
 func (ruo *RiskUpdateOne) SetMitigation(s string) *RiskUpdateOne {
 	ruo.mutation.SetMitigation(s)
@@ -1353,35 +1495,43 @@ func (ruo *RiskUpdateOne) ClearMitigation() *RiskUpdateOne {
 	return ruo
 }
 
-// SetSatisfies sets the "satisfies" field.
-func (ruo *RiskUpdateOne) SetSatisfies(s string) *RiskUpdateOne {
-	ruo.mutation.SetSatisfies(s)
-	return ruo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableSatisfies(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetSatisfies(*s)
-	}
-	return ruo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (ruo *RiskUpdateOne) ClearSatisfies() *RiskUpdateOne {
-	ruo.mutation.ClearSatisfies()
-	return ruo
-}
-
 // SetDetails sets the "details" field.
-func (ruo *RiskUpdateOne) SetDetails(m map[string]interface{}) *RiskUpdateOne {
-	ruo.mutation.SetDetails(m)
+func (ruo *RiskUpdateOne) SetDetails(s string) *RiskUpdateOne {
+	ruo.mutation.SetDetails(s)
+	return ruo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableDetails(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetDetails(*s)
+	}
 	return ruo
 }
 
 // ClearDetails clears the value of the "details" field.
 func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	ruo.mutation.ClearDetails()
+	return ruo
+}
+
+// SetBusinessCosts sets the "business_costs" field.
+func (ruo *RiskUpdateOne) SetBusinessCosts(s string) *RiskUpdateOne {
+	ruo.mutation.SetBusinessCosts(s)
+	return ruo
+}
+
+// SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableBusinessCosts(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetBusinessCosts(*s)
+	}
+	return ruo
+}
+
+// ClearBusinessCosts clears the value of the "business_costs" field.
+func (ruo *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
+	ruo.mutation.ClearBusinessCosts()
 	return ruo
 }
 
@@ -1488,6 +1638,44 @@ func (ruo *RiskUpdateOne) AddPrograms(p ...*Program) *RiskUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return ruo.AddProgramIDs(ids...)
+}
+
+// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
+func (ruo *RiskUpdateOne) SetStakeholderID(id string) *RiskUpdateOne {
+	ruo.mutation.SetStakeholderID(id)
+	return ruo
+}
+
+// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableStakeholderID(id *string) *RiskUpdateOne {
+	if id != nil {
+		ruo = ruo.SetStakeholderID(*id)
+	}
+	return ruo
+}
+
+// SetStakeholder sets the "stakeholder" edge to the Group entity.
+func (ruo *RiskUpdateOne) SetStakeholder(g *Group) *RiskUpdateOne {
+	return ruo.SetStakeholderID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (ruo *RiskUpdateOne) SetDelegateID(id string) *RiskUpdateOne {
+	ruo.mutation.SetDelegateID(id)
+	return ruo
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableDelegateID(id *string) *RiskUpdateOne {
+	if id != nil {
+		ruo = ruo.SetDelegateID(*id)
+	}
+	return ruo
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (ruo *RiskUpdateOne) SetDelegate(g *Group) *RiskUpdateOne {
+	return ruo.SetDelegateID(g.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -1642,6 +1830,18 @@ func (ruo *RiskUpdateOne) RemovePrograms(p ...*Program) *RiskUpdateOne {
 	return ruo.RemoveProgramIDs(ids...)
 }
 
+// ClearStakeholder clears the "stakeholder" edge to the Group entity.
+func (ruo *RiskUpdateOne) ClearStakeholder() *RiskUpdateOne {
+	ruo.mutation.ClearStakeholder()
+	return ruo
+}
+
+// ClearDelegate clears the "delegate" edge to the Group entity.
+func (ruo *RiskUpdateOne) ClearDelegate() *RiskUpdateOne {
+	ruo.mutation.ClearDelegate()
+	return ruo
+}
+
 // Where appends a list predicates to the RiskUpdate builder.
 func (ruo *RiskUpdateOne) Where(ps ...predicate.Risk) *RiskUpdateOne {
 	ruo.mutation.Where(ps...)
@@ -1702,6 +1902,11 @@ func (ruo *RiskUpdateOne) check() error {
 	if v, ok := ruo.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
+	if v, ok := ruo.mutation.Status(); ok {
+		if err := risk.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Risk.status": %w`, err)}
 		}
 	}
 	if v, ok := ruo.mutation.Impact(); ok {
@@ -1796,17 +2001,11 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if value, ok := ruo.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
-	if value, ok := ruo.mutation.Description(); ok {
-		_spec.SetField(risk.FieldDescription, field.TypeString, value)
-	}
-	if ruo.mutation.DescriptionCleared() {
-		_spec.ClearField(risk.FieldDescription, field.TypeString)
-	}
 	if value, ok := ruo.mutation.Status(); ok {
-		_spec.SetField(risk.FieldStatus, field.TypeString, value)
+		_spec.SetField(risk.FieldStatus, field.TypeEnum, value)
 	}
 	if ruo.mutation.StatusCleared() {
-		_spec.ClearField(risk.FieldStatus, field.TypeString)
+		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := ruo.mutation.RiskType(); ok {
 		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
@@ -1814,11 +2013,11 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if ruo.mutation.RiskTypeCleared() {
 		_spec.ClearField(risk.FieldRiskType, field.TypeString)
 	}
-	if value, ok := ruo.mutation.BusinessCosts(); ok {
-		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
+	if value, ok := ruo.mutation.Category(); ok {
+		_spec.SetField(risk.FieldCategory, field.TypeString, value)
 	}
-	if ruo.mutation.BusinessCostsCleared() {
-		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
+	if ruo.mutation.CategoryCleared() {
+		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
 	if value, ok := ruo.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
@@ -1832,23 +2031,32 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if ruo.mutation.LikelihoodCleared() {
 		_spec.ClearField(risk.FieldLikelihood, field.TypeEnum)
 	}
+	if value, ok := ruo.mutation.Score(); ok {
+		_spec.SetField(risk.FieldScore, field.TypeInt, value)
+	}
+	if value, ok := ruo.mutation.AddedScore(); ok {
+		_spec.AddField(risk.FieldScore, field.TypeInt, value)
+	}
+	if ruo.mutation.ScoreCleared() {
+		_spec.ClearField(risk.FieldScore, field.TypeInt)
+	}
 	if value, ok := ruo.mutation.Mitigation(); ok {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 	}
 	if ruo.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
-	if value, ok := ruo.mutation.Satisfies(); ok {
-		_spec.SetField(risk.FieldSatisfies, field.TypeString, value)
-	}
-	if ruo.mutation.SatisfiesCleared() {
-		_spec.ClearField(risk.FieldSatisfies, field.TypeString)
-	}
 	if value, ok := ruo.mutation.Details(); ok {
-		_spec.SetField(risk.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
 	if ruo.mutation.DetailsCleared() {
-		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
+		_spec.ClearField(risk.FieldDetails, field.TypeString)
+	}
+	if value, ok := ruo.mutation.BusinessCosts(); ok {
+		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
+	}
+	if ruo.mutation.BusinessCostsCleared() {
+		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
 	}
 	if ruo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2181,6 +2389,68 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			},
 		}
 		edge.Schema = ruo.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.StakeholderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderTable,
+			Columns: []string{risk.StakeholderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.StakeholderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderTable,
+			Columns: []string{risk.StakeholderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.DelegateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateTable,
+			Columns: []string{risk.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateTable,
+			Columns: []string{risk.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

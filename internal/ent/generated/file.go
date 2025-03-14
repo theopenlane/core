@@ -65,6 +65,7 @@ type File struct {
 	Edges        FileEdges `json:"edges"`
 	selectValues sql.SelectValues
 
+	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
 }
 

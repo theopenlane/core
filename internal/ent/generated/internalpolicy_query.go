@@ -37,6 +37,8 @@ type InternalPolicyQuery struct {
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
+	withApprover               *GroupQuery
+	withDelegate               *GroupQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
@@ -159,6 +161,56 @@ func (ipq *InternalPolicyQuery) QueryEditors() *GroupQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.InternalPolicyEditors
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryApprover chains the current query on the "approver" edge.
+func (ipq *InternalPolicyQuery) QueryApprover() *GroupQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.ApproverTable, internalpolicy.ApproverColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegate chains the current query on the "delegate" edge.
+func (ipq *InternalPolicyQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.DelegateTable, internalpolicy.DelegateColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -510,6 +562,8 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withOwner:             ipq.withOwner.Clone(),
 		withBlockedGroups:     ipq.withBlockedGroups.Clone(),
 		withEditors:           ipq.withEditors.Clone(),
+		withApprover:          ipq.withApprover.Clone(),
+		withDelegate:          ipq.withDelegate.Clone(),
 		withControlObjectives: ipq.withControlObjectives.Clone(),
 		withControls:          ipq.withControls.Clone(),
 		withProcedures:        ipq.withProcedures.Clone(),
@@ -553,6 +607,28 @@ func (ipq *InternalPolicyQuery) WithEditors(opts ...func(*GroupQuery)) *Internal
 		opt(query)
 	}
 	ipq.withEditors = query
+	return ipq
+}
+
+// WithApprover tells the query-builder to eager-load the nodes that are connected to
+// the "approver" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithApprover(opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withApprover = query
+	return ipq
+}
+
+// WithDelegate tells the query-builder to eager-load the nodes that are connected to
+// the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithDelegate(opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withDelegate = query
 	return ipq
 }
 
@@ -707,10 +783,12 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		nodes       = []*InternalPolicy{}
 		withFKs     = ipq.withFKs
 		_spec       = ipq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
 			ipq.withOwner != nil,
 			ipq.withBlockedGroups != nil,
 			ipq.withEditors != nil,
+			ipq.withApprover != nil,
+			ipq.withDelegate != nil,
 			ipq.withControlObjectives != nil,
 			ipq.withControls != nil,
 			ipq.withProcedures != nil,
@@ -719,6 +797,9 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			ipq.withPrograms != nil,
 		}
 	)
+	if ipq.withApprover != nil || ipq.withDelegate != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicy.ForeignKeys...)
 	}
@@ -762,6 +843,18 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		if err := ipq.loadEditors(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Editors = []*Group{} },
 			func(n *InternalPolicy, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withApprover; query != nil {
+		if err := ipq.loadApprover(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *Group) { n.Edges.Approver = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withDelegate; query != nil {
+		if err := ipq.loadDelegate(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *Group) { n.Edges.Delegate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1022,6 +1115,70 @@ func (ipq *InternalPolicyQuery) loadEditors(ctx context.Context, query *GroupQue
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadApprover(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		if nodes[i].internal_policy_approver == nil {
+			continue
+		}
+		fk := *nodes[i].internal_policy_approver
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_policy_approver" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		if nodes[i].internal_policy_delegate == nil {
+			continue
+		}
+		fk := *nodes[i].internal_policy_delegate
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_policy_delegate" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/privacy"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -552,6 +553,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Standard.Query().Where((standard.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if standardCount, err := FromContext(ctx).Standard.Delete().Where(standard.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", standardCount).Msg("deleting standard")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).ActionPlan.Query().Where((actionplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if actionplanCount, err := FromContext(ctx).ActionPlan.Delete().Where(actionplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", actionplanCount).Msg("deleting actionplan")
 			return err
 		}
 	}

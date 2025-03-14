@@ -2,22 +2,22 @@
 mutation CreateBulkCSVProcedure($input: Upload!) {
   createBulkCSVProcedure(input: $input) {
     procedures {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       procedureType
-      purposeAndScope
-      satisfies
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -25,22 +25,22 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
 mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
   createBulkProcedure(input: $input) {
     procedures {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       procedureType
-      purposeAndScope
-      satisfies
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
     }
   }
 }
@@ -48,22 +48,22 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
 mutation CreateProcedure($input: CreateProcedureInput!) {
   createProcedure(input: $input) {
     procedure {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       procedureType
-      purposeAndScope
-      satisfies
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
       editors{
         id
         name
@@ -86,22 +86,22 @@ query GetAllProcedures {
   procedures {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
-        id
         displayID
+        id
         name
+        ownerID
         procedureType
-        purposeAndScope
-        satisfies
+        reviewDue
+        reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
-        version
         editors{
           id
           name
@@ -116,22 +116,22 @@ query GetAllProcedures {
 }
 query GetProcedureByID($procedureId: ID!) {
   procedure(id: $procedureId) {
-    background
+    approvalRequired
     createdAt
     createdBy
-    description
     details
-    id
     displayID
+    id
     name
+    ownerID
     procedureType
-    purposeAndScope
-    satisfies
+    reviewDue
+    reviewFrequency
+    revision
     status
     tags
     updatedAt
     updatedBy
-    version
     editors{
       id
       name
@@ -147,22 +147,22 @@ query GetProcedures($where: ProcedureWhereInput) {
   procedures(where: $where) {
     edges {
       node {
-        background
+        approvalRequired
         createdAt
         createdBy
-        description
         details
-        id
         displayID
+        id
         name
+        ownerID
         procedureType
-        purposeAndScope
-        satisfies
+        reviewDue
+        reviewFrequency
+        revision
         status
         tags
         updatedAt
         updatedBy
-        version
         editors{
           id
           name
@@ -178,22 +178,22 @@ query GetProcedures($where: ProcedureWhereInput) {
 mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
   updateProcedure(id: $updateProcedureId, input: $input) {
     procedure {
-      background
+      approvalRequired
       createdAt
       createdBy
-      description
       details
-      id
       displayID
+      id
       name
+      ownerID
       procedureType
-      purposeAndScope
-      satisfies
+      reviewDue
+      reviewFrequency
+      revision
       status
       tags
       updatedAt
       updatedBy
-      version
       editors{
         id
         name

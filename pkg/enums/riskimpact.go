@@ -12,13 +12,14 @@ var (
 	RiskImpactLow      RiskImpact = "LOW"
 	RiskImpactModerate RiskImpact = "MODERATE"
 	RiskImpactHigh     RiskImpact = "HIGH"
+	RiskImpactCritical RiskImpact = "CRITICAL"
 	RiskImpactInvalid  RiskImpact = "INVALID"
 )
 
 // Values returns a slice of strings that represents all the possible values of the RiskImpact enum.
-// Possible default values are "LOW", "MODERATE", and "HIGH".
+// Possible default values are "LOW", "MODERATE", "HIGH", and "CRITICAL"
 func (RiskImpact) Values() (kinds []string) {
-	for _, s := range []RiskImpact{RiskImpactLow, RiskImpactModerate, RiskImpactHigh} {
+	for _, s := range []RiskImpact{RiskImpactLow, RiskImpactModerate, RiskImpactHigh, RiskImpactCritical} {
 		kinds = append(kinds, string(s))
 	}
 

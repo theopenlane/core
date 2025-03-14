@@ -4,7 +4,6 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       businessCosts
       createdAt
       createdBy
-      description
       details
       id
       displayID
@@ -13,8 +12,8 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       mitigation
       name
       riskType
-      satisfies
       status
+      score
       tags
       updatedAt
       updatedBy
@@ -28,7 +27,6 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       businessCosts
       createdAt
       createdBy
-      description
       details
       id
       displayID
@@ -37,8 +35,8 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       mitigation
       name
       riskType
-      satisfies
       status
+      score
       tags
       updatedAt
       updatedBy
@@ -52,7 +50,6 @@ mutation CreateRisk($input: CreateRiskInput!) {
       businessCosts
       createdAt
       createdBy
-      description
       details
       id
       displayID
@@ -61,8 +58,8 @@ mutation CreateRisk($input: CreateRiskInput!) {
       mitigation
       name
       riskType
-      satisfies
       status
+      score
       tags
       updatedAt
       updatedBy
@@ -99,17 +96,17 @@ query GetAllRisks {
         businessCosts
         createdAt
         createdBy
-        description
         details
         id
         displayID
         impact
         likelihood
+        score
         mitigation
         name
         riskType
-        satisfies
         status
+        score
         tags
         updatedAt
         updatedBy
@@ -139,7 +136,7 @@ query GetRiskByID($riskId: ID!) {
     businessCosts
     createdAt
     createdBy
-    description
+    score
     details
     id
     displayID
@@ -148,8 +145,8 @@ query GetRiskByID($riskId: ID!) {
     mitigation
     name
     riskType
-    satisfies
     status
+    score
     tags
     updatedAt
     updatedBy
@@ -179,7 +176,7 @@ query GetRisks($where: RiskWhereInput) {
         businessCosts
         createdAt
         createdBy
-        description
+        score
         details
         id
         displayID
@@ -188,8 +185,8 @@ query GetRisks($where: RiskWhereInput) {
         mitigation
         name
         riskType
-        satisfies
         status
+        score
         tags
         updatedAt
         updatedBy
@@ -220,7 +217,7 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       businessCosts
       createdAt
       createdBy
-      description
+      score
       details
       id
       displayID
@@ -229,8 +226,8 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       mitigation
       name
       riskType
-      satisfies
       status
+      score
       tags
       updatedAt
       updatedBy

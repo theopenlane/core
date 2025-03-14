@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.
@@ -84,6 +85,12 @@ func (ipc *InternalPolicyCreate) SetNillableUpdatedBy(s *string) *InternalPolicy
 	return ipc
 }
 
+// SetTags sets the "tags" field.
+func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetTags(s)
+	return ipc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (ipc *InternalPolicyCreate) SetDeletedAt(t time.Time) *InternalPolicyCreate {
 	ipc.mutation.SetDeletedAt(t)
@@ -118,12 +125,6 @@ func (ipc *InternalPolicyCreate) SetDisplayID(s string) *InternalPolicyCreate {
 	return ipc
 }
 
-// SetTags sets the "tags" field.
-func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetTags(s)
-	return ipc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (ipc *InternalPolicyCreate) SetOwnerID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetOwnerID(s)
@@ -144,44 +145,16 @@ func (ipc *InternalPolicyCreate) SetName(s string) *InternalPolicyCreate {
 	return ipc
 }
 
-// SetDescription sets the "description" field.
-func (ipc *InternalPolicyCreate) SetDescription(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDescription(s)
-	return ipc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDescription(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetDescription(*s)
-	}
-	return ipc
-}
-
 // SetStatus sets the "status" field.
-func (ipc *InternalPolicyCreate) SetStatus(s string) *InternalPolicyCreate {
-	ipc.mutation.SetStatus(s)
+func (ipc *InternalPolicyCreate) SetStatus(es enums.DocumentStatus) *InternalPolicyCreate {
+	ipc.mutation.SetStatus(es)
 	return ipc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableStatus(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetStatus(*s)
-	}
-	return ipc
-}
-
-// SetReviewDue sets the "review_due" field.
-func (ipc *InternalPolicyCreate) SetReviewDue(t time.Time) *InternalPolicyCreate {
-	ipc.mutation.SetReviewDue(t)
-	return ipc
-}
-
-// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyCreate {
-	if t != nil {
-		ipc.SetReviewDue(*t)
+func (ipc *InternalPolicyCreate) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyCreate {
+	if es != nil {
+		ipc.SetStatus(*es)
 	}
 	return ipc
 }
@@ -200,51 +173,73 @@ func (ipc *InternalPolicyCreate) SetNillablePolicyType(s *string) *InternalPolic
 	return ipc
 }
 
-// SetVersion sets the "version" field.
-func (ipc *InternalPolicyCreate) SetVersion(s string) *InternalPolicyCreate {
-	ipc.mutation.SetVersion(s)
-	return ipc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableVersion(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetVersion(*s)
-	}
-	return ipc
-}
-
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (ipc *InternalPolicyCreate) SetPurposeAndScope(s string) *InternalPolicyCreate {
-	ipc.mutation.SetPurposeAndScope(s)
-	return ipc
-}
-
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillablePurposeAndScope(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetPurposeAndScope(*s)
-	}
-	return ipc
-}
-
-// SetBackground sets the "background" field.
-func (ipc *InternalPolicyCreate) SetBackground(s string) *InternalPolicyCreate {
-	ipc.mutation.SetBackground(s)
-	return ipc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableBackground(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetBackground(*s)
-	}
-	return ipc
-}
-
 // SetDetails sets the "details" field.
-func (ipc *InternalPolicyCreate) SetDetails(m map[string]interface{}) *InternalPolicyCreate {
-	ipc.mutation.SetDetails(m)
+func (ipc *InternalPolicyCreate) SetDetails(s string) *InternalPolicyCreate {
+	ipc.mutation.SetDetails(s)
+	return ipc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDetails(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetDetails(*s)
+	}
+	return ipc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (ipc *InternalPolicyCreate) SetApprovalRequired(b bool) *InternalPolicyCreate {
+	ipc.mutation.SetApprovalRequired(b)
+	return ipc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableApprovalRequired(b *bool) *InternalPolicyCreate {
+	if b != nil {
+		ipc.SetApprovalRequired(*b)
+	}
+	return ipc
+}
+
+// SetReviewDue sets the "review_due" field.
+func (ipc *InternalPolicyCreate) SetReviewDue(t time.Time) *InternalPolicyCreate {
+	ipc.mutation.SetReviewDue(t)
+	return ipc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyCreate {
+	if t != nil {
+		ipc.SetReviewDue(*t)
+	}
+	return ipc
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (ipc *InternalPolicyCreate) SetReviewFrequency(e enums.Frequency) *InternalPolicyCreate {
+	ipc.mutation.SetReviewFrequency(e)
+	return ipc
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyCreate {
+	if e != nil {
+		ipc.SetReviewFrequency(*e)
+	}
+	return ipc
+}
+
+// SetRevision sets the "revision" field.
+func (ipc *InternalPolicyCreate) SetRevision(s string) *InternalPolicyCreate {
+	ipc.mutation.SetRevision(s)
+	return ipc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableRevision(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetRevision(*s)
+	}
 	return ipc
 }
 
@@ -295,6 +290,44 @@ func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
 		ids[i] = g[i].ID
 	}
 	return ipc.AddEditorIDs(ids...)
+}
+
+// SetApproverID sets the "approver" edge to the Group entity by ID.
+func (ipc *InternalPolicyCreate) SetApproverID(id string) *InternalPolicyCreate {
+	ipc.mutation.SetApproverID(id)
+	return ipc
+}
+
+// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableApproverID(id *string) *InternalPolicyCreate {
+	if id != nil {
+		ipc = ipc.SetApproverID(*id)
+	}
+	return ipc
+}
+
+// SetApprover sets the "approver" edge to the Group entity.
+func (ipc *InternalPolicyCreate) SetApprover(g *Group) *InternalPolicyCreate {
+	return ipc.SetApproverID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (ipc *InternalPolicyCreate) SetDelegateID(id string) *InternalPolicyCreate {
+	ipc.mutation.SetDelegateID(id)
+	return ipc
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDelegateID(id *string) *InternalPolicyCreate {
+	if id != nil {
+		ipc = ipc.SetDelegateID(*id)
+	}
+	return ipc
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (ipc *InternalPolicyCreate) SetDelegate(g *Group) *InternalPolicyCreate {
+	return ipc.SetDelegateID(g.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -442,9 +475,25 @@ func (ipc *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultTags
 		ipc.mutation.SetTags(v)
 	}
+	if _, ok := ipc.mutation.Status(); !ok {
+		v := internalpolicy.DefaultStatus
+		ipc.mutation.SetStatus(v)
+	}
+	if _, ok := ipc.mutation.ApprovalRequired(); !ok {
+		v := internalpolicy.DefaultApprovalRequired
+		ipc.mutation.SetApprovalRequired(v)
+	}
 	if _, ok := ipc.mutation.ReviewDue(); !ok {
 		v := internalpolicy.DefaultReviewDue
 		ipc.mutation.SetReviewDue(v)
+	}
+	if _, ok := ipc.mutation.ReviewFrequency(); !ok {
+		v := internalpolicy.DefaultReviewFrequency
+		ipc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := ipc.mutation.Revision(); !ok {
+		v := internalpolicy.DefaultRevision
+		ipc.mutation.SetRevision(v)
 	}
 	if _, ok := ipc.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
@@ -477,6 +526,21 @@ func (ipc *InternalPolicyCreate) check() error {
 	if v, ok := ipc.mutation.Name(); ok {
 		if err := internalpolicy.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
+		}
+	}
+	if v, ok := ipc.mutation.Status(); ok {
+		if err := internalpolicy.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
+		}
+	}
+	if v, ok := ipc.mutation.ReviewFrequency(); ok {
+		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := ipc.mutation.Revision(); ok {
+		if err := internalpolicy.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -531,6 +595,10 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := ipc.mutation.Tags(); ok {
+		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
 	if value, ok := ipc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -543,45 +611,37 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := ipc.mutation.Tags(); ok {
-		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ipc.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ipc.mutation.Description(); ok {
-		_spec.SetField(internalpolicy.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := ipc.mutation.Status(); ok {
-		_spec.SetField(internalpolicy.FieldStatus, field.TypeString, value)
+		_spec.SetField(internalpolicy.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := ipc.mutation.ReviewDue(); ok {
-		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
-		_node.ReviewDue = value
 	}
 	if value, ok := ipc.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
 		_node.PolicyType = value
 	}
-	if value, ok := ipc.mutation.Version(); ok {
-		_spec.SetField(internalpolicy.FieldVersion, field.TypeString, value)
-		_node.Version = value
-	}
-	if value, ok := ipc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(internalpolicy.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
-	}
-	if value, ok := ipc.mutation.Background(); ok {
-		_spec.SetField(internalpolicy.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
 	if value, ok := ipc.mutation.Details(); ok {
-		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := ipc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
+	if value, ok := ipc.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
+	}
+	if value, ok := ipc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := ipc.mutation.Revision(); ok {
+		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -633,6 +693,42 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.ApproverIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.ApproverTable,
+			Columns: []string{internalpolicy.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.internal_policy_approver = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.DelegateTable,
+			Columns: []string{internalpolicy.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.internal_policy_delegate = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ipc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {

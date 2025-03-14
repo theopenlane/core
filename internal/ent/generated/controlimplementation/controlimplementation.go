@@ -3,11 +3,14 @@
 package controlimplementation
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -104,6 +107,18 @@ var (
 	DefaultID func() string
 )
 
+const DefaultStatus enums.DocumentStatus = "DRAFT"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.DocumentStatus) error {
+	switch s.String() {
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("controlimplementation: invalid enum value for status field: %q", s)
+	}
+}
+
 // OrderOption defines the ordering options for the ControlImplementation queries.
 type OrderOption func(*sql.Selector)
 
@@ -187,3 +202,10 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
+
+var (
+	// enums.DocumentStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
+	// enums.DocumentStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
+)

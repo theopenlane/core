@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ProcedureCreate is the builder for creating a Procedure entity.
@@ -84,6 +85,12 @@ func (pc *ProcedureCreate) SetNillableUpdatedBy(s *string) *ProcedureCreate {
 	return pc
 }
 
+// SetTags sets the "tags" field.
+func (pc *ProcedureCreate) SetTags(s []string) *ProcedureCreate {
+	pc.mutation.SetTags(s)
+	return pc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (pc *ProcedureCreate) SetDeletedAt(t time.Time) *ProcedureCreate {
 	pc.mutation.SetDeletedAt(t)
@@ -118,12 +125,6 @@ func (pc *ProcedureCreate) SetDisplayID(s string) *ProcedureCreate {
 	return pc
 }
 
-// SetTags sets the "tags" field.
-func (pc *ProcedureCreate) SetTags(s []string) *ProcedureCreate {
-	pc.mutation.SetTags(s)
-	return pc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (pc *ProcedureCreate) SetOwnerID(s string) *ProcedureCreate {
 	pc.mutation.SetOwnerID(s)
@@ -144,30 +145,16 @@ func (pc *ProcedureCreate) SetName(s string) *ProcedureCreate {
 	return pc
 }
 
-// SetDescription sets the "description" field.
-func (pc *ProcedureCreate) SetDescription(s string) *ProcedureCreate {
-	pc.mutation.SetDescription(s)
-	return pc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableDescription(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetDescription(*s)
-	}
-	return pc
-}
-
 // SetStatus sets the "status" field.
-func (pc *ProcedureCreate) SetStatus(s string) *ProcedureCreate {
-	pc.mutation.SetStatus(s)
+func (pc *ProcedureCreate) SetStatus(es enums.DocumentStatus) *ProcedureCreate {
+	pc.mutation.SetStatus(es)
 	return pc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableStatus(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetStatus(*s)
+func (pc *ProcedureCreate) SetNillableStatus(es *enums.DocumentStatus) *ProcedureCreate {
+	if es != nil {
+		pc.SetStatus(*es)
 	}
 	return pc
 }
@@ -186,6 +173,34 @@ func (pc *ProcedureCreate) SetNillableProcedureType(s *string) *ProcedureCreate 
 	return pc
 }
 
+// SetDetails sets the "details" field.
+func (pc *ProcedureCreate) SetDetails(s string) *ProcedureCreate {
+	pc.mutation.SetDetails(s)
+	return pc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableDetails(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetDetails(*s)
+	}
+	return pc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (pc *ProcedureCreate) SetApprovalRequired(b bool) *ProcedureCreate {
+	pc.mutation.SetApprovalRequired(b)
+	return pc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableApprovalRequired(b *bool) *ProcedureCreate {
+	if b != nil {
+		pc.SetApprovalRequired(*b)
+	}
+	return pc
+}
+
 // SetReviewDue sets the "review_due" field.
 func (pc *ProcedureCreate) SetReviewDue(t time.Time) *ProcedureCreate {
 	pc.mutation.SetReviewDue(t)
@@ -200,65 +215,31 @@ func (pc *ProcedureCreate) SetNillableReviewDue(t *time.Time) *ProcedureCreate {
 	return pc
 }
 
-// SetVersion sets the "version" field.
-func (pc *ProcedureCreate) SetVersion(s string) *ProcedureCreate {
-	pc.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (pc *ProcedureCreate) SetReviewFrequency(e enums.Frequency) *ProcedureCreate {
+	pc.mutation.SetReviewFrequency(e)
 	return pc
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableVersion(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureCreate {
+	if e != nil {
+		pc.SetReviewFrequency(*e)
 	}
 	return pc
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (pc *ProcedureCreate) SetPurposeAndScope(s string) *ProcedureCreate {
-	pc.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (pc *ProcedureCreate) SetRevision(s string) *ProcedureCreate {
+	pc.mutation.SetRevision(s)
 	return pc
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillablePurposeAndScope(s *string) *ProcedureCreate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableRevision(s *string) *ProcedureCreate {
 	if s != nil {
-		pc.SetPurposeAndScope(*s)
+		pc.SetRevision(*s)
 	}
-	return pc
-}
-
-// SetBackground sets the "background" field.
-func (pc *ProcedureCreate) SetBackground(s string) *ProcedureCreate {
-	pc.mutation.SetBackground(s)
-	return pc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableBackground(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetBackground(*s)
-	}
-	return pc
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (pc *ProcedureCreate) SetSatisfies(s string) *ProcedureCreate {
-	pc.mutation.SetSatisfies(s)
-	return pc
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableSatisfies(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetSatisfies(*s)
-	}
-	return pc
-}
-
-// SetDetails sets the "details" field.
-func (pc *ProcedureCreate) SetDetails(m map[string]interface{}) *ProcedureCreate {
-	pc.mutation.SetDetails(m)
 	return pc
 }
 
@@ -309,6 +290,44 @@ func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
 		ids[i] = g[i].ID
 	}
 	return pc.AddEditorIDs(ids...)
+}
+
+// SetApproverID sets the "approver" edge to the Group entity by ID.
+func (pc *ProcedureCreate) SetApproverID(id string) *ProcedureCreate {
+	pc.mutation.SetApproverID(id)
+	return pc
+}
+
+// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableApproverID(id *string) *ProcedureCreate {
+	if id != nil {
+		pc = pc.SetApproverID(*id)
+	}
+	return pc
+}
+
+// SetApprover sets the "approver" edge to the Group entity.
+func (pc *ProcedureCreate) SetApprover(g *Group) *ProcedureCreate {
+	return pc.SetApproverID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (pc *ProcedureCreate) SetDelegateID(id string) *ProcedureCreate {
+	pc.mutation.SetDelegateID(id)
+	return pc
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableDelegateID(id *string) *ProcedureCreate {
+	if id != nil {
+		pc = pc.SetDelegateID(*id)
+	}
+	return pc
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (pc *ProcedureCreate) SetDelegate(g *Group) *ProcedureCreate {
+	return pc.SetDelegateID(g.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -456,9 +475,25 @@ func (pc *ProcedureCreate) defaults() error {
 		v := procedure.DefaultTags
 		pc.mutation.SetTags(v)
 	}
+	if _, ok := pc.mutation.Status(); !ok {
+		v := procedure.DefaultStatus
+		pc.mutation.SetStatus(v)
+	}
+	if _, ok := pc.mutation.ApprovalRequired(); !ok {
+		v := procedure.DefaultApprovalRequired
+		pc.mutation.SetApprovalRequired(v)
+	}
 	if _, ok := pc.mutation.ReviewDue(); !ok {
 		v := procedure.DefaultReviewDue
 		pc.mutation.SetReviewDue(v)
+	}
+	if _, ok := pc.mutation.ReviewFrequency(); !ok {
+		v := procedure.DefaultReviewFrequency
+		pc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := pc.mutation.Revision(); !ok {
+		v := procedure.DefaultRevision
+		pc.mutation.SetRevision(v)
 	}
 	if _, ok := pc.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
@@ -491,6 +526,21 @@ func (pc *ProcedureCreate) check() error {
 	if v, ok := pc.mutation.Name(); ok {
 		if err := procedure.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
+		}
+	}
+	if v, ok := pc.mutation.Status(); ok {
+		if err := procedure.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Procedure.status": %w`, err)}
+		}
+	}
+	if v, ok := pc.mutation.ReviewFrequency(); ok {
+		if err := procedure.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := pc.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -545,6 +595,10 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := pc.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
 	if value, ok := pc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -557,49 +611,37 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := pc.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := pc.mutation.Description(); ok {
-		_spec.SetField(procedure.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := pc.mutation.Status(); ok {
-		_spec.SetField(procedure.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedure.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := pc.mutation.ProcedureType(); ok {
 		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
 		_node.ProcedureType = value
 	}
+	if value, ok := pc.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
+		_node.Details = value
+	}
+	if value, ok := pc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
 	if value, ok := pc.mutation.ReviewDue(); ok {
 		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
 		_node.ReviewDue = value
 	}
-	if value, ok := pc.mutation.Version(); ok {
-		_spec.SetField(procedure.FieldVersion, field.TypeString, value)
-		_node.Version = value
+	if value, ok := pc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
 	}
-	if value, ok := pc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedure.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
-	}
-	if value, ok := pc.mutation.Background(); ok {
-		_spec.SetField(procedure.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
-	if value, ok := pc.mutation.Satisfies(); ok {
-		_spec.SetField(procedure.FieldSatisfies, field.TypeString, value)
-		_node.Satisfies = value
-	}
-	if value, ok := pc.mutation.Details(); ok {
-		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
-		_node.Details = value
+	if value, ok := pc.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -651,6 +693,42 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ApproverIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ApproverTable,
+			Columns: []string{procedure.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.procedure_approver = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.DelegateTable,
+			Columns: []string{procedure.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.procedure_delegate = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.ControlsIDs(); len(nodes) > 0 {

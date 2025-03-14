@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -111,6 +112,12 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedBy(s *string) *Intern
 	return iphc
 }
 
+// SetTags sets the "tags" field.
+func (iphc *InternalPolicyHistoryCreate) SetTags(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetTags(s)
+	return iphc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (iphc *InternalPolicyHistoryCreate) SetDeletedAt(t time.Time) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetDeletedAt(t)
@@ -145,12 +152,6 @@ func (iphc *InternalPolicyHistoryCreate) SetDisplayID(s string) *InternalPolicyH
 	return iphc
 }
 
-// SetTags sets the "tags" field.
-func (iphc *InternalPolicyHistoryCreate) SetTags(s []string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetTags(s)
-	return iphc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (iphc *InternalPolicyHistoryCreate) SetOwnerID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetOwnerID(s)
@@ -171,44 +172,16 @@ func (iphc *InternalPolicyHistoryCreate) SetName(s string) *InternalPolicyHistor
 	return iphc
 }
 
-// SetDescription sets the "description" field.
-func (iphc *InternalPolicyHistoryCreate) SetDescription(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetDescription(s)
-	return iphc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableDescription(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetDescription(*s)
-	}
-	return iphc
-}
-
 // SetStatus sets the "status" field.
-func (iphc *InternalPolicyHistoryCreate) SetStatus(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetStatus(s)
+func (iphc *InternalPolicyHistoryCreate) SetStatus(es enums.DocumentStatus) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetStatus(es)
 	return iphc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableStatus(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetStatus(*s)
-	}
-	return iphc
-}
-
-// SetReviewDue sets the "review_due" field.
-func (iphc *InternalPolicyHistoryCreate) SetReviewDue(t time.Time) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetReviewDue(t)
-	return iphc
-}
-
-// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryCreate {
-	if t != nil {
-		iphc.SetReviewDue(*t)
+func (iphc *InternalPolicyHistoryCreate) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyHistoryCreate {
+	if es != nil {
+		iphc.SetStatus(*es)
 	}
 	return iphc
 }
@@ -227,51 +200,73 @@ func (iphc *InternalPolicyHistoryCreate) SetNillablePolicyType(s *string) *Inter
 	return iphc
 }
 
-// SetVersion sets the "version" field.
-func (iphc *InternalPolicyHistoryCreate) SetVersion(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetVersion(s)
-	return iphc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableVersion(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetVersion(*s)
-	}
-	return iphc
-}
-
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (iphc *InternalPolicyHistoryCreate) SetPurposeAndScope(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetPurposeAndScope(s)
-	return iphc
-}
-
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillablePurposeAndScope(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetPurposeAndScope(*s)
-	}
-	return iphc
-}
-
-// SetBackground sets the "background" field.
-func (iphc *InternalPolicyHistoryCreate) SetBackground(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetBackground(s)
-	return iphc
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableBackground(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetBackground(*s)
-	}
-	return iphc
-}
-
 // SetDetails sets the "details" field.
-func (iphc *InternalPolicyHistoryCreate) SetDetails(m map[string]interface{}) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetDetails(m)
+func (iphc *InternalPolicyHistoryCreate) SetDetails(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDetails(s)
+	return iphc
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableDetails(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetDetails(*s)
+	}
+	return iphc
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (iphc *InternalPolicyHistoryCreate) SetApprovalRequired(b bool) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetApprovalRequired(b)
+	return iphc
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableApprovalRequired(b *bool) *InternalPolicyHistoryCreate {
+	if b != nil {
+		iphc.SetApprovalRequired(*b)
+	}
+	return iphc
+}
+
+// SetReviewDue sets the "review_due" field.
+func (iphc *InternalPolicyHistoryCreate) SetReviewDue(t time.Time) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetReviewDue(t)
+	return iphc
+}
+
+// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryCreate {
+	if t != nil {
+		iphc.SetReviewDue(*t)
+	}
+	return iphc
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (iphc *InternalPolicyHistoryCreate) SetReviewFrequency(e enums.Frequency) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetReviewFrequency(e)
+	return iphc
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyHistoryCreate {
+	if e != nil {
+		iphc.SetReviewFrequency(*e)
+	}
+	return iphc
+}
+
+// SetRevision sets the "revision" field.
+func (iphc *InternalPolicyHistoryCreate) SetRevision(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetRevision(s)
+	return iphc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableRevision(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetRevision(*s)
+	}
 	return iphc
 }
 
@@ -340,9 +335,25 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 		v := internalpolicyhistory.DefaultTags
 		iphc.mutation.SetTags(v)
 	}
+	if _, ok := iphc.mutation.Status(); !ok {
+		v := internalpolicyhistory.DefaultStatus
+		iphc.mutation.SetStatus(v)
+	}
+	if _, ok := iphc.mutation.ApprovalRequired(); !ok {
+		v := internalpolicyhistory.DefaultApprovalRequired
+		iphc.mutation.SetApprovalRequired(v)
+	}
 	if _, ok := iphc.mutation.ReviewDue(); !ok {
 		v := internalpolicyhistory.DefaultReviewDue
 		iphc.mutation.SetReviewDue(v)
+	}
+	if _, ok := iphc.mutation.ReviewFrequency(); !ok {
+		v := internalpolicyhistory.DefaultReviewFrequency
+		iphc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := iphc.mutation.Revision(); !ok {
+		v := internalpolicyhistory.DefaultRevision
+		iphc.mutation.SetRevision(v)
 	}
 	if _, ok := iphc.mutation.ID(); !ok {
 		v := internalpolicyhistory.DefaultID()
@@ -368,6 +379,16 @@ func (iphc *InternalPolicyHistoryCreate) check() error {
 	}
 	if _, ok := iphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicyHistory.name"`)}
+	}
+	if v, ok := iphc.mutation.Status(); ok {
+		if err := internalpolicyhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := iphc.mutation.ReviewFrequency(); ok {
+		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -433,6 +454,10 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := iphc.mutation.Tags(); ok {
+		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
 	if value, ok := iphc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -445,10 +470,6 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := iphc.mutation.Tags(); ok {
-		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := iphc.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -457,37 +478,33 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := iphc.mutation.Description(); ok {
-		_spec.SetField(internalpolicyhistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := iphc.mutation.Status(); ok {
-		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := iphc.mutation.ReviewDue(); ok {
-		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
-		_node.ReviewDue = value
 	}
 	if value, ok := iphc.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
 		_node.PolicyType = value
 	}
-	if value, ok := iphc.mutation.Version(); ok {
-		_spec.SetField(internalpolicyhistory.FieldVersion, field.TypeString, value)
-		_node.Version = value
-	}
-	if value, ok := iphc.mutation.PurposeAndScope(); ok {
-		_spec.SetField(internalpolicyhistory.FieldPurposeAndScope, field.TypeString, value)
-		_node.PurposeAndScope = value
-	}
-	if value, ok := iphc.mutation.Background(); ok {
-		_spec.SetField(internalpolicyhistory.FieldBackground, field.TypeString, value)
-		_node.Background = value
-	}
 	if value, ok := iphc.mutation.Details(); ok {
-		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeJSON, value)
+		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := iphc.mutation.ApprovalRequired(); ok {
+		_spec.SetField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool, value)
+		_node.ApprovalRequired = value
+	}
+	if value, ok := iphc.mutation.ReviewDue(); ok {
+		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
+		_node.ReviewDue = value
+	}
+	if value, ok := iphc.mutation.ReviewFrequency(); ok {
+		_spec.SetField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := iphc.mutation.Revision(); ok {
+		_spec.SetField(internalpolicyhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	return _node, _spec
 }

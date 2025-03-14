@@ -7,7 +7,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func marshalGQL[T any](w io.Writer, a T) {
+// marshalGQLJSON marshals the given type into JSON and writes it to the given writer
+func marshalGQLJSON[T any](w io.Writer, a T) {
 	byteData, err := json.Marshal(a)
 	if err != nil {
 		log.Fatal().Err(err).Msg("error marshalling json object")
@@ -19,7 +20,8 @@ func marshalGQL[T any](w io.Writer, a T) {
 	}
 }
 
-func unmarshalGQL[T any](v any, a T) error {
+// unmarshalGQLJSON unmarshals a JSON object into the given type
+func unmarshalGQLJSON[T any](v any, a T) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err

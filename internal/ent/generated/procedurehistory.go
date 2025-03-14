@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -33,36 +34,32 @@ type ProcedureHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
 	Name string `json:"name,omitempty"`
-	// description of the procedure
-	Description string `json:"description,omitempty"`
-	// status of the procedure
-	Status string `json:"status,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType string `json:"procedure_type,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details string `json:"details,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired bool `json:"approval_required,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue time.Time `json:"review_due,omitempty"`
-	// version of the procedure
-	Version string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background of the procedure
-	Background string `json:"background,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the procedure document
-	Details      map[string]interface{} `json:"details,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision     string `json:"revision,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -71,11 +68,13 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedurehistory.FieldTags, procedurehistory.FieldDetails:
+		case procedurehistory.FieldTags:
 			values[i] = new([]byte)
 		case procedurehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
+		case procedurehistory.FieldApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldRevision:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -142,6 +141,14 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.UpdatedBy = value.String
 			}
+		case procedurehistory.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
 		case procedurehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -160,14 +167,6 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.DisplayID = value.String
 			}
-		case procedurehistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case procedurehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -180,17 +179,11 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.Name = value.String
 			}
-		case procedurehistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				ph.Description = value.String
-			}
 		case procedurehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ph.Status = value.String
+				ph.Status = enums.DocumentStatus(value.String)
 			}
 		case procedurehistory.FieldProcedureType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -198,43 +191,35 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.ProcedureType = value.String
 			}
+		case procedurehistory.FieldDetails:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field details", values[i])
+			} else if value.Valid {
+				ph.Details = value.String
+			}
+		case procedurehistory.FieldApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
+			} else if value.Valid {
+				ph.ApprovalRequired = value.Bool
+			}
 		case procedurehistory.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
 				ph.ReviewDue = value.Time
 			}
-		case procedurehistory.FieldVersion:
+		case procedurehistory.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				ph.Version = value.String
+				ph.ReviewFrequency = enums.Frequency(value.String)
 			}
-		case procedurehistory.FieldPurposeAndScope:
+		case procedurehistory.FieldRevision:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field purpose_and_scope", values[i])
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				ph.PurposeAndScope = value.String
-			}
-		case procedurehistory.FieldBackground:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field background", values[i])
-			} else if value.Valid {
-				ph.Background = value.String
-			}
-		case procedurehistory.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				ph.Satisfies = value.String
-			}
-		case procedurehistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+				ph.Revision = value.String
 			}
 		default:
 			ph.selectValues.Set(columns[i], values[i])
@@ -293,6 +278,9 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ph.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
+	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -302,41 +290,32 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(ph.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ph.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ph.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(ph.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(ph.Status)
+	builder.WriteString(fmt.Sprintf("%v", ph.Status))
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
 	builder.WriteString(ph.ProcedureType)
 	builder.WriteString(", ")
+	builder.WriteString("details=")
+	builder.WriteString(ph.Details)
+	builder.WriteString(", ")
+	builder.WriteString("approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", ph.ApprovalRequired))
+	builder.WriteString(", ")
 	builder.WriteString("review_due=")
 	builder.WriteString(ph.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(ph.Version)
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", ph.ReviewFrequency))
 	builder.WriteString(", ")
-	builder.WriteString("purpose_and_scope=")
-	builder.WriteString(ph.PurposeAndScope)
-	builder.WriteString(", ")
-	builder.WriteString("background=")
-	builder.WriteString(ph.Background)
-	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(ph.Satisfies)
-	builder.WriteString(", ")
-	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Details))
+	builder.WriteString("revision=")
+	builder.WriteString(ph.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

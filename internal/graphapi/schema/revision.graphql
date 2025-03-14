@@ -1,0 +1,19 @@
+extend input UpdateActionPlanInput {
+    RevisionBump: VersionBump
+}
+
+extend input UpdateControlObjectiveInput {
+    RevisionBump: VersionBump
+}
+
+extend input UpdateInternalPolicyInput {
+    RevisionBump: VersionBump
+}
+
+extend input UpdateProcedureInput {
+    RevisionBump: VersionBump
+}
+
+extend input UpdateStandardInput {
+    RevisionBump: VersionBump
+}

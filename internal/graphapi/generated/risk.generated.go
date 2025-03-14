@@ -87,24 +87,24 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Risk_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
 			case "riskType":
 				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "category":
+				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
 				return ec.fieldContext_Risk_likelihood(ctx, field)
+			case "score":
+				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "businessCosts":
+				return ec.fieldContext_Risk_businessCosts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -121,6 +121,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "stakeholder":
+				return ec.fieldContext_Risk_stakeholder(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Risk_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -189,24 +193,24 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Risk_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
 			case "riskType":
 				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "category":
+				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
 				return ec.fieldContext_Risk_likelihood(ctx, field)
+			case "score":
+				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "businessCosts":
+				return ec.fieldContext_Risk_businessCosts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -223,6 +227,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "stakeholder":
+				return ec.fieldContext_Risk_stakeholder(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Risk_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -335,24 +343,24 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Risk_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
 			case "riskType":
 				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "category":
+				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
 				return ec.fieldContext_Risk_likelihood(ctx, field)
+			case "score":
+				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "satisfies":
-				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "businessCosts":
+				return ec.fieldContext_Risk_businessCosts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -369,6 +377,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "stakeholder":
+				return ec.fieldContext_Risk_stakeholder(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Risk_delegate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},

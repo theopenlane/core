@@ -46,25 +46,25 @@ type RiskHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
-	// description of the risk
-	Description string `json:"description,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status string `json:"status,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType string `json:"risk_type,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts string `json:"business_costs,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category string `json:"category,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score int `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation string `json:"mitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies string `json:"satisfies,omitempty"`
-	// json data for the risk document
-	Details      map[string]interface{} `json:"details,omitempty"`
-	selectValues sql.SelectValues
+	// details of the risk
+	Details string `json:"details,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts string `json:"business_costs,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -72,11 +72,13 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case riskhistory.FieldTags, riskhistory.FieldDetails:
+		case riskhistory.FieldTags:
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
+		case riskhistory.FieldScore:
+			values[i] = new(sql.NullInt64)
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -181,17 +183,11 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.Name = value.String
 			}
-		case riskhistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				rh.Description = value.String
-			}
 		case riskhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				rh.Status = value.String
+				rh.Status = enums.RiskStatus(value.String)
 			}
 		case riskhistory.FieldRiskType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,11 +195,11 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.RiskType = value.String
 			}
-		case riskhistory.FieldBusinessCosts:
+		case riskhistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
+				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				rh.BusinessCosts = value.String
+				rh.Category = value.String
 			}
 		case riskhistory.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -217,25 +213,29 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.Likelihood = enums.RiskLikelihood(value.String)
 			}
+		case riskhistory.FieldScore:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field score", values[i])
+			} else if value.Valid {
+				rh.Score = int(value.Int64)
+			}
 		case riskhistory.FieldMitigation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mitigation", values[i])
 			} else if value.Valid {
 				rh.Mitigation = value.String
 			}
-		case riskhistory.FieldSatisfies:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field satisfies", values[i])
-			} else if value.Valid {
-				rh.Satisfies = value.String
-			}
 		case riskhistory.FieldDetails:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &rh.Details); err != nil {
-					return fmt.Errorf("unmarshal field details: %w", err)
-				}
+			} else if value.Valid {
+				rh.Details = value.String
+			}
+		case riskhistory.FieldBusinessCosts:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
+			} else if value.Valid {
+				rh.BusinessCosts = value.String
 			}
 		default:
 			rh.selectValues.Set(columns[i], values[i])
@@ -312,17 +312,14 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(rh.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(rh.Description)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(rh.Status)
+	builder.WriteString(fmt.Sprintf("%v", rh.Status))
 	builder.WriteString(", ")
 	builder.WriteString("risk_type=")
 	builder.WriteString(rh.RiskType)
 	builder.WriteString(", ")
-	builder.WriteString("business_costs=")
-	builder.WriteString(rh.BusinessCosts)
+	builder.WriteString("category=")
+	builder.WriteString(rh.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Impact))
@@ -330,14 +327,17 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString("likelihood=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Likelihood))
 	builder.WriteString(", ")
+	builder.WriteString("score=")
+	builder.WriteString(fmt.Sprintf("%v", rh.Score))
+	builder.WriteString(", ")
 	builder.WriteString("mitigation=")
 	builder.WriteString(rh.Mitigation)
 	builder.WriteString(", ")
-	builder.WriteString("satisfies=")
-	builder.WriteString(rh.Satisfies)
-	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Details))
+	builder.WriteString(rh.Details)
+	builder.WriteString(", ")
+	builder.WriteString("business_costs=")
+	builder.WriteString(rh.BusinessCosts)
 	builder.WriteByte(')')
 	return builder.String()
 }

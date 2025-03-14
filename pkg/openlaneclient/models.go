@@ -312,24 +312,39 @@ type ActionPlan struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name string `json:"name"`
-	// description of the action plan
-	Description *string `json:"description,omitempty"`
-	// status of the action plan
-	Status *string `json:"status,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType *string `json:"actionPlanType,omitempty"`
+	// details of the action_plan
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
-	Priority *string `json:"priority,omitempty"`
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
-	// json data including details of the action plan
-	Details map[string]any `json:"details,omitempty"`
-	Risk    []*Risk        `json:"risk,omitempty"`
-	Control []*Control     `json:"control,omitempty"`
-	User    []*User        `json:"user,omitempty"`
-	Program []*Program     `json:"program,omitempty"`
+	// the group of users who are responsible for approving the action_plan
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the action_plan, used for temporary approval
+	Delegate *Group        `json:"delegate,omitempty"`
+	Owner    *Organization `json:"owner,omitempty"`
+	Risk     []*Risk       `json:"risk,omitempty"`
+	Control  []*Control    `json:"control,omitempty"`
+	User     []*User       `json:"user,omitempty"`
+	Program  []*Program    `json:"program,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -383,20 +398,30 @@ type ActionPlanHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name string `json:"name"`
-	// description of the action plan
-	Description *string `json:"description,omitempty"`
-	// status of the action plan
-	Status *string `json:"status,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType *string `json:"actionPlanType,omitempty"`
+	// details of the action_plan
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
-	Priority *string `json:"priority,omitempty"`
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
-	// json data including details of the action plan
-	Details map[string]any `json:"details,omitempty"`
 }
 
 func (ActionPlanHistory) IsNode() {}
@@ -561,38 +586,100 @@ type ActionPlanHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// action_plan_type field predicates
+	ActionPlanType             *string  `json:"actionPlanType,omitempty"`
+	ActionPlanTypeNeq          *string  `json:"actionPlanTypeNEQ,omitempty"`
+	ActionPlanTypeIn           []string `json:"actionPlanTypeIn,omitempty"`
+	ActionPlanTypeNotIn        []string `json:"actionPlanTypeNotIn,omitempty"`
+	ActionPlanTypeGt           *string  `json:"actionPlanTypeGT,omitempty"`
+	ActionPlanTypeGte          *string  `json:"actionPlanTypeGTE,omitempty"`
+	ActionPlanTypeLt           *string  `json:"actionPlanTypeLT,omitempty"`
+	ActionPlanTypeLte          *string  `json:"actionPlanTypeLTE,omitempty"`
+	ActionPlanTypeContains     *string  `json:"actionPlanTypeContains,omitempty"`
+	ActionPlanTypeHasPrefix    *string  `json:"actionPlanTypeHasPrefix,omitempty"`
+	ActionPlanTypeHasSuffix    *string  `json:"actionPlanTypeHasSuffix,omitempty"`
+	ActionPlanTypeIsNil        *bool    `json:"actionPlanTypeIsNil,omitempty"`
+	ActionPlanTypeNotNil       *bool    `json:"actionPlanTypeNotNil,omitempty"`
+	ActionPlanTypeEqualFold    *string  `json:"actionPlanTypeEqualFold,omitempty"`
+	ActionPlanTypeContainsFold *string  `json:"actionPlanTypeContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
+	// review_due field predicates
+	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
+	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
+	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
+	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
+	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
+	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
+	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
+	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
+	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
+	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -605,21 +692,12 @@ type ActionPlanHistoryWhereInput struct {
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
 	// priority field predicates
-	Priority             *string  `json:"priority,omitempty"`
-	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
-	PriorityIn           []string `json:"priorityIn,omitempty"`
-	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
-	PriorityGt           *string  `json:"priorityGT,omitempty"`
-	PriorityGte          *string  `json:"priorityGTE,omitempty"`
-	PriorityLt           *string  `json:"priorityLT,omitempty"`
-	PriorityLte          *string  `json:"priorityLTE,omitempty"`
-	PriorityContains     *string  `json:"priorityContains,omitempty"`
-	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
-	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
-	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
-	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
-	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
-	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	Priority       *enums.Priority  `json:"priority,omitempty"`
+	PriorityNeq    *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn     []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
+	PriorityIsNil  *bool            `json:"priorityIsNil,omitempty"`
+	PriorityNotNil *bool            `json:"priorityNotNil,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -762,38 +840,100 @@ type ActionPlanWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// action_plan_type field predicates
+	ActionPlanType             *string  `json:"actionPlanType,omitempty"`
+	ActionPlanTypeNeq          *string  `json:"actionPlanTypeNEQ,omitempty"`
+	ActionPlanTypeIn           []string `json:"actionPlanTypeIn,omitempty"`
+	ActionPlanTypeNotIn        []string `json:"actionPlanTypeNotIn,omitempty"`
+	ActionPlanTypeGt           *string  `json:"actionPlanTypeGT,omitempty"`
+	ActionPlanTypeGte          *string  `json:"actionPlanTypeGTE,omitempty"`
+	ActionPlanTypeLt           *string  `json:"actionPlanTypeLT,omitempty"`
+	ActionPlanTypeLte          *string  `json:"actionPlanTypeLTE,omitempty"`
+	ActionPlanTypeContains     *string  `json:"actionPlanTypeContains,omitempty"`
+	ActionPlanTypeHasPrefix    *string  `json:"actionPlanTypeHasPrefix,omitempty"`
+	ActionPlanTypeHasSuffix    *string  `json:"actionPlanTypeHasSuffix,omitempty"`
+	ActionPlanTypeIsNil        *bool    `json:"actionPlanTypeIsNil,omitempty"`
+	ActionPlanTypeNotNil       *bool    `json:"actionPlanTypeNotNil,omitempty"`
+	ActionPlanTypeEqualFold    *string  `json:"actionPlanTypeEqualFold,omitempty"`
+	ActionPlanTypeContainsFold *string  `json:"actionPlanTypeContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
+	// review_due field predicates
+	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
+	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
+	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
+	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
+	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
+	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
+	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
+	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
+	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
+	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -806,21 +946,12 @@ type ActionPlanWhereInput struct {
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
 	// priority field predicates
-	Priority             *string  `json:"priority,omitempty"`
-	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
-	PriorityIn           []string `json:"priorityIn,omitempty"`
-	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
-	PriorityGt           *string  `json:"priorityGT,omitempty"`
-	PriorityGte          *string  `json:"priorityGTE,omitempty"`
-	PriorityLt           *string  `json:"priorityLT,omitempty"`
-	PriorityLte          *string  `json:"priorityLTE,omitempty"`
-	PriorityContains     *string  `json:"priorityContains,omitempty"`
-	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
-	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
-	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
-	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
-	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
-	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
+	Priority       *enums.Priority  `json:"priority,omitempty"`
+	PriorityNeq    *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn     []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
+	PriorityIsNil  *bool            `json:"priorityIsNil,omitempty"`
+	PriorityNotNil *bool            `json:"priorityNotNil,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -837,6 +968,15 @@ type ActionPlanWhereInput struct {
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// approver edge predicates
+	HasApprover     *bool              `json:"hasApprover,omitempty"`
+	HasApproverWith []*GroupWhereInput `json:"hasApproverWith,omitempty"`
+	// delegate edge predicates
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// risk edge predicates
 	HasRisk     *bool             `json:"hasRisk,omitempty"`
 	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
@@ -1967,8 +2107,8 @@ type ControlImplementation struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// status of the control implementation
-	Status *string `json:"status,omitempty"`
+	// status of the %s, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
 	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// set to true if the control implementation has been verified
@@ -2031,8 +2171,8 @@ type ControlImplementationHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// status of the control implementation
-	Status *string `json:"status,omitempty"`
+	// status of the %s, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
 	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// set to true if the control implementation has been verified
@@ -2192,21 +2332,12 @@ type ControlImplementationHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// implementation_date field predicates
 	ImplementationDate       *time.Time   `json:"implementationDate,omitempty"`
 	ImplementationDateNeq    *time.Time   `json:"implementationDateNEQ,omitempty"`
@@ -2363,21 +2494,12 @@ type ControlImplementationWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// implementation_date field predicates
 	ImplementationDate       *time.Time   `json:"implementationDate,omitempty"`
 	ImplementationDateNeq    *time.Time   `json:"implementationDateNEQ,omitempty"`
@@ -2434,6 +2556,8 @@ type ControlObjective struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -2450,8 +2574,6 @@ type ControlObjective struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control objective
-	Version *string `json:"version,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// subcategory of the control
@@ -2523,6 +2645,8 @@ type ControlObjectiveHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -2539,8 +2663,6 @@ type ControlObjectiveHistory struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control objective
-	Version *string `json:"version,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// subcategory of the control
@@ -2695,6 +2817,22 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -2794,22 +2932,6 @@ type ControlObjectiveHistoryWhereInput struct {
 	ControlObjectiveTypeNotNil       *bool    `json:"controlObjectiveTypeNotNil,omitempty"`
 	ControlObjectiveTypeEqualFold    *string  `json:"controlObjectiveTypeEqualFold,omitempty"`
 	ControlObjectiveTypeContainsFold *string  `json:"controlObjectiveTypeContainsFold,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -2954,6 +3076,22 @@ type ControlObjectiveWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -3053,22 +3191,6 @@ type ControlObjectiveWhereInput struct {
 	ControlObjectiveTypeNotNil       *bool    `json:"controlObjectiveTypeNotNil,omitempty"`
 	ControlObjectiveTypeEqualFold    *string  `json:"controlObjectiveTypeEqualFold,omitempty"`
 	ControlObjectiveTypeContainsFold *string  `json:"controlObjectiveTypeContainsFold,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -3494,24 +3616,35 @@ type CreateAPITokenInput struct {
 type CreateActionPlanInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name string `json:"name"`
-	// description of the action plan
-	Description *string `json:"description,omitempty"`
-	// status of the action plan
-	Status *string `json:"status,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType *string `json:"actionPlanType,omitempty"`
+	// details of the action_plan
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
-	Priority *string `json:"priority,omitempty"`
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
-	Source *string `json:"source,omitempty"`
-	// json data including details of the action plan
-	Details    map[string]any `json:"details,omitempty"`
-	RiskIDs    []string       `json:"riskIDs,omitempty"`
-	ControlIDs []string       `json:"controlIDs,omitempty"`
-	UserIDs    []string       `json:"userIDs,omitempty"`
-	ProgramIDs []string       `json:"programIDs,omitempty"`
+	Source     *string  `json:"source,omitempty"`
+	ApproverID *string  `json:"approverID,omitempty"`
+	DelegateID *string  `json:"delegateID,omitempty"`
+	OwnerID    *string  `json:"ownerID,omitempty"`
+	RiskIDs    []string `json:"riskIDs,omitempty"`
+	ControlIDs []string `json:"controlIDs,omitempty"`
+	UserIDs    []string `json:"userIDs,omitempty"`
+	ProgramIDs []string `json:"programIDs,omitempty"`
 }
 
 // CreateContactInput is used for create Contact object.
@@ -3543,8 +3676,8 @@ type CreateContactInput struct {
 type CreateControlImplementationInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// status of the control implementation
-	Status *string `json:"status,omitempty"`
+	// status of the %s, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
 	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// set to true if the control implementation has been verified
@@ -3615,6 +3748,8 @@ type CreateControlInput struct {
 // CreateControlObjectiveInput is used for create ControlObjective object.
 // Input was generated by ent.
 type CreateControlObjectiveInput struct {
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the control objective
@@ -3627,8 +3762,6 @@ type CreateControlObjectiveInput struct {
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control objective
-	Version *string `json:"version,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// subcategory of the control
@@ -3742,14 +3875,16 @@ type CreateEvidenceInput struct {
 	// whether the evidence was automatically generated
 	IsAutomated *bool `json:"isAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
-	URL                 *string  `json:"url,omitempty"`
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	ControlObjectiveIDs []string `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs       []string `json:"subcontrolIDs,omitempty"`
-	FileIDs             []string `json:"fileIDs,omitempty"`
-	ProgramIDs          []string `json:"programIDs,omitempty"`
-	TaskIDs             []string `json:"taskIDs,omitempty"`
+	URL *string `json:"url,omitempty"`
+	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	Status              *enums.EvidenceStatus `json:"status,omitempty"`
+	OwnerID             *string               `json:"ownerID,omitempty"`
+	ControlObjectiveIDs []string              `json:"controlObjectiveIDs,omitempty"`
+	ControlIDs          []string              `json:"controlIDs,omitempty"`
+	SubcontrolIDs       []string              `json:"subcontrolIDs,omitempty"`
+	FileIDs             []string              `json:"fileIDs,omitempty"`
+	ProgramIDs          []string              `json:"programIDs,omitempty"`
+	TaskIDs             []string              `json:"taskIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -3911,31 +4046,31 @@ type CreateInternalPolicyInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
-	// description of the policy
-	Description *string `json:"description,omitempty"`
-	// status of the policy
-	Status *string `json:"status,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType *string `json:"policyType,omitempty"`
-	// version of the policy
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the policy
-	Background *string `json:"background,omitempty"`
-	// json data for the policy document
-	Details             map[string]any `json:"details,omitempty"`
-	OwnerID             *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string       `json:"editorIDs,omitempty"`
-	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string       `json:"controlIDs,omitempty"`
-	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
-	NarrativeIDs        []string       `json:"narrativeIDs,omitempty"`
-	TaskIDs             []string       `json:"taskIDs,omitempty"`
-	ProgramIDs          []string       `json:"programIDs,omitempty"`
+	// details of the policy
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision            *string  `json:"revision,omitempty"`
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string `json:"editorIDs,omitempty"`
+	ApproverID          *string  `json:"approverID,omitempty"`
+	DelegateID          *string  `json:"delegateID,omitempty"`
+	ControlObjectiveIDs []string `json:"controlObjectiveIDs,omitempty"`
+	ControlIDs          []string `json:"controlIDs,omitempty"`
+	ProcedureIDs        []string `json:"procedureIDs,omitempty"`
+	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
+	TaskIDs             []string `json:"taskIDs,omitempty"`
+	ProgramIDs          []string `json:"programIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -4085,6 +4220,7 @@ type CreateOrganizationInput struct {
 	SubcontrolIDs              []string                        `json:"subcontrolIDs,omitempty"`
 	EvidenceIDs                []string                        `json:"evidenceIDs,omitempty"`
 	StandardIDs                []string                        `json:"standardIDs,omitempty"`
+	ActionPlanIDs              []string                        `json:"actionPlanIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -4148,33 +4284,31 @@ type CreateProcedureInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
-	// description of the procedure
-	Description *string `json:"description,omitempty"`
-	// status of the procedure
-	Status *string `json:"status,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType *string `json:"procedureType,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// version of the procedure
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the procedure
-	Background *string `json:"background,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the procedure document
-	Details           map[string]any `json:"details,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string       `json:"editorIDs,omitempty"`
-	ControlIDs        []string       `json:"controlIDs,omitempty"`
-	InternalPolicyIDs []string       `json:"internalPolicyIDs,omitempty"`
-	NarrativeIDs      []string       `json:"narrativeIDs,omitempty"`
-	RiskIDs           []string       `json:"riskIDs,omitempty"`
-	TaskIDs           []string       `json:"taskIDs,omitempty"`
-	ProgramIDs        []string       `json:"programIDs,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision          *string  `json:"revision,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string `json:"editorIDs,omitempty"`
+	ApproverID        *string  `json:"approverID,omitempty"`
+	DelegateID        *string  `json:"delegateID,omitempty"`
+	ControlIDs        []string `json:"controlIDs,omitempty"`
+	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
+	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
+	RiskIDs           []string `json:"riskIDs,omitempty"`
+	TaskIDs           []string `json:"taskIDs,omitempty"`
+	ProgramIDs        []string `json:"programIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -4236,32 +4370,34 @@ type CreateRiskInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// description of the risk
-	Description *string `json:"description,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category *string `json:"category,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the risk document
-	Details         map[string]any `json:"details,omitempty"`
-	OwnerID         *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string       `json:"editorIDs,omitempty"`
-	ViewerIDs       []string       `json:"viewerIDs,omitempty"`
-	ControlIDs      []string       `json:"controlIDs,omitempty"`
-	ProcedureIDs    []string       `json:"procedureIDs,omitempty"`
-	ActionPlanIDs   []string       `json:"actionPlanIDs,omitempty"`
-	ProgramIDs      []string       `json:"programIDs,omitempty"`
+	// details of the risk
+	Details *string `json:"details,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts   *string  `json:"businessCosts,omitempty"`
+	OwnerID         *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string `json:"editorIDs,omitempty"`
+	ViewerIDs       []string `json:"viewerIDs,omitempty"`
+	ControlIDs      []string `json:"controlIDs,omitempty"`
+	ProcedureIDs    []string `json:"procedureIDs,omitempty"`
+	ActionPlanIDs   []string `json:"actionPlanIDs,omitempty"`
+	ProgramIDs      []string `json:"programIDs,omitempty"`
+	StakeholderID   *string  `json:"stakeholderID,omitempty"`
+	DelegateID      *string  `json:"delegateID,omitempty"`
 }
 
 // CreateStandardInput is used for create Standard object.
@@ -4269,6 +4405,8 @@ type CreateRiskInput struct {
 type CreateStandardInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -4277,26 +4415,26 @@ type CreateStandardInput struct {
 	Framework *string `json:"framework,omitempty"`
 	// description of the standard
 	Description *string `json:"description,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody *string `json:"governingBody,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
 	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
 	Link *string `json:"link,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status *enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned *bool `json:"systemOwned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version *string `json:"version,omitempty"`
-	// internal revision of the standard
-	Revision   *string  `json:"revision,omitempty"`
+	Version    *string  `json:"version,omitempty"`
 	OwnerID    *string  `json:"ownerID,omitempty"`
 	ControlIDs []string `json:"controlIDs,omitempty"`
 }
@@ -6326,14 +6464,16 @@ type Evidence struct {
 	// whether the evidence was automatically generated
 	IsAutomated *bool `json:"isAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
-	URL               *string             `json:"url,omitempty"`
-	Owner             *Organization       `json:"owner,omitempty"`
-	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
-	Controls          []*Control          `json:"controls,omitempty"`
-	Subcontrols       []*Subcontrol       `json:"subcontrols,omitempty"`
-	Files             []*File             `json:"files,omitempty"`
-	Programs          []*Program          `json:"programs,omitempty"`
-	Tasks             []*Task             `json:"tasks,omitempty"`
+	URL *string `json:"url,omitempty"`
+	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	Status            *enums.EvidenceStatus `json:"status,omitempty"`
+	Owner             *Organization         `json:"owner,omitempty"`
+	ControlObjectives []*ControlObjective   `json:"controlObjectives,omitempty"`
+	Controls          []*Control            `json:"controls,omitempty"`
+	Subcontrols       []*Subcontrol         `json:"subcontrols,omitempty"`
+	Files             []*File               `json:"files,omitempty"`
+	Programs          []*Program            `json:"programs,omitempty"`
+	Tasks             []*Task               `json:"tasks,omitempty"`
 }
 
 func (Evidence) IsNode() {}
@@ -6407,6 +6547,8 @@ type EvidenceHistory struct {
 	IsAutomated *bool `json:"isAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
+	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	Status *enums.EvidenceStatus `json:"status,omitempty"`
 }
 
 func (EvidenceHistory) IsNode() {}
@@ -6690,6 +6832,13 @@ type EvidenceHistoryWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// status field predicates
+	Status       *enums.EvidenceStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.EvidenceStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.EvidenceStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 }
 
 type EvidenceSearchResult struct {
@@ -6935,6 +7084,13 @@ type EvidenceWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+	// status field predicates
+	Status       *enums.EvidenceStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.EvidenceStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.EvidenceStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -10080,37 +10236,39 @@ type InternalPolicy struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
-	// description of the policy
-	Description *string `json:"description,omitempty"`
-	// status of the policy
-	Status *string `json:"status,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType *string `json:"policyType,omitempty"`
-	// version of the policy
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the policy
-	Background *string `json:"background,omitempty"`
-	// json data for the policy document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner,omitempty"`
+	// details of the policy
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string       `json:"revision,omitempty"`
+	Owner    *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors           []*Group            `json:"editors,omitempty"`
+	Editors []*Group `json:"editors,omitempty"`
+	// the group of users who are responsible for approving the policy
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the policy, used for temporary approval
+	Delegate          *Group              `json:"delegate,omitempty"`
 	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 	Controls          []*Control          `json:"controls,omitempty"`
 	Procedures        []*Procedure        `json:"procedures,omitempty"`
@@ -10166,32 +10324,30 @@ type InternalPolicyHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags      []string   `json:"tags,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
-	// description of the policy
-	Description *string `json:"description,omitempty"`
-	// status of the policy
-	Status *string `json:"status,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType *string `json:"policyType,omitempty"`
-	// version of the policy
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the policy
-	Background *string `json:"background,omitempty"`
-	// json data for the policy document
-	Details map[string]any `json:"details,omitempty"`
+	// details of the policy
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -10386,49 +10542,13 @@ type InternalPolicyHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
-	// review_due field predicates
-	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
-	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
-	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
-	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
-	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
-	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
-	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
-	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
-	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
-	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// policy_type field predicates
 	PolicyType             *string  `json:"policyType,omitempty"`
 	PolicyTypeNeq          *string  `json:"policyTypeNEQ,omitempty"`
@@ -10445,54 +10565,61 @@ type InternalPolicyHistoryWhereInput struct {
 	PolicyTypeNotNil       *bool    `json:"policyTypeNotNil,omitempty"`
 	PolicyTypeEqualFold    *string  `json:"policyTypeEqualFold,omitempty"`
 	PolicyTypeContainsFold *string  `json:"policyTypeContainsFold,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// purpose_and_scope field predicates
-	PurposeAndScope             *string  `json:"purposeAndScope,omitempty"`
-	PurposeAndScopeNeq          *string  `json:"purposeAndScopeNEQ,omitempty"`
-	PurposeAndScopeIn           []string `json:"purposeAndScopeIn,omitempty"`
-	PurposeAndScopeNotIn        []string `json:"purposeAndScopeNotIn,omitempty"`
-	PurposeAndScopeGt           *string  `json:"purposeAndScopeGT,omitempty"`
-	PurposeAndScopeGte          *string  `json:"purposeAndScopeGTE,omitempty"`
-	PurposeAndScopeLt           *string  `json:"purposeAndScopeLT,omitempty"`
-	PurposeAndScopeLte          *string  `json:"purposeAndScopeLTE,omitempty"`
-	PurposeAndScopeContains     *string  `json:"purposeAndScopeContains,omitempty"`
-	PurposeAndScopeHasPrefix    *string  `json:"purposeAndScopeHasPrefix,omitempty"`
-	PurposeAndScopeHasSuffix    *string  `json:"purposeAndScopeHasSuffix,omitempty"`
-	PurposeAndScopeIsNil        *bool    `json:"purposeAndScopeIsNil,omitempty"`
-	PurposeAndScopeNotNil       *bool    `json:"purposeAndScopeNotNil,omitempty"`
-	PurposeAndScopeEqualFold    *string  `json:"purposeAndScopeEqualFold,omitempty"`
-	PurposeAndScopeContainsFold *string  `json:"purposeAndScopeContainsFold,omitempty"`
-	// background field predicates
-	Background             *string  `json:"background,omitempty"`
-	BackgroundNeq          *string  `json:"backgroundNEQ,omitempty"`
-	BackgroundIn           []string `json:"backgroundIn,omitempty"`
-	BackgroundNotIn        []string `json:"backgroundNotIn,omitempty"`
-	BackgroundGt           *string  `json:"backgroundGT,omitempty"`
-	BackgroundGte          *string  `json:"backgroundGTE,omitempty"`
-	BackgroundLt           *string  `json:"backgroundLT,omitempty"`
-	BackgroundLte          *string  `json:"backgroundLTE,omitempty"`
-	BackgroundContains     *string  `json:"backgroundContains,omitempty"`
-	BackgroundHasPrefix    *string  `json:"backgroundHasPrefix,omitempty"`
-	BackgroundHasSuffix    *string  `json:"backgroundHasSuffix,omitempty"`
-	BackgroundIsNil        *bool    `json:"backgroundIsNil,omitempty"`
-	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
-	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
-	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
+	// review_due field predicates
+	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
+	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
+	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
+	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
+	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
+	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
+	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
+	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
+	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
+	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 }
 
 type InternalPolicySearchResult struct {
@@ -10649,49 +10776,13 @@ type InternalPolicyWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
-	// review_due field predicates
-	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
-	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
-	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
-	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
-	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
-	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
-	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
-	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
-	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
-	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// policy_type field predicates
 	PolicyType             *string  `json:"policyType,omitempty"`
 	PolicyTypeNeq          *string  `json:"policyTypeNEQ,omitempty"`
@@ -10708,54 +10799,61 @@ type InternalPolicyWhereInput struct {
 	PolicyTypeNotNil       *bool    `json:"policyTypeNotNil,omitempty"`
 	PolicyTypeEqualFold    *string  `json:"policyTypeEqualFold,omitempty"`
 	PolicyTypeContainsFold *string  `json:"policyTypeContainsFold,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// purpose_and_scope field predicates
-	PurposeAndScope             *string  `json:"purposeAndScope,omitempty"`
-	PurposeAndScopeNeq          *string  `json:"purposeAndScopeNEQ,omitempty"`
-	PurposeAndScopeIn           []string `json:"purposeAndScopeIn,omitempty"`
-	PurposeAndScopeNotIn        []string `json:"purposeAndScopeNotIn,omitempty"`
-	PurposeAndScopeGt           *string  `json:"purposeAndScopeGT,omitempty"`
-	PurposeAndScopeGte          *string  `json:"purposeAndScopeGTE,omitempty"`
-	PurposeAndScopeLt           *string  `json:"purposeAndScopeLT,omitempty"`
-	PurposeAndScopeLte          *string  `json:"purposeAndScopeLTE,omitempty"`
-	PurposeAndScopeContains     *string  `json:"purposeAndScopeContains,omitempty"`
-	PurposeAndScopeHasPrefix    *string  `json:"purposeAndScopeHasPrefix,omitempty"`
-	PurposeAndScopeHasSuffix    *string  `json:"purposeAndScopeHasSuffix,omitempty"`
-	PurposeAndScopeIsNil        *bool    `json:"purposeAndScopeIsNil,omitempty"`
-	PurposeAndScopeNotNil       *bool    `json:"purposeAndScopeNotNil,omitempty"`
-	PurposeAndScopeEqualFold    *string  `json:"purposeAndScopeEqualFold,omitempty"`
-	PurposeAndScopeContainsFold *string  `json:"purposeAndScopeContainsFold,omitempty"`
-	// background field predicates
-	Background             *string  `json:"background,omitempty"`
-	BackgroundNeq          *string  `json:"backgroundNEQ,omitempty"`
-	BackgroundIn           []string `json:"backgroundIn,omitempty"`
-	BackgroundNotIn        []string `json:"backgroundNotIn,omitempty"`
-	BackgroundGt           *string  `json:"backgroundGT,omitempty"`
-	BackgroundGte          *string  `json:"backgroundGTE,omitempty"`
-	BackgroundLt           *string  `json:"backgroundLT,omitempty"`
-	BackgroundLte          *string  `json:"backgroundLTE,omitempty"`
-	BackgroundContains     *string  `json:"backgroundContains,omitempty"`
-	BackgroundHasPrefix    *string  `json:"backgroundHasPrefix,omitempty"`
-	BackgroundHasSuffix    *string  `json:"backgroundHasSuffix,omitempty"`
-	BackgroundIsNil        *bool    `json:"backgroundIsNil,omitempty"`
-	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
-	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
-	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
+	// review_due field predicates
+	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
+	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
+	ReviewDueIn     []*time.Time `json:"reviewDueIn,omitempty"`
+	ReviewDueNotIn  []*time.Time `json:"reviewDueNotIn,omitempty"`
+	ReviewDueGt     *time.Time   `json:"reviewDueGT,omitempty"`
+	ReviewDueGte    *time.Time   `json:"reviewDueGTE,omitempty"`
+	ReviewDueLt     *time.Time   `json:"reviewDueLT,omitempty"`
+	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
+	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
+	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -10765,6 +10863,12 @@ type InternalPolicyWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// approver edge predicates
+	HasApprover     *bool              `json:"hasApprover,omitempty"`
+	HasApproverWith []*GroupWhereInput `json:"hasApproverWith,omitempty"`
+	// delegate edge predicates
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
 	// control_objectives edge predicates
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
 	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
@@ -13584,6 +13688,7 @@ type Organization struct {
 	Subcontrols          []*Subcontrol           `json:"subcontrols,omitempty"`
 	Evidence             []*Evidence             `json:"evidence,omitempty"`
 	Standards            []*Standard             `json:"standards,omitempty"`
+	ActionPlans          []*ActionPlan           `json:"actionPlans,omitempty"`
 	Members              []*OrgMembership        `json:"members,omitempty"`
 }
 
@@ -14766,6 +14871,9 @@ type OrganizationWhereInput struct {
 	// standards edge predicates
 	HasStandards     *bool                 `json:"hasStandards,omitempty"`
 	HasStandardsWith []*StandardWhereInput `json:"hasStandardsWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -15066,39 +15174,39 @@ type Procedure struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
-	// description of the procedure
-	Description *string `json:"description,omitempty"`
-	// status of the procedure
-	Status *string `json:"status,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType *string `json:"procedureType,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// version of the procedure
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the procedure
-	Background *string `json:"background,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the procedure document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string       `json:"revision,omitempty"`
+	Owner    *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors          []*Group          `json:"editors,omitempty"`
+	Editors []*Group `json:"editors,omitempty"`
+	// the group of users who are responsible for approving the procedure
+	Approver *Group `json:"approver,omitempty"`
+	// temporary delegates for the procedure, used for temporary approval
+	Delegate         *Group            `json:"delegate,omitempty"`
 	Controls         []*Control        `json:"controls,omitempty"`
 	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
 	Narratives       []*Narrative      `json:"narratives,omitempty"`
@@ -15154,34 +15262,30 @@ type ProcedureHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags      []string   `json:"tags,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
-	// description of the procedure
-	Description *string `json:"description,omitempty"`
-	// status of the procedure
-	Status *string `json:"status,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType *string `json:"procedureType,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details *string `json:"details,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
-	// version of the procedure
-	Version *string `json:"version,omitempty"`
-	// purpose and scope
-	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background of the procedure
-	Background *string `json:"background,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the procedure document
-	Details map[string]any `json:"details,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -15376,38 +15480,13 @@ type ProcedureHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// procedure_type field predicates
 	ProcedureType             *string  `json:"procedureType,omitempty"`
 	ProcedureTypeNeq          *string  `json:"procedureTypeNEQ,omitempty"`
@@ -15424,6 +15503,27 @@ type ProcedureHistoryWhereInput struct {
 	ProcedureTypeNotNil       *bool    `json:"procedureTypeNotNil,omitempty"`
 	ProcedureTypeEqualFold    *string  `json:"procedureTypeEqualFold,omitempty"`
 	ProcedureTypeContainsFold *string  `json:"procedureTypeContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
 	// review_due field predicates
 	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
 	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
@@ -15435,70 +15535,29 @@ type ProcedureHistoryWhereInput struct {
 	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
 	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
 	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// purpose_and_scope field predicates
-	PurposeAndScope             *string  `json:"purposeAndScope,omitempty"`
-	PurposeAndScopeNeq          *string  `json:"purposeAndScopeNEQ,omitempty"`
-	PurposeAndScopeIn           []string `json:"purposeAndScopeIn,omitempty"`
-	PurposeAndScopeNotIn        []string `json:"purposeAndScopeNotIn,omitempty"`
-	PurposeAndScopeGt           *string  `json:"purposeAndScopeGT,omitempty"`
-	PurposeAndScopeGte          *string  `json:"purposeAndScopeGTE,omitempty"`
-	PurposeAndScopeLt           *string  `json:"purposeAndScopeLT,omitempty"`
-	PurposeAndScopeLte          *string  `json:"purposeAndScopeLTE,omitempty"`
-	PurposeAndScopeContains     *string  `json:"purposeAndScopeContains,omitempty"`
-	PurposeAndScopeHasPrefix    *string  `json:"purposeAndScopeHasPrefix,omitempty"`
-	PurposeAndScopeHasSuffix    *string  `json:"purposeAndScopeHasSuffix,omitempty"`
-	PurposeAndScopeIsNil        *bool    `json:"purposeAndScopeIsNil,omitempty"`
-	PurposeAndScopeNotNil       *bool    `json:"purposeAndScopeNotNil,omitempty"`
-	PurposeAndScopeEqualFold    *string  `json:"purposeAndScopeEqualFold,omitempty"`
-	PurposeAndScopeContainsFold *string  `json:"purposeAndScopeContainsFold,omitempty"`
-	// background field predicates
-	Background             *string  `json:"background,omitempty"`
-	BackgroundNeq          *string  `json:"backgroundNEQ,omitempty"`
-	BackgroundIn           []string `json:"backgroundIn,omitempty"`
-	BackgroundNotIn        []string `json:"backgroundNotIn,omitempty"`
-	BackgroundGt           *string  `json:"backgroundGT,omitempty"`
-	BackgroundGte          *string  `json:"backgroundGTE,omitempty"`
-	BackgroundLt           *string  `json:"backgroundLT,omitempty"`
-	BackgroundLte          *string  `json:"backgroundLTE,omitempty"`
-	BackgroundContains     *string  `json:"backgroundContains,omitempty"`
-	BackgroundHasPrefix    *string  `json:"backgroundHasPrefix,omitempty"`
-	BackgroundHasSuffix    *string  `json:"backgroundHasSuffix,omitempty"`
-	BackgroundIsNil        *bool    `json:"backgroundIsNil,omitempty"`
-	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
-	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
-	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
-	// satisfies field predicates
-	Satisfies             *string  `json:"satisfies,omitempty"`
-	SatisfiesNeq          *string  `json:"satisfiesNEQ,omitempty"`
-	SatisfiesIn           []string `json:"satisfiesIn,omitempty"`
-	SatisfiesNotIn        []string `json:"satisfiesNotIn,omitempty"`
-	SatisfiesGt           *string  `json:"satisfiesGT,omitempty"`
-	SatisfiesGte          *string  `json:"satisfiesGTE,omitempty"`
-	SatisfiesLt           *string  `json:"satisfiesLT,omitempty"`
-	SatisfiesLte          *string  `json:"satisfiesLTE,omitempty"`
-	SatisfiesContains     *string  `json:"satisfiesContains,omitempty"`
-	SatisfiesHasPrefix    *string  `json:"satisfiesHasPrefix,omitempty"`
-	SatisfiesHasSuffix    *string  `json:"satisfiesHasSuffix,omitempty"`
-	SatisfiesIsNil        *bool    `json:"satisfiesIsNil,omitempty"`
-	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
-	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
-	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 }
 
 type ProcedureSearchResult struct {
@@ -15655,38 +15714,13 @@ type ProcedureWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.DocumentStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.DocumentStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// procedure_type field predicates
 	ProcedureType             *string  `json:"procedureType,omitempty"`
 	ProcedureTypeNeq          *string  `json:"procedureTypeNEQ,omitempty"`
@@ -15703,6 +15737,27 @@ type ProcedureWhereInput struct {
 	ProcedureTypeNotNil       *bool    `json:"procedureTypeNotNil,omitempty"`
 	ProcedureTypeEqualFold    *string  `json:"procedureTypeEqualFold,omitempty"`
 	ProcedureTypeContainsFold *string  `json:"procedureTypeContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// approval_required field predicates
+	ApprovalRequired       *bool `json:"approvalRequired,omitempty"`
+	ApprovalRequiredNeq    *bool `json:"approvalRequiredNEQ,omitempty"`
+	ApprovalRequiredIsNil  *bool `json:"approvalRequiredIsNil,omitempty"`
+	ApprovalRequiredNotNil *bool `json:"approvalRequiredNotNil,omitempty"`
 	// review_due field predicates
 	ReviewDue       *time.Time   `json:"reviewDue,omitempty"`
 	ReviewDueNeq    *time.Time   `json:"reviewDueNEQ,omitempty"`
@@ -15714,70 +15769,29 @@ type ProcedureWhereInput struct {
 	ReviewDueLte    *time.Time   `json:"reviewDueLTE,omitempty"`
 	ReviewDueIsNil  *bool        `json:"reviewDueIsNil,omitempty"`
 	ReviewDueNotNil *bool        `json:"reviewDueNotNil,omitempty"`
-	// version field predicates
-	Version             *string  `json:"version,omitempty"`
-	VersionNeq          *string  `json:"versionNEQ,omitempty"`
-	VersionIn           []string `json:"versionIn,omitempty"`
-	VersionNotIn        []string `json:"versionNotIn,omitempty"`
-	VersionGt           *string  `json:"versionGT,omitempty"`
-	VersionGte          *string  `json:"versionGTE,omitempty"`
-	VersionLt           *string  `json:"versionLT,omitempty"`
-	VersionLte          *string  `json:"versionLTE,omitempty"`
-	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
-	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
-	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
-	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
-	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
-	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// purpose_and_scope field predicates
-	PurposeAndScope             *string  `json:"purposeAndScope,omitempty"`
-	PurposeAndScopeNeq          *string  `json:"purposeAndScopeNEQ,omitempty"`
-	PurposeAndScopeIn           []string `json:"purposeAndScopeIn,omitempty"`
-	PurposeAndScopeNotIn        []string `json:"purposeAndScopeNotIn,omitempty"`
-	PurposeAndScopeGt           *string  `json:"purposeAndScopeGT,omitempty"`
-	PurposeAndScopeGte          *string  `json:"purposeAndScopeGTE,omitempty"`
-	PurposeAndScopeLt           *string  `json:"purposeAndScopeLT,omitempty"`
-	PurposeAndScopeLte          *string  `json:"purposeAndScopeLTE,omitempty"`
-	PurposeAndScopeContains     *string  `json:"purposeAndScopeContains,omitempty"`
-	PurposeAndScopeHasPrefix    *string  `json:"purposeAndScopeHasPrefix,omitempty"`
-	PurposeAndScopeHasSuffix    *string  `json:"purposeAndScopeHasSuffix,omitempty"`
-	PurposeAndScopeIsNil        *bool    `json:"purposeAndScopeIsNil,omitempty"`
-	PurposeAndScopeNotNil       *bool    `json:"purposeAndScopeNotNil,omitempty"`
-	PurposeAndScopeEqualFold    *string  `json:"purposeAndScopeEqualFold,omitempty"`
-	PurposeAndScopeContainsFold *string  `json:"purposeAndScopeContainsFold,omitempty"`
-	// background field predicates
-	Background             *string  `json:"background,omitempty"`
-	BackgroundNeq          *string  `json:"backgroundNEQ,omitempty"`
-	BackgroundIn           []string `json:"backgroundIn,omitempty"`
-	BackgroundNotIn        []string `json:"backgroundNotIn,omitempty"`
-	BackgroundGt           *string  `json:"backgroundGT,omitempty"`
-	BackgroundGte          *string  `json:"backgroundGTE,omitempty"`
-	BackgroundLt           *string  `json:"backgroundLT,omitempty"`
-	BackgroundLte          *string  `json:"backgroundLTE,omitempty"`
-	BackgroundContains     *string  `json:"backgroundContains,omitempty"`
-	BackgroundHasPrefix    *string  `json:"backgroundHasPrefix,omitempty"`
-	BackgroundHasSuffix    *string  `json:"backgroundHasSuffix,omitempty"`
-	BackgroundIsNil        *bool    `json:"backgroundIsNil,omitempty"`
-	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
-	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
-	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
-	// satisfies field predicates
-	Satisfies             *string  `json:"satisfies,omitempty"`
-	SatisfiesNeq          *string  `json:"satisfiesNEQ,omitempty"`
-	SatisfiesIn           []string `json:"satisfiesIn,omitempty"`
-	SatisfiesNotIn        []string `json:"satisfiesNotIn,omitempty"`
-	SatisfiesGt           *string  `json:"satisfiesGT,omitempty"`
-	SatisfiesGte          *string  `json:"satisfiesGTE,omitempty"`
-	SatisfiesLt           *string  `json:"satisfiesLT,omitempty"`
-	SatisfiesLte          *string  `json:"satisfiesLTE,omitempty"`
-	SatisfiesContains     *string  `json:"satisfiesContains,omitempty"`
-	SatisfiesHasPrefix    *string  `json:"satisfiesHasPrefix,omitempty"`
-	SatisfiesHasSuffix    *string  `json:"satisfiesHasSuffix,omitempty"`
-	SatisfiesIsNil        *bool    `json:"satisfiesIsNil,omitempty"`
-	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
-	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
-	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -15787,6 +15801,12 @@ type ProcedureWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// approver edge predicates
+	HasApprover     *bool              `json:"hasApprover,omitempty"`
+	HasApproverWith []*GroupWhereInput `json:"hasApproverWith,omitempty"`
+	// delegate edge predicates
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -16825,25 +16845,25 @@ type Risk struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// description of the risk
-	Description *string `json:"description,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category *string `json:"category,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the risk document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner,omitempty"`
+	// details of the risk
+	Details *string `json:"details,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts *string       `json:"businessCosts,omitempty"`
+	Owner         *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -16854,6 +16874,10 @@ type Risk struct {
 	Procedure   []*Procedure  `json:"procedure,omitempty"`
 	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
 	Programs    []*Program    `json:"programs,omitempty"`
+	// the group of users who are responsible for risk oversight
+	Stakeholder *Group `json:"stakeholder,omitempty"`
+	// temporary delegates for the risk, used for temporary ownership
+	Delegate *Group `json:"delegate,omitempty"`
 }
 
 func (Risk) IsNode() {}
@@ -16913,24 +16937,24 @@ type RiskHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// description of the risk
-	Description *string `json:"description,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category *string `json:"category,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies *string `json:"satisfies,omitempty"`
-	// json data for the risk document
-	Details map[string]any `json:"details,omitempty"`
+	// details of the risk
+	Details *string `json:"details,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts *string `json:"businessCosts,omitempty"`
 }
 
 func (RiskHistory) IsNode() {}
@@ -17125,38 +17149,13 @@ type RiskHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.RiskStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.RiskStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.RiskStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.RiskStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool              `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool              `json:"statusNotNil,omitempty"`
 	// risk_type field predicates
 	RiskType             *string  `json:"riskType,omitempty"`
 	RiskTypeNeq          *string  `json:"riskTypeNEQ,omitempty"`
@@ -17173,22 +17172,22 @@ type RiskHistoryWhereInput struct {
 	RiskTypeNotNil       *bool    `json:"riskTypeNotNil,omitempty"`
 	RiskTypeEqualFold    *string  `json:"riskTypeEqualFold,omitempty"`
 	RiskTypeContainsFold *string  `json:"riskTypeContainsFold,omitempty"`
-	// business_costs field predicates
-	BusinessCosts             *string  `json:"businessCosts,omitempty"`
-	BusinessCostsNeq          *string  `json:"businessCostsNEQ,omitempty"`
-	BusinessCostsIn           []string `json:"businessCostsIn,omitempty"`
-	BusinessCostsNotIn        []string `json:"businessCostsNotIn,omitempty"`
-	BusinessCostsGt           *string  `json:"businessCostsGT,omitempty"`
-	BusinessCostsGte          *string  `json:"businessCostsGTE,omitempty"`
-	BusinessCostsLt           *string  `json:"businessCostsLT,omitempty"`
-	BusinessCostsLte          *string  `json:"businessCostsLTE,omitempty"`
-	BusinessCostsContains     *string  `json:"businessCostsContains,omitempty"`
-	BusinessCostsHasPrefix    *string  `json:"businessCostsHasPrefix,omitempty"`
-	BusinessCostsHasSuffix    *string  `json:"businessCostsHasSuffix,omitempty"`
-	BusinessCostsIsNil        *bool    `json:"businessCostsIsNil,omitempty"`
-	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
-	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
-	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// impact field predicates
 	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
 	ImpactNeq    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
@@ -17203,6 +17202,17 @@ type RiskHistoryWhereInput struct {
 	LikelihoodNotIn  []enums.RiskLikelihood `json:"likelihoodNotIn,omitempty"`
 	LikelihoodIsNil  *bool                  `json:"likelihoodIsNil,omitempty"`
 	LikelihoodNotNil *bool                  `json:"likelihoodNotNil,omitempty"`
+	// score field predicates
+	Score       *int64  `json:"score,omitempty"`
+	ScoreNeq    *int64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []int64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []int64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *int64  `json:"scoreGT,omitempty"`
+	ScoreGte    *int64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *int64  `json:"scoreLT,omitempty"`
+	ScoreLte    *int64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool   `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool   `json:"scoreNotNil,omitempty"`
 	// mitigation field predicates
 	Mitigation             *string  `json:"mitigation,omitempty"`
 	MitigationNeq          *string  `json:"mitigationNEQ,omitempty"`
@@ -17219,22 +17229,38 @@ type RiskHistoryWhereInput struct {
 	MitigationNotNil       *bool    `json:"mitigationNotNil,omitempty"`
 	MitigationEqualFold    *string  `json:"mitigationEqualFold,omitempty"`
 	MitigationContainsFold *string  `json:"mitigationContainsFold,omitempty"`
-	// satisfies field predicates
-	Satisfies             *string  `json:"satisfies,omitempty"`
-	SatisfiesNeq          *string  `json:"satisfiesNEQ,omitempty"`
-	SatisfiesIn           []string `json:"satisfiesIn,omitempty"`
-	SatisfiesNotIn        []string `json:"satisfiesNotIn,omitempty"`
-	SatisfiesGt           *string  `json:"satisfiesGT,omitempty"`
-	SatisfiesGte          *string  `json:"satisfiesGTE,omitempty"`
-	SatisfiesLt           *string  `json:"satisfiesLT,omitempty"`
-	SatisfiesLte          *string  `json:"satisfiesLTE,omitempty"`
-	SatisfiesContains     *string  `json:"satisfiesContains,omitempty"`
-	SatisfiesHasPrefix    *string  `json:"satisfiesHasPrefix,omitempty"`
-	SatisfiesHasSuffix    *string  `json:"satisfiesHasSuffix,omitempty"`
-	SatisfiesIsNil        *bool    `json:"satisfiesIsNil,omitempty"`
-	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
-	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
-	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// business_costs field predicates
+	BusinessCosts             *string  `json:"businessCosts,omitempty"`
+	BusinessCostsNeq          *string  `json:"businessCostsNEQ,omitempty"`
+	BusinessCostsIn           []string `json:"businessCostsIn,omitempty"`
+	BusinessCostsNotIn        []string `json:"businessCostsNotIn,omitempty"`
+	BusinessCostsGt           *string  `json:"businessCostsGT,omitempty"`
+	BusinessCostsGte          *string  `json:"businessCostsGTE,omitempty"`
+	BusinessCostsLt           *string  `json:"businessCostsLT,omitempty"`
+	BusinessCostsLte          *string  `json:"businessCostsLTE,omitempty"`
+	BusinessCostsContains     *string  `json:"businessCostsContains,omitempty"`
+	BusinessCostsHasPrefix    *string  `json:"businessCostsHasPrefix,omitempty"`
+	BusinessCostsHasSuffix    *string  `json:"businessCostsHasSuffix,omitempty"`
+	BusinessCostsIsNil        *bool    `json:"businessCostsIsNil,omitempty"`
+	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
+	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
+	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
 }
 
 type RiskSearchResult struct {
@@ -17391,38 +17417,13 @@ type RiskWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.RiskStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.RiskStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.RiskStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.RiskStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool              `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool              `json:"statusNotNil,omitempty"`
 	// risk_type field predicates
 	RiskType             *string  `json:"riskType,omitempty"`
 	RiskTypeNeq          *string  `json:"riskTypeNEQ,omitempty"`
@@ -17439,22 +17440,22 @@ type RiskWhereInput struct {
 	RiskTypeNotNil       *bool    `json:"riskTypeNotNil,omitempty"`
 	RiskTypeEqualFold    *string  `json:"riskTypeEqualFold,omitempty"`
 	RiskTypeContainsFold *string  `json:"riskTypeContainsFold,omitempty"`
-	// business_costs field predicates
-	BusinessCosts             *string  `json:"businessCosts,omitempty"`
-	BusinessCostsNeq          *string  `json:"businessCostsNEQ,omitempty"`
-	BusinessCostsIn           []string `json:"businessCostsIn,omitempty"`
-	BusinessCostsNotIn        []string `json:"businessCostsNotIn,omitempty"`
-	BusinessCostsGt           *string  `json:"businessCostsGT,omitempty"`
-	BusinessCostsGte          *string  `json:"businessCostsGTE,omitempty"`
-	BusinessCostsLt           *string  `json:"businessCostsLT,omitempty"`
-	BusinessCostsLte          *string  `json:"businessCostsLTE,omitempty"`
-	BusinessCostsContains     *string  `json:"businessCostsContains,omitempty"`
-	BusinessCostsHasPrefix    *string  `json:"businessCostsHasPrefix,omitempty"`
-	BusinessCostsHasSuffix    *string  `json:"businessCostsHasSuffix,omitempty"`
-	BusinessCostsIsNil        *bool    `json:"businessCostsIsNil,omitempty"`
-	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
-	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
-	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
+	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// impact field predicates
 	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
 	ImpactNeq    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
@@ -17469,6 +17470,17 @@ type RiskWhereInput struct {
 	LikelihoodNotIn  []enums.RiskLikelihood `json:"likelihoodNotIn,omitempty"`
 	LikelihoodIsNil  *bool                  `json:"likelihoodIsNil,omitempty"`
 	LikelihoodNotNil *bool                  `json:"likelihoodNotNil,omitempty"`
+	// score field predicates
+	Score       *int64  `json:"score,omitempty"`
+	ScoreNeq    *int64  `json:"scoreNEQ,omitempty"`
+	ScoreIn     []int64 `json:"scoreIn,omitempty"`
+	ScoreNotIn  []int64 `json:"scoreNotIn,omitempty"`
+	ScoreGt     *int64  `json:"scoreGT,omitempty"`
+	ScoreGte    *int64  `json:"scoreGTE,omitempty"`
+	ScoreLt     *int64  `json:"scoreLT,omitempty"`
+	ScoreLte    *int64  `json:"scoreLTE,omitempty"`
+	ScoreIsNil  *bool   `json:"scoreIsNil,omitempty"`
+	ScoreNotNil *bool   `json:"scoreNotNil,omitempty"`
 	// mitigation field predicates
 	Mitigation             *string  `json:"mitigation,omitempty"`
 	MitigationNeq          *string  `json:"mitigationNEQ,omitempty"`
@@ -17485,22 +17497,38 @@ type RiskWhereInput struct {
 	MitigationNotNil       *bool    `json:"mitigationNotNil,omitempty"`
 	MitigationEqualFold    *string  `json:"mitigationEqualFold,omitempty"`
 	MitigationContainsFold *string  `json:"mitigationContainsFold,omitempty"`
-	// satisfies field predicates
-	Satisfies             *string  `json:"satisfies,omitempty"`
-	SatisfiesNeq          *string  `json:"satisfiesNEQ,omitempty"`
-	SatisfiesIn           []string `json:"satisfiesIn,omitempty"`
-	SatisfiesNotIn        []string `json:"satisfiesNotIn,omitempty"`
-	SatisfiesGt           *string  `json:"satisfiesGT,omitempty"`
-	SatisfiesGte          *string  `json:"satisfiesGTE,omitempty"`
-	SatisfiesLt           *string  `json:"satisfiesLT,omitempty"`
-	SatisfiesLte          *string  `json:"satisfiesLTE,omitempty"`
-	SatisfiesContains     *string  `json:"satisfiesContains,omitempty"`
-	SatisfiesHasPrefix    *string  `json:"satisfiesHasPrefix,omitempty"`
-	SatisfiesHasSuffix    *string  `json:"satisfiesHasSuffix,omitempty"`
-	SatisfiesIsNil        *bool    `json:"satisfiesIsNil,omitempty"`
-	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
-	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
-	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// details field predicates
+	Details             *string  `json:"details,omitempty"`
+	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
+	DetailsIn           []string `json:"detailsIn,omitempty"`
+	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
+	DetailsGt           *string  `json:"detailsGT,omitempty"`
+	DetailsGte          *string  `json:"detailsGTE,omitempty"`
+	DetailsLt           *string  `json:"detailsLT,omitempty"`
+	DetailsLte          *string  `json:"detailsLTE,omitempty"`
+	DetailsContains     *string  `json:"detailsContains,omitempty"`
+	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
+	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
+	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
+	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
+	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
+	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+	// business_costs field predicates
+	BusinessCosts             *string  `json:"businessCosts,omitempty"`
+	BusinessCostsNeq          *string  `json:"businessCostsNEQ,omitempty"`
+	BusinessCostsIn           []string `json:"businessCostsIn,omitempty"`
+	BusinessCostsNotIn        []string `json:"businessCostsNotIn,omitempty"`
+	BusinessCostsGt           *string  `json:"businessCostsGT,omitempty"`
+	BusinessCostsGte          *string  `json:"businessCostsGTE,omitempty"`
+	BusinessCostsLt           *string  `json:"businessCostsLT,omitempty"`
+	BusinessCostsLte          *string  `json:"businessCostsLTE,omitempty"`
+	BusinessCostsContains     *string  `json:"businessCostsContains,omitempty"`
+	BusinessCostsHasPrefix    *string  `json:"businessCostsHasPrefix,omitempty"`
+	BusinessCostsHasSuffix    *string  `json:"businessCostsHasSuffix,omitempty"`
+	BusinessCostsIsNil        *bool    `json:"businessCostsIsNil,omitempty"`
+	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
+	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
+	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -17525,6 +17553,12 @@ type RiskWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// stakeholder edge predicates
+	HasStakeholder     *bool              `json:"hasStakeholder,omitempty"`
+	HasStakeholderWith []*GroupWhereInput `json:"hasStakeholderWith,omitempty"`
+	// delegate edge predicates
+	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
+	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
 }
 
 type SearchResultConnection struct {
@@ -17546,6 +17580,8 @@ type Standard struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the long name of the standard body
@@ -17556,26 +17592,26 @@ type Standard struct {
 	Framework *string `json:"framework,omitempty"`
 	// description of the standard
 	Description *string `json:"description,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody *string `json:"governingBody,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
 	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
 	Link *string `json:"link,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status *enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned *bool `json:"systemOwned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version *string `json:"version,omitempty"`
-	// internal revision of the standard
-	Revision *string       `json:"revision,omitempty"`
+	Version  *string       `json:"version,omitempty"`
 	Owner    *Organization `json:"owner,omitempty"`
 	Controls []*Control    `json:"controls,omitempty"`
 }
@@ -17631,6 +17667,8 @@ type StandardHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the long name of the standard body
@@ -17641,26 +17679,26 @@ type StandardHistory struct {
 	Framework *string `json:"framework,omitempty"`
 	// description of the standard
 	Description *string `json:"description,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody *string `json:"governingBody,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
 	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
 	Link *string `json:"link,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status *string `json:"status,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status *enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned *bool `json:"systemOwned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
 	Version *string `json:"version,omitempty"`
-	// internal revision of the standard
-	Revision *string `json:"revision,omitempty"`
 }
 
 func (StandardHistory) IsNode() {}
@@ -17811,6 +17849,22 @@ type StandardHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -17889,6 +17943,22 @@ type StandardHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// governing_body_logo_url field predicates
+	GoverningBodyLogoURL             *string  `json:"governingBodyLogoURL,omitempty"`
+	GoverningBodyLogoURLNeq          *string  `json:"governingBodyLogoURLNEQ,omitempty"`
+	GoverningBodyLogoURLIn           []string `json:"governingBodyLogoURLIn,omitempty"`
+	GoverningBodyLogoURLNotIn        []string `json:"governingBodyLogoURLNotIn,omitempty"`
+	GoverningBodyLogoURLGt           *string  `json:"governingBodyLogoURLGT,omitempty"`
+	GoverningBodyLogoURLGte          *string  `json:"governingBodyLogoURLGTE,omitempty"`
+	GoverningBodyLogoURLLt           *string  `json:"governingBodyLogoURLLT,omitempty"`
+	GoverningBodyLogoURLLte          *string  `json:"governingBodyLogoURLLTE,omitempty"`
+	GoverningBodyLogoURLContains     *string  `json:"governingBodyLogoURLContains,omitempty"`
+	GoverningBodyLogoURLHasPrefix    *string  `json:"governingBodyLogoURLHasPrefix,omitempty"`
+	GoverningBodyLogoURLHasSuffix    *string  `json:"governingBodyLogoURLHasSuffix,omitempty"`
+	GoverningBodyLogoURLIsNil        *bool    `json:"governingBodyLogoURLIsNil,omitempty"`
+	GoverningBodyLogoURLNotNil       *bool    `json:"governingBodyLogoURLNotNil,omitempty"`
+	GoverningBodyLogoURLEqualFold    *string  `json:"governingBodyLogoURLEqualFold,omitempty"`
+	GoverningBodyLogoURLContainsFold *string  `json:"governingBodyLogoURLContainsFold,omitempty"`
 	// governing_body field predicates
 	GoverningBody             *string  `json:"governingBody,omitempty"`
 	GoverningBodyNeq          *string  `json:"governingBodyNEQ,omitempty"`
@@ -17922,21 +17992,12 @@ type StandardHistoryWhereInput struct {
 	LinkEqualFold    *string  `json:"linkEqualFold,omitempty"`
 	LinkContainsFold *string  `json:"linkContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.StandardStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.StandardStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.StandardStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.StandardStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// is_public field predicates
 	IsPublic       *bool `json:"isPublic,omitempty"`
 	IsPublicNeq    *bool `json:"isPublicNEQ,omitempty"`
@@ -17984,22 +18045,6 @@ type StandardHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 }
 
 type StandardSearchResult struct {
@@ -18112,6 +18157,22 @@ type StandardWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -18190,6 +18251,22 @@ type StandardWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// governing_body_logo_url field predicates
+	GoverningBodyLogoURL             *string  `json:"governingBodyLogoURL,omitempty"`
+	GoverningBodyLogoURLNeq          *string  `json:"governingBodyLogoURLNEQ,omitempty"`
+	GoverningBodyLogoURLIn           []string `json:"governingBodyLogoURLIn,omitempty"`
+	GoverningBodyLogoURLNotIn        []string `json:"governingBodyLogoURLNotIn,omitempty"`
+	GoverningBodyLogoURLGt           *string  `json:"governingBodyLogoURLGT,omitempty"`
+	GoverningBodyLogoURLGte          *string  `json:"governingBodyLogoURLGTE,omitempty"`
+	GoverningBodyLogoURLLt           *string  `json:"governingBodyLogoURLLT,omitempty"`
+	GoverningBodyLogoURLLte          *string  `json:"governingBodyLogoURLLTE,omitempty"`
+	GoverningBodyLogoURLContains     *string  `json:"governingBodyLogoURLContains,omitempty"`
+	GoverningBodyLogoURLHasPrefix    *string  `json:"governingBodyLogoURLHasPrefix,omitempty"`
+	GoverningBodyLogoURLHasSuffix    *string  `json:"governingBodyLogoURLHasSuffix,omitempty"`
+	GoverningBodyLogoURLIsNil        *bool    `json:"governingBodyLogoURLIsNil,omitempty"`
+	GoverningBodyLogoURLNotNil       *bool    `json:"governingBodyLogoURLNotNil,omitempty"`
+	GoverningBodyLogoURLEqualFold    *string  `json:"governingBodyLogoURLEqualFold,omitempty"`
+	GoverningBodyLogoURLContainsFold *string  `json:"governingBodyLogoURLContainsFold,omitempty"`
 	// governing_body field predicates
 	GoverningBody             *string  `json:"governingBody,omitempty"`
 	GoverningBodyNeq          *string  `json:"governingBodyNEQ,omitempty"`
@@ -18223,21 +18300,12 @@ type StandardWhereInput struct {
 	LinkEqualFold    *string  `json:"linkEqualFold,omitempty"`
 	LinkContainsFold *string  `json:"linkContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.StandardStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.StandardStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.StandardStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.StandardStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
 	// is_public field predicates
 	IsPublic       *bool `json:"isPublic,omitempty"`
 	IsPublicNeq    *bool `json:"isPublicNEQ,omitempty"`
@@ -18285,22 +18353,6 @@ type StandardWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -20710,38 +20762,57 @@ type UpdateActionPlanInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the name of the action plan
+	// the name of the action_plan
 	Name *string `json:"name,omitempty"`
-	// description of the action plan
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// status of the action plan
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// status of the action_plan, e.g. draft, published, archived, etc.
+	Status      *enums.DocumentStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
+	ActionPlanType      *string `json:"actionPlanType,omitempty"`
+	ClearActionPlanType *bool   `json:"clearActionPlanType,omitempty"`
+	// details of the action_plan
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// whether approval is required for edits to the action_plan
+	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
+	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
+	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
+	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
+	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
+	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// due date of the action plan
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
 	// priority of the action plan
-	Priority      *string `json:"priority,omitempty"`
-	ClearPriority *bool   `json:"clearPriority,omitempty"`
+	Priority      *enums.Priority `json:"priority,omitempty"`
+	ClearPriority *bool           `json:"clearPriority,omitempty"`
 	// source of the action plan
-	Source      *string `json:"source,omitempty"`
-	ClearSource *bool   `json:"clearSource,omitempty"`
-	// json data including details of the action plan
-	Details          map[string]any `json:"details,omitempty"`
-	ClearDetails     *bool          `json:"clearDetails,omitempty"`
-	AddRiskIDs       []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs    []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisk        *bool          `json:"clearRisk,omitempty"`
-	AddControlIDs    []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs []string       `json:"removeControlIDs,omitempty"`
-	ClearControl     *bool          `json:"clearControl,omitempty"`
-	AddUserIDs       []string       `json:"addUserIDs,omitempty"`
-	RemoveUserIDs    []string       `json:"removeUserIDs,omitempty"`
-	ClearUser        *bool          `json:"clearUser,omitempty"`
-	AddProgramIDs    []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs []string       `json:"removeProgramIDs,omitempty"`
-	ClearProgram     *bool          `json:"clearProgram,omitempty"`
+	Source           *string             `json:"source,omitempty"`
+	ClearSource      *bool               `json:"clearSource,omitempty"`
+	ApproverID       *string             `json:"approverID,omitempty"`
+	ClearApprover    *bool               `json:"clearApprover,omitempty"`
+	DelegateID       *string             `json:"delegateID,omitempty"`
+	ClearDelegate    *bool               `json:"clearDelegate,omitempty"`
+	OwnerID          *string             `json:"ownerID,omitempty"`
+	ClearOwner       *bool               `json:"clearOwner,omitempty"`
+	AddRiskIDs       []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs    []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisk        *bool               `json:"clearRisk,omitempty"`
+	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
+	ClearControl     *bool               `json:"clearControl,omitempty"`
+	AddUserIDs       []string            `json:"addUserIDs,omitempty"`
+	RemoveUserIDs    []string            `json:"removeUserIDs,omitempty"`
+	ClearUser        *bool               `json:"clearUser,omitempty"`
+	AddProgramIDs    []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs []string            `json:"removeProgramIDs,omitempty"`
+	ClearProgram     *bool               `json:"clearProgram,omitempty"`
+	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateContactInput is used for update Contact object.
@@ -20787,9 +20858,9 @@ type UpdateControlImplementationInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// status of the control implementation
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// status of the %s, e.g. draft, published, archived, etc.
+	Status      *enums.DocumentStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
 	// date the control was implemented
 	ImplementationDate      *time.Time `json:"implementationDate,omitempty"`
 	ClearImplementationDate *bool      `json:"clearImplementationDate,omitempty"`
@@ -20921,6 +20992,9 @@ type UpdateControlInput struct {
 // UpdateControlObjectiveInput is used for update ControlObjective object.
 // Input was generated by ent.
 type UpdateControlObjectiveInput struct {
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// tags associated with the object
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
@@ -20939,51 +21013,49 @@ type UpdateControlObjectiveInput struct {
 	// type of the control objective e.g. compliance, financial, operational, etc.
 	ControlObjectiveType      *string `json:"controlObjectiveType,omitempty"`
 	ClearControlObjectiveType *bool   `json:"clearControlObjectiveType,omitempty"`
-	// version of the control objective
-	Version      *string `json:"version,omitempty"`
-	ClearVersion *bool   `json:"clearVersion,omitempty"`
 	// category of the control
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`
 	// subcategory of the control
-	Subcategory             *string  `json:"subcategory,omitempty"`
-	ClearSubcategory        *bool    `json:"clearSubcategory,omitempty"`
-	AddBlockedGroupIDs      []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool    `json:"clearViewers,omitempty"`
-	AddProgramIDs           []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool    `json:"clearPrograms,omitempty"`
-	AddEvidenceIDs          []string `json:"addEvidenceIDs,omitempty"`
-	RemoveEvidenceIDs       []string `json:"removeEvidenceIDs,omitempty"`
-	ClearEvidence           *bool    `json:"clearEvidence,omitempty"`
-	AddControlIDs           []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool    `json:"clearSubcontrols,omitempty"`
-	AddInternalPolicyIDs    []string `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool    `json:"clearInternalPolicies,omitempty"`
-	AddProcedureIDs         []string `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs      []string `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures         *bool    `json:"clearProcedures,omitempty"`
-	AddRiskIDs              []string `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool    `json:"clearRisks,omitempty"`
-	AddNarrativeIDs         []string `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs      []string `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives         *bool    `json:"clearNarratives,omitempty"`
-	AddTaskIDs              []string `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool    `json:"clearTasks,omitempty"`
+	Subcategory             *string             `json:"subcategory,omitempty"`
+	ClearSubcategory        *bool               `json:"clearSubcategory,omitempty"`
+	AddBlockedGroupIDs      []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool               `json:"clearEditors,omitempty"`
+	AddViewerIDs            []string            `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs         []string            `json:"removeViewerIDs,omitempty"`
+	ClearViewers            *bool               `json:"clearViewers,omitempty"`
+	AddProgramIDs           []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool               `json:"clearPrograms,omitempty"`
+	AddEvidenceIDs          []string            `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs       []string            `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence           *bool               `json:"clearEvidence,omitempty"`
+	AddControlIDs           []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string            `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool               `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string            `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string            `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool               `json:"clearSubcontrols,omitempty"`
+	AddInternalPolicyIDs    []string            `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string            `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool               `json:"clearInternalPolicies,omitempty"`
+	AddProcedureIDs         []string            `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs      []string            `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures         *bool               `json:"clearProcedures,omitempty"`
+	AddRiskIDs              []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool               `json:"clearRisks,omitempty"`
+	AddNarrativeIDs         []string            `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs      []string            `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives         *bool               `json:"clearNarratives,omitempty"`
+	AddTaskIDs              []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool               `json:"clearTasks,omitempty"`
+	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.
@@ -21135,26 +21207,29 @@ type UpdateEvidenceInput struct {
 	IsAutomated      *bool `json:"isAutomated,omitempty"`
 	ClearIsAutomated *bool `json:"clearIsAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
-	URL                       *string  `json:"url,omitempty"`
-	ClearURL                  *bool    `json:"clearURL,omitempty"`
-	AddControlObjectiveIDs    []string `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool    `json:"clearControlObjectives,omitempty"`
-	AddControlIDs             []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs          []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs       []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols          *bool    `json:"clearSubcontrols,omitempty"`
-	AddFileIDs                []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs             []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                *bool    `json:"clearFiles,omitempty"`
-	AddProgramIDs             []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool    `json:"clearPrograms,omitempty"`
-	AddTaskIDs                []string `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool    `json:"clearTasks,omitempty"`
+	URL      *string `json:"url,omitempty"`
+	ClearURL *bool   `json:"clearURL,omitempty"`
+	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
+	Status                    *enums.EvidenceStatus `json:"status,omitempty"`
+	ClearStatus               *bool                 `json:"clearStatus,omitempty"`
+	AddControlObjectiveIDs    []string              `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string              `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool                 `json:"clearControlObjectives,omitempty"`
+	AddControlIDs             []string              `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string              `json:"removeControlIDs,omitempty"`
+	ClearControls             *bool                 `json:"clearControls,omitempty"`
+	AddSubcontrolIDs          []string              `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs       []string              `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols          *bool                 `json:"clearSubcontrols,omitempty"`
+	AddFileIDs                []string              `json:"addFileIDs,omitempty"`
+	RemoveFileIDs             []string              `json:"removeFileIDs,omitempty"`
+	ClearFiles                *bool                 `json:"clearFiles,omitempty"`
+	AddProgramIDs             []string              `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string              `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool                 `json:"clearPrograms,omitempty"`
+	AddTaskIDs                []string              `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string              `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool                 `json:"clearTasks,omitempty"`
 }
 
 // UpdateFileInput is used for update File object.
@@ -21419,56 +21494,58 @@ type UpdateInternalPolicyInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the policy
 	Name *string `json:"name,omitempty"`
-	// description of the policy
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// status of the policy
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
-	// the date the policy should be reviewed, defaults to a year from creation date
-	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
-	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
-	// type of the policy
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status      *enums.DocumentStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// type of the policy, e.g. compliance, operational, health and safety, etc.
 	PolicyType      *string `json:"policyType,omitempty"`
 	ClearPolicyType *bool   `json:"clearPolicyType,omitempty"`
-	// version of the policy
-	Version      *string `json:"version,omitempty"`
-	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// purpose and scope
-	PurposeAndScope      *string `json:"purposeAndScope,omitempty"`
-	ClearPurposeAndScope *bool   `json:"clearPurposeAndScope,omitempty"`
-	// background of the policy
-	Background      *string `json:"background,omitempty"`
-	ClearBackground *bool   `json:"clearBackground,omitempty"`
-	// json data for the policy document
-	Details                   map[string]any `json:"details,omitempty"`
-	ClearDetails              *bool          `json:"clearDetails,omitempty"`
-	OwnerID                   *string        `json:"ownerID,omitempty"`
-	ClearOwner                *bool          `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups        *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs              []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs           []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors              *bool          `json:"clearEditors,omitempty"`
-	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool          `json:"clearControlObjectives,omitempty"`
-	AddControlIDs             []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string       `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool          `json:"clearControls,omitempty"`
-	AddProcedureIDs           []string       `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string       `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool          `json:"clearProcedures,omitempty"`
-	AddNarrativeIDs           []string       `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs        []string       `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives           *bool          `json:"clearNarratives,omitempty"`
-	AddTaskIDs                []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool          `json:"clearTasks,omitempty"`
-	AddProgramIDs             []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool          `json:"clearPrograms,omitempty"`
+	// details of the policy
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// whether approval is required for edits to the policy
+	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
+	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
+	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
+	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
+	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
+	// the frequency at which the policy should be reviewed, used to calculate the review_due date
+	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision                  *string             `json:"revision,omitempty"`
+	ClearRevision             *bool               `json:"clearRevision,omitempty"`
+	OwnerID                   *string             `json:"ownerID,omitempty"`
+	ClearOwner                *bool               `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs        []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool               `json:"clearEditors,omitempty"`
+	ApproverID                *string             `json:"approverID,omitempty"`
+	ClearApprover             *bool               `json:"clearApprover,omitempty"`
+	DelegateID                *string             `json:"delegateID,omitempty"`
+	ClearDelegate             *bool               `json:"clearDelegate,omitempty"`
+	AddControlObjectiveIDs    []string            `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string            `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool               `json:"clearControlObjectives,omitempty"`
+	AddControlIDs             []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string            `json:"removeControlIDs,omitempty"`
+	ClearControls             *bool               `json:"clearControls,omitempty"`
+	AddProcedureIDs           []string            `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string            `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures           *bool               `json:"clearProcedures,omitempty"`
+	AddNarrativeIDs           []string            `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs        []string            `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives           *bool               `json:"clearNarratives,omitempty"`
+	AddTaskIDs                []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool               `json:"clearTasks,omitempty"`
+	AddProgramIDs             []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool               `json:"clearPrograms,omitempty"`
+	RevisionBump              *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateInviteInput is used for update Invite object.
@@ -21692,6 +21769,9 @@ type UpdateOrganizationInput struct {
 	AddStandardIDs                   []string                        `json:"addStandardIDs,omitempty"`
 	RemoveStandardIDs                []string                        `json:"removeStandardIDs,omitempty"`
 	ClearStandards                   *bool                           `json:"clearStandards,omitempty"`
+	AddActionPlanIDs                 []string                        `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs              []string                        `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans                 *bool                           `json:"clearActionPlans,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                 []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -21785,59 +21865,58 @@ type UpdateProcedureInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the procedure
 	Name *string `json:"name,omitempty"`
-	// description of the procedure
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// status of the procedure
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
-	// type of the procedure
+	// status of the procedure, e.g. draft, published, archived, etc.
+	Status      *enums.DocumentStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// type of the procedure, e.g. compliance, operational, health and safety, etc.
 	ProcedureType      *string `json:"procedureType,omitempty"`
 	ClearProcedureType *bool   `json:"clearProcedureType,omitempty"`
-	// the date the procedure should be reviewed, defaults to a year from creation date
+	// details of the procedure
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// whether approval is required for edits to the procedure
+	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
+	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
+	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
 	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
-	// version of the procedure
-	Version      *string `json:"version,omitempty"`
-	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// purpose and scope
-	PurposeAndScope      *string `json:"purposeAndScope,omitempty"`
-	ClearPurposeAndScope *bool   `json:"clearPurposeAndScope,omitempty"`
-	// background of the procedure
-	Background      *string `json:"background,omitempty"`
-	ClearBackground *bool   `json:"clearBackground,omitempty"`
-	// which controls are satisfied by the procedure
-	Satisfies      *string `json:"satisfies,omitempty"`
-	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// json data for the procedure document
-	Details                 map[string]any `json:"details,omitempty"`
-	ClearDetails            *bool          `json:"clearDetails,omitempty"`
-	OwnerID                 *string        `json:"ownerID,omitempty"`
-	ClearOwner              *bool          `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool          `json:"clearEditors,omitempty"`
-	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool          `json:"clearControls,omitempty"`
-	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
-	AddNarrativeIDs         []string       `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs      []string       `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives         *bool          `json:"clearNarratives,omitempty"`
-	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool          `json:"clearRisks,omitempty"`
-	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool          `json:"clearTasks,omitempty"`
-	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
+	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
+	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision                *string             `json:"revision,omitempty"`
+	ClearRevision           *bool               `json:"clearRevision,omitempty"`
+	OwnerID                 *string             `json:"ownerID,omitempty"`
+	ClearOwner              *bool               `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs      []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool               `json:"clearEditors,omitempty"`
+	ApproverID              *string             `json:"approverID,omitempty"`
+	ClearApprover           *bool               `json:"clearApprover,omitempty"`
+	DelegateID              *string             `json:"delegateID,omitempty"`
+	ClearDelegate           *bool               `json:"clearDelegate,omitempty"`
+	AddControlIDs           []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string            `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool               `json:"clearControls,omitempty"`
+	AddInternalPolicyIDs    []string            `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string            `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool               `json:"clearInternalPolicies,omitempty"`
+	AddNarrativeIDs         []string            `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs      []string            `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives         *bool               `json:"clearNarratives,omitempty"`
+	AddRiskIDs              []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool               `json:"clearRisks,omitempty"`
+	AddTaskIDs              []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool               `json:"clearTasks,omitempty"`
+	AddProgramIDs           []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool               `json:"clearPrograms,omitempty"`
+	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateProgramInput is used for update Program object.
@@ -21932,54 +22011,58 @@ type UpdateRiskInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the risk
 	Name *string `json:"name,omitempty"`
-	// description of the risk
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// status of the risk - mitigated or not, inflight, etc.
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	Status      *enums.RiskStatus `json:"status,omitempty"`
+	ClearStatus *bool             `json:"clearStatus,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType      *string `json:"riskType,omitempty"`
 	ClearRiskType *bool   `json:"clearRiskType,omitempty"`
-	// business costs associated with the risk
-	BusinessCosts      *string `json:"businessCosts,omitempty"`
-	ClearBusinessCosts *bool   `json:"clearBusinessCosts,omitempty"`
-	// impact of the risk - high, medium, low
+	// category of the risk, e.g. human resources, operations, IT, etc.
+	Category      *string `json:"category,omitempty"`
+	ClearCategory *bool   `json:"clearCategory,omitempty"`
+	// impact of the risk -critical, high, medium, low
 	Impact      *enums.RiskImpact `json:"impact,omitempty"`
 	ClearImpact *bool             `json:"clearImpact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
 	Likelihood      *enums.RiskLikelihood `json:"likelihood,omitempty"`
 	ClearLikelihood *bool                 `json:"clearLikelihood,omitempty"`
+	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	Score      *int64 `json:"score,omitempty"`
+	ClearScore *bool  `json:"clearScore,omitempty"`
 	// mitigation for the risk
 	Mitigation      *string `json:"mitigation,omitempty"`
 	ClearMitigation *bool   `json:"clearMitigation,omitempty"`
-	// which controls are satisfied by the risk
-	Satisfies      *string `json:"satisfies,omitempty"`
-	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// json data for the risk document
-	Details               map[string]any `json:"details,omitempty"`
-	ClearDetails          *bool          `json:"clearDetails,omitempty"`
-	AddBlockedGroupIDs    []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups    *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs          []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs       []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors          *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs          []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs       []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers          *bool          `json:"clearViewers,omitempty"`
-	AddControlIDs         []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs      []string       `json:"removeControlIDs,omitempty"`
-	ClearControl          *bool          `json:"clearControl,omitempty"`
-	AddProcedureIDs       []string       `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs    []string       `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure        *bool          `json:"clearProcedure,omitempty"`
-	AddActionPlanIDs      []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs   []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans      *bool          `json:"clearActionPlans,omitempty"`
-	AddProgramIDs         []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs      []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms         *bool          `json:"clearPrograms,omitempty"`
+	// details of the risk
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// business costs associated with the risk
+	BusinessCosts         *string  `json:"businessCosts,omitempty"`
+	ClearBusinessCosts    *bool    `json:"clearBusinessCosts,omitempty"`
+	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs          []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool    `json:"clearViewers,omitempty"`
+	AddControlIDs         []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs      []string `json:"removeControlIDs,omitempty"`
+	ClearControl          *bool    `json:"clearControl,omitempty"`
+	AddProcedureIDs       []string `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs    []string `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure        *bool    `json:"clearProcedure,omitempty"`
+	AddActionPlanIDs      []string `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs   []string `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans      *bool    `json:"clearActionPlans,omitempty"`
+	AddProgramIDs         []string `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs      []string `json:"removeProgramIDs,omitempty"`
+	ClearPrograms         *bool    `json:"clearPrograms,omitempty"`
+	StakeholderID         *string  `json:"stakeholderID,omitempty"`
+	ClearStakeholder      *bool    `json:"clearStakeholder,omitempty"`
+	DelegateID            *string  `json:"delegateID,omitempty"`
+	ClearDelegate         *bool    `json:"clearDelegate,omitempty"`
 }
 
 // UpdateStandardInput is used for update Standard object.
@@ -21989,6 +22072,9 @@ type UpdateStandardInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// the long name of the standard body
 	Name *string `json:"name,omitempty"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -22000,6 +22086,9 @@ type UpdateStandardInput struct {
 	// description of the standard
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// URL to the logo of the governing body
+	GoverningBodyLogoURL      *string `json:"governingBodyLogoURL,omitempty"`
+	ClearGoverningBodyLogoURL *bool   `json:"clearGoverningBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
 	GoverningBody      *string `json:"governingBody,omitempty"`
 	ClearGoverningBody *bool   `json:"clearGoverningBody,omitempty"`
@@ -22010,9 +22099,9 @@ type UpdateStandardInput struct {
 	// link to the official standard documentation
 	Link      *string `json:"link,omitempty"`
 	ClearLink *bool   `json:"clearLink,omitempty"`
-	// status of the standard - active, deprecated, etc.
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	// status of the standard - active, draft, and archived
+	Status      *enums.StandardStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
 	// indicates if the standard should be made available to all users, only for public standards
 	IsPublic      *bool `json:"isPublic,omitempty"`
 	ClearIsPublic *bool `json:"clearIsPublic,omitempty"`
@@ -22022,20 +22111,18 @@ type UpdateStandardInput struct {
 	// indicates if the standard is owned by the the openlane system
 	SystemOwned      *bool `json:"systemOwned,omitempty"`
 	ClearSystemOwned *bool `json:"clearSystemOwned,omitempty"`
-	// type of the standard - security, privacy, etc.
+	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`
 	// version of the standard
-	Version      *string `json:"version,omitempty"`
-	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// internal revision of the standard
-	Revision         *string  `json:"revision,omitempty"`
-	ClearRevision    *bool    `json:"clearRevision,omitempty"`
-	OwnerID          *string  `json:"ownerID,omitempty"`
-	ClearOwner       *bool    `json:"clearOwner,omitempty"`
-	AddControlIDs    []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs []string `json:"removeControlIDs,omitempty"`
-	ClearControls    *bool    `json:"clearControls,omitempty"`
+	Version          *string             `json:"version,omitempty"`
+	ClearVersion     *bool               `json:"clearVersion,omitempty"`
+	OwnerID          *string             `json:"ownerID,omitempty"`
+	ClearOwner       *bool               `json:"clearOwner,omitempty"`
+	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
+	ClearControls    *bool               `json:"clearControls,omitempty"`
+	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateSubcontrolInput is used for update Subcontrol object.

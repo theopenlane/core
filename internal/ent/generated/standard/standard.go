@@ -3,11 +3,14 @@
 package standard
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -29,6 +32,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -39,6 +44,8 @@ const (
 	FieldFramework = "framework"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldGoverningBodyLogoURL holds the string denoting the governing_body_logo_url field in the database.
+	FieldGoverningBodyLogoURL = "governing_body_logo_url"
 	// FieldGoverningBody holds the string denoting the governing_body field in the database.
 	FieldGoverningBody = "governing_body"
 	// FieldDomains holds the string denoting the domains field in the database.
@@ -57,8 +64,6 @@ const (
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -91,11 +96,13 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldRevision,
 	FieldOwnerID,
 	FieldName,
 	FieldShortName,
 	FieldFramework,
 	FieldDescription,
+	FieldGoverningBodyLogoURL,
 	FieldGoverningBody,
 	FieldDomains,
 	FieldLink,
@@ -105,7 +112,6 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldStandardType,
 	FieldVersion,
-	FieldRevision,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -124,7 +130,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [6]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -135,8 +141,14 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// GoverningBodyLogoURLValidator is a validator for the "governing_body_logo_url" field. It is called by the builders before save.
+	GoverningBodyLogoURLValidator func(string) error
 	// DefaultIsPublic holds the default value on creation for the "is_public" field.
 	DefaultIsPublic bool
 	// DefaultFreeToUse holds the default value on creation for the "free_to_use" field.
@@ -146,6 +158,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.StandardStatus = "ACTIVE"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.StandardStatus) error {
+	switch s.String() {
+	case "ACTIVE", "DRAFT", "ARCHIVED":
+		return nil
+	default:
+		return fmt.Errorf("standard: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Standard queries.
 type OrderOption func(*sql.Selector)
@@ -185,6 +209,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -208,6 +237,11 @@ func ByFramework(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByGoverningBodyLogoURL orders the results by the governing_body_logo_url field.
+func ByGoverningBodyLogoURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGoverningBodyLogoURL, opts...).ToFunc()
 }
 
 // ByGoverningBody orders the results by the governing_body field.
@@ -250,11 +284,6 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
-}
-
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -289,3 +318,10 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
 	)
 }
+
+var (
+	// enums.StandardStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.StandardStatus)(nil)
+	// enums.StandardStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.StandardStatus)(nil)
+)

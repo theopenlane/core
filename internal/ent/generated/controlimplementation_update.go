@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -124,15 +125,15 @@ func (ciu *ControlImplementationUpdate) ClearTags() *ControlImplementationUpdate
 }
 
 // SetStatus sets the "status" field.
-func (ciu *ControlImplementationUpdate) SetStatus(s string) *ControlImplementationUpdate {
-	ciu.mutation.SetStatus(s)
+func (ciu *ControlImplementationUpdate) SetStatus(es enums.DocumentStatus) *ControlImplementationUpdate {
+	ciu.mutation.SetStatus(es)
 	return ciu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ciu *ControlImplementationUpdate) SetNillableStatus(s *string) *ControlImplementationUpdate {
-	if s != nil {
-		ciu.SetStatus(*s)
+func (ciu *ControlImplementationUpdate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationUpdate {
+	if es != nil {
+		ciu.SetStatus(*es)
 	}
 	return ciu
 }
@@ -306,6 +307,16 @@ func (ciu *ControlImplementationUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ciu *ControlImplementationUpdate) check() error {
+	if v, ok := ciu.mutation.Status(); ok {
+		if err := controlimplementation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ciu *ControlImplementationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationUpdate {
 	ciu.modifiers = append(ciu.modifiers, modifiers...)
@@ -313,6 +324,9 @@ func (ciu *ControlImplementationUpdate) Modify(modifiers ...func(u *sql.UpdateBu
 }
 
 func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ciu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementation.Table, controlimplementation.Columns, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	if ps := ciu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -363,10 +377,10 @@ func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ciu.mutation.Status(); ok {
-		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementation.FieldStatus, field.TypeEnum, value)
 	}
 	if ciu.mutation.StatusCleared() {
-		_spec.ClearField(controlimplementation.FieldStatus, field.TypeString)
+		_spec.ClearField(controlimplementation.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := ciu.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementation.FieldImplementationDate, field.TypeTime, value)
@@ -555,15 +569,15 @@ func (ciuo *ControlImplementationUpdateOne) ClearTags() *ControlImplementationUp
 }
 
 // SetStatus sets the "status" field.
-func (ciuo *ControlImplementationUpdateOne) SetStatus(s string) *ControlImplementationUpdateOne {
-	ciuo.mutation.SetStatus(s)
+func (ciuo *ControlImplementationUpdateOne) SetStatus(es enums.DocumentStatus) *ControlImplementationUpdateOne {
+	ciuo.mutation.SetStatus(es)
 	return ciuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ciuo *ControlImplementationUpdateOne) SetNillableStatus(s *string) *ControlImplementationUpdateOne {
-	if s != nil {
-		ciuo.SetStatus(*s)
+func (ciuo *ControlImplementationUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationUpdateOne {
+	if es != nil {
+		ciuo.SetStatus(*es)
 	}
 	return ciuo
 }
@@ -750,6 +764,16 @@ func (ciuo *ControlImplementationUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ciuo *ControlImplementationUpdateOne) check() error {
+	if v, ok := ciuo.mutation.Status(); ok {
+		if err := controlimplementation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ciuo *ControlImplementationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationUpdateOne {
 	ciuo.modifiers = append(ciuo.modifiers, modifiers...)
@@ -757,6 +781,9 @@ func (ciuo *ControlImplementationUpdateOne) Modify(modifiers ...func(u *sql.Upda
 }
 
 func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementation, err error) {
+	if err := ciuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementation.Table, controlimplementation.Columns, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	id, ok := ciuo.mutation.ID()
 	if !ok {
@@ -824,10 +851,10 @@ func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node 
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ciuo.mutation.Status(); ok {
-		_spec.SetField(controlimplementation.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlimplementation.FieldStatus, field.TypeEnum, value)
 	}
 	if ciuo.mutation.StatusCleared() {
-		_spec.ClearField(controlimplementation.FieldStatus, field.TypeString)
+		_spec.ClearField(controlimplementation.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := ciuo.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementation.FieldImplementationDate, field.TypeTime, value)

@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -72,6 +73,24 @@ func (pu *ProcedureUpdate) ClearUpdatedBy() *ProcedureUpdate {
 	return pu
 }
 
+// SetTags sets the "tags" field.
+func (pu *ProcedureUpdate) SetTags(s []string) *ProcedureUpdate {
+	pu.mutation.SetTags(s)
+	return pu
+}
+
+// AppendTags appends s to the "tags" field.
+func (pu *ProcedureUpdate) AppendTags(s []string) *ProcedureUpdate {
+	pu.mutation.AppendTags(s)
+	return pu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (pu *ProcedureUpdate) ClearTags() *ProcedureUpdate {
+	pu.mutation.ClearTags()
+	return pu
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (pu *ProcedureUpdate) SetDeletedAt(t time.Time) *ProcedureUpdate {
 	pu.mutation.SetDeletedAt(t)
@@ -112,24 +131,6 @@ func (pu *ProcedureUpdate) ClearDeletedBy() *ProcedureUpdate {
 	return pu
 }
 
-// SetTags sets the "tags" field.
-func (pu *ProcedureUpdate) SetTags(s []string) *ProcedureUpdate {
-	pu.mutation.SetTags(s)
-	return pu
-}
-
-// AppendTags appends s to the "tags" field.
-func (pu *ProcedureUpdate) AppendTags(s []string) *ProcedureUpdate {
-	pu.mutation.AppendTags(s)
-	return pu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (pu *ProcedureUpdate) ClearTags() *ProcedureUpdate {
-	pu.mutation.ClearTags()
-	return pu
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (pu *ProcedureUpdate) SetOwnerID(s string) *ProcedureUpdate {
 	pu.mutation.SetOwnerID(s)
@@ -164,36 +165,16 @@ func (pu *ProcedureUpdate) SetNillableName(s *string) *ProcedureUpdate {
 	return pu
 }
 
-// SetDescription sets the "description" field.
-func (pu *ProcedureUpdate) SetDescription(s string) *ProcedureUpdate {
-	pu.mutation.SetDescription(s)
-	return pu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableDescription(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetDescription(*s)
-	}
-	return pu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (pu *ProcedureUpdate) ClearDescription() *ProcedureUpdate {
-	pu.mutation.ClearDescription()
-	return pu
-}
-
 // SetStatus sets the "status" field.
-func (pu *ProcedureUpdate) SetStatus(s string) *ProcedureUpdate {
-	pu.mutation.SetStatus(s)
+func (pu *ProcedureUpdate) SetStatus(es enums.DocumentStatus) *ProcedureUpdate {
+	pu.mutation.SetStatus(es)
 	return pu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableStatus(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetStatus(*s)
+func (pu *ProcedureUpdate) SetNillableStatus(es *enums.DocumentStatus) *ProcedureUpdate {
+	if es != nil {
+		pu.SetStatus(*es)
 	}
 	return pu
 }
@@ -224,6 +205,46 @@ func (pu *ProcedureUpdate) ClearProcedureType() *ProcedureUpdate {
 	return pu
 }
 
+// SetDetails sets the "details" field.
+func (pu *ProcedureUpdate) SetDetails(s string) *ProcedureUpdate {
+	pu.mutation.SetDetails(s)
+	return pu
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableDetails(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetDetails(*s)
+	}
+	return pu
+}
+
+// ClearDetails clears the value of the "details" field.
+func (pu *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
+	pu.mutation.ClearDetails()
+	return pu
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (pu *ProcedureUpdate) SetApprovalRequired(b bool) *ProcedureUpdate {
+	pu.mutation.SetApprovalRequired(b)
+	return pu
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableApprovalRequired(b *bool) *ProcedureUpdate {
+	if b != nil {
+		pu.SetApprovalRequired(*b)
+	}
+	return pu
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (pu *ProcedureUpdate) ClearApprovalRequired() *ProcedureUpdate {
+	pu.mutation.ClearApprovalRequired()
+	return pu
+}
+
 // SetReviewDue sets the "review_due" field.
 func (pu *ProcedureUpdate) SetReviewDue(t time.Time) *ProcedureUpdate {
 	pu.mutation.SetReviewDue(t)
@@ -244,95 +265,43 @@ func (pu *ProcedureUpdate) ClearReviewDue() *ProcedureUpdate {
 	return pu
 }
 
-// SetVersion sets the "version" field.
-func (pu *ProcedureUpdate) SetVersion(s string) *ProcedureUpdate {
-	pu.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (pu *ProcedureUpdate) SetReviewFrequency(e enums.Frequency) *ProcedureUpdate {
+	pu.mutation.SetReviewFrequency(e)
 	return pu
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableVersion(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureUpdate {
+	if e != nil {
+		pu.SetReviewFrequency(*e)
 	}
 	return pu
 }
 
-// ClearVersion clears the value of the "version" field.
-func (pu *ProcedureUpdate) ClearVersion() *ProcedureUpdate {
-	pu.mutation.ClearVersion()
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (pu *ProcedureUpdate) ClearReviewFrequency() *ProcedureUpdate {
+	pu.mutation.ClearReviewFrequency()
 	return pu
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (pu *ProcedureUpdate) SetPurposeAndScope(s string) *ProcedureUpdate {
-	pu.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (pu *ProcedureUpdate) SetRevision(s string) *ProcedureUpdate {
+	pu.mutation.SetRevision(s)
 	return pu
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillablePurposeAndScope(s *string) *ProcedureUpdate {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableRevision(s *string) *ProcedureUpdate {
 	if s != nil {
-		pu.SetPurposeAndScope(*s)
+		pu.SetRevision(*s)
 	}
 	return pu
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (pu *ProcedureUpdate) ClearPurposeAndScope() *ProcedureUpdate {
-	pu.mutation.ClearPurposeAndScope()
-	return pu
-}
-
-// SetBackground sets the "background" field.
-func (pu *ProcedureUpdate) SetBackground(s string) *ProcedureUpdate {
-	pu.mutation.SetBackground(s)
-	return pu
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableBackground(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetBackground(*s)
-	}
-	return pu
-}
-
-// ClearBackground clears the value of the "background" field.
-func (pu *ProcedureUpdate) ClearBackground() *ProcedureUpdate {
-	pu.mutation.ClearBackground()
-	return pu
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (pu *ProcedureUpdate) SetSatisfies(s string) *ProcedureUpdate {
-	pu.mutation.SetSatisfies(s)
-	return pu
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableSatisfies(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetSatisfies(*s)
-	}
-	return pu
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (pu *ProcedureUpdate) ClearSatisfies() *ProcedureUpdate {
-	pu.mutation.ClearSatisfies()
-	return pu
-}
-
-// SetDetails sets the "details" field.
-func (pu *ProcedureUpdate) SetDetails(m map[string]interface{}) *ProcedureUpdate {
-	pu.mutation.SetDetails(m)
-	return pu
-}
-
-// ClearDetails clears the value of the "details" field.
-func (pu *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
-	pu.mutation.ClearDetails()
+// ClearRevision clears the value of the "revision" field.
+func (pu *ProcedureUpdate) ClearRevision() *ProcedureUpdate {
+	pu.mutation.ClearRevision()
 	return pu
 }
 
@@ -369,6 +338,44 @@ func (pu *ProcedureUpdate) AddEditors(g ...*Group) *ProcedureUpdate {
 		ids[i] = g[i].ID
 	}
 	return pu.AddEditorIDs(ids...)
+}
+
+// SetApproverID sets the "approver" edge to the Group entity by ID.
+func (pu *ProcedureUpdate) SetApproverID(id string) *ProcedureUpdate {
+	pu.mutation.SetApproverID(id)
+	return pu
+}
+
+// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableApproverID(id *string) *ProcedureUpdate {
+	if id != nil {
+		pu = pu.SetApproverID(*id)
+	}
+	return pu
+}
+
+// SetApprover sets the "approver" edge to the Group entity.
+func (pu *ProcedureUpdate) SetApprover(g *Group) *ProcedureUpdate {
+	return pu.SetApproverID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (pu *ProcedureUpdate) SetDelegateID(id string) *ProcedureUpdate {
+	pu.mutation.SetDelegateID(id)
+	return pu
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableDelegateID(id *string) *ProcedureUpdate {
+	if id != nil {
+		pu = pu.SetDelegateID(*id)
+	}
+	return pu
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (pu *ProcedureUpdate) SetDelegate(g *Group) *ProcedureUpdate {
+	return pu.SetDelegateID(g.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -512,6 +519,18 @@ func (pu *ProcedureUpdate) RemoveEditors(g ...*Group) *ProcedureUpdate {
 		ids[i] = g[i].ID
 	}
 	return pu.RemoveEditorIDs(ids...)
+}
+
+// ClearApprover clears the "approver" edge to the Group entity.
+func (pu *ProcedureUpdate) ClearApprover() *ProcedureUpdate {
+	pu.mutation.ClearApprover()
+	return pu
+}
+
+// ClearDelegate clears the "delegate" edge to the Group entity.
+func (pu *ProcedureUpdate) ClearDelegate() *ProcedureUpdate {
+	pu.mutation.ClearDelegate()
+	return pu
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -694,6 +713,21 @@ func (pu *ProcedureUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.Status(); ok {
+		if err := procedure.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Procedure.status": %w`, err)}
+		}
+	}
+	if v, ok := pu.mutation.ReviewFrequency(); ok {
+		if err := procedure.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := pu.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -733,6 +767,17 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedure.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pu.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTags, value)
+		})
+	}
+	if pu.mutation.TagsCleared() {
+		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
+	}
 	if value, ok := pu.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -745,31 +790,14 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DeletedByCleared() {
 		_spec.ClearField(procedure.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := pu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedure.FieldTags, value)
-		})
-	}
-	if pu.mutation.TagsCleared() {
-		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
-	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.Description(); ok {
-		_spec.SetField(procedure.FieldDescription, field.TypeString, value)
-	}
-	if pu.mutation.DescriptionCleared() {
-		_spec.ClearField(procedure.FieldDescription, field.TypeString)
-	}
 	if value, ok := pu.mutation.Status(); ok {
-		_spec.SetField(procedure.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedure.FieldStatus, field.TypeEnum, value)
 	}
 	if pu.mutation.StatusCleared() {
-		_spec.ClearField(procedure.FieldStatus, field.TypeString)
+		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := pu.mutation.ProcedureType(); ok {
 		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
@@ -777,41 +805,35 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
 	}
+	if value, ok := pu.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
+	}
+	if pu.mutation.DetailsCleared() {
+		_spec.ClearField(procedure.FieldDetails, field.TypeString)
+	}
+	if value, ok := pu.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if pu.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(procedure.FieldApprovalRequired, field.TypeBool)
+	}
 	if value, ok := pu.mutation.ReviewDue(); ok {
 		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
 	}
 	if pu.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedure.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := pu.mutation.Version(); ok {
-		_spec.SetField(procedure.FieldVersion, field.TypeString, value)
+	if value, ok := pu.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if pu.mutation.VersionCleared() {
-		_spec.ClearField(procedure.FieldVersion, field.TypeString)
+	if pu.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := pu.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedure.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := pu.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
 	}
-	if pu.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(procedure.FieldPurposeAndScope, field.TypeString)
-	}
-	if value, ok := pu.mutation.Background(); ok {
-		_spec.SetField(procedure.FieldBackground, field.TypeString, value)
-	}
-	if pu.mutation.BackgroundCleared() {
-		_spec.ClearField(procedure.FieldBackground, field.TypeString)
-	}
-	if value, ok := pu.mutation.Satisfies(); ok {
-		_spec.SetField(procedure.FieldSatisfies, field.TypeString, value)
-	}
-	if pu.mutation.SatisfiesCleared() {
-		_spec.ClearField(procedure.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := pu.mutation.Details(); ok {
-		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
-	}
-	if pu.mutation.DetailsCleared() {
-		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
+	if pu.mutation.RevisionCleared() {
+		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -935,6 +957,68 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = pu.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.ApproverCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ApproverTable,
+			Columns: []string{procedure.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ApproverIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ApproverTable,
+			Columns: []string{procedure.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.DelegateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.DelegateTable,
+			Columns: []string{procedure.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.DelegateTable,
+			Columns: []string{procedure.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1284,6 +1368,24 @@ func (puo *ProcedureUpdateOne) ClearUpdatedBy() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetTags sets the "tags" field.
+func (puo *ProcedureUpdateOne) SetTags(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetTags(s)
+	return puo
+}
+
+// AppendTags appends s to the "tags" field.
+func (puo *ProcedureUpdateOne) AppendTags(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendTags(s)
+	return puo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (puo *ProcedureUpdateOne) ClearTags() *ProcedureUpdateOne {
+	puo.mutation.ClearTags()
+	return puo
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (puo *ProcedureUpdateOne) SetDeletedAt(t time.Time) *ProcedureUpdateOne {
 	puo.mutation.SetDeletedAt(t)
@@ -1324,24 +1426,6 @@ func (puo *ProcedureUpdateOne) ClearDeletedBy() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetTags sets the "tags" field.
-func (puo *ProcedureUpdateOne) SetTags(s []string) *ProcedureUpdateOne {
-	puo.mutation.SetTags(s)
-	return puo
-}
-
-// AppendTags appends s to the "tags" field.
-func (puo *ProcedureUpdateOne) AppendTags(s []string) *ProcedureUpdateOne {
-	puo.mutation.AppendTags(s)
-	return puo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (puo *ProcedureUpdateOne) ClearTags() *ProcedureUpdateOne {
-	puo.mutation.ClearTags()
-	return puo
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (puo *ProcedureUpdateOne) SetOwnerID(s string) *ProcedureUpdateOne {
 	puo.mutation.SetOwnerID(s)
@@ -1376,36 +1460,16 @@ func (puo *ProcedureUpdateOne) SetNillableName(s *string) *ProcedureUpdateOne {
 	return puo
 }
 
-// SetDescription sets the "description" field.
-func (puo *ProcedureUpdateOne) SetDescription(s string) *ProcedureUpdateOne {
-	puo.mutation.SetDescription(s)
-	return puo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableDescription(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetDescription(*s)
-	}
-	return puo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (puo *ProcedureUpdateOne) ClearDescription() *ProcedureUpdateOne {
-	puo.mutation.ClearDescription()
-	return puo
-}
-
 // SetStatus sets the "status" field.
-func (puo *ProcedureUpdateOne) SetStatus(s string) *ProcedureUpdateOne {
-	puo.mutation.SetStatus(s)
+func (puo *ProcedureUpdateOne) SetStatus(es enums.DocumentStatus) *ProcedureUpdateOne {
+	puo.mutation.SetStatus(es)
 	return puo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableStatus(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetStatus(*s)
+func (puo *ProcedureUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ProcedureUpdateOne {
+	if es != nil {
+		puo.SetStatus(*es)
 	}
 	return puo
 }
@@ -1436,6 +1500,46 @@ func (puo *ProcedureUpdateOne) ClearProcedureType() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetDetails sets the "details" field.
+func (puo *ProcedureUpdateOne) SetDetails(s string) *ProcedureUpdateOne {
+	puo.mutation.SetDetails(s)
+	return puo
+}
+
+// SetNillableDetails sets the "details" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableDetails(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetDetails(*s)
+	}
+	return puo
+}
+
+// ClearDetails clears the value of the "details" field.
+func (puo *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
+	puo.mutation.ClearDetails()
+	return puo
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (puo *ProcedureUpdateOne) SetApprovalRequired(b bool) *ProcedureUpdateOne {
+	puo.mutation.SetApprovalRequired(b)
+	return puo
+}
+
+// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableApprovalRequired(b *bool) *ProcedureUpdateOne {
+	if b != nil {
+		puo.SetApprovalRequired(*b)
+	}
+	return puo
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (puo *ProcedureUpdateOne) ClearApprovalRequired() *ProcedureUpdateOne {
+	puo.mutation.ClearApprovalRequired()
+	return puo
+}
+
 // SetReviewDue sets the "review_due" field.
 func (puo *ProcedureUpdateOne) SetReviewDue(t time.Time) *ProcedureUpdateOne {
 	puo.mutation.SetReviewDue(t)
@@ -1456,95 +1560,43 @@ func (puo *ProcedureUpdateOne) ClearReviewDue() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetVersion sets the "version" field.
-func (puo *ProcedureUpdateOne) SetVersion(s string) *ProcedureUpdateOne {
-	puo.mutation.SetVersion(s)
+// SetReviewFrequency sets the "review_frequency" field.
+func (puo *ProcedureUpdateOne) SetReviewFrequency(e enums.Frequency) *ProcedureUpdateOne {
+	puo.mutation.SetReviewFrequency(e)
 	return puo
 }
 
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableVersion(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetVersion(*s)
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureUpdateOne {
+	if e != nil {
+		puo.SetReviewFrequency(*e)
 	}
 	return puo
 }
 
-// ClearVersion clears the value of the "version" field.
-func (puo *ProcedureUpdateOne) ClearVersion() *ProcedureUpdateOne {
-	puo.mutation.ClearVersion()
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (puo *ProcedureUpdateOne) ClearReviewFrequency() *ProcedureUpdateOne {
+	puo.mutation.ClearReviewFrequency()
 	return puo
 }
 
-// SetPurposeAndScope sets the "purpose_and_scope" field.
-func (puo *ProcedureUpdateOne) SetPurposeAndScope(s string) *ProcedureUpdateOne {
-	puo.mutation.SetPurposeAndScope(s)
+// SetRevision sets the "revision" field.
+func (puo *ProcedureUpdateOne) SetRevision(s string) *ProcedureUpdateOne {
+	puo.mutation.SetRevision(s)
 	return puo
 }
 
-// SetNillablePurposeAndScope sets the "purpose_and_scope" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillablePurposeAndScope(s *string) *ProcedureUpdateOne {
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableRevision(s *string) *ProcedureUpdateOne {
 	if s != nil {
-		puo.SetPurposeAndScope(*s)
+		puo.SetRevision(*s)
 	}
 	return puo
 }
 
-// ClearPurposeAndScope clears the value of the "purpose_and_scope" field.
-func (puo *ProcedureUpdateOne) ClearPurposeAndScope() *ProcedureUpdateOne {
-	puo.mutation.ClearPurposeAndScope()
-	return puo
-}
-
-// SetBackground sets the "background" field.
-func (puo *ProcedureUpdateOne) SetBackground(s string) *ProcedureUpdateOne {
-	puo.mutation.SetBackground(s)
-	return puo
-}
-
-// SetNillableBackground sets the "background" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableBackground(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetBackground(*s)
-	}
-	return puo
-}
-
-// ClearBackground clears the value of the "background" field.
-func (puo *ProcedureUpdateOne) ClearBackground() *ProcedureUpdateOne {
-	puo.mutation.ClearBackground()
-	return puo
-}
-
-// SetSatisfies sets the "satisfies" field.
-func (puo *ProcedureUpdateOne) SetSatisfies(s string) *ProcedureUpdateOne {
-	puo.mutation.SetSatisfies(s)
-	return puo
-}
-
-// SetNillableSatisfies sets the "satisfies" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableSatisfies(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetSatisfies(*s)
-	}
-	return puo
-}
-
-// ClearSatisfies clears the value of the "satisfies" field.
-func (puo *ProcedureUpdateOne) ClearSatisfies() *ProcedureUpdateOne {
-	puo.mutation.ClearSatisfies()
-	return puo
-}
-
-// SetDetails sets the "details" field.
-func (puo *ProcedureUpdateOne) SetDetails(m map[string]interface{}) *ProcedureUpdateOne {
-	puo.mutation.SetDetails(m)
-	return puo
-}
-
-// ClearDetails clears the value of the "details" field.
-func (puo *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
-	puo.mutation.ClearDetails()
+// ClearRevision clears the value of the "revision" field.
+func (puo *ProcedureUpdateOne) ClearRevision() *ProcedureUpdateOne {
+	puo.mutation.ClearRevision()
 	return puo
 }
 
@@ -1581,6 +1633,44 @@ func (puo *ProcedureUpdateOne) AddEditors(g ...*Group) *ProcedureUpdateOne {
 		ids[i] = g[i].ID
 	}
 	return puo.AddEditorIDs(ids...)
+}
+
+// SetApproverID sets the "approver" edge to the Group entity by ID.
+func (puo *ProcedureUpdateOne) SetApproverID(id string) *ProcedureUpdateOne {
+	puo.mutation.SetApproverID(id)
+	return puo
+}
+
+// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableApproverID(id *string) *ProcedureUpdateOne {
+	if id != nil {
+		puo = puo.SetApproverID(*id)
+	}
+	return puo
+}
+
+// SetApprover sets the "approver" edge to the Group entity.
+func (puo *ProcedureUpdateOne) SetApprover(g *Group) *ProcedureUpdateOne {
+	return puo.SetApproverID(g.ID)
+}
+
+// SetDelegateID sets the "delegate" edge to the Group entity by ID.
+func (puo *ProcedureUpdateOne) SetDelegateID(id string) *ProcedureUpdateOne {
+	puo.mutation.SetDelegateID(id)
+	return puo
+}
+
+// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableDelegateID(id *string) *ProcedureUpdateOne {
+	if id != nil {
+		puo = puo.SetDelegateID(*id)
+	}
+	return puo
+}
+
+// SetDelegate sets the "delegate" edge to the Group entity.
+func (puo *ProcedureUpdateOne) SetDelegate(g *Group) *ProcedureUpdateOne {
+	return puo.SetDelegateID(g.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -1724,6 +1814,18 @@ func (puo *ProcedureUpdateOne) RemoveEditors(g ...*Group) *ProcedureUpdateOne {
 		ids[i] = g[i].ID
 	}
 	return puo.RemoveEditorIDs(ids...)
+}
+
+// ClearApprover clears the "approver" edge to the Group entity.
+func (puo *ProcedureUpdateOne) ClearApprover() *ProcedureUpdateOne {
+	puo.mutation.ClearApprover()
+	return puo
+}
+
+// ClearDelegate clears the "delegate" edge to the Group entity.
+func (puo *ProcedureUpdateOne) ClearDelegate() *ProcedureUpdateOne {
+	puo.mutation.ClearDelegate()
+	return puo
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1919,6 +2021,21 @@ func (puo *ProcedureUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.Status(); ok {
+		if err := procedure.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Procedure.status": %w`, err)}
+		}
+	}
+	if v, ok := puo.mutation.ReviewFrequency(); ok {
+		if err := procedure.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := puo.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1975,6 +2092,17 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedure.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := puo.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTags, value)
+		})
+	}
+	if puo.mutation.TagsCleared() {
+		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
+	}
 	if value, ok := puo.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1987,31 +2115,14 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	if puo.mutation.DeletedByCleared() {
 		_spec.ClearField(procedure.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := puo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedure.FieldTags, value)
-		})
-	}
-	if puo.mutation.TagsCleared() {
-		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
-	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.Description(); ok {
-		_spec.SetField(procedure.FieldDescription, field.TypeString, value)
-	}
-	if puo.mutation.DescriptionCleared() {
-		_spec.ClearField(procedure.FieldDescription, field.TypeString)
-	}
 	if value, ok := puo.mutation.Status(); ok {
-		_spec.SetField(procedure.FieldStatus, field.TypeString, value)
+		_spec.SetField(procedure.FieldStatus, field.TypeEnum, value)
 	}
 	if puo.mutation.StatusCleared() {
-		_spec.ClearField(procedure.FieldStatus, field.TypeString)
+		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := puo.mutation.ProcedureType(); ok {
 		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
@@ -2019,41 +2130,35 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	if puo.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
 	}
+	if value, ok := puo.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
+	}
+	if puo.mutation.DetailsCleared() {
+		_spec.ClearField(procedure.FieldDetails, field.TypeString)
+	}
+	if value, ok := puo.mutation.ApprovalRequired(); ok {
+		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
+	}
+	if puo.mutation.ApprovalRequiredCleared() {
+		_spec.ClearField(procedure.FieldApprovalRequired, field.TypeBool)
+	}
 	if value, ok := puo.mutation.ReviewDue(); ok {
 		_spec.SetField(procedure.FieldReviewDue, field.TypeTime, value)
 	}
 	if puo.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedure.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := puo.mutation.Version(); ok {
-		_spec.SetField(procedure.FieldVersion, field.TypeString, value)
+	if value, ok := puo.mutation.ReviewFrequency(); ok {
+		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if puo.mutation.VersionCleared() {
-		_spec.ClearField(procedure.FieldVersion, field.TypeString)
+	if puo.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := puo.mutation.PurposeAndScope(); ok {
-		_spec.SetField(procedure.FieldPurposeAndScope, field.TypeString, value)
+	if value, ok := puo.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
 	}
-	if puo.mutation.PurposeAndScopeCleared() {
-		_spec.ClearField(procedure.FieldPurposeAndScope, field.TypeString)
-	}
-	if value, ok := puo.mutation.Background(); ok {
-		_spec.SetField(procedure.FieldBackground, field.TypeString, value)
-	}
-	if puo.mutation.BackgroundCleared() {
-		_spec.ClearField(procedure.FieldBackground, field.TypeString)
-	}
-	if value, ok := puo.mutation.Satisfies(); ok {
-		_spec.SetField(procedure.FieldSatisfies, field.TypeString, value)
-	}
-	if puo.mutation.SatisfiesCleared() {
-		_spec.ClearField(procedure.FieldSatisfies, field.TypeString)
-	}
-	if value, ok := puo.mutation.Details(); ok {
-		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
-	}
-	if puo.mutation.DetailsCleared() {
-		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
+	if puo.mutation.RevisionCleared() {
+		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2177,6 +2282,68 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ApproverCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ApproverTable,
+			Columns: []string{procedure.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ApproverIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.ApproverTable,
+			Columns: []string{procedure.ApproverColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.DelegateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.DelegateTable,
+			Columns: []string{procedure.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.DelegateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.DelegateTable,
+			Columns: []string{procedure.DelegateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

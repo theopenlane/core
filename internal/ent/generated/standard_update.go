@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -124,6 +125,26 @@ func (su *StandardUpdate) ClearTags() *StandardUpdate {
 	return su
 }
 
+// SetRevision sets the "revision" field.
+func (su *StandardUpdate) SetRevision(s string) *StandardUpdate {
+	su.mutation.SetRevision(s)
+	return su
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableRevision(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetRevision(*s)
+	}
+	return su
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (su *StandardUpdate) ClearRevision() *StandardUpdate {
+	su.mutation.ClearRevision()
+	return su
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (su *StandardUpdate) SetOwnerID(s string) *StandardUpdate {
 	su.mutation.SetOwnerID(s)
@@ -218,6 +239,26 @@ func (su *StandardUpdate) ClearDescription() *StandardUpdate {
 	return su
 }
 
+// SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
+func (su *StandardUpdate) SetGoverningBodyLogoURL(s string) *StandardUpdate {
+	su.mutation.SetGoverningBodyLogoURL(s)
+	return su
+}
+
+// SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableGoverningBodyLogoURL(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetGoverningBodyLogoURL(*s)
+	}
+	return su
+}
+
+// ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
+func (su *StandardUpdate) ClearGoverningBodyLogoURL() *StandardUpdate {
+	su.mutation.ClearGoverningBodyLogoURL()
+	return su
+}
+
 // SetGoverningBody sets the "governing_body" field.
 func (su *StandardUpdate) SetGoverningBody(s string) *StandardUpdate {
 	su.mutation.SetGoverningBody(s)
@@ -277,15 +318,15 @@ func (su *StandardUpdate) ClearLink() *StandardUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (su *StandardUpdate) SetStatus(s string) *StandardUpdate {
-	su.mutation.SetStatus(s)
+func (su *StandardUpdate) SetStatus(es enums.StandardStatus) *StandardUpdate {
+	su.mutation.SetStatus(es)
 	return su
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableStatus(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetStatus(*s)
+func (su *StandardUpdate) SetNillableStatus(es *enums.StandardStatus) *StandardUpdate {
+	if es != nil {
+		su.SetStatus(*es)
 	}
 	return su
 }
@@ -396,26 +437,6 @@ func (su *StandardUpdate) ClearVersion() *StandardUpdate {
 	return su
 }
 
-// SetRevision sets the "revision" field.
-func (su *StandardUpdate) SetRevision(s string) *StandardUpdate {
-	su.mutation.SetRevision(s)
-	return su
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableRevision(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetRevision(*s)
-	}
-	return su
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (su *StandardUpdate) ClearRevision() *StandardUpdate {
-	su.mutation.ClearRevision()
-	return su
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (su *StandardUpdate) SetOwner(o *Organization) *StandardUpdate {
 	return su.SetOwnerID(o.ID)
@@ -512,9 +533,24 @@ func (su *StandardUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *StandardUpdate) check() error {
+	if v, ok := su.mutation.Revision(); ok {
+		if err := standard.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
+		}
+	}
 	if v, ok := su.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
+	if v, ok := su.mutation.GoverningBodyLogoURL(); ok {
+		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := su.mutation.Status(); ok {
+		if err := standard.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
 	}
 	return nil
@@ -579,6 +615,12 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.TagsCleared() {
 		_spec.ClearField(standard.FieldTags, field.TypeJSON)
 	}
+	if value, ok := su.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
+	}
+	if su.mutation.RevisionCleared() {
+		_spec.ClearField(standard.FieldRevision, field.TypeString)
+	}
 	if value, ok := su.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
@@ -599,6 +641,12 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
+	}
+	if value, ok := su.mutation.GoverningBodyLogoURL(); ok {
+		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
+	}
+	if su.mutation.GoverningBodyLogoURLCleared() {
+		_spec.ClearField(standard.FieldGoverningBodyLogoURL, field.TypeString)
 	}
 	if value, ok := su.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
@@ -624,10 +672,10 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
 	if value, ok := su.mutation.Status(); ok {
-		_spec.SetField(standard.FieldStatus, field.TypeString, value)
+		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 	}
 	if su.mutation.StatusCleared() {
-		_spec.ClearField(standard.FieldStatus, field.TypeString)
+		_spec.ClearField(standard.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := su.mutation.IsPublic(); ok {
 		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
@@ -658,12 +706,6 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
-	}
-	if value, ok := su.mutation.Revision(); ok {
-		_spec.SetField(standard.FieldRevision, field.TypeString, value)
-	}
-	if su.mutation.RevisionCleared() {
-		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
 	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -858,6 +900,26 @@ func (suo *StandardUpdateOne) ClearTags() *StandardUpdateOne {
 	return suo
 }
 
+// SetRevision sets the "revision" field.
+func (suo *StandardUpdateOne) SetRevision(s string) *StandardUpdateOne {
+	suo.mutation.SetRevision(s)
+	return suo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableRevision(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetRevision(*s)
+	}
+	return suo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (suo *StandardUpdateOne) ClearRevision() *StandardUpdateOne {
+	suo.mutation.ClearRevision()
+	return suo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (suo *StandardUpdateOne) SetOwnerID(s string) *StandardUpdateOne {
 	suo.mutation.SetOwnerID(s)
@@ -952,6 +1014,26 @@ func (suo *StandardUpdateOne) ClearDescription() *StandardUpdateOne {
 	return suo
 }
 
+// SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
+func (suo *StandardUpdateOne) SetGoverningBodyLogoURL(s string) *StandardUpdateOne {
+	suo.mutation.SetGoverningBodyLogoURL(s)
+	return suo
+}
+
+// SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableGoverningBodyLogoURL(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetGoverningBodyLogoURL(*s)
+	}
+	return suo
+}
+
+// ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
+func (suo *StandardUpdateOne) ClearGoverningBodyLogoURL() *StandardUpdateOne {
+	suo.mutation.ClearGoverningBodyLogoURL()
+	return suo
+}
+
 // SetGoverningBody sets the "governing_body" field.
 func (suo *StandardUpdateOne) SetGoverningBody(s string) *StandardUpdateOne {
 	suo.mutation.SetGoverningBody(s)
@@ -1011,15 +1093,15 @@ func (suo *StandardUpdateOne) ClearLink() *StandardUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (suo *StandardUpdateOne) SetStatus(s string) *StandardUpdateOne {
-	suo.mutation.SetStatus(s)
+func (suo *StandardUpdateOne) SetStatus(es enums.StandardStatus) *StandardUpdateOne {
+	suo.mutation.SetStatus(es)
 	return suo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableStatus(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetStatus(*s)
+func (suo *StandardUpdateOne) SetNillableStatus(es *enums.StandardStatus) *StandardUpdateOne {
+	if es != nil {
+		suo.SetStatus(*es)
 	}
 	return suo
 }
@@ -1127,26 +1209,6 @@ func (suo *StandardUpdateOne) SetNillableVersion(s *string) *StandardUpdateOne {
 // ClearVersion clears the value of the "version" field.
 func (suo *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
 	suo.mutation.ClearVersion()
-	return suo
-}
-
-// SetRevision sets the "revision" field.
-func (suo *StandardUpdateOne) SetRevision(s string) *StandardUpdateOne {
-	suo.mutation.SetRevision(s)
-	return suo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableRevision(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetRevision(*s)
-	}
-	return suo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (suo *StandardUpdateOne) ClearRevision() *StandardUpdateOne {
-	suo.mutation.ClearRevision()
 	return suo
 }
 
@@ -1259,9 +1321,24 @@ func (suo *StandardUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *StandardUpdateOne) check() error {
+	if v, ok := suo.mutation.Revision(); ok {
+		if err := standard.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
+		}
+	}
 	if v, ok := suo.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
+	if v, ok := suo.mutation.GoverningBodyLogoURL(); ok {
+		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := suo.mutation.Status(); ok {
+		if err := standard.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
 	}
 	return nil
@@ -1343,6 +1420,12 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.TagsCleared() {
 		_spec.ClearField(standard.FieldTags, field.TypeJSON)
 	}
+	if value, ok := suo.mutation.Revision(); ok {
+		_spec.SetField(standard.FieldRevision, field.TypeString, value)
+	}
+	if suo.mutation.RevisionCleared() {
+		_spec.ClearField(standard.FieldRevision, field.TypeString)
+	}
 	if value, ok := suo.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
@@ -1363,6 +1446,12 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	}
 	if suo.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
+	}
+	if value, ok := suo.mutation.GoverningBodyLogoURL(); ok {
+		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
+	}
+	if suo.mutation.GoverningBodyLogoURLCleared() {
+		_spec.ClearField(standard.FieldGoverningBodyLogoURL, field.TypeString)
 	}
 	if value, ok := suo.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
@@ -1388,10 +1477,10 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
 	if value, ok := suo.mutation.Status(); ok {
-		_spec.SetField(standard.FieldStatus, field.TypeString, value)
+		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 	}
 	if suo.mutation.StatusCleared() {
-		_spec.ClearField(standard.FieldStatus, field.TypeString)
+		_spec.ClearField(standard.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := suo.mutation.IsPublic(); ok {
 		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
@@ -1422,12 +1511,6 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	}
 	if suo.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
-	}
-	if value, ok := suo.mutation.Revision(); ok {
-		_spec.SetField(standard.FieldRevision, field.TypeString, value)
-	}
-	if suo.mutation.RevisionCleared() {
-		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
 	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

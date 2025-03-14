@@ -116,6 +116,20 @@ func (coc *ControlObjectiveCreate) SetNillableDeletedBy(s *string) *ControlObjec
 	return coc
 }
 
+// SetRevision sets the "revision" field.
+func (coc *ControlObjectiveCreate) SetRevision(s string) *ControlObjectiveCreate {
+	coc.mutation.SetRevision(s)
+	return coc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableRevision(s *string) *ControlObjectiveCreate {
+	if s != nil {
+		coc.SetRevision(*s)
+	}
+	return coc
+}
+
 // SetDisplayID sets the "display_id" field.
 func (coc *ControlObjectiveCreate) SetDisplayID(s string) *ControlObjectiveCreate {
 	coc.mutation.SetDisplayID(s)
@@ -200,20 +214,6 @@ func (coc *ControlObjectiveCreate) SetControlObjectiveType(s string) *ControlObj
 func (coc *ControlObjectiveCreate) SetNillableControlObjectiveType(s *string) *ControlObjectiveCreate {
 	if s != nil {
 		coc.SetControlObjectiveType(*s)
-	}
-	return coc
-}
-
-// SetVersion sets the "version" field.
-func (coc *ControlObjectiveCreate) SetVersion(s string) *ControlObjectiveCreate {
-	coc.mutation.SetVersion(s)
-	return coc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableVersion(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetVersion(*s)
 	}
 	return coc
 }
@@ -496,6 +496,10 @@ func (coc *ControlObjectiveCreate) defaults() error {
 		v := controlobjective.DefaultUpdatedAt()
 		coc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := coc.mutation.Revision(); !ok {
+		v := controlobjective.DefaultRevision
+		coc.mutation.SetRevision(v)
+	}
 	if _, ok := coc.mutation.Tags(); !ok {
 		v := controlobjective.DefaultTags
 		coc.mutation.SetTags(v)
@@ -516,6 +520,11 @@ func (coc *ControlObjectiveCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (coc *ControlObjectiveCreate) check() error {
+	if v, ok := coc.mutation.Revision(); ok {
+		if err := controlobjective.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.revision": %w`, err)}
+		}
+	}
 	if _, ok := coc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlObjective.display_id"`)}
 	}
@@ -602,6 +611,10 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := coc.mutation.Revision(); ok {
+		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := coc.mutation.DisplayID(); ok {
 		_spec.SetField(controlobjective.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
@@ -629,10 +642,6 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 	if value, ok := coc.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjective.FieldControlObjectiveType, field.TypeString, value)
 		_node.ControlObjectiveType = value
-	}
-	if value, ok := coc.mutation.Version(); ok {
-		_spec.SetField(controlobjective.FieldVersion, field.TypeString, value)
-		_node.Version = value
 	}
 	if value, ok := coc.mutation.Category(); ok {
 		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)

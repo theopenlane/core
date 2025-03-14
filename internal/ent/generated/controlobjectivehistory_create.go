@@ -140,6 +140,20 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableDeletedBy(s *string) *Cont
 	return cohc
 }
 
+// SetRevision sets the "revision" field.
+func (cohc *ControlObjectiveHistoryCreate) SetRevision(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetRevision(s)
+	return cohc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableRevision(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetRevision(*s)
+	}
+	return cohc
+}
+
 // SetDisplayID sets the "display_id" field.
 func (cohc *ControlObjectiveHistoryCreate) SetDisplayID(s string) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetDisplayID(s)
@@ -224,20 +238,6 @@ func (cohc *ControlObjectiveHistoryCreate) SetControlObjectiveType(s string) *Co
 func (cohc *ControlObjectiveHistoryCreate) SetNillableControlObjectiveType(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
 		cohc.SetControlObjectiveType(*s)
-	}
-	return cohc
-}
-
-// SetVersion sets the "version" field.
-func (cohc *ControlObjectiveHistoryCreate) SetVersion(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetVersion(s)
-	return cohc
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableVersion(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetVersion(*s)
 	}
 	return cohc
 }
@@ -330,6 +330,10 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 	if _, ok := cohc.mutation.UpdatedAt(); !ok {
 		v := controlobjectivehistory.DefaultUpdatedAt()
 		cohc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := cohc.mutation.Revision(); !ok {
+		v := controlobjectivehistory.DefaultRevision
+		cohc.mutation.SetRevision(v)
 	}
 	if _, ok := cohc.mutation.Tags(); !ok {
 		v := controlobjectivehistory.DefaultTags
@@ -441,6 +445,10 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := cohc.mutation.Revision(); ok {
+		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := cohc.mutation.DisplayID(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
@@ -472,10 +480,6 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 	if value, ok := cohc.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlObjectiveType, field.TypeString, value)
 		_node.ControlObjectiveType = value
-	}
-	if value, ok := cohc.mutation.Version(); ok {
-		_spec.SetField(controlobjectivehistory.FieldVersion, field.TypeString, value)
-		_node.Version = value
 	}
 	if value, ok := cohc.mutation.Category(); ok {
 		_spec.SetField(controlobjectivehistory.FieldCategory, field.TypeString, value)
