@@ -103,7 +103,7 @@ func (suite *GraphTestSuite) TestQueryNarrative() {
 			assert.NotEmpty(t, resp.Narrative.Name)
 
 			require.Len(t, resp.Narrative.Programs, 1)
-			assert.NotEmpty(t, resp.Narrative.Programs[0].ID)
+			assert.NotEmpty(t, resp.Narrative.Programs.Edges[0].Node.ID)
 		})
 	}
 }
@@ -332,8 +332,8 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 				require.NotEmpty(t, resp.CreateNarrative.Narrative.Programs)
 				require.Len(t, resp.CreateNarrative.Narrative.Programs, len(tc.request.ProgramIDs))
 
-				for i, p := range resp.CreateNarrative.Narrative.Programs {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
+				for i, p := range resp.CreateNarrative.Narrative.Programs.Edges {
+					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
 				assert.Empty(t, resp.CreateNarrative.Narrative.Programs)

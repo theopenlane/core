@@ -50,8 +50,12 @@ mutation CreateControlWithSubcontrols($input: CreateControlWithSubcontrolsInput!
       id
       refCode
       subcontrols {
-        id
-        refCode
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
       }
     }
   }
@@ -64,30 +68,54 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       id
       displayID
       members {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       controls {
-        id
-        refCode
-        subcontrols {
-          id
-          refCode
+        edges {
+          node {
+            id
+            refCode
+            subcontrols {
+              edges {
+                node {
+                  id
+                  refCode
+                }
+              }
+            }
+          }
         }
       }
       risks {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       internalPolicies {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       procedures {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
     }
   }
@@ -113,32 +141,40 @@ mutation CreateProgram($input: CreateProgramInput!) {
       updatedAt
       updatedBy
       procedures {
-        createdAt
-        createdBy
-        details
-        id
-        displayID
-        name
-        procedureType
-        status
-        tags
-        updatedAt
-        updatedBy
-        revision
+        edges {
+          node {
+            createdAt
+            createdBy
+            details
+            id
+            displayID
+            name
+            procedureType
+            status
+            tags
+            updatedAt
+            updatedBy
+            revision
+          }
+        }
       }
       internalPolicies {
-        createdAt
-        createdBy
-        details
-        id
-        displayID
-        name
-        policyType
-        status
-        tags
-        updatedAt
-        updatedBy
-        revision
+        edges {
+          node {
+            createdAt
+            createdBy
+            details
+            id
+            displayID
+            name
+            policyType
+            status
+            tags
+            updatedAt
+            updatedBy
+            revision
+          }
+        }
       }
       editors {
         id
@@ -163,11 +199,15 @@ mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
       id
       displayID
       members {
-        id
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -201,32 +241,40 @@ query GetAllPrograms {
         updatedAt
         updatedBy
         procedures {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          procedureType
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
+          edges {
+            node {
+              createdAt
+              createdBy
+              details
+              id
+              displayID
+              name
+              procedureType
+              status
+              tags
+              updatedAt
+              updatedBy
+              revision
+            }
+          }
         }
         internalPolicies {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          policyType
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
+          edges {
+            node {
+              createdAt
+              createdBy
+              details
+              id
+              displayID
+              name
+              policyType
+              status
+              tags
+              updatedAt
+              updatedBy
+              revision
+            }
+          }
         }
         editors {
           id
@@ -241,11 +289,15 @@ query GetAllPrograms {
           name
         }
         members {
-          id
-          user {
-            id
-            firstName
-            lastName
+          edges {
+            node {
+              id
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
       }
@@ -272,32 +324,40 @@ query GetProgramByID($programId: ID!) {
     updatedAt
     updatedBy
     procedures {
-      createdAt
-      createdBy
-      details
-      id
-      displayID
-      name
-      procedureType
-      status
-      tags
-      updatedAt
-      updatedBy
-      revision
+      edges {
+        node {
+          createdAt
+          createdBy
+          details
+          id
+          displayID
+          name
+          procedureType
+          status
+          tags
+          updatedAt
+          updatedBy
+          revision
+        }
+      }
     }
     internalPolicies {
-      createdAt
-      createdBy
-      details
-      id
-      displayID
-      name
-      policyType
-      status
-      tags
-      updatedAt
-      updatedBy
-      revision
+      edges {
+        node {
+          createdAt
+          createdBy
+          details
+          id
+          displayID
+          name
+          policyType
+          status
+          tags
+          updatedAt
+          updatedBy
+          revision
+        }
+      }
     }
     editors {
       id
@@ -312,11 +372,15 @@ query GetProgramByID($programId: ID!) {
       name
     }
     members {
-      id
-      user {
-        id
-        firstName
-        lastName
+      edges {
+        node {
+          id
+          user {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
   }
@@ -343,32 +407,40 @@ query GetPrograms($where: ProgramWhereInput) {
         updatedAt
         updatedBy
         procedures {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          procedureType
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
+          edges {
+            node {
+              createdAt
+              createdBy
+              details
+              id
+              displayID
+              name
+              procedureType
+              status
+              tags
+              updatedAt
+              updatedBy
+              revision
+            }
+          }
         }
         internalPolicies {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          policyType
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
+          edges {
+            node {
+              createdAt
+              createdBy
+              details
+              id
+              displayID
+              name
+              policyType
+              status
+              tags
+              updatedAt
+              updatedBy
+              revision
+            }
+          }
         }
         editors {
           id
@@ -383,11 +455,15 @@ query GetPrograms($where: ProgramWhereInput) {
           name
         }
         members {
-          id
-          user {
-            id
-            firstName
-            lastName
+          edges {
+            node {
+              id
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
       }
@@ -414,30 +490,40 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       updatedAt
       updatedBy
       procedures {
-        createdAt
-        createdBy
-        details
-        id
-        name
-        procedureType
-        status
-        tags
-        updatedAt
-        updatedBy
-        revision
+        edges {
+          node {
+            createdAt
+            createdBy
+            details
+            id
+            displayID
+            name
+            procedureType
+            status
+            tags
+            updatedAt
+            updatedBy
+            revision
+          }
+        }
       }
       internalPolicies {
-        createdAt
-        createdBy
-        details
-        id
-        name
-        policyType
-        status
-        tags
-        updatedAt
-        updatedBy
-        revision
+        edges {
+          node {
+            createdAt
+            createdBy
+            details
+            id
+            displayID
+            name
+            policyType
+            status
+            tags
+            updatedAt
+            updatedBy
+            revision
+          }
+        }
       }
       editors {
         id
@@ -452,11 +538,15 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         name
       }
       members {
-        id
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }

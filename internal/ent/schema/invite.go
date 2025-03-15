@@ -51,6 +51,9 @@ func (Invite) Fields() []ent.Field {
 			Default(func() time.Time {
 				return time.Now().AddDate(0, 0, defaultInviteExpiresDays)
 			}).
+			Annotations(
+				entgql.OrderField("expires"),
+			).
 			Optional(),
 		field.String("recipient").
 			Comment("the email used as input to generate the invitation token and is the destination person the invitation is sent to who is required to accept to join the organization").
@@ -63,12 +66,18 @@ func (Invite) Fields() []ent.Field {
 		field.Enum("status").
 			Comment("the status of the invitation").
 			GoType(enums.InviteStatus("")).
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Default(string(enums.InvitationSent)),
 		field.Enum("role").
 			GoType(enums.Role("")).
 			Default(string(enums.RoleMember)),
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send of the invitation, maximum of 5").
+			Annotations(
+				entgql.OrderField("send_attempts"),
+			).
 			Default(0),
 		field.String("requestor_id").
 			Comment("the user who initiated the invitation").
@@ -111,7 +120,7 @@ func (Invite) Indexes() []ent.Index {
 // Edges of the Invite
 func (Invite) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -120,6 +129,7 @@ func (Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 		history.Annotations{

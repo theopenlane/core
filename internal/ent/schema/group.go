@@ -93,10 +93,10 @@ func (Group) Edges() []ent.Edge {
 			// this should be done via the members edge
 			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", GroupMembership.Type),
-		edge.To("events", Event.Type),
-		edge.To("integrations", Integration.Type),
-		edge.To("files", File.Type),
-		edge.To("tasks", Task.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		edge.To("integrations", Integration.Type).Annotations(entgql.RelayConnection()),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -167,6 +167,7 @@ func (Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(

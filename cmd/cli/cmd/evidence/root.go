@@ -90,20 +90,20 @@ func tableOutput(out []openlaneclient.Evidence) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Description", "CollectionProcedure", "Source", "IsAutomated", "URL", "NumOfFiles", "Programs", "CreatedAt", "UpdatedAt")
 	for _, i := range out {
-		prgs := i.Programs
+		prgs := i.Programs.Edges
 
 		progNames := make([]string, 0, len(prgs))
 
 		// add programs with either no end date or end date before the current date
 		for _, p := range prgs {
-			if p.EndDate == nil {
-				progNames = append(progNames, p.Name)
-			} else if p.EndDate.Before(time.Now()) {
-				progNames = append(progNames, p.Name)
+			if p.Node.EndDate == nil {
+				progNames = append(progNames, p.Node.Name)
+			} else if p.Node.EndDate.Before(time.Now()) {
+				progNames = append(progNames, p.Node.Name)
 			}
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Description, *i.CollectionProcedure, *i.Source, *i.IsAutomated, *i.URL, len(i.Files), strings.Join(progNames, ","), i.CreatedAt, i.UpdatedAt)
+		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Description, *i.CollectionProcedure, *i.Source, *i.IsAutomated, *i.URL, len(i.Files.Edges), strings.Join(progNames, ","), i.CreatedAt, i.UpdatedAt)
 	}
 
 	writer.Render()

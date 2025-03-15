@@ -23,6 +23,9 @@ func (MappedControl) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("mapping_type").
 			Comment("the type of mapping between the two controls, e.g. subset, intersect, equal, superset").
+			Annotations(
+				entgql.OrderField("mapping_type"),
+			).
 			Optional(),
 		field.String("relation").
 			Comment("description of how the two controls are related").
@@ -34,8 +37,10 @@ func (MappedControl) Fields() []ent.Field {
 func (MappedControl) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("controls", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Comment("mapped controls that have a relation to each other"),
 		edge.To("subcontrols", Subcontrol.Type).
+			Annotations(entgql.RelayConnection()).
 			Comment("mapped subcontrols that have a relation to each other"),
 	}
 }

@@ -18,8 +18,12 @@ mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
       updatedAt
       updatedBy
       organizations {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       owner {
         id
@@ -55,8 +59,12 @@ query GetAllPersonalAccessTokens {
         updatedAt
         updatedBy
         organizations {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -82,10 +90,14 @@ query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
     updatedAt
     updatedBy
     organizations {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
-}
+  }
 }
 
 query GetPersonalAccessTokens($where: PersonalAccessTokenWhereInput) {
@@ -109,9 +121,13 @@ query GetPersonalAccessTokens($where: PersonalAccessTokenWhereInput) {
         updatedAt
         updatedBy
         organizations {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
           }
+        }
     }
   }
 }
@@ -137,8 +153,12 @@ mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: Up
       updatedAt
       updatedBy
       organizations {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       owner {
         id

@@ -10,10 +10,18 @@ mutation CreateBulkCSVIntegration($input: Upload!) {
         id
       }
       secrets {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -31,10 +39,18 @@ mutation CreateBulkIntegration($input: [CreateIntegrationInput!]) {
         id
       }
       secrets {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -52,10 +68,18 @@ mutation CreateIntegration($input: CreateIntegrationInput!) {
         id
       }
       secrets {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -80,10 +104,18 @@ query GetAllIntegrations {
           id
         }
         secrets {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         events {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         createdAt
         createdBy
@@ -105,10 +137,18 @@ query GetIntegrationByID($integrationId: ID!) {
       id
     }
     secrets {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     events {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     createdAt
     createdBy
@@ -130,10 +170,18 @@ query GetIntegrations($where: IntegrationWhereInput) {
           id
         }
         secrets {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         events {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         createdAt
         createdBy
@@ -156,10 +204,18 @@ mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationI
         id
       }
       secrets {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }

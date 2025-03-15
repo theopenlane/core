@@ -114,8 +114,8 @@ func tableOutput(out []openlaneclient.Task) {
 			writer.AddRow("----------------------------------------")
 			writer.AddRow("COMMENTS", "CREATEDBY", "CREATEDAT")
 			writer.AddRow("----------------------------------------")
-			for _, c := range i.Comments {
-				writer.AddRow(c.Text, *c.CreatedBy, *c.CreatedAt)
+			for _, c := range i.Comments.Edges {
+				writer.AddRow(c.Node.Text, *c.Node.CreatedBy, *c.Node.CreatedAt)
 			}
 		}
 

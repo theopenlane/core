@@ -19,32 +19,56 @@ mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!])
       updatedBy
       url
       files {
-        id
-        presignedURL
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
       }
       programs {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       tasks {
-        id
-        displayID
+        edges {
+          node {
+            id
+            displayID
+          }
+        }
       }
       controls {
-        id
-        displayID
-        refCode
+        edges {
+          node {
+            id
+            displayID
+            refCode
+          }
+        }
       }
       subcontrols {
-        id
-        displayID
-        refCode
+        edges {
+          node {
+            id
+            displayID
+            refCode
+          }
+        }
       }
       controlObjectives {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
     }
   }
@@ -78,32 +102,56 @@ query GetAllEvidences {
         updatedBy
         url
         files {
-          id
-          presignedURL
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
         }
         programs {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         tasks {
-          id
-          displayID
+          edges {
+            node {
+              id
+              displayID
+            }
+          }
         }
         controls {
-          id
-          displayID
-          refCode
+          edges {
+            node {
+              id
+              displayID
+              refCode
+            }
+          }
         }
         subcontrols {
-          id
-          displayID
-          refCode
+          edges {
+            node {
+              id
+              displayID
+              refCode
+            }
+          }
         }
         controlObjectives {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
       }
     }
@@ -130,32 +178,56 @@ query GetEvidenceByID($evidenceId: ID!) {
     updatedBy
     url
     files {
-      id
-      presignedURL
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
     }
     programs {
-      id
-      displayID
-      name
+      edges {
+        node {
+          id
+          displayID
+          name
+        }
+      }
     }
     tasks {
-      id
-      displayID
+      edges {
+        node {
+          id
+          displayID
+        }
+      }
     }
     controls {
-      id
-      displayID
-      refCode
+      edges {
+        node {
+          id
+          displayID
+          refCode
+        }
+      }
     }
     subcontrols {
-      id
-      displayID
-      refCode
+      edges {
+        node {
+          id
+          displayID
+          refCode
+        }
+      }
     }
     controlObjectives {
-      id
-      displayID
-      name
+      edges {
+        node {
+          id
+          displayID
+          name
+        }
+      }
     }
   }
 }
@@ -182,32 +254,56 @@ query GetEvidences($where: EvidenceWhereInput) {
         updatedBy
         url
         files {
-          id
-          presignedURL
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
         }
         programs {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         tasks {
-          id
-          displayID
+          edges {
+            node {
+              id
+              displayID
+            }
+          }
         }
         controls {
-          id
-          displayID
-          refCode
+          edges {
+            node {
+              id
+              displayID
+              refCode
+            }
+          }
         }
         subcontrols {
-          id
-          displayID
-          refCode
+          edges {
+            node {
+              id
+              displayID
+              refCode
+            }
+          }
         }
         controlObjectives {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
       }
     }
@@ -239,32 +335,56 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $e
       updatedBy
       url
       files {
-        id
-        presignedURL
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
       }
       programs {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       tasks {
-        id
-        displayID
+        edges {
+          node {
+            id
+            displayID
+          }
+        }
       }
       controls {
-        id
-        displayID
-        refCode
+        edges {
+          node {
+            id
+            displayID
+            refCode
+          }
+        }
       }
       subcontrols {
-        id
-        displayID
-        refCode
+        edges {
+          node {
+            id
+            displayID
+            refCode
+          }
+        }
       }
       controlObjectives {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
     }
   }

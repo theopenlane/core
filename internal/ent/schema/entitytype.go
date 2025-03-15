@@ -60,7 +60,7 @@ func (EntityType) Mixin() []ent.Mixin {
 // Edges of the EntityType
 func (EntityType) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("entities", Entity.Type),
+		edge.To("entities", Entity.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 

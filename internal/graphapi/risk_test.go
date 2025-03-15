@@ -102,7 +102,7 @@ func (suite *GraphTestSuite) TestQueryRisk() {
 			assert.NotEmpty(t, resp.Risk.Name)
 
 			require.Len(t, resp.Risk.Programs, 1)
-			assert.NotEmpty(t, resp.Risk.Programs[0].ID)
+			assert.NotEmpty(t, resp.Risk.Programs.Edges[0].Node.ID)
 		})
 	}
 }
@@ -333,8 +333,8 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				require.NotEmpty(t, resp.CreateRisk.Risk.Programs)
 				require.Len(t, resp.CreateRisk.Risk.Programs, len(tc.request.ProgramIDs))
 
-				for i, p := range resp.CreateRisk.Risk.Programs {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
+				for i, p := range resp.CreateRisk.Risk.Programs.Edges {
+					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
 				assert.Empty(t, resp.CreateRisk.Risk.Programs)

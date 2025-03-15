@@ -384,10 +384,130 @@ type ActionPlan implements Node {
   """
   delegate: Group
   owner: Organization
-  risk: [Risk!]
-  control: [Control!]
-  user: [User!]
-  program: [Program!]
+  risk(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -558,6 +678,27 @@ enum ActionPlanHistoryOpType @goModel(model: "github.com/theopenlane/entx/histor
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ActionPlanHistory connections
+"""
+input ActionPlanHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ActionPlanHistories.
+  """
+  field: ActionPlanHistoryOrderField!
+}
+"""
+Properties by which ActionPlanHistory connections can be ordered.
+"""
+enum ActionPlanHistoryOrderField {
+  due_date
+  PRIORITY
+  source
 }
 """
 ActionPlanHistoryPriority is enum for the field priority
@@ -884,6 +1025,27 @@ input ActionPlanHistoryWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+}
+"""
+Ordering options for ActionPlan connections
+"""
+input ActionPlanOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ActionPlans.
+  """
+  field: ActionPlanOrderField!
+}
+"""
+Properties by which ActionPlan connections can be ordered.
+"""
+enum ActionPlanOrderField {
+  due_date
+  PRIORITY
+  source
 }
 """
 ActionPlanPriority is enum for the field priority
@@ -1255,8 +1417,63 @@ type Contact implements Node {
   """
   status: ContactUserStatus!
   owner: Organization
-  entities: [Entity!]
-  files: [File!]
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -1373,6 +1590,29 @@ enum ContactHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ContactHistory connections
+"""
+input ContactHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ContactHistories.
+  """
+  field: ContactHistoryOrderField!
+}
+"""
+Properties by which ContactHistory connections can be ordered.
+"""
+enum ContactHistoryOrderField {
+  full_name
+  title
+  company
+  email
+  STATUS
 }
 """
 ContactHistoryUserStatus is enum for the field status
@@ -1665,6 +1905,29 @@ input ContactHistoryWhereInput {
   statusNEQ: ContactHistoryUserStatus
   statusIn: [ContactHistoryUserStatus!]
   statusNotIn: [ContactHistoryUserStatus!]
+}
+"""
+Ordering options for Contact connections
+"""
+input ContactOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Contacts.
+  """
+  field: ContactOrderField!
+}
+"""
+Properties by which Contact connections can be ordered.
+"""
+enum ContactOrderField {
+  full_name
+  title
+  company
+  email
+  STATUS
 }
 """
 ContactUserStatus is enum for the field status
@@ -2035,24 +2298,338 @@ type Control implements Node {
   """
   viewers: [Group!]
   standard: Standard
-  programs: [Program!]
-  evidence: [Evidence!]
-  """
-  the implementation(s) of the control
-  """
-  controlImplementations: [ControlImplementation!]
-  """
-  mapped subcontrols that have a relation to another control or subcontrol
-  """
-  mappedControls: [MappedControl!]
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: MappedControlOrder
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   controlObjectives: [ControlObjective!]
-  subcontrols: [Subcontrol!]
-  tasks: [Task!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  actionPlans: [ActionPlan!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -2253,6 +2830,29 @@ enum ControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlHistory connections
+"""
+input ControlHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlHistories.
+  """
+  field: ControlHistoryOrderField!
+}
+"""
+Properties by which ControlHistory connections can be ordered.
+"""
+enum ControlHistoryOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
 }
 """
 ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -2613,7 +3213,37 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
-  controls: [Control!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
 }
 """
 A connection to a list of items.
@@ -2738,6 +3368,28 @@ enum ControlImplementationHistoryOpType @goModel(model: "github.com/theopenlane/
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlImplementationHistory connections
+"""
+input ControlImplementationHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlImplementationHistories.
+  """
+  field: ControlImplementationHistoryOrderField!
+}
+"""
+Properties by which ControlImplementationHistory connections can be ordered.
+"""
+enum ControlImplementationHistoryOrderField {
+  STATUS
+  implementation_date
+  verified
+  verification_date
 }
 """
 ControlImplementationHistoryWhereInput is used for filtering ControlImplementationHistory objects.
@@ -2949,6 +3601,28 @@ input ControlImplementationHistoryWhereInput {
   detailsNotNil: Boolean
   detailsEqualFold: String
   detailsContainsFold: String
+}
+"""
+Ordering options for ControlImplementation connections
+"""
+input ControlImplementationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlImplementations.
+  """
+  field: ControlImplementationOrderField!
+}
+"""
+Properties by which ControlImplementation connections can be ordered.
+"""
+enum ControlImplementationOrderField {
+  STATUS
+  implementation_date
+  verified
+  verification_date
 }
 """
 ControlImplementationWhereInput is used for filtering ControlImplementation objects.
@@ -3195,15 +3869,275 @@ type ControlObjective implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  programs: [Program!]
-  evidence: [Evidence!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  internalPolicies: [InternalPolicy!]
-  procedures: [Procedure!]
-  risks: [Risk!]
-  narratives: [Narrative!]
-  tasks: [Task!]
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -3346,6 +4280,30 @@ enum ControlObjectiveHistoryOpType @goModel(model: "github.com/theopenlane/entx/
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlObjectiveHistory connections
+"""
+input ControlObjectiveHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlObjectiveHistories.
+  """
+  field: ControlObjectiveHistoryOrderField!
+}
+"""
+Properties by which ControlObjectiveHistory connections can be ordered.
+"""
+enum ControlObjectiveHistoryOrderField {
+  name
+  status
+  SOURCE
+  control_objective_type
+  category
+  subcategory
 }
 """
 ControlObjectiveHistoryWhereInput is used for filtering ControlObjectiveHistory objects.
@@ -3664,6 +4622,30 @@ input ControlObjectiveHistoryWhereInput {
   subcategoryNotNil: Boolean
   subcategoryEqualFold: String
   subcategoryContainsFold: String
+}
+"""
+Ordering options for ControlObjective connections
+"""
+input ControlObjectiveOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlObjectives.
+  """
+  field: ControlObjectiveOrderField!
+}
+"""
+Properties by which ControlObjective connections can be ordered.
+"""
+enum ControlObjectiveOrderField {
+  name
+  status
+  SOURCE
+  control_objective_type
+  category
+  subcategory
 }
 """
 ControlObjectiveWhereInput is used for filtering ControlObjective objects.
@@ -4011,6 +4993,29 @@ input ControlObjectiveWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+}
+"""
+Ordering options for Control connections
+"""
+input ControlOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Controls.
+  """
+  field: ControlOrderField!
+}
+"""
+Properties by which Control connections can be ordered.
+"""
+enum ControlOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -6003,8 +7008,63 @@ type DocumentData implements Node {
   data: Map!
   owner: Organization
   template: Template!
-  entity: [Entity!]
-  files: [File!]
+  entity(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -6497,10 +7557,115 @@ type Entity implements Node {
   """
   status: String
   owner: Organization
-  contacts: [Contact!]
-  documents: [DocumentData!]
-  notes: [Note!]
-  files: [File!]
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  documents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   entityType: EntityType
 }
 """
@@ -6634,6 +7799,7 @@ Properties by which EntityHistory connections can be ordered.
 enum EntityHistoryOrderField {
   name
   display_name
+  status
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -6895,6 +8061,7 @@ Properties by which Entity connections can be ordered.
 enum EntityOrderField {
   name
   display_name
+  status
 }
 type EntityType implements Node {
   id: ID!
@@ -6917,7 +8084,37 @@ type EntityType implements Node {
   """
   name: String!
   owner: Organization
-  entities: [Entity!]
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
 }
 """
 A connection to a list of items.
@@ -7642,18 +8839,368 @@ type Event implements Node {
   correlationID: String
   eventType: String!
   metadata: Map
-  user: [User!]
-  group: [Group!]
-  integration: [Integration!]
-  organization: [Organization!]
-  invite: [Invite!]
-  personalAccessToken: [PersonalAccessToken!]
-  hush: [Hush!]
-  orgmembership: [OrgMembership!]
-  groupmembership: [GroupMembership!]
-  subscriber: [Subscriber!]
-  file: [File!]
-  orgsubscription: [OrgSubscription!]
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integration(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  invite(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
+    Filtering options for Invites returned from the connection.
+    """
+    where: InviteWhereInput
+  ): InviteConnection!
+  personalAccessToken(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  hush(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
+  orgmembership(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrgMemberships returned from the connection.
+    """
+    orderBy: OrgMembershipOrder
+
+    """
+    Filtering options for OrgMemberships returned from the connection.
+    """
+    where: OrgMembershipWhereInput
+  ): OrgMembershipConnection!
+  groupmembership(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: GroupMembershipOrder
+
+    """
+    Filtering options for GroupMemberships returned from the connection.
+    """
+    where: GroupMembershipWhereInput
+  ): GroupMembershipConnection!
+  subscriber(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
+  file(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  orgsubscription(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrgSubscriptions returned from the connection.
+    """
+    orderBy: OrgSubscriptionOrder
+
+    """
+    Filtering options for OrgSubscriptions returned from the connection.
+    """
+    where: OrgSubscriptionWhereInput
+  ): OrgSubscriptionConnection!
 }
 """
 A connection to a list of items.
@@ -8166,12 +9713,187 @@ type Evidence implements Node {
   """
   status: EvidenceEvidenceStatus
   owner: Organization
-  controlObjectives: [ControlObjective!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  files: [File!]
-  programs: [Program!]
-  tasks: [Task!]
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -8320,6 +10042,28 @@ enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for EvidenceHistory connections
+"""
+input EvidenceHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EvidenceHistories.
+  """
+  field: EvidenceHistoryOrderField!
+}
+"""
+Properties by which EvidenceHistory connections can be ordered.
+"""
+enum EvidenceHistoryOrderField {
+  name
+  creation_date
+  renewal_date
+  STATUS
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -8633,6 +10377,28 @@ input EvidenceHistoryWhereInput {
   statusNotIn: [EvidenceHistoryEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+}
+"""
+Ordering options for Evidence connections
+"""
+input EvidenceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Evidences.
+  """
+  field: EvidenceOrderField!
+}
+"""
+Properties by which Evidence connections can be ordered.
+"""
+enum EvidenceOrderField {
+  name
+  creation_date
+  renewal_date
+  STATUS
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -9007,18 +10773,358 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
-  user: [User!]
-  organization: [Organization!]
-  group: [Group!]
-  contact: [Contact!]
-  entity: [Entity!]
-  userSetting: [UserSetting!]
-  organizationSetting: [OrganizationSetting!]
-  template: [Template!]
-  documentData: [DocumentData!]
-  events: [Event!]
-  program: [Program!]
-  evidence: [Evidence!]
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  contact(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  entity(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  userSetting(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for UserSettings returned from the connection.
+    """
+    where: UserSettingWhereInput
+  ): UserSettingConnection!
+  organizationSetting(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for OrganizationSettings returned from the connection.
+    """
+    where: OrganizationSettingWhereInput
+  ): OrganizationSettingConnection!
+  template(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
+  documentData(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
 }
 """
 A connection to a list of items.
@@ -9981,10 +12087,120 @@ type Group implements Node {
   narrativeViewers: [Narrative!]
   setting: GroupSetting
   users: [User!]
-  events: [Event!]
-  integrations: [Integration!]
-  files: [File!]
-  tasks: [Task!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   members: [GroupMembership!]
 }
 """
@@ -10446,6 +12662,25 @@ enum GroupMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/h
   DELETE
 }
 """
+Ordering options for GroupMembershipHistory connections
+"""
+input GroupMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order GroupMembershipHistories.
+  """
+  field: GroupMembershipHistoryOrderField!
+}
+"""
+Properties by which GroupMembershipHistory connections can be ordered.
+"""
+enum GroupMembershipHistoryOrderField {
+  ROLE
+}
+"""
 GroupMembershipHistoryRole is enum for the field role
 """
 enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -10641,6 +12876,25 @@ input GroupMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+}
+"""
+Ordering options for GroupMembership connections
+"""
+input GroupMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order GroupMemberships.
+  """
+  field: GroupMembershipOrderField!
+}
+"""
+Properties by which GroupMembership connections can be ordered.
+"""
+enum GroupMembershipOrderField {
+  ROLE
 }
 """
 GroupMembershipRole is enum for the field role
@@ -11663,12 +13917,94 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
-  """
-  the integration associated with the secret
-  """
-  integrations: [Integration!]
-  organization: [Organization!]
-  events: [Event!]
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -12217,11 +14553,63 @@ type Integration implements Node {
   description: String
   kind: String
   owner: Organization
-  """
-  the secrets associated with the integration
-  """
-  secrets: [Hush!]
-  events: [Event!]
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -12814,12 +15202,187 @@ type InternalPolicy implements Node {
   temporary delegates for the policy, used for temporary approval
   """
   delegate: Group
-  controlObjectives: [ControlObjective!]
-  controls: [Control!]
-  procedures: [Procedure!]
-  narratives: [Narrative!]
-  tasks: [Task!]
-  programs: [Program!]
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -13622,7 +16185,32 @@ type Invite implements Node {
   """
   requestorID: String
   owner: Organization
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -13662,6 +16250,27 @@ enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.I
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
   INVITATION_EXPIRED
+}
+"""
+Ordering options for Invite connections
+"""
+input InviteOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Invites.
+  """
+  field: InviteOrderField!
+}
+"""
+Properties by which Invite connections can be ordered.
+"""
+enum InviteOrderField {
+  expires
+  STATUS
+  send_attempts
 }
 """
 InviteRole is enum for the field role
@@ -13913,14 +16522,68 @@ type MappedControl implements Node {
   description of how the two controls are related
   """
   relation: String
-  """
-  mapped controls that have a relation to each other
-  """
-  controls: [Control!]
-  """
-  mapped subcontrols that have a relation to each other
-  """
-  subcontrols: [Subcontrol!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -14013,6 +16676,25 @@ enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/his
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for MappedControlHistory connections
+"""
+input MappedControlHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappedControlHistories.
+  """
+  field: MappedControlHistoryOrderField!
+}
+"""
+Properties by which MappedControlHistory connections can be ordered.
+"""
+enum MappedControlHistoryOrderField {
+  mapping_type
 }
 """
 MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -14200,6 +16882,25 @@ input MappedControlHistoryWhereInput {
   relationNotNil: Boolean
   relationEqualFold: String
   relationContainsFold: String
+}
+"""
+Ordering options for MappedControl connections
+"""
+input MappedControlOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappedControls.
+  """
+  field: MappedControlOrderField!
+}
+"""
+Properties by which MappedControl connections can be ordered.
+"""
+enum MappedControlOrderField {
+  mapping_type
 }
 """
 MappedControlWhereInput is used for filtering MappedControl objects.
@@ -14407,11 +17108,68 @@ type Narrative implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  """
-  which controls are satisfied by the narrative
-  """
-  satisfies: [Control!]
-  programs: [Program!]
+  satisfies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -14516,6 +17274,25 @@ enum NarrativeHistoryOpType @goModel(model: "github.com/theopenlane/entx/history
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for NarrativeHistory connections
+"""
+input NarrativeHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NarrativeHistories.
+  """
+  field: NarrativeHistoryOrderField!
+}
+"""
+Properties by which NarrativeHistory connections can be ordered.
+"""
+enum NarrativeHistoryOrderField {
+  name
 }
 """
 NarrativeHistoryWhereInput is used for filtering NarrativeHistory objects.
@@ -14753,6 +17530,25 @@ input NarrativeHistoryWhereInput {
   detailsNotNil: Boolean
   detailsEqualFold: String
   detailsContainsFold: String
+}
+"""
+Ordering options for Narrative connections
+"""
+input NarrativeOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Narratives.
+  """
+  field: NarrativeOrderField!
+}
+"""
+Properties by which Narrative connections can be ordered.
+"""
+enum NarrativeOrderField {
+  name
 }
 """
 NarrativeWhereInput is used for filtering Narrative objects.
@@ -15631,7 +18427,32 @@ type OrgMembership implements Node {
   userID: ID!
   organization: Organization!
   user: User!
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -15715,6 +18536,25 @@ enum OrgMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/his
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for OrgMembershipHistory connections
+"""
+input OrgMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgMembershipHistories.
+  """
+  field: OrgMembershipHistoryOrderField!
+}
+"""
+Properties by which OrgMembershipHistory connections can be ordered.
+"""
+enum OrgMembershipHistoryOrderField {
+  ROLE
 }
 """
 OrgMembershipHistoryRole is enum for the field role
@@ -15913,6 +18753,25 @@ input OrgMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+}
+"""
+Ordering options for OrgMembership connections
+"""
+input OrgMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgMemberships.
+  """
+  field: OrgMembershipOrderField!
+}
+"""
+Properties by which OrgMembership connections can be ordered.
+"""
+enum OrgMembershipOrderField {
+  ROLE
 }
 """
 OrgMembershipRole is enum for the field role
@@ -16256,6 +19115,30 @@ enum OrgSubscriptionHistoryOpType @goModel(model: "github.com/theopenlane/entx/h
   DELETE
 }
 """
+Ordering options for OrgSubscriptionHistory connections
+"""
+input OrgSubscriptionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgSubscriptionHistories.
+  """
+  field: OrgSubscriptionHistoryOrderField!
+}
+"""
+Properties by which OrgSubscriptionHistory connections can be ordered.
+"""
+enum OrgSubscriptionHistoryOrderField {
+  product_tier
+  stripe_subscription_status
+  active
+  expires_at
+  trial_expires_at
+  days_until_due
+}
+"""
 OrgSubscriptionHistoryWhereInput is used for filtering OrgSubscriptionHistory objects.
 Input was generated by ent.
 """
@@ -16569,6 +19452,30 @@ input OrgSubscriptionHistoryWhereInput {
   paymentMethodAddedNEQ: Boolean
   paymentMethodAddedIsNil: Boolean
   paymentMethodAddedNotNil: Boolean
+}
+"""
+Ordering options for OrgSubscription connections
+"""
+input OrgSubscriptionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgSubscriptions.
+  """
+  field: OrgSubscriptionOrderField!
+}
+"""
+Properties by which OrgSubscription connections can be ordered.
+"""
+enum OrgSubscriptionOrderField {
+  product_tier
+  stripe_subscription_status
+  active
+  expires_at
+  trial_expires_at
+  days_until_due
 }
 """
 OrgSubscriptionWhereInput is used for filtering OrgSubscription objects.
@@ -16964,7 +19871,7 @@ type Organization implements Node {
     """
     Ordering options for Organizations returned from the connection.
     """
-    orderBy: OrganizationOrder
+    orderBy: [OrganizationOrder!]
 
     """
     Filtering options for Organizations returned from the connection.
@@ -16972,36 +19879,806 @@ type Organization implements Node {
     where: OrganizationWhereInput
   ): OrganizationConnection!
   setting: OrganizationSetting
-  personalAccessTokens: [PersonalAccessToken!]
-  apiTokens: [APIToken!]
+  personalAccessTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  apiTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for APITokens returned from the connection.
+    """
+    where: APITokenWhereInput
+  ): APITokenConnection!
   users: [User!]
-  files: [File!]
-  events: [Event!]
-  secrets: [Hush!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
   avatarFile: File
-  groups: [Group!]
-  templates: [Template!]
-  integrations: [Integration!]
-  documentData: [DocumentData!]
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  documentData(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
   orgSubscriptions: [OrgSubscription!]
-  invites: [Invite!]
-  subscribers: [Subscriber!]
-  entities: [Entity!]
-  entityTypes: [EntityType!]
-  contacts: [Contact!]
-  notes: [Note!]
-  tasks: [Task!]
-  programs: [Program!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
-  risks: [Risk!]
-  controlObjectives: [ControlObjective!]
-  narratives: [Narrative!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  evidence: [Evidence!]
-  standards: [Standard!]
-  actionPlans: [ActionPlan!]
+  invites(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
+    Filtering options for Invites returned from the connection.
+    """
+    where: InviteWhereInput
+  ): InviteConnection!
+  subscribers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityTypes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EntityTypes returned from the connection.
+    """
+    orderBy: EntityTypeOrder
+
+    """
+    Filtering options for EntityTypes returned from the connection.
+    """
+    where: EntityTypeWhereInput
+  ): EntityTypeConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  standards(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
   members: [OrgMembership!]
 }
 """
@@ -17454,7 +21131,32 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   organization: Organization
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -18566,11 +22268,63 @@ type PersonalAccessToken implements Node {
   """
   revokedAt: Time
   owner: User!
-  """
-  the organization(s) the token is associated with
-  """
-  organizations: [Organization!]
-  events: [Event!]
+  organizations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -18899,12 +22653,187 @@ type Procedure implements Node {
   temporary delegates for the procedure, used for temporary approval
   """
   delegate: Group
-  controls: [Control!]
-  internalPolicies: [InternalPolicy!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  tasks: [Task!]
-  programs: [Program!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -19738,20 +23667,390 @@ type Program implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  controlObjectives: [ControlObjective!]
-  internalPolicies: [InternalPolicy!]
-  procedures: [Procedure!]
-  risks: [Risk!]
-  tasks: [Task!]
-  notes: [Note!]
-  files: [File!]
-  evidence: [Evidence!]
-  narratives: [Narrative!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
   actionPlans: [ActionPlan!]
-  users: [User!]
-  members: [ProgramMembership!]
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ProgramMemberships returned from the connection.
+    """
+    orderBy: ProgramMembershipOrder
+
+    """
+    Filtering options for ProgramMemberships returned from the connection.
+    """
+    where: ProgramMembershipWhereInput
+  ): ProgramMembershipConnection!
 }
 """
 A connection to a list of items.
@@ -19876,6 +24175,28 @@ enum ProgramHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ProgramHistory connections
+"""
+input ProgramHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramHistories.
+  """
+  field: ProgramHistoryOrderField!
+}
+"""
+Properties by which ProgramHistory connections can be ordered.
+"""
+enum ProgramHistoryOrderField {
+  name
+  STATUS
+  start_date
+  end_date
 }
 """
 ProgramHistoryProgramStatus is enum for the field status
@@ -20252,6 +24573,25 @@ enum ProgramMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx
   DELETE
 }
 """
+Ordering options for ProgramMembershipHistory connections
+"""
+input ProgramMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramMembershipHistories.
+  """
+  field: ProgramMembershipHistoryOrderField!
+}
+"""
+Properties by which ProgramMembershipHistory connections can be ordered.
+"""
+enum ProgramMembershipHistoryOrderField {
+  ROLE
+}
+"""
 ProgramMembershipHistoryRole is enum for the field role
 """
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -20449,6 +24789,25 @@ input ProgramMembershipHistoryWhereInput {
   userIDContainsFold: String
 }
 """
+Ordering options for ProgramMembership connections
+"""
+input ProgramMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramMemberships.
+  """
+  field: ProgramMembershipOrderField!
+}
+"""
+Properties by which ProgramMembership connections can be ordered.
+"""
+enum ProgramMembershipOrderField {
+  ROLE
+}
+"""
 ProgramMembershipRole is enum for the field role
 """
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -20576,6 +24935,28 @@ input ProgramMembershipWhereInput {
   roleNEQ: ProgramMembershipRole
   roleIn: [ProgramMembershipRole!]
   roleNotIn: [ProgramMembershipRole!]
+}
+"""
+Ordering options for Program connections
+"""
+input ProgramOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Programs.
+  """
+  field: ProgramOrderField!
+}
+"""
+Properties by which Program connections can be ordered.
+"""
+enum ProgramOrderField {
+  name
+  STATUS
+  start_date
+  end_date
 }
 """
 ProgramProgramStatus is enum for the field status
@@ -20975,6 +25356,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
     Filtering options for ActionPlans returned from the connection.
     """
     where: ActionPlanWhereInput
@@ -20999,6 +25385,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ActionPlanHistories returned from the connection.
+    """
+    orderBy: ActionPlanHistoryOrder
 
     """
     Filtering options for ActionPlanHistories returned from the connection.
@@ -21027,6 +25418,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
     Filtering options for Contacts returned from the connection.
     """
     where: ContactWhereInput
@@ -21051,6 +25447,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ContactHistories returned from the connection.
+    """
+    orderBy: ContactHistoryOrder
 
     """
     Filtering options for ContactHistories returned from the connection.
@@ -21079,6 +25480,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
     Filtering options for Controls returned from the connection.
     """
     where: ControlWhereInput
@@ -21103,6 +25509,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlHistories returned from the connection.
+    """
+    orderBy: ControlHistoryOrder
 
     """
     Filtering options for ControlHistories returned from the connection.
@@ -21131,6 +25542,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
     Filtering options for ControlImplementations returned from the connection.
     """
     where: ControlImplementationWhereInput
@@ -21155,6 +25571,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlImplementationHistories returned from the connection.
+    """
+    orderBy: ControlImplementationHistoryOrder
 
     """
     Filtering options for ControlImplementationHistories returned from the connection.
@@ -21183,6 +25604,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
     Filtering options for ControlObjectives returned from the connection.
     """
     where: ControlObjectiveWhereInput
@@ -21207,6 +25633,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlObjectiveHistories returned from the connection.
+    """
+    orderBy: ControlObjectiveHistoryOrder
 
     """
     Filtering options for ControlObjectiveHistories returned from the connection.
@@ -21289,7 +25720,7 @@ type Query {
     """
     Ordering options for Entities returned from the connection.
     """
-    orderBy: EntityOrder
+    orderBy: [EntityOrder!]
 
     """
     Filtering options for Entities returned from the connection.
@@ -21463,6 +25894,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
     Filtering options for Evidences returned from the connection.
     """
     where: EvidenceWhereInput
@@ -21487,6 +25923,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for EvidenceHistories returned from the connection.
+    """
+    orderBy: EvidenceHistoryOrder
 
     """
     Filtering options for EvidenceHistories returned from the connection.
@@ -21569,7 +26010,7 @@ type Query {
     """
     Ordering options for Groups returned from the connection.
     """
-    orderBy: GroupOrder
+    orderBy: [GroupOrder!]
 
     """
     Filtering options for Groups returned from the connection.
@@ -21629,6 +26070,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: GroupMembershipOrder
+
+    """
     Filtering options for GroupMemberships returned from the connection.
     """
     where: GroupMembershipWhereInput
@@ -21653,6 +26099,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for GroupMembershipHistories returned from the connection.
+    """
+    orderBy: GroupMembershipHistoryOrder
 
     """
     Filtering options for GroupMembershipHistories returned from the connection.
@@ -21735,7 +26186,7 @@ type Query {
     """
     Ordering options for Hushes returned from the connection.
     """
-    orderBy: HushOrder
+    orderBy: [HushOrder!]
 
     """
     Filtering options for Hushes returned from the connection.
@@ -21797,7 +26248,7 @@ type Query {
     """
     Ordering options for Integrations returned from the connection.
     """
-    orderBy: IntegrationOrder
+    orderBy: [IntegrationOrder!]
 
     """
     Filtering options for Integrations returned from the connection.
@@ -21909,6 +26360,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
     Filtering options for Invites returned from the connection.
     """
     where: InviteWhereInput
@@ -21933,6 +26389,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: MappedControlOrder
 
     """
     Filtering options for MappedControls returned from the connection.
@@ -21961,6 +26422,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for MappedControlHistories returned from the connection.
+    """
+    orderBy: MappedControlHistoryOrder
+
+    """
     Filtering options for MappedControlHistories returned from the connection.
     """
     where: MappedControlHistoryWhereInput
@@ -21987,6 +26453,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
     Filtering options for Narratives returned from the connection.
     """
     where: NarrativeWhereInput
@@ -22011,6 +26482,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for NarrativeHistories returned from the connection.
+    """
+    orderBy: NarrativeHistoryOrder
 
     """
     Filtering options for NarrativeHistories returned from the connection.
@@ -22091,6 +26567,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for OrgMemberships returned from the connection.
+    """
+    orderBy: OrgMembershipOrder
+
+    """
     Filtering options for OrgMemberships returned from the connection.
     """
     where: OrgMembershipWhereInput
@@ -22115,6 +26596,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for OrgMembershipHistories returned from the connection.
+    """
+    orderBy: OrgMembershipHistoryOrder
 
     """
     Filtering options for OrgMembershipHistories returned from the connection.
@@ -22143,6 +26629,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for OrgSubscriptions returned from the connection.
+    """
+    orderBy: OrgSubscriptionOrder
+
+    """
     Filtering options for OrgSubscriptions returned from the connection.
     """
     where: OrgSubscriptionWhereInput
@@ -22167,6 +26658,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for OrgSubscriptionHistories returned from the connection.
+    """
+    orderBy: OrgSubscriptionHistoryOrder
 
     """
     Filtering options for OrgSubscriptionHistories returned from the connection.
@@ -22197,7 +26693,7 @@ type Query {
     """
     Ordering options for Organizations returned from the connection.
     """
-    orderBy: OrganizationOrder
+    orderBy: [OrganizationOrder!]
 
     """
     Filtering options for Organizations returned from the connection.
@@ -22387,6 +26883,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
     Filtering options for Programs returned from the connection.
     """
     where: ProgramWhereInput
@@ -22411,6 +26912,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ProgramHistories returned from the connection.
+    """
+    orderBy: ProgramHistoryOrder
 
     """
     Filtering options for ProgramHistories returned from the connection.
@@ -22439,6 +26945,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ProgramMemberships returned from the connection.
+    """
+    orderBy: ProgramMembershipOrder
+
+    """
     Filtering options for ProgramMemberships returned from the connection.
     """
     where: ProgramMembershipWhereInput
@@ -22463,6 +26974,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ProgramMembershipHistories returned from the connection.
+    """
+    orderBy: ProgramMembershipHistoryOrder
 
     """
     Filtering options for ProgramMembershipHistories returned from the connection.
@@ -22491,6 +27007,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
     Filtering options for Risks returned from the connection.
     """
     where: RiskWhereInput
@@ -22515,6 +27036,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for RiskHistories returned from the connection.
+    """
+    orderBy: RiskHistoryOrder
 
     """
     Filtering options for RiskHistories returned from the connection.
@@ -22543,6 +27069,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
     Filtering options for Standards returned from the connection.
     """
     where: StandardWhereInput
@@ -22567,6 +27098,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for StandardHistories returned from the connection.
+    """
+    orderBy: StandardHistoryOrder
 
     """
     Filtering options for StandardHistories returned from the connection.
@@ -22595,6 +27131,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
     Filtering options for Subcontrols returned from the connection.
     """
     where: SubcontrolWhereInput
@@ -22621,6 +27162,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for SubcontrolHistories returned from the connection.
+    """
+    orderBy: SubcontrolHistoryOrder
+
+    """
     Filtering options for SubcontrolHistories returned from the connection.
     """
     where: SubcontrolHistoryWhereInput
@@ -22645,6 +27191,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
 
     """
     Filtering options for Subscribers returned from the connection.
@@ -22699,6 +27250,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
     Filtering options for Tasks returned from the connection.
     """
     where: TaskWhereInput
@@ -22723,6 +27279,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for TaskHistories returned from the connection.
+    """
+    orderBy: TaskHistoryOrder
 
     """
     Filtering options for TaskHistories returned from the connection.
@@ -22753,7 +27314,7 @@ type Query {
     """
     Ordering options for Templates returned from the connection.
     """
-    orderBy: TemplateOrder
+    orderBy: [TemplateOrder!]
 
     """
     Filtering options for Templates returned from the connection.
@@ -22815,7 +27376,7 @@ type Query {
     """
     Ordering options for Users returned from the connection.
     """
-    orderBy: UserOrder
+    orderBy: [UserOrder!]
 
     """
     Filtering options for Users returned from the connection.
@@ -22979,10 +27540,125 @@ type Risk implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  control: [Control!]
-  procedure: [Procedure!]
-  actionPlans: [ActionPlan!]
-  programs: [Program!]
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  procedure(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
   """
   the group of users who are responsible for risk oversight
   """
@@ -23123,6 +27799,32 @@ enum RiskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for RiskHistory connections
+"""
+input RiskHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order RiskHistories.
+  """
+  field: RiskHistoryOrderField!
+}
+"""
+Properties by which RiskHistory connections can be ordered.
+"""
+enum RiskHistoryOrderField {
+  name
+  STATUS
+  risk_type
+  category
+  IMPACT
+  LIKELIHOOD
+  score
+  business_costs
 }
 """
 RiskHistoryRiskImpact is enum for the field impact
@@ -23481,6 +28183,32 @@ input RiskHistoryWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+}
+"""
+Ordering options for Risk connections
+"""
+input RiskOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Risks.
+  """
+  field: RiskOrderField!
+}
+"""
+Properties by which Risk connections can be ordered.
+"""
+enum RiskOrderField {
+  name
+  STATUS
+  risk_type
+  category
+  IMPACT
+  LIKELIHOOD
+  score
+  business_costs
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -23931,7 +28659,37 @@ type Standard implements Node {
   """
   version: String
   owner: Organization
-  controls: [Control!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
 }
 """
 A connection to a list of items.
@@ -24080,6 +28838,30 @@ enum StandardHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for StandardHistory connections
+"""
+input StandardHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order StandardHistories.
+  """
+  field: StandardHistoryOrderField!
+}
+"""
+Properties by which StandardHistory connections can be ordered.
+"""
+enum StandardHistoryOrderField {
+  name
+  short_name
+  framework
+  governing_body
+  STATUS
+  standard_type
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -24465,6 +29247,30 @@ input StandardHistoryWhereInput {
   versionNotNil: Boolean
   versionEqualFold: String
   versionContainsFold: String
+}
+"""
+Ordering options for Standard connections
+"""
+input StandardOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Standards.
+  """
+  field: StandardOrderField!
+}
+"""
+Properties by which Standard connections can be ordered.
+"""
+enum StandardOrderField {
+  name
+  short_name
+  framework
+  governing_body
+  STATUS
+  standard_type
 }
 """
 StandardStandardStatus is enum for the field status
@@ -24915,14 +29721,244 @@ type Subcontrol implements Node {
   mapped subcontrols that have a relation to another control or subcontrol
   """
   mappedControls: [MappedControl!]
-  evidence: [Evidence!]
-  controlObjectives: [ControlObjective!]
-  tasks: [Task!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  actionPlans: [ActionPlan!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   """
   the user who is responsible for the subcontrol, defaults to the parent control owner if not set
   """
@@ -25123,6 +30159,30 @@ enum SubcontrolHistoryOpType @goModel(model: "github.com/theopenlane/entx/histor
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for SubcontrolHistory connections
+"""
+input SubcontrolHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SubcontrolHistories.
+  """
+  field: SubcontrolHistoryOrderField!
+}
+"""
+Properties by which SubcontrolHistory connections can be ordered.
+"""
+enum SubcontrolHistoryOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
+  ref_code
 }
 """
 SubcontrolHistoryWhereInput is used for filtering SubcontrolHistory objects.
@@ -25448,6 +30508,30 @@ input SubcontrolHistoryWhereInput {
   controlIDHasSuffix: String
   controlIDEqualFold: String
   controlIDContainsFold: String
+}
+"""
+Ordering options for Subcontrol connections
+"""
+input SubcontrolOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Subcontrols.
+  """
+  field: SubcontrolOrderField!
+}
+"""
+Properties by which Subcontrol connections can be ordered.
+"""
+enum SubcontrolOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
+  ref_code
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -25840,7 +30924,32 @@ type Subscriber implements Node {
   """
   active: Boolean!
   owner: Organization
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -25871,6 +30980,26 @@ type SubscriberEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+Ordering options for Subscriber connections
+"""
+input SubscriberOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Subscribers.
+  """
+  field: SubscriberOrderField!
+}
+"""
+Properties by which Subscriber connections can be ordered.
+"""
+enum SubscriberOrderField {
+  email
+  active
 }
 """
 SubscriberWhereInput is used for filtering Subscriber objects.
@@ -26303,18 +31432,270 @@ type Task implements Node {
   owner: Organization
   assigner: User
   assignee: User
-  """
-  conversations related to the task
-  """
-  comments: [Note!]
-  group: [Group!]
-  internalPolicy: [InternalPolicy!]
-  procedure: [Procedure!]
-  control: [Control!]
-  controlObjective: [ControlObjective!]
-  subcontrol: [Subcontrol!]
-  program: [Program!]
-  evidence: [Evidence!]
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalPolicy(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedure(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  controlObjective(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  subcontrol(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
 }
 """
 A connection to a list of items.
@@ -26443,6 +31824,29 @@ enum TaskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for TaskHistory connections
+"""
+input TaskHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TaskHistories.
+  """
+  field: TaskHistoryOrderField!
+}
+"""
+Properties by which TaskHistory connections can be ordered.
+"""
+enum TaskHistoryOrderField {
+  title
+  STATUS
+  category
+  due
+  completed
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -26777,6 +32181,29 @@ input TaskHistoryWhereInput {
   assignerIDNotNil: Boolean
   assignerIDEqualFold: String
   assignerIDContainsFold: String
+}
+"""
+Ordering options for Task connections
+"""
+input TaskOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Tasks.
+  """
+  field: TaskOrderField!
+}
+"""
+Properties by which Task connections can be ordered.
+"""
+enum TaskOrderField {
+  title
+  STATUS
+  category
+  due
+  completed
 }
 """
 TaskTaskStatus is enum for the field status
@@ -27173,8 +32600,58 @@ type Template implements Node {
   """
   uischema: Map
   owner: Organization
-  documents: [DocumentData!]
-  files: [File!]
+  documents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -27316,6 +32793,7 @@ Properties by which TemplateHistory connections can be ordered.
 """
 enum TemplateHistoryOrderField {
   name
+  TEMPLATE_TYPE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -27545,6 +33023,7 @@ Properties by which Template connections can be ordered.
 """
 enum TemplateOrderField {
   name
+  TEMPLATE_TYPE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -30034,18 +35513,238 @@ type User implements Node {
   the user's role
   """
   role: UserRole
-  personalAccessTokens: [PersonalAccessToken!]
-  tfaSettings: [TFASetting!]
+  personalAccessTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  tfaSettings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for TFASettings returned from the connection.
+    """
+    where: TFASettingWhereInput
+  ): TFASettingConnection!
   setting: UserSetting!
   groups: [Group!]
   organizations: [Organization!]
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   avatarFile: File
-  events: [Event!]
-  actionPlans: [ActionPlan!]
-  subcontrols: [Subcontrol!]
-  assignerTasks: [Task!]
-  assigneeTasks: [Task!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  assignerTasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  assigneeTasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   programs: [Program!]
   groupMemberships: [GroupMembership!]
   orgMemberships: [OrgMembership!]
@@ -30627,7 +36326,32 @@ type UserSetting implements Node {
   organization to load on user login
   """
   defaultOrg: Organization
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.

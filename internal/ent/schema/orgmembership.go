@@ -34,6 +34,9 @@ func (OrgMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
+			Annotations(
+				entgql.OrderField("ROLE"),
+			).
 			Values(string(enums.RoleOwner)). // adds owner to the allowed values
 			Default(string(enums.RoleMember)),
 		field.String("organization_id").Immutable(),
@@ -54,7 +57,7 @@ func (OrgMembership) Edges() []ent.Edge {
 			Required().
 			Unique().
 			Immutable(),
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 

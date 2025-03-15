@@ -31,6 +31,9 @@ func (GroupMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
+			Annotations(
+				entgql.OrderField("ROLE"),
+			).
 			Default(string(enums.RoleMember)),
 		field.String("group_id").Immutable(),
 		field.String("user_id").Immutable(),

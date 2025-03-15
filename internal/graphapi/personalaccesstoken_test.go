@@ -190,8 +190,8 @@ func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
 			if tc.input.OrganizationIDs != nil {
 				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations, len(tc.input.OrganizationIDs))
 
-				for _, orgID := range resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations {
-					assert.Contains(t, tc.input.OrganizationIDs, orgID.ID)
+				for _, orgID := range resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges {
+					assert.Contains(t, tc.input.OrganizationIDs, orgID.Node.ID)
 				}
 			} else {
 				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations, 0)

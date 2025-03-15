@@ -26,15 +26,27 @@ func (ControlImplementation) Fields() []ent.Field {
 			GoType(enums.DocumentStatus("")).
 			Default(enums.DocumentDraft.String()).
 			Optional().
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Comment("status of the %s, e.g. draft, published, archived, etc."),
 		field.Time("implementation_date").
 			Optional().
+			Annotations(
+				entgql.OrderField("implementation_date"),
+			).
 			Comment("date the control was implemented"),
 		field.Bool("verified").
 			Optional().
+			Annotations(
+				entgql.OrderField("verified"),
+			).
 			Comment("set to true if the control implementation has been verified"),
 		field.Time("verification_date").
 			Optional().
+			Annotations(
+				entgql.OrderField("verification_date"),
+			).
 			Comment("date the control implementation was verified"),
 		field.Text("details").
 			Optional().
@@ -56,6 +68,7 @@ func (ControlImplementation) Mixin() []ent.Mixin {
 func (ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("controls", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_implementations"),
 	}
 }
@@ -65,6 +78,7 @@ func (ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 	}
 }

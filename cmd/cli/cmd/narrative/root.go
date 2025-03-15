@@ -93,8 +93,8 @@ func tableOutput(out []openlaneclient.Narrative) {
 	for _, i := range out {
 		programs := []string{}
 
-		for _, p := range i.Programs {
-			programs = append(programs, p.Name)
+		for _, p := range i.Programs.Edges {
+			programs = append(programs, p.Node.Name)
 		}
 
 		writer.AddRow(i.ID, i.Name, *i.Description, *i.Details, strings.Join(programs, ", "))

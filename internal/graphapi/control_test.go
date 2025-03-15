@@ -104,7 +104,7 @@ func (suite *GraphTestSuite) TestQueryControl() {
 			assert.NotEmpty(t, resp.Control.RefCode)
 
 			require.Len(t, resp.Control.Programs, 1)
-			assert.NotEmpty(t, resp.Control.Programs[0].ID)
+			assert.NotEmpty(t, resp.Control.Programs.Edges[0].Node.ID)
 		})
 	}
 }
@@ -377,8 +377,8 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				require.NotEmpty(t, resp.CreateControl.Control.Programs)
 				require.Len(t, resp.CreateControl.Control.Programs, len(tc.request.ProgramIDs))
 
-				for i, p := range resp.CreateControl.Control.Programs {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
+				for i, p := range resp.CreateControl.Control.Programs.Edges {
+					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
 				assert.Empty(t, resp.CreateControl.Control.Programs)
