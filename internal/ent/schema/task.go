@@ -30,6 +30,7 @@ func (Task) Fields() []ent.Field {
 			Comment("the title of the task").
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("title"),
 			).
 			NotEmpty(),
 		field.String("description").
@@ -44,15 +45,27 @@ func (Task) Fields() []ent.Field {
 		field.Enum("status").
 			GoType(enums.TaskStatus("")).
 			Comment("the status of the task").
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Default(enums.TaskStatusOpen.String()),
 		field.String("category").
 			Comment("the category of the task, e.g. evidence upload, risk review, policy review, etc.").
+			Annotations(
+				entgql.OrderField("category"),
+			).
 			Optional(),
 		field.Time("due").
 			Comment("the due date of the task").
+			Annotations(
+				entgql.OrderField("due"),
+			).
 			Optional(),
 		field.Time("completed").
 			Comment("the completion date of the task").
+			Annotations(
+				entgql.OrderField("completed"),
+			).
 			Optional(),
 		field.String("assignee_id").
 			Comment("the id of the user who was assigned the task").
@@ -90,22 +103,30 @@ func (Task) Edges() []ent.Edge {
 			Field("assignee_id").
 			Unique(),
 		edge.To("comments", Note.Type).
+			Annotations(entgql.RelayConnection()).
 			Comment("conversations related to the task"),
 		edge.From("group", Group.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("internal_policy", InternalPolicy.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("procedure", Procedure.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("control", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("control_objective", ControlObjective.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("subcontrol", Subcontrol.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
 		edge.From("program", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("tasks"),
-		edge.To("evidence", Evidence.Type),
+		edge.To("evidence", Evidence.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -114,6 +135,7 @@ func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

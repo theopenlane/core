@@ -48,8 +48,9 @@ func (Integration) Fields() []ent.Field {
 func (Integration) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("secrets", Hush.Type).
+			Annotations(entgql.RelayConnection()).
 			Comment("the secrets associated with the integration"),
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -58,6 +59,7 @@ func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}

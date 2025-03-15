@@ -74,27 +74,38 @@ func (File) Fields() []ent.Field {
 func (File) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user", User.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("organization", Organization.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("group", Group.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("contact", Contact.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("entity", Entity.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("user_setting", UserSetting.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("organization_setting", OrganizationSetting.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("template", Template.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("document_data", DocumentData.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 		edge.From("program", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 		edge.From("evidence", Evidence.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("files"),
 	}
 }

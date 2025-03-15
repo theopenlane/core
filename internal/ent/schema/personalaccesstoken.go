@@ -84,8 +84,9 @@ func (PersonalAccessToken) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("organizations", Organization.Type).
 			Ref("personal_access_tokens").
+			Annotations(entgql.RelayConnection()).
 			Comment("the organization(s) the token is associated with"),
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 

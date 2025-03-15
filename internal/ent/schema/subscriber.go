@@ -38,6 +38,7 @@ func (Subscriber) Fields() []ent.Field {
 			Comment("email address of the subscriber").
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("email"),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -62,7 +63,7 @@ func (Subscriber) Fields() []ent.Field {
 		field.Bool("active").
 			Comment("indicates if the subscriber is active or not, active users will have at least one verified contact method").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput), entgql.OrderField("active")),
 		field.String("token").
 			Comment("the verification token sent to the user via email which should only be provided to the /subscribe endpoint + handler").
 			Unique().
@@ -102,7 +103,7 @@ func (Subscriber) Mixin() []ent.Mixin {
 // Edges of the Subscriber
 func (Subscriber) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -128,6 +129,7 @@ func (Subscriber) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 		history.Annotations{

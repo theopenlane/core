@@ -30,7 +30,10 @@ func (Program) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the program").
 			NotEmpty().
-			Annotations(entx.FieldSearchable()),
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("name"),
+			),
 		field.String("description").
 			Comment("the description of the program").
 			Annotations(
@@ -40,12 +43,21 @@ func (Program) Fields() []ent.Field {
 		field.Enum("status").
 			Comment("the status of the program").
 			GoType(enums.ProgramStatus("")).
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Default(enums.ProgramStatusNotStarted.String()),
 		field.Time("start_date").
 			Comment("the start date of the period").
+			Annotations(
+				entgql.OrderField("start_date"),
+			).
 			Optional(),
 		field.Time("end_date").
 			Comment("the end date of the period").
+			Annotations(
+				entgql.OrderField("end_date"),
+			).
 			Optional(),
 		field.Bool("auditor_ready").
 			Comment("is the program ready for the auditor").
@@ -77,34 +89,34 @@ func (Program) Mixin() []ent.Mixin {
 func (Program) Edges() []ent.Edge {
 	return []ent.Edge{
 		// programs can have 1:many controls
-		edge.To("controls", Control.Type),
+		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many subcontrols
-		edge.To("subcontrols", Subcontrol.Type),
+		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many control objectives
-		edge.To("control_objectives", ControlObjective.Type),
+		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated policies
-		edge.To("internal_policies", InternalPolicy.Type),
+		edge.To("internal_policies", InternalPolicy.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated procedures
-		edge.To("procedures", Procedure.Type),
+		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated risks
-		edge.To("risks", Risk.Type),
+		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated tasks
-		edge.To("tasks", Task.Type),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated notes (comments)
-		edge.To("notes", Note.Type),
+		edge.To("notes", Note.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated files
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 		// programs can be many:many with evidence
-		edge.To("evidence", Evidence.Type),
+		edge.To("evidence", Evidence.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated narratives
-		edge.To("narratives", Narrative.Type),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
 		// programs can have 1:many associated action plans
 		edge.To("action_plans", ActionPlan.Type),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge
 			// this should be done via the members edge
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput), entgql.RelayConnection()).
 			Through("members", ProgramMembership.Type),
 	}
 }
@@ -114,6 +126,7 @@ func (Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(

@@ -92,8 +92,8 @@ func tableOutput(out []openlaneclient.Control) {
 	for _, i := range out {
 		programs := []string{}
 
-		for _, p := range i.Programs {
-			programs = append(programs, p.Name)
+		for _, p := range i.Programs.Edges {
+			programs = append(programs, p.Node.Name)
 		}
 
 		stdName := ""

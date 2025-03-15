@@ -65,15 +65,23 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       updatedBy
       revision
       controls {
-        id
-        displayID
-        refCode
-        description
+        edges {
+          node {
+            id
+            displayID
+            refCode
+            description
+          }
+        }
       }
       programs {
-          id
-          displayID
-          name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       editors {
         id
@@ -118,15 +126,23 @@ query GetAllControlObjectives {
         updatedBy
         revision
         controls {
-          id
-          displayID
-          refCode
-          description
+          edges {
+            node {
+              id
+              displayID
+              refCode
+              description
+            }
+          }
         }
         programs {
-            id
-            displayID
-            name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         editors {
           id
@@ -163,28 +179,36 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     updatedBy
     revision
     controls {
-        id
-        displayID
-        refCode
-        description
+      edges {
+        node {
+          id
+          displayID
+          refCode
+          description
+        }
       }
-      programs {
+    }
+    programs {
+      edges {
+        node {
           id
           displayID
           name
+        }
       }
-      editors {
-        id
-        name
-      }
-      viewers {
-        id
-        name
-      }
-      blockedGroups{
-        id
-        name
-      }
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups{
+      id
+      name
+    }
   }
 }
 
@@ -209,15 +233,23 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         updatedBy
         revision
         controls {
-          id
-          displayID
-          refCode
-          description
+          edges {
+            node {
+              id
+              displayID
+              refCode
+              description
+            }
+          }
         }
         programs {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         editors {
           id
@@ -256,15 +288,23 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       updatedBy
       revision
       controls {
-        id
-        displayID
-        refCode
-        description
+        edges {
+          node {
+            id
+            displayID
+            refCode
+            description
+          }
+        }
       }
       programs {
-          id
-          displayID
-          name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       editors {
         id

@@ -81,7 +81,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 func (OrganizationSetting) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("organization", Organization.Type).Ref("setting").Field("organization_id").Unique(),
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 

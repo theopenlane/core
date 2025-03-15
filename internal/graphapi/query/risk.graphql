@@ -64,8 +64,12 @@ mutation CreateRisk($input: CreateRiskInput!) {
       updatedAt
       updatedBy
       programs {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       editors {
         id
@@ -111,8 +115,12 @@ query GetAllRisks {
         updatedAt
         updatedBy
         programs {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         editors {
           id
@@ -151,8 +159,12 @@ query GetRiskByID($riskId: ID!) {
     updatedAt
     updatedBy
     programs {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     editors {
       id
@@ -191,8 +203,12 @@ query GetRisks($where: RiskWhereInput) {
         updatedAt
         updatedBy
         programs {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         editors {
           id
@@ -232,8 +248,12 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       updatedAt
       updatedBy
       programs {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       editors {
         id

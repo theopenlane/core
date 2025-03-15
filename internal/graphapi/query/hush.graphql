@@ -7,13 +7,25 @@ mutation CreateBulkCSVHush($input: Upload!) {
       name
       secretName
       integrations {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -28,13 +40,25 @@ mutation CreateBulkHush($input: [CreateHushInput!]) {
       name
       secretName
       integrations {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -49,13 +73,25 @@ mutation CreateHush($input: CreateHushInput!) {
       name
       secretName
       integrations {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -71,13 +107,25 @@ query GetAllHushes {
         name
         secretName
         integrations {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         organization {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         events {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         createdAt
         updatedAt
@@ -96,13 +144,25 @@ query GetHushByID($hushId: ID!) {
     name
     secretName
     integrations {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     organization {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     events {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     createdAt
     updatedAt
@@ -121,13 +181,25 @@ query GetHushes($where: HushWhereInput) {
         name
         secretName
         integrations {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         organization {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         events {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         createdAt
         updatedAt
@@ -147,13 +219,25 @@ mutation UpdateHush($updateHushId: ID!, $input: UpdateHushInput!) {
       name
       secretName
       integrations {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       events {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }

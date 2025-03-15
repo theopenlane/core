@@ -28,6 +28,9 @@ func (OrgSubscription) Fields() []ent.Field {
 			Optional(),
 		field.String("product_tier").
 			Comment("the common name of the product tier the subscription is associated with, e.g. starter tier").
+			Annotations(
+				entgql.OrderField("product_tier"),
+			).
 			Optional(),
 		field.JSON("product_price", models.Price{}).
 			Comment("the price of the product tier").
@@ -37,9 +40,15 @@ func (OrgSubscription) Fields() []ent.Field {
 			Optional(),
 		field.String("stripe_subscription_status").
 			Comment("the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status").
+			Annotations(
+				entgql.OrderField("stripe_subscription_status"),
+			).
 			Optional(),
 		field.Bool("active").
 			Comment("indicates if the subscription is active").
+			Annotations(
+				entgql.OrderField("active"),
+			).
 			Default(true),
 		field.String("stripe_customer_id").
 			Comment("the customer ID the subscription is associated to").
@@ -47,14 +56,23 @@ func (OrgSubscription) Fields() []ent.Field {
 			Optional(),
 		field.Time("expires_at").
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").
+			Annotations(
+				entgql.OrderField("expires_at"),
+			).
 			Nillable().
 			Optional(),
 		field.Time("trial_expires_at").
 			Comment("the time the trial is set to expire").
+			Annotations(
+				entgql.OrderField("trial_expires_at"),
+			).
 			Nillable().
 			Optional(),
 		field.String("days_until_due").
 			Comment("number of days until there is a due payment").
+			Annotations(
+				entgql.OrderField("days_until_due"),
+			).
 			Nillable().
 			Optional(),
 		field.Bool("payment_method_added").

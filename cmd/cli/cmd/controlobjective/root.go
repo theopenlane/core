@@ -93,13 +93,13 @@ func tableOutput(out []openlaneclient.ControlObjective) {
 	for _, i := range out {
 		programs := []string{}
 
-		for _, p := range i.Programs {
-			programs = append(programs, p.Name)
+		for _, p := range i.Programs.Edges {
+			programs = append(programs, p.Node.Name)
 		}
 
 		controls := []string{}
-		for _, c := range i.Controls {
-			controls = append(controls, c.RefCode)
+		for _, c := range i.Controls.Edges {
+			controls = append(controls, c.Node.RefCode)
 		}
 
 		writer.AddRow(i.ID, i.Name, *i.DesiredOutcome, *i.Source, *i.Revision, *i.Status, *i.ControlObjectiveType, strings.Join(controls, ", "), strings.Join(programs, ", "))

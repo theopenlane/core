@@ -18,13 +18,17 @@ mutation CreateBulkCSVTask($input: Upload!) {
       details
       category
       comments {
-        id
-        displayID
-        text
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
       }
       due
       id
@@ -58,13 +62,17 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       details
       category
       comments {
-        id
-        displayID
-        text
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
       }
       due
       id
@@ -98,13 +106,17 @@ mutation CreateTask($input: CreateTaskInput!) {
       details
       category
       comments {
-        id
-        displayID
-        text
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
       }
       due
       id
@@ -150,13 +162,17 @@ query GetAllTasks {
         details
         category
         comments {
-          id
-          displayID
-          text
-          createdAt
-          createdBy
-          updatedAt
-          updatedBy
+          edges {
+            node {
+              id
+              displayID
+              text
+              createdAt
+              createdBy
+              updatedAt
+              updatedBy
+            }
+          }
         }
         due
         id
@@ -194,13 +210,17 @@ query GetTaskByID($taskId: ID!) {
     details
     category
     comments {
-      id
-      displayID
-      text
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
+      edges {
+        node {
+          id
+          displayID
+          text
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
     }
     due
     id
@@ -234,13 +254,17 @@ query GetTasks($where: TaskWhereInput) {
         details
         category
         comments {
-          id
-          displayID
-          text
-          createdAt
-          createdBy
-          updatedAt
-          updatedBy
+          edges {
+            node {
+              id
+              displayID
+              text
+              createdAt
+              createdBy
+              updatedAt
+              updatedBy
+            }
+          }
         }
         due
         id
@@ -275,13 +299,17 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       details
       category
       comments {
-        id
-        displayID
-        text
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
       }
       due
       id
@@ -315,13 +343,17 @@ mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!) 
       details
       category
       comments {
-        id
-        displayID
-        text
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
       }
       due
       id

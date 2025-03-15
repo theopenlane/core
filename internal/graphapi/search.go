@@ -126,11 +126,12 @@ func adminSearchActionPlans(ctx context.Context, query string) ([]*generated.Act
 func searchContacts(ctx context.Context, query string) ([]*generated.Contact, error) {
 	return withTransactionalMutation(ctx).Contact.Query().Where(
 		contact.Or(
+			contact.EmailContainsFold(query),    // search by Email
 			contact.FullNameContainsFold(query), // search by FullName
 			contact.ID(query),                   // search equal to ID
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)
@@ -437,11 +438,12 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 func searchEvidences(ctx context.Context, query string) ([]*generated.Evidence, error) {
 	return withTransactionalMutation(ctx).Evidence.Query().Where(
 		evidence.Or(
-			evidence.DisplayID(query), // search equal to DisplayID
-			evidence.ID(query),        // search equal to ID
+			evidence.DisplayID(query),        // search equal to DisplayID
+			evidence.ID(query),               // search equal to ID
+			evidence.NameContainsFold(query), // search by Name
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)
@@ -938,12 +940,18 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 func searchStandards(ctx context.Context, query string) ([]*generated.Standard, error) {
 	return withTransactionalMutation(ctx).Standard.Query().Where(
 		standard.Or(
-			standard.ID(query),                    // search equal to ID
-			standard.NameContainsFold(query),      // search by Name
-			standard.ShortNameContainsFold(query), // search by ShortName
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(domains)::text LIKE $1", likeQuery)) // search by Domains
+			},
+			standard.FrameworkContainsFold(query),     // search by Framework
+			standard.GoverningBodyContainsFold(query), // search by GoverningBody
+			standard.ID(query),                        // search equal to ID
+			standard.NameContainsFold(query),          // search by Name
+			standard.ShortNameContainsFold(query),     // search by ShortName
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $7", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)

@@ -50,7 +50,7 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 }
 
 // ActionPlans is the resolver for the actionPlans field.
-func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error) {
+func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Query().Paginate(
 		ctx,
 		after,
@@ -66,7 +66,7 @@ func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[st
 }
 
 // ActionPlanHistories is the resolver for the actionPlanHistories field.
-func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanHistoryWhereInput) (*generated.ActionPlanHistoryConnection, error) {
+func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) (*generated.ActionPlanHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlanHistory.Query().Paginate(
 		ctx,
 		after,
@@ -82,7 +82,7 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 }
 
 // Contacts is the resolver for the contacts field.
-func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
+func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Query().Paginate(
 		ctx,
 		after,
@@ -98,7 +98,7 @@ func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[strin
 }
 
 // ContactHistories is the resolver for the contactHistories field.
-func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactHistoryWhereInput) (*generated.ContactHistoryConnection, error) {
+func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) (*generated.ContactHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ContactHistory.Query().Paginate(
 		ctx,
 		after,
@@ -114,7 +114,7 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 }
 
 // Controls is the resolver for the controls field.
-func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
+func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
 	query := withTransactionalMutation(ctx).Control.Query()
 
 	if graphutils.CheckForRequestedField(ctx, generated.TypeSubcontrol) {
@@ -210,7 +210,7 @@ func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[strin
 }
 
 // ControlHistories is the resolver for the controlHistories field.
-func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlHistoryWhereInput) (*generated.ControlHistoryConnection, error) {
+func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) (*generated.ControlHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlHistory.Query().Paginate(
 		ctx,
 		after,
@@ -226,7 +226,7 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 }
 
 // ControlImplementations is the resolver for the controlImplementations field.
-func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
+func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Query().Paginate(
 		ctx,
 		after,
@@ -242,7 +242,7 @@ func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgq
 }
 
 // ControlImplementationHistories is the resolver for the controlImplementationHistories field.
-func (r *queryResolver) ControlImplementationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationHistoryWhereInput) (*generated.ControlImplementationHistoryConnection, error) {
+func (r *queryResolver) ControlImplementationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) (*generated.ControlImplementationHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlImplementationHistory.Query().Paginate(
 		ctx,
 		after,
@@ -258,7 +258,7 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 }
 
 // ControlObjectives is the resolver for the controlObjectives field.
-func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
+func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjective.Query().Paginate(
 		ctx,
 		after,
@@ -274,7 +274,7 @@ func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cur
 }
 
 // ControlObjectiveHistories is the resolver for the controlObjectiveHistories field.
-func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveHistoryWhereInput) (*generated.ControlObjectiveHistoryConnection, error) {
+func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) (*generated.ControlObjectiveHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjectiveHistory.Query().Paginate(
 		ctx,
 		after,
@@ -322,7 +322,7 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 }
 
 // Entities is the resolver for the entities field.
-func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
+func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Query().Paginate(
 		ctx,
 		after,
@@ -422,7 +422,7 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 }
 
 // Evidences is the resolver for the evidences field.
-func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
+func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
 	res, err := withTransactionalMutation(ctx).Evidence.Query().Paginate(
 		ctx,
 		after,
@@ -438,7 +438,7 @@ func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[stri
 }
 
 // EvidenceHistories is the resolver for the evidenceHistories field.
-func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) (*generated.EvidenceHistoryConnection, error) {
+func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) (*generated.EvidenceHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).EvidenceHistory.Query().Paginate(
 		ctx,
 		after,
@@ -486,7 +486,7 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // Groups is the resolver for the groups field.
-func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) (*generated.GroupConnection, error) {
+func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) (*generated.GroupConnection, error) {
 	res, err := withTransactionalMutation(ctx).Group.Query().Paginate(
 		ctx,
 		after,
@@ -520,7 +520,7 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 }
 
 // GroupMemberships is the resolver for the groupMemberships field.
-func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
+func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Query().Paginate(
 		ctx,
 		after,
@@ -536,7 +536,7 @@ func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Curs
 }
 
 // GroupMembershipHistories is the resolver for the groupMembershipHistories field.
-func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipHistoryWhereInput) (*generated.GroupMembershipHistoryConnection, error) {
+func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) (*generated.GroupMembershipHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembershipHistory.Query().Paginate(
 		ctx,
 		after,
@@ -584,7 +584,7 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 }
 
 // Hushes is the resolver for the hushes field.
-func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushOrder, where *generated.HushWhereInput) (*generated.HushConnection, error) {
+func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) (*generated.HushConnection, error) {
 	res, err := withTransactionalMutation(ctx).Hush.Query().Paginate(
 		ctx,
 		after,
@@ -618,7 +618,7 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // Integrations is the resolver for the integrations field.
-func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
+func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
 	res, err := withTransactionalMutation(ctx).Integration.Query().Paginate(
 		ctx,
 		after,
@@ -684,7 +684,7 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 }
 
 // Invites is the resolver for the invites field.
-func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
+func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
 	res, err := withTransactionalMutation(ctx).Invite.Query().Paginate(
 		ctx,
 		after,
@@ -700,7 +700,7 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 }
 
 // MappedControls is the resolver for the mappedControls field.
-func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
+func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlOrder, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
 	res, err := withTransactionalMutation(ctx).MappedControl.Query().Paginate(
 		ctx,
 		after,
@@ -716,7 +716,7 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 }
 
 // MappedControlHistories is the resolver for the mappedControlHistories field.
-func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
+func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).MappedControlHistory.Query().Paginate(
 		ctx,
 		after,
@@ -732,7 +732,7 @@ func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgq
 }
 
 // Narratives is the resolver for the narratives field.
-func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
+func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
 	res, err := withTransactionalMutation(ctx).Narrative.Query().Paginate(
 		ctx,
 		after,
@@ -748,7 +748,7 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 }
 
 // NarrativeHistories is the resolver for the narrativeHistories field.
-func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeHistoryWhereInput) (*generated.NarrativeHistoryConnection, error) {
+func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) (*generated.NarrativeHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).NarrativeHistory.Query().Paginate(
 		ctx,
 		after,
@@ -796,7 +796,7 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // OrgMemberships is the resolver for the orgMemberships field.
-func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
+func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
 	res, err := withTransactionalMutation(ctx).OrgMembership.Query().Paginate(
 		ctx,
 		after,
@@ -812,7 +812,7 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 }
 
 // OrgMembershipHistories is the resolver for the orgMembershipHistories field.
-func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipHistoryWhereInput) (*generated.OrgMembershipHistoryConnection, error) {
+func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) (*generated.OrgMembershipHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).OrgMembershipHistory.Query().Paginate(
 		ctx,
 		after,
@@ -828,7 +828,7 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 }
 
 // OrgSubscriptions is the resolver for the orgSubscriptions field.
-func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionWhereInput) (*generated.OrgSubscriptionConnection, error) {
+func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) (*generated.OrgSubscriptionConnection, error) {
 	res, err := withTransactionalMutation(ctx).OrgSubscription.Query().Paginate(
 		ctx,
 		after,
@@ -844,7 +844,7 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 }
 
 // OrgSubscriptionHistories is the resolver for the orgSubscriptionHistories field.
-func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionHistoryWhereInput) (*generated.OrgSubscriptionHistoryConnection, error) {
+func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) (*generated.OrgSubscriptionHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).OrgSubscriptionHistory.Query().Paginate(
 		ctx,
 		after,
@@ -860,7 +860,7 @@ func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *ent
 }
 
 // Organizations is the resolver for the organizations field.
-func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) (*generated.OrganizationConnection, error) {
+func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) (*generated.OrganizationConnection, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Query().Paginate(
 		ctx,
 		after,
@@ -974,7 +974,7 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 }
 
 // Programs is the resolver for the programs field.
-func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
+func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
 	res, err := withTransactionalMutation(ctx).Program.Query().Paginate(
 		ctx,
 		after,
@@ -990,7 +990,7 @@ func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[strin
 }
 
 // ProgramHistories is the resolver for the programHistories field.
-func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) (*generated.ProgramHistoryConnection, error) {
+func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) (*generated.ProgramHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ProgramHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1006,7 +1006,7 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 }
 
 // ProgramMemberships is the resolver for the programMemberships field.
-func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
+func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Query().Paginate(
 		ctx,
 		after,
@@ -1022,7 +1022,7 @@ func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cu
 }
 
 // ProgramMembershipHistories is the resolver for the programMembershipHistories field.
-func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) (*generated.ProgramMembershipHistoryConnection, error) {
+func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) (*generated.ProgramMembershipHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembershipHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1038,7 +1038,7 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 }
 
 // Risks is the resolver for the risks field.
-func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
+func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Query().Paginate(
 		ctx,
 		after,
@@ -1054,7 +1054,7 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 }
 
 // RiskHistories is the resolver for the riskHistories field.
-func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskHistoryWhereInput) (*generated.RiskHistoryConnection, error) {
+func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) (*generated.RiskHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).RiskHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1070,7 +1070,7 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // Standards is the resolver for the standards field.
-func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
+func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
 	query := withTransactionalMutation(ctx).Standard.Query()
 
 	if graphutils.CheckForRequestedField(ctx, generated.TypeControl) {
@@ -1172,7 +1172,7 @@ func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[stri
 }
 
 // StandardHistories is the resolver for the standardHistories field.
-func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) (*generated.StandardHistoryConnection, error) {
+func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) (*generated.StandardHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).StandardHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1188,7 +1188,7 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 }
 
 // Subcontrols is the resolver for the subcontrols field.
-func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
+func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
 	query := withTransactionalMutation(ctx).Subcontrol.Query()
 
 	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
@@ -1260,7 +1260,7 @@ func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[st
 }
 
 // SubcontrolHistories is the resolver for the subcontrolHistories field.
-func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolHistoryWhereInput) (*generated.SubcontrolHistoryConnection, error) {
+func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) (*generated.SubcontrolHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).SubcontrolHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1276,7 +1276,7 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 }
 
 // Subscribers is the resolver for the subscribers field.
-func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
+func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
 	res, err := withTransactionalMutation(ctx).Subscriber.Query().Paginate(
 		ctx,
 		after,
@@ -1308,7 +1308,7 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 }
 
 // Tasks is the resolver for the tasks field.
-func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
+func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
 	res, err := withTransactionalMutation(ctx).Task.Query().Paginate(
 		ctx,
 		after,
@@ -1324,7 +1324,7 @@ func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string],
 }
 
 // TaskHistories is the resolver for the taskHistories field.
-func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) (*generated.TaskHistoryConnection, error) {
+func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) (*generated.TaskHistoryConnection, error) {
 	res, err := withTransactionalMutation(ctx).TaskHistory.Query().Paginate(
 		ctx,
 		after,
@@ -1340,7 +1340,7 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // Templates is the resolver for the templates field.
-func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
+func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
 	res, err := withTransactionalMutation(ctx).Template.Query().Paginate(
 		ctx,
 		after,
@@ -1374,7 +1374,7 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 }
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
+func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	res, err := withTransactionalMutation(ctx).User.Query().Paginate(
 		ctx,
 		after,

@@ -475,19 +475,14 @@ func (c *ActionPlanConnection) build(nodes []*ActionPlan, pager *actionplanPager
 type ActionPlanPaginateOption func(*actionplanPager) error
 
 // WithActionPlanOrder configures pagination ordering.
-func WithActionPlanOrder(order *ActionPlanOrder) ActionPlanPaginateOption {
-	if order == nil {
-		order = DefaultActionPlanOrder
-	}
-	o := *order
+func WithActionPlanOrder(order []*ActionPlanOrder) ActionPlanPaginateOption {
 	return func(pager *actionplanPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultActionPlanOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -505,7 +500,7 @@ func WithActionPlanFilter(filter func(*ActionPlanQuery) (*ActionPlanQuery, error
 
 type actionplanPager struct {
 	reverse bool
-	order   *ActionPlanOrder
+	order   []*ActionPlanOrder
 	filter  func(*ActionPlanQuery) (*ActionPlanQuery, error)
 }
 
@@ -516,8 +511,10 @@ func newActionPlanPager(opts []ActionPlanPaginateOption, reverse bool) (*actionp
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultActionPlanOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -530,48 +527,87 @@ func (p *actionplanPager) applyFilter(query *ActionPlanQuery) (*ActionPlanQuery,
 }
 
 func (p *actionplanPager) toCursor(ap *ActionPlan) Cursor {
-	return p.order.Field.toCursor(ap)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(ap).Value)
+	}
+	return Cursor{ID: ap.ID, Value: cs_}
 }
 
 func (p *actionplanPager) applyCursors(query *ActionPlanQuery, after, before *Cursor) (*ActionPlanQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultActionPlanOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultActionPlanOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *actionplanPager) applyOrder(query *ActionPlanQuery) *ActionPlanQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultActionPlanOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultActionPlanOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultActionPlanOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *actionplanPager) orderExpr(query *ActionPlanQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultActionPlanOrder.Field {
-			b.Comma().Ident(DefaultActionPlanOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultActionPlanOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -626,6 +662,89 @@ func (ap *ActionPlanQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ActionPlanOrderFieldDueDate orders ActionPlan by due_date.
+	ActionPlanOrderFieldDueDate = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.DueDate, nil
+		},
+		column: actionplan.FieldDueDate,
+		toTerm: actionplan.ByDueDate,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.DueDate,
+			}
+		},
+	}
+	// ActionPlanOrderFieldPriority orders ActionPlan by priority.
+	ActionPlanOrderFieldPriority = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.Priority, nil
+		},
+		column: actionplan.FieldPriority,
+		toTerm: actionplan.ByPriority,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.Priority,
+			}
+		},
+	}
+	// ActionPlanOrderFieldSource orders ActionPlan by source.
+	ActionPlanOrderFieldSource = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.Source, nil
+		},
+		column: actionplan.FieldSource,
+		toTerm: actionplan.BySource,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.Source,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ActionPlanOrderField) String() string {
+	var str string
+	switch f.column {
+	case ActionPlanOrderFieldDueDate.column:
+		str = "due_date"
+	case ActionPlanOrderFieldPriority.column:
+		str = "PRIORITY"
+	case ActionPlanOrderFieldSource.column:
+		str = "source"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ActionPlanOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ActionPlanOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ActionPlanOrderField %T must be a string", v)
+	}
+	switch str {
+	case "due_date":
+		*f = *ActionPlanOrderFieldDueDate
+	case "PRIORITY":
+		*f = *ActionPlanOrderFieldPriority
+	case "source":
+		*f = *ActionPlanOrderFieldSource
+	default:
+		return fmt.Errorf("%s is not a valid ActionPlanOrderField", str)
+	}
+	return nil
 }
 
 // ActionPlanOrderField defines the ordering field of ActionPlan.
@@ -877,6 +996,89 @@ func (aph *ActionPlanHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ActionPlanHistoryOrderFieldDueDate orders ActionPlanHistory by due_date.
+	ActionPlanHistoryOrderFieldDueDate = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.DueDate, nil
+		},
+		column: actionplanhistory.FieldDueDate,
+		toTerm: actionplanhistory.ByDueDate,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.DueDate,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldPriority orders ActionPlanHistory by priority.
+	ActionPlanHistoryOrderFieldPriority = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.Priority, nil
+		},
+		column: actionplanhistory.FieldPriority,
+		toTerm: actionplanhistory.ByPriority,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.Priority,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldSource orders ActionPlanHistory by source.
+	ActionPlanHistoryOrderFieldSource = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.Source, nil
+		},
+		column: actionplanhistory.FieldSource,
+		toTerm: actionplanhistory.BySource,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.Source,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ActionPlanHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ActionPlanHistoryOrderFieldDueDate.column:
+		str = "due_date"
+	case ActionPlanHistoryOrderFieldPriority.column:
+		str = "PRIORITY"
+	case ActionPlanHistoryOrderFieldSource.column:
+		str = "source"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ActionPlanHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ActionPlanHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ActionPlanHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "due_date":
+		*f = *ActionPlanHistoryOrderFieldDueDate
+	case "PRIORITY":
+		*f = *ActionPlanHistoryOrderFieldPriority
+	case "source":
+		*f = *ActionPlanHistoryOrderFieldSource
+	default:
+		return fmt.Errorf("%s is not a valid ActionPlanHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ActionPlanHistoryOrderField defines the ordering field of ActionPlanHistory.
 type ActionPlanHistoryOrderField struct {
 	// Value extracts the ordering value from the given ActionPlanHistory.
@@ -973,19 +1175,14 @@ func (c *ContactConnection) build(nodes []*Contact, pager *contactPager, after *
 type ContactPaginateOption func(*contactPager) error
 
 // WithContactOrder configures pagination ordering.
-func WithContactOrder(order *ContactOrder) ContactPaginateOption {
-	if order == nil {
-		order = DefaultContactOrder
-	}
-	o := *order
+func WithContactOrder(order []*ContactOrder) ContactPaginateOption {
 	return func(pager *contactPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultContactOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -1003,7 +1200,7 @@ func WithContactFilter(filter func(*ContactQuery) (*ContactQuery, error)) Contac
 
 type contactPager struct {
 	reverse bool
-	order   *ContactOrder
+	order   []*ContactOrder
 	filter  func(*ContactQuery) (*ContactQuery, error)
 }
 
@@ -1014,8 +1211,10 @@ func newContactPager(opts []ContactPaginateOption, reverse bool) (*contactPager,
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultContactOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -1028,48 +1227,87 @@ func (p *contactPager) applyFilter(query *ContactQuery) (*ContactQuery, error) {
 }
 
 func (p *contactPager) toCursor(c *Contact) Cursor {
-	return p.order.Field.toCursor(c)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(c).Value)
+	}
+	return Cursor{ID: c.ID, Value: cs_}
 }
 
 func (p *contactPager) applyCursors(query *ContactQuery, after, before *Cursor) (*ContactQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultContactOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultContactOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *contactPager) applyOrder(query *ContactQuery) *ContactQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultContactOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultContactOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultContactOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *contactPager) orderExpr(query *ContactQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultContactOrder.Field {
-			b.Comma().Ident(DefaultContactOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultContactOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -1124,6 +1362,125 @@ func (c *ContactQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ContactOrderFieldFullName orders Contact by full_name.
+	ContactOrderFieldFullName = &ContactOrderField{
+		Value: func(c *Contact) (ent.Value, error) {
+			return c.FullName, nil
+		},
+		column: contact.FieldFullName,
+		toTerm: contact.ByFullName,
+		toCursor: func(c *Contact) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.FullName,
+			}
+		},
+	}
+	// ContactOrderFieldTitle orders Contact by title.
+	ContactOrderFieldTitle = &ContactOrderField{
+		Value: func(c *Contact) (ent.Value, error) {
+			return c.Title, nil
+		},
+		column: contact.FieldTitle,
+		toTerm: contact.ByTitle,
+		toCursor: func(c *Contact) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Title,
+			}
+		},
+	}
+	// ContactOrderFieldCompany orders Contact by company.
+	ContactOrderFieldCompany = &ContactOrderField{
+		Value: func(c *Contact) (ent.Value, error) {
+			return c.Company, nil
+		},
+		column: contact.FieldCompany,
+		toTerm: contact.ByCompany,
+		toCursor: func(c *Contact) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Company,
+			}
+		},
+	}
+	// ContactOrderFieldEmail orders Contact by email.
+	ContactOrderFieldEmail = &ContactOrderField{
+		Value: func(c *Contact) (ent.Value, error) {
+			return c.Email, nil
+		},
+		column: contact.FieldEmail,
+		toTerm: contact.ByEmail,
+		toCursor: func(c *Contact) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Email,
+			}
+		},
+	}
+	// ContactOrderFieldStatus orders Contact by status.
+	ContactOrderFieldStatus = &ContactOrderField{
+		Value: func(c *Contact) (ent.Value, error) {
+			return c.Status, nil
+		},
+		column: contact.FieldStatus,
+		toTerm: contact.ByStatus,
+		toCursor: func(c *Contact) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ContactOrderField) String() string {
+	var str string
+	switch f.column {
+	case ContactOrderFieldFullName.column:
+		str = "full_name"
+	case ContactOrderFieldTitle.column:
+		str = "title"
+	case ContactOrderFieldCompany.column:
+		str = "company"
+	case ContactOrderFieldEmail.column:
+		str = "email"
+	case ContactOrderFieldStatus.column:
+		str = "STATUS"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ContactOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ContactOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ContactOrderField %T must be a string", v)
+	}
+	switch str {
+	case "full_name":
+		*f = *ContactOrderFieldFullName
+	case "title":
+		*f = *ContactOrderFieldTitle
+	case "company":
+		*f = *ContactOrderFieldCompany
+	case "email":
+		*f = *ContactOrderFieldEmail
+	case "STATUS":
+		*f = *ContactOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid ContactOrderField", str)
+	}
+	return nil
 }
 
 // ContactOrderField defines the ordering field of Contact.
@@ -1375,6 +1732,125 @@ func (ch *ContactHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ContactHistoryOrderFieldFullName orders ContactHistory by full_name.
+	ContactHistoryOrderFieldFullName = &ContactHistoryOrderField{
+		Value: func(ch *ContactHistory) (ent.Value, error) {
+			return ch.FullName, nil
+		},
+		column: contacthistory.FieldFullName,
+		toTerm: contacthistory.ByFullName,
+		toCursor: func(ch *ContactHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.FullName,
+			}
+		},
+	}
+	// ContactHistoryOrderFieldTitle orders ContactHistory by title.
+	ContactHistoryOrderFieldTitle = &ContactHistoryOrderField{
+		Value: func(ch *ContactHistory) (ent.Value, error) {
+			return ch.Title, nil
+		},
+		column: contacthistory.FieldTitle,
+		toTerm: contacthistory.ByTitle,
+		toCursor: func(ch *ContactHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Title,
+			}
+		},
+	}
+	// ContactHistoryOrderFieldCompany orders ContactHistory by company.
+	ContactHistoryOrderFieldCompany = &ContactHistoryOrderField{
+		Value: func(ch *ContactHistory) (ent.Value, error) {
+			return ch.Company, nil
+		},
+		column: contacthistory.FieldCompany,
+		toTerm: contacthistory.ByCompany,
+		toCursor: func(ch *ContactHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Company,
+			}
+		},
+	}
+	// ContactHistoryOrderFieldEmail orders ContactHistory by email.
+	ContactHistoryOrderFieldEmail = &ContactHistoryOrderField{
+		Value: func(ch *ContactHistory) (ent.Value, error) {
+			return ch.Email, nil
+		},
+		column: contacthistory.FieldEmail,
+		toTerm: contacthistory.ByEmail,
+		toCursor: func(ch *ContactHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Email,
+			}
+		},
+	}
+	// ContactHistoryOrderFieldStatus orders ContactHistory by status.
+	ContactHistoryOrderFieldStatus = &ContactHistoryOrderField{
+		Value: func(ch *ContactHistory) (ent.Value, error) {
+			return ch.Status, nil
+		},
+		column: contacthistory.FieldStatus,
+		toTerm: contacthistory.ByStatus,
+		toCursor: func(ch *ContactHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ContactHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ContactHistoryOrderFieldFullName.column:
+		str = "full_name"
+	case ContactHistoryOrderFieldTitle.column:
+		str = "title"
+	case ContactHistoryOrderFieldCompany.column:
+		str = "company"
+	case ContactHistoryOrderFieldEmail.column:
+		str = "email"
+	case ContactHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ContactHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ContactHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ContactHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "full_name":
+		*f = *ContactHistoryOrderFieldFullName
+	case "title":
+		*f = *ContactHistoryOrderFieldTitle
+	case "company":
+		*f = *ContactHistoryOrderFieldCompany
+	case "email":
+		*f = *ContactHistoryOrderFieldEmail
+	case "STATUS":
+		*f = *ContactHistoryOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid ContactHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ContactHistoryOrderField defines the ordering field of ContactHistory.
 type ContactHistoryOrderField struct {
 	// Value extracts the ordering value from the given ContactHistory.
@@ -1471,19 +1947,14 @@ func (c *ControlConnection) build(nodes []*Control, pager *controlPager, after *
 type ControlPaginateOption func(*controlPager) error
 
 // WithControlOrder configures pagination ordering.
-func WithControlOrder(order *ControlOrder) ControlPaginateOption {
-	if order == nil {
-		order = DefaultControlOrder
-	}
-	o := *order
+func WithControlOrder(order []*ControlOrder) ControlPaginateOption {
 	return func(pager *controlPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultControlOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -1501,7 +1972,7 @@ func WithControlFilter(filter func(*ControlQuery) (*ControlQuery, error)) Contro
 
 type controlPager struct {
 	reverse bool
-	order   *ControlOrder
+	order   []*ControlOrder
 	filter  func(*ControlQuery) (*ControlQuery, error)
 }
 
@@ -1512,8 +1983,10 @@ func newControlPager(opts []ControlPaginateOption, reverse bool) (*controlPager,
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultControlOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -1526,48 +1999,87 @@ func (p *controlPager) applyFilter(query *ControlQuery) (*ControlQuery, error) {
 }
 
 func (p *controlPager) toCursor(c *Control) Cursor {
-	return p.order.Field.toCursor(c)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(c).Value)
+	}
+	return Cursor{ID: c.ID, Value: cs_}
 }
 
 func (p *controlPager) applyCursors(query *ControlQuery, after, before *Cursor) (*ControlQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultControlOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultControlOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *controlPager) applyOrder(query *ControlQuery) *ControlQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultControlOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultControlOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultControlOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *controlPager) orderExpr(query *ControlQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultControlOrder.Field {
-			b.Comma().Ident(DefaultControlOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultControlOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -1622,6 +2134,125 @@ func (c *ControlQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ControlOrderFieldStatus orders Control by status.
+	ControlOrderFieldStatus = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.Status, nil
+		},
+		column: control.FieldStatus,
+		toTerm: control.ByStatus,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Status,
+			}
+		},
+	}
+	// ControlOrderFieldSource orders Control by source.
+	ControlOrderFieldSource = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.Source, nil
+		},
+		column: control.FieldSource,
+		toTerm: control.BySource,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Source,
+			}
+		},
+	}
+	// ControlOrderFieldControlType orders Control by control_type.
+	ControlOrderFieldControlType = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.ControlType, nil
+		},
+		column: control.FieldControlType,
+		toTerm: control.ByControlType,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.ControlType,
+			}
+		},
+	}
+	// ControlOrderFieldCategory orders Control by category.
+	ControlOrderFieldCategory = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.Category, nil
+		},
+		column: control.FieldCategory,
+		toTerm: control.ByCategory,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Category,
+			}
+		},
+	}
+	// ControlOrderFieldSubcategory orders Control by subcategory.
+	ControlOrderFieldSubcategory = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.Subcategory, nil
+		},
+		column: control.FieldSubcategory,
+		toTerm: control.BySubcategory,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.Subcategory,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlOrderFieldStatus.column:
+		str = "status"
+	case ControlOrderFieldSource.column:
+		str = "SOURCE"
+	case ControlOrderFieldControlType.column:
+		str = "CONTROL_TYPE"
+	case ControlOrderFieldCategory.column:
+		str = "category"
+	case ControlOrderFieldSubcategory.column:
+		str = "subcategory"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlOrderField %T must be a string", v)
+	}
+	switch str {
+	case "status":
+		*f = *ControlOrderFieldStatus
+	case "SOURCE":
+		*f = *ControlOrderFieldSource
+	case "CONTROL_TYPE":
+		*f = *ControlOrderFieldControlType
+	case "category":
+		*f = *ControlOrderFieldCategory
+	case "subcategory":
+		*f = *ControlOrderFieldSubcategory
+	default:
+		return fmt.Errorf("%s is not a valid ControlOrderField", str)
+	}
+	return nil
 }
 
 // ControlOrderField defines the ordering field of Control.
@@ -1873,6 +2504,125 @@ func (ch *ControlHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ControlHistoryOrderFieldStatus orders ControlHistory by status.
+	ControlHistoryOrderFieldStatus = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.Status, nil
+		},
+		column: controlhistory.FieldStatus,
+		toTerm: controlhistory.ByStatus,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Status,
+			}
+		},
+	}
+	// ControlHistoryOrderFieldSource orders ControlHistory by source.
+	ControlHistoryOrderFieldSource = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.Source, nil
+		},
+		column: controlhistory.FieldSource,
+		toTerm: controlhistory.BySource,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Source,
+			}
+		},
+	}
+	// ControlHistoryOrderFieldControlType orders ControlHistory by control_type.
+	ControlHistoryOrderFieldControlType = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.ControlType, nil
+		},
+		column: controlhistory.FieldControlType,
+		toTerm: controlhistory.ByControlType,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.ControlType,
+			}
+		},
+	}
+	// ControlHistoryOrderFieldCategory orders ControlHistory by category.
+	ControlHistoryOrderFieldCategory = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.Category, nil
+		},
+		column: controlhistory.FieldCategory,
+		toTerm: controlhistory.ByCategory,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Category,
+			}
+		},
+	}
+	// ControlHistoryOrderFieldSubcategory orders ControlHistory by subcategory.
+	ControlHistoryOrderFieldSubcategory = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.Subcategory, nil
+		},
+		column: controlhistory.FieldSubcategory,
+		toTerm: controlhistory.BySubcategory,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.Subcategory,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlHistoryOrderFieldStatus.column:
+		str = "status"
+	case ControlHistoryOrderFieldSource.column:
+		str = "SOURCE"
+	case ControlHistoryOrderFieldControlType.column:
+		str = "CONTROL_TYPE"
+	case ControlHistoryOrderFieldCategory.column:
+		str = "category"
+	case ControlHistoryOrderFieldSubcategory.column:
+		str = "subcategory"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "status":
+		*f = *ControlHistoryOrderFieldStatus
+	case "SOURCE":
+		*f = *ControlHistoryOrderFieldSource
+	case "CONTROL_TYPE":
+		*f = *ControlHistoryOrderFieldControlType
+	case "category":
+		*f = *ControlHistoryOrderFieldCategory
+	case "subcategory":
+		*f = *ControlHistoryOrderFieldSubcategory
+	default:
+		return fmt.Errorf("%s is not a valid ControlHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ControlHistoryOrderField defines the ordering field of ControlHistory.
 type ControlHistoryOrderField struct {
 	// Value extracts the ordering value from the given ControlHistory.
@@ -1969,19 +2719,14 @@ func (c *ControlImplementationConnection) build(nodes []*ControlImplementation, 
 type ControlImplementationPaginateOption func(*controlimplementationPager) error
 
 // WithControlImplementationOrder configures pagination ordering.
-func WithControlImplementationOrder(order *ControlImplementationOrder) ControlImplementationPaginateOption {
-	if order == nil {
-		order = DefaultControlImplementationOrder
-	}
-	o := *order
+func WithControlImplementationOrder(order []*ControlImplementationOrder) ControlImplementationPaginateOption {
 	return func(pager *controlimplementationPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultControlImplementationOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -1999,7 +2744,7 @@ func WithControlImplementationFilter(filter func(*ControlImplementationQuery) (*
 
 type controlimplementationPager struct {
 	reverse bool
-	order   *ControlImplementationOrder
+	order   []*ControlImplementationOrder
 	filter  func(*ControlImplementationQuery) (*ControlImplementationQuery, error)
 }
 
@@ -2010,8 +2755,10 @@ func newControlImplementationPager(opts []ControlImplementationPaginateOption, r
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultControlImplementationOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -2024,48 +2771,87 @@ func (p *controlimplementationPager) applyFilter(query *ControlImplementationQue
 }
 
 func (p *controlimplementationPager) toCursor(ci *ControlImplementation) Cursor {
-	return p.order.Field.toCursor(ci)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(ci).Value)
+	}
+	return Cursor{ID: ci.ID, Value: cs_}
 }
 
 func (p *controlimplementationPager) applyCursors(query *ControlImplementationQuery, after, before *Cursor) (*ControlImplementationQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultControlImplementationOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultControlImplementationOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *controlimplementationPager) applyOrder(query *ControlImplementationQuery) *ControlImplementationQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultControlImplementationOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultControlImplementationOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultControlImplementationOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *controlimplementationPager) orderExpr(query *ControlImplementationQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultControlImplementationOrder.Field {
-			b.Comma().Ident(DefaultControlImplementationOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultControlImplementationOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -2120,6 +2906,107 @@ func (ci *ControlImplementationQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ControlImplementationOrderFieldStatus orders ControlImplementation by status.
+	ControlImplementationOrderFieldStatus = &ControlImplementationOrderField{
+		Value: func(ci *ControlImplementation) (ent.Value, error) {
+			return ci.Status, nil
+		},
+		column: controlimplementation.FieldStatus,
+		toTerm: controlimplementation.ByStatus,
+		toCursor: func(ci *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    ci.ID,
+				Value: ci.Status,
+			}
+		},
+	}
+	// ControlImplementationOrderFieldImplementationDate orders ControlImplementation by implementation_date.
+	ControlImplementationOrderFieldImplementationDate = &ControlImplementationOrderField{
+		Value: func(ci *ControlImplementation) (ent.Value, error) {
+			return ci.ImplementationDate, nil
+		},
+		column: controlimplementation.FieldImplementationDate,
+		toTerm: controlimplementation.ByImplementationDate,
+		toCursor: func(ci *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    ci.ID,
+				Value: ci.ImplementationDate,
+			}
+		},
+	}
+	// ControlImplementationOrderFieldVerified orders ControlImplementation by verified.
+	ControlImplementationOrderFieldVerified = &ControlImplementationOrderField{
+		Value: func(ci *ControlImplementation) (ent.Value, error) {
+			return ci.Verified, nil
+		},
+		column: controlimplementation.FieldVerified,
+		toTerm: controlimplementation.ByVerified,
+		toCursor: func(ci *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    ci.ID,
+				Value: ci.Verified,
+			}
+		},
+	}
+	// ControlImplementationOrderFieldVerificationDate orders ControlImplementation by verification_date.
+	ControlImplementationOrderFieldVerificationDate = &ControlImplementationOrderField{
+		Value: func(ci *ControlImplementation) (ent.Value, error) {
+			return ci.VerificationDate, nil
+		},
+		column: controlimplementation.FieldVerificationDate,
+		toTerm: controlimplementation.ByVerificationDate,
+		toCursor: func(ci *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    ci.ID,
+				Value: ci.VerificationDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlImplementationOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlImplementationOrderFieldStatus.column:
+		str = "STATUS"
+	case ControlImplementationOrderFieldImplementationDate.column:
+		str = "implementation_date"
+	case ControlImplementationOrderFieldVerified.column:
+		str = "verified"
+	case ControlImplementationOrderFieldVerificationDate.column:
+		str = "verification_date"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlImplementationOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlImplementationOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlImplementationOrderField %T must be a string", v)
+	}
+	switch str {
+	case "STATUS":
+		*f = *ControlImplementationOrderFieldStatus
+	case "implementation_date":
+		*f = *ControlImplementationOrderFieldImplementationDate
+	case "verified":
+		*f = *ControlImplementationOrderFieldVerified
+	case "verification_date":
+		*f = *ControlImplementationOrderFieldVerificationDate
+	default:
+		return fmt.Errorf("%s is not a valid ControlImplementationOrderField", str)
+	}
+	return nil
 }
 
 // ControlImplementationOrderField defines the ordering field of ControlImplementation.
@@ -2371,6 +3258,107 @@ func (cih *ControlImplementationHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ControlImplementationHistoryOrderFieldStatus orders ControlImplementationHistory by status.
+	ControlImplementationHistoryOrderFieldStatus = &ControlImplementationHistoryOrderField{
+		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
+			return cih.Status, nil
+		},
+		column: controlimplementationhistory.FieldStatus,
+		toTerm: controlimplementationhistory.ByStatus,
+		toCursor: func(cih *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    cih.ID,
+				Value: cih.Status,
+			}
+		},
+	}
+	// ControlImplementationHistoryOrderFieldImplementationDate orders ControlImplementationHistory by implementation_date.
+	ControlImplementationHistoryOrderFieldImplementationDate = &ControlImplementationHistoryOrderField{
+		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
+			return cih.ImplementationDate, nil
+		},
+		column: controlimplementationhistory.FieldImplementationDate,
+		toTerm: controlimplementationhistory.ByImplementationDate,
+		toCursor: func(cih *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    cih.ID,
+				Value: cih.ImplementationDate,
+			}
+		},
+	}
+	// ControlImplementationHistoryOrderFieldVerified orders ControlImplementationHistory by verified.
+	ControlImplementationHistoryOrderFieldVerified = &ControlImplementationHistoryOrderField{
+		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
+			return cih.Verified, nil
+		},
+		column: controlimplementationhistory.FieldVerified,
+		toTerm: controlimplementationhistory.ByVerified,
+		toCursor: func(cih *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    cih.ID,
+				Value: cih.Verified,
+			}
+		},
+	}
+	// ControlImplementationHistoryOrderFieldVerificationDate orders ControlImplementationHistory by verification_date.
+	ControlImplementationHistoryOrderFieldVerificationDate = &ControlImplementationHistoryOrderField{
+		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
+			return cih.VerificationDate, nil
+		},
+		column: controlimplementationhistory.FieldVerificationDate,
+		toTerm: controlimplementationhistory.ByVerificationDate,
+		toCursor: func(cih *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    cih.ID,
+				Value: cih.VerificationDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlImplementationHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlImplementationHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case ControlImplementationHistoryOrderFieldImplementationDate.column:
+		str = "implementation_date"
+	case ControlImplementationHistoryOrderFieldVerified.column:
+		str = "verified"
+	case ControlImplementationHistoryOrderFieldVerificationDate.column:
+		str = "verification_date"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlImplementationHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlImplementationHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlImplementationHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "STATUS":
+		*f = *ControlImplementationHistoryOrderFieldStatus
+	case "implementation_date":
+		*f = *ControlImplementationHistoryOrderFieldImplementationDate
+	case "verified":
+		*f = *ControlImplementationHistoryOrderFieldVerified
+	case "verification_date":
+		*f = *ControlImplementationHistoryOrderFieldVerificationDate
+	default:
+		return fmt.Errorf("%s is not a valid ControlImplementationHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ControlImplementationHistoryOrderField defines the ordering field of ControlImplementationHistory.
 type ControlImplementationHistoryOrderField struct {
 	// Value extracts the ordering value from the given ControlImplementationHistory.
@@ -2467,19 +3455,14 @@ func (c *ControlObjectiveConnection) build(nodes []*ControlObjective, pager *con
 type ControlObjectivePaginateOption func(*controlobjectivePager) error
 
 // WithControlObjectiveOrder configures pagination ordering.
-func WithControlObjectiveOrder(order *ControlObjectiveOrder) ControlObjectivePaginateOption {
-	if order == nil {
-		order = DefaultControlObjectiveOrder
-	}
-	o := *order
+func WithControlObjectiveOrder(order []*ControlObjectiveOrder) ControlObjectivePaginateOption {
 	return func(pager *controlobjectivePager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultControlObjectiveOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -2497,7 +3480,7 @@ func WithControlObjectiveFilter(filter func(*ControlObjectiveQuery) (*ControlObj
 
 type controlobjectivePager struct {
 	reverse bool
-	order   *ControlObjectiveOrder
+	order   []*ControlObjectiveOrder
 	filter  func(*ControlObjectiveQuery) (*ControlObjectiveQuery, error)
 }
 
@@ -2508,8 +3491,10 @@ func newControlObjectivePager(opts []ControlObjectivePaginateOption, reverse boo
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultControlObjectiveOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -2522,48 +3507,87 @@ func (p *controlobjectivePager) applyFilter(query *ControlObjectiveQuery) (*Cont
 }
 
 func (p *controlobjectivePager) toCursor(co *ControlObjective) Cursor {
-	return p.order.Field.toCursor(co)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(co).Value)
+	}
+	return Cursor{ID: co.ID, Value: cs_}
 }
 
 func (p *controlobjectivePager) applyCursors(query *ControlObjectiveQuery, after, before *Cursor) (*ControlObjectiveQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultControlObjectiveOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultControlObjectiveOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *controlobjectivePager) applyOrder(query *ControlObjectiveQuery) *ControlObjectiveQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultControlObjectiveOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultControlObjectiveOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultControlObjectiveOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *controlobjectivePager) orderExpr(query *ControlObjectiveQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultControlObjectiveOrder.Field {
-			b.Comma().Ident(DefaultControlObjectiveOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultControlObjectiveOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -2618,6 +3642,143 @@ func (co *ControlObjectiveQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ControlObjectiveOrderFieldName orders ControlObjective by name.
+	ControlObjectiveOrderFieldName = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Name, nil
+		},
+		column: controlobjective.FieldName,
+		toTerm: controlobjective.ByName,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Name,
+			}
+		},
+	}
+	// ControlObjectiveOrderFieldStatus orders ControlObjective by status.
+	ControlObjectiveOrderFieldStatus = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Status, nil
+		},
+		column: controlobjective.FieldStatus,
+		toTerm: controlobjective.ByStatus,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Status,
+			}
+		},
+	}
+	// ControlObjectiveOrderFieldSource orders ControlObjective by source.
+	ControlObjectiveOrderFieldSource = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Source, nil
+		},
+		column: controlobjective.FieldSource,
+		toTerm: controlobjective.BySource,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Source,
+			}
+		},
+	}
+	// ControlObjectiveOrderFieldControlObjectiveType orders ControlObjective by control_objective_type.
+	ControlObjectiveOrderFieldControlObjectiveType = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.ControlObjectiveType, nil
+		},
+		column: controlobjective.FieldControlObjectiveType,
+		toTerm: controlobjective.ByControlObjectiveType,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.ControlObjectiveType,
+			}
+		},
+	}
+	// ControlObjectiveOrderFieldCategory orders ControlObjective by category.
+	ControlObjectiveOrderFieldCategory = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Category, nil
+		},
+		column: controlobjective.FieldCategory,
+		toTerm: controlobjective.ByCategory,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Category,
+			}
+		},
+	}
+	// ControlObjectiveOrderFieldSubcategory orders ControlObjective by subcategory.
+	ControlObjectiveOrderFieldSubcategory = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Subcategory, nil
+		},
+		column: controlobjective.FieldSubcategory,
+		toTerm: controlobjective.BySubcategory,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Subcategory,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlObjectiveOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlObjectiveOrderFieldName.column:
+		str = "name"
+	case ControlObjectiveOrderFieldStatus.column:
+		str = "status"
+	case ControlObjectiveOrderFieldSource.column:
+		str = "SOURCE"
+	case ControlObjectiveOrderFieldControlObjectiveType.column:
+		str = "control_objective_type"
+	case ControlObjectiveOrderFieldCategory.column:
+		str = "category"
+	case ControlObjectiveOrderFieldSubcategory.column:
+		str = "subcategory"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlObjectiveOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlObjectiveOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlObjectiveOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ControlObjectiveOrderFieldName
+	case "status":
+		*f = *ControlObjectiveOrderFieldStatus
+	case "SOURCE":
+		*f = *ControlObjectiveOrderFieldSource
+	case "control_objective_type":
+		*f = *ControlObjectiveOrderFieldControlObjectiveType
+	case "category":
+		*f = *ControlObjectiveOrderFieldCategory
+	case "subcategory":
+		*f = *ControlObjectiveOrderFieldSubcategory
+	default:
+		return fmt.Errorf("%s is not a valid ControlObjectiveOrderField", str)
+	}
+	return nil
 }
 
 // ControlObjectiveOrderField defines the ordering field of ControlObjective.
@@ -2867,6 +4028,143 @@ func (coh *ControlObjectiveHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ControlObjectiveHistoryOrderFieldName orders ControlObjectiveHistory by name.
+	ControlObjectiveHistoryOrderFieldName = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Name, nil
+		},
+		column: controlobjectivehistory.FieldName,
+		toTerm: controlobjectivehistory.ByName,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Name,
+			}
+		},
+	}
+	// ControlObjectiveHistoryOrderFieldStatus orders ControlObjectiveHistory by status.
+	ControlObjectiveHistoryOrderFieldStatus = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Status, nil
+		},
+		column: controlobjectivehistory.FieldStatus,
+		toTerm: controlobjectivehistory.ByStatus,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Status,
+			}
+		},
+	}
+	// ControlObjectiveHistoryOrderFieldSource orders ControlObjectiveHistory by source.
+	ControlObjectiveHistoryOrderFieldSource = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Source, nil
+		},
+		column: controlobjectivehistory.FieldSource,
+		toTerm: controlobjectivehistory.BySource,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Source,
+			}
+		},
+	}
+	// ControlObjectiveHistoryOrderFieldControlObjectiveType orders ControlObjectiveHistory by control_objective_type.
+	ControlObjectiveHistoryOrderFieldControlObjectiveType = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.ControlObjectiveType, nil
+		},
+		column: controlobjectivehistory.FieldControlObjectiveType,
+		toTerm: controlobjectivehistory.ByControlObjectiveType,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.ControlObjectiveType,
+			}
+		},
+	}
+	// ControlObjectiveHistoryOrderFieldCategory orders ControlObjectiveHistory by category.
+	ControlObjectiveHistoryOrderFieldCategory = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Category, nil
+		},
+		column: controlobjectivehistory.FieldCategory,
+		toTerm: controlobjectivehistory.ByCategory,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Category,
+			}
+		},
+	}
+	// ControlObjectiveHistoryOrderFieldSubcategory orders ControlObjectiveHistory by subcategory.
+	ControlObjectiveHistoryOrderFieldSubcategory = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Subcategory, nil
+		},
+		column: controlobjectivehistory.FieldSubcategory,
+		toTerm: controlobjectivehistory.BySubcategory,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Subcategory,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ControlObjectiveHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ControlObjectiveHistoryOrderFieldName.column:
+		str = "name"
+	case ControlObjectiveHistoryOrderFieldStatus.column:
+		str = "status"
+	case ControlObjectiveHistoryOrderFieldSource.column:
+		str = "SOURCE"
+	case ControlObjectiveHistoryOrderFieldControlObjectiveType.column:
+		str = "control_objective_type"
+	case ControlObjectiveHistoryOrderFieldCategory.column:
+		str = "category"
+	case ControlObjectiveHistoryOrderFieldSubcategory.column:
+		str = "subcategory"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ControlObjectiveHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ControlObjectiveHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ControlObjectiveHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ControlObjectiveHistoryOrderFieldName
+	case "status":
+		*f = *ControlObjectiveHistoryOrderFieldStatus
+	case "SOURCE":
+		*f = *ControlObjectiveHistoryOrderFieldSource
+	case "control_objective_type":
+		*f = *ControlObjectiveHistoryOrderFieldControlObjectiveType
+	case "category":
+		*f = *ControlObjectiveHistoryOrderFieldCategory
+	case "subcategory":
+		*f = *ControlObjectiveHistoryOrderFieldSubcategory
+	default:
+		return fmt.Errorf("%s is not a valid ControlObjectiveHistoryOrderField", str)
+	}
+	return nil
 }
 
 // ControlObjectiveHistoryOrderField defines the ordering field of ControlObjectiveHistory.
@@ -3463,19 +4761,14 @@ func (c *EntityConnection) build(nodes []*Entity, pager *entityPager, after *Cur
 type EntityPaginateOption func(*entityPager) error
 
 // WithEntityOrder configures pagination ordering.
-func WithEntityOrder(order *EntityOrder) EntityPaginateOption {
-	if order == nil {
-		order = DefaultEntityOrder
-	}
-	o := *order
+func WithEntityOrder(order []*EntityOrder) EntityPaginateOption {
 	return func(pager *entityPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultEntityOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -3493,7 +4786,7 @@ func WithEntityFilter(filter func(*EntityQuery) (*EntityQuery, error)) EntityPag
 
 type entityPager struct {
 	reverse bool
-	order   *EntityOrder
+	order   []*EntityOrder
 	filter  func(*EntityQuery) (*EntityQuery, error)
 }
 
@@ -3504,8 +4797,10 @@ func newEntityPager(opts []EntityPaginateOption, reverse bool) (*entityPager, er
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultEntityOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -3518,48 +4813,87 @@ func (p *entityPager) applyFilter(query *EntityQuery) (*EntityQuery, error) {
 }
 
 func (p *entityPager) toCursor(e *Entity) Cursor {
-	return p.order.Field.toCursor(e)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(e).Value)
+	}
+	return Cursor{ID: e.ID, Value: cs_}
 }
 
 func (p *entityPager) applyCursors(query *EntityQuery, after, before *Cursor) (*EntityQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultEntityOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultEntityOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *entityPager) applyOrder(query *EntityQuery) *EntityQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultEntityOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultEntityOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultEntityOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *entityPager) orderExpr(query *EntityQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultEntityOrder.Field {
-			b.Comma().Ident(DefaultEntityOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultEntityOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -3645,6 +4979,20 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldStatus orders Entity by status.
+	EntityOrderFieldStatus = &EntityOrderField{
+		Value: func(e *Entity) (ent.Value, error) {
+			return e.Status, nil
+		},
+		column: entity.FieldStatus,
+		toTerm: entity.ByStatus,
+		toCursor: func(e *Entity) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3655,6 +5003,8 @@ func (f EntityOrderField) String() string {
 		str = "name"
 	case EntityOrderFieldDisplayName.column:
 		str = "display_name"
+	case EntityOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -3675,6 +5025,8 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldName
 	case "display_name":
 		*f = *EntityOrderFieldDisplayName
+	case "status":
+		*f = *EntityOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid EntityOrderField", str)
 	}
@@ -3959,6 +5311,20 @@ var (
 			}
 		},
 	}
+	// EntityHistoryOrderFieldStatus orders EntityHistory by status.
+	EntityHistoryOrderFieldStatus = &EntityHistoryOrderField{
+		Value: func(eh *EntityHistory) (ent.Value, error) {
+			return eh.Status, nil
+		},
+		column: entityhistory.FieldStatus,
+		toTerm: entityhistory.ByStatus,
+		toCursor: func(eh *EntityHistory) Cursor {
+			return Cursor{
+				ID:    eh.ID,
+				Value: eh.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3969,6 +5335,8 @@ func (f EntityHistoryOrderField) String() string {
 		str = "name"
 	case EntityHistoryOrderFieldDisplayName.column:
 		str = "display_name"
+	case EntityHistoryOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -3989,6 +5357,8 @@ func (f *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityHistoryOrderFieldName
 	case "display_name":
 		*f = *EntityHistoryOrderFieldDisplayName
+	case "status":
+		*f = *EntityHistoryOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid EntityHistoryOrderField", str)
 	}
@@ -5181,19 +6551,14 @@ func (c *EvidenceConnection) build(nodes []*Evidence, pager *evidencePager, afte
 type EvidencePaginateOption func(*evidencePager) error
 
 // WithEvidenceOrder configures pagination ordering.
-func WithEvidenceOrder(order *EvidenceOrder) EvidencePaginateOption {
-	if order == nil {
-		order = DefaultEvidenceOrder
-	}
-	o := *order
+func WithEvidenceOrder(order []*EvidenceOrder) EvidencePaginateOption {
 	return func(pager *evidencePager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultEvidenceOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -5211,7 +6576,7 @@ func WithEvidenceFilter(filter func(*EvidenceQuery) (*EvidenceQuery, error)) Evi
 
 type evidencePager struct {
 	reverse bool
-	order   *EvidenceOrder
+	order   []*EvidenceOrder
 	filter  func(*EvidenceQuery) (*EvidenceQuery, error)
 }
 
@@ -5222,8 +6587,10 @@ func newEvidencePager(opts []EvidencePaginateOption, reverse bool) (*evidencePag
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultEvidenceOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -5236,48 +6603,87 @@ func (p *evidencePager) applyFilter(query *EvidenceQuery) (*EvidenceQuery, error
 }
 
 func (p *evidencePager) toCursor(e *Evidence) Cursor {
-	return p.order.Field.toCursor(e)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(e).Value)
+	}
+	return Cursor{ID: e.ID, Value: cs_}
 }
 
 func (p *evidencePager) applyCursors(query *EvidenceQuery, after, before *Cursor) (*EvidenceQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultEvidenceOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultEvidenceOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *evidencePager) applyOrder(query *EvidenceQuery) *EvidenceQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultEvidenceOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultEvidenceOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultEvidenceOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *evidencePager) orderExpr(query *EvidenceQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultEvidenceOrder.Field {
-			b.Comma().Ident(DefaultEvidenceOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultEvidenceOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -5332,6 +6738,107 @@ func (e *EvidenceQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// EvidenceOrderFieldName orders Evidence by name.
+	EvidenceOrderFieldName = &EvidenceOrderField{
+		Value: func(e *Evidence) (ent.Value, error) {
+			return e.Name, nil
+		},
+		column: evidence.FieldName,
+		toTerm: evidence.ByName,
+		toCursor: func(e *Evidence) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Name,
+			}
+		},
+	}
+	// EvidenceOrderFieldCreationDate orders Evidence by creation_date.
+	EvidenceOrderFieldCreationDate = &EvidenceOrderField{
+		Value: func(e *Evidence) (ent.Value, error) {
+			return e.CreationDate, nil
+		},
+		column: evidence.FieldCreationDate,
+		toTerm: evidence.ByCreationDate,
+		toCursor: func(e *Evidence) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.CreationDate,
+			}
+		},
+	}
+	// EvidenceOrderFieldRenewalDate orders Evidence by renewal_date.
+	EvidenceOrderFieldRenewalDate = &EvidenceOrderField{
+		Value: func(e *Evidence) (ent.Value, error) {
+			return e.RenewalDate, nil
+		},
+		column: evidence.FieldRenewalDate,
+		toTerm: evidence.ByRenewalDate,
+		toCursor: func(e *Evidence) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.RenewalDate,
+			}
+		},
+	}
+	// EvidenceOrderFieldStatus orders Evidence by status.
+	EvidenceOrderFieldStatus = &EvidenceOrderField{
+		Value: func(e *Evidence) (ent.Value, error) {
+			return e.Status, nil
+		},
+		column: evidence.FieldStatus,
+		toTerm: evidence.ByStatus,
+		toCursor: func(e *Evidence) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f EvidenceOrderField) String() string {
+	var str string
+	switch f.column {
+	case EvidenceOrderFieldName.column:
+		str = "name"
+	case EvidenceOrderFieldCreationDate.column:
+		str = "creation_date"
+	case EvidenceOrderFieldRenewalDate.column:
+		str = "renewal_date"
+	case EvidenceOrderFieldStatus.column:
+		str = "STATUS"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f EvidenceOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *EvidenceOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("EvidenceOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *EvidenceOrderFieldName
+	case "creation_date":
+		*f = *EvidenceOrderFieldCreationDate
+	case "renewal_date":
+		*f = *EvidenceOrderFieldRenewalDate
+	case "STATUS":
+		*f = *EvidenceOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid EvidenceOrderField", str)
+	}
+	return nil
 }
 
 // EvidenceOrderField defines the ordering field of Evidence.
@@ -5581,6 +7088,107 @@ func (eh *EvidenceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// EvidenceHistoryOrderFieldName orders EvidenceHistory by name.
+	EvidenceHistoryOrderFieldName = &EvidenceHistoryOrderField{
+		Value: func(eh *EvidenceHistory) (ent.Value, error) {
+			return eh.Name, nil
+		},
+		column: evidencehistory.FieldName,
+		toTerm: evidencehistory.ByName,
+		toCursor: func(eh *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    eh.ID,
+				Value: eh.Name,
+			}
+		},
+	}
+	// EvidenceHistoryOrderFieldCreationDate orders EvidenceHistory by creation_date.
+	EvidenceHistoryOrderFieldCreationDate = &EvidenceHistoryOrderField{
+		Value: func(eh *EvidenceHistory) (ent.Value, error) {
+			return eh.CreationDate, nil
+		},
+		column: evidencehistory.FieldCreationDate,
+		toTerm: evidencehistory.ByCreationDate,
+		toCursor: func(eh *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    eh.ID,
+				Value: eh.CreationDate,
+			}
+		},
+	}
+	// EvidenceHistoryOrderFieldRenewalDate orders EvidenceHistory by renewal_date.
+	EvidenceHistoryOrderFieldRenewalDate = &EvidenceHistoryOrderField{
+		Value: func(eh *EvidenceHistory) (ent.Value, error) {
+			return eh.RenewalDate, nil
+		},
+		column: evidencehistory.FieldRenewalDate,
+		toTerm: evidencehistory.ByRenewalDate,
+		toCursor: func(eh *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    eh.ID,
+				Value: eh.RenewalDate,
+			}
+		},
+	}
+	// EvidenceHistoryOrderFieldStatus orders EvidenceHistory by status.
+	EvidenceHistoryOrderFieldStatus = &EvidenceHistoryOrderField{
+		Value: func(eh *EvidenceHistory) (ent.Value, error) {
+			return eh.Status, nil
+		},
+		column: evidencehistory.FieldStatus,
+		toTerm: evidencehistory.ByStatus,
+		toCursor: func(eh *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    eh.ID,
+				Value: eh.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f EvidenceHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case EvidenceHistoryOrderFieldName.column:
+		str = "name"
+	case EvidenceHistoryOrderFieldCreationDate.column:
+		str = "creation_date"
+	case EvidenceHistoryOrderFieldRenewalDate.column:
+		str = "renewal_date"
+	case EvidenceHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f EvidenceHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *EvidenceHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("EvidenceHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *EvidenceHistoryOrderFieldName
+	case "creation_date":
+		*f = *EvidenceHistoryOrderFieldCreationDate
+	case "renewal_date":
+		*f = *EvidenceHistoryOrderFieldRenewalDate
+	case "STATUS":
+		*f = *EvidenceHistoryOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid EvidenceHistoryOrderField", str)
+	}
+	return nil
 }
 
 // EvidenceHistoryOrderField defines the ordering field of EvidenceHistory.
@@ -6177,19 +7785,14 @@ func (c *GroupConnection) build(nodes []*Group, pager *groupPager, after *Cursor
 type GroupPaginateOption func(*groupPager) error
 
 // WithGroupOrder configures pagination ordering.
-func WithGroupOrder(order *GroupOrder) GroupPaginateOption {
-	if order == nil {
-		order = DefaultGroupOrder
-	}
-	o := *order
+func WithGroupOrder(order []*GroupOrder) GroupPaginateOption {
 	return func(pager *groupPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultGroupOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -6207,7 +7810,7 @@ func WithGroupFilter(filter func(*GroupQuery) (*GroupQuery, error)) GroupPaginat
 
 type groupPager struct {
 	reverse bool
-	order   *GroupOrder
+	order   []*GroupOrder
 	filter  func(*GroupQuery) (*GroupQuery, error)
 }
 
@@ -6218,8 +7821,10 @@ func newGroupPager(opts []GroupPaginateOption, reverse bool) (*groupPager, error
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultGroupOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -6232,48 +7837,87 @@ func (p *groupPager) applyFilter(query *GroupQuery) (*GroupQuery, error) {
 }
 
 func (p *groupPager) toCursor(gr *Group) Cursor {
-	return p.order.Field.toCursor(gr)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(gr).Value)
+	}
+	return Cursor{ID: gr.ID, Value: cs_}
 }
 
 func (p *groupPager) applyCursors(query *GroupQuery, after, before *Cursor) (*GroupQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultGroupOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultGroupOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *groupPager) applyOrder(query *GroupQuery) *GroupQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultGroupOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultGroupOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultGroupOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *groupPager) orderExpr(query *GroupQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultGroupOrder.Field {
-			b.Comma().Ident(DefaultGroupOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultGroupOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -6958,6 +8602,53 @@ func (gm *GroupMembershipQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// GroupMembershipOrderFieldRole orders GroupMembership by role.
+	GroupMembershipOrderFieldRole = &GroupMembershipOrderField{
+		Value: func(gm *GroupMembership) (ent.Value, error) {
+			return gm.Role, nil
+		},
+		column: groupmembership.FieldRole,
+		toTerm: groupmembership.ByRole,
+		toCursor: func(gm *GroupMembership) Cursor {
+			return Cursor{
+				ID:    gm.ID,
+				Value: gm.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f GroupMembershipOrderField) String() string {
+	var str string
+	switch f.column {
+	case GroupMembershipOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f GroupMembershipOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *GroupMembershipOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("GroupMembershipOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *GroupMembershipOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid GroupMembershipOrderField", str)
+	}
+	return nil
+}
+
 // GroupMembershipOrderField defines the ordering field of GroupMembership.
 type GroupMembershipOrderField struct {
 	// Value extracts the ordering value from the given GroupMembership.
@@ -7205,6 +8896,53 @@ func (gmh *GroupMembershipHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// GroupMembershipHistoryOrderFieldRole orders GroupMembershipHistory by role.
+	GroupMembershipHistoryOrderFieldRole = &GroupMembershipHistoryOrderField{
+		Value: func(gmh *GroupMembershipHistory) (ent.Value, error) {
+			return gmh.Role, nil
+		},
+		column: groupmembershiphistory.FieldRole,
+		toTerm: groupmembershiphistory.ByRole,
+		toCursor: func(gmh *GroupMembershipHistory) Cursor {
+			return Cursor{
+				ID:    gmh.ID,
+				Value: gmh.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f GroupMembershipHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case GroupMembershipHistoryOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f GroupMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *GroupMembershipHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("GroupMembershipHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *GroupMembershipHistoryOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid GroupMembershipHistoryOrderField", str)
+	}
+	return nil
 }
 
 // GroupMembershipHistoryOrderField defines the ordering field of GroupMembershipHistory.
@@ -7801,19 +9539,14 @@ func (c *HushConnection) build(nodes []*Hush, pager *hushPager, after *Cursor, f
 type HushPaginateOption func(*hushPager) error
 
 // WithHushOrder configures pagination ordering.
-func WithHushOrder(order *HushOrder) HushPaginateOption {
-	if order == nil {
-		order = DefaultHushOrder
-	}
-	o := *order
+func WithHushOrder(order []*HushOrder) HushPaginateOption {
 	return func(pager *hushPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultHushOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -7831,7 +9564,7 @@ func WithHushFilter(filter func(*HushQuery) (*HushQuery, error)) HushPaginateOpt
 
 type hushPager struct {
 	reverse bool
-	order   *HushOrder
+	order   []*HushOrder
 	filter  func(*HushQuery) (*HushQuery, error)
 }
 
@@ -7842,8 +9575,10 @@ func newHushPager(opts []HushPaginateOption, reverse bool) (*hushPager, error) {
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultHushOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -7856,48 +9591,87 @@ func (p *hushPager) applyFilter(query *HushQuery) (*HushQuery, error) {
 }
 
 func (p *hushPager) toCursor(h *Hush) Cursor {
-	return p.order.Field.toCursor(h)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(h).Value)
+	}
+	return Cursor{ID: h.ID, Value: cs_}
 }
 
 func (p *hushPager) applyCursors(query *HushQuery, after, before *Cursor) (*HushQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultHushOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultHushOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *hushPager) applyOrder(query *HushQuery) *HushQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultHushOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultHushOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultHushOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *hushPager) orderExpr(query *HushQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultHushOrder.Field {
-			b.Comma().Ident(DefaultHushOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultHushOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -8429,19 +10203,14 @@ func (c *IntegrationConnection) build(nodes []*Integration, pager *integrationPa
 type IntegrationPaginateOption func(*integrationPager) error
 
 // WithIntegrationOrder configures pagination ordering.
-func WithIntegrationOrder(order *IntegrationOrder) IntegrationPaginateOption {
-	if order == nil {
-		order = DefaultIntegrationOrder
-	}
-	o := *order
+func WithIntegrationOrder(order []*IntegrationOrder) IntegrationPaginateOption {
 	return func(pager *integrationPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultIntegrationOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -8459,7 +10228,7 @@ func WithIntegrationFilter(filter func(*IntegrationQuery) (*IntegrationQuery, er
 
 type integrationPager struct {
 	reverse bool
-	order   *IntegrationOrder
+	order   []*IntegrationOrder
 	filter  func(*IntegrationQuery) (*IntegrationQuery, error)
 }
 
@@ -8470,8 +10239,10 @@ func newIntegrationPager(opts []IntegrationPaginateOption, reverse bool) (*integ
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultIntegrationOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -8484,48 +10255,87 @@ func (p *integrationPager) applyFilter(query *IntegrationQuery) (*IntegrationQue
 }
 
 func (p *integrationPager) toCursor(i *Integration) Cursor {
-	return p.order.Field.toCursor(i)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(i).Value)
+	}
+	return Cursor{ID: i.ID, Value: cs_}
 }
 
 func (p *integrationPager) applyCursors(query *IntegrationQuery, after, before *Cursor) (*IntegrationQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultIntegrationOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultIntegrationOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *integrationPager) applyOrder(query *IntegrationQuery) *IntegrationQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultIntegrationOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultIntegrationOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultIntegrationOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *integrationPager) orderExpr(query *IntegrationQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultIntegrationOrder.Field {
-			b.Comma().Ident(DefaultIntegrationOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultIntegrationOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -9555,19 +11365,14 @@ func (c *InviteConnection) build(nodes []*Invite, pager *invitePager, after *Cur
 type InvitePaginateOption func(*invitePager) error
 
 // WithInviteOrder configures pagination ordering.
-func WithInviteOrder(order *InviteOrder) InvitePaginateOption {
-	if order == nil {
-		order = DefaultInviteOrder
-	}
-	o := *order
+func WithInviteOrder(order []*InviteOrder) InvitePaginateOption {
 	return func(pager *invitePager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultInviteOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -9585,7 +11390,7 @@ func WithInviteFilter(filter func(*InviteQuery) (*InviteQuery, error)) InvitePag
 
 type invitePager struct {
 	reverse bool
-	order   *InviteOrder
+	order   []*InviteOrder
 	filter  func(*InviteQuery) (*InviteQuery, error)
 }
 
@@ -9596,8 +11401,10 @@ func newInvitePager(opts []InvitePaginateOption, reverse bool) (*invitePager, er
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultInviteOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -9610,48 +11417,87 @@ func (p *invitePager) applyFilter(query *InviteQuery) (*InviteQuery, error) {
 }
 
 func (p *invitePager) toCursor(i *Invite) Cursor {
-	return p.order.Field.toCursor(i)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(i).Value)
+	}
+	return Cursor{ID: i.ID, Value: cs_}
 }
 
 func (p *invitePager) applyCursors(query *InviteQuery, after, before *Cursor) (*InviteQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultInviteOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultInviteOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *invitePager) applyOrder(query *InviteQuery) *InviteQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultInviteOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultInviteOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultInviteOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *invitePager) orderExpr(query *InviteQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultInviteOrder.Field {
-			b.Comma().Ident(DefaultInviteOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultInviteOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -9706,6 +11552,89 @@ func (i *InviteQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// InviteOrderFieldExpires orders Invite by expires.
+	InviteOrderFieldExpires = &InviteOrderField{
+		Value: func(i *Invite) (ent.Value, error) {
+			return i.Expires, nil
+		},
+		column: invite.FieldExpires,
+		toTerm: invite.ByExpires,
+		toCursor: func(i *Invite) Cursor {
+			return Cursor{
+				ID:    i.ID,
+				Value: i.Expires,
+			}
+		},
+	}
+	// InviteOrderFieldStatus orders Invite by status.
+	InviteOrderFieldStatus = &InviteOrderField{
+		Value: func(i *Invite) (ent.Value, error) {
+			return i.Status, nil
+		},
+		column: invite.FieldStatus,
+		toTerm: invite.ByStatus,
+		toCursor: func(i *Invite) Cursor {
+			return Cursor{
+				ID:    i.ID,
+				Value: i.Status,
+			}
+		},
+	}
+	// InviteOrderFieldSendAttempts orders Invite by send_attempts.
+	InviteOrderFieldSendAttempts = &InviteOrderField{
+		Value: func(i *Invite) (ent.Value, error) {
+			return i.SendAttempts, nil
+		},
+		column: invite.FieldSendAttempts,
+		toTerm: invite.BySendAttempts,
+		toCursor: func(i *Invite) Cursor {
+			return Cursor{
+				ID:    i.ID,
+				Value: i.SendAttempts,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f InviteOrderField) String() string {
+	var str string
+	switch f.column {
+	case InviteOrderFieldExpires.column:
+		str = "expires"
+	case InviteOrderFieldStatus.column:
+		str = "STATUS"
+	case InviteOrderFieldSendAttempts.column:
+		str = "send_attempts"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f InviteOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *InviteOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("InviteOrderField %T must be a string", v)
+	}
+	switch str {
+	case "expires":
+		*f = *InviteOrderFieldExpires
+	case "STATUS":
+		*f = *InviteOrderFieldStatus
+	case "send_attempts":
+		*f = *InviteOrderFieldSendAttempts
+	default:
+		return fmt.Errorf("%s is not a valid InviteOrderField", str)
+	}
+	return nil
 }
 
 // InviteOrderField defines the ordering field of Invite.
@@ -9957,6 +11886,53 @@ func (mc *MappedControlQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// MappedControlOrderFieldMappingType orders MappedControl by mapping_type.
+	MappedControlOrderFieldMappingType = &MappedControlOrderField{
+		Value: func(mc *MappedControl) (ent.Value, error) {
+			return mc.MappingType, nil
+		},
+		column: mappedcontrol.FieldMappingType,
+		toTerm: mappedcontrol.ByMappingType,
+		toCursor: func(mc *MappedControl) Cursor {
+			return Cursor{
+				ID:    mc.ID,
+				Value: mc.MappingType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f MappedControlOrderField) String() string {
+	var str string
+	switch f.column {
+	case MappedControlOrderFieldMappingType.column:
+		str = "mapping_type"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f MappedControlOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *MappedControlOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("MappedControlOrderField %T must be a string", v)
+	}
+	switch str {
+	case "mapping_type":
+		*f = *MappedControlOrderFieldMappingType
+	default:
+		return fmt.Errorf("%s is not a valid MappedControlOrderField", str)
+	}
+	return nil
+}
+
 // MappedControlOrderField defines the ordering field of MappedControl.
 type MappedControlOrderField struct {
 	// Value extracts the ordering value from the given MappedControl.
@@ -10204,6 +12180,53 @@ func (mch *MappedControlHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// MappedControlHistoryOrderFieldMappingType orders MappedControlHistory by mapping_type.
+	MappedControlHistoryOrderFieldMappingType = &MappedControlHistoryOrderField{
+		Value: func(mch *MappedControlHistory) (ent.Value, error) {
+			return mch.MappingType, nil
+		},
+		column: mappedcontrolhistory.FieldMappingType,
+		toTerm: mappedcontrolhistory.ByMappingType,
+		toCursor: func(mch *MappedControlHistory) Cursor {
+			return Cursor{
+				ID:    mch.ID,
+				Value: mch.MappingType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f MappedControlHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case MappedControlHistoryOrderFieldMappingType.column:
+		str = "mapping_type"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f MappedControlHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *MappedControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("MappedControlHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "mapping_type":
+		*f = *MappedControlHistoryOrderFieldMappingType
+	default:
+		return fmt.Errorf("%s is not a valid MappedControlHistoryOrderField", str)
+	}
+	return nil
 }
 
 // MappedControlHistoryOrderField defines the ordering field of MappedControlHistory.
@@ -10455,6 +12478,53 @@ func (n *NarrativeQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// NarrativeOrderFieldName orders Narrative by name.
+	NarrativeOrderFieldName = &NarrativeOrderField{
+		Value: func(n *Narrative) (ent.Value, error) {
+			return n.Name, nil
+		},
+		column: narrative.FieldName,
+		toTerm: narrative.ByName,
+		toCursor: func(n *Narrative) Cursor {
+			return Cursor{
+				ID:    n.ID,
+				Value: n.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f NarrativeOrderField) String() string {
+	var str string
+	switch f.column {
+	case NarrativeOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f NarrativeOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *NarrativeOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("NarrativeOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *NarrativeOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid NarrativeOrderField", str)
+	}
+	return nil
+}
+
 // NarrativeOrderField defines the ordering field of Narrative.
 type NarrativeOrderField struct {
 	// Value extracts the ordering value from the given Narrative.
@@ -10702,6 +12772,53 @@ func (nh *NarrativeHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// NarrativeHistoryOrderFieldName orders NarrativeHistory by name.
+	NarrativeHistoryOrderFieldName = &NarrativeHistoryOrderField{
+		Value: func(nh *NarrativeHistory) (ent.Value, error) {
+			return nh.Name, nil
+		},
+		column: narrativehistory.FieldName,
+		toTerm: narrativehistory.ByName,
+		toCursor: func(nh *NarrativeHistory) Cursor {
+			return Cursor{
+				ID:    nh.ID,
+				Value: nh.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f NarrativeHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case NarrativeHistoryOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f NarrativeHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *NarrativeHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("NarrativeHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *NarrativeHistoryOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid NarrativeHistoryOrderField", str)
+	}
+	return nil
 }
 
 // NarrativeHistoryOrderField defines the ordering field of NarrativeHistory.
@@ -11700,6 +13817,53 @@ func (om *OrgMembershipQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// OrgMembershipOrderFieldRole orders OrgMembership by role.
+	OrgMembershipOrderFieldRole = &OrgMembershipOrderField{
+		Value: func(om *OrgMembership) (ent.Value, error) {
+			return om.Role, nil
+		},
+		column: orgmembership.FieldRole,
+		toTerm: orgmembership.ByRole,
+		toCursor: func(om *OrgMembership) Cursor {
+			return Cursor{
+				ID:    om.ID,
+				Value: om.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f OrgMembershipOrderField) String() string {
+	var str string
+	switch f.column {
+	case OrgMembershipOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f OrgMembershipOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *OrgMembershipOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("OrgMembershipOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *OrgMembershipOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid OrgMembershipOrderField", str)
+	}
+	return nil
+}
+
 // OrgMembershipOrderField defines the ordering field of OrgMembership.
 type OrgMembershipOrderField struct {
 	// Value extracts the ordering value from the given OrgMembership.
@@ -11947,6 +14111,53 @@ func (omh *OrgMembershipHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// OrgMembershipHistoryOrderFieldRole orders OrgMembershipHistory by role.
+	OrgMembershipHistoryOrderFieldRole = &OrgMembershipHistoryOrderField{
+		Value: func(omh *OrgMembershipHistory) (ent.Value, error) {
+			return omh.Role, nil
+		},
+		column: orgmembershiphistory.FieldRole,
+		toTerm: orgmembershiphistory.ByRole,
+		toCursor: func(omh *OrgMembershipHistory) Cursor {
+			return Cursor{
+				ID:    omh.ID,
+				Value: omh.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f OrgMembershipHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case OrgMembershipHistoryOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f OrgMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *OrgMembershipHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("OrgMembershipHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *OrgMembershipHistoryOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid OrgMembershipHistoryOrderField", str)
+	}
+	return nil
 }
 
 // OrgMembershipHistoryOrderField defines the ordering field of OrgMembershipHistory.
@@ -12198,6 +14409,143 @@ func (os *OrgSubscriptionQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// OrgSubscriptionOrderFieldProductTier orders OrgSubscription by product_tier.
+	OrgSubscriptionOrderFieldProductTier = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.ProductTier, nil
+		},
+		column: orgsubscription.FieldProductTier,
+		toTerm: orgsubscription.ByProductTier,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.ProductTier,
+			}
+		},
+	}
+	// OrgSubscriptionOrderFieldStripeSubscriptionStatus orders OrgSubscription by stripe_subscription_status.
+	OrgSubscriptionOrderFieldStripeSubscriptionStatus = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.StripeSubscriptionStatus, nil
+		},
+		column: orgsubscription.FieldStripeSubscriptionStatus,
+		toTerm: orgsubscription.ByStripeSubscriptionStatus,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.StripeSubscriptionStatus,
+			}
+		},
+	}
+	// OrgSubscriptionOrderFieldActive orders OrgSubscription by active.
+	OrgSubscriptionOrderFieldActive = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.Active, nil
+		},
+		column: orgsubscription.FieldActive,
+		toTerm: orgsubscription.ByActive,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.Active,
+			}
+		},
+	}
+	// OrgSubscriptionOrderFieldExpiresAt orders OrgSubscription by expires_at.
+	OrgSubscriptionOrderFieldExpiresAt = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.ExpiresAt, nil
+		},
+		column: orgsubscription.FieldExpiresAt,
+		toTerm: orgsubscription.ByExpiresAt,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.ExpiresAt,
+			}
+		},
+	}
+	// OrgSubscriptionOrderFieldTrialExpiresAt orders OrgSubscription by trial_expires_at.
+	OrgSubscriptionOrderFieldTrialExpiresAt = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.TrialExpiresAt, nil
+		},
+		column: orgsubscription.FieldTrialExpiresAt,
+		toTerm: orgsubscription.ByTrialExpiresAt,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.TrialExpiresAt,
+			}
+		},
+	}
+	// OrgSubscriptionOrderFieldDaysUntilDue orders OrgSubscription by days_until_due.
+	OrgSubscriptionOrderFieldDaysUntilDue = &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.DaysUntilDue, nil
+		},
+		column: orgsubscription.FieldDaysUntilDue,
+		toTerm: orgsubscription.ByDaysUntilDue,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{
+				ID:    os.ID,
+				Value: os.DaysUntilDue,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f OrgSubscriptionOrderField) String() string {
+	var str string
+	switch f.column {
+	case OrgSubscriptionOrderFieldProductTier.column:
+		str = "product_tier"
+	case OrgSubscriptionOrderFieldStripeSubscriptionStatus.column:
+		str = "stripe_subscription_status"
+	case OrgSubscriptionOrderFieldActive.column:
+		str = "active"
+	case OrgSubscriptionOrderFieldExpiresAt.column:
+		str = "expires_at"
+	case OrgSubscriptionOrderFieldTrialExpiresAt.column:
+		str = "trial_expires_at"
+	case OrgSubscriptionOrderFieldDaysUntilDue.column:
+		str = "days_until_due"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f OrgSubscriptionOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *OrgSubscriptionOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("OrgSubscriptionOrderField %T must be a string", v)
+	}
+	switch str {
+	case "product_tier":
+		*f = *OrgSubscriptionOrderFieldProductTier
+	case "stripe_subscription_status":
+		*f = *OrgSubscriptionOrderFieldStripeSubscriptionStatus
+	case "active":
+		*f = *OrgSubscriptionOrderFieldActive
+	case "expires_at":
+		*f = *OrgSubscriptionOrderFieldExpiresAt
+	case "trial_expires_at":
+		*f = *OrgSubscriptionOrderFieldTrialExpiresAt
+	case "days_until_due":
+		*f = *OrgSubscriptionOrderFieldDaysUntilDue
+	default:
+		return fmt.Errorf("%s is not a valid OrgSubscriptionOrderField", str)
+	}
+	return nil
+}
+
 // OrgSubscriptionOrderField defines the ordering field of OrgSubscription.
 type OrgSubscriptionOrderField struct {
 	// Value extracts the ordering value from the given OrgSubscription.
@@ -12447,6 +14795,143 @@ func (osh *OrgSubscriptionHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// OrgSubscriptionHistoryOrderFieldProductTier orders OrgSubscriptionHistory by product_tier.
+	OrgSubscriptionHistoryOrderFieldProductTier = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.ProductTier, nil
+		},
+		column: orgsubscriptionhistory.FieldProductTier,
+		toTerm: orgsubscriptionhistory.ByProductTier,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.ProductTier,
+			}
+		},
+	}
+	// OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus orders OrgSubscriptionHistory by stripe_subscription_status.
+	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.StripeSubscriptionStatus, nil
+		},
+		column: orgsubscriptionhistory.FieldStripeSubscriptionStatus,
+		toTerm: orgsubscriptionhistory.ByStripeSubscriptionStatus,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.StripeSubscriptionStatus,
+			}
+		},
+	}
+	// OrgSubscriptionHistoryOrderFieldActive orders OrgSubscriptionHistory by active.
+	OrgSubscriptionHistoryOrderFieldActive = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.Active, nil
+		},
+		column: orgsubscriptionhistory.FieldActive,
+		toTerm: orgsubscriptionhistory.ByActive,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.Active,
+			}
+		},
+	}
+	// OrgSubscriptionHistoryOrderFieldExpiresAt orders OrgSubscriptionHistory by expires_at.
+	OrgSubscriptionHistoryOrderFieldExpiresAt = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.ExpiresAt, nil
+		},
+		column: orgsubscriptionhistory.FieldExpiresAt,
+		toTerm: orgsubscriptionhistory.ByExpiresAt,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.ExpiresAt,
+			}
+		},
+	}
+	// OrgSubscriptionHistoryOrderFieldTrialExpiresAt orders OrgSubscriptionHistory by trial_expires_at.
+	OrgSubscriptionHistoryOrderFieldTrialExpiresAt = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.TrialExpiresAt, nil
+		},
+		column: orgsubscriptionhistory.FieldTrialExpiresAt,
+		toTerm: orgsubscriptionhistory.ByTrialExpiresAt,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.TrialExpiresAt,
+			}
+		},
+	}
+	// OrgSubscriptionHistoryOrderFieldDaysUntilDue orders OrgSubscriptionHistory by days_until_due.
+	OrgSubscriptionHistoryOrderFieldDaysUntilDue = &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.DaysUntilDue, nil
+		},
+		column: orgsubscriptionhistory.FieldDaysUntilDue,
+		toTerm: orgsubscriptionhistory.ByDaysUntilDue,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{
+				ID:    osh.ID,
+				Value: osh.DaysUntilDue,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f OrgSubscriptionHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case OrgSubscriptionHistoryOrderFieldProductTier.column:
+		str = "product_tier"
+	case OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus.column:
+		str = "stripe_subscription_status"
+	case OrgSubscriptionHistoryOrderFieldActive.column:
+		str = "active"
+	case OrgSubscriptionHistoryOrderFieldExpiresAt.column:
+		str = "expires_at"
+	case OrgSubscriptionHistoryOrderFieldTrialExpiresAt.column:
+		str = "trial_expires_at"
+	case OrgSubscriptionHistoryOrderFieldDaysUntilDue.column:
+		str = "days_until_due"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f OrgSubscriptionHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *OrgSubscriptionHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("OrgSubscriptionHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "product_tier":
+		*f = *OrgSubscriptionHistoryOrderFieldProductTier
+	case "stripe_subscription_status":
+		*f = *OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus
+	case "active":
+		*f = *OrgSubscriptionHistoryOrderFieldActive
+	case "expires_at":
+		*f = *OrgSubscriptionHistoryOrderFieldExpiresAt
+	case "trial_expires_at":
+		*f = *OrgSubscriptionHistoryOrderFieldTrialExpiresAt
+	case "days_until_due":
+		*f = *OrgSubscriptionHistoryOrderFieldDaysUntilDue
+	default:
+		return fmt.Errorf("%s is not a valid OrgSubscriptionHistoryOrderField", str)
+	}
+	return nil
+}
+
 // OrgSubscriptionHistoryOrderField defines the ordering field of OrgSubscriptionHistory.
 type OrgSubscriptionHistoryOrderField struct {
 	// Value extracts the ordering value from the given OrgSubscriptionHistory.
@@ -12543,19 +15028,14 @@ func (c *OrganizationConnection) build(nodes []*Organization, pager *organizatio
 type OrganizationPaginateOption func(*organizationPager) error
 
 // WithOrganizationOrder configures pagination ordering.
-func WithOrganizationOrder(order *OrganizationOrder) OrganizationPaginateOption {
-	if order == nil {
-		order = DefaultOrganizationOrder
-	}
-	o := *order
+func WithOrganizationOrder(order []*OrganizationOrder) OrganizationPaginateOption {
 	return func(pager *organizationPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultOrganizationOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -12573,7 +15053,7 @@ func WithOrganizationFilter(filter func(*OrganizationQuery) (*OrganizationQuery,
 
 type organizationPager struct {
 	reverse bool
-	order   *OrganizationOrder
+	order   []*OrganizationOrder
 	filter  func(*OrganizationQuery) (*OrganizationQuery, error)
 }
 
@@ -12584,8 +15064,10 @@ func newOrganizationPager(opts []OrganizationPaginateOption, reverse bool) (*org
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultOrganizationOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -12598,48 +15080,87 @@ func (p *organizationPager) applyFilter(query *OrganizationQuery) (*Organization
 }
 
 func (p *organizationPager) toCursor(o *Organization) Cursor {
-	return p.order.Field.toCursor(o)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(o).Value)
+	}
+	return Cursor{ID: o.ID, Value: cs_}
 }
 
 func (p *organizationPager) applyCursors(query *OrganizationQuery, after, before *Cursor) (*OrganizationQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultOrganizationOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultOrganizationOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *organizationPager) applyOrder(query *OrganizationQuery) *OrganizationQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultOrganizationOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultOrganizationOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultOrganizationOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *organizationPager) orderExpr(query *OrganizationQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultOrganizationOrder.Field {
-			b.Comma().Ident(DefaultOrganizationOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultOrganizationOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -14416,19 +16937,14 @@ func (c *ProgramConnection) build(nodes []*Program, pager *programPager, after *
 type ProgramPaginateOption func(*programPager) error
 
 // WithProgramOrder configures pagination ordering.
-func WithProgramOrder(order *ProgramOrder) ProgramPaginateOption {
-	if order == nil {
-		order = DefaultProgramOrder
-	}
-	o := *order
+func WithProgramOrder(order []*ProgramOrder) ProgramPaginateOption {
 	return func(pager *programPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultProgramOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -14446,7 +16962,7 @@ func WithProgramFilter(filter func(*ProgramQuery) (*ProgramQuery, error)) Progra
 
 type programPager struct {
 	reverse bool
-	order   *ProgramOrder
+	order   []*ProgramOrder
 	filter  func(*ProgramQuery) (*ProgramQuery, error)
 }
 
@@ -14457,8 +16973,10 @@ func newProgramPager(opts []ProgramPaginateOption, reverse bool) (*programPager,
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultProgramOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -14471,48 +16989,87 @@ func (p *programPager) applyFilter(query *ProgramQuery) (*ProgramQuery, error) {
 }
 
 func (p *programPager) toCursor(pr *Program) Cursor {
-	return p.order.Field.toCursor(pr)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(pr).Value)
+	}
+	return Cursor{ID: pr.ID, Value: cs_}
 }
 
 func (p *programPager) applyCursors(query *ProgramQuery, after, before *Cursor) (*ProgramQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProgramOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultProgramOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *programPager) applyOrder(query *ProgramQuery) *ProgramQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultProgramOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultProgramOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultProgramOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *programPager) orderExpr(query *ProgramQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultProgramOrder.Field {
-			b.Comma().Ident(DefaultProgramOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultProgramOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -14567,6 +17124,107 @@ func (pr *ProgramQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ProgramOrderFieldName orders Program by name.
+	ProgramOrderFieldName = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.Name, nil
+		},
+		column: program.FieldName,
+		toTerm: program.ByName,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.Name,
+			}
+		},
+	}
+	// ProgramOrderFieldStatus orders Program by status.
+	ProgramOrderFieldStatus = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.Status, nil
+		},
+		column: program.FieldStatus,
+		toTerm: program.ByStatus,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.Status,
+			}
+		},
+	}
+	// ProgramOrderFieldStartDate orders Program by start_date.
+	ProgramOrderFieldStartDate = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.StartDate, nil
+		},
+		column: program.FieldStartDate,
+		toTerm: program.ByStartDate,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.StartDate,
+			}
+		},
+	}
+	// ProgramOrderFieldEndDate orders Program by end_date.
+	ProgramOrderFieldEndDate = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.EndDate, nil
+		},
+		column: program.FieldEndDate,
+		toTerm: program.ByEndDate,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.EndDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ProgramOrderField) String() string {
+	var str string
+	switch f.column {
+	case ProgramOrderFieldName.column:
+		str = "name"
+	case ProgramOrderFieldStatus.column:
+		str = "STATUS"
+	case ProgramOrderFieldStartDate.column:
+		str = "start_date"
+	case ProgramOrderFieldEndDate.column:
+		str = "end_date"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ProgramOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ProgramOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ProgramOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ProgramOrderFieldName
+	case "STATUS":
+		*f = *ProgramOrderFieldStatus
+	case "start_date":
+		*f = *ProgramOrderFieldStartDate
+	case "end_date":
+		*f = *ProgramOrderFieldEndDate
+	default:
+		return fmt.Errorf("%s is not a valid ProgramOrderField", str)
+	}
+	return nil
 }
 
 // ProgramOrderField defines the ordering field of Program.
@@ -14818,6 +17476,107 @@ func (ph *ProgramHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ProgramHistoryOrderFieldName orders ProgramHistory by name.
+	ProgramHistoryOrderFieldName = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.Name, nil
+		},
+		column: programhistory.FieldName,
+		toTerm: programhistory.ByName,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.Name,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldStatus orders ProgramHistory by status.
+	ProgramHistoryOrderFieldStatus = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.Status, nil
+		},
+		column: programhistory.FieldStatus,
+		toTerm: programhistory.ByStatus,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.Status,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldStartDate orders ProgramHistory by start_date.
+	ProgramHistoryOrderFieldStartDate = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.StartDate, nil
+		},
+		column: programhistory.FieldStartDate,
+		toTerm: programhistory.ByStartDate,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.StartDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldEndDate orders ProgramHistory by end_date.
+	ProgramHistoryOrderFieldEndDate = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.EndDate, nil
+		},
+		column: programhistory.FieldEndDate,
+		toTerm: programhistory.ByEndDate,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.EndDate,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ProgramHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ProgramHistoryOrderFieldName.column:
+		str = "name"
+	case ProgramHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case ProgramHistoryOrderFieldStartDate.column:
+		str = "start_date"
+	case ProgramHistoryOrderFieldEndDate.column:
+		str = "end_date"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ProgramHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ProgramHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ProgramHistoryOrderFieldName
+	case "STATUS":
+		*f = *ProgramHistoryOrderFieldStatus
+	case "start_date":
+		*f = *ProgramHistoryOrderFieldStartDate
+	case "end_date":
+		*f = *ProgramHistoryOrderFieldEndDate
+	default:
+		return fmt.Errorf("%s is not a valid ProgramHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ProgramHistoryOrderField defines the ordering field of ProgramHistory.
 type ProgramHistoryOrderField struct {
 	// Value extracts the ordering value from the given ProgramHistory.
@@ -15065,6 +17824,53 @@ func (pm *ProgramMembershipQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ProgramMembershipOrderFieldRole orders ProgramMembership by role.
+	ProgramMembershipOrderFieldRole = &ProgramMembershipOrderField{
+		Value: func(pm *ProgramMembership) (ent.Value, error) {
+			return pm.Role, nil
+		},
+		column: programmembership.FieldRole,
+		toTerm: programmembership.ByRole,
+		toCursor: func(pm *ProgramMembership) Cursor {
+			return Cursor{
+				ID:    pm.ID,
+				Value: pm.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ProgramMembershipOrderField) String() string {
+	var str string
+	switch f.column {
+	case ProgramMembershipOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ProgramMembershipOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ProgramMembershipOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ProgramMembershipOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *ProgramMembershipOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid ProgramMembershipOrderField", str)
+	}
+	return nil
 }
 
 // ProgramMembershipOrderField defines the ordering field of ProgramMembership.
@@ -15316,6 +18122,53 @@ func (pmh *ProgramMembershipHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// ProgramMembershipHistoryOrderFieldRole orders ProgramMembershipHistory by role.
+	ProgramMembershipHistoryOrderFieldRole = &ProgramMembershipHistoryOrderField{
+		Value: func(pmh *ProgramMembershipHistory) (ent.Value, error) {
+			return pmh.Role, nil
+		},
+		column: programmembershiphistory.FieldRole,
+		toTerm: programmembershiphistory.ByRole,
+		toCursor: func(pmh *ProgramMembershipHistory) Cursor {
+			return Cursor{
+				ID:    pmh.ID,
+				Value: pmh.Role,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ProgramMembershipHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ProgramMembershipHistoryOrderFieldRole.column:
+		str = "ROLE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ProgramMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ProgramMembershipHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ProgramMembershipHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "ROLE":
+		*f = *ProgramMembershipHistoryOrderFieldRole
+	default:
+		return fmt.Errorf("%s is not a valid ProgramMembershipHistoryOrderField", str)
+	}
+	return nil
+}
+
 // ProgramMembershipHistoryOrderField defines the ordering field of ProgramMembershipHistory.
 type ProgramMembershipHistoryOrderField struct {
 	// Value extracts the ordering value from the given ProgramMembershipHistory.
@@ -15412,19 +18265,14 @@ func (c *RiskConnection) build(nodes []*Risk, pager *riskPager, after *Cursor, f
 type RiskPaginateOption func(*riskPager) error
 
 // WithRiskOrder configures pagination ordering.
-func WithRiskOrder(order *RiskOrder) RiskPaginateOption {
-	if order == nil {
-		order = DefaultRiskOrder
-	}
-	o := *order
+func WithRiskOrder(order []*RiskOrder) RiskPaginateOption {
 	return func(pager *riskPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultRiskOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -15442,7 +18290,7 @@ func WithRiskFilter(filter func(*RiskQuery) (*RiskQuery, error)) RiskPaginateOpt
 
 type riskPager struct {
 	reverse bool
-	order   *RiskOrder
+	order   []*RiskOrder
 	filter  func(*RiskQuery) (*RiskQuery, error)
 }
 
@@ -15453,8 +18301,10 @@ func newRiskPager(opts []RiskPaginateOption, reverse bool) (*riskPager, error) {
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultRiskOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -15467,48 +18317,87 @@ func (p *riskPager) applyFilter(query *RiskQuery) (*RiskQuery, error) {
 }
 
 func (p *riskPager) toCursor(r *Risk) Cursor {
-	return p.order.Field.toCursor(r)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(r).Value)
+	}
+	return Cursor{ID: r.ID, Value: cs_}
 }
 
 func (p *riskPager) applyCursors(query *RiskQuery, after, before *Cursor) (*RiskQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultRiskOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultRiskOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *riskPager) applyOrder(query *RiskQuery) *RiskQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultRiskOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultRiskOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultRiskOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *riskPager) orderExpr(query *RiskQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultRiskOrder.Field {
-			b.Comma().Ident(DefaultRiskOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultRiskOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -15563,6 +18452,179 @@ func (r *RiskQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// RiskOrderFieldName orders Risk by name.
+	RiskOrderFieldName = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Name, nil
+		},
+		column: risk.FieldName,
+		toTerm: risk.ByName,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Name,
+			}
+		},
+	}
+	// RiskOrderFieldStatus orders Risk by status.
+	RiskOrderFieldStatus = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Status, nil
+		},
+		column: risk.FieldStatus,
+		toTerm: risk.ByStatus,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Status,
+			}
+		},
+	}
+	// RiskOrderFieldRiskType orders Risk by risk_type.
+	RiskOrderFieldRiskType = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.RiskType, nil
+		},
+		column: risk.FieldRiskType,
+		toTerm: risk.ByRiskType,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.RiskType,
+			}
+		},
+	}
+	// RiskOrderFieldCategory orders Risk by category.
+	RiskOrderFieldCategory = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Category, nil
+		},
+		column: risk.FieldCategory,
+		toTerm: risk.ByCategory,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Category,
+			}
+		},
+	}
+	// RiskOrderFieldImpact orders Risk by impact.
+	RiskOrderFieldImpact = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Impact, nil
+		},
+		column: risk.FieldImpact,
+		toTerm: risk.ByImpact,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Impact,
+			}
+		},
+	}
+	// RiskOrderFieldLikelihood orders Risk by likelihood.
+	RiskOrderFieldLikelihood = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Likelihood, nil
+		},
+		column: risk.FieldLikelihood,
+		toTerm: risk.ByLikelihood,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Likelihood,
+			}
+		},
+	}
+	// RiskOrderFieldScore orders Risk by score.
+	RiskOrderFieldScore = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.Score, nil
+		},
+		column: risk.FieldScore,
+		toTerm: risk.ByScore,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Score,
+			}
+		},
+	}
+	// RiskOrderFieldBusinessCosts orders Risk by business_costs.
+	RiskOrderFieldBusinessCosts = &RiskOrderField{
+		Value: func(r *Risk) (ent.Value, error) {
+			return r.BusinessCosts, nil
+		},
+		column: risk.FieldBusinessCosts,
+		toTerm: risk.ByBusinessCosts,
+		toCursor: func(r *Risk) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.BusinessCosts,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f RiskOrderField) String() string {
+	var str string
+	switch f.column {
+	case RiskOrderFieldName.column:
+		str = "name"
+	case RiskOrderFieldStatus.column:
+		str = "STATUS"
+	case RiskOrderFieldRiskType.column:
+		str = "risk_type"
+	case RiskOrderFieldCategory.column:
+		str = "category"
+	case RiskOrderFieldImpact.column:
+		str = "IMPACT"
+	case RiskOrderFieldLikelihood.column:
+		str = "LIKELIHOOD"
+	case RiskOrderFieldScore.column:
+		str = "score"
+	case RiskOrderFieldBusinessCosts.column:
+		str = "business_costs"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f RiskOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("RiskOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *RiskOrderFieldName
+	case "STATUS":
+		*f = *RiskOrderFieldStatus
+	case "risk_type":
+		*f = *RiskOrderFieldRiskType
+	case "category":
+		*f = *RiskOrderFieldCategory
+	case "IMPACT":
+		*f = *RiskOrderFieldImpact
+	case "LIKELIHOOD":
+		*f = *RiskOrderFieldLikelihood
+	case "score":
+		*f = *RiskOrderFieldScore
+	case "business_costs":
+		*f = *RiskOrderFieldBusinessCosts
+	default:
+		return fmt.Errorf("%s is not a valid RiskOrderField", str)
+	}
+	return nil
 }
 
 // RiskOrderField defines the ordering field of Risk.
@@ -15814,6 +18876,179 @@ func (rh *RiskHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// RiskHistoryOrderFieldName orders RiskHistory by name.
+	RiskHistoryOrderFieldName = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Name, nil
+		},
+		column: riskhistory.FieldName,
+		toTerm: riskhistory.ByName,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Name,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldStatus orders RiskHistory by status.
+	RiskHistoryOrderFieldStatus = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Status, nil
+		},
+		column: riskhistory.FieldStatus,
+		toTerm: riskhistory.ByStatus,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Status,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldRiskType orders RiskHistory by risk_type.
+	RiskHistoryOrderFieldRiskType = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.RiskType, nil
+		},
+		column: riskhistory.FieldRiskType,
+		toTerm: riskhistory.ByRiskType,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.RiskType,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldCategory orders RiskHistory by category.
+	RiskHistoryOrderFieldCategory = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Category, nil
+		},
+		column: riskhistory.FieldCategory,
+		toTerm: riskhistory.ByCategory,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Category,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldImpact orders RiskHistory by impact.
+	RiskHistoryOrderFieldImpact = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Impact, nil
+		},
+		column: riskhistory.FieldImpact,
+		toTerm: riskhistory.ByImpact,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Impact,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldLikelihood orders RiskHistory by likelihood.
+	RiskHistoryOrderFieldLikelihood = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Likelihood, nil
+		},
+		column: riskhistory.FieldLikelihood,
+		toTerm: riskhistory.ByLikelihood,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Likelihood,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldScore orders RiskHistory by score.
+	RiskHistoryOrderFieldScore = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.Score, nil
+		},
+		column: riskhistory.FieldScore,
+		toTerm: riskhistory.ByScore,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.Score,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldBusinessCosts orders RiskHistory by business_costs.
+	RiskHistoryOrderFieldBusinessCosts = &RiskHistoryOrderField{
+		Value: func(rh *RiskHistory) (ent.Value, error) {
+			return rh.BusinessCosts, nil
+		},
+		column: riskhistory.FieldBusinessCosts,
+		toTerm: riskhistory.ByBusinessCosts,
+		toCursor: func(rh *RiskHistory) Cursor {
+			return Cursor{
+				ID:    rh.ID,
+				Value: rh.BusinessCosts,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f RiskHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case RiskHistoryOrderFieldName.column:
+		str = "name"
+	case RiskHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case RiskHistoryOrderFieldRiskType.column:
+		str = "risk_type"
+	case RiskHistoryOrderFieldCategory.column:
+		str = "category"
+	case RiskHistoryOrderFieldImpact.column:
+		str = "IMPACT"
+	case RiskHistoryOrderFieldLikelihood.column:
+		str = "LIKELIHOOD"
+	case RiskHistoryOrderFieldScore.column:
+		str = "score"
+	case RiskHistoryOrderFieldBusinessCosts.column:
+		str = "business_costs"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f RiskHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("RiskHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *RiskHistoryOrderFieldName
+	case "STATUS":
+		*f = *RiskHistoryOrderFieldStatus
+	case "risk_type":
+		*f = *RiskHistoryOrderFieldRiskType
+	case "category":
+		*f = *RiskHistoryOrderFieldCategory
+	case "IMPACT":
+		*f = *RiskHistoryOrderFieldImpact
+	case "LIKELIHOOD":
+		*f = *RiskHistoryOrderFieldLikelihood
+	case "score":
+		*f = *RiskHistoryOrderFieldScore
+	case "business_costs":
+		*f = *RiskHistoryOrderFieldBusinessCosts
+	default:
+		return fmt.Errorf("%s is not a valid RiskHistoryOrderField", str)
+	}
+	return nil
+}
+
 // RiskHistoryOrderField defines the ordering field of RiskHistory.
 type RiskHistoryOrderField struct {
 	// Value extracts the ordering value from the given RiskHistory.
@@ -15910,19 +19145,14 @@ func (c *StandardConnection) build(nodes []*Standard, pager *standardPager, afte
 type StandardPaginateOption func(*standardPager) error
 
 // WithStandardOrder configures pagination ordering.
-func WithStandardOrder(order *StandardOrder) StandardPaginateOption {
-	if order == nil {
-		order = DefaultStandardOrder
-	}
-	o := *order
+func WithStandardOrder(order []*StandardOrder) StandardPaginateOption {
 	return func(pager *standardPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultStandardOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -15940,7 +19170,7 @@ func WithStandardFilter(filter func(*StandardQuery) (*StandardQuery, error)) Sta
 
 type standardPager struct {
 	reverse bool
-	order   *StandardOrder
+	order   []*StandardOrder
 	filter  func(*StandardQuery) (*StandardQuery, error)
 }
 
@@ -15951,8 +19181,10 @@ func newStandardPager(opts []StandardPaginateOption, reverse bool) (*standardPag
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultStandardOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -15965,48 +19197,87 @@ func (p *standardPager) applyFilter(query *StandardQuery) (*StandardQuery, error
 }
 
 func (p *standardPager) toCursor(s *Standard) Cursor {
-	return p.order.Field.toCursor(s)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(s).Value)
+	}
+	return Cursor{ID: s.ID, Value: cs_}
 }
 
 func (p *standardPager) applyCursors(query *StandardQuery, after, before *Cursor) (*StandardQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultStandardOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultStandardOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *standardPager) applyOrder(query *StandardQuery) *StandardQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultStandardOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultStandardOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultStandardOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *standardPager) orderExpr(query *StandardQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultStandardOrder.Field {
-			b.Comma().Ident(DefaultStandardOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultStandardOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -16061,6 +19332,143 @@ func (s *StandardQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// StandardOrderFieldName orders Standard by name.
+	StandardOrderFieldName = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.Name, nil
+		},
+		column: standard.FieldName,
+		toTerm: standard.ByName,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Name,
+			}
+		},
+	}
+	// StandardOrderFieldShortName orders Standard by short_name.
+	StandardOrderFieldShortName = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.ShortName, nil
+		},
+		column: standard.FieldShortName,
+		toTerm: standard.ByShortName,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.ShortName,
+			}
+		},
+	}
+	// StandardOrderFieldFramework orders Standard by framework.
+	StandardOrderFieldFramework = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.Framework, nil
+		},
+		column: standard.FieldFramework,
+		toTerm: standard.ByFramework,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Framework,
+			}
+		},
+	}
+	// StandardOrderFieldGoverningBody orders Standard by governing_body.
+	StandardOrderFieldGoverningBody = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.GoverningBody, nil
+		},
+		column: standard.FieldGoverningBody,
+		toTerm: standard.ByGoverningBody,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.GoverningBody,
+			}
+		},
+	}
+	// StandardOrderFieldStatus orders Standard by status.
+	StandardOrderFieldStatus = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.Status, nil
+		},
+		column: standard.FieldStatus,
+		toTerm: standard.ByStatus,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Status,
+			}
+		},
+	}
+	// StandardOrderFieldStandardType orders Standard by standard_type.
+	StandardOrderFieldStandardType = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.StandardType, nil
+		},
+		column: standard.FieldStandardType,
+		toTerm: standard.ByStandardType,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.StandardType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f StandardOrderField) String() string {
+	var str string
+	switch f.column {
+	case StandardOrderFieldName.column:
+		str = "name"
+	case StandardOrderFieldShortName.column:
+		str = "short_name"
+	case StandardOrderFieldFramework.column:
+		str = "framework"
+	case StandardOrderFieldGoverningBody.column:
+		str = "governing_body"
+	case StandardOrderFieldStatus.column:
+		str = "STATUS"
+	case StandardOrderFieldStandardType.column:
+		str = "standard_type"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f StandardOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *StandardOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("StandardOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *StandardOrderFieldName
+	case "short_name":
+		*f = *StandardOrderFieldShortName
+	case "framework":
+		*f = *StandardOrderFieldFramework
+	case "governing_body":
+		*f = *StandardOrderFieldGoverningBody
+	case "STATUS":
+		*f = *StandardOrderFieldStatus
+	case "standard_type":
+		*f = *StandardOrderFieldStandardType
+	default:
+		return fmt.Errorf("%s is not a valid StandardOrderField", str)
+	}
+	return nil
 }
 
 // StandardOrderField defines the ordering field of Standard.
@@ -16312,6 +19720,143 @@ func (sh *StandardHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// StandardHistoryOrderFieldName orders StandardHistory by name.
+	StandardHistoryOrderFieldName = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.Name, nil
+		},
+		column: standardhistory.FieldName,
+		toTerm: standardhistory.ByName,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Name,
+			}
+		},
+	}
+	// StandardHistoryOrderFieldShortName orders StandardHistory by short_name.
+	StandardHistoryOrderFieldShortName = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.ShortName, nil
+		},
+		column: standardhistory.FieldShortName,
+		toTerm: standardhistory.ByShortName,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.ShortName,
+			}
+		},
+	}
+	// StandardHistoryOrderFieldFramework orders StandardHistory by framework.
+	StandardHistoryOrderFieldFramework = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.Framework, nil
+		},
+		column: standardhistory.FieldFramework,
+		toTerm: standardhistory.ByFramework,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Framework,
+			}
+		},
+	}
+	// StandardHistoryOrderFieldGoverningBody orders StandardHistory by governing_body.
+	StandardHistoryOrderFieldGoverningBody = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.GoverningBody, nil
+		},
+		column: standardhistory.FieldGoverningBody,
+		toTerm: standardhistory.ByGoverningBody,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.GoverningBody,
+			}
+		},
+	}
+	// StandardHistoryOrderFieldStatus orders StandardHistory by status.
+	StandardHistoryOrderFieldStatus = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.Status, nil
+		},
+		column: standardhistory.FieldStatus,
+		toTerm: standardhistory.ByStatus,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Status,
+			}
+		},
+	}
+	// StandardHistoryOrderFieldStandardType orders StandardHistory by standard_type.
+	StandardHistoryOrderFieldStandardType = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.StandardType, nil
+		},
+		column: standardhistory.FieldStandardType,
+		toTerm: standardhistory.ByStandardType,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.StandardType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f StandardHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case StandardHistoryOrderFieldName.column:
+		str = "name"
+	case StandardHistoryOrderFieldShortName.column:
+		str = "short_name"
+	case StandardHistoryOrderFieldFramework.column:
+		str = "framework"
+	case StandardHistoryOrderFieldGoverningBody.column:
+		str = "governing_body"
+	case StandardHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case StandardHistoryOrderFieldStandardType.column:
+		str = "standard_type"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f StandardHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *StandardHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("StandardHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *StandardHistoryOrderFieldName
+	case "short_name":
+		*f = *StandardHistoryOrderFieldShortName
+	case "framework":
+		*f = *StandardHistoryOrderFieldFramework
+	case "governing_body":
+		*f = *StandardHistoryOrderFieldGoverningBody
+	case "STATUS":
+		*f = *StandardHistoryOrderFieldStatus
+	case "standard_type":
+		*f = *StandardHistoryOrderFieldStandardType
+	default:
+		return fmt.Errorf("%s is not a valid StandardHistoryOrderField", str)
+	}
+	return nil
+}
+
 // StandardHistoryOrderField defines the ordering field of StandardHistory.
 type StandardHistoryOrderField struct {
 	// Value extracts the ordering value from the given StandardHistory.
@@ -16408,19 +19953,14 @@ func (c *SubcontrolConnection) build(nodes []*Subcontrol, pager *subcontrolPager
 type SubcontrolPaginateOption func(*subcontrolPager) error
 
 // WithSubcontrolOrder configures pagination ordering.
-func WithSubcontrolOrder(order *SubcontrolOrder) SubcontrolPaginateOption {
-	if order == nil {
-		order = DefaultSubcontrolOrder
-	}
-	o := *order
+func WithSubcontrolOrder(order []*SubcontrolOrder) SubcontrolPaginateOption {
 	return func(pager *subcontrolPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultSubcontrolOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -16438,7 +19978,7 @@ func WithSubcontrolFilter(filter func(*SubcontrolQuery) (*SubcontrolQuery, error
 
 type subcontrolPager struct {
 	reverse bool
-	order   *SubcontrolOrder
+	order   []*SubcontrolOrder
 	filter  func(*SubcontrolQuery) (*SubcontrolQuery, error)
 }
 
@@ -16449,8 +19989,10 @@ func newSubcontrolPager(opts []SubcontrolPaginateOption, reverse bool) (*subcont
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultSubcontrolOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -16463,48 +20005,87 @@ func (p *subcontrolPager) applyFilter(query *SubcontrolQuery) (*SubcontrolQuery,
 }
 
 func (p *subcontrolPager) toCursor(s *Subcontrol) Cursor {
-	return p.order.Field.toCursor(s)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(s).Value)
+	}
+	return Cursor{ID: s.ID, Value: cs_}
 }
 
 func (p *subcontrolPager) applyCursors(query *SubcontrolQuery, after, before *Cursor) (*SubcontrolQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSubcontrolOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSubcontrolOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *subcontrolPager) applyOrder(query *SubcontrolQuery) *SubcontrolQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSubcontrolOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultSubcontrolOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultSubcontrolOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *subcontrolPager) orderExpr(query *SubcontrolQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultSubcontrolOrder.Field {
-			b.Comma().Ident(DefaultSubcontrolOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSubcontrolOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -16559,6 +20140,143 @@ func (s *SubcontrolQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// SubcontrolOrderFieldStatus orders Subcontrol by status.
+	SubcontrolOrderFieldStatus = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.Status, nil
+		},
+		column: subcontrol.FieldStatus,
+		toTerm: subcontrol.ByStatus,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Status,
+			}
+		},
+	}
+	// SubcontrolOrderFieldSource orders Subcontrol by source.
+	SubcontrolOrderFieldSource = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.Source, nil
+		},
+		column: subcontrol.FieldSource,
+		toTerm: subcontrol.BySource,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Source,
+			}
+		},
+	}
+	// SubcontrolOrderFieldControlType orders Subcontrol by control_type.
+	SubcontrolOrderFieldControlType = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.ControlType, nil
+		},
+		column: subcontrol.FieldControlType,
+		toTerm: subcontrol.ByControlType,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.ControlType,
+			}
+		},
+	}
+	// SubcontrolOrderFieldCategory orders Subcontrol by category.
+	SubcontrolOrderFieldCategory = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.Category, nil
+		},
+		column: subcontrol.FieldCategory,
+		toTerm: subcontrol.ByCategory,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Category,
+			}
+		},
+	}
+	// SubcontrolOrderFieldSubcategory orders Subcontrol by subcategory.
+	SubcontrolOrderFieldSubcategory = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.Subcategory, nil
+		},
+		column: subcontrol.FieldSubcategory,
+		toTerm: subcontrol.BySubcategory,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Subcategory,
+			}
+		},
+	}
+	// SubcontrolOrderFieldRefCode orders Subcontrol by ref_code.
+	SubcontrolOrderFieldRefCode = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.RefCode, nil
+		},
+		column: subcontrol.FieldRefCode,
+		toTerm: subcontrol.ByRefCode,
+		toCursor: func(s *Subcontrol) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.RefCode,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SubcontrolOrderField) String() string {
+	var str string
+	switch f.column {
+	case SubcontrolOrderFieldStatus.column:
+		str = "status"
+	case SubcontrolOrderFieldSource.column:
+		str = "SOURCE"
+	case SubcontrolOrderFieldControlType.column:
+		str = "CONTROL_TYPE"
+	case SubcontrolOrderFieldCategory.column:
+		str = "category"
+	case SubcontrolOrderFieldSubcategory.column:
+		str = "subcategory"
+	case SubcontrolOrderFieldRefCode.column:
+		str = "ref_code"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SubcontrolOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SubcontrolOrderField %T must be a string", v)
+	}
+	switch str {
+	case "status":
+		*f = *SubcontrolOrderFieldStatus
+	case "SOURCE":
+		*f = *SubcontrolOrderFieldSource
+	case "CONTROL_TYPE":
+		*f = *SubcontrolOrderFieldControlType
+	case "category":
+		*f = *SubcontrolOrderFieldCategory
+	case "subcategory":
+		*f = *SubcontrolOrderFieldSubcategory
+	case "ref_code":
+		*f = *SubcontrolOrderFieldRefCode
+	default:
+		return fmt.Errorf("%s is not a valid SubcontrolOrderField", str)
+	}
+	return nil
 }
 
 // SubcontrolOrderField defines the ordering field of Subcontrol.
@@ -16810,6 +20528,143 @@ func (sh *SubcontrolHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// SubcontrolHistoryOrderFieldStatus orders SubcontrolHistory by status.
+	SubcontrolHistoryOrderFieldStatus = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.Status, nil
+		},
+		column: subcontrolhistory.FieldStatus,
+		toTerm: subcontrolhistory.ByStatus,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Status,
+			}
+		},
+	}
+	// SubcontrolHistoryOrderFieldSource orders SubcontrolHistory by source.
+	SubcontrolHistoryOrderFieldSource = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.Source, nil
+		},
+		column: subcontrolhistory.FieldSource,
+		toTerm: subcontrolhistory.BySource,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Source,
+			}
+		},
+	}
+	// SubcontrolHistoryOrderFieldControlType orders SubcontrolHistory by control_type.
+	SubcontrolHistoryOrderFieldControlType = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.ControlType, nil
+		},
+		column: subcontrolhistory.FieldControlType,
+		toTerm: subcontrolhistory.ByControlType,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.ControlType,
+			}
+		},
+	}
+	// SubcontrolHistoryOrderFieldCategory orders SubcontrolHistory by category.
+	SubcontrolHistoryOrderFieldCategory = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.Category, nil
+		},
+		column: subcontrolhistory.FieldCategory,
+		toTerm: subcontrolhistory.ByCategory,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Category,
+			}
+		},
+	}
+	// SubcontrolHistoryOrderFieldSubcategory orders SubcontrolHistory by subcategory.
+	SubcontrolHistoryOrderFieldSubcategory = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.Subcategory, nil
+		},
+		column: subcontrolhistory.FieldSubcategory,
+		toTerm: subcontrolhistory.BySubcategory,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Subcategory,
+			}
+		},
+	}
+	// SubcontrolHistoryOrderFieldRefCode orders SubcontrolHistory by ref_code.
+	SubcontrolHistoryOrderFieldRefCode = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			return sh.RefCode, nil
+		},
+		column: subcontrolhistory.FieldRefCode,
+		toTerm: subcontrolhistory.ByRefCode,
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.RefCode,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SubcontrolHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case SubcontrolHistoryOrderFieldStatus.column:
+		str = "status"
+	case SubcontrolHistoryOrderFieldSource.column:
+		str = "SOURCE"
+	case SubcontrolHistoryOrderFieldControlType.column:
+		str = "CONTROL_TYPE"
+	case SubcontrolHistoryOrderFieldCategory.column:
+		str = "category"
+	case SubcontrolHistoryOrderFieldSubcategory.column:
+		str = "subcategory"
+	case SubcontrolHistoryOrderFieldRefCode.column:
+		str = "ref_code"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SubcontrolHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SubcontrolHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "status":
+		*f = *SubcontrolHistoryOrderFieldStatus
+	case "SOURCE":
+		*f = *SubcontrolHistoryOrderFieldSource
+	case "CONTROL_TYPE":
+		*f = *SubcontrolHistoryOrderFieldControlType
+	case "category":
+		*f = *SubcontrolHistoryOrderFieldCategory
+	case "subcategory":
+		*f = *SubcontrolHistoryOrderFieldSubcategory
+	case "ref_code":
+		*f = *SubcontrolHistoryOrderFieldRefCode
+	default:
+		return fmt.Errorf("%s is not a valid SubcontrolHistoryOrderField", str)
+	}
+	return nil
+}
+
 // SubcontrolHistoryOrderField defines the ordering field of SubcontrolHistory.
 type SubcontrolHistoryOrderField struct {
 	// Value extracts the ordering value from the given SubcontrolHistory.
@@ -16906,19 +20761,14 @@ func (c *SubscriberConnection) build(nodes []*Subscriber, pager *subscriberPager
 type SubscriberPaginateOption func(*subscriberPager) error
 
 // WithSubscriberOrder configures pagination ordering.
-func WithSubscriberOrder(order *SubscriberOrder) SubscriberPaginateOption {
-	if order == nil {
-		order = DefaultSubscriberOrder
-	}
-	o := *order
+func WithSubscriberOrder(order []*SubscriberOrder) SubscriberPaginateOption {
 	return func(pager *subscriberPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultSubscriberOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -16936,7 +20786,7 @@ func WithSubscriberFilter(filter func(*SubscriberQuery) (*SubscriberQuery, error
 
 type subscriberPager struct {
 	reverse bool
-	order   *SubscriberOrder
+	order   []*SubscriberOrder
 	filter  func(*SubscriberQuery) (*SubscriberQuery, error)
 }
 
@@ -16947,8 +20797,10 @@ func newSubscriberPager(opts []SubscriberPaginateOption, reverse bool) (*subscri
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultSubscriberOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -16961,48 +20813,87 @@ func (p *subscriberPager) applyFilter(query *SubscriberQuery) (*SubscriberQuery,
 }
 
 func (p *subscriberPager) toCursor(s *Subscriber) Cursor {
-	return p.order.Field.toCursor(s)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(s).Value)
+	}
+	return Cursor{ID: s.ID, Value: cs_}
 }
 
 func (p *subscriberPager) applyCursors(query *SubscriberQuery, after, before *Cursor) (*SubscriberQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSubscriberOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSubscriberOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *subscriberPager) applyOrder(query *SubscriberQuery) *SubscriberQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSubscriberOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultSubscriberOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultSubscriberOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *subscriberPager) orderExpr(query *SubscriberQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultSubscriberOrder.Field {
-			b.Comma().Ident(DefaultSubscriberOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSubscriberOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -17057,6 +20948,71 @@ func (s *SubscriberQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// SubscriberOrderFieldEmail orders Subscriber by email.
+	SubscriberOrderFieldEmail = &SubscriberOrderField{
+		Value: func(s *Subscriber) (ent.Value, error) {
+			return s.Email, nil
+		},
+		column: subscriber.FieldEmail,
+		toTerm: subscriber.ByEmail,
+		toCursor: func(s *Subscriber) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Email,
+			}
+		},
+	}
+	// SubscriberOrderFieldActive orders Subscriber by active.
+	SubscriberOrderFieldActive = &SubscriberOrderField{
+		Value: func(s *Subscriber) (ent.Value, error) {
+			return s.Active, nil
+		},
+		column: subscriber.FieldActive,
+		toTerm: subscriber.ByActive,
+		toCursor: func(s *Subscriber) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Active,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SubscriberOrderField) String() string {
+	var str string
+	switch f.column {
+	case SubscriberOrderFieldEmail.column:
+		str = "email"
+	case SubscriberOrderFieldActive.column:
+		str = "active"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SubscriberOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SubscriberOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SubscriberOrderField %T must be a string", v)
+	}
+	switch str {
+	case "email":
+		*f = *SubscriberOrderFieldEmail
+	case "active":
+		*f = *SubscriberOrderFieldActive
+	default:
+		return fmt.Errorf("%s is not a valid SubscriberOrderField", str)
+	}
+	return nil
 }
 
 // SubscriberOrderField defines the ordering field of Subscriber.
@@ -17404,19 +21360,14 @@ func (c *TaskConnection) build(nodes []*Task, pager *taskPager, after *Cursor, f
 type TaskPaginateOption func(*taskPager) error
 
 // WithTaskOrder configures pagination ordering.
-func WithTaskOrder(order *TaskOrder) TaskPaginateOption {
-	if order == nil {
-		order = DefaultTaskOrder
-	}
-	o := *order
+func WithTaskOrder(order []*TaskOrder) TaskPaginateOption {
 	return func(pager *taskPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultTaskOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -17434,7 +21385,7 @@ func WithTaskFilter(filter func(*TaskQuery) (*TaskQuery, error)) TaskPaginateOpt
 
 type taskPager struct {
 	reverse bool
-	order   *TaskOrder
+	order   []*TaskOrder
 	filter  func(*TaskQuery) (*TaskQuery, error)
 }
 
@@ -17445,8 +21396,10 @@ func newTaskPager(opts []TaskPaginateOption, reverse bool) (*taskPager, error) {
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultTaskOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -17459,48 +21412,87 @@ func (p *taskPager) applyFilter(query *TaskQuery) (*TaskQuery, error) {
 }
 
 func (p *taskPager) toCursor(t *Task) Cursor {
-	return p.order.Field.toCursor(t)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(t).Value)
+	}
+	return Cursor{ID: t.ID, Value: cs_}
 }
 
 func (p *taskPager) applyCursors(query *TaskQuery, after, before *Cursor) (*TaskQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultTaskOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTaskOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *taskPager) applyOrder(query *TaskQuery) *TaskQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTaskOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultTaskOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultTaskOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *taskPager) orderExpr(query *TaskQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultTaskOrder.Field {
-			b.Comma().Ident(DefaultTaskOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTaskOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -17555,6 +21547,125 @@ func (t *TaskQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// TaskOrderFieldTitle orders Task by title.
+	TaskOrderFieldTitle = &TaskOrderField{
+		Value: func(t *Task) (ent.Value, error) {
+			return t.Title, nil
+		},
+		column: task.FieldTitle,
+		toTerm: task.ByTitle,
+		toCursor: func(t *Task) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.Title,
+			}
+		},
+	}
+	// TaskOrderFieldStatus orders Task by status.
+	TaskOrderFieldStatus = &TaskOrderField{
+		Value: func(t *Task) (ent.Value, error) {
+			return t.Status, nil
+		},
+		column: task.FieldStatus,
+		toTerm: task.ByStatus,
+		toCursor: func(t *Task) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.Status,
+			}
+		},
+	}
+	// TaskOrderFieldCategory orders Task by category.
+	TaskOrderFieldCategory = &TaskOrderField{
+		Value: func(t *Task) (ent.Value, error) {
+			return t.Category, nil
+		},
+		column: task.FieldCategory,
+		toTerm: task.ByCategory,
+		toCursor: func(t *Task) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.Category,
+			}
+		},
+	}
+	// TaskOrderFieldDue orders Task by due.
+	TaskOrderFieldDue = &TaskOrderField{
+		Value: func(t *Task) (ent.Value, error) {
+			return t.Due, nil
+		},
+		column: task.FieldDue,
+		toTerm: task.ByDue,
+		toCursor: func(t *Task) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.Due,
+			}
+		},
+	}
+	// TaskOrderFieldCompleted orders Task by completed.
+	TaskOrderFieldCompleted = &TaskOrderField{
+		Value: func(t *Task) (ent.Value, error) {
+			return t.Completed, nil
+		},
+		column: task.FieldCompleted,
+		toTerm: task.ByCompleted,
+		toCursor: func(t *Task) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.Completed,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TaskOrderField) String() string {
+	var str string
+	switch f.column {
+	case TaskOrderFieldTitle.column:
+		str = "title"
+	case TaskOrderFieldStatus.column:
+		str = "STATUS"
+	case TaskOrderFieldCategory.column:
+		str = "category"
+	case TaskOrderFieldDue.column:
+		str = "due"
+	case TaskOrderFieldCompleted.column:
+		str = "completed"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TaskOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TaskOrderField %T must be a string", v)
+	}
+	switch str {
+	case "title":
+		*f = *TaskOrderFieldTitle
+	case "STATUS":
+		*f = *TaskOrderFieldStatus
+	case "category":
+		*f = *TaskOrderFieldCategory
+	case "due":
+		*f = *TaskOrderFieldDue
+	case "completed":
+		*f = *TaskOrderFieldCompleted
+	default:
+		return fmt.Errorf("%s is not a valid TaskOrderField", str)
+	}
+	return nil
 }
 
 // TaskOrderField defines the ordering field of Task.
@@ -17806,6 +21917,125 @@ func (th *TaskHistoryQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// TaskHistoryOrderFieldTitle orders TaskHistory by title.
+	TaskHistoryOrderFieldTitle = &TaskHistoryOrderField{
+		Value: func(th *TaskHistory) (ent.Value, error) {
+			return th.Title, nil
+		},
+		column: taskhistory.FieldTitle,
+		toTerm: taskhistory.ByTitle,
+		toCursor: func(th *TaskHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.Title,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldStatus orders TaskHistory by status.
+	TaskHistoryOrderFieldStatus = &TaskHistoryOrderField{
+		Value: func(th *TaskHistory) (ent.Value, error) {
+			return th.Status, nil
+		},
+		column: taskhistory.FieldStatus,
+		toTerm: taskhistory.ByStatus,
+		toCursor: func(th *TaskHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.Status,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldCategory orders TaskHistory by category.
+	TaskHistoryOrderFieldCategory = &TaskHistoryOrderField{
+		Value: func(th *TaskHistory) (ent.Value, error) {
+			return th.Category, nil
+		},
+		column: taskhistory.FieldCategory,
+		toTerm: taskhistory.ByCategory,
+		toCursor: func(th *TaskHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.Category,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldDue orders TaskHistory by due.
+	TaskHistoryOrderFieldDue = &TaskHistoryOrderField{
+		Value: func(th *TaskHistory) (ent.Value, error) {
+			return th.Due, nil
+		},
+		column: taskhistory.FieldDue,
+		toTerm: taskhistory.ByDue,
+		toCursor: func(th *TaskHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.Due,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldCompleted orders TaskHistory by completed.
+	TaskHistoryOrderFieldCompleted = &TaskHistoryOrderField{
+		Value: func(th *TaskHistory) (ent.Value, error) {
+			return th.Completed, nil
+		},
+		column: taskhistory.FieldCompleted,
+		toTerm: taskhistory.ByCompleted,
+		toCursor: func(th *TaskHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.Completed,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TaskHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case TaskHistoryOrderFieldTitle.column:
+		str = "title"
+	case TaskHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case TaskHistoryOrderFieldCategory.column:
+		str = "category"
+	case TaskHistoryOrderFieldDue.column:
+		str = "due"
+	case TaskHistoryOrderFieldCompleted.column:
+		str = "completed"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TaskHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TaskHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "title":
+		*f = *TaskHistoryOrderFieldTitle
+	case "STATUS":
+		*f = *TaskHistoryOrderFieldStatus
+	case "category":
+		*f = *TaskHistoryOrderFieldCategory
+	case "due":
+		*f = *TaskHistoryOrderFieldDue
+	case "completed":
+		*f = *TaskHistoryOrderFieldCompleted
+	default:
+		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
+	}
+	return nil
+}
+
 // TaskHistoryOrderField defines the ordering field of TaskHistory.
 type TaskHistoryOrderField struct {
 	// Value extracts the ordering value from the given TaskHistory.
@@ -17902,19 +22132,14 @@ func (c *TemplateConnection) build(nodes []*Template, pager *templatePager, afte
 type TemplatePaginateOption func(*templatePager) error
 
 // WithTemplateOrder configures pagination ordering.
-func WithTemplateOrder(order *TemplateOrder) TemplatePaginateOption {
-	if order == nil {
-		order = DefaultTemplateOrder
-	}
-	o := *order
+func WithTemplateOrder(order []*TemplateOrder) TemplatePaginateOption {
 	return func(pager *templatePager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultTemplateOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -17932,7 +22157,7 @@ func WithTemplateFilter(filter func(*TemplateQuery) (*TemplateQuery, error)) Tem
 
 type templatePager struct {
 	reverse bool
-	order   *TemplateOrder
+	order   []*TemplateOrder
 	filter  func(*TemplateQuery) (*TemplateQuery, error)
 }
 
@@ -17943,8 +22168,10 @@ func newTemplatePager(opts []TemplatePaginateOption, reverse bool) (*templatePag
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultTemplateOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -17957,48 +22184,87 @@ func (p *templatePager) applyFilter(query *TemplateQuery) (*TemplateQuery, error
 }
 
 func (p *templatePager) toCursor(t *Template) Cursor {
-	return p.order.Field.toCursor(t)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(t).Value)
+	}
+	return Cursor{ID: t.ID, Value: cs_}
 }
 
 func (p *templatePager) applyCursors(query *TemplateQuery, after, before *Cursor) (*TemplateQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultTemplateOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTemplateOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *templatePager) applyOrder(query *TemplateQuery) *TemplateQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTemplateOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultTemplateOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultTemplateOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *templatePager) orderExpr(query *TemplateQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultTemplateOrder.Field {
-			b.Comma().Ident(DefaultTemplateOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTemplateOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -18070,6 +22336,20 @@ var (
 			}
 		},
 	}
+	// TemplateOrderFieldTemplateType orders Template by template_type.
+	TemplateOrderFieldTemplateType = &TemplateOrderField{
+		Value: func(t *Template) (ent.Value, error) {
+			return t.TemplateType, nil
+		},
+		column: template.FieldTemplateType,
+		toTerm: template.ByTemplateType,
+		toCursor: func(t *Template) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.TemplateType,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -18078,6 +22358,8 @@ func (f TemplateOrderField) String() string {
 	switch f.column {
 	case TemplateOrderFieldName.column:
 		str = "name"
+	case TemplateOrderFieldTemplateType.column:
+		str = "TEMPLATE_TYPE"
 	}
 	return str
 }
@@ -18096,6 +22378,8 @@ func (f *TemplateOrderField) UnmarshalGQL(v interface{}) error {
 	switch str {
 	case "name":
 		*f = *TemplateOrderFieldName
+	case "TEMPLATE_TYPE":
+		*f = *TemplateOrderFieldTemplateType
 	default:
 		return fmt.Errorf("%s is not a valid TemplateOrderField", str)
 	}
@@ -18366,6 +22650,20 @@ var (
 			}
 		},
 	}
+	// TemplateHistoryOrderFieldTemplateType orders TemplateHistory by template_type.
+	TemplateHistoryOrderFieldTemplateType = &TemplateHistoryOrderField{
+		Value: func(th *TemplateHistory) (ent.Value, error) {
+			return th.TemplateType, nil
+		},
+		column: templatehistory.FieldTemplateType,
+		toTerm: templatehistory.ByTemplateType,
+		toCursor: func(th *TemplateHistory) Cursor {
+			return Cursor{
+				ID:    th.ID,
+				Value: th.TemplateType,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -18374,6 +22672,8 @@ func (f TemplateHistoryOrderField) String() string {
 	switch f.column {
 	case TemplateHistoryOrderFieldName.column:
 		str = "name"
+	case TemplateHistoryOrderFieldTemplateType.column:
+		str = "TEMPLATE_TYPE"
 	}
 	return str
 }
@@ -18392,6 +22692,8 @@ func (f *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 	switch str {
 	case "name":
 		*f = *TemplateHistoryOrderFieldName
+	case "TEMPLATE_TYPE":
+		*f = *TemplateHistoryOrderFieldTemplateType
 	default:
 		return fmt.Errorf("%s is not a valid TemplateHistoryOrderField", str)
 	}
@@ -18494,19 +22796,14 @@ func (c *UserConnection) build(nodes []*User, pager *userPager, after *Cursor, f
 type UserPaginateOption func(*userPager) error
 
 // WithUserOrder configures pagination ordering.
-func WithUserOrder(order *UserOrder) UserPaginateOption {
-	if order == nil {
-		order = DefaultUserOrder
-	}
-	o := *order
+func WithUserOrder(order []*UserOrder) UserPaginateOption {
 	return func(pager *userPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultUserOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -18524,7 +22821,7 @@ func WithUserFilter(filter func(*UserQuery) (*UserQuery, error)) UserPaginateOpt
 
 type userPager struct {
 	reverse bool
-	order   *UserOrder
+	order   []*UserOrder
 	filter  func(*UserQuery) (*UserQuery, error)
 }
 
@@ -18535,8 +22832,10 @@ func newUserPager(opts []UserPaginateOption, reverse bool) (*userPager, error) {
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultUserOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -18549,48 +22848,87 @@ func (p *userPager) applyFilter(query *UserQuery) (*UserQuery, error) {
 }
 
 func (p *userPager) toCursor(u *User) Cursor {
-	return p.order.Field.toCursor(u)
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(u).Value)
+	}
+	return Cursor{ID: u.ID, Value: cs_}
 }
 
 func (p *userPager) applyCursors(query *UserQuery, after, before *Cursor) (*UserQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultUserOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultUserOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *userPager) applyOrder(query *UserQuery) *UserQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultUserOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultUserOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultUserOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *userPager) orderExpr(query *UserQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultUserOrder.Field {
-			b.Comma().Ident(DefaultUserOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultUserOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 

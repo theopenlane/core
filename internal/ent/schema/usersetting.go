@@ -77,11 +77,15 @@ func (UserSetting) Fields() []ent.Field {
 // Edges of the UserSetting
 func (UserSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).Ref("setting").Unique().Field("user_id"),
+		edge.From("user", User.Type).
+			Ref("setting").
+			Unique().
+			Field("user_id"),
 		edge.To("default_org", Organization.Type).
 			Unique().
 			Comment("organization to load on user login"),
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).
+			Annotations(entgql.RelayConnection()),
 	}
 }
 

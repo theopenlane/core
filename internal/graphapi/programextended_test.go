@@ -62,7 +62,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 			assert.Equal(t, tc.request.Program.Name, resp.CreateProgramWithMembers.Program.Name)
 
 			// the creator is automatically added as an admin, and the members are added in addition
-			assert.Len(t, resp.CreateProgramWithMembers.Program.Members, len(tc.request.Members)+1)
+			assert.Len(t, resp.CreateProgramWithMembers.Program.Members.Edges, len(tc.request.Members)+1)
 		})
 	}
 }
@@ -155,19 +155,19 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			assert.Equal(t, tc.request.Program.Name, resp.CreateFullProgram.Program.Name)
 
 			// the creator is automatically added as an admin, and the members are added in addition
-			assert.Len(t, resp.CreateFullProgram.Program.Members, len(tc.request.Members)+1)
+			assert.Len(t, resp.CreateFullProgram.Program.Members.Edges, len(tc.request.Members)+1)
 
-			require.NotNil(t, resp.CreateFullProgram.Program.Controls)
-			assert.Len(t, resp.CreateFullProgram.Program.Controls, len(tc.request.Controls))
+			require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
+			assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
 
-			assert.NotNil(t, resp.CreateFullProgram.Program.Controls[0].Subcontrols)
-			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls[0].Subcontrols))
+			assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
+			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
 
-			require.NotNil(t, resp.CreateFullProgram.Program.Risks)
-			assert.Len(t, resp.CreateFullProgram.Program.Risks, len(tc.request.Risks))
+			require.NotNil(t, resp.CreateFullProgram.Program.Risks.Edges)
+			assert.Len(t, resp.CreateFullProgram.Program.Risks.Edges, len(tc.request.Risks))
 
-			require.NotNil(t, resp.CreateFullProgram.Program.InternalPolicies)
-			assert.Len(t, resp.CreateFullProgram.Program.InternalPolicies, len(tc.request.InternalPolicies))
+			require.NotNil(t, resp.CreateFullProgram.Program.InternalPolicies.Edges)
+			assert.Len(t, resp.CreateFullProgram.Program.InternalPolicies.Edges, len(tc.request.InternalPolicies))
 		})
 	}
 }

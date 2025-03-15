@@ -150,9 +150,13 @@ func (User) Indexes() []ent.Index {
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("personal_access_tokens", PersonalAccessToken.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection()),
 		edge.To("tfa_settings", TFASetting.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection()),
 		edge.To("setting", UserSetting.Type).
 			Required().
 			Unique().
@@ -162,25 +166,27 @@ func (User) Edges() []ent.Edge {
 		edge.To("email_verification_tokens", EmailVerificationToken.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
-			),
+				entgql.RelayConnection()),
 		edge.To("password_reset_tokens", PasswordResetToken.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
-			),
+				entgql.RelayConnection()),
 		edge.To("groups", Group.Type).
 			Through("group_memberships", GroupMembership.Type),
 		edge.To("organizations", Organization.Type).
 			Through("org_memberships", OrgMembership.Type),
 		edge.To("webauthn", Webauthn.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
-		edge.To("files", File.Type),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection()),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 		edge.To("avatar_file", File.Type).
 			Field("avatar_local_file_id").Unique(),
-		edge.To("events", Event.Type),
-		edge.To("action_plans", ActionPlan.Type),
-		edge.To("subcontrols", Subcontrol.Type),
-		edge.To("assigner_tasks", Task.Type),
-		edge.To("assignee_tasks", Task.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
+		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
+		edge.To("assigner_tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		edge.To("assignee_tasks", Task.Type).Annotations(entgql.RelayConnection()),
 		edge.To("programs", Program.Type).
 			Through("program_memberships", ProgramMembership.Type),
 	}
@@ -191,6 +197,7 @@ func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete users from groups and orgs when the user is deleted
 		entx.CascadeThroughAnnotationField(

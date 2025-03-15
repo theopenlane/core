@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -31,6 +32,10 @@ func (Evidence) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the evidence").
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("name"),
+			).
 			NotEmpty(),
 		field.String("description").
 			Comment("the description of the evidence, what is contained in the uploaded file(s) or url(s)").
@@ -40,10 +45,16 @@ func (Evidence) Fields() []ent.Field {
 			Optional(),
 		field.Time("creation_date").
 			Comment("the date the evidence was retrieved").
+			Annotations(
+				entgql.OrderField("creation_date"),
+			).
 			Default(time.Now),
 		field.Time("renewal_date").
 			Comment("the date the evidence should be renewed, defaults to a year from entry date").
 			Default(time.Now().AddDate(1, 0, 0)).
+			Annotations(
+				entgql.OrderField("renewal_date"),
+			).
 			Optional(),
 		field.String("source").
 			Comment("the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)").
@@ -59,6 +70,9 @@ func (Evidence) Fields() []ent.Field {
 		field.Enum("status").
 			GoType(enums.EvidenceStatus("")).
 			Default(enums.EvidenceReady.String()).
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
 			Optional(),
 	}
@@ -81,13 +95,15 @@ func (Evidence) Mixin() []ent.Mixin {
 // Edges of the Evidence
 func (Evidence) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("control_objectives", ControlObjective.Type),
-		edge.To("controls", Control.Type),
-		edge.To("subcontrols", Subcontrol.Type),
-		edge.To("files", File.Type),
+		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
+		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
+		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("evidence"),
 		edge.From("tasks", Task.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("evidence"),
 	}
 }
@@ -97,6 +113,7 @@ func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

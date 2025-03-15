@@ -54,8 +54,9 @@ func (DocumentData) Edges() []ent.Edge {
 			Required().
 			Field("template_id"),
 		edge.From("entity", Entity.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("documents"),
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 

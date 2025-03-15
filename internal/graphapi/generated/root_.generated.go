@@ -117,7 +117,7 @@ type ComplexityRoot struct {
 		ActionPlanType   func(childComplexity int) int
 		ApprovalRequired func(childComplexity int) int
 		Approver         func(childComplexity int) int
-		Control          func(childComplexity int) int
+		Control          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
@@ -130,17 +130,17 @@ type ComplexityRoot struct {
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Priority         func(childComplexity int) int
-		Program          func(childComplexity int) int
+		Program          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue        func(childComplexity int) int
 		ReviewFrequency  func(childComplexity int) int
 		Revision         func(childComplexity int) int
-		Risk             func(childComplexity int) int
+		Risk             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source           func(childComplexity int) int
 		Status           func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
-		User             func(childComplexity int) int
+		User             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -239,8 +239,8 @@ type ComplexityRoot struct {
 		DeletedAt   func(childComplexity int) int
 		DeletedBy   func(childComplexity int) int
 		Email       func(childComplexity int) int
-		Entities    func(childComplexity int) int
-		Files       func(childComplexity int) int
+		Entities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		FullName    func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Owner       func(childComplexity int) int
@@ -318,13 +318,13 @@ type ComplexityRoot struct {
 	}
 
 	Control struct {
-		ActionPlans            func(childComplexity int) int
+		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		BlockedGroups          func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
-		ControlImplementations func(childComplexity int) int
+		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int) int
 		ControlOwner           func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
@@ -337,29 +337,29 @@ type ComplexityRoot struct {
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Editors                func(childComplexity int) int
-		Evidence               func(childComplexity int) int
+		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
-		InternalPolicies       func(childComplexity int) int
+		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
-		MappedControls         func(childComplexity int) int
-		Narratives             func(childComplexity int) int
+		MappedControls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
-		Procedures             func(childComplexity int) int
-		Programs               func(childComplexity int) int
+		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RefCode                func(childComplexity int) int
 		References             func(childComplexity int) int
-		Risks                  func(childComplexity int) int
+		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source                 func(childComplexity int) int
 		Standard               func(childComplexity int) int
 		StandardID             func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
-		Subcontrols            func(childComplexity int) int
+		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int) int
+		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		Viewers                func(childComplexity int) int
@@ -432,7 +432,7 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementation struct {
-		Controls           func(childComplexity int) int
+		Controls           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		DeletedAt          func(childComplexity int) int
@@ -513,7 +513,7 @@ type ComplexityRoot struct {
 		BlockedGroups        func(childComplexity int) int
 		Category             func(childComplexity int) int
 		ControlObjectiveType func(childComplexity int) int
-		Controls             func(childComplexity int) int
+		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
@@ -521,23 +521,23 @@ type ComplexityRoot struct {
 		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
-		Evidence             func(childComplexity int) int
+		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ID                   func(childComplexity int) int
-		InternalPolicies     func(childComplexity int) int
+		InternalPolicies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		Name                 func(childComplexity int) int
-		Narratives           func(childComplexity int) int
+		Narratives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
-		Procedures           func(childComplexity int) int
-		Programs             func(childComplexity int) int
+		Procedures           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Programs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Revision             func(childComplexity int) int
-		Risks                func(childComplexity int) int
+		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source               func(childComplexity int) int
 		Status               func(childComplexity int) int
 		Subcategory          func(childComplexity int) int
-		Subcontrols          func(childComplexity int) int
+		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                 func(childComplexity int) int
-		Tasks                func(childComplexity int) int
+		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Viewers              func(childComplexity int) int
@@ -623,8 +623,8 @@ type ComplexityRoot struct {
 		Data       func(childComplexity int) int
 		DeletedAt  func(childComplexity int) int
 		DeletedBy  func(childComplexity int) int
-		Entity     func(childComplexity int) int
-		Files      func(childComplexity int) int
+		Entity     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID         func(childComplexity int) int
 		Owner      func(childComplexity int) int
 		OwnerID    func(childComplexity int) int
@@ -695,21 +695,21 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		Contacts     func(childComplexity int) int
+		Contacts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
 		DeletedAt    func(childComplexity int) int
 		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		DisplayName  func(childComplexity int) int
-		Documents    func(childComplexity int) int
+		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
 		Domains      func(childComplexity int) int
 		EntityType   func(childComplexity int) int
 		EntityTypeID func(childComplexity int) int
-		Files        func(childComplexity int) int
+		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID           func(childComplexity int) int
 		Name         func(childComplexity int) int
-		Notes        func(childComplexity int) int
+		Notes        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		Owner        func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
 		Status       func(childComplexity int) int
@@ -782,7 +782,7 @@ type ComplexityRoot struct {
 		CreatedBy func(childComplexity int) int
 		DeletedAt func(childComplexity int) int
 		DeletedBy func(childComplexity int) int
-		Entities  func(childComplexity int) int
+		Entities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
 		Owner     func(childComplexity int) int
@@ -860,23 +860,23 @@ type ComplexityRoot struct {
 		CreatedBy           func(childComplexity int) int
 		EventID             func(childComplexity int) int
 		EventType           func(childComplexity int) int
-		File                func(childComplexity int) int
-		Group               func(childComplexity int) int
-		Groupmembership     func(childComplexity int) int
-		Hush                func(childComplexity int) int
+		File                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
+		Group               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Groupmembership     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		Hush                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		ID                  func(childComplexity int) int
-		Integration         func(childComplexity int) int
-		Invite              func(childComplexity int) int
+		Integration         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		Invite              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		Metadata            func(childComplexity int) int
-		Organization        func(childComplexity int) int
-		Orgmembership       func(childComplexity int) int
-		Orgsubscription     func(childComplexity int) int
-		PersonalAccessToken func(childComplexity int) int
-		Subscriber          func(childComplexity int) int
+		Organization        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Orgmembership       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Orgsubscription     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
+		PersonalAccessToken func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
+		Subscriber          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
-		User                func(childComplexity int) int
+		User                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	EventBulkCreatePayload struct {
@@ -939,8 +939,8 @@ type ComplexityRoot struct {
 
 	Evidence struct {
 		CollectionProcedure func(childComplexity int) int
-		ControlObjectives   func(childComplexity int) int
-		Controls            func(childComplexity int) int
+		ControlObjectives   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
 		CreationDate        func(childComplexity int) int
@@ -948,19 +948,19 @@ type ComplexityRoot struct {
 		DeletedBy           func(childComplexity int) int
 		Description         func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
-		Files               func(childComplexity int) int
+		Files               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID                  func(childComplexity int) int
 		IsAutomated         func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
-		Programs            func(childComplexity int) int
+		Programs            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate         func(childComplexity int) int
 		Source              func(childComplexity int) int
 		Status              func(childComplexity int) int
-		Subcontrols         func(childComplexity int) int
+		Subcontrols         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                func(childComplexity int) int
-		Tasks               func(childComplexity int) int
+		Tasks               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		URL                 func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
@@ -1035,25 +1035,25 @@ type ComplexityRoot struct {
 
 	File struct {
 		CategoryType          func(childComplexity int) int
-		Contact               func(childComplexity int) int
+		Contact               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
 		DeletedAt             func(childComplexity int) int
 		DeletedBy             func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
 		DetectedMimeType      func(childComplexity int) int
-		DocumentData          func(childComplexity int) int
-		Entity                func(childComplexity int) int
-		Events                func(childComplexity int) int
-		Evidence              func(childComplexity int) int
-		Group                 func(childComplexity int) int
+		DocumentData          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
+		Entity                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Evidence              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Group                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
-		Organization          func(childComplexity int) int
-		OrganizationSetting   func(childComplexity int) int
+		Organization          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		OrganizationSetting   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) int
 		PersistedFileSize     func(childComplexity int) int
 		PresignedURL          func(childComplexity int) int
-		Program               func(childComplexity int) int
+		Program               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
 		ProvidedFileSize      func(childComplexity int) int
@@ -1062,12 +1062,12 @@ type ComplexityRoot struct {
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
 		Tags                  func(childComplexity int) int
-		Template              func(childComplexity int) int
+		Template              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
-		User                  func(childComplexity int) int
-		UserSetting           func(childComplexity int) int
+		User                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		UserSetting           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) int
 	}
 
 	FileConnection struct {
@@ -1141,11 +1141,11 @@ type ComplexityRoot struct {
 		Description                   func(childComplexity int) int
 		DisplayID                     func(childComplexity int) int
 		DisplayName                   func(childComplexity int) int
-		Events                        func(childComplexity int) int
-		Files                         func(childComplexity int) int
+		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		GravatarLogoURL               func(childComplexity int) int
 		ID                            func(childComplexity int) int
-		Integrations                  func(childComplexity int) int
+		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicyBlockedGroups   func(childComplexity int) int
 		InternalPolicyEditors         func(childComplexity int) int
 		IsManaged                     func(childComplexity int) int
@@ -1168,7 +1168,7 @@ type ComplexityRoot struct {
 		RiskViewers                   func(childComplexity int) int
 		Setting                       func(childComplexity int) int
 		Tags                          func(childComplexity int) int
-		Tasks                         func(childComplexity int) int
+		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
 		Users                         func(childComplexity int) int
@@ -1394,12 +1394,12 @@ type ComplexityRoot struct {
 		DeletedAt    func(childComplexity int) int
 		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
-		Events       func(childComplexity int) int
+		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		ID           func(childComplexity int) int
-		Integrations func(childComplexity int) int
+		Integrations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
-		Organization func(childComplexity int) int
+		Organization func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		SecretName   func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
@@ -1466,13 +1466,13 @@ type ComplexityRoot struct {
 		DeletedAt   func(childComplexity int) int
 		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
-		Events      func(childComplexity int) int
+		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		ID          func(childComplexity int) int
 		Kind        func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Owner       func(childComplexity int) int
 		OwnerID     func(childComplexity int) int
-		Secrets     func(childComplexity int) int
+		Secrets     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -1542,8 +1542,8 @@ type ComplexityRoot struct {
 		ApprovalRequired  func(childComplexity int) int
 		Approver          func(childComplexity int) int
 		BlockedGroups     func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		Controls          func(childComplexity int) int
+		ControlObjectives func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		Delegate          func(childComplexity int) int
@@ -1554,18 +1554,18 @@ type ComplexityRoot struct {
 		Editors           func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Name              func(childComplexity int) int
-		Narratives        func(childComplexity int) int
+		Narratives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner             func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		PolicyType        func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
+		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue         func(childComplexity int) int
 		ReviewFrequency   func(childComplexity int) int
 		Revision          func(childComplexity int) int
 		Status            func(childComplexity int) int
 		Tags              func(childComplexity int) int
-		Tasks             func(childComplexity int) int
+		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
 	}
@@ -1641,7 +1641,7 @@ type ComplexityRoot struct {
 		CreatedBy    func(childComplexity int) int
 		DeletedAt    func(childComplexity int) int
 		DeletedBy    func(childComplexity int) int
-		Events       func(childComplexity int) int
+		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		Expires      func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Owner        func(childComplexity int) int
@@ -1683,7 +1683,7 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		Controls    func(childComplexity int) int
+		Controls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
@@ -1691,7 +1691,7 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 		MappingType func(childComplexity int) int
 		Relation    func(childComplexity int) int
-		Subcontrols func(childComplexity int) int
+		Subcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -1947,8 +1947,8 @@ type ComplexityRoot struct {
 		Name          func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
-		Programs      func(childComplexity int) int
-		Satisfies     func(childComplexity int) int
+		Programs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Satisfies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		Tags          func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
@@ -2091,7 +2091,7 @@ type ComplexityRoot struct {
 		CreatedBy      func(childComplexity int) int
 		DeletedAt      func(childComplexity int) int
 		DeletedBy      func(childComplexity int) int
-		Events         func(childComplexity int) int
+		Events         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
@@ -2241,18 +2241,18 @@ type ComplexityRoot struct {
 	}
 
 	Organization struct {
-		APITokens                func(childComplexity int) int
-		ActionPlans              func(childComplexity int) int
+		APITokens                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) int
+		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AvatarFile               func(childComplexity int) int
 		AvatarLocalFileID        func(childComplexity int) int
 		AvatarRemoteURL          func(childComplexity int) int
 		AvatarUpdatedAt          func(childComplexity int) int
-		Children                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Contacts                 func(childComplexity int) int
+		Children                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Contacts                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ControlCreators          func(childComplexity int) int
 		ControlObjectiveCreators func(childComplexity int) int
-		ControlObjectives        func(childComplexity int) int
-		Controls                 func(childComplexity int) int
+		ControlObjectives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DedicatedDb              func(childComplexity int) int
@@ -2260,43 +2260,43 @@ type ComplexityRoot struct {
 		DeletedBy                func(childComplexity int) int
 		Description              func(childComplexity int) int
 		DisplayName              func(childComplexity int) int
-		DocumentData             func(childComplexity int) int
-		Entities                 func(childComplexity int) int
-		EntityTypes              func(childComplexity int) int
-		Events                   func(childComplexity int) int
-		Evidence                 func(childComplexity int) int
-		Files                    func(childComplexity int) int
+		DocumentData             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
+		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityTypes              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Evidence                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		GroupCreators            func(childComplexity int) int
-		Groups                   func(childComplexity int) int
+		Groups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                       func(childComplexity int) int
-		Integrations             func(childComplexity int) int
-		InternalPolicies         func(childComplexity int) int
+		Integrations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyCreators   func(childComplexity int) int
-		Invites                  func(childComplexity int) int
+		Invites                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		Members                  func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		NarrativeCreators        func(childComplexity int) int
-		Narratives               func(childComplexity int) int
-		Notes                    func(childComplexity int) int
+		Narratives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Notes                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		OrgSubscriptions         func(childComplexity int) int
 		Parent                   func(childComplexity int) int
-		PersonalAccessTokens     func(childComplexity int) int
+		PersonalAccessTokens     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg              func(childComplexity int) int
 		ProcedureCreators        func(childComplexity int) int
-		Procedures               func(childComplexity int) int
+		Procedures               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
 		ProgramCreators          func(childComplexity int) int
-		Programs                 func(childComplexity int) int
+		Programs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskCreators             func(childComplexity int) int
-		Risks                    func(childComplexity int) int
-		Secrets                  func(childComplexity int) int
+		Risks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Secrets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Setting                  func(childComplexity int) int
-		Standards                func(childComplexity int) int
-		Subcontrols              func(childComplexity int) int
-		Subscribers              func(childComplexity int) int
+		Standards                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrols              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subscribers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                     func(childComplexity int) int
-		Tasks                    func(childComplexity int) int
+		Tasks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators         func(childComplexity int) int
-		Templates                func(childComplexity int) int
+		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 		Users                    func(childComplexity int) int
@@ -2374,7 +2374,7 @@ type ComplexityRoot struct {
 		DeletedAt                   func(childComplexity int) int
 		DeletedBy                   func(childComplexity int) int
 		Domains                     func(childComplexity int) int
-		Files                       func(childComplexity int) int
+		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		GeoLocation                 func(childComplexity int) int
 		ID                          func(childComplexity int) int
 		Organization                func(childComplexity int) int
@@ -2468,13 +2468,13 @@ type ComplexityRoot struct {
 		DeletedAt     func(childComplexity int) int
 		DeletedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
-		Events        func(childComplexity int) int
+		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		IsActive      func(childComplexity int) int
 		LastUsedAt    func(childComplexity int) int
 		Name          func(childComplexity int) int
-		Organizations func(childComplexity int) int
+		Organizations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		Owner         func(childComplexity int) int
 		RevokedAt     func(childComplexity int) int
 		RevokedBy     func(childComplexity int) int
@@ -2521,7 +2521,7 @@ type ComplexityRoot struct {
 		ApprovalRequired func(childComplexity int) int
 		Approver         func(childComplexity int) int
 		BlockedGroups    func(childComplexity int) int
-		Controls         func(childComplexity int) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
@@ -2531,20 +2531,20 @@ type ComplexityRoot struct {
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int) int
 		ID               func(childComplexity int) int
-		InternalPolicies func(childComplexity int) int
+		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
-		Narratives       func(childComplexity int) int
+		Narratives       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		ProcedureType    func(childComplexity int) int
-		Programs         func(childComplexity int) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue        func(childComplexity int) int
 		ReviewFrequency  func(childComplexity int) int
 		Revision         func(childComplexity int) int
-		Risks            func(childComplexity int) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status           func(childComplexity int) int
 		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
 	}
@@ -2621,8 +2621,8 @@ type ComplexityRoot struct {
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
 		BlockedGroups        func(childComplexity int) int
-		ControlObjectives    func(childComplexity int) int
-		Controls             func(childComplexity int) int
+		ControlObjectives    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
@@ -2631,26 +2631,26 @@ type ComplexityRoot struct {
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
 		EndDate              func(childComplexity int) int
-		Evidence             func(childComplexity int) int
-		Files                func(childComplexity int) int
+		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID                   func(childComplexity int) int
-		InternalPolicies     func(childComplexity int) int
-		Members              func(childComplexity int) int
+		InternalPolicies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
+		Members              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		Name                 func(childComplexity int) int
-		Narratives           func(childComplexity int) int
-		Notes                func(childComplexity int) int
+		Narratives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Notes                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
-		Procedures           func(childComplexity int) int
-		Risks                func(childComplexity int) int
+		Procedures           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
-		Subcontrols          func(childComplexity int) int
+		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                 func(childComplexity int) int
-		Tasks                func(childComplexity int) int
+		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
-		Users                func(childComplexity int) int
+		Users                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		Viewers              func(childComplexity int) int
 	}
 
@@ -2794,9 +2794,9 @@ type ComplexityRoot struct {
 		APITokenSearch                   func(childComplexity int, query string) int
 		APITokens                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) int
 		ActionPlan                       func(childComplexity int, id string) int
-		ActionPlanHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanHistoryWhereInput) int
+		ActionPlanHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) int
 		ActionPlanSearch                 func(childComplexity int, query string) int
-		ActionPlans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanWhereInput) int
+		ActionPlans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AdminAPITokenSearch              func(childComplexity int, query string) int
 		AdminActionPlanSearch            func(childComplexity int, query string) int
 		AdminContactSearch               func(childComplexity int, query string) int
@@ -2831,26 +2831,26 @@ type ComplexityRoot struct {
 		AdminUserSettingSearch           func(childComplexity int, query string) int
 		AuditLogs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
 		Contact                          func(childComplexity int, id string) int
-		ContactHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactHistoryWhereInput) int
+		ContactHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
 		ContactSearch                    func(childComplexity int, query string) int
-		Contacts                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactWhereInput) int
+		Contacts                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		Control                          func(childComplexity int, id string) int
-		ControlHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlHistoryWhereInput) int
+		ControlHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
 		ControlImplementation            func(childComplexity int, id string) int
-		ControlImplementationHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationHistoryWhereInput) int
+		ControlImplementationHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
 		ControlImplementationSearch      func(childComplexity int, query string) int
-		ControlImplementations           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlImplementationWhereInput) int
+		ControlImplementations           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjective                 func(childComplexity int, id string) int
-		ControlObjectiveHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveHistoryWhereInput) int
+		ControlObjectiveHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
 		ControlObjectiveSearch           func(childComplexity int, query string) int
-		ControlObjectives                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) int
+		ControlObjectives                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlSearch                    func(childComplexity int, query string) int
-		Controls                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) int
+		Controls                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		DocumentData                     func(childComplexity int, id string) int
 		DocumentDataHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataHistoryWhereInput) int
 		DocumentDataSearch               func(childComplexity int, query string) int
 		DocumentDataSlice                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
-		Entities                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) int
+		Entities                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Entity                           func(childComplexity int, id string) int
 		EntityHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
 		EntitySearch                     func(childComplexity int, query string) int
@@ -2863,9 +2863,9 @@ type ComplexityRoot struct {
 		EventSearch                      func(childComplexity int, query string) int
 		Events                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		Evidence                         func(childComplexity int, id string) int
-		EvidenceHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceHistoryWhereInput) int
+		EvidenceHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
 		EvidenceSearch                   func(childComplexity int, query string) int
-		Evidences                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EvidenceWhereInput) int
+		Evidences                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		File                             func(childComplexity int, id string) int
 		FileHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) int
 		FileSearch                       func(childComplexity int, query string) int
@@ -2873,46 +2873,46 @@ type ComplexityRoot struct {
 		Group                            func(childComplexity int, id string) int
 		GroupHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
 		GroupMembership                  func(childComplexity int, id string) int
-		GroupMembershipHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipHistoryWhereInput) int
-		GroupMemberships                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) int
+		GroupMembershipHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) int
+		GroupMemberships                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		GroupSearch                      func(childComplexity int, query string) int
 		GroupSetting                     func(childComplexity int, id string) int
 		GroupSettingHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) int
 		GroupSettings                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) int
-		Groups                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) int
+		Groups                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Hush                             func(childComplexity int, id string) int
 		HushHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
-		Hushes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushOrder, where *generated.HushWhereInput) int
+		Hushes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Integration                      func(childComplexity int, id string) int
 		IntegrationHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
 		IntegrationSearch                func(childComplexity int, query string) int
-		Integrations                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		Integrations                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		InternalPolicy                   func(childComplexity int, id string) int
 		InternalPolicyHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyHistoryWhereInput) int
 		InternalPolicySearch             func(childComplexity int, query string) int
 		Invite                           func(childComplexity int, id string) int
-		Invites                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) int
+		Invites                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		MappedControl                    func(childComplexity int, id string) int
-		MappedControlHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlHistoryWhereInput) int
+		MappedControlHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
 		MappedControlSearch              func(childComplexity int, query string) int
-		MappedControls                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.MappedControlWhereInput) int
+		MappedControls                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Narrative                        func(childComplexity int, id string) int
-		NarrativeHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeHistoryWhereInput) int
+		NarrativeHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) int
 		NarrativeSearch                  func(childComplexity int, query string) int
-		Narratives                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) int
+		Narratives                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Node                             func(childComplexity int, id string) int
 		Nodes                            func(childComplexity int, ids []string) int
 		Note                             func(childComplexity int, id string) int
 		NoteHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) int
 		Notes                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		OrgMembership                    func(childComplexity int, id string) int
-		OrgMembershipHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipHistoryWhereInput) int
-		OrgMemberships                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipWhereInput) int
+		OrgMembershipHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) int
+		OrgMemberships                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscription                  func(childComplexity int, id string) int
-		OrgSubscriptionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionHistoryWhereInput) int
+		OrgSubscriptionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) int
 		OrgSubscriptionSearch            func(childComplexity int, query string) int
-		OrgSubscriptions                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionWhereInput) int
+		OrgSubscriptions                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
 		Organization                     func(childComplexity int, id string) int
 		OrganizationHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
 		OrganizationSearch               func(childComplexity int, query string) int
@@ -2920,7 +2920,7 @@ type ComplexityRoot struct {
 		OrganizationSettingHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingHistoryWhereInput) int
 		OrganizationSettingSearch        func(childComplexity int, query string) int
 		OrganizationSettings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) int
-		Organizations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Organizations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		PersonalAccessToken              func(childComplexity int, id string) int
 		PersonalAccessTokenSearch        func(childComplexity int, query string) int
 		PersonalAccessTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
@@ -2929,37 +2929,37 @@ type ComplexityRoot struct {
 		ProcedureSearch                  func(childComplexity int, query string) int
 		Procedures                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
 		Program                          func(childComplexity int, id string) int
-		ProgramHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) int
+		ProgramHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) int
 		ProgramMembership                func(childComplexity int, id string) int
-		ProgramMembershipHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) int
-		ProgramMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) int
+		ProgramMembershipHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) int
+		ProgramMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		ProgramSearch                    func(childComplexity int, query string) int
-		Programs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) int
+		Programs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Risk                             func(childComplexity int, id string) int
-		RiskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskHistoryWhereInput) int
+		RiskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
 		RiskSearch                       func(childComplexity int, query string) int
-		Risks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) int
+		Risks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Search                           func(childComplexity int, query string) int
 		Self                             func(childComplexity int) int
 		Standard                         func(childComplexity int, id string) int
-		StandardHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) int
+		StandardHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) int
 		StandardSearch                   func(childComplexity int, query string) int
-		Standards                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) int
+		Standards                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		Subcontrol                       func(childComplexity int, id string) int
-		SubcontrolHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolHistoryWhereInput) int
+		SubcontrolHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
 		SubcontrolSearch                 func(childComplexity int, query string) int
-		Subcontrols                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) int
+		Subcontrols                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Subscriber                       func(childComplexity int, email string) int
 		SubscriberSearch                 func(childComplexity int, query string) int
-		Subscribers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) int
+		Subscribers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Task                             func(childComplexity int, id string) int
-		TaskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) int
+		TaskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
 		TaskSearch                       func(childComplexity int, query string) int
-		Tasks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) int
+		Tasks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Template                         func(childComplexity int, id string) int
 		TemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
 		TemplateSearch                   func(childComplexity int, query string) int
-		Templates                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		Templates                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TfaSetting                       func(childComplexity int, id *string) int
 		TfaSettings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) int
 		User                             func(childComplexity int, id string) int
@@ -2969,15 +2969,15 @@ type ComplexityRoot struct {
 		UserSettingHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) int
 		UserSettingSearch                func(childComplexity int, query string) int
 		UserSettings                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) int
-		Users                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserOrder, where *generated.UserWhereInput) int
+		Users                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	Risk struct {
-		ActionPlans   func(childComplexity int) int
+		ActionPlans   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		BlockedGroups func(childComplexity int) int
 		BusinessCosts func(childComplexity int) int
 		Category      func(childComplexity int) int
-		Control       func(childComplexity int) int
+		Control       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Delegate      func(childComplexity int) int
@@ -2993,8 +2993,8 @@ type ComplexityRoot struct {
 		Name          func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
-		Procedure     func(childComplexity int) int
-		Programs      func(childComplexity int) int
+		Procedure     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Programs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskType      func(childComplexity int) int
 		Score         func(childComplexity int) int
 		Stakeholder   func(childComplexity int) int
@@ -3080,7 +3080,7 @@ type ComplexityRoot struct {
 	}
 
 	Standard struct {
-		Controls             func(childComplexity int) int
+		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
@@ -3181,14 +3181,14 @@ type ComplexityRoot struct {
 	}
 
 	Subcontrol struct {
-		ActionPlans            func(childComplexity int) int
+		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		Control                func(childComplexity int) int
 		ControlID              func(childComplexity int) int
-		ControlObjectives      func(childComplexity int) int
+		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner           func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
 		ControlType            func(childComplexity int) int
@@ -3199,25 +3199,25 @@ type ComplexityRoot struct {
 		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
-		Evidence               func(childComplexity int) int
+		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
-		InternalPolicies       func(childComplexity int) int
+		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
 		MappedControls         func(childComplexity int) int
-		Narratives             func(childComplexity int) int
+		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
-		Procedures             func(childComplexity int) int
+		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
 		RefCode                func(childComplexity int) int
 		References             func(childComplexity int) int
-		Risks                  func(childComplexity int) int
+		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
-		Tasks                  func(childComplexity int) int
+		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 	}
@@ -3303,7 +3303,7 @@ type ComplexityRoot struct {
 		DeletedAt     func(childComplexity int) int
 		DeletedBy     func(childComplexity int) int
 		Email         func(childComplexity int) int
-		Events        func(childComplexity int) int
+		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
 		ID            func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
@@ -3389,10 +3389,10 @@ type ComplexityRoot struct {
 		Assigner         func(childComplexity int) int
 		AssignerID       func(childComplexity int) int
 		Category         func(childComplexity int) int
-		Comments         func(childComplexity int) int
+		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) int
 		Completed        func(childComplexity int) int
-		Control          func(childComplexity int) int
-		ControlObjective func(childComplexity int) int
+		Control          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlObjective func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
@@ -3401,16 +3401,16 @@ type ComplexityRoot struct {
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		Due              func(childComplexity int) int
-		Evidence         func(childComplexity int) int
-		Group            func(childComplexity int) int
+		Evidence         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Group            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID               func(childComplexity int) int
-		InternalPolicy   func(childComplexity int) int
+		InternalPolicy   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
-		Procedure        func(childComplexity int) int
-		Program          func(childComplexity int) int
+		Procedure        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) int
+		Program          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Status           func(childComplexity int) int
-		Subcontrol       func(childComplexity int) int
+		Subcontrol       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags             func(childComplexity int) int
 		Title            func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
@@ -3490,8 +3490,8 @@ type ComplexityRoot struct {
 		DeletedAt    func(childComplexity int) int
 		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
-		Documents    func(childComplexity int) int
-		Files        func(childComplexity int) int
+		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) int
+		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID           func(childComplexity int) int
 		Jsonconfig   func(childComplexity int) int
 		Name         func(childComplexity int) int
@@ -3567,9 +3567,9 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		ActionPlans          func(childComplexity int) int
-		AssigneeTasks        func(childComplexity int) int
-		AssignerTasks        func(childComplexity int) int
+		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssigneeTasks        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AssignerTasks        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		AuthProvider         func(childComplexity int) int
 		AvatarFile           func(childComplexity int) int
 		AvatarLocalFileID    func(childComplexity int) int
@@ -3582,8 +3582,8 @@ type ComplexityRoot struct {
 		DisplayID            func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
 		Email                func(childComplexity int) int
-		Events               func(childComplexity int) int
-		Files                func(childComplexity int) int
+		Events               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) int
+		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		FirstName            func(childComplexity int) int
 		GroupMemberships     func(childComplexity int) int
 		Groups               func(childComplexity int) int
@@ -3592,15 +3592,15 @@ type ComplexityRoot struct {
 		LastSeen             func(childComplexity int) int
 		OrgMemberships       func(childComplexity int) int
 		Organizations        func(childComplexity int) int
-		PersonalAccessTokens func(childComplexity int) int
+		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) int
 		ProgramMemberships   func(childComplexity int) int
 		Programs             func(childComplexity int) int
 		Role                 func(childComplexity int) int
 		Setting              func(childComplexity int) int
 		Sub                  func(childComplexity int) int
-		Subcontrols          func(childComplexity int) int
+		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                 func(childComplexity int) int
-		TfaSettings          func(childComplexity int) int
+		TfaSettings          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 	}
@@ -3676,7 +3676,7 @@ type ComplexityRoot struct {
 		DeletedAt         func(childComplexity int) int
 		DeletedBy         func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
-		Files             func(childComplexity int) int
+		Files             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) int
 		ID                func(childComplexity int) int
 		IsTfaEnabled      func(childComplexity int) int
 		IsWebauthnAllowed func(childComplexity int) int
@@ -4011,7 +4011,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ActionPlan.Control(childComplexity), true
+		args, err := ec.field_ActionPlan_control_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Control(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "ActionPlan.createdAt":
 		if e.complexity.ActionPlan.CreatedAt == nil {
@@ -4102,7 +4107,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ActionPlan.Program(childComplexity), true
+		args, err := ec.field_ActionPlan_program_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Program(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "ActionPlan.reviewDue":
 		if e.complexity.ActionPlan.ReviewDue == nil {
@@ -4130,7 +4140,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ActionPlan.Risk(childComplexity), true
+		args, err := ec.field_ActionPlan_risk_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.Risk(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "ActionPlan.source":
 		if e.complexity.ActionPlan.Source == nil {
@@ -4172,7 +4187,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ActionPlan.User(childComplexity), true
+		args, err := ec.field_ActionPlan_user_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.User(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -4571,14 +4591,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Contact.Entities(childComplexity), true
+		args, err := ec.field_Contact_entities_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Contact.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Contact.files":
 		if e.complexity.Contact.Files == nil {
 			break
 		}
 
-		return e.complexity.Contact.Files(childComplexity), true
+		args, err := ec.field_Contact_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Contact.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Contact.fullName":
 		if e.complexity.Contact.FullName == nil {
@@ -4893,7 +4923,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.ActionPlans(childComplexity), true
+		args, err := ec.field_Control_actionPlans_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Control.assessmentMethods":
 		if e.complexity.Control.AssessmentMethods == nil {
@@ -4935,7 +4970,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.ControlImplementations(childComplexity), true
+		args, err := ec.field_Control_controlImplementations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
 
 	case "Control.controlObjectives":
 		if e.complexity.Control.ControlObjectives == nil {
@@ -5026,7 +5066,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.Evidence(childComplexity), true
+		args, err := ec.field_Control_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Control.exampleEvidence":
 		if e.complexity.Control.ExampleEvidence == nil {
@@ -5054,7 +5099,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.InternalPolicies(childComplexity), true
+		args, err := ec.field_Control_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Control.mappedCategories":
 		if e.complexity.Control.MappedCategories == nil {
@@ -5068,14 +5118,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.MappedControls(childComplexity), true
+		args, err := ec.field_Control_mappedControls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Control.narratives":
 		if e.complexity.Control.Narratives == nil {
 			break
 		}
 
-		return e.complexity.Control.Narratives(childComplexity), true
+		args, err := ec.field_Control_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Control.owner":
 		if e.complexity.Control.Owner == nil {
@@ -5096,14 +5156,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.Procedures(childComplexity), true
+		args, err := ec.field_Control_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Control.programs":
 		if e.complexity.Control.Programs == nil {
 			break
 		}
 
-		return e.complexity.Control.Programs(childComplexity), true
+		args, err := ec.field_Control_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Control.refCode":
 		if e.complexity.Control.RefCode == nil {
@@ -5124,7 +5194,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.Risks(childComplexity), true
+		args, err := ec.field_Control_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Control.source":
 		if e.complexity.Control.Source == nil {
@@ -5166,7 +5241,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.Subcontrols(childComplexity), true
+		args, err := ec.field_Control_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Control.tags":
 		if e.complexity.Control.Tags == nil {
@@ -5180,7 +5260,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Control.Tasks(childComplexity), true
+		args, err := ec.field_Control_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Control.updatedAt":
 		if e.complexity.Control.UpdatedAt == nil {
@@ -5502,7 +5587,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlImplementation.Controls(childComplexity), true
+		args, err := ec.field_ControlImplementation_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlImplementation.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "ControlImplementation.createdAt":
 		if e.complexity.ControlImplementation.CreatedAt == nil {
@@ -5838,7 +5928,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Controls(childComplexity), true
+		args, err := ec.field_ControlObjective_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "ControlObjective.createdAt":
 		if e.complexity.ControlObjective.CreatedAt == nil {
@@ -5894,7 +5989,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Evidence(childComplexity), true
+		args, err := ec.field_ControlObjective_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "ControlObjective.id":
 		if e.complexity.ControlObjective.ID == nil {
@@ -5908,7 +6008,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.InternalPolicies(childComplexity), true
+		args, err := ec.field_ControlObjective_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "ControlObjective.name":
 		if e.complexity.ControlObjective.Name == nil {
@@ -5922,7 +6027,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Narratives(childComplexity), true
+		args, err := ec.field_ControlObjective_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "ControlObjective.owner":
 		if e.complexity.ControlObjective.Owner == nil {
@@ -5943,14 +6053,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Procedures(childComplexity), true
+		args, err := ec.field_ControlObjective_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "ControlObjective.programs":
 		if e.complexity.ControlObjective.Programs == nil {
 			break
 		}
 
-		return e.complexity.ControlObjective.Programs(childComplexity), true
+		args, err := ec.field_ControlObjective_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "ControlObjective.revision":
 		if e.complexity.ControlObjective.Revision == nil {
@@ -5964,7 +6084,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Risks(childComplexity), true
+		args, err := ec.field_ControlObjective_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "ControlObjective.source":
 		if e.complexity.ControlObjective.Source == nil {
@@ -5992,7 +6117,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Subcontrols(childComplexity), true
+		args, err := ec.field_ControlObjective_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "ControlObjective.tags":
 		if e.complexity.ControlObjective.Tags == nil {
@@ -6006,7 +6136,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.ControlObjective.Tasks(childComplexity), true
+		args, err := ec.field_ControlObjective_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "ControlObjective.updatedAt":
 		if e.complexity.ControlObjective.UpdatedAt == nil {
@@ -6335,14 +6470,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.DocumentData.Entity(childComplexity), true
+		args, err := ec.field_DocumentData_entity_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DocumentData.Entity(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "DocumentData.files":
 		if e.complexity.DocumentData.Files == nil {
 			break
 		}
 
-		return e.complexity.DocumentData.Files(childComplexity), true
+		args, err := ec.field_DocumentData_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DocumentData.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "DocumentData.id":
 		if e.complexity.DocumentData.ID == nil {
@@ -6608,7 +6753,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Entity.Contacts(childComplexity), true
+		args, err := ec.field_Entity_contacts_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
 	case "Entity.createdAt":
 		if e.complexity.Entity.CreatedAt == nil {
@@ -6657,7 +6807,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Entity.Documents(childComplexity), true
+		args, err := ec.field_Entity_documents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.DocumentDataWhereInput)), true
 
 	case "Entity.domains":
 		if e.complexity.Entity.Domains == nil {
@@ -6685,7 +6840,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Entity.Files(childComplexity), true
+		args, err := ec.field_Entity_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Entity.id":
 		if e.complexity.Entity.ID == nil {
@@ -6706,7 +6866,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Entity.Notes(childComplexity), true
+		args, err := ec.field_Entity_notes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Entity.owner":
 		if e.complexity.Entity.Owner == nil {
@@ -7007,7 +7172,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.EntityType.Entities(childComplexity), true
+		args, err := ec.field_EntityType_entities_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EntityType.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "EntityType.id":
 		if e.complexity.EntityType.ID == nil {
@@ -7301,28 +7471,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Event.File(childComplexity), true
+		args, err := ec.field_Event_file_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.File(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Event.group":
 		if e.complexity.Event.Group == nil {
 			break
 		}
 
-		return e.complexity.Event.Group(childComplexity), true
+		args, err := ec.field_Event_group_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Group(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Event.groupmembership":
 		if e.complexity.Event.Groupmembership == nil {
 			break
 		}
 
-		return e.complexity.Event.Groupmembership(childComplexity), true
+		args, err := ec.field_Event_groupmembership_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Groupmembership(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Event.hush":
 		if e.complexity.Event.Hush == nil {
 			break
 		}
 
-		return e.complexity.Event.Hush(childComplexity), true
+		args, err := ec.field_Event_hush_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Hush(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
 	case "Event.id":
 		if e.complexity.Event.ID == nil {
@@ -7336,14 +7526,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Event.Integration(childComplexity), true
+		args, err := ec.field_Event_integration_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Integration(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Event.invite":
 		if e.complexity.Event.Invite == nil {
 			break
 		}
 
-		return e.complexity.Event.Invite(childComplexity), true
+		args, err := ec.field_Event_invite_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Invite(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
 
 	case "Event.metadata":
 		if e.complexity.Event.Metadata == nil {
@@ -7357,35 +7557,60 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Event.Organization(childComplexity), true
+		args, err := ec.field_Event_organization_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Organization(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "Event.orgmembership":
 		if e.complexity.Event.Orgmembership == nil {
 			break
 		}
 
-		return e.complexity.Event.Orgmembership(childComplexity), true
+		args, err := ec.field_Event_orgmembership_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Orgmembership(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Event.orgsubscription":
 		if e.complexity.Event.Orgsubscription == nil {
 			break
 		}
 
-		return e.complexity.Event.Orgsubscription(childComplexity), true
+		args, err := ec.field_Event_orgsubscription_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Orgsubscription(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgSubscriptionOrder), args["where"].(*generated.OrgSubscriptionWhereInput)), true
 
 	case "Event.personalAccessToken":
 		if e.complexity.Event.PersonalAccessToken == nil {
 			break
 		}
 
-		return e.complexity.Event.PersonalAccessToken(childComplexity), true
+		args, err := ec.field_Event_personalAccessToken_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.PersonalAccessToken(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.PersonalAccessTokenWhereInput)), true
 
 	case "Event.subscriber":
 		if e.complexity.Event.Subscriber == nil {
 			break
 		}
 
-		return e.complexity.Event.Subscriber(childComplexity), true
+		args, err := ec.field_Event_subscriber_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.Subscriber(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
 	case "Event.tags":
 		if e.complexity.Event.Tags == nil {
@@ -7413,7 +7638,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Event.User(childComplexity), true
+		args, err := ec.field_Event_user_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.User(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "EventBulkCreatePayload.events":
 		if e.complexity.EventBulkCreatePayload.Events == nil {
@@ -7623,14 +7853,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Evidence.ControlObjectives(childComplexity), true
+		args, err := ec.field_Evidence_controlObjectives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Evidence.controls":
 		if e.complexity.Evidence.Controls == nil {
 			break
 		}
 
-		return e.complexity.Evidence.Controls(childComplexity), true
+		args, err := ec.field_Evidence_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Evidence.createdAt":
 		if e.complexity.Evidence.CreatedAt == nil {
@@ -7686,7 +7926,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Evidence.Files(childComplexity), true
+		args, err := ec.field_Evidence_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Evidence.id":
 		if e.complexity.Evidence.ID == nil {
@@ -7728,7 +7973,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Evidence.Programs(childComplexity), true
+		args, err := ec.field_Evidence_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Evidence.renewalDate":
 		if e.complexity.Evidence.RenewalDate == nil {
@@ -7756,7 +8006,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Evidence.Subcontrols(childComplexity), true
+		args, err := ec.field_Evidence_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Evidence.tags":
 		if e.complexity.Evidence.Tags == nil {
@@ -7770,7 +8025,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Evidence.Tasks(childComplexity), true
+		args, err := ec.field_Evidence_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Evidence.url":
 		if e.complexity.Evidence.URL == nil {
@@ -8064,7 +8324,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.Contact(childComplexity), true
+		args, err := ec.field_File_contact_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Contact(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
 	case "File.createdAt":
 		if e.complexity.File.CreatedAt == nil {
@@ -8113,35 +8378,60 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.DocumentData(childComplexity), true
+		args, err := ec.field_File_documentData_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.DocumentData(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.DocumentDataWhereInput)), true
 
 	case "File.entity":
 		if e.complexity.File.Entity == nil {
 			break
 		}
 
-		return e.complexity.File.Entity(childComplexity), true
+		args, err := ec.field_File_entity_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Entity(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "File.events":
 		if e.complexity.File.Events == nil {
 			break
 		}
 
-		return e.complexity.File.Events(childComplexity), true
+		args, err := ec.field_File_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "File.evidence":
 		if e.complexity.File.Evidence == nil {
 			break
 		}
 
-		return e.complexity.File.Evidence(childComplexity), true
+		args, err := ec.field_File_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "File.group":
 		if e.complexity.File.Group == nil {
 			break
 		}
 
-		return e.complexity.File.Group(childComplexity), true
+		args, err := ec.field_File_group_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Group(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "File.id":
 		if e.complexity.File.ID == nil {
@@ -8162,14 +8452,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.Organization(childComplexity), true
+		args, err := ec.field_File_organization_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Organization(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "File.organizationSetting":
 		if e.complexity.File.OrganizationSetting == nil {
 			break
 		}
 
-		return e.complexity.File.OrganizationSetting(childComplexity), true
+		args, err := ec.field_File_organizationSetting_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.OrganizationSetting(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.OrganizationSettingWhereInput)), true
 
 	case "File.persistedFileSize":
 		if e.complexity.File.PersistedFileSize == nil {
@@ -8190,7 +8490,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.Program(childComplexity), true
+		args, err := ec.field_File_program_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Program(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "File.providedFileExtension":
 		if e.complexity.File.ProvidedFileExtension == nil {
@@ -8253,7 +8558,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.Template(childComplexity), true
+		args, err := ec.field_File_template_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Template(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
 	case "File.uri":
 		if e.complexity.File.URI == nil {
@@ -8281,14 +8591,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.File.User(childComplexity), true
+		args, err := ec.field_File_user_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.User(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "File.userSetting":
 		if e.complexity.File.UserSetting == nil {
 			break
 		}
 
-		return e.complexity.File.UserSetting(childComplexity), true
+		args, err := ec.field_File_userSetting_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.UserSetting(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.UserSettingWhereInput)), true
 
 	case "FileConnection.edges":
 		if e.complexity.FileConnection.Edges == nil {
@@ -8638,14 +8958,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Group.Events(childComplexity), true
+		args, err := ec.field_Group_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Group.files":
 		if e.complexity.Group.Files == nil {
 			break
 		}
 
-		return e.complexity.Group.Files(childComplexity), true
+		args, err := ec.field_Group_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Group.gravatarLogoURL":
 		if e.complexity.Group.GravatarLogoURL == nil {
@@ -8666,7 +8996,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Group.Integrations(childComplexity), true
+		args, err := ec.field_Group_integrations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Group.internalPolicyBlockedGroups":
 		if e.complexity.Group.InternalPolicyBlockedGroups == nil {
@@ -8827,7 +9162,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Group.Tasks(childComplexity), true
+		args, err := ec.field_Group_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Group.updatedAt":
 		if e.complexity.Group.UpdatedAt == nil {
@@ -9737,7 +10077,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Hush.Events(childComplexity), true
+		args, err := ec.field_Hush_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Hush.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Hush.id":
 		if e.complexity.Hush.ID == nil {
@@ -9751,7 +10096,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Hush.Integrations(childComplexity), true
+		args, err := ec.field_Hush_integrations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Hush.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Hush.kind":
 		if e.complexity.Hush.Kind == nil {
@@ -9772,7 +10122,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Hush.Organization(childComplexity), true
+		args, err := ec.field_Hush_organization_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Hush.Organization(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "Hush.secretName":
 		if e.complexity.Hush.SecretName == nil {
@@ -10031,7 +10386,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Integration.Events(childComplexity), true
+		args, err := ec.field_Integration_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Integration.id":
 		if e.complexity.Integration.ID == nil {
@@ -10073,7 +10433,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Integration.Secrets(childComplexity), true
+		args, err := ec.field_Integration_secrets_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
 	case "Integration.tags":
 		if e.complexity.Integration.Tags == nil {
@@ -10332,14 +10697,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.InternalPolicy.ControlObjectives(childComplexity), true
+		args, err := ec.field_InternalPolicy_controlObjectives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "InternalPolicy.controls":
 		if e.complexity.InternalPolicy.Controls == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicy.Controls(childComplexity), true
+		args, err := ec.field_InternalPolicy_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "InternalPolicy.createdAt":
 		if e.complexity.InternalPolicy.CreatedAt == nil {
@@ -10416,7 +10791,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.InternalPolicy.Narratives(childComplexity), true
+		args, err := ec.field_InternalPolicy_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "InternalPolicy.owner":
 		if e.complexity.InternalPolicy.Owner == nil {
@@ -10444,14 +10824,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.InternalPolicy.Procedures(childComplexity), true
+		args, err := ec.field_InternalPolicy_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "InternalPolicy.programs":
 		if e.complexity.InternalPolicy.Programs == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicy.Programs(childComplexity), true
+		args, err := ec.field_InternalPolicy_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "InternalPolicy.reviewDue":
 		if e.complexity.InternalPolicy.ReviewDue == nil {
@@ -10493,7 +10883,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.InternalPolicy.Tasks(childComplexity), true
+		args, err := ec.field_InternalPolicy_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "InternalPolicy.updatedAt":
 		if e.complexity.InternalPolicy.UpdatedAt == nil {
@@ -10794,7 +11189,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Invite.Events(childComplexity), true
+		args, err := ec.field_Invite_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Invite.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Invite.expires":
 		if e.complexity.Invite.Expires == nil {
@@ -10941,7 +11341,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.MappedControl.Controls(childComplexity), true
+		args, err := ec.field_MappedControl_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "MappedControl.createdAt":
 		if e.complexity.MappedControl.CreatedAt == nil {
@@ -10997,7 +11402,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.MappedControl.Subcontrols(childComplexity), true
+		args, err := ec.field_MappedControl_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "MappedControl.tags":
 		if e.complexity.MappedControl.Tags == nil {
@@ -13412,14 +13822,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Narrative.Programs(childComplexity), true
+		args, err := ec.field_Narrative_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Narrative.satisfies":
 		if e.complexity.Narrative.Satisfies == nil {
 			break
 		}
 
-		return e.complexity.Narrative.Satisfies(childComplexity), true
+		args, err := ec.field_Narrative_satisfies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.Satisfies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Narrative.tags":
 		if e.complexity.Narrative.Tags == nil {
@@ -14021,7 +14441,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.OrgMembership.Events(childComplexity), true
+		args, err := ec.field_OrgMembership_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.OrgMembership.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "OrgMembership.id":
 		if e.complexity.OrgMembership.ID == nil {
@@ -14714,14 +15139,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.APITokens(childComplexity), true
+		args, err := ec.field_Organization_apiTokens_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.APITokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.APITokenWhereInput)), true
 
 	case "Organization.actionPlans":
 		if e.complexity.Organization.ActionPlans == nil {
 			break
 		}
 
-		return e.complexity.Organization.ActionPlans(childComplexity), true
+		args, err := ec.field_Organization_actionPlans_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Organization.avatarFile":
 		if e.complexity.Organization.AvatarFile == nil {
@@ -14761,14 +15196,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Organization.Children(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
+		return e.complexity.Organization.Children(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "Organization.contacts":
 		if e.complexity.Organization.Contacts == nil {
 			break
 		}
 
-		return e.complexity.Organization.Contacts(childComplexity), true
+		args, err := ec.field_Organization_contacts_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
 	case "Organization.controlCreators":
 		if e.complexity.Organization.ControlCreators == nil {
@@ -14789,14 +15229,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.ControlObjectives(childComplexity), true
+		args, err := ec.field_Organization_controlObjectives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Organization.controls":
 		if e.complexity.Organization.Controls == nil {
 			break
 		}
 
-		return e.complexity.Organization.Controls(childComplexity), true
+		args, err := ec.field_Organization_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Organization.createdAt":
 		if e.complexity.Organization.CreatedAt == nil {
@@ -14852,42 +15302,72 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.DocumentData(childComplexity), true
+		args, err := ec.field_Organization_documentData_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DocumentData(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.DocumentDataWhereInput)), true
 
 	case "Organization.entities":
 		if e.complexity.Organization.Entities == nil {
 			break
 		}
 
-		return e.complexity.Organization.Entities(childComplexity), true
+		args, err := ec.field_Organization_entities_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Organization.entityTypes":
 		if e.complexity.Organization.EntityTypes == nil {
 			break
 		}
 
-		return e.complexity.Organization.EntityTypes(childComplexity), true
+		args, err := ec.field_Organization_entityTypes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.EntityTypes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.EntityTypeOrder), args["where"].(*generated.EntityTypeWhereInput)), true
 
 	case "Organization.events":
 		if e.complexity.Organization.Events == nil {
 			break
 		}
 
-		return e.complexity.Organization.Events(childComplexity), true
+		args, err := ec.field_Organization_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Organization.evidence":
 		if e.complexity.Organization.Evidence == nil {
 			break
 		}
 
-		return e.complexity.Organization.Evidence(childComplexity), true
+		args, err := ec.field_Organization_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Organization.files":
 		if e.complexity.Organization.Files == nil {
 			break
 		}
 
-		return e.complexity.Organization.Files(childComplexity), true
+		args, err := ec.field_Organization_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Organization.groupCreators":
 		if e.complexity.Organization.GroupCreators == nil {
@@ -14901,7 +15381,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Groups(childComplexity), true
+		args, err := ec.field_Organization_groups_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.id":
 		if e.complexity.Organization.ID == nil {
@@ -14915,14 +15400,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Integrations(childComplexity), true
+		args, err := ec.field_Organization_integrations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Organization.internalPolicies":
 		if e.complexity.Organization.InternalPolicies == nil {
 			break
 		}
 
-		return e.complexity.Organization.InternalPolicies(childComplexity), true
+		args, err := ec.field_Organization_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Organization.internalPolicyCreators":
 		if e.complexity.Organization.InternalPolicyCreators == nil {
@@ -14936,7 +15431,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Invites(childComplexity), true
+		args, err := ec.field_Organization_invites_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
 
 	case "Organization.members":
 		if e.complexity.Organization.Members == nil {
@@ -14964,14 +15464,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Narratives(childComplexity), true
+		args, err := ec.field_Organization_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Organization.notes":
 		if e.complexity.Organization.Notes == nil {
 			break
 		}
 
-		return e.complexity.Organization.Notes(childComplexity), true
+		args, err := ec.field_Organization_notes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Organization.orgSubscriptions":
 		if e.complexity.Organization.OrgSubscriptions == nil {
@@ -14992,7 +15502,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.PersonalAccessTokens(childComplexity), true
+		args, err := ec.field_Organization_personalAccessTokens_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.PersonalAccessTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.PersonalAccessTokenWhereInput)), true
 
 	case "Organization.personalOrg":
 		if e.complexity.Organization.PersonalOrg == nil {
@@ -15013,7 +15528,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Procedures(childComplexity), true
+		args, err := ec.field_Organization_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Organization.programCreators":
 		if e.complexity.Organization.ProgramCreators == nil {
@@ -15027,7 +15547,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Programs(childComplexity), true
+		args, err := ec.field_Organization_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Organization.riskCreators":
 		if e.complexity.Organization.RiskCreators == nil {
@@ -15041,14 +15566,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Risks(childComplexity), true
+		args, err := ec.field_Organization_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Organization.secrets":
 		if e.complexity.Organization.Secrets == nil {
 			break
 		}
 
-		return e.complexity.Organization.Secrets(childComplexity), true
+		args, err := ec.field_Organization_secrets_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
 	case "Organization.setting":
 		if e.complexity.Organization.Setting == nil {
@@ -15062,21 +15597,36 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Standards(childComplexity), true
+		args, err := ec.field_Organization_standards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
 	case "Organization.subcontrols":
 		if e.complexity.Organization.Subcontrols == nil {
 			break
 		}
 
-		return e.complexity.Organization.Subcontrols(childComplexity), true
+		args, err := ec.field_Organization_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Organization.subscribers":
 		if e.complexity.Organization.Subscribers == nil {
 			break
 		}
 
-		return e.complexity.Organization.Subscribers(childComplexity), true
+		args, err := ec.field_Organization_subscribers_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
 	case "Organization.tags":
 		if e.complexity.Organization.Tags == nil {
@@ -15090,7 +15640,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Tasks(childComplexity), true
+		args, err := ec.field_Organization_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Organization.templateCreators":
 		if e.complexity.Organization.TemplateCreators == nil {
@@ -15104,7 +15659,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Templates(childComplexity), true
+		args, err := ec.field_Organization_templates_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
 	case "Organization.updatedAt":
 		if e.complexity.Organization.UpdatedAt == nil {
@@ -15440,7 +16000,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.OrganizationSetting.Files(childComplexity), true
+		args, err := ec.field_OrganizationSetting_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.OrganizationSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "OrganizationSetting.geoLocation":
 		if e.complexity.OrganizationSetting.GeoLocation == nil {
@@ -15825,7 +16390,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.PersonalAccessToken.Events(childComplexity), true
+		args, err := ec.field_PersonalAccessToken_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.PersonalAccessToken.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "PersonalAccessToken.expiresAt":
 		if e.complexity.PersonalAccessToken.ExpiresAt == nil {
@@ -15867,7 +16437,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.PersonalAccessToken.Organizations(childComplexity), true
+		args, err := ec.field_PersonalAccessToken_organizations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.PersonalAccessToken.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "PersonalAccessToken.owner":
 		if e.complexity.PersonalAccessToken.Owner == nil {
@@ -16028,7 +16603,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.Controls(childComplexity), true
+		args, err := ec.field_Procedure_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Procedure.createdAt":
 		if e.complexity.Procedure.CreatedAt == nil {
@@ -16098,7 +16678,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.InternalPolicies(childComplexity), true
+		args, err := ec.field_Procedure_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Procedure.name":
 		if e.complexity.Procedure.Name == nil {
@@ -16112,7 +16697,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.Narratives(childComplexity), true
+		args, err := ec.field_Procedure_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Procedure.owner":
 		if e.complexity.Procedure.Owner == nil {
@@ -16140,7 +16730,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.Programs(childComplexity), true
+		args, err := ec.field_Procedure_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Procedure.reviewDue":
 		if e.complexity.Procedure.ReviewDue == nil {
@@ -16168,7 +16763,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.Risks(childComplexity), true
+		args, err := ec.field_Procedure_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Procedure.status":
 		if e.complexity.Procedure.Status == nil {
@@ -16189,7 +16789,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Procedure.Tasks(childComplexity), true
+		args, err := ec.field_Procedure_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Procedure.updatedAt":
 		if e.complexity.Procedure.UpdatedAt == nil {
@@ -16497,14 +17102,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.ControlObjectives(childComplexity), true
+		args, err := ec.field_Program_controlObjectives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Program.controls":
 		if e.complexity.Program.Controls == nil {
 			break
 		}
 
-		return e.complexity.Program.Controls(childComplexity), true
+		args, err := ec.field_Program_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Program.createdAt":
 		if e.complexity.Program.CreatedAt == nil {
@@ -16567,14 +17182,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Evidence(childComplexity), true
+		args, err := ec.field_Program_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Program.files":
 		if e.complexity.Program.Files == nil {
 			break
 		}
 
-		return e.complexity.Program.Files(childComplexity), true
+		args, err := ec.field_Program_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Program.id":
 		if e.complexity.Program.ID == nil {
@@ -16588,14 +17213,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.InternalPolicies(childComplexity), true
+		args, err := ec.field_Program_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Program.members":
 		if e.complexity.Program.Members == nil {
 			break
 		}
 
-		return e.complexity.Program.Members(childComplexity), true
+		args, err := ec.field_Program_members_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Members(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ProgramMembershipOrder), args["where"].(*generated.ProgramMembershipWhereInput)), true
 
 	case "Program.name":
 		if e.complexity.Program.Name == nil {
@@ -16609,14 +17244,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Narratives(childComplexity), true
+		args, err := ec.field_Program_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Program.notes":
 		if e.complexity.Program.Notes == nil {
 			break
 		}
 
-		return e.complexity.Program.Notes(childComplexity), true
+		args, err := ec.field_Program_notes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Program.owner":
 		if e.complexity.Program.Owner == nil {
@@ -16637,14 +17282,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Procedures(childComplexity), true
+		args, err := ec.field_Program_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Program.risks":
 		if e.complexity.Program.Risks == nil {
 			break
 		}
 
-		return e.complexity.Program.Risks(childComplexity), true
+		args, err := ec.field_Program_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Program.startDate":
 		if e.complexity.Program.StartDate == nil {
@@ -16665,7 +17320,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Subcontrols(childComplexity), true
+		args, err := ec.field_Program_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Program.tags":
 		if e.complexity.Program.Tags == nil {
@@ -16679,7 +17339,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Tasks(childComplexity), true
+		args, err := ec.field_Program_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Program.updatedAt":
 		if e.complexity.Program.UpdatedAt == nil {
@@ -16700,7 +17365,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Program.Users(childComplexity), true
+		args, err := ec.field_Program_users_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "Program.viewers":
 		if e.complexity.Program.Viewers == nil {
@@ -17292,7 +17962,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ActionPlanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ActionPlanHistoryWhereInput)), true
+		return e.complexity.Query.ActionPlanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ActionPlanHistoryOrder), args["where"].(*generated.ActionPlanHistoryWhereInput)), true
 
 	case "Query.actionPlanSearch":
 		if e.complexity.Query.ActionPlanSearch == nil {
@@ -17316,7 +17986,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ActionPlanWhereInput)), true
+		return e.complexity.Query.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Query.adminAPITokenSearch":
 		if e.complexity.Query.AdminAPITokenSearch == nil {
@@ -17736,7 +18406,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ContactHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ContactHistoryWhereInput)), true
+		return e.complexity.Query.ContactHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ContactHistoryOrder), args["where"].(*generated.ContactHistoryWhereInput)), true
 
 	case "Query.contactSearch":
 		if e.complexity.Query.ContactSearch == nil {
@@ -17760,7 +18430,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ContactWhereInput)), true
+		return e.complexity.Query.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
 	case "Query.control":
 		if e.complexity.Query.Control == nil {
@@ -17784,7 +18454,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlHistoryWhereInput)), true
+		return e.complexity.Query.ControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ControlHistoryOrder), args["where"].(*generated.ControlHistoryWhereInput)), true
 
 	case "Query.controlImplementation":
 		if e.complexity.Query.ControlImplementation == nil {
@@ -17808,7 +18478,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlImplementationHistoryWhereInput)), true
+		return e.complexity.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ControlImplementationHistoryOrder), args["where"].(*generated.ControlImplementationHistoryWhereInput)), true
 
 	case "Query.controlImplementationSearch":
 		if e.complexity.Query.ControlImplementationSearch == nil {
@@ -17832,7 +18502,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlImplementationWhereInput)), true
+		return e.complexity.Query.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
 
 	case "Query.controlObjective":
 		if e.complexity.Query.ControlObjective == nil {
@@ -17856,7 +18526,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlObjectiveHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlObjectiveHistoryWhereInput)), true
+		return e.complexity.Query.ControlObjectiveHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ControlObjectiveHistoryOrder), args["where"].(*generated.ControlObjectiveHistoryWhereInput)), true
 
 	case "Query.controlObjectiveSearch":
 		if e.complexity.Query.ControlObjectiveSearch == nil {
@@ -17880,7 +18550,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlObjectiveWhereInput)), true
+		return e.complexity.Query.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Query.controlSearch":
 		if e.complexity.Query.ControlSearch == nil {
@@ -17904,7 +18574,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ControlWhereInput)), true
+		return e.complexity.Query.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Query.documentData":
 		if e.complexity.Query.DocumentData == nil {
@@ -17964,7 +18634,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+		return e.complexity.Query.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Query.entity":
 		if e.complexity.Query.Entity == nil {
@@ -18120,7 +18790,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.EvidenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EvidenceHistoryWhereInput)), true
+		return e.complexity.Query.EvidenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.EvidenceHistoryOrder), args["where"].(*generated.EvidenceHistoryWhereInput)), true
 
 	case "Query.evidenceSearch":
 		if e.complexity.Query.EvidenceSearch == nil {
@@ -18144,7 +18814,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Evidences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EvidenceWhereInput)), true
+		return e.complexity.Query.Evidences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Query.file":
 		if e.complexity.Query.File == nil {
@@ -18240,7 +18910,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GroupMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.GroupMembershipHistoryWhereInput)), true
+		return e.complexity.Query.GroupMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.GroupMembershipHistoryOrder), args["where"].(*generated.GroupMembershipHistoryWhereInput)), true
 
 	case "Query.groupMemberships":
 		if e.complexity.Query.GroupMemberships == nil {
@@ -18252,7 +18922,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GroupMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.GroupMembershipWhereInput)), true
+		return e.complexity.Query.GroupMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Query.groupSearch":
 		if e.complexity.Query.GroupSearch == nil {
@@ -18312,7 +18982,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+		return e.complexity.Query.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Query.hush":
 		if e.complexity.Query.Hush == nil {
@@ -18348,7 +19018,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Hushes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
+		return e.complexity.Query.Hushes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 
 	case "Query.integration":
 		if e.complexity.Query.Integration == nil {
@@ -18396,7 +19066,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+		return e.complexity.Query.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Query.internalPolicies":
 		if e.complexity.Query.InternalPolicies == nil {
@@ -18468,7 +19138,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InviteWhereInput)), true
+		return e.complexity.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
 
 	case "Query.mappedControl":
 		if e.complexity.Query.MappedControl == nil {
@@ -18492,7 +19162,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.MappedControlHistoryWhereInput)), true
+		return e.complexity.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappedControlHistoryOrder), args["where"].(*generated.MappedControlHistoryWhereInput)), true
 
 	case "Query.mappedControlSearch":
 		if e.complexity.Query.MappedControlSearch == nil {
@@ -18516,7 +19186,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.MappedControlWhereInput)), true
+		return e.complexity.Query.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Query.narrative":
 		if e.complexity.Query.Narrative == nil {
@@ -18540,7 +19210,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.NarrativeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NarrativeHistoryWhereInput)), true
+		return e.complexity.Query.NarrativeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeHistoryOrder), args["where"].(*generated.NarrativeHistoryWhereInput)), true
 
 	case "Query.narrativeSearch":
 		if e.complexity.Query.NarrativeSearch == nil {
@@ -18564,7 +19234,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NarrativeWhereInput)), true
+		return e.complexity.Query.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
@@ -18648,7 +19318,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.OrgMembershipHistoryWhereInput)), true
+		return e.complexity.Query.OrgMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgMembershipHistoryOrder), args["where"].(*generated.OrgMembershipHistoryWhereInput)), true
 
 	case "Query.orgMemberships":
 		if e.complexity.Query.OrgMemberships == nil {
@@ -18660,7 +19330,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.OrgMembershipWhereInput)), true
+		return e.complexity.Query.OrgMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Query.orgSubscription":
 		if e.complexity.Query.OrgSubscription == nil {
@@ -18684,7 +19354,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgSubscriptionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.OrgSubscriptionHistoryWhereInput)), true
+		return e.complexity.Query.OrgSubscriptionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgSubscriptionHistoryOrder), args["where"].(*generated.OrgSubscriptionHistoryWhereInput)), true
 
 	case "Query.orgSubscriptionSearch":
 		if e.complexity.Query.OrgSubscriptionSearch == nil {
@@ -18708,7 +19378,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgSubscriptions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.OrgSubscriptionWhereInput)), true
+		return e.complexity.Query.OrgSubscriptions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgSubscriptionOrder), args["where"].(*generated.OrgSubscriptionWhereInput)), true
 
 	case "Query.organization":
 		if e.complexity.Query.Organization == nil {
@@ -18804,7 +19474,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
+		return e.complexity.Query.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
 
 	case "Query.personalAccessToken":
 		if e.complexity.Query.PersonalAccessToken == nil {
@@ -18912,7 +19582,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProgramHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProgramHistoryWhereInput)), true
+		return e.complexity.Query.ProgramHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ProgramHistoryOrder), args["where"].(*generated.ProgramHistoryWhereInput)), true
 
 	case "Query.programMembership":
 		if e.complexity.Query.ProgramMembership == nil {
@@ -18936,7 +19606,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProgramMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProgramMembershipHistoryWhereInput)), true
+		return e.complexity.Query.ProgramMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ProgramMembershipHistoryOrder), args["where"].(*generated.ProgramMembershipHistoryWhereInput)), true
 
 	case "Query.programMemberships":
 		if e.complexity.Query.ProgramMemberships == nil {
@@ -18948,7 +19618,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProgramMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProgramMembershipWhereInput)), true
+		return e.complexity.Query.ProgramMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ProgramMembershipOrder), args["where"].(*generated.ProgramMembershipWhereInput)), true
 
 	case "Query.programSearch":
 		if e.complexity.Query.ProgramSearch == nil {
@@ -18972,7 +19642,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProgramWhereInput)), true
+		return e.complexity.Query.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Query.risk":
 		if e.complexity.Query.Risk == nil {
@@ -18996,7 +19666,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.RiskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.RiskHistoryWhereInput)), true
+		return e.complexity.Query.RiskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.RiskHistoryOrder), args["where"].(*generated.RiskHistoryWhereInput)), true
 
 	case "Query.riskSearch":
 		if e.complexity.Query.RiskSearch == nil {
@@ -19020,7 +19690,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.RiskWhereInput)), true
+		return e.complexity.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Query.search":
 		if e.complexity.Query.Search == nil {
@@ -19063,7 +19733,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.StandardHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.StandardHistoryWhereInput)), true
+		return e.complexity.Query.StandardHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.StandardHistoryOrder), args["where"].(*generated.StandardHistoryWhereInput)), true
 
 	case "Query.standardSearch":
 		if e.complexity.Query.StandardSearch == nil {
@@ -19087,7 +19757,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.StandardWhereInput)), true
+		return e.complexity.Query.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
 	case "Query.subcontrol":
 		if e.complexity.Query.Subcontrol == nil {
@@ -19111,7 +19781,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.SubcontrolHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.SubcontrolHistoryWhereInput)), true
+		return e.complexity.Query.SubcontrolHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.SubcontrolHistoryOrder), args["where"].(*generated.SubcontrolHistoryWhereInput)), true
 
 	case "Query.subcontrolSearch":
 		if e.complexity.Query.SubcontrolSearch == nil {
@@ -19135,7 +19805,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.SubcontrolWhereInput)), true
+		return e.complexity.Query.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Query.subscriber":
 		if e.complexity.Query.Subscriber == nil {
@@ -19171,7 +19841,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.SubscriberWhereInput)), true
+		return e.complexity.Query.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
 	case "Query.task":
 		if e.complexity.Query.Task == nil {
@@ -19195,7 +19865,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.TaskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.TaskHistoryWhereInput)), true
+		return e.complexity.Query.TaskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TaskHistoryOrder), args["where"].(*generated.TaskHistoryWhereInput)), true
 
 	case "Query.taskSearch":
 		if e.complexity.Query.TaskSearch == nil {
@@ -19219,7 +19889,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.TaskWhereInput)), true
+		return e.complexity.Query.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Query.template":
 		if e.complexity.Query.Template == nil {
@@ -19267,7 +19937,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+		return e.complexity.Query.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
 	case "Query.tfaSetting":
 		if e.complexity.Query.TfaSetting == nil {
@@ -19387,14 +20057,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
+		return e.complexity.Query.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "Risk.actionPlans":
 		if e.complexity.Risk.ActionPlans == nil {
 			break
 		}
 
-		return e.complexity.Risk.ActionPlans(childComplexity), true
+		args, err := ec.field_Risk_actionPlans_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Risk.blockedGroups":
 		if e.complexity.Risk.BlockedGroups == nil {
@@ -19422,7 +20097,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Risk.Control(childComplexity), true
+		args, err := ec.field_Risk_control_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Control(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Risk.createdAt":
 		if e.complexity.Risk.CreatedAt == nil {
@@ -19534,14 +20214,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Risk.Procedure(childComplexity), true
+		args, err := ec.field_Risk_procedure_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Procedure(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Risk.programs":
 		if e.complexity.Risk.Programs == nil {
 			break
 		}
 
-		return e.complexity.Risk.Programs(childComplexity), true
+		args, err := ec.field_Risk_programs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Risk.riskType":
 		if e.complexity.Risk.RiskType == nil {
@@ -19891,7 +20581,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Standard.Controls(childComplexity), true
+		args, err := ec.field_Standard_controls_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Standard.createdAt":
 		if e.complexity.Standard.CreatedAt == nil {
@@ -20367,7 +21062,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.ActionPlans(childComplexity), true
+		args, err := ec.field_Subcontrol_actionPlans_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "Subcontrol.assessmentMethods":
 		if e.complexity.Subcontrol.AssessmentMethods == nil {
@@ -20416,7 +21116,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.ControlObjectives(childComplexity), true
+		args, err := ec.field_Subcontrol_controlObjectives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Subcontrol.controlOwner":
 		if e.complexity.Subcontrol.ControlOwner == nil {
@@ -20493,7 +21198,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.Evidence(childComplexity), true
+		args, err := ec.field_Subcontrol_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Subcontrol.exampleEvidence":
 		if e.complexity.Subcontrol.ExampleEvidence == nil {
@@ -20521,7 +21231,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.InternalPolicies(childComplexity), true
+		args, err := ec.field_Subcontrol_internalPolicies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Subcontrol.mappedCategories":
 		if e.complexity.Subcontrol.MappedCategories == nil {
@@ -20542,7 +21257,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.Narratives(childComplexity), true
+		args, err := ec.field_Subcontrol_narratives_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Subcontrol.owner":
 		if e.complexity.Subcontrol.Owner == nil {
@@ -20563,7 +21283,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.Procedures(childComplexity), true
+		args, err := ec.field_Subcontrol_procedures_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Subcontrol.refCode":
 		if e.complexity.Subcontrol.RefCode == nil {
@@ -20584,7 +21309,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.Risks(childComplexity), true
+		args, err := ec.field_Subcontrol_risks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Subcontrol.source":
 		if e.complexity.Subcontrol.Source == nil {
@@ -20619,7 +21349,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subcontrol.Tasks(childComplexity), true
+		args, err := ec.field_Subcontrol_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "Subcontrol.updatedAt":
 		if e.complexity.Subcontrol.UpdatedAt == nil {
@@ -20990,7 +21725,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Subscriber.Events(childComplexity), true
+		args, err := ec.field_Subscriber_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subscriber.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "Subscriber.id":
 		if e.complexity.Subscriber.ID == nil {
@@ -21319,7 +22059,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.Comments(childComplexity), true
+		args, err := ec.field_Task_comments_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Task.completed":
 		if e.complexity.Task.Completed == nil {
@@ -21333,14 +22078,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.Control(childComplexity), true
+		args, err := ec.field_Task_control_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Control(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Task.controlObjective":
 		if e.complexity.Task.ControlObjective == nil {
 			break
 		}
 
-		return e.complexity.Task.ControlObjective(childComplexity), true
+		args, err := ec.field_Task_controlObjective_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.ControlObjective(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Task.createdAt":
 		if e.complexity.Task.CreatedAt == nil {
@@ -21403,14 +22158,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.Evidence(childComplexity), true
+		args, err := ec.field_Task_evidence_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "Task.group":
 		if e.complexity.Task.Group == nil {
 			break
 		}
 
-		return e.complexity.Task.Group(childComplexity), true
+		args, err := ec.field_Task_group_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Group(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Task.id":
 		if e.complexity.Task.ID == nil {
@@ -21424,7 +22189,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.InternalPolicy(childComplexity), true
+		args, err := ec.field_Task_internalPolicy_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.InternalPolicy(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Task.owner":
 		if e.complexity.Task.Owner == nil {
@@ -21445,14 +22215,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.Procedure(childComplexity), true
+		args, err := ec.field_Task_procedure_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Procedure(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Task.program":
 		if e.complexity.Task.Program == nil {
 			break
 		}
 
-		return e.complexity.Task.Program(childComplexity), true
+		args, err := ec.field_Task_program_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Program(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Task.status":
 		if e.complexity.Task.Status == nil {
@@ -21466,7 +22246,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Task.Subcontrol(childComplexity), true
+		args, err := ec.field_Task_subcontrol_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Subcontrol(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Task.tags":
 		if e.complexity.Task.Tags == nil {
@@ -21795,14 +22580,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Template.Documents(childComplexity), true
+		args, err := ec.field_Template_documents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.DocumentDataWhereInput)), true
 
 	case "Template.files":
 		if e.complexity.Template.Files == nil {
 			break
 		}
 
-		return e.complexity.Template.Files(childComplexity), true
+		args, err := ec.field_Template_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "Template.id":
 		if e.complexity.Template.ID == nil {
@@ -22103,21 +22898,36 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.User.ActionPlans(childComplexity), true
+		args, err := ec.field_User_actionPlans_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
 	case "User.assigneeTasks":
 		if e.complexity.User.AssigneeTasks == nil {
 			break
 		}
 
-		return e.complexity.User.AssigneeTasks(childComplexity), true
+		args, err := ec.field_User_assigneeTasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.AssigneeTasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "User.assignerTasks":
 		if e.complexity.User.AssignerTasks == nil {
 			break
 		}
 
-		return e.complexity.User.AssignerTasks(childComplexity), true
+		args, err := ec.field_User_assignerTasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.AssignerTasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "User.authProvider":
 		if e.complexity.User.AuthProvider == nil {
@@ -22208,14 +23018,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.User.Events(childComplexity), true
+		args, err := ec.field_User_events_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.EventWhereInput)), true
 
 	case "User.files":
 		if e.complexity.User.Files == nil {
 			break
 		}
 
-		return e.complexity.User.Files(childComplexity), true
+		args, err := ec.field_User_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "User.firstName":
 		if e.complexity.User.FirstName == nil {
@@ -22278,7 +23098,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.User.PersonalAccessTokens(childComplexity), true
+		args, err := ec.field_User_personalAccessTokens_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.PersonalAccessTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.PersonalAccessTokenWhereInput)), true
 
 	case "User.programMemberships":
 		if e.complexity.User.ProgramMemberships == nil {
@@ -22320,7 +23145,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.User.Subcontrols(childComplexity), true
+		args, err := ec.field_User_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "User.tags":
 		if e.complexity.User.Tags == nil {
@@ -22334,7 +23164,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.User.TfaSettings(childComplexity), true
+		args, err := ec.field_User_tfaSettings_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.TfaSettings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.TFASettingWhereInput)), true
 
 	case "User.updatedAt":
 		if e.complexity.User.UpdatedAt == nil {
@@ -22656,7 +23491,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.UserSetting.Files(childComplexity), true
+		args, err := ec.field_UserSetting_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.UserSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.FileWhereInput)), true
 
 	case "UserSetting.id":
 		if e.complexity.UserSetting.ID == nil {
@@ -22989,16 +23829,26 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAPITokenWhereInput,
+		ec.unmarshalInputActionPlanHistoryOrder,
 		ec.unmarshalInputActionPlanHistoryWhereInput,
+		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAuditLogWhereInput,
+		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
+		ec.unmarshalInputContactOrder,
 		ec.unmarshalInputContactWhereInput,
+		ec.unmarshalInputControlHistoryOrder,
 		ec.unmarshalInputControlHistoryWhereInput,
+		ec.unmarshalInputControlImplementationHistoryOrder,
 		ec.unmarshalInputControlImplementationHistoryWhereInput,
+		ec.unmarshalInputControlImplementationOrder,
 		ec.unmarshalInputControlImplementationWhereInput,
+		ec.unmarshalInputControlObjectiveHistoryOrder,
 		ec.unmarshalInputControlObjectiveHistoryWhereInput,
+		ec.unmarshalInputControlObjectiveOrder,
 		ec.unmarshalInputControlObjectiveWhereInput,
+		ec.unmarshalInputControlOrder,
 		ec.unmarshalInputControlWhereInput,
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
@@ -23055,14 +23905,18 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEntityWhereInput,
 		ec.unmarshalInputEventHistoryWhereInput,
 		ec.unmarshalInputEventWhereInput,
+		ec.unmarshalInputEvidenceHistoryOrder,
 		ec.unmarshalInputEvidenceHistoryWhereInput,
+		ec.unmarshalInputEvidenceOrder,
 		ec.unmarshalInputEvidenceWhereInput,
 		ec.unmarshalInputFileHistoryWhereInput,
 		ec.unmarshalInputFileWhereInput,
 		ec.unmarshalInputGroupHistoryOrder,
 		ec.unmarshalInputGroupHistoryWhereInput,
 		ec.unmarshalInputGroupMembersInput,
+		ec.unmarshalInputGroupMembershipHistoryOrder,
 		ec.unmarshalInputGroupMembershipHistoryWhereInput,
+		ec.unmarshalInputGroupMembershipOrder,
 		ec.unmarshalInputGroupMembershipWhereInput,
 		ec.unmarshalInputGroupOrder,
 		ec.unmarshalInputGroupSettingHistoryWhereInput,
@@ -23078,18 +23932,27 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputIntegrationWhereInput,
 		ec.unmarshalInputInternalPolicyHistoryWhereInput,
 		ec.unmarshalInputInternalPolicyWhereInput,
+		ec.unmarshalInputInviteOrder,
 		ec.unmarshalInputInviteWhereInput,
+		ec.unmarshalInputMappedControlHistoryOrder,
 		ec.unmarshalInputMappedControlHistoryWhereInput,
+		ec.unmarshalInputMappedControlOrder,
 		ec.unmarshalInputMappedControlWhereInput,
+		ec.unmarshalInputNarrativeHistoryOrder,
 		ec.unmarshalInputNarrativeHistoryWhereInput,
+		ec.unmarshalInputNarrativeOrder,
 		ec.unmarshalInputNarrativeWhereInput,
 		ec.unmarshalInputNoteHistoryWhereInput,
 		ec.unmarshalInputNoteWhereInput,
 		ec.unmarshalInputOnboardingWhereInput,
 		ec.unmarshalInputOrgMembersInput,
+		ec.unmarshalInputOrgMembershipHistoryOrder,
 		ec.unmarshalInputOrgMembershipHistoryWhereInput,
+		ec.unmarshalInputOrgMembershipOrder,
 		ec.unmarshalInputOrgMembershipWhereInput,
+		ec.unmarshalInputOrgSubscriptionHistoryOrder,
 		ec.unmarshalInputOrgSubscriptionHistoryWhereInput,
+		ec.unmarshalInputOrgSubscriptionOrder,
 		ec.unmarshalInputOrgSubscriptionWhereInput,
 		ec.unmarshalInputOrganizationHistoryOrder,
 		ec.unmarshalInputOrganizationHistoryWhereInput,
@@ -23100,19 +23963,32 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputPersonalAccessTokenWhereInput,
 		ec.unmarshalInputProcedureHistoryWhereInput,
 		ec.unmarshalInputProcedureWhereInput,
+		ec.unmarshalInputProgramHistoryOrder,
 		ec.unmarshalInputProgramHistoryWhereInput,
+		ec.unmarshalInputProgramMembershipHistoryOrder,
 		ec.unmarshalInputProgramMembershipHistoryWhereInput,
+		ec.unmarshalInputProgramMembershipOrder,
 		ec.unmarshalInputProgramMembershipWhereInput,
+		ec.unmarshalInputProgramOrder,
 		ec.unmarshalInputProgramWhereInput,
+		ec.unmarshalInputRiskHistoryOrder,
 		ec.unmarshalInputRiskHistoryWhereInput,
+		ec.unmarshalInputRiskOrder,
 		ec.unmarshalInputRiskWhereInput,
+		ec.unmarshalInputStandardHistoryOrder,
 		ec.unmarshalInputStandardHistoryWhereInput,
+		ec.unmarshalInputStandardOrder,
 		ec.unmarshalInputStandardWhereInput,
+		ec.unmarshalInputSubcontrolHistoryOrder,
 		ec.unmarshalInputSubcontrolHistoryWhereInput,
+		ec.unmarshalInputSubcontrolOrder,
 		ec.unmarshalInputSubcontrolWhereInput,
+		ec.unmarshalInputSubscriberOrder,
 		ec.unmarshalInputSubscriberWhereInput,
 		ec.unmarshalInputTFASettingWhereInput,
+		ec.unmarshalInputTaskHistoryOrder,
 		ec.unmarshalInputTaskHistoryWhereInput,
+		ec.unmarshalInputTaskOrder,
 		ec.unmarshalInputTaskWhereInput,
 		ec.unmarshalInputTemplateHistoryOrder,
 		ec.unmarshalInputTemplateHistoryWhereInput,
@@ -24727,10 +25603,130 @@ type ActionPlan implements Node {
   """
   delegate: Group
   owner: Organization
-  risk: [Risk!]
-  control: [Control!]
-  user: [User!]
-  program: [Program!]
+  risk(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -24901,6 +25897,27 @@ enum ActionPlanHistoryOpType @goModel(model: "github.com/theopenlane/entx/histor
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ActionPlanHistory connections
+"""
+input ActionPlanHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ActionPlanHistories.
+  """
+  field: ActionPlanHistoryOrderField!
+}
+"""
+Properties by which ActionPlanHistory connections can be ordered.
+"""
+enum ActionPlanHistoryOrderField {
+  due_date
+  PRIORITY
+  source
 }
 """
 ActionPlanHistoryPriority is enum for the field priority
@@ -25227,6 +26244,27 @@ input ActionPlanHistoryWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+}
+"""
+Ordering options for ActionPlan connections
+"""
+input ActionPlanOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ActionPlans.
+  """
+  field: ActionPlanOrderField!
+}
+"""
+Properties by which ActionPlan connections can be ordered.
+"""
+enum ActionPlanOrderField {
+  due_date
+  PRIORITY
+  source
 }
 """
 ActionPlanPriority is enum for the field priority
@@ -25598,8 +26636,63 @@ type Contact implements Node {
   """
   status: ContactUserStatus!
   owner: Organization
-  entities: [Entity!]
-  files: [File!]
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -25716,6 +26809,29 @@ enum ContactHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ContactHistory connections
+"""
+input ContactHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ContactHistories.
+  """
+  field: ContactHistoryOrderField!
+}
+"""
+Properties by which ContactHistory connections can be ordered.
+"""
+enum ContactHistoryOrderField {
+  full_name
+  title
+  company
+  email
+  STATUS
 }
 """
 ContactHistoryUserStatus is enum for the field status
@@ -26008,6 +27124,29 @@ input ContactHistoryWhereInput {
   statusNEQ: ContactHistoryUserStatus
   statusIn: [ContactHistoryUserStatus!]
   statusNotIn: [ContactHistoryUserStatus!]
+}
+"""
+Ordering options for Contact connections
+"""
+input ContactOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Contacts.
+  """
+  field: ContactOrderField!
+}
+"""
+Properties by which Contact connections can be ordered.
+"""
+enum ContactOrderField {
+  full_name
+  title
+  company
+  email
+  STATUS
 }
 """
 ContactUserStatus is enum for the field status
@@ -26378,24 +27517,338 @@ type Control implements Node {
   """
   viewers: [Group!]
   standard: Standard
-  programs: [Program!]
-  evidence: [Evidence!]
-  """
-  the implementation(s) of the control
-  """
-  controlImplementations: [ControlImplementation!]
-  """
-  mapped subcontrols that have a relation to another control or subcontrol
-  """
-  mappedControls: [MappedControl!]
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: MappedControlOrder
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   controlObjectives: [ControlObjective!]
-  subcontrols: [Subcontrol!]
-  tasks: [Task!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  actionPlans: [ActionPlan!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -26596,6 +28049,29 @@ enum ControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlHistory connections
+"""
+input ControlHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlHistories.
+  """
+  field: ControlHistoryOrderField!
+}
+"""
+Properties by which ControlHistory connections can be ordered.
+"""
+enum ControlHistoryOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
 }
 """
 ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -26956,7 +28432,37 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
-  controls: [Control!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
 }
 """
 A connection to a list of items.
@@ -27081,6 +28587,28 @@ enum ControlImplementationHistoryOpType @goModel(model: "github.com/theopenlane/
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlImplementationHistory connections
+"""
+input ControlImplementationHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlImplementationHistories.
+  """
+  field: ControlImplementationHistoryOrderField!
+}
+"""
+Properties by which ControlImplementationHistory connections can be ordered.
+"""
+enum ControlImplementationHistoryOrderField {
+  STATUS
+  implementation_date
+  verified
+  verification_date
 }
 """
 ControlImplementationHistoryWhereInput is used for filtering ControlImplementationHistory objects.
@@ -27292,6 +28820,28 @@ input ControlImplementationHistoryWhereInput {
   detailsNotNil: Boolean
   detailsEqualFold: String
   detailsContainsFold: String
+}
+"""
+Ordering options for ControlImplementation connections
+"""
+input ControlImplementationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlImplementations.
+  """
+  field: ControlImplementationOrderField!
+}
+"""
+Properties by which ControlImplementation connections can be ordered.
+"""
+enum ControlImplementationOrderField {
+  STATUS
+  implementation_date
+  verified
+  verification_date
 }
 """
 ControlImplementationWhereInput is used for filtering ControlImplementation objects.
@@ -27538,15 +29088,275 @@ type ControlObjective implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  programs: [Program!]
-  evidence: [Evidence!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  internalPolicies: [InternalPolicy!]
-  procedures: [Procedure!]
-  risks: [Risk!]
-  narratives: [Narrative!]
-  tasks: [Task!]
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -27689,6 +29499,30 @@ enum ControlObjectiveHistoryOpType @goModel(model: "github.com/theopenlane/entx/
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ControlObjectiveHistory connections
+"""
+input ControlObjectiveHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlObjectiveHistories.
+  """
+  field: ControlObjectiveHistoryOrderField!
+}
+"""
+Properties by which ControlObjectiveHistory connections can be ordered.
+"""
+enum ControlObjectiveHistoryOrderField {
+  name
+  status
+  SOURCE
+  control_objective_type
+  category
+  subcategory
 }
 """
 ControlObjectiveHistoryWhereInput is used for filtering ControlObjectiveHistory objects.
@@ -28007,6 +29841,30 @@ input ControlObjectiveHistoryWhereInput {
   subcategoryNotNil: Boolean
   subcategoryEqualFold: String
   subcategoryContainsFold: String
+}
+"""
+Ordering options for ControlObjective connections
+"""
+input ControlObjectiveOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlObjectives.
+  """
+  field: ControlObjectiveOrderField!
+}
+"""
+Properties by which ControlObjective connections can be ordered.
+"""
+enum ControlObjectiveOrderField {
+  name
+  status
+  SOURCE
+  control_objective_type
+  category
+  subcategory
 }
 """
 ControlObjectiveWhereInput is used for filtering ControlObjective objects.
@@ -28354,6 +30212,29 @@ input ControlObjectiveWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+}
+"""
+Ordering options for Control connections
+"""
+input ControlOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Controls.
+  """
+  field: ControlOrderField!
+}
+"""
+Properties by which Control connections can be ordered.
+"""
+enum ControlOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -30346,8 +32227,63 @@ type DocumentData implements Node {
   data: Map!
   owner: Organization
   template: Template!
-  entity: [Entity!]
-  files: [File!]
+  entity(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -30840,10 +32776,115 @@ type Entity implements Node {
   """
   status: String
   owner: Organization
-  contacts: [Contact!]
-  documents: [DocumentData!]
-  notes: [Note!]
-  files: [File!]
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  documents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   entityType: EntityType
 }
 """
@@ -30977,6 +33018,7 @@ Properties by which EntityHistory connections can be ordered.
 enum EntityHistoryOrderField {
   name
   display_name
+  status
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -31238,6 +33280,7 @@ Properties by which Entity connections can be ordered.
 enum EntityOrderField {
   name
   display_name
+  status
 }
 type EntityType implements Node {
   id: ID!
@@ -31260,7 +33303,37 @@ type EntityType implements Node {
   """
   name: String!
   owner: Organization
-  entities: [Entity!]
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
 }
 """
 A connection to a list of items.
@@ -31985,18 +34058,368 @@ type Event implements Node {
   correlationID: String
   eventType: String!
   metadata: Map
-  user: [User!]
-  group: [Group!]
-  integration: [Integration!]
-  organization: [Organization!]
-  invite: [Invite!]
-  personalAccessToken: [PersonalAccessToken!]
-  hush: [Hush!]
-  orgmembership: [OrgMembership!]
-  groupmembership: [GroupMembership!]
-  subscriber: [Subscriber!]
-  file: [File!]
-  orgsubscription: [OrgSubscription!]
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integration(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  invite(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
+    Filtering options for Invites returned from the connection.
+    """
+    where: InviteWhereInput
+  ): InviteConnection!
+  personalAccessToken(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  hush(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
+  orgmembership(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrgMemberships returned from the connection.
+    """
+    orderBy: OrgMembershipOrder
+
+    """
+    Filtering options for OrgMemberships returned from the connection.
+    """
+    where: OrgMembershipWhereInput
+  ): OrgMembershipConnection!
+  groupmembership(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: GroupMembershipOrder
+
+    """
+    Filtering options for GroupMemberships returned from the connection.
+    """
+    where: GroupMembershipWhereInput
+  ): GroupMembershipConnection!
+  subscriber(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
+  file(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  orgsubscription(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrgSubscriptions returned from the connection.
+    """
+    orderBy: OrgSubscriptionOrder
+
+    """
+    Filtering options for OrgSubscriptions returned from the connection.
+    """
+    where: OrgSubscriptionWhereInput
+  ): OrgSubscriptionConnection!
 }
 """
 A connection to a list of items.
@@ -32509,12 +34932,187 @@ type Evidence implements Node {
   """
   status: EvidenceEvidenceStatus
   owner: Organization
-  controlObjectives: [ControlObjective!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  files: [File!]
-  programs: [Program!]
-  tasks: [Task!]
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -32663,6 +35261,28 @@ enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for EvidenceHistory connections
+"""
+input EvidenceHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EvidenceHistories.
+  """
+  field: EvidenceHistoryOrderField!
+}
+"""
+Properties by which EvidenceHistory connections can be ordered.
+"""
+enum EvidenceHistoryOrderField {
+  name
+  creation_date
+  renewal_date
+  STATUS
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -32976,6 +35596,28 @@ input EvidenceHistoryWhereInput {
   statusNotIn: [EvidenceHistoryEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+}
+"""
+Ordering options for Evidence connections
+"""
+input EvidenceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Evidences.
+  """
+  field: EvidenceOrderField!
+}
+"""
+Properties by which Evidence connections can be ordered.
+"""
+enum EvidenceOrderField {
+  name
+  creation_date
+  renewal_date
+  STATUS
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -33350,18 +35992,358 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
-  user: [User!]
-  organization: [Organization!]
-  group: [Group!]
-  contact: [Contact!]
-  entity: [Entity!]
-  userSetting: [UserSetting!]
-  organizationSetting: [OrganizationSetting!]
-  template: [Template!]
-  documentData: [DocumentData!]
-  events: [Event!]
-  program: [Program!]
-  evidence: [Evidence!]
+  user(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  contact(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  entity(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  userSetting(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for UserSettings returned from the connection.
+    """
+    where: UserSettingWhereInput
+  ): UserSettingConnection!
+  organizationSetting(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for OrganizationSettings returned from the connection.
+    """
+    where: OrganizationSettingWhereInput
+  ): OrganizationSettingConnection!
+  template(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
+  documentData(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
 }
 """
 A connection to a list of items.
@@ -34324,10 +37306,120 @@ type Group implements Node {
   narrativeViewers: [Narrative!]
   setting: GroupSetting
   users: [User!]
-  events: [Event!]
-  integrations: [Integration!]
-  files: [File!]
-  tasks: [Task!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   members: [GroupMembership!]
 }
 """
@@ -34789,6 +37881,25 @@ enum GroupMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/h
   DELETE
 }
 """
+Ordering options for GroupMembershipHistory connections
+"""
+input GroupMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order GroupMembershipHistories.
+  """
+  field: GroupMembershipHistoryOrderField!
+}
+"""
+Properties by which GroupMembershipHistory connections can be ordered.
+"""
+enum GroupMembershipHistoryOrderField {
+  ROLE
+}
+"""
 GroupMembershipHistoryRole is enum for the field role
 """
 enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -34984,6 +38095,25 @@ input GroupMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+}
+"""
+Ordering options for GroupMembership connections
+"""
+input GroupMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order GroupMemberships.
+  """
+  field: GroupMembershipOrderField!
+}
+"""
+Properties by which GroupMembership connections can be ordered.
+"""
+enum GroupMembershipOrderField {
+  ROLE
 }
 """
 GroupMembershipRole is enum for the field role
@@ -36006,12 +39136,94 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
-  """
-  the integration associated with the secret
-  """
-  integrations: [Integration!]
-  organization: [Organization!]
-  events: [Event!]
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  organization(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -36560,11 +39772,63 @@ type Integration implements Node {
   description: String
   kind: String
   owner: Organization
-  """
-  the secrets associated with the integration
-  """
-  secrets: [Hush!]
-  events: [Event!]
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -37157,12 +40421,187 @@ type InternalPolicy implements Node {
   temporary delegates for the policy, used for temporary approval
   """
   delegate: Group
-  controlObjectives: [ControlObjective!]
-  controls: [Control!]
-  procedures: [Procedure!]
-  narratives: [Narrative!]
-  tasks: [Task!]
-  programs: [Program!]
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -37965,7 +41404,32 @@ type Invite implements Node {
   """
   requestorID: String
   owner: Organization
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -38005,6 +41469,27 @@ enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.I
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
   INVITATION_EXPIRED
+}
+"""
+Ordering options for Invite connections
+"""
+input InviteOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Invites.
+  """
+  field: InviteOrderField!
+}
+"""
+Properties by which Invite connections can be ordered.
+"""
+enum InviteOrderField {
+  expires
+  STATUS
+  send_attempts
 }
 """
 InviteRole is enum for the field role
@@ -38256,14 +41741,68 @@ type MappedControl implements Node {
   description of how the two controls are related
   """
   relation: String
-  """
-  mapped controls that have a relation to each other
-  """
-  controls: [Control!]
-  """
-  mapped subcontrols that have a relation to each other
-  """
-  subcontrols: [Subcontrol!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -38356,6 +41895,25 @@ enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/his
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for MappedControlHistory connections
+"""
+input MappedControlHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappedControlHistories.
+  """
+  field: MappedControlHistoryOrderField!
+}
+"""
+Properties by which MappedControlHistory connections can be ordered.
+"""
+enum MappedControlHistoryOrderField {
+  mapping_type
 }
 """
 MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -38543,6 +42101,25 @@ input MappedControlHistoryWhereInput {
   relationNotNil: Boolean
   relationEqualFold: String
   relationContainsFold: String
+}
+"""
+Ordering options for MappedControl connections
+"""
+input MappedControlOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappedControls.
+  """
+  field: MappedControlOrderField!
+}
+"""
+Properties by which MappedControl connections can be ordered.
+"""
+enum MappedControlOrderField {
+  mapping_type
 }
 """
 MappedControlWhereInput is used for filtering MappedControl objects.
@@ -38750,11 +42327,68 @@ type Narrative implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  """
-  which controls are satisfied by the narrative
-  """
-  satisfies: [Control!]
-  programs: [Program!]
+  satisfies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -38859,6 +42493,25 @@ enum NarrativeHistoryOpType @goModel(model: "github.com/theopenlane/entx/history
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for NarrativeHistory connections
+"""
+input NarrativeHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NarrativeHistories.
+  """
+  field: NarrativeHistoryOrderField!
+}
+"""
+Properties by which NarrativeHistory connections can be ordered.
+"""
+enum NarrativeHistoryOrderField {
+  name
 }
 """
 NarrativeHistoryWhereInput is used for filtering NarrativeHistory objects.
@@ -39096,6 +42749,25 @@ input NarrativeHistoryWhereInput {
   detailsNotNil: Boolean
   detailsEqualFold: String
   detailsContainsFold: String
+}
+"""
+Ordering options for Narrative connections
+"""
+input NarrativeOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Narratives.
+  """
+  field: NarrativeOrderField!
+}
+"""
+Properties by which Narrative connections can be ordered.
+"""
+enum NarrativeOrderField {
+  name
 }
 """
 NarrativeWhereInput is used for filtering Narrative objects.
@@ -39974,7 +43646,32 @@ type OrgMembership implements Node {
   userID: ID!
   organization: Organization!
   user: User!
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -40058,6 +43755,25 @@ enum OrgMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/his
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for OrgMembershipHistory connections
+"""
+input OrgMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgMembershipHistories.
+  """
+  field: OrgMembershipHistoryOrderField!
+}
+"""
+Properties by which OrgMembershipHistory connections can be ordered.
+"""
+enum OrgMembershipHistoryOrderField {
+  ROLE
 }
 """
 OrgMembershipHistoryRole is enum for the field role
@@ -40256,6 +43972,25 @@ input OrgMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+}
+"""
+Ordering options for OrgMembership connections
+"""
+input OrgMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgMemberships.
+  """
+  field: OrgMembershipOrderField!
+}
+"""
+Properties by which OrgMembership connections can be ordered.
+"""
+enum OrgMembershipOrderField {
+  ROLE
 }
 """
 OrgMembershipRole is enum for the field role
@@ -40599,6 +44334,30 @@ enum OrgSubscriptionHistoryOpType @goModel(model: "github.com/theopenlane/entx/h
   DELETE
 }
 """
+Ordering options for OrgSubscriptionHistory connections
+"""
+input OrgSubscriptionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgSubscriptionHistories.
+  """
+  field: OrgSubscriptionHistoryOrderField!
+}
+"""
+Properties by which OrgSubscriptionHistory connections can be ordered.
+"""
+enum OrgSubscriptionHistoryOrderField {
+  product_tier
+  stripe_subscription_status
+  active
+  expires_at
+  trial_expires_at
+  days_until_due
+}
+"""
 OrgSubscriptionHistoryWhereInput is used for filtering OrgSubscriptionHistory objects.
 Input was generated by ent.
 """
@@ -40912,6 +44671,30 @@ input OrgSubscriptionHistoryWhereInput {
   paymentMethodAddedNEQ: Boolean
   paymentMethodAddedIsNil: Boolean
   paymentMethodAddedNotNil: Boolean
+}
+"""
+Ordering options for OrgSubscription connections
+"""
+input OrgSubscriptionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrgSubscriptions.
+  """
+  field: OrgSubscriptionOrderField!
+}
+"""
+Properties by which OrgSubscription connections can be ordered.
+"""
+enum OrgSubscriptionOrderField {
+  product_tier
+  stripe_subscription_status
+  active
+  expires_at
+  trial_expires_at
+  days_until_due
 }
 """
 OrgSubscriptionWhereInput is used for filtering OrgSubscription objects.
@@ -41307,7 +45090,7 @@ type Organization implements Node {
     """
     Ordering options for Organizations returned from the connection.
     """
-    orderBy: OrganizationOrder
+    orderBy: [OrganizationOrder!]
 
     """
     Filtering options for Organizations returned from the connection.
@@ -41315,36 +45098,806 @@ type Organization implements Node {
     where: OrganizationWhereInput
   ): OrganizationConnection!
   setting: OrganizationSetting
-  personalAccessTokens: [PersonalAccessToken!]
-  apiTokens: [APIToken!]
+  personalAccessTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  apiTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for APITokens returned from the connection.
+    """
+    where: APITokenWhereInput
+  ): APITokenConnection!
   users: [User!]
-  files: [File!]
-  events: [Event!]
-  secrets: [Hush!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
   avatarFile: File
-  groups: [Group!]
-  templates: [Template!]
-  integrations: [Integration!]
-  documentData: [DocumentData!]
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  documentData(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
   orgSubscriptions: [OrgSubscription!]
-  invites: [Invite!]
-  subscribers: [Subscriber!]
-  entities: [Entity!]
-  entityTypes: [EntityType!]
-  contacts: [Contact!]
-  notes: [Note!]
-  tasks: [Task!]
-  programs: [Program!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
-  risks: [Risk!]
-  controlObjectives: [ControlObjective!]
-  narratives: [Narrative!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  evidence: [Evidence!]
-  standards: [Standard!]
-  actionPlans: [ActionPlan!]
+  invites(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
+    Filtering options for Invites returned from the connection.
+    """
+    where: InviteWhereInput
+  ): InviteConnection!
+  subscribers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityTypes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EntityTypes returned from the connection.
+    """
+    orderBy: EntityTypeOrder
+
+    """
+    Filtering options for EntityTypes returned from the connection.
+    """
+    where: EntityTypeWhereInput
+  ): EntityTypeConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  standards(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
   members: [OrgMembership!]
 }
 """
@@ -41797,7 +46350,32 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   organization: Organization
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -42909,11 +47487,63 @@ type PersonalAccessToken implements Node {
   """
   revokedAt: Time
   owner: User!
-  """
-  the organization(s) the token is associated with
-  """
-  organizations: [Organization!]
-  events: [Event!]
+  organizations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Organizations returned from the connection.
+    """
+    orderBy: [OrganizationOrder!]
+
+    """
+    Filtering options for Organizations returned from the connection.
+    """
+    where: OrganizationWhereInput
+  ): OrganizationConnection!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -43242,12 +47872,187 @@ type Procedure implements Node {
   temporary delegates for the procedure, used for temporary approval
   """
   delegate: Group
-  controls: [Control!]
-  internalPolicies: [InternalPolicy!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  tasks: [Task!]
-  programs: [Program!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -44081,20 +48886,390 @@ type Program implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  controls: [Control!]
-  subcontrols: [Subcontrol!]
-  controlObjectives: [ControlObjective!]
-  internalPolicies: [InternalPolicy!]
-  procedures: [Procedure!]
-  risks: [Risk!]
-  tasks: [Task!]
-  notes: [Note!]
-  files: [File!]
-  evidence: [Evidence!]
-  narratives: [Narrative!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  notes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
   actionPlans: [ActionPlan!]
-  users: [User!]
-  members: [ProgramMembership!]
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ProgramMemberships returned from the connection.
+    """
+    orderBy: ProgramMembershipOrder
+
+    """
+    Filtering options for ProgramMemberships returned from the connection.
+    """
+    where: ProgramMembershipWhereInput
+  ): ProgramMembershipConnection!
 }
 """
 A connection to a list of items.
@@ -44219,6 +49394,28 @@ enum ProgramHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.O
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for ProgramHistory connections
+"""
+input ProgramHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramHistories.
+  """
+  field: ProgramHistoryOrderField!
+}
+"""
+Properties by which ProgramHistory connections can be ordered.
+"""
+enum ProgramHistoryOrderField {
+  name
+  STATUS
+  start_date
+  end_date
 }
 """
 ProgramHistoryProgramStatus is enum for the field status
@@ -44595,6 +49792,25 @@ enum ProgramMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx
   DELETE
 }
 """
+Ordering options for ProgramMembershipHistory connections
+"""
+input ProgramMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramMembershipHistories.
+  """
+  field: ProgramMembershipHistoryOrderField!
+}
+"""
+Properties by which ProgramMembershipHistory connections can be ordered.
+"""
+enum ProgramMembershipHistoryOrderField {
+  ROLE
+}
+"""
 ProgramMembershipHistoryRole is enum for the field role
 """
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -44792,6 +50008,25 @@ input ProgramMembershipHistoryWhereInput {
   userIDContainsFold: String
 }
 """
+Ordering options for ProgramMembership connections
+"""
+input ProgramMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ProgramMemberships.
+  """
+  field: ProgramMembershipOrderField!
+}
+"""
+Properties by which ProgramMembership connections can be ordered.
+"""
+enum ProgramMembershipOrderField {
+  ROLE
+}
+"""
 ProgramMembershipRole is enum for the field role
 """
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
@@ -44919,6 +50154,28 @@ input ProgramMembershipWhereInput {
   roleNEQ: ProgramMembershipRole
   roleIn: [ProgramMembershipRole!]
   roleNotIn: [ProgramMembershipRole!]
+}
+"""
+Ordering options for Program connections
+"""
+input ProgramOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Programs.
+  """
+  field: ProgramOrderField!
+}
+"""
+Properties by which Program connections can be ordered.
+"""
+enum ProgramOrderField {
+  name
+  STATUS
+  start_date
+  end_date
 }
 """
 ProgramProgramStatus is enum for the field status
@@ -45318,6 +50575,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
     Filtering options for ActionPlans returned from the connection.
     """
     where: ActionPlanWhereInput
@@ -45342,6 +50604,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ActionPlanHistories returned from the connection.
+    """
+    orderBy: ActionPlanHistoryOrder
 
     """
     Filtering options for ActionPlanHistories returned from the connection.
@@ -45370,6 +50637,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
     Filtering options for Contacts returned from the connection.
     """
     where: ContactWhereInput
@@ -45394,6 +50666,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ContactHistories returned from the connection.
+    """
+    orderBy: ContactHistoryOrder
 
     """
     Filtering options for ContactHistories returned from the connection.
@@ -45422,6 +50699,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
     Filtering options for Controls returned from the connection.
     """
     where: ControlWhereInput
@@ -45446,6 +50728,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlHistories returned from the connection.
+    """
+    orderBy: ControlHistoryOrder
 
     """
     Filtering options for ControlHistories returned from the connection.
@@ -45474,6 +50761,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
     Filtering options for ControlImplementations returned from the connection.
     """
     where: ControlImplementationWhereInput
@@ -45498,6 +50790,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlImplementationHistories returned from the connection.
+    """
+    orderBy: ControlImplementationHistoryOrder
 
     """
     Filtering options for ControlImplementationHistories returned from the connection.
@@ -45526,6 +50823,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
     Filtering options for ControlObjectives returned from the connection.
     """
     where: ControlObjectiveWhereInput
@@ -45550,6 +50852,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ControlObjectiveHistories returned from the connection.
+    """
+    orderBy: ControlObjectiveHistoryOrder
 
     """
     Filtering options for ControlObjectiveHistories returned from the connection.
@@ -45632,7 +50939,7 @@ type Query {
     """
     Ordering options for Entities returned from the connection.
     """
-    orderBy: EntityOrder
+    orderBy: [EntityOrder!]
 
     """
     Filtering options for Entities returned from the connection.
@@ -45806,6 +51113,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
     Filtering options for Evidences returned from the connection.
     """
     where: EvidenceWhereInput
@@ -45830,6 +51142,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for EvidenceHistories returned from the connection.
+    """
+    orderBy: EvidenceHistoryOrder
 
     """
     Filtering options for EvidenceHistories returned from the connection.
@@ -45912,7 +51229,7 @@ type Query {
     """
     Ordering options for Groups returned from the connection.
     """
-    orderBy: GroupOrder
+    orderBy: [GroupOrder!]
 
     """
     Filtering options for Groups returned from the connection.
@@ -45972,6 +51289,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: GroupMembershipOrder
+
+    """
     Filtering options for GroupMemberships returned from the connection.
     """
     where: GroupMembershipWhereInput
@@ -45996,6 +51318,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for GroupMembershipHistories returned from the connection.
+    """
+    orderBy: GroupMembershipHistoryOrder
 
     """
     Filtering options for GroupMembershipHistories returned from the connection.
@@ -46078,7 +51405,7 @@ type Query {
     """
     Ordering options for Hushes returned from the connection.
     """
-    orderBy: HushOrder
+    orderBy: [HushOrder!]
 
     """
     Filtering options for Hushes returned from the connection.
@@ -46140,7 +51467,7 @@ type Query {
     """
     Ordering options for Integrations returned from the connection.
     """
-    orderBy: IntegrationOrder
+    orderBy: [IntegrationOrder!]
 
     """
     Filtering options for Integrations returned from the connection.
@@ -46252,6 +51579,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Invites returned from the connection.
+    """
+    orderBy: [InviteOrder!]
+
+    """
     Filtering options for Invites returned from the connection.
     """
     where: InviteWhereInput
@@ -46276,6 +51608,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: MappedControlOrder
 
     """
     Filtering options for MappedControls returned from the connection.
@@ -46304,6 +51641,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for MappedControlHistories returned from the connection.
+    """
+    orderBy: MappedControlHistoryOrder
+
+    """
     Filtering options for MappedControlHistories returned from the connection.
     """
     where: MappedControlHistoryWhereInput
@@ -46330,6 +51672,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
     Filtering options for Narratives returned from the connection.
     """
     where: NarrativeWhereInput
@@ -46354,6 +51701,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for NarrativeHistories returned from the connection.
+    """
+    orderBy: NarrativeHistoryOrder
 
     """
     Filtering options for NarrativeHistories returned from the connection.
@@ -46434,6 +51786,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for OrgMemberships returned from the connection.
+    """
+    orderBy: OrgMembershipOrder
+
+    """
     Filtering options for OrgMemberships returned from the connection.
     """
     where: OrgMembershipWhereInput
@@ -46458,6 +51815,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for OrgMembershipHistories returned from the connection.
+    """
+    orderBy: OrgMembershipHistoryOrder
 
     """
     Filtering options for OrgMembershipHistories returned from the connection.
@@ -46486,6 +51848,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for OrgSubscriptions returned from the connection.
+    """
+    orderBy: OrgSubscriptionOrder
+
+    """
     Filtering options for OrgSubscriptions returned from the connection.
     """
     where: OrgSubscriptionWhereInput
@@ -46510,6 +51877,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for OrgSubscriptionHistories returned from the connection.
+    """
+    orderBy: OrgSubscriptionHistoryOrder
 
     """
     Filtering options for OrgSubscriptionHistories returned from the connection.
@@ -46540,7 +51912,7 @@ type Query {
     """
     Ordering options for Organizations returned from the connection.
     """
-    orderBy: OrganizationOrder
+    orderBy: [OrganizationOrder!]
 
     """
     Filtering options for Organizations returned from the connection.
@@ -46730,6 +52102,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
     Filtering options for Programs returned from the connection.
     """
     where: ProgramWhereInput
@@ -46754,6 +52131,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ProgramHistories returned from the connection.
+    """
+    orderBy: ProgramHistoryOrder
 
     """
     Filtering options for ProgramHistories returned from the connection.
@@ -46782,6 +52164,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for ProgramMemberships returned from the connection.
+    """
+    orderBy: ProgramMembershipOrder
+
+    """
     Filtering options for ProgramMemberships returned from the connection.
     """
     where: ProgramMembershipWhereInput
@@ -46806,6 +52193,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for ProgramMembershipHistories returned from the connection.
+    """
+    orderBy: ProgramMembershipHistoryOrder
 
     """
     Filtering options for ProgramMembershipHistories returned from the connection.
@@ -46834,6 +52226,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
     Filtering options for Risks returned from the connection.
     """
     where: RiskWhereInput
@@ -46858,6 +52255,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for RiskHistories returned from the connection.
+    """
+    orderBy: RiskHistoryOrder
 
     """
     Filtering options for RiskHistories returned from the connection.
@@ -46886,6 +52288,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
     Filtering options for Standards returned from the connection.
     """
     where: StandardWhereInput
@@ -46910,6 +52317,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for StandardHistories returned from the connection.
+    """
+    orderBy: StandardHistoryOrder
 
     """
     Filtering options for StandardHistories returned from the connection.
@@ -46938,6 +52350,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
     Filtering options for Subcontrols returned from the connection.
     """
     where: SubcontrolWhereInput
@@ -46964,6 +52381,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for SubcontrolHistories returned from the connection.
+    """
+    orderBy: SubcontrolHistoryOrder
+
+    """
     Filtering options for SubcontrolHistories returned from the connection.
     """
     where: SubcontrolHistoryWhereInput
@@ -46988,6 +52410,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
 
     """
     Filtering options for Subscribers returned from the connection.
@@ -47042,6 +52469,11 @@ type Query {
     last: Int
 
     """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
     Filtering options for Tasks returned from the connection.
     """
     where: TaskWhereInput
@@ -47066,6 +52498,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Ordering options for TaskHistories returned from the connection.
+    """
+    orderBy: TaskHistoryOrder
 
     """
     Filtering options for TaskHistories returned from the connection.
@@ -47096,7 +52533,7 @@ type Query {
     """
     Ordering options for Templates returned from the connection.
     """
-    orderBy: TemplateOrder
+    orderBy: [TemplateOrder!]
 
     """
     Filtering options for Templates returned from the connection.
@@ -47158,7 +52595,7 @@ type Query {
     """
     Ordering options for Users returned from the connection.
     """
-    orderBy: UserOrder
+    orderBy: [UserOrder!]
 
     """
     Filtering options for Users returned from the connection.
@@ -47322,10 +52759,125 @@ type Risk implements Node {
   provides view access to the risk to members of the group
   """
   viewers: [Group!]
-  control: [Control!]
-  procedure: [Procedure!]
-  actionPlans: [ActionPlan!]
-  programs: [Program!]
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  procedure(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
   """
   the group of users who are responsible for risk oversight
   """
@@ -47466,6 +53018,32 @@ enum RiskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for RiskHistory connections
+"""
+input RiskHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order RiskHistories.
+  """
+  field: RiskHistoryOrderField!
+}
+"""
+Properties by which RiskHistory connections can be ordered.
+"""
+enum RiskHistoryOrderField {
+  name
+  STATUS
+  risk_type
+  category
+  IMPACT
+  LIKELIHOOD
+  score
+  business_costs
 }
 """
 RiskHistoryRiskImpact is enum for the field impact
@@ -47824,6 +53402,32 @@ input RiskHistoryWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+}
+"""
+Ordering options for Risk connections
+"""
+input RiskOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Risks.
+  """
+  field: RiskOrderField!
+}
+"""
+Properties by which Risk connections can be ordered.
+"""
+enum RiskOrderField {
+  name
+  STATUS
+  risk_type
+  category
+  IMPACT
+  LIKELIHOOD
+  score
+  business_costs
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -48274,7 +53878,37 @@ type Standard implements Node {
   """
   version: String
   owner: Organization
-  controls: [Control!]
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
 }
 """
 A connection to a list of items.
@@ -48423,6 +54057,30 @@ enum StandardHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for StandardHistory connections
+"""
+input StandardHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order StandardHistories.
+  """
+  field: StandardHistoryOrderField!
+}
+"""
+Properties by which StandardHistory connections can be ordered.
+"""
+enum StandardHistoryOrderField {
+  name
+  short_name
+  framework
+  governing_body
+  STATUS
+  standard_type
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -48808,6 +54466,30 @@ input StandardHistoryWhereInput {
   versionNotNil: Boolean
   versionEqualFold: String
   versionContainsFold: String
+}
+"""
+Ordering options for Standard connections
+"""
+input StandardOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Standards.
+  """
+  field: StandardOrderField!
+}
+"""
+Properties by which Standard connections can be ordered.
+"""
+enum StandardOrderField {
+  name
+  short_name
+  framework
+  governing_body
+  STATUS
+  standard_type
 }
 """
 StandardStandardStatus is enum for the field status
@@ -49258,14 +54940,244 @@ type Subcontrol implements Node {
   mapped subcontrols that have a relation to another control or subcontrol
   """
   mappedControls: [MappedControl!]
-  evidence: [Evidence!]
-  controlObjectives: [ControlObjective!]
-  tasks: [Task!]
-  narratives: [Narrative!]
-  risks: [Risk!]
-  actionPlans: [ActionPlan!]
-  procedures: [Procedure!]
-  internalPolicies: [InternalPolicy!]
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  controlObjectives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  narratives(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: NarrativeOrder
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   """
   the user who is responsible for the subcontrol, defaults to the parent control owner if not set
   """
@@ -49466,6 +55378,30 @@ enum SubcontrolHistoryOpType @goModel(model: "github.com/theopenlane/entx/histor
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for SubcontrolHistory connections
+"""
+input SubcontrolHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SubcontrolHistories.
+  """
+  field: SubcontrolHistoryOrderField!
+}
+"""
+Properties by which SubcontrolHistory connections can be ordered.
+"""
+enum SubcontrolHistoryOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
+  ref_code
 }
 """
 SubcontrolHistoryWhereInput is used for filtering SubcontrolHistory objects.
@@ -49791,6 +55727,30 @@ input SubcontrolHistoryWhereInput {
   controlIDHasSuffix: String
   controlIDEqualFold: String
   controlIDContainsFold: String
+}
+"""
+Ordering options for Subcontrol connections
+"""
+input SubcontrolOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Subcontrols.
+  """
+  field: SubcontrolOrderField!
+}
+"""
+Properties by which Subcontrol connections can be ordered.
+"""
+enum SubcontrolOrderField {
+  status
+  SOURCE
+  CONTROL_TYPE
+  category
+  subcategory
+  ref_code
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -50183,7 +56143,32 @@ type Subscriber implements Node {
   """
   active: Boolean!
   owner: Organization
-  events: [Event!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
 }
 """
 A connection to a list of items.
@@ -50214,6 +56199,26 @@ type SubscriberEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+Ordering options for Subscriber connections
+"""
+input SubscriberOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Subscribers.
+  """
+  field: SubscriberOrderField!
+}
+"""
+Properties by which Subscriber connections can be ordered.
+"""
+enum SubscriberOrderField {
+  email
+  active
 }
 """
 SubscriberWhereInput is used for filtering Subscriber objects.
@@ -50646,18 +56651,270 @@ type Task implements Node {
   owner: Organization
   assigner: User
   assignee: User
-  """
-  conversations related to the task
-  """
-  comments: [Note!]
-  group: [Group!]
-  internalPolicy: [InternalPolicy!]
-  procedure: [Procedure!]
-  control: [Control!]
-  controlObjective: [ControlObjective!]
-  subcontrol: [Subcontrol!]
-  program: [Program!]
-  evidence: [Evidence!]
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  group(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalPolicy(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedure(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  control(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  controlObjective(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  subcontrol(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  program(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
 }
 """
 A connection to a list of items.
@@ -50786,6 +57043,29 @@ enum TaskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
   INSERT
   UPDATE
   DELETE
+}
+"""
+Ordering options for TaskHistory connections
+"""
+input TaskHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TaskHistories.
+  """
+  field: TaskHistoryOrderField!
+}
+"""
+Properties by which TaskHistory connections can be ordered.
+"""
+enum TaskHistoryOrderField {
+  title
+  STATUS
+  category
+  due
+  completed
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -51120,6 +57400,29 @@ input TaskHistoryWhereInput {
   assignerIDNotNil: Boolean
   assignerIDEqualFold: String
   assignerIDContainsFold: String
+}
+"""
+Ordering options for Task connections
+"""
+input TaskOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Tasks.
+  """
+  field: TaskOrderField!
+}
+"""
+Properties by which Task connections can be ordered.
+"""
+enum TaskOrderField {
+  title
+  STATUS
+  category
+  due
+  completed
 }
 """
 TaskTaskStatus is enum for the field status
@@ -51516,8 +57819,58 @@ type Template implements Node {
   """
   uischema: Map
   owner: Organization
-  documents: [DocumentData!]
-  files: [File!]
+  documents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for DocumentDataSlice returned from the connection.
+    """
+    where: DocumentDataWhereInput
+  ): DocumentDataConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -51659,6 +58012,7 @@ Properties by which TemplateHistory connections can be ordered.
 """
 enum TemplateHistoryOrderField {
   name
+  TEMPLATE_TYPE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -51888,6 +58242,7 @@ Properties by which Template connections can be ordered.
 """
 enum TemplateOrderField {
   name
+  TEMPLATE_TYPE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -54377,18 +60732,238 @@ type User implements Node {
   the user's role
   """
   role: UserRole
-  personalAccessTokens: [PersonalAccessToken!]
-  tfaSettings: [TFASetting!]
+  personalAccessTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for PersonalAccessTokens returned from the connection.
+    """
+    where: PersonalAccessTokenWhereInput
+  ): PersonalAccessTokenConnection!
+  tfaSettings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for TFASettings returned from the connection.
+    """
+    where: TFASettingWhereInput
+  ): TFASettingConnection!
   setting: UserSetting!
   groups: [Group!]
   organizations: [Organization!]
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   avatarFile: File
-  events: [Event!]
-  actionPlans: [ActionPlan!]
-  subcontrols: [Subcontrol!]
-  assignerTasks: [Task!]
-  assigneeTasks: [Task!]
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  assignerTasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
+  assigneeTasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   programs: [Program!]
   groupMemberships: [GroupMembership!]
   orgMemberships: [OrgMembership!]
@@ -54970,7 +61545,32 @@ type UserSetting implements Node {
   organization to load on user login
   """
   defaultOrg: Organization
-  files: [File!]
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.

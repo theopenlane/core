@@ -32,6 +32,7 @@ func (Subcontrol) Fields() []ent.Field {
 		field.String("ref_code").
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("ref_code"),
 			).
 			NotEmpty().
 			Comment("the unique reference code for the control"),
@@ -61,19 +62,20 @@ func (Subcontrol) Edges() []ent.Edge {
 
 		// evidence can be associated with the control
 		edge.From("evidence", Evidence.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("subcontrols"),
 
-		edge.To("control_objectives", ControlObjective.Type),
+		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
 
 		// sub controls can have associated task, narratives, risks, and action plans
-		edge.To("tasks", Task.Type),
-		edge.To("narratives", Narrative.Type),
-		edge.To("risks", Risk.Type),
-		edge.To("action_plans", ActionPlan.Type),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
+		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
+		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
 
 		// policies and procedures are used to implement the subcontrol
-		edge.To("procedures", Procedure.Type),
-		edge.To("internal_policies", InternalPolicy.Type),
+		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
+		edge.To("internal_policies", InternalPolicy.Type).Annotations(entgql.RelayConnection()),
 
 		// owner is the user who is responsible for the subcontrol
 		edge.To("control_owner", Group.Type).
@@ -117,6 +119,7 @@ func (Subcontrol) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

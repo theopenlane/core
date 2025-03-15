@@ -26,12 +26,21 @@ func (ActionPlan) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("due_date").
 			Optional().
+			Annotations(
+				entgql.OrderField("due_date"),
+			).
 			Comment("due date of the action plan"),
 		field.Enum("priority").
 			GoType(enums.Priority("")).
+			Annotations(
+				entgql.OrderField("PRIORITY"),
+			).
 			Optional().
 			Comment("priority of the action plan"),
 		field.String("source").
+			Annotations(
+				entgql.OrderField("source"),
+			).
 			Optional().
 			Comment("source of the action plan"),
 	}
@@ -41,12 +50,16 @@ func (ActionPlan) Fields() []ent.Field {
 func (ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("risk", Risk.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("action_plans"),
 		edge.From("control", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("action_plans"),
 		edge.From("user", User.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("action_plans"),
 		edge.From("program", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("action_plans"),
 	}
 }
@@ -71,6 +84,7 @@ func (ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

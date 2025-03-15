@@ -30,31 +30,51 @@ func (Risk) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("name"),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
 			GoType(enums.RiskStatus("")).
 			Default(enums.RiskOpen.String()).
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Optional().
 			Comment("status of the risk - open, mitigated, ongoing, in-progress, and archived."),
 		field.String("risk_type").
+			Annotations(
+				entgql.OrderField("risk_type"),
+			).
 			Optional().
 			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
 		field.String("category").
 			Optional().
+			Annotations(
+				entgql.OrderField("category"),
+			).
 			Comment("category of the risk, e.g. human resources, operations, IT, etc."),
 		field.Enum("impact").
 			GoType(enums.RiskImpact("")).
 			Default(enums.RiskImpactModerate.String()).
+			Annotations(
+				entgql.OrderField("IMPACT"),
+			).
 			Optional().
 			Comment("impact of the risk -critical, high, medium, low"),
 		field.Enum("likelihood").
 			GoType(enums.RiskLikelihood("")).
 			Default(enums.RiskLikelihoodMid.String()).
 			Optional().
+			Annotations(
+				entgql.OrderField("LIKELIHOOD"),
+			).
 			Comment("likelihood of the risk occurring; unlikely, likely, highly likely"),
 		field.Int("score").
 			Optional().
+			Annotations(
+				entgql.OrderField("score"),
+				entx.FieldSearchable(),
+			).
 			Comment("score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
 		field.Text("mitigation").
 			Optional().
@@ -63,6 +83,9 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Comment("details of the risk"),
 		field.Text("business_costs").
+			Annotations(
+				entgql.OrderField("business_costs"),
+			).
 			Optional().
 			Comment("business costs associated with the risk"),
 	}
@@ -72,11 +95,14 @@ func (Risk) Fields() []ent.Field {
 func (Risk) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("risks"),
 		edge.From("procedure", Procedure.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("risks"),
-		edge.To("action_plans", ActionPlan.Type),
+		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
 
 		edge.To("stakeholder", Group.Type).
@@ -113,6 +139,7 @@ func (Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

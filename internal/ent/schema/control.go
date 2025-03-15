@@ -51,17 +51,20 @@ func (Control) Edges() []ent.Edge {
 			Unique().
 			Ref("controls"),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("controls"),
 
 		// evidence can be associated with the control
 		edge.From("evidence", Evidence.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("controls"),
 
 		edge.To("control_implementations", ControlImplementation.Type).
-			Annotations(entx.CascadeAnnotationField("Controls")). // cascade delete the implementation when the control is deleted
+			Annotations(entx.CascadeAnnotationField("Controls"), entgql.RelayConnection()). // cascade delete the implementation when the control is deleted
 			Comment("the implementation(s) of the control"),
 
 		edge.From("mapped_controls", MappedControl.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("controls").
 			Comment("mapped subcontrols that have a relation to another control or subcontrol"),
 
@@ -69,17 +72,17 @@ func (Control) Edges() []ent.Edge {
 		edge.To("control_objectives", ControlObjective.Type),
 
 		edge.To("subcontrols", Subcontrol.Type).
-			Annotations(entx.CascadeAnnotationField("Control")), // cascade delete the subcontrol when the control is deleted
+			Annotations(entx.CascadeAnnotationField("Control"), entgql.RelayConnection()), // cascade delete the subcontrol when the control is deleted
 
 		// controls can have associated task, narratives, risks, and action plans
-		edge.To("tasks", Task.Type),
-		edge.To("narratives", Narrative.Type),
-		edge.To("risks", Risk.Type),
-		edge.To("action_plans", ActionPlan.Type),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
+		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
+		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
 
 		// policies and procedures are used to implement the control
-		edge.To("procedures", Procedure.Type),
-		edge.To("internal_policies", InternalPolicy.Type),
+		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
+		edge.To("internal_policies", InternalPolicy.Type).Annotations(entgql.RelayConnection()),
 
 		// owner is the user who is responsible for the control
 		edge.To("control_owner", Group.Type).
@@ -126,6 +129,7 @@ func (Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

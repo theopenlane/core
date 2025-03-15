@@ -136,8 +136,8 @@ func (Organization) Edges() []ent.Edge {
 				entx.CascadeAnnotationField("Organization"),
 			),
 
-		edge.To("personal_access_tokens", PersonalAccessToken.Type),
-		edge.To("api_tokens", APIToken.Type),
+		edge.To("personal_access_tokens", PersonalAccessToken.Type).Annotations(entgql.RelayConnection()),
+		edge.To("api_tokens", APIToken.Type).Annotations(entgql.RelayConnection()),
 		edge.From("users", User.Type).
 			Ref("organizations").
 			// Skip the mutation input for the users edge
@@ -148,59 +148,128 @@ func (Organization) Edges() []ent.Edge {
 		// files can be owned by an organization, but don't have to be
 		// only those with the organization id set should be cascade deleted
 		edge.To("files", File.Type).
-			Annotations(entx.CascadeAnnotationField("Organization")),
-		edge.To("events", Event.Type),
-		edge.To("secrets", Hush.Type),
+			Annotations(entx.CascadeAnnotationField("Organization"),
+				entgql.RelayConnection()),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		edge.To("secrets", Hush.Type).Annotations(entgql.RelayConnection()),
 		edge.To("avatar_file", File.Type).
 			Field("avatar_local_file_id").Unique(),
 
 		// Organization owns the following entities
 		edge.To("groups", Group.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("templates", Template.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("integrations", Integration.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("document_data", DocumentData.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("org_subscriptions", OrgSubscription.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+			),
 		edge.To("invites", Invite.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("subscribers", Subscriber.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("entities", Entity.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("entity_types", EntityType.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("contacts", Contact.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("notes", Note.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("tasks", Task.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("programs", Program.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("procedures", Procedure.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("internal_policies", InternalPolicy.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("risks", Risk.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("control_objectives", ControlObjective.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("narratives", Narrative.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("controls", Control.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("subcontrols", Subcontrol.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("evidence", Evidence.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("standards", Standard.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 		edge.To("action_plans", ActionPlan.Type).
-			Annotations(entx.CascadeAnnotationField("Owner")),
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+				entgql.RelayConnection(),
+			),
 	}
 }
 
@@ -219,6 +288,7 @@ func (Organization) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete org members when orgs are deleted
 		entx.CascadeThroughAnnotationField(

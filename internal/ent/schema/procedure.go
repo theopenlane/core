@@ -32,13 +32,16 @@ func (Procedure) Fields() []ent.Field {
 func (Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("controls", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("procedures"),
 		edge.From("internal_policies", InternalPolicy.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("procedures"),
-		edge.To("narratives", Narrative.Type),
-		edge.To("risks", Risk.Type),
-		edge.To("tasks", Task.Type),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
+		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("procedures"),
 	}
 }

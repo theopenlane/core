@@ -113,8 +113,12 @@ query GetSelf {
       updatedBy
     }
     tfaSettings {
-      totpAllowed
-      verified
+      edges {
+        node {
+          totpAllowed
+          verified
+        }
+      }
     }
     createdAt
     createdBy

@@ -93,8 +93,8 @@ func tableOutput(out []openlaneclient.PersonalAccessToken) {
 		}
 
 		orgs := []string{}
-		for _, o := range i.Organizations {
-			orgs = append(orgs, o.Name)
+		for _, o := range i.Organizations.Edges {
+			orgs = append(orgs, o.Node.Name)
 		}
 
 		authorizedOrgs := strings.Join(orgs, ", ")

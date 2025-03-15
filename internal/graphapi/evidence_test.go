@@ -407,21 +407,21 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 			}
 
 			if tc.request.ProgramIDs != nil {
-				assert.Len(t, resp.CreateEvidence.Evidence.Programs, len(tc.request.ProgramIDs))
+				assert.Len(t, resp.CreateEvidence.Evidence.Programs.Edges, len(tc.request.ProgramIDs))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Programs)
+				assert.Empty(t, resp.CreateEvidence.Evidence.Programs.Edges)
 			}
 
 			if tc.request.TaskIDs != nil {
-				assert.Len(t, resp.CreateEvidence.Evidence.Tasks, len(tc.request.TaskIDs))
+				assert.Len(t, resp.CreateEvidence.Evidence.Tasks.Edges, len(tc.request.TaskIDs))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Tasks)
+				assert.Empty(t, resp.CreateEvidence.Evidence.Tasks.Edges)
 			}
 
 			if tc.files != nil && len(tc.files) > 0 {
-				assert.Len(t, resp.CreateEvidence.Evidence.Files, len(tc.files))
+				assert.Len(t, resp.CreateEvidence.Evidence.Files.Edges, len(tc.files))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Files)
+				assert.Empty(t, resp.CreateEvidence.Evidence.Files.Edges)
 			}
 
 			// attempt to retrieve the created evidence by org owner, no matter who created it
@@ -532,7 +532,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEvidence() {
 			}
 
 			if tc.files != nil && len(tc.files) > 0 {
-				assert.Len(t, resp.UpdateEvidence.Evidence.Files, len(tc.files))
+				assert.Len(t, resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files))
 			}
 
 		})

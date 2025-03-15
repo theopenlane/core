@@ -48,6 +48,9 @@ func (Template) Fields() []ent.Field {
 		field.Enum("template_type").
 			Comment("the type of the template, either a provided template or an implementation (document)").
 			GoType(enums.DocumentType("")).
+			Annotations(
+				entgql.OrderField("TEMPLATE_TYPE"),
+			).
 			Default(string(enums.Document)),
 		field.String("description").
 			Comment("the description of the template").
@@ -69,8 +72,9 @@ func (Template) Edges() []ent.Edge {
 		edge.To("documents", DocumentData.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Template"),
+				entgql.RelayConnection(),
 			),
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -88,6 +92,7 @@ func (Template) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}

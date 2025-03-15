@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/pkg/enums"
@@ -18,21 +19,31 @@ var controlFields = []ent.Field{
 		Comment("description of what the control is supposed to accomplish"),
 	field.String("status").
 		Optional().
+		Annotations(
+			entgql.OrderField("status"),
+		).
 		Comment("status of the control"),
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().
+		Annotations(
+			entgql.OrderField("SOURCE"),
+		).
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).
 		Default(enums.ControlTypePreventative.String()).
+		Annotations(
+			entgql.OrderField("CONTROL_TYPE"),
+		).
 		Optional().
 		Comment("type of the control e.g. preventive, detective, corrective, or deterrent."),
 	field.String("category").
 		Optional().
 		Annotations(
 			entx.FieldSearchable(),
+			entgql.OrderField("category"),
 		).
 		Comment("category of the control"),
 	field.String("category_id").
@@ -42,6 +53,7 @@ var controlFields = []ent.Field{
 		Optional().
 		Annotations(
 			entx.FieldSearchable(),
+			entgql.OrderField("subcategory"),
 		).
 		Comment("subcategory of the control"),
 	field.Strings("mapped_categories").

@@ -17,6 +17,7 @@ query GlobalSearch($query: String!) {
       }
       ... on ContactSearchResult {
         contacts {
+          email
           fullName
           id
           tags
@@ -81,6 +82,7 @@ query GlobalSearch($query: String!) {
         evidences {
           displayID
           id
+          name
           tags
         }
       }
@@ -183,6 +185,9 @@ query GlobalSearch($query: String!) {
       }
       ... on StandardSearchResult {
         standards {
+          domains
+          framework
+          governingBody
           id
           name
           shortName
