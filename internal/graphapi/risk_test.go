@@ -101,7 +101,7 @@ func (suite *GraphTestSuite) TestQueryRisk() {
 			assert.Equal(t, tc.queryID, resp.Risk.ID)
 			assert.NotEmpty(t, resp.Risk.Name)
 
-			require.Len(t, resp.Risk.Programs, 1)
+			require.Len(t, resp.Risk.Programs.Edges, 1)
 			assert.NotEmpty(t, resp.Risk.Programs.Edges[0].Node.ID)
 		})
 	}
@@ -330,14 +330,14 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
-				require.NotEmpty(t, resp.CreateRisk.Risk.Programs)
-				require.Len(t, resp.CreateRisk.Risk.Programs, len(tc.request.ProgramIDs))
+				require.NotEmpty(t, resp.CreateRisk.Risk.Programs.Edges)
+				require.Len(t, resp.CreateRisk.Risk.Programs.Edges, len(tc.request.ProgramIDs))
 
 				for i, p := range resp.CreateRisk.Risk.Programs.Edges {
 					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
-				assert.Empty(t, resp.CreateRisk.Risk.Programs)
+				assert.Empty(t, resp.CreateRisk.Risk.Programs.Edges)
 			}
 
 			if tc.request.Status != nil {

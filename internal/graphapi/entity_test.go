@@ -258,7 +258,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntity() {
 			}
 
 			if tc.request.Note != nil {
-				require.Len(t, resp.CreateEntity.Entity.Notes, 1)
+				require.Len(t, resp.CreateEntity.Entity.Notes.Edges, 1)
 				require.NotEmpty(t, resp.CreateEntity.Entity.Notes)
 				assert.Equal(t, tc.request.Note.Text, resp.CreateEntity.Entity.Notes.Edges[0].Node.Text)
 			}
@@ -382,7 +382,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntity() {
 			if tc.request.Note != nil {
 				numNotes++
 
-				require.Len(t, resp.UpdateEntity.Entity.Notes, numNotes)
+				require.Len(t, resp.UpdateEntity.Entity.Notes.Edges, numNotes)
 				assert.Equal(t, tc.request.Note.Text, resp.UpdateEntity.Entity.Notes.Edges[0].Node.Text)
 			}
 		})

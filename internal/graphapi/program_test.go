@@ -71,8 +71,8 @@ func (suite *GraphTestSuite) TestQueryProgram() {
 
 			assert.Equal(t, program.ID, resp.Program.ID)
 			assert.Equal(t, program.Name, resp.Program.Name)
-			assert.Len(t, resp.Program.Procedures, 1)
-			assert.Len(t, resp.Program.InternalPolicies, 1)
+			assert.Len(t, resp.Program.Procedures.Edges, 1)
+			assert.Len(t, resp.Program.InternalPolicies.Edges, 1)
 		})
 	}
 }
@@ -147,8 +147,8 @@ func (suite *GraphTestSuite) TestQueryPrograms() {
 
 			for _, edge := range resp.Programs.Edges {
 				require.NotNil(t, edge.Node)
-				assert.Len(t, edge.Node.Procedures, 1)
-				assert.Len(t, edge.Node.InternalPolicies, 1)
+				assert.Len(t, edge.Node.Procedures.Edges, 1)
+				assert.Len(t, edge.Node.InternalPolicies.Edges, 1)
 			}
 		})
 	}
@@ -368,14 +368,14 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 
 			// check edges
 			if len(tc.request.ProcedureIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.Procedures, 1)
+				require.Len(t, resp.CreateProgram.Program.Procedures.Edges, 1)
 				for _, edge := range resp.CreateProgram.Program.Procedures.Edges {
 					assert.Equal(t, procedure.ID, edge.Node.ID)
 				}
 			}
 
 			if len(tc.request.InternalPolicyIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.InternalPolicies, 1)
+				require.Len(t, resp.CreateProgram.Program.InternalPolicies.Edges, 1)
 				for _, edge := range resp.CreateProgram.Program.InternalPolicies.Edges {
 					assert.Equal(t, policy.ID, edge.Node.ID)
 				}
@@ -653,14 +653,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 			// check edges
 			if len(tc.request.AddProcedureIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Procedures, 1)
+				require.Len(t, resp.UpdateProgram.Program.Procedures.Edges, 1)
 				for _, edge := range resp.UpdateProgram.Program.Procedures.Edges {
 					assert.Equal(t, procedure1.ID, edge.Node.ID)
 				}
 			}
 
 			if len(tc.request.AddInternalPolicyIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.InternalPolicies, 1)
+				require.Len(t, resp.UpdateProgram.Program.InternalPolicies.Edges, 1)
 				for _, edge := range resp.UpdateProgram.Program.InternalPolicies.Edges {
 					assert.Equal(t, policy1.ID, edge.Node.ID)
 				}
@@ -694,7 +694,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			}
 
 			if len(tc.request.AddProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members, 3)
+				require.Len(t, resp.UpdateProgram.Program.Members.Edges, 3)
 
 				// it should have the owner and the admin user and the other user added in the test setup
 				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
@@ -704,7 +704,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 			// member was removed, ensure there are two members left
 			if len(tc.request.RemoveProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members, 2)
+				require.Len(t, resp.UpdateProgram.Program.Members.Edges, 2)
 
 				// it should have the owner and the admin user
 				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)

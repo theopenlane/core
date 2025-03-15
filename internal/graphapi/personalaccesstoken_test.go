@@ -188,13 +188,13 @@ func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
 
 			// check organization is set if provided
 			if tc.input.OrganizationIDs != nil {
-				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations, len(tc.input.OrganizationIDs))
+				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.OrganizationIDs))
 
 				for _, orgID := range resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges {
 					assert.Contains(t, tc.input.OrganizationIDs, orgID.Node.ID)
 				}
 			} else {
-				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations, 0)
+				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 0)
 			}
 
 			// ensure the owner is the user that made the request
@@ -308,11 +308,11 @@ func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
 				assert.Empty(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt)
 			}
 
-			assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations, len(tc.input.AddOrganizationIDs)+1)
+			assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.AddOrganizationIDs)+1)
 
 			// Ensure its removed
 			if tc.input.RemoveOrganizationIDs != nil {
-				assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations, 1)
+				assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 1)
 			}
 
 			assert.Equal(t, testUser1.ID, resp.UpdatePersonalAccessToken.PersonalAccessToken.Owner.ID)

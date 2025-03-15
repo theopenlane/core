@@ -103,7 +103,7 @@ func (suite *GraphTestSuite) TestQueryControl() {
 			assert.Equal(t, tc.queryID, resp.Control.ID)
 			assert.NotEmpty(t, resp.Control.RefCode)
 
-			require.Len(t, resp.Control.Programs, 1)
+			require.Len(t, resp.Control.Programs.Edges, 1)
 			assert.NotEmpty(t, resp.Control.Programs.Edges[0].Node.ID)
 		})
 	}
@@ -375,13 +375,13 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
 				require.NotEmpty(t, resp.CreateControl.Control.Programs)
-				require.Len(t, resp.CreateControl.Control.Programs, len(tc.request.ProgramIDs))
+				require.Len(t, resp.CreateControl.Control.Programs.Edges, len(tc.request.ProgramIDs))
 
 				for i, p := range resp.CreateControl.Control.Programs.Edges {
 					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Programs)
+				assert.Empty(t, resp.CreateControl.Control.Programs.Edges)
 			}
 
 			if tc.request.Description != nil {
@@ -755,7 +755,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			// ensure the program is set
 			if len(tc.request.AddProgramIDs) > 0 {
 				require.NotEmpty(t, resp.UpdateControl.Control.Programs)
-				require.Len(t, resp.UpdateControl.Control.Programs, len(tc.request.AddProgramIDs))
+				require.Len(t, resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs))
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
