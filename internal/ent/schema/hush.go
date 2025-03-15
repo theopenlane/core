@@ -60,10 +60,12 @@ func (Hush) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("integrations", Integration.Type).
 			Comment("the integration associated with the secret").
+			Annotations(entgql.RelayConnection()).
 			Ref("secrets"),
 		edge.From("organization", Organization.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("secrets"),
-		edge.To("events", Event.Type),
+		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -72,6 +74,7 @@ func (Hush) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 	}
 }

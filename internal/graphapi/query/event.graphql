@@ -7,31 +7,67 @@ mutation CreateBulkCSVEvent($input: Upload!) {
       eventType
       metadata
       user {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       group {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       integration {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       invite {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       personalAccessToken {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       hush {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       orgmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       groupmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -46,31 +82,67 @@ mutation CreateBulkEvent($input: [CreateEventInput!]) {
       eventType
       metadata
       user {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       group {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       integration {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       invite {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       personalAccessToken {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       hush {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       orgmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       groupmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -85,31 +157,67 @@ mutation CreateEvent($input: CreateEventInput!) {
       eventType
       metadata
       user {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       group {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       integration {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       invite {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       personalAccessToken {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       hush {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       orgmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       groupmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -135,31 +243,67 @@ query GetAllEvents {
         eventType
         metadata
         user {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         group {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         integration {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         organization {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         invite {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         personalAccessToken {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         hush {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         orgmembership {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
         groupmembership {
-          id
+          edges {
+            node {
+              id
+            }
+          }
         }
       }
     }
@@ -178,31 +322,67 @@ query GetEventByID($eventId: ID!) {
     eventType
     metadata
     user {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     group {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     integration {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     organization {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     invite {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     personalAccessToken {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     hush {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     orgmembership {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
     groupmembership {
-      id
+      edges {
+        node {
+          id
+        }
+      }
     }
   }
 }
@@ -234,31 +414,67 @@ mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
       eventType
       metadata
       user {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       group {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       integration {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       organization {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       invite {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       personalAccessToken {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       hush {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       orgmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
       groupmembership {
-        id
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }

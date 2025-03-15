@@ -30,6 +30,7 @@ func (ControlObjective) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("name"),
 			).
 			Comment("the name of the control objective"),
 		field.Text("desired_outcome").
@@ -37,25 +38,36 @@ func (ControlObjective) Fields() []ent.Field {
 			Comment("the desired outcome or target of the control objective"),
 		field.String("status").
 			Optional().
+			Annotations(
+				entgql.OrderField("status"),
+			).
 			Comment("status of the control objective"),
 		field.Enum("source").
 			GoType(enums.ControlSource("")).
 			Optional().
+			Annotations(
+				entgql.OrderField("SOURCE"),
+			).
 			Default(enums.ControlSourceUserDefined.String()).
 			Comment("source of the control, e.g. framework, template, custom, etc."),
 		field.String("control_objective_type").
 			Optional().
+			Annotations(
+				entgql.OrderField("control_objective_type"),
+			).
 			Comment("type of the control objective e.g. compliance, financial, operational, etc."),
 		field.String("category").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("category"),
 			).
 			Comment("category of the control"),
 		field.String("subcategory").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("subcategory"),
 			).
 			Comment("subcategory of the control"),
 	}
@@ -65,25 +77,30 @@ func (ControlObjective) Fields() []ent.Field {
 func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_objectives"),
 		edge.From("evidence", Evidence.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_objectives"),
 
 		// control objectives can map to multiple controls and subcontrols
 		edge.From("controls", Control.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_objectives"),
 		edge.From("subcontrols", Subcontrol.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_objectives"),
 
 		edge.From("internal_policies", InternalPolicy.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("control_objectives"),
 
-		edge.To("procedures", Procedure.Type),
+		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
 
-		edge.To("risks", Risk.Type),
-		edge.To("narratives", Narrative.Type),
+		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
 
-		edge.To("tasks", Task.Type),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -114,6 +131,7 @@ func (ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}

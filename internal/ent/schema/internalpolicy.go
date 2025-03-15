@@ -31,12 +31,13 @@ func (InternalPolicy) Fields() []ent.Field {
 // Edges of the InternalPolicy
 func (InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("control_objectives", ControlObjective.Type),
-		edge.To("controls", Control.Type),
-		edge.To("procedures", Procedure.Type),
-		edge.To("narratives", Narrative.Type),
-		edge.To("tasks", Task.Type),
+		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
+		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
+		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
+		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
+		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("internal_policies"),
 	}
 }

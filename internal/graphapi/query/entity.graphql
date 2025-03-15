@@ -8,9 +8,13 @@ mutation CreateBulkCSVEntity($input: Upload!) {
       status
       domains
       notes {
-        text
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
       }
       entityType {
         name
@@ -35,9 +39,13 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
       status
       domains
       notes {
-        text
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
       }
       entityType {
         name
@@ -62,9 +70,13 @@ mutation CreateEntity($input: CreateEntityInput!) {
       status
       domains
       notes {
-        text
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
       }
       entityType {
         name
@@ -96,9 +108,13 @@ query GetAllEntities {
         status
         domains
         notes {
-          text
-          updatedAt
-          updatedBy
+          edges {
+            node {
+              text
+              updatedAt
+              updatedBy
+            }
+          }
         }
         entityType {
           name
@@ -125,9 +141,13 @@ query GetEntities($where: EntityWhereInput) {
         status
         domains
         notes {
-          text
-          updatedAt
-          updatedBy
+          edges {
+            node {
+              text
+              updatedAt
+              updatedBy
+            }
+          }
         }
         entityType {
           name
@@ -152,9 +172,13 @@ query GetEntityByID($entityId: ID!) {
     status
     domains
     notes {
-      text
-      updatedAt
-      updatedBy
+      edges {
+        node {
+          text
+          updatedAt
+          updatedBy
+        }
+      }
     }
     entityType {
       name
@@ -163,13 +187,17 @@ query GetEntityByID($entityId: ID!) {
     name
     ownerID
     contacts {
-      id
-      fullName
-      email
-      title
-      company
-      address
-      phoneNumber
+      edges {
+        node {
+          id
+          fullName
+          email
+          title
+          company
+          address
+          phoneNumber
+        }
+      }
     }
     tags
     updatedAt
@@ -187,9 +215,13 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
       status
       domains
       notes {
-        text
-        updatedAt
-        updatedBy
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
       }
       entityType {
         name

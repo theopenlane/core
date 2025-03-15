@@ -90,11 +90,15 @@ query InvitesByOrgID($where: InviteWhereInput) {
         owner {
           id
           invites {
-            recipient
-            requestorID
-            role
-            sendAttempts
-            status
+            edges {
+              node {
+                recipient
+                requestorID
+                role
+                sendAttempts
+                status
+              }
+            }
           }
         }
       }

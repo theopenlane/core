@@ -339,12 +339,12 @@ type ActionPlan struct {
 	// the group of users who are responsible for approving the action_plan
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
-	Delegate *Group        `json:"delegate,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
-	Risk     []*Risk       `json:"risk,omitempty"`
-	Control  []*Control    `json:"control,omitempty"`
-	User     []*User       `json:"user,omitempty"`
-	Program  []*Program    `json:"program,omitempty"`
+	Delegate *Group             `json:"delegate,omitempty"`
+	Owner    *Organization      `json:"owner,omitempty"`
+	Risk     *RiskConnection    `json:"risk"`
+	Control  *ControlConnection `json:"control"`
+	User     *UserConnection    `json:"user"`
+	Program  *ProgramConnection `json:"program"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -442,6 +442,14 @@ type ActionPlanHistoryEdge struct {
 	Node *ActionPlanHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ActionPlanHistory connections
+type ActionPlanHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ActionPlanHistories.
+	Field ActionPlanHistoryOrderField `json:"field"`
 }
 
 // ActionPlanHistoryWhereInput is used for filtering ActionPlanHistory objects.
@@ -714,6 +722,14 @@ type ActionPlanHistoryWhereInput struct {
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+}
+
+// Ordering options for ActionPlan connections
+type ActionPlanOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ActionPlans.
+	Field ActionPlanOrderField `json:"field"`
 }
 
 type ActionPlanSearchResult struct {
@@ -1054,10 +1070,10 @@ type Contact struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status   enums.UserStatus `json:"status"`
-	Owner    *Organization    `json:"owner,omitempty"`
-	Entities []*Entity        `json:"entities,omitempty"`
-	Files    []*File          `json:"files,omitempty"`
+	Status   enums.UserStatus  `json:"status"`
+	Owner    *Organization     `json:"owner,omitempty"`
+	Entities *EntityConnection `json:"entities"`
+	Files    *FileConnection   `json:"files"`
 }
 
 func (Contact) IsNode() {}
@@ -1147,6 +1163,14 @@ type ContactHistoryEdge struct {
 	Node *ContactHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ContactHistory connections
+type ContactHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ContactHistories.
+	Field ContactHistoryOrderField `json:"field"`
 }
 
 // ContactHistoryWhereInput is used for filtering ContactHistory objects.
@@ -1392,6 +1416,14 @@ type ContactHistoryWhereInput struct {
 	StatusNeq   *enums.UserStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
+}
+
+// Ordering options for Contact connections
+type ContactOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Contacts.
+	Field ContactOrderField `json:"field"`
 }
 
 type ContactSearchResult struct {
@@ -1682,22 +1714,20 @@ type Control struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers  []*Group    `json:"viewers,omitempty"`
-	Standard *Standard   `json:"standard,omitempty"`
-	Programs []*Program  `json:"programs,omitempty"`
-	Evidence []*Evidence `json:"evidence,omitempty"`
-	// the implementation(s) of the control
-	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty"`
-	// mapped subcontrols that have a relation to another control or subcontrol
-	MappedControls    []*MappedControl    `json:"mappedControls,omitempty"`
-	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
-	Subcontrols       []*Subcontrol       `json:"subcontrols,omitempty"`
-	Tasks             []*Task             `json:"tasks,omitempty"`
-	Narratives        []*Narrative        `json:"narratives,omitempty"`
-	Risks             []*Risk             `json:"risks,omitempty"`
-	ActionPlans       []*ActionPlan       `json:"actionPlans,omitempty"`
-	Procedures        []*Procedure        `json:"procedures,omitempty"`
-	InternalPolicies  []*InternalPolicy   `json:"internalPolicies,omitempty"`
+	Viewers                []*Group                         `json:"viewers,omitempty"`
+	Standard               *Standard                        `json:"standard,omitempty"`
+	Programs               *ProgramConnection               `json:"programs"`
+	Evidence               *EvidenceConnection              `json:"evidence"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	MappedControls         *MappedControlConnection         `json:"mappedControls"`
+	ControlObjectives      []*ControlObjective              `json:"controlObjectives,omitempty"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
+	Tasks                  *TaskConnection                  `json:"tasks"`
+	Narratives             *NarrativeConnection             `json:"narratives"`
+	Risks                  *RiskConnection                  `json:"risks"`
+	ActionPlans            *ActionPlanConnection            `json:"actionPlans"`
+	Procedures             *ProcedureConnection             `json:"procedures"`
+	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
@@ -1811,6 +1841,14 @@ type ControlHistoryEdge struct {
 	Node *ControlHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ControlHistory connections
+type ControlHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlHistories.
+	Field ControlHistoryOrderField `json:"field"`
 }
 
 // ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -2116,8 +2154,8 @@ type ControlImplementation struct {
 	// date the control implementation was verified
 	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details  *string    `json:"details,omitempty"`
-	Controls []*Control `json:"controls,omitempty"`
+	Details  *string            `json:"details,omitempty"`
+	Controls *ControlConnection `json:"controls"`
 }
 
 func (ControlImplementation) IsNode() {}
@@ -2201,6 +2239,14 @@ type ControlImplementationHistoryEdge struct {
 	Node *ControlImplementationHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ControlImplementationHistory connections
+type ControlImplementationHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlImplementationHistories.
+	Field ControlImplementationHistoryOrderField `json:"field"`
 }
 
 // ControlImplementationHistoryWhereInput is used for filtering ControlImplementationHistory objects.
@@ -2381,6 +2427,14 @@ type ControlImplementationHistoryWhereInput struct {
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+}
+
+// Ordering options for ControlImplementation connections
+type ControlImplementationOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlImplementations.
+	Field ControlImplementationOrderField `json:"field"`
 }
 
 type ControlImplementationSearchResult struct {
@@ -2584,16 +2638,16 @@ type ControlObjective struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers          []*Group          `json:"viewers,omitempty"`
-	Programs         []*Program        `json:"programs,omitempty"`
-	Evidence         []*Evidence       `json:"evidence,omitempty"`
-	Controls         []*Control        `json:"controls,omitempty"`
-	Subcontrols      []*Subcontrol     `json:"subcontrols,omitempty"`
-	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
-	Procedures       []*Procedure      `json:"procedures,omitempty"`
-	Risks            []*Risk           `json:"risks,omitempty"`
-	Narratives       []*Narrative      `json:"narratives,omitempty"`
-	Tasks            []*Task           `json:"tasks,omitempty"`
+	Viewers          []*Group                  `json:"viewers,omitempty"`
+	Programs         *ProgramConnection        `json:"programs"`
+	Evidence         *EvidenceConnection       `json:"evidence"`
+	Controls         *ControlConnection        `json:"controls"`
+	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
+	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
+	Procedures       *ProcedureConnection      `json:"procedures"`
+	Risks            *RiskConnection           `json:"risks"`
+	Narratives       *NarrativeConnection      `json:"narratives"`
+	Tasks            *TaskConnection           `json:"tasks"`
 }
 
 func (ControlObjective) IsNode() {}
@@ -2687,6 +2741,14 @@ type ControlObjectiveHistoryEdge struct {
 	Node *ControlObjectiveHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ControlObjectiveHistory connections
+type ControlObjectiveHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlObjectiveHistories.
+	Field ControlObjectiveHistoryOrderField `json:"field"`
 }
 
 // ControlObjectiveHistoryWhereInput is used for filtering ControlObjectiveHistory objects.
@@ -2964,6 +3026,14 @@ type ControlObjectiveHistoryWhereInput struct {
 	SubcategoryNotNil       *bool    `json:"subcategoryNotNil,omitempty"`
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
+}
+
+// Ordering options for ControlObjective connections
+type ControlObjectiveOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlObjectives.
+	Field ControlObjectiveOrderField `json:"field"`
 }
 
 type ControlObjectiveSearchResult struct {
@@ -3262,6 +3332,14 @@ type ControlObjectiveWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+}
+
+// Ordering options for Control connections
+type ControlOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Controls.
+	Field ControlOrderField `json:"field"`
 }
 
 type ControlSearchResult struct {
@@ -4644,11 +4722,11 @@ type DocumentData struct {
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
-	Data     map[string]any `json:"data"`
-	Owner    *Organization  `json:"owner,omitempty"`
-	Template *Template      `json:"template"`
-	Entity   []*Entity      `json:"entity,omitempty"`
-	Files    []*File        `json:"files,omitempty"`
+	Data     map[string]any    `json:"data"`
+	Owner    *Organization     `json:"owner,omitempty"`
+	Template *Template         `json:"template"`
+	Entity   *EntityConnection `json:"entity"`
+	Files    *FileConnection   `json:"files"`
 }
 
 func (DocumentData) IsNode() {}
@@ -5067,13 +5145,13 @@ type Entity struct {
 	// The type of the entity
 	EntityTypeID *string `json:"entityTypeID,omitempty"`
 	// status of the entity
-	Status     *string         `json:"status,omitempty"`
-	Owner      *Organization   `json:"owner,omitempty"`
-	Contacts   []*Contact      `json:"contacts,omitempty"`
-	Documents  []*DocumentData `json:"documents,omitempty"`
-	Notes      []*Note         `json:"notes,omitempty"`
-	Files      []*File         `json:"files,omitempty"`
-	EntityType *EntityType     `json:"entityType,omitempty"`
+	Status     *string                 `json:"status,omitempty"`
+	Owner      *Organization           `json:"owner,omitempty"`
+	Contacts   *ContactConnection      `json:"contacts"`
+	Documents  *DocumentDataConnection `json:"documents"`
+	Notes      *NoteConnection         `json:"notes"`
+	Files      *FileConnection         `json:"files"`
+	EntityType *EntityType             `json:"entityType,omitempty"`
 }
 
 func (Entity) IsNode() {}
@@ -5408,9 +5486,9 @@ type EntityType struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
-	Name     string        `json:"name"`
-	Owner    *Organization `json:"owner,omitempty"`
-	Entities []*Entity     `json:"entities,omitempty"`
+	Name     string            `json:"name"`
+	Owner    *Organization     `json:"owner,omitempty"`
+	Entities *EntityConnection `json:"entities"`
 }
 
 func (EntityType) IsNode() {}
@@ -6025,23 +6103,23 @@ type Event struct {
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags                []string               `json:"tags,omitempty"`
-	EventID             *string                `json:"eventID,omitempty"`
-	CorrelationID       *string                `json:"correlationID,omitempty"`
-	EventType           string                 `json:"eventType"`
-	Metadata            map[string]any         `json:"metadata,omitempty"`
-	User                []*User                `json:"user,omitempty"`
-	Group               []*Group               `json:"group,omitempty"`
-	Integration         []*Integration         `json:"integration,omitempty"`
-	Organization        []*Organization        `json:"organization,omitempty"`
-	Invite              []*Invite              `json:"invite,omitempty"`
-	PersonalAccessToken []*PersonalAccessToken `json:"personalAccessToken,omitempty"`
-	Hush                []*Hush                `json:"hush,omitempty"`
-	Orgmembership       []*OrgMembership       `json:"orgmembership,omitempty"`
-	Groupmembership     []*GroupMembership     `json:"groupmembership,omitempty"`
-	Subscriber          []*Subscriber          `json:"subscriber,omitempty"`
-	File                []*File                `json:"file,omitempty"`
-	Orgsubscription     []*OrgSubscription     `json:"orgsubscription,omitempty"`
+	Tags                []string                       `json:"tags,omitempty"`
+	EventID             *string                        `json:"eventID,omitempty"`
+	CorrelationID       *string                        `json:"correlationID,omitempty"`
+	EventType           string                         `json:"eventType"`
+	Metadata            map[string]any                 `json:"metadata,omitempty"`
+	User                *UserConnection                `json:"user"`
+	Group               *GroupConnection               `json:"group"`
+	Integration         *IntegrationConnection         `json:"integration"`
+	Organization        *OrganizationConnection        `json:"organization"`
+	Invite              *InviteConnection              `json:"invite"`
+	PersonalAccessToken *PersonalAccessTokenConnection `json:"personalAccessToken"`
+	Hush                *HushConnection                `json:"hush"`
+	Orgmembership       *OrgMembershipConnection       `json:"orgmembership"`
+	Groupmembership     *GroupMembershipConnection     `json:"groupmembership"`
+	Subscriber          *SubscriberConnection          `json:"subscriber"`
+	File                *FileConnection                `json:"file"`
+	Orgsubscription     *OrgSubscriptionConnection     `json:"orgsubscription"`
 }
 
 func (Event) IsNode() {}
@@ -6466,14 +6544,14 @@ type Evidence struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status            *enums.EvidenceStatus `json:"status,omitempty"`
-	Owner             *Organization         `json:"owner,omitempty"`
-	ControlObjectives []*ControlObjective   `json:"controlObjectives,omitempty"`
-	Controls          []*Control            `json:"controls,omitempty"`
-	Subcontrols       []*Subcontrol         `json:"subcontrols,omitempty"`
-	Files             []*File               `json:"files,omitempty"`
-	Programs          []*Program            `json:"programs,omitempty"`
-	Tasks             []*Task               `json:"tasks,omitempty"`
+	Status            *enums.EvidenceStatus       `json:"status,omitempty"`
+	Owner             *Organization               `json:"owner,omitempty"`
+	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
+	Controls          *ControlConnection          `json:"controls"`
+	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
+	Files             *FileConnection             `json:"files"`
+	Programs          *ProgramConnection          `json:"programs"`
+	Tasks             *TaskConnection             `json:"tasks"`
 }
 
 func (Evidence) IsNode() {}
@@ -6569,6 +6647,14 @@ type EvidenceHistoryEdge struct {
 	Node *EvidenceHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for EvidenceHistory connections
+type EvidenceHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order EvidenceHistories.
+	Field EvidenceHistoryOrderField `json:"field"`
 }
 
 // EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -6839,6 +6925,14 @@ type EvidenceHistoryWhereInput struct {
 	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+}
+
+// Ordering options for Evidence connections
+type EvidenceOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Evidences.
+	Field EvidenceOrderField `json:"field"`
 }
 
 type EvidenceSearchResult struct {
@@ -7148,20 +7242,20 @@ type File struct {
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath         *string                `json:"storagePath,omitempty"`
-	User                []*User                `json:"user,omitempty"`
-	Organization        []*Organization        `json:"organization,omitempty"`
-	Group               []*Group               `json:"group,omitempty"`
-	Contact             []*Contact             `json:"contact,omitempty"`
-	Entity              []*Entity              `json:"entity,omitempty"`
-	UserSetting         []*UserSetting         `json:"userSetting,omitempty"`
-	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty"`
-	Template            []*Template            `json:"template,omitempty"`
-	DocumentData        []*DocumentData        `json:"documentData,omitempty"`
-	Events              []*Event               `json:"events,omitempty"`
-	Program             []*Program             `json:"program,omitempty"`
-	Evidence            []*Evidence            `json:"evidence,omitempty"`
-	PresignedURL        *string                `json:"presignedURL,omitempty"`
+	StoragePath         *string                        `json:"storagePath,omitempty"`
+	User                *UserConnection                `json:"user"`
+	Organization        *OrganizationConnection        `json:"organization"`
+	Group               *GroupConnection               `json:"group"`
+	Contact             *ContactConnection             `json:"contact"`
+	Entity              *EntityConnection              `json:"entity"`
+	UserSetting         *UserSettingConnection         `json:"userSetting"`
+	OrganizationSetting *OrganizationSettingConnection `json:"organizationSetting"`
+	Template            *TemplateConnection            `json:"template"`
+	DocumentData        *DocumentDataConnection        `json:"documentData"`
+	Events              *EventConnection               `json:"events"`
+	Program             *ProgramConnection             `json:"program"`
+	Evidence            *EvidenceConnection            `json:"evidence"`
+	PresignedURL        *string                        `json:"presignedURL,omitempty"`
 }
 
 func (File) IsNode() {}
@@ -7931,34 +8025,34 @@ type Group struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                   string              `json:"displayName"`
-	Owner                         *Organization       `json:"owner,omitempty"`
-	ProcedureEditors              []*Procedure        `json:"procedureEditors,omitempty"`
-	ProcedureBlockedGroups        []*Procedure        `json:"procedureBlockedGroups,omitempty"`
-	InternalPolicyEditors         []*InternalPolicy   `json:"internalPolicyEditors,omitempty"`
-	InternalPolicyBlockedGroups   []*InternalPolicy   `json:"internalPolicyBlockedGroups,omitempty"`
-	ProgramEditors                []*Program          `json:"programEditors,omitempty"`
-	ProgramBlockedGroups          []*Program          `json:"programBlockedGroups,omitempty"`
-	ProgramViewers                []*Program          `json:"programViewers,omitempty"`
-	RiskEditors                   []*Risk             `json:"riskEditors,omitempty"`
-	RiskBlockedGroups             []*Risk             `json:"riskBlockedGroups,omitempty"`
-	RiskViewers                   []*Risk             `json:"riskViewers,omitempty"`
-	ControlObjectiveEditors       []*ControlObjective `json:"controlObjectiveEditors,omitempty"`
-	ControlObjectiveBlockedGroups []*ControlObjective `json:"controlObjectiveBlockedGroups,omitempty"`
-	ControlObjectiveViewers       []*ControlObjective `json:"controlObjectiveViewers,omitempty"`
-	ControlEditors                []*Control          `json:"controlEditors,omitempty"`
-	ControlBlockedGroups          []*Control          `json:"controlBlockedGroups,omitempty"`
-	ControlViewers                []*Control          `json:"controlViewers,omitempty"`
-	NarrativeEditors              []*Narrative        `json:"narrativeEditors,omitempty"`
-	NarrativeBlockedGroups        []*Narrative        `json:"narrativeBlockedGroups,omitempty"`
-	NarrativeViewers              []*Narrative        `json:"narrativeViewers,omitempty"`
-	Setting                       *GroupSetting       `json:"setting,omitempty"`
-	Users                         []*User             `json:"users,omitempty"`
-	Events                        []*Event            `json:"events,omitempty"`
-	Integrations                  []*Integration      `json:"integrations,omitempty"`
-	Files                         []*File             `json:"files,omitempty"`
-	Tasks                         []*Task             `json:"tasks,omitempty"`
-	Members                       []*GroupMembership  `json:"members,omitempty"`
+	DisplayName                   string                 `json:"displayName"`
+	Owner                         *Organization          `json:"owner,omitempty"`
+	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty"`
+	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty"`
+	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty"`
+	ProgramEditors                []*Program             `json:"programEditors,omitempty"`
+	ProgramBlockedGroups          []*Program             `json:"programBlockedGroups,omitempty"`
+	ProgramViewers                []*Program             `json:"programViewers,omitempty"`
+	RiskEditors                   []*Risk                `json:"riskEditors,omitempty"`
+	RiskBlockedGroups             []*Risk                `json:"riskBlockedGroups,omitempty"`
+	RiskViewers                   []*Risk                `json:"riskViewers,omitempty"`
+	ControlObjectiveEditors       []*ControlObjective    `json:"controlObjectiveEditors,omitempty"`
+	ControlObjectiveBlockedGroups []*ControlObjective    `json:"controlObjectiveBlockedGroups,omitempty"`
+	ControlObjectiveViewers       []*ControlObjective    `json:"controlObjectiveViewers,omitempty"`
+	ControlEditors                []*Control             `json:"controlEditors,omitempty"`
+	ControlBlockedGroups          []*Control             `json:"controlBlockedGroups,omitempty"`
+	ControlViewers                []*Control             `json:"controlViewers,omitempty"`
+	NarrativeEditors              []*Narrative           `json:"narrativeEditors,omitempty"`
+	NarrativeBlockedGroups        []*Narrative           `json:"narrativeBlockedGroups,omitempty"`
+	NarrativeViewers              []*Narrative           `json:"narrativeViewers,omitempty"`
+	Setting                       *GroupSetting          `json:"setting,omitempty"`
+	Users                         []*User                `json:"users,omitempty"`
+	Events                        *EventConnection       `json:"events"`
+	Integrations                  *IntegrationConnection `json:"integrations"`
+	Files                         *FileConnection        `json:"files"`
+	Tasks                         *TaskConnection        `json:"tasks"`
+	Members                       []*GroupMembership     `json:"members,omitempty"`
 	// permissions the group provides
 	Permissions []*GroupPermissions `json:"permissions,omitempty"`
 }
@@ -8350,6 +8444,14 @@ type GroupMembershipHistoryEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+// Ordering options for GroupMembershipHistory connections
+type GroupMembershipHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order GroupMembershipHistories.
+	Field GroupMembershipHistoryOrderField `json:"field"`
+}
+
 // GroupMembershipHistoryWhereInput is used for filtering GroupMembershipHistory objects.
 // Input was generated by ent.
 type GroupMembershipHistoryWhereInput struct {
@@ -8511,6 +8613,14 @@ type GroupMembershipHistoryWhereInput struct {
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
 	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+}
+
+// Ordering options for GroupMembership connections
+type GroupMembershipOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order GroupMemberships.
+	Field GroupMembershipOrderField `json:"field"`
 }
 
 // Return response for updateGroupMembership mutation
@@ -9329,11 +9439,10 @@ type Hush struct {
 	// the kind of secret, such as sshkey, certificate, api token, etc.
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
-	SecretName *string `json:"secretName,omitempty"`
-	// the integration associated with the secret
-	Integrations []*Integration  `json:"integrations,omitempty"`
-	Organization []*Organization `json:"organization,omitempty"`
-	Events       []*Event        `json:"events,omitempty"`
+	SecretName   *string                 `json:"secretName,omitempty"`
+	Integrations *IntegrationConnection  `json:"integrations"`
+	Organization *OrganizationConnection `json:"organization"`
+	Events       *EventConnection        `json:"events"`
 }
 
 func (Hush) IsNode() {}
@@ -9783,12 +9892,11 @@ type Integration struct {
 	// the name of the integration - must be unique within the organization
 	Name string `json:"name"`
 	// a description of the integration
-	Description *string       `json:"description,omitempty"`
-	Kind        *string       `json:"kind,omitempty"`
-	Owner       *Organization `json:"owner,omitempty"`
-	// the secrets associated with the integration
-	Secrets []*Hush  `json:"secrets,omitempty"`
-	Events  []*Event `json:"events,omitempty"`
+	Description *string          `json:"description,omitempty"`
+	Kind        *string          `json:"kind,omitempty"`
+	Owner       *Organization    `json:"owner,omitempty"`
+	Secrets     *HushConnection  `json:"secrets"`
+	Events      *EventConnection `json:"events"`
 }
 
 func (Integration) IsNode() {}
@@ -10268,13 +10376,13 @@ type InternalPolicy struct {
 	// the group of users who are responsible for approving the policy
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
-	Delegate          *Group              `json:"delegate,omitempty"`
-	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
-	Controls          []*Control          `json:"controls,omitempty"`
-	Procedures        []*Procedure        `json:"procedures,omitempty"`
-	Narratives        []*Narrative        `json:"narratives,omitempty"`
-	Tasks             []*Task             `json:"tasks,omitempty"`
-	Programs          []*Program          `json:"programs,omitempty"`
+	Delegate          *Group                      `json:"delegate,omitempty"`
+	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
+	Controls          *ControlConnection          `json:"controls"`
+	Procedures        *ProcedureConnection        `json:"procedures"`
+	Narratives        *NarrativeConnection        `json:"narratives"`
+	Tasks             *TaskConnection             `json:"tasks"`
+	Programs          *ProgramConnection          `json:"programs"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -10909,9 +11017,9 @@ type Invite struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
 	// the user who initiated the invitation
-	RequestorID *string       `json:"requestorID,omitempty"`
-	Owner       *Organization `json:"owner,omitempty"`
-	Events      []*Event      `json:"events,omitempty"`
+	RequestorID *string          `json:"requestorID,omitempty"`
+	Owner       *Organization    `json:"owner,omitempty"`
+	Events      *EventConnection `json:"events"`
 }
 
 func (Invite) IsNode() {}
@@ -10950,6 +11058,14 @@ type InviteEdge struct {
 	Node *Invite `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for Invite connections
+type InviteOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Invites.
+	Field InviteOrderField `json:"field"`
 }
 
 // Return response for updateInvite mutation
@@ -11153,11 +11269,9 @@ type MappedControl struct {
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation *string `json:"relation,omitempty"`
-	// mapped controls that have a relation to each other
-	Controls []*Control `json:"controls,omitempty"`
-	// mapped subcontrols that have a relation to each other
-	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	Relation    *string               `json:"relation,omitempty"`
+	Controls    *ControlConnection    `json:"controls"`
+	Subcontrols *SubcontrolConnection `json:"subcontrols"`
 }
 
 func (MappedControl) IsNode() {}
@@ -11235,6 +11349,14 @@ type MappedControlHistoryEdge struct {
 	Node *MappedControlHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for MappedControlHistory connections
+type MappedControlHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order MappedControlHistories.
+	Field MappedControlHistoryOrderField `json:"field"`
 }
 
 // MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -11397,6 +11519,14 @@ type MappedControlHistoryWhereInput struct {
 	RelationNotNil       *bool    `json:"relationNotNil,omitempty"`
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
+}
+
+// Ordering options for MappedControl connections
+type MappedControlOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order MappedControls.
+	Field MappedControlOrderField `json:"field"`
 }
 
 type MappedControlSearchResult struct {
@@ -11578,10 +11708,9 @@ type Narrative struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
-	// which controls are satisfied by the narrative
-	Satisfies []*Control `json:"satisfies,omitempty"`
-	Programs  []*Program `json:"programs,omitempty"`
+	Viewers   []*Group           `json:"viewers,omitempty"`
+	Satisfies *ControlConnection `json:"satisfies"`
+	Programs  *ProgramConnection `json:"programs"`
 }
 
 func (Narrative) IsNode() {}
@@ -11665,6 +11794,14 @@ type NarrativeHistoryEdge struct {
 	Node *NarrativeHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for NarrativeHistory connections
+type NarrativeHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order NarrativeHistories.
+	Field NarrativeHistoryOrderField `json:"field"`
 }
 
 // NarrativeHistoryWhereInput is used for filtering NarrativeHistory objects.
@@ -11871,6 +12008,14 @@ type NarrativeHistoryWhereInput struct {
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+}
+
+// Ordering options for Narrative connections
+type NarrativeOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Narratives.
+	Field NarrativeOrderField `json:"field"`
 }
 
 type NarrativeSearchResult struct {
@@ -12593,19 +12738,19 @@ type OrgMembersInput struct {
 }
 
 type OrgMembership struct {
-	ID             string        `json:"id"`
-	CreatedAt      *time.Time    `json:"createdAt,omitempty"`
-	UpdatedAt      *time.Time    `json:"updatedAt,omitempty"`
-	CreatedBy      *string       `json:"createdBy,omitempty"`
-	UpdatedBy      *string       `json:"updatedBy,omitempty"`
-	DeletedAt      *time.Time    `json:"deletedAt,omitempty"`
-	DeletedBy      *string       `json:"deletedBy,omitempty"`
-	Role           enums.Role    `json:"role"`
-	OrganizationID string        `json:"organizationID"`
-	UserID         string        `json:"userID"`
-	Organization   *Organization `json:"organization"`
-	User           *User         `json:"user"`
-	Events         []*Event      `json:"events,omitempty"`
+	ID             string           `json:"id"`
+	CreatedAt      *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt      *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy      *string          `json:"createdBy,omitempty"`
+	UpdatedBy      *string          `json:"updatedBy,omitempty"`
+	DeletedAt      *time.Time       `json:"deletedAt,omitempty"`
+	DeletedBy      *string          `json:"deletedBy,omitempty"`
+	Role           enums.Role       `json:"role"`
+	OrganizationID string           `json:"organizationID"`
+	UserID         string           `json:"userID"`
+	Organization   *Organization    `json:"organization"`
+	User           *User            `json:"user"`
+	Events         *EventConnection `json:"events"`
 }
 
 func (OrgMembership) IsNode() {}
@@ -12680,6 +12825,14 @@ type OrgMembershipHistoryEdge struct {
 	Node *OrgMembershipHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for OrgMembershipHistory connections
+type OrgMembershipHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrgMembershipHistories.
+	Field OrgMembershipHistoryOrderField `json:"field"`
 }
 
 // OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -12843,6 +12996,14 @@ type OrgMembershipHistoryWhereInput struct {
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
 	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+}
+
+// Ordering options for OrgMembership connections
+type OrgMembershipOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrgMemberships.
+	Field OrgMembershipOrderField `json:"field"`
 }
 
 // Return response for updateOrgMembership mutation
@@ -13084,6 +13245,14 @@ type OrgSubscriptionHistoryEdge struct {
 	Node *OrgSubscriptionHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for OrgSubscriptionHistory connections
+type OrgSubscriptionHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrgSubscriptionHistories.
+	Field OrgSubscriptionHistoryOrderField `json:"field"`
 }
 
 // OrgSubscriptionHistoryWhereInput is used for filtering OrgSubscriptionHistory objects.
@@ -13356,6 +13525,14 @@ type OrgSubscriptionHistoryWhereInput struct {
 	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
 	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
 	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
+}
+
+// Ordering options for OrgSubscription connections
+type OrgSubscriptionOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrgSubscriptions.
+	Field OrgSubscriptionOrderField `json:"field"`
 }
 
 type OrgSubscriptionSearchResult struct {
@@ -13655,41 +13832,41 @@ type Organization struct {
 	// groups that are allowed to create risks
 	RiskCreators []*Group `json:"riskCreators,omitempty"`
 	// groups that are allowed to create templates
-	TemplateCreators     []*Group                `json:"templateCreators,omitempty"`
-	Parent               *Organization           `json:"parent,omitempty"`
-	Children             *OrganizationConnection `json:"children"`
-	Setting              *OrganizationSetting    `json:"setting,omitempty"`
-	PersonalAccessTokens []*PersonalAccessToken  `json:"personalAccessTokens,omitempty"`
-	APITokens            []*APIToken             `json:"apiTokens,omitempty"`
-	Users                []*User                 `json:"users,omitempty"`
-	Files                []*File                 `json:"files,omitempty"`
-	Events               []*Event                `json:"events,omitempty"`
-	Secrets              []*Hush                 `json:"secrets,omitempty"`
-	AvatarFile           *File                   `json:"avatarFile,omitempty"`
-	Groups               []*Group                `json:"groups,omitempty"`
-	Templates            []*Template             `json:"templates,omitempty"`
-	Integrations         []*Integration          `json:"integrations,omitempty"`
-	DocumentData         []*DocumentData         `json:"documentData,omitempty"`
-	OrgSubscriptions     []*OrgSubscription      `json:"orgSubscriptions,omitempty"`
-	Invites              []*Invite               `json:"invites,omitempty"`
-	Subscribers          []*Subscriber           `json:"subscribers,omitempty"`
-	Entities             []*Entity               `json:"entities,omitempty"`
-	EntityTypes          []*EntityType           `json:"entityTypes,omitempty"`
-	Contacts             []*Contact              `json:"contacts,omitempty"`
-	Notes                []*Note                 `json:"notes,omitempty"`
-	Tasks                []*Task                 `json:"tasks,omitempty"`
-	Programs             []*Program              `json:"programs,omitempty"`
-	Procedures           []*Procedure            `json:"procedures,omitempty"`
-	InternalPolicies     []*InternalPolicy       `json:"internalPolicies,omitempty"`
-	Risks                []*Risk                 `json:"risks,omitempty"`
-	ControlObjectives    []*ControlObjective     `json:"controlObjectives,omitempty"`
-	Narratives           []*Narrative            `json:"narratives,omitempty"`
-	Controls             []*Control              `json:"controls,omitempty"`
-	Subcontrols          []*Subcontrol           `json:"subcontrols,omitempty"`
-	Evidence             []*Evidence             `json:"evidence,omitempty"`
-	Standards            []*Standard             `json:"standards,omitempty"`
-	ActionPlans          []*ActionPlan           `json:"actionPlans,omitempty"`
-	Members              []*OrgMembership        `json:"members,omitempty"`
+	TemplateCreators     []*Group                       `json:"templateCreators,omitempty"`
+	Parent               *Organization                  `json:"parent,omitempty"`
+	Children             *OrganizationConnection        `json:"children"`
+	Setting              *OrganizationSetting           `json:"setting,omitempty"`
+	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
+	APITokens            *APITokenConnection            `json:"apiTokens"`
+	Users                []*User                        `json:"users,omitempty"`
+	Files                *FileConnection                `json:"files"`
+	Events               *EventConnection               `json:"events"`
+	Secrets              *HushConnection                `json:"secrets"`
+	AvatarFile           *File                          `json:"avatarFile,omitempty"`
+	Groups               *GroupConnection               `json:"groups"`
+	Templates            *TemplateConnection            `json:"templates"`
+	Integrations         *IntegrationConnection         `json:"integrations"`
+	DocumentData         *DocumentDataConnection        `json:"documentData"`
+	OrgSubscriptions     []*OrgSubscription             `json:"orgSubscriptions,omitempty"`
+	Invites              *InviteConnection              `json:"invites"`
+	Subscribers          *SubscriberConnection          `json:"subscribers"`
+	Entities             *EntityConnection              `json:"entities"`
+	EntityTypes          *EntityTypeConnection          `json:"entityTypes"`
+	Contacts             *ContactConnection             `json:"contacts"`
+	Notes                *NoteConnection                `json:"notes"`
+	Tasks                *TaskConnection                `json:"tasks"`
+	Programs             *ProgramConnection             `json:"programs"`
+	Procedures           *ProcedureConnection           `json:"procedures"`
+	InternalPolicies     *InternalPolicyConnection      `json:"internalPolicies"`
+	Risks                *RiskConnection                `json:"risks"`
+	ControlObjectives    *ControlObjectiveConnection    `json:"controlObjectives"`
+	Narratives           *NarrativeConnection           `json:"narratives"`
+	Controls             *ControlConnection             `json:"controls"`
+	Subcontrols          *SubcontrolConnection          `json:"subcontrols"`
+	Evidence             *EvidenceConnection            `json:"evidence"`
+	Standards            *StandardConnection            `json:"standards"`
+	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
+	Members              []*OrgMembership               `json:"members,omitempty"`
 }
 
 func (Organization) IsNode() {}
@@ -14040,9 +14217,9 @@ type OrganizationSetting struct {
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 	// domains allowed to access the organization, if empty all domains are allowed
-	AllowedEmailDomains []string      `json:"allowedEmailDomains,omitempty"`
-	Organization        *Organization `json:"organization,omitempty"`
-	Files               []*File       `json:"files,omitempty"`
+	AllowedEmailDomains []string        `json:"allowedEmailDomains,omitempty"`
+	Organization        *Organization   `json:"organization,omitempty"`
+	Files               *FileConnection `json:"files"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -14918,11 +15095,10 @@ type PersonalAccessToken struct {
 	// the user who revoked the token
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
-	RevokedAt *time.Time `json:"revokedAt,omitempty"`
-	Owner     *User      `json:"owner"`
-	// the organization(s) the token is associated with
-	Organizations []*Organization `json:"organizations,omitempty"`
-	Events        []*Event        `json:"events,omitempty"`
+	RevokedAt     *time.Time              `json:"revokedAt,omitempty"`
+	Owner         *User                   `json:"owner"`
+	Organizations *OrganizationConnection `json:"organizations"`
+	Events        *EventConnection        `json:"events"`
 }
 
 func (PersonalAccessToken) IsNode() {}
@@ -15206,13 +15382,13 @@ type Procedure struct {
 	// the group of users who are responsible for approving the procedure
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
-	Delegate         *Group            `json:"delegate,omitempty"`
-	Controls         []*Control        `json:"controls,omitempty"`
-	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
-	Narratives       []*Narrative      `json:"narratives,omitempty"`
-	Risks            []*Risk           `json:"risks,omitempty"`
-	Tasks            []*Task           `json:"tasks,omitempty"`
-	Programs         []*Program        `json:"programs,omitempty"`
+	Delegate         *Group                    `json:"delegate,omitempty"`
+	Controls         *ControlConnection        `json:"controls"`
+	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
+	Narratives       *NarrativeConnection      `json:"narratives"`
+	Risks            *RiskConnection           `json:"risks"`
+	Tasks            *TaskConnection           `json:"tasks"`
+	Programs         *ProgramConnection        `json:"programs"`
 }
 
 func (Procedure) IsNode() {}
@@ -15863,21 +16039,21 @@ type Program struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers           []*Group             `json:"viewers,omitempty"`
-	Controls          []*Control           `json:"controls,omitempty"`
-	Subcontrols       []*Subcontrol        `json:"subcontrols,omitempty"`
-	ControlObjectives []*ControlObjective  `json:"controlObjectives,omitempty"`
-	InternalPolicies  []*InternalPolicy    `json:"internalPolicies,omitempty"`
-	Procedures        []*Procedure         `json:"procedures,omitempty"`
-	Risks             []*Risk              `json:"risks,omitempty"`
-	Tasks             []*Task              `json:"tasks,omitempty"`
-	Notes             []*Note              `json:"notes,omitempty"`
-	Files             []*File              `json:"files,omitempty"`
-	Evidence          []*Evidence          `json:"evidence,omitempty"`
-	Narratives        []*Narrative         `json:"narratives,omitempty"`
-	ActionPlans       []*ActionPlan        `json:"actionPlans,omitempty"`
-	Users             []*User              `json:"users,omitempty"`
-	Members           []*ProgramMembership `json:"members,omitempty"`
+	Viewers           []*Group                     `json:"viewers,omitempty"`
+	Controls          *ControlConnection           `json:"controls"`
+	Subcontrols       *SubcontrolConnection        `json:"subcontrols"`
+	ControlObjectives *ControlObjectiveConnection  `json:"controlObjectives"`
+	InternalPolicies  *InternalPolicyConnection    `json:"internalPolicies"`
+	Procedures        *ProcedureConnection         `json:"procedures"`
+	Risks             *RiskConnection              `json:"risks"`
+	Tasks             *TaskConnection              `json:"tasks"`
+	Notes             *NoteConnection              `json:"notes"`
+	Files             *FileConnection              `json:"files"`
+	Evidence          *EvidenceConnection          `json:"evidence"`
+	Narratives        *NarrativeConnection         `json:"narratives"`
+	ActionPlans       []*ActionPlan                `json:"actionPlans,omitempty"`
+	Users             *UserConnection              `json:"users"`
+	Members           *ProgramMembershipConnection `json:"members"`
 }
 
 func (Program) IsNode() {}
@@ -15971,6 +16147,14 @@ type ProgramHistoryEdge struct {
 	Node *ProgramHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ProgramHistory connections
+type ProgramHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ProgramHistories.
+	Field ProgramHistoryOrderField `json:"field"`
 }
 
 // ProgramHistoryWhereInput is used for filtering ProgramHistory objects.
@@ -16288,6 +16472,14 @@ type ProgramMembershipHistoryEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+// Ordering options for ProgramMembershipHistory connections
+type ProgramMembershipHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ProgramMembershipHistories.
+	Field ProgramMembershipHistoryOrderField `json:"field"`
+}
+
 // ProgramMembershipHistoryWhereInput is used for filtering ProgramMembershipHistory objects.
 // Input was generated by ent.
 type ProgramMembershipHistoryWhereInput struct {
@@ -16451,6 +16643,14 @@ type ProgramMembershipHistoryWhereInput struct {
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 }
 
+// Ordering options for ProgramMembership connections
+type ProgramMembershipOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ProgramMemberships.
+	Field ProgramMembershipOrderField `json:"field"`
+}
+
 // Return response for updateProgramMembership mutation
 type ProgramMembershipUpdatePayload struct {
 	// Updated programMembership
@@ -16562,6 +16762,14 @@ type ProgramMembershipWhereInput struct {
 	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
 	ProgramID *string      `json:"programID,omitempty"`
 	UserID    *string      `json:"userID,omitempty"`
+}
+
+// Ordering options for Program connections
+type ProgramOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Programs.
+	Field ProgramOrderField `json:"field"`
 }
 
 type ProgramSearchResult struct {
@@ -16869,11 +17077,11 @@ type Risk struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers     []*Group      `json:"viewers,omitempty"`
-	Control     []*Control    `json:"control,omitempty"`
-	Procedure   []*Procedure  `json:"procedure,omitempty"`
-	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
-	Programs    []*Program    `json:"programs,omitempty"`
+	Viewers     []*Group              `json:"viewers,omitempty"`
+	Control     *ControlConnection    `json:"control"`
+	Procedure   *ProcedureConnection  `json:"procedure"`
+	ActionPlans *ActionPlanConnection `json:"actionPlans"`
+	Programs    *ProgramConnection    `json:"programs"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
@@ -16975,6 +17183,14 @@ type RiskHistoryEdge struct {
 	Node *RiskHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for RiskHistory connections
+type RiskHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order RiskHistories.
+	Field RiskHistoryOrderField `json:"field"`
 }
 
 // RiskHistoryWhereInput is used for filtering RiskHistory objects.
@@ -17261,6 +17477,14 @@ type RiskHistoryWhereInput struct {
 	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
 	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
 	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
+}
+
+// Ordering options for Risk connections
+type RiskOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Risks.
+	Field RiskOrderField `json:"field"`
 }
 
 type RiskSearchResult struct {
@@ -17611,9 +17835,9 @@ type Standard struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version  *string       `json:"version,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
-	Controls []*Control    `json:"controls,omitempty"`
+	Version  *string            `json:"version,omitempty"`
+	Owner    *Organization      `json:"owner,omitempty"`
+	Controls *ControlConnection `json:"controls"`
 }
 
 func (Standard) IsNode() {}
@@ -17719,6 +17943,14 @@ type StandardHistoryEdge struct {
 	Node *StandardHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for StandardHistory connections
+type StandardHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order StandardHistories.
+	Field StandardHistoryOrderField `json:"field"`
 }
 
 // StandardHistoryWhereInput is used for filtering StandardHistory objects.
@@ -18045,6 +18277,14 @@ type StandardHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+}
+
+// Ordering options for Standard connections
+type StandardOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Standards.
+	Field StandardOrderField `json:"field"`
 }
 
 type StandardSearchResult struct {
@@ -18410,15 +18650,15 @@ type Subcontrol struct {
 	Owner     *Organization `json:"owner,omitempty"`
 	Control   *Control      `json:"control"`
 	// mapped subcontrols that have a relation to another control or subcontrol
-	MappedControls    []*MappedControl    `json:"mappedControls,omitempty"`
-	Evidence          []*Evidence         `json:"evidence,omitempty"`
-	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
-	Tasks             []*Task             `json:"tasks,omitempty"`
-	Narratives        []*Narrative        `json:"narratives,omitempty"`
-	Risks             []*Risk             `json:"risks,omitempty"`
-	ActionPlans       []*ActionPlan       `json:"actionPlans,omitempty"`
-	Procedures        []*Procedure        `json:"procedures,omitempty"`
-	InternalPolicies  []*InternalPolicy   `json:"internalPolicies,omitempty"`
+	MappedControls    []*MappedControl            `json:"mappedControls,omitempty"`
+	Evidence          *EvidenceConnection         `json:"evidence"`
+	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
+	Tasks             *TaskConnection             `json:"tasks"`
+	Narratives        *NarrativeConnection        `json:"narratives"`
+	Risks             *RiskConnection             `json:"risks"`
+	ActionPlans       *ActionPlanConnection       `json:"actionPlans"`
+	Procedures        *ProcedureConnection        `json:"procedures"`
+	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
 	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
@@ -18532,6 +18772,14 @@ type SubcontrolHistoryEdge struct {
 	Node *SubcontrolHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for SubcontrolHistory connections
+type SubcontrolHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order SubcontrolHistories.
+	Field SubcontrolHistoryOrderField `json:"field"`
 }
 
 // SubcontrolHistoryWhereInput is used for filtering SubcontrolHistory objects.
@@ -18814,6 +19062,14 @@ type SubcontrolHistoryWhereInput struct {
 	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
 	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
 	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
+}
+
+// Ordering options for Subcontrol connections
+type SubcontrolOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Subcontrols.
+	Field SubcontrolOrderField `json:"field"`
 }
 
 type SubcontrolSearchResult struct {
@@ -19140,9 +19396,9 @@ type Subscriber struct {
 	// indicates if the phone number has been verified
 	VerifiedPhone bool `json:"verifiedPhone"`
 	// indicates if the subscriber is active or not, active users will have at least one verified contact method
-	Active bool          `json:"active"`
-	Owner  *Organization `json:"owner,omitempty"`
-	Events []*Event      `json:"events,omitempty"`
+	Active bool             `json:"active"`
+	Owner  *Organization    `json:"owner,omitempty"`
+	Events *EventConnection `json:"events"`
 }
 
 func (Subscriber) IsNode() {}
@@ -19181,6 +19437,14 @@ type SubscriberEdge struct {
 	Node *Subscriber `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for Subscriber connections
+type SubscriberOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Subscribers.
+	Field SubscriberOrderField `json:"field"`
 }
 
 type SubscriberSearchResult struct {
@@ -19550,20 +19814,19 @@ type Task struct {
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
-	AssignerID *string       `json:"assignerID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
-	Assigner   *User         `json:"assigner,omitempty"`
-	Assignee   *User         `json:"assignee,omitempty"`
-	// conversations related to the task
-	Comments         []*Note             `json:"comments,omitempty"`
-	Group            []*Group            `json:"group,omitempty"`
-	InternalPolicy   []*InternalPolicy   `json:"internalPolicy,omitempty"`
-	Procedure        []*Procedure        `json:"procedure,omitempty"`
-	Control          []*Control          `json:"control,omitempty"`
-	ControlObjective []*ControlObjective `json:"controlObjective,omitempty"`
-	Subcontrol       []*Subcontrol       `json:"subcontrol,omitempty"`
-	Program          []*Program          `json:"program,omitempty"`
-	Evidence         []*Evidence         `json:"evidence,omitempty"`
+	AssignerID       *string                     `json:"assignerID,omitempty"`
+	Owner            *Organization               `json:"owner,omitempty"`
+	Assigner         *User                       `json:"assigner,omitempty"`
+	Assignee         *User                       `json:"assignee,omitempty"`
+	Comments         *NoteConnection             `json:"comments"`
+	Group            *GroupConnection            `json:"group"`
+	InternalPolicy   *InternalPolicyConnection   `json:"internalPolicy"`
+	Procedure        *ProcedureConnection        `json:"procedure"`
+	Control          *ControlConnection          `json:"control"`
+	ControlObjective *ControlObjectiveConnection `json:"controlObjective"`
+	Subcontrol       *SubcontrolConnection       `json:"subcontrol"`
+	Program          *ProgramConnection          `json:"program"`
+	Evidence         *EvidenceConnection         `json:"evidence"`
 }
 
 func (Task) IsNode() {}
@@ -19659,6 +19922,14 @@ type TaskHistoryEdge struct {
 	Node *TaskHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for TaskHistory connections
+type TaskHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order TaskHistories.
+	Field TaskHistoryOrderField `json:"field"`
 }
 
 // TaskHistoryWhereInput is used for filtering TaskHistory objects.
@@ -19940,6 +20211,14 @@ type TaskHistoryWhereInput struct {
 	AssignerIDNotNil       *bool    `json:"assignerIDNotNil,omitempty"`
 	AssignerIDEqualFold    *string  `json:"assignerIDEqualFold,omitempty"`
 	AssignerIDContainsFold *string  `json:"assignerIDContainsFold,omitempty"`
+}
+
+// Ordering options for Task connections
+type TaskOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Tasks.
+	Field TaskOrderField `json:"field"`
 }
 
 type TaskSearchResult struct {
@@ -20262,10 +20541,10 @@ type Template struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema  map[string]any  `json:"uischema,omitempty"`
-	Owner     *Organization   `json:"owner,omitempty"`
-	Documents []*DocumentData `json:"documents,omitempty"`
-	Files     []*File         `json:"files,omitempty"`
+	Uischema  map[string]any          `json:"uischema,omitempty"`
+	Owner     *Organization           `json:"owner,omitempty"`
+	Documents *DocumentDataConnection `json:"documents"`
+	Files     *FileConnection         `json:"files"`
 }
 
 func (Template) IsNode() {}
@@ -22483,23 +22762,23 @@ type User struct {
 	// auth provider used to register the account
 	AuthProvider enums.AuthProvider `json:"authProvider"`
 	// the user's role
-	Role                 *enums.Role            `json:"role,omitempty"`
-	PersonalAccessTokens []*PersonalAccessToken `json:"personalAccessTokens,omitempty"`
-	TfaSettings          []*TFASetting          `json:"tfaSettings,omitempty"`
-	Setting              *UserSetting           `json:"setting"`
-	Groups               []*Group               `json:"groups,omitempty"`
-	Organizations        []*Organization        `json:"organizations,omitempty"`
-	Files                []*File                `json:"files,omitempty"`
-	AvatarFile           *File                  `json:"avatarFile,omitempty"`
-	Events               []*Event               `json:"events,omitempty"`
-	ActionPlans          []*ActionPlan          `json:"actionPlans,omitempty"`
-	Subcontrols          []*Subcontrol          `json:"subcontrols,omitempty"`
-	AssignerTasks        []*Task                `json:"assignerTasks,omitempty"`
-	AssigneeTasks        []*Task                `json:"assigneeTasks,omitempty"`
-	Programs             []*Program             `json:"programs,omitempty"`
-	GroupMemberships     []*GroupMembership     `json:"groupMemberships,omitempty"`
-	OrgMemberships       []*OrgMembership       `json:"orgMemberships,omitempty"`
-	ProgramMemberships   []*ProgramMembership   `json:"programMemberships,omitempty"`
+	Role                 *enums.Role                    `json:"role,omitempty"`
+	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
+	TfaSettings          *TFASettingConnection          `json:"tfaSettings"`
+	Setting              *UserSetting                   `json:"setting"`
+	Groups               []*Group                       `json:"groups,omitempty"`
+	Organizations        []*Organization                `json:"organizations,omitempty"`
+	Files                *FileConnection                `json:"files"`
+	AvatarFile           *File                          `json:"avatarFile,omitempty"`
+	Events               *EventConnection               `json:"events"`
+	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
+	Subcontrols          *SubcontrolConnection          `json:"subcontrols"`
+	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
+	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
+	Programs             []*Program                     `json:"programs,omitempty"`
+	GroupMemberships     []*GroupMembership             `json:"groupMemberships,omitempty"`
+	OrgMemberships       []*OrgMembership               `json:"orgMemberships,omitempty"`
+	ProgramMemberships   []*ProgramMembership           `json:"programMemberships,omitempty"`
 }
 
 func (User) IsNode() {}
@@ -22931,8 +23210,8 @@ type UserSetting struct {
 	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty"`
 	User         *User `json:"user,omitempty"`
 	// organization to load on user login
-	DefaultOrg *Organization `json:"defaultOrg,omitempty"`
-	Files      []*File       `json:"files,omitempty"`
+	DefaultOrg *Organization   `json:"defaultOrg,omitempty"`
+	Files      *FileConnection `json:"files"`
 }
 
 func (UserSetting) IsNode() {}
@@ -23696,22 +23975,496 @@ type UserWhereInput struct {
 	HasProgramMembershipsWith []*ProgramMembershipWhereInput `json:"hasProgramMembershipsWith,omitempty"`
 }
 
+// Properties by which ActionPlanHistory connections can be ordered.
+type ActionPlanHistoryOrderField string
+
+const (
+	ActionPlanHistoryOrderFieldDueDate  ActionPlanHistoryOrderField = "due_date"
+	ActionPlanHistoryOrderFieldPriority ActionPlanHistoryOrderField = "PRIORITY"
+	ActionPlanHistoryOrderFieldSource   ActionPlanHistoryOrderField = "source"
+)
+
+var AllActionPlanHistoryOrderField = []ActionPlanHistoryOrderField{
+	ActionPlanHistoryOrderFieldDueDate,
+	ActionPlanHistoryOrderFieldPriority,
+	ActionPlanHistoryOrderFieldSource,
+}
+
+func (e ActionPlanHistoryOrderField) IsValid() bool {
+	switch e {
+	case ActionPlanHistoryOrderFieldDueDate, ActionPlanHistoryOrderFieldPriority, ActionPlanHistoryOrderFieldSource:
+		return true
+	}
+	return false
+}
+
+func (e ActionPlanHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ActionPlanHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ActionPlanHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ActionPlanHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ActionPlanHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ActionPlan connections can be ordered.
+type ActionPlanOrderField string
+
+const (
+	ActionPlanOrderFieldDueDate  ActionPlanOrderField = "due_date"
+	ActionPlanOrderFieldPriority ActionPlanOrderField = "PRIORITY"
+	ActionPlanOrderFieldSource   ActionPlanOrderField = "source"
+)
+
+var AllActionPlanOrderField = []ActionPlanOrderField{
+	ActionPlanOrderFieldDueDate,
+	ActionPlanOrderFieldPriority,
+	ActionPlanOrderFieldSource,
+}
+
+func (e ActionPlanOrderField) IsValid() bool {
+	switch e {
+	case ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
+		return true
+	}
+	return false
+}
+
+func (e ActionPlanOrderField) String() string {
+	return string(e)
+}
+
+func (e *ActionPlanOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ActionPlanOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ActionPlanOrderField", str)
+	}
+	return nil
+}
+
+func (e ActionPlanOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ContactHistory connections can be ordered.
+type ContactHistoryOrderField string
+
+const (
+	ContactHistoryOrderFieldFullName ContactHistoryOrderField = "full_name"
+	ContactHistoryOrderFieldTitle    ContactHistoryOrderField = "title"
+	ContactHistoryOrderFieldCompany  ContactHistoryOrderField = "company"
+	ContactHistoryOrderFieldEmail    ContactHistoryOrderField = "email"
+	ContactHistoryOrderFieldStatus   ContactHistoryOrderField = "STATUS"
+)
+
+var AllContactHistoryOrderField = []ContactHistoryOrderField{
+	ContactHistoryOrderFieldFullName,
+	ContactHistoryOrderFieldTitle,
+	ContactHistoryOrderFieldCompany,
+	ContactHistoryOrderFieldEmail,
+	ContactHistoryOrderFieldStatus,
+}
+
+func (e ContactHistoryOrderField) IsValid() bool {
+	switch e {
+	case ContactHistoryOrderFieldFullName, ContactHistoryOrderFieldTitle, ContactHistoryOrderFieldCompany, ContactHistoryOrderFieldEmail, ContactHistoryOrderFieldStatus:
+		return true
+	}
+	return false
+}
+
+func (e ContactHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ContactHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ContactHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ContactHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ContactHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Contact connections can be ordered.
+type ContactOrderField string
+
+const (
+	ContactOrderFieldFullName ContactOrderField = "full_name"
+	ContactOrderFieldTitle    ContactOrderField = "title"
+	ContactOrderFieldCompany  ContactOrderField = "company"
+	ContactOrderFieldEmail    ContactOrderField = "email"
+	ContactOrderFieldStatus   ContactOrderField = "STATUS"
+)
+
+var AllContactOrderField = []ContactOrderField{
+	ContactOrderFieldFullName,
+	ContactOrderFieldTitle,
+	ContactOrderFieldCompany,
+	ContactOrderFieldEmail,
+	ContactOrderFieldStatus,
+}
+
+func (e ContactOrderField) IsValid() bool {
+	switch e {
+	case ContactOrderFieldFullName, ContactOrderFieldTitle, ContactOrderFieldCompany, ContactOrderFieldEmail, ContactOrderFieldStatus:
+		return true
+	}
+	return false
+}
+
+func (e ContactOrderField) String() string {
+	return string(e)
+}
+
+func (e *ContactOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ContactOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ContactOrderField", str)
+	}
+	return nil
+}
+
+func (e ContactOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ControlHistory connections can be ordered.
+type ControlHistoryOrderField string
+
+const (
+	ControlHistoryOrderFieldStatus      ControlHistoryOrderField = "status"
+	ControlHistoryOrderFieldSource      ControlHistoryOrderField = "SOURCE"
+	ControlHistoryOrderFieldControlType ControlHistoryOrderField = "CONTROL_TYPE"
+	ControlHistoryOrderFieldCategory    ControlHistoryOrderField = "category"
+	ControlHistoryOrderFieldSubcategory ControlHistoryOrderField = "subcategory"
+)
+
+var AllControlHistoryOrderField = []ControlHistoryOrderField{
+	ControlHistoryOrderFieldStatus,
+	ControlHistoryOrderFieldSource,
+	ControlHistoryOrderFieldControlType,
+	ControlHistoryOrderFieldCategory,
+	ControlHistoryOrderFieldSubcategory,
+}
+
+func (e ControlHistoryOrderField) IsValid() bool {
+	switch e {
+	case ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e ControlHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ControlImplementationHistory connections can be ordered.
+type ControlImplementationHistoryOrderField string
+
+const (
+	ControlImplementationHistoryOrderFieldStatus             ControlImplementationHistoryOrderField = "STATUS"
+	ControlImplementationHistoryOrderFieldImplementationDate ControlImplementationHistoryOrderField = "implementation_date"
+	ControlImplementationHistoryOrderFieldVerified           ControlImplementationHistoryOrderField = "verified"
+	ControlImplementationHistoryOrderFieldVerificationDate   ControlImplementationHistoryOrderField = "verification_date"
+)
+
+var AllControlImplementationHistoryOrderField = []ControlImplementationHistoryOrderField{
+	ControlImplementationHistoryOrderFieldStatus,
+	ControlImplementationHistoryOrderFieldImplementationDate,
+	ControlImplementationHistoryOrderFieldVerified,
+	ControlImplementationHistoryOrderFieldVerificationDate,
+}
+
+func (e ControlImplementationHistoryOrderField) IsValid() bool {
+	switch e {
+	case ControlImplementationHistoryOrderFieldStatus, ControlImplementationHistoryOrderFieldImplementationDate, ControlImplementationHistoryOrderFieldVerified, ControlImplementationHistoryOrderFieldVerificationDate:
+		return true
+	}
+	return false
+}
+
+func (e ControlImplementationHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlImplementationHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlImplementationHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlImplementationHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlImplementationHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ControlImplementation connections can be ordered.
+type ControlImplementationOrderField string
+
+const (
+	ControlImplementationOrderFieldStatus             ControlImplementationOrderField = "STATUS"
+	ControlImplementationOrderFieldImplementationDate ControlImplementationOrderField = "implementation_date"
+	ControlImplementationOrderFieldVerified           ControlImplementationOrderField = "verified"
+	ControlImplementationOrderFieldVerificationDate   ControlImplementationOrderField = "verification_date"
+)
+
+var AllControlImplementationOrderField = []ControlImplementationOrderField{
+	ControlImplementationOrderFieldStatus,
+	ControlImplementationOrderFieldImplementationDate,
+	ControlImplementationOrderFieldVerified,
+	ControlImplementationOrderFieldVerificationDate,
+}
+
+func (e ControlImplementationOrderField) IsValid() bool {
+	switch e {
+	case ControlImplementationOrderFieldStatus, ControlImplementationOrderFieldImplementationDate, ControlImplementationOrderFieldVerified, ControlImplementationOrderFieldVerificationDate:
+		return true
+	}
+	return false
+}
+
+func (e ControlImplementationOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlImplementationOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlImplementationOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlImplementationOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlImplementationOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ControlObjectiveHistory connections can be ordered.
+type ControlObjectiveHistoryOrderField string
+
+const (
+	ControlObjectiveHistoryOrderFieldName                 ControlObjectiveHistoryOrderField = "name"
+	ControlObjectiveHistoryOrderFieldStatus               ControlObjectiveHistoryOrderField = "status"
+	ControlObjectiveHistoryOrderFieldSource               ControlObjectiveHistoryOrderField = "SOURCE"
+	ControlObjectiveHistoryOrderFieldControlObjectiveType ControlObjectiveHistoryOrderField = "control_objective_type"
+	ControlObjectiveHistoryOrderFieldCategory             ControlObjectiveHistoryOrderField = "category"
+	ControlObjectiveHistoryOrderFieldSubcategory          ControlObjectiveHistoryOrderField = "subcategory"
+)
+
+var AllControlObjectiveHistoryOrderField = []ControlObjectiveHistoryOrderField{
+	ControlObjectiveHistoryOrderFieldName,
+	ControlObjectiveHistoryOrderFieldStatus,
+	ControlObjectiveHistoryOrderFieldSource,
+	ControlObjectiveHistoryOrderFieldControlObjectiveType,
+	ControlObjectiveHistoryOrderFieldCategory,
+	ControlObjectiveHistoryOrderFieldSubcategory,
+}
+
+func (e ControlObjectiveHistoryOrderField) IsValid() bool {
+	switch e {
+	case ControlObjectiveHistoryOrderFieldName, ControlObjectiveHistoryOrderFieldStatus, ControlObjectiveHistoryOrderFieldSource, ControlObjectiveHistoryOrderFieldControlObjectiveType, ControlObjectiveHistoryOrderFieldCategory, ControlObjectiveHistoryOrderFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e ControlObjectiveHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlObjectiveHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlObjectiveHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlObjectiveHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlObjectiveHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ControlObjective connections can be ordered.
+type ControlObjectiveOrderField string
+
+const (
+	ControlObjectiveOrderFieldName                 ControlObjectiveOrderField = "name"
+	ControlObjectiveOrderFieldStatus               ControlObjectiveOrderField = "status"
+	ControlObjectiveOrderFieldSource               ControlObjectiveOrderField = "SOURCE"
+	ControlObjectiveOrderFieldControlObjectiveType ControlObjectiveOrderField = "control_objective_type"
+	ControlObjectiveOrderFieldCategory             ControlObjectiveOrderField = "category"
+	ControlObjectiveOrderFieldSubcategory          ControlObjectiveOrderField = "subcategory"
+)
+
+var AllControlObjectiveOrderField = []ControlObjectiveOrderField{
+	ControlObjectiveOrderFieldName,
+	ControlObjectiveOrderFieldStatus,
+	ControlObjectiveOrderFieldSource,
+	ControlObjectiveOrderFieldControlObjectiveType,
+	ControlObjectiveOrderFieldCategory,
+	ControlObjectiveOrderFieldSubcategory,
+}
+
+func (e ControlObjectiveOrderField) IsValid() bool {
+	switch e {
+	case ControlObjectiveOrderFieldName, ControlObjectiveOrderFieldStatus, ControlObjectiveOrderFieldSource, ControlObjectiveOrderFieldControlObjectiveType, ControlObjectiveOrderFieldCategory, ControlObjectiveOrderFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e ControlObjectiveOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlObjectiveOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlObjectiveOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlObjectiveOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlObjectiveOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Control connections can be ordered.
+type ControlOrderField string
+
+const (
+	ControlOrderFieldStatus      ControlOrderField = "status"
+	ControlOrderFieldSource      ControlOrderField = "SOURCE"
+	ControlOrderFieldControlType ControlOrderField = "CONTROL_TYPE"
+	ControlOrderFieldCategory    ControlOrderField = "category"
+	ControlOrderFieldSubcategory ControlOrderField = "subcategory"
+)
+
+var AllControlOrderField = []ControlOrderField{
+	ControlOrderFieldStatus,
+	ControlOrderFieldSource,
+	ControlOrderFieldControlType,
+	ControlOrderFieldCategory,
+	ControlOrderFieldSubcategory,
+}
+
+func (e ControlOrderField) IsValid() bool {
+	switch e {
+	case ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e ControlOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which EntityHistory connections can be ordered.
 type EntityHistoryOrderField string
 
 const (
 	EntityHistoryOrderFieldName        EntityHistoryOrderField = "name"
 	EntityHistoryOrderFieldDisplayName EntityHistoryOrderField = "display_name"
+	EntityHistoryOrderFieldStatus      EntityHistoryOrderField = "status"
 )
 
 var AllEntityHistoryOrderField = []EntityHistoryOrderField{
 	EntityHistoryOrderFieldName,
 	EntityHistoryOrderFieldDisplayName,
+	EntityHistoryOrderFieldStatus,
 }
 
 func (e EntityHistoryOrderField) IsValid() bool {
 	switch e {
-	case EntityHistoryOrderFieldName, EntityHistoryOrderFieldDisplayName:
+	case EntityHistoryOrderFieldName, EntityHistoryOrderFieldDisplayName, EntityHistoryOrderFieldStatus:
 		return true
 	}
 	return false
@@ -23744,16 +24497,18 @@ type EntityOrderField string
 const (
 	EntityOrderFieldName        EntityOrderField = "name"
 	EntityOrderFieldDisplayName EntityOrderField = "display_name"
+	EntityOrderFieldStatus      EntityOrderField = "status"
 )
 
 var AllEntityOrderField = []EntityOrderField{
 	EntityOrderFieldName,
 	EntityOrderFieldDisplayName,
+	EntityOrderFieldStatus,
 }
 
 func (e EntityOrderField) IsValid() bool {
 	switch e {
-	case EntityOrderFieldName, EntityOrderFieldDisplayName:
+	case EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus:
 		return true
 	}
 	return false
@@ -23860,6 +24615,98 @@ func (e EntityTypeOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which EvidenceHistory connections can be ordered.
+type EvidenceHistoryOrderField string
+
+const (
+	EvidenceHistoryOrderFieldName         EvidenceHistoryOrderField = "name"
+	EvidenceHistoryOrderFieldCreationDate EvidenceHistoryOrderField = "creation_date"
+	EvidenceHistoryOrderFieldRenewalDate  EvidenceHistoryOrderField = "renewal_date"
+	EvidenceHistoryOrderFieldStatus       EvidenceHistoryOrderField = "STATUS"
+)
+
+var AllEvidenceHistoryOrderField = []EvidenceHistoryOrderField{
+	EvidenceHistoryOrderFieldName,
+	EvidenceHistoryOrderFieldCreationDate,
+	EvidenceHistoryOrderFieldRenewalDate,
+	EvidenceHistoryOrderFieldStatus,
+}
+
+func (e EvidenceHistoryOrderField) IsValid() bool {
+	switch e {
+	case EvidenceHistoryOrderFieldName, EvidenceHistoryOrderFieldCreationDate, EvidenceHistoryOrderFieldRenewalDate, EvidenceHistoryOrderFieldStatus:
+		return true
+	}
+	return false
+}
+
+func (e EvidenceHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *EvidenceHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EvidenceHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EvidenceHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e EvidenceHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Evidence connections can be ordered.
+type EvidenceOrderField string
+
+const (
+	EvidenceOrderFieldName         EvidenceOrderField = "name"
+	EvidenceOrderFieldCreationDate EvidenceOrderField = "creation_date"
+	EvidenceOrderFieldRenewalDate  EvidenceOrderField = "renewal_date"
+	EvidenceOrderFieldStatus       EvidenceOrderField = "STATUS"
+)
+
+var AllEvidenceOrderField = []EvidenceOrderField{
+	EvidenceOrderFieldName,
+	EvidenceOrderFieldCreationDate,
+	EvidenceOrderFieldRenewalDate,
+	EvidenceOrderFieldStatus,
+}
+
+func (e EvidenceOrderField) IsValid() bool {
+	switch e {
+	case EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus:
+		return true
+	}
+	return false
+}
+
+func (e EvidenceOrderField) String() string {
+	return string(e)
+}
+
+func (e *EvidenceOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EvidenceOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EvidenceOrderField", str)
+	}
+	return nil
+}
+
+func (e EvidenceOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which GroupHistory connections can be ordered.
 type GroupHistoryOrderField string
 
@@ -23899,6 +24746,86 @@ func (e *GroupHistoryOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which GroupMembershipHistory connections can be ordered.
+type GroupMembershipHistoryOrderField string
+
+const (
+	GroupMembershipHistoryOrderFieldRole GroupMembershipHistoryOrderField = "ROLE"
+)
+
+var AllGroupMembershipHistoryOrderField = []GroupMembershipHistoryOrderField{
+	GroupMembershipHistoryOrderFieldRole,
+}
+
+func (e GroupMembershipHistoryOrderField) IsValid() bool {
+	switch e {
+	case GroupMembershipHistoryOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e GroupMembershipHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupMembershipHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupMembershipHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupMembershipHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which GroupMembership connections can be ordered.
+type GroupMembershipOrderField string
+
+const (
+	GroupMembershipOrderFieldRole GroupMembershipOrderField = "ROLE"
+)
+
+var AllGroupMembershipOrderField = []GroupMembershipOrderField{
+	GroupMembershipOrderFieldRole,
+}
+
+func (e GroupMembershipOrderField) IsValid() bool {
+	switch e {
+	case GroupMembershipOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e GroupMembershipOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupMembershipOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupMembershipOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupMembershipOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupMembershipOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -24112,6 +25039,210 @@ func (e IntegrationOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which Invite connections can be ordered.
+type InviteOrderField string
+
+const (
+	InviteOrderFieldExpires      InviteOrderField = "expires"
+	InviteOrderFieldStatus       InviteOrderField = "STATUS"
+	InviteOrderFieldSendAttempts InviteOrderField = "send_attempts"
+)
+
+var AllInviteOrderField = []InviteOrderField{
+	InviteOrderFieldExpires,
+	InviteOrderFieldStatus,
+	InviteOrderFieldSendAttempts,
+}
+
+func (e InviteOrderField) IsValid() bool {
+	switch e {
+	case InviteOrderFieldExpires, InviteOrderFieldStatus, InviteOrderFieldSendAttempts:
+		return true
+	}
+	return false
+}
+
+func (e InviteOrderField) String() string {
+	return string(e)
+}
+
+func (e *InviteOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InviteOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InviteOrderField", str)
+	}
+	return nil
+}
+
+func (e InviteOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which MappedControlHistory connections can be ordered.
+type MappedControlHistoryOrderField string
+
+const (
+	MappedControlHistoryOrderFieldMappingType MappedControlHistoryOrderField = "mapping_type"
+)
+
+var AllMappedControlHistoryOrderField = []MappedControlHistoryOrderField{
+	MappedControlHistoryOrderFieldMappingType,
+}
+
+func (e MappedControlHistoryOrderField) IsValid() bool {
+	switch e {
+	case MappedControlHistoryOrderFieldMappingType:
+		return true
+	}
+	return false
+}
+
+func (e MappedControlHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *MappedControlHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MappedControlHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MappedControlHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e MappedControlHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which MappedControl connections can be ordered.
+type MappedControlOrderField string
+
+const (
+	MappedControlOrderFieldMappingType MappedControlOrderField = "mapping_type"
+)
+
+var AllMappedControlOrderField = []MappedControlOrderField{
+	MappedControlOrderFieldMappingType,
+}
+
+func (e MappedControlOrderField) IsValid() bool {
+	switch e {
+	case MappedControlOrderFieldMappingType:
+		return true
+	}
+	return false
+}
+
+func (e MappedControlOrderField) String() string {
+	return string(e)
+}
+
+func (e *MappedControlOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MappedControlOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MappedControlOrderField", str)
+	}
+	return nil
+}
+
+func (e MappedControlOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which NarrativeHistory connections can be ordered.
+type NarrativeHistoryOrderField string
+
+const (
+	NarrativeHistoryOrderFieldName NarrativeHistoryOrderField = "name"
+)
+
+var AllNarrativeHistoryOrderField = []NarrativeHistoryOrderField{
+	NarrativeHistoryOrderFieldName,
+}
+
+func (e NarrativeHistoryOrderField) IsValid() bool {
+	switch e {
+	case NarrativeHistoryOrderFieldName:
+		return true
+	}
+	return false
+}
+
+func (e NarrativeHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *NarrativeHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NarrativeHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NarrativeHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e NarrativeHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Narrative connections can be ordered.
+type NarrativeOrderField string
+
+const (
+	NarrativeOrderFieldName NarrativeOrderField = "name"
+)
+
+var AllNarrativeOrderField = []NarrativeOrderField{
+	NarrativeOrderFieldName,
+}
+
+func (e NarrativeOrderField) IsValid() bool {
+	switch e {
+	case NarrativeOrderFieldName:
+		return true
+	}
+	return false
+}
+
+func (e NarrativeOrderField) String() string {
+	return string(e)
+}
+
+func (e *NarrativeOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NarrativeOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NarrativeOrderField", str)
+	}
+	return nil
+}
+
+func (e NarrativeOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Possible directions in which to order a list of items when provided an `orderBy` argument.
 type OrderDirection string
 
@@ -24153,6 +25284,186 @@ func (e *OrderDirection) UnmarshalGQL(v any) error {
 }
 
 func (e OrderDirection) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which OrgMembershipHistory connections can be ordered.
+type OrgMembershipHistoryOrderField string
+
+const (
+	OrgMembershipHistoryOrderFieldRole OrgMembershipHistoryOrderField = "ROLE"
+)
+
+var AllOrgMembershipHistoryOrderField = []OrgMembershipHistoryOrderField{
+	OrgMembershipHistoryOrderFieldRole,
+}
+
+func (e OrgMembershipHistoryOrderField) IsValid() bool {
+	switch e {
+	case OrgMembershipHistoryOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e OrgMembershipHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrgMembershipHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrgMembershipHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrgMembershipHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e OrgMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which OrgMembership connections can be ordered.
+type OrgMembershipOrderField string
+
+const (
+	OrgMembershipOrderFieldRole OrgMembershipOrderField = "ROLE"
+)
+
+var AllOrgMembershipOrderField = []OrgMembershipOrderField{
+	OrgMembershipOrderFieldRole,
+}
+
+func (e OrgMembershipOrderField) IsValid() bool {
+	switch e {
+	case OrgMembershipOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e OrgMembershipOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrgMembershipOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrgMembershipOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrgMembershipOrderField", str)
+	}
+	return nil
+}
+
+func (e OrgMembershipOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which OrgSubscriptionHistory connections can be ordered.
+type OrgSubscriptionHistoryOrderField string
+
+const (
+	OrgSubscriptionHistoryOrderFieldProductTier              OrgSubscriptionHistoryOrderField = "product_tier"
+	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus OrgSubscriptionHistoryOrderField = "stripe_subscription_status"
+	OrgSubscriptionHistoryOrderFieldActive                   OrgSubscriptionHistoryOrderField = "active"
+	OrgSubscriptionHistoryOrderFieldExpiresAt                OrgSubscriptionHistoryOrderField = "expires_at"
+	OrgSubscriptionHistoryOrderFieldTrialExpiresAt           OrgSubscriptionHistoryOrderField = "trial_expires_at"
+	OrgSubscriptionHistoryOrderFieldDaysUntilDue             OrgSubscriptionHistoryOrderField = "days_until_due"
+)
+
+var AllOrgSubscriptionHistoryOrderField = []OrgSubscriptionHistoryOrderField{
+	OrgSubscriptionHistoryOrderFieldProductTier,
+	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus,
+	OrgSubscriptionHistoryOrderFieldActive,
+	OrgSubscriptionHistoryOrderFieldExpiresAt,
+	OrgSubscriptionHistoryOrderFieldTrialExpiresAt,
+	OrgSubscriptionHistoryOrderFieldDaysUntilDue,
+}
+
+func (e OrgSubscriptionHistoryOrderField) IsValid() bool {
+	switch e {
+	case OrgSubscriptionHistoryOrderFieldProductTier, OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus, OrgSubscriptionHistoryOrderFieldActive, OrgSubscriptionHistoryOrderFieldExpiresAt, OrgSubscriptionHistoryOrderFieldTrialExpiresAt, OrgSubscriptionHistoryOrderFieldDaysUntilDue:
+		return true
+	}
+	return false
+}
+
+func (e OrgSubscriptionHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrgSubscriptionHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrgSubscriptionHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrgSubscriptionHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e OrgSubscriptionHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which OrgSubscription connections can be ordered.
+type OrgSubscriptionOrderField string
+
+const (
+	OrgSubscriptionOrderFieldProductTier              OrgSubscriptionOrderField = "product_tier"
+	OrgSubscriptionOrderFieldStripeSubscriptionStatus OrgSubscriptionOrderField = "stripe_subscription_status"
+	OrgSubscriptionOrderFieldActive                   OrgSubscriptionOrderField = "active"
+	OrgSubscriptionOrderFieldExpiresAt                OrgSubscriptionOrderField = "expires_at"
+	OrgSubscriptionOrderFieldTrialExpiresAt           OrgSubscriptionOrderField = "trial_expires_at"
+	OrgSubscriptionOrderFieldDaysUntilDue             OrgSubscriptionOrderField = "days_until_due"
+)
+
+var AllOrgSubscriptionOrderField = []OrgSubscriptionOrderField{
+	OrgSubscriptionOrderFieldProductTier,
+	OrgSubscriptionOrderFieldStripeSubscriptionStatus,
+	OrgSubscriptionOrderFieldActive,
+	OrgSubscriptionOrderFieldExpiresAt,
+	OrgSubscriptionOrderFieldTrialExpiresAt,
+	OrgSubscriptionOrderFieldDaysUntilDue,
+}
+
+func (e OrgSubscriptionOrderField) IsValid() bool {
+	switch e {
+	case OrgSubscriptionOrderFieldProductTier, OrgSubscriptionOrderFieldStripeSubscriptionStatus, OrgSubscriptionOrderFieldActive, OrgSubscriptionOrderFieldExpiresAt, OrgSubscriptionOrderFieldTrialExpiresAt, OrgSubscriptionOrderFieldDaysUntilDue:
+		return true
+	}
+	return false
+}
+
+func (e OrgSubscriptionOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrgSubscriptionOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrgSubscriptionOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrgSubscriptionOrderField", str)
+	}
+	return nil
+}
+
+func (e OrgSubscriptionOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -24240,20 +25551,640 @@ func (e OrganizationOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which ProgramHistory connections can be ordered.
+type ProgramHistoryOrderField string
+
+const (
+	ProgramHistoryOrderFieldName      ProgramHistoryOrderField = "name"
+	ProgramHistoryOrderFieldStatus    ProgramHistoryOrderField = "STATUS"
+	ProgramHistoryOrderFieldStartDate ProgramHistoryOrderField = "start_date"
+	ProgramHistoryOrderFieldEndDate   ProgramHistoryOrderField = "end_date"
+)
+
+var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
+	ProgramHistoryOrderFieldName,
+	ProgramHistoryOrderFieldStatus,
+	ProgramHistoryOrderFieldStartDate,
+	ProgramHistoryOrderFieldEndDate,
+}
+
+func (e ProgramHistoryOrderField) IsValid() bool {
+	switch e {
+	case ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
+		return true
+	}
+	return false
+}
+
+func (e ProgramHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProgramHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProgramHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProgramHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ProgramHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ProgramMembershipHistory connections can be ordered.
+type ProgramMembershipHistoryOrderField string
+
+const (
+	ProgramMembershipHistoryOrderFieldRole ProgramMembershipHistoryOrderField = "ROLE"
+)
+
+var AllProgramMembershipHistoryOrderField = []ProgramMembershipHistoryOrderField{
+	ProgramMembershipHistoryOrderFieldRole,
+}
+
+func (e ProgramMembershipHistoryOrderField) IsValid() bool {
+	switch e {
+	case ProgramMembershipHistoryOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e ProgramMembershipHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProgramMembershipHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProgramMembershipHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProgramMembershipHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ProgramMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ProgramMembership connections can be ordered.
+type ProgramMembershipOrderField string
+
+const (
+	ProgramMembershipOrderFieldRole ProgramMembershipOrderField = "ROLE"
+)
+
+var AllProgramMembershipOrderField = []ProgramMembershipOrderField{
+	ProgramMembershipOrderFieldRole,
+}
+
+func (e ProgramMembershipOrderField) IsValid() bool {
+	switch e {
+	case ProgramMembershipOrderFieldRole:
+		return true
+	}
+	return false
+}
+
+func (e ProgramMembershipOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProgramMembershipOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProgramMembershipOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProgramMembershipOrderField", str)
+	}
+	return nil
+}
+
+func (e ProgramMembershipOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Program connections can be ordered.
+type ProgramOrderField string
+
+const (
+	ProgramOrderFieldName      ProgramOrderField = "name"
+	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
+	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
+)
+
+var AllProgramOrderField = []ProgramOrderField{
+	ProgramOrderFieldName,
+	ProgramOrderFieldStatus,
+	ProgramOrderFieldStartDate,
+	ProgramOrderFieldEndDate,
+}
+
+func (e ProgramOrderField) IsValid() bool {
+	switch e {
+	case ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+		return true
+	}
+	return false
+}
+
+func (e ProgramOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProgramOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProgramOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProgramOrderField", str)
+	}
+	return nil
+}
+
+func (e ProgramOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which RiskHistory connections can be ordered.
+type RiskHistoryOrderField string
+
+const (
+	RiskHistoryOrderFieldName          RiskHistoryOrderField = "name"
+	RiskHistoryOrderFieldStatus        RiskHistoryOrderField = "STATUS"
+	RiskHistoryOrderFieldRiskType      RiskHistoryOrderField = "risk_type"
+	RiskHistoryOrderFieldCategory      RiskHistoryOrderField = "category"
+	RiskHistoryOrderFieldImpact        RiskHistoryOrderField = "IMPACT"
+	RiskHistoryOrderFieldLikelihood    RiskHistoryOrderField = "LIKELIHOOD"
+	RiskHistoryOrderFieldScore         RiskHistoryOrderField = "score"
+	RiskHistoryOrderFieldBusinessCosts RiskHistoryOrderField = "business_costs"
+)
+
+var AllRiskHistoryOrderField = []RiskHistoryOrderField{
+	RiskHistoryOrderFieldName,
+	RiskHistoryOrderFieldStatus,
+	RiskHistoryOrderFieldRiskType,
+	RiskHistoryOrderFieldCategory,
+	RiskHistoryOrderFieldImpact,
+	RiskHistoryOrderFieldLikelihood,
+	RiskHistoryOrderFieldScore,
+	RiskHistoryOrderFieldBusinessCosts,
+}
+
+func (e RiskHistoryOrderField) IsValid() bool {
+	switch e {
+	case RiskHistoryOrderFieldName, RiskHistoryOrderFieldStatus, RiskHistoryOrderFieldRiskType, RiskHistoryOrderFieldCategory, RiskHistoryOrderFieldImpact, RiskHistoryOrderFieldLikelihood, RiskHistoryOrderFieldScore, RiskHistoryOrderFieldBusinessCosts:
+		return true
+	}
+	return false
+}
+
+func (e RiskHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *RiskHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RiskHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RiskHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e RiskHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Risk connections can be ordered.
+type RiskOrderField string
+
+const (
+	RiskOrderFieldName          RiskOrderField = "name"
+	RiskOrderFieldStatus        RiskOrderField = "STATUS"
+	RiskOrderFieldRiskType      RiskOrderField = "risk_type"
+	RiskOrderFieldCategory      RiskOrderField = "category"
+	RiskOrderFieldImpact        RiskOrderField = "IMPACT"
+	RiskOrderFieldLikelihood    RiskOrderField = "LIKELIHOOD"
+	RiskOrderFieldScore         RiskOrderField = "score"
+	RiskOrderFieldBusinessCosts RiskOrderField = "business_costs"
+)
+
+var AllRiskOrderField = []RiskOrderField{
+	RiskOrderFieldName,
+	RiskOrderFieldStatus,
+	RiskOrderFieldRiskType,
+	RiskOrderFieldCategory,
+	RiskOrderFieldImpact,
+	RiskOrderFieldLikelihood,
+	RiskOrderFieldScore,
+	RiskOrderFieldBusinessCosts,
+}
+
+func (e RiskOrderField) IsValid() bool {
+	switch e {
+	case RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldRiskType, RiskOrderFieldCategory, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
+		return true
+	}
+	return false
+}
+
+func (e RiskOrderField) String() string {
+	return string(e)
+}
+
+func (e *RiskOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RiskOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RiskOrderField", str)
+	}
+	return nil
+}
+
+func (e RiskOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which StandardHistory connections can be ordered.
+type StandardHistoryOrderField string
+
+const (
+	StandardHistoryOrderFieldName          StandardHistoryOrderField = "name"
+	StandardHistoryOrderFieldShortName     StandardHistoryOrderField = "short_name"
+	StandardHistoryOrderFieldFramework     StandardHistoryOrderField = "framework"
+	StandardHistoryOrderFieldGoverningBody StandardHistoryOrderField = "governing_body"
+	StandardHistoryOrderFieldStatus        StandardHistoryOrderField = "STATUS"
+	StandardHistoryOrderFieldStandardType  StandardHistoryOrderField = "standard_type"
+)
+
+var AllStandardHistoryOrderField = []StandardHistoryOrderField{
+	StandardHistoryOrderFieldName,
+	StandardHistoryOrderFieldShortName,
+	StandardHistoryOrderFieldFramework,
+	StandardHistoryOrderFieldGoverningBody,
+	StandardHistoryOrderFieldStatus,
+	StandardHistoryOrderFieldStandardType,
+}
+
+func (e StandardHistoryOrderField) IsValid() bool {
+	switch e {
+	case StandardHistoryOrderFieldName, StandardHistoryOrderFieldShortName, StandardHistoryOrderFieldFramework, StandardHistoryOrderFieldGoverningBody, StandardHistoryOrderFieldStatus, StandardHistoryOrderFieldStandardType:
+		return true
+	}
+	return false
+}
+
+func (e StandardHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *StandardHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = StandardHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid StandardHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e StandardHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Standard connections can be ordered.
+type StandardOrderField string
+
+const (
+	StandardOrderFieldName          StandardOrderField = "name"
+	StandardOrderFieldShortName     StandardOrderField = "short_name"
+	StandardOrderFieldFramework     StandardOrderField = "framework"
+	StandardOrderFieldGoverningBody StandardOrderField = "governing_body"
+	StandardOrderFieldStatus        StandardOrderField = "STATUS"
+	StandardOrderFieldStandardType  StandardOrderField = "standard_type"
+)
+
+var AllStandardOrderField = []StandardOrderField{
+	StandardOrderFieldName,
+	StandardOrderFieldShortName,
+	StandardOrderFieldFramework,
+	StandardOrderFieldGoverningBody,
+	StandardOrderFieldStatus,
+	StandardOrderFieldStandardType,
+}
+
+func (e StandardOrderField) IsValid() bool {
+	switch e {
+	case StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType:
+		return true
+	}
+	return false
+}
+
+func (e StandardOrderField) String() string {
+	return string(e)
+}
+
+func (e *StandardOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = StandardOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid StandardOrderField", str)
+	}
+	return nil
+}
+
+func (e StandardOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which SubcontrolHistory connections can be ordered.
+type SubcontrolHistoryOrderField string
+
+const (
+	SubcontrolHistoryOrderFieldStatus      SubcontrolHistoryOrderField = "status"
+	SubcontrolHistoryOrderFieldSource      SubcontrolHistoryOrderField = "SOURCE"
+	SubcontrolHistoryOrderFieldControlType SubcontrolHistoryOrderField = "CONTROL_TYPE"
+	SubcontrolHistoryOrderFieldCategory    SubcontrolHistoryOrderField = "category"
+	SubcontrolHistoryOrderFieldSubcategory SubcontrolHistoryOrderField = "subcategory"
+	SubcontrolHistoryOrderFieldRefCode     SubcontrolHistoryOrderField = "ref_code"
+)
+
+var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
+	SubcontrolHistoryOrderFieldStatus,
+	SubcontrolHistoryOrderFieldSource,
+	SubcontrolHistoryOrderFieldControlType,
+	SubcontrolHistoryOrderFieldCategory,
+	SubcontrolHistoryOrderFieldSubcategory,
+	SubcontrolHistoryOrderFieldRefCode,
+}
+
+func (e SubcontrolHistoryOrderField) IsValid() bool {
+	switch e {
+	case SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
+		return true
+	}
+	return false
+}
+
+func (e SubcontrolHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *SubcontrolHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SubcontrolHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SubcontrolHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e SubcontrolHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Subcontrol connections can be ordered.
+type SubcontrolOrderField string
+
+const (
+	SubcontrolOrderFieldStatus      SubcontrolOrderField = "status"
+	SubcontrolOrderFieldSource      SubcontrolOrderField = "SOURCE"
+	SubcontrolOrderFieldControlType SubcontrolOrderField = "CONTROL_TYPE"
+	SubcontrolOrderFieldCategory    SubcontrolOrderField = "category"
+	SubcontrolOrderFieldSubcategory SubcontrolOrderField = "subcategory"
+	SubcontrolOrderFieldRefCode     SubcontrolOrderField = "ref_code"
+)
+
+var AllSubcontrolOrderField = []SubcontrolOrderField{
+	SubcontrolOrderFieldStatus,
+	SubcontrolOrderFieldSource,
+	SubcontrolOrderFieldControlType,
+	SubcontrolOrderFieldCategory,
+	SubcontrolOrderFieldSubcategory,
+	SubcontrolOrderFieldRefCode,
+}
+
+func (e SubcontrolOrderField) IsValid() bool {
+	switch e {
+	case SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode:
+		return true
+	}
+	return false
+}
+
+func (e SubcontrolOrderField) String() string {
+	return string(e)
+}
+
+func (e *SubcontrolOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SubcontrolOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SubcontrolOrderField", str)
+	}
+	return nil
+}
+
+func (e SubcontrolOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Subscriber connections can be ordered.
+type SubscriberOrderField string
+
+const (
+	SubscriberOrderFieldEmail  SubscriberOrderField = "email"
+	SubscriberOrderFieldActive SubscriberOrderField = "active"
+)
+
+var AllSubscriberOrderField = []SubscriberOrderField{
+	SubscriberOrderFieldEmail,
+	SubscriberOrderFieldActive,
+}
+
+func (e SubscriberOrderField) IsValid() bool {
+	switch e {
+	case SubscriberOrderFieldEmail, SubscriberOrderFieldActive:
+		return true
+	}
+	return false
+}
+
+func (e SubscriberOrderField) String() string {
+	return string(e)
+}
+
+func (e *SubscriberOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SubscriberOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SubscriberOrderField", str)
+	}
+	return nil
+}
+
+func (e SubscriberOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which TaskHistory connections can be ordered.
+type TaskHistoryOrderField string
+
+const (
+	TaskHistoryOrderFieldTitle     TaskHistoryOrderField = "title"
+	TaskHistoryOrderFieldStatus    TaskHistoryOrderField = "STATUS"
+	TaskHistoryOrderFieldCategory  TaskHistoryOrderField = "category"
+	TaskHistoryOrderFieldDue       TaskHistoryOrderField = "due"
+	TaskHistoryOrderFieldCompleted TaskHistoryOrderField = "completed"
+)
+
+var AllTaskHistoryOrderField = []TaskHistoryOrderField{
+	TaskHistoryOrderFieldTitle,
+	TaskHistoryOrderFieldStatus,
+	TaskHistoryOrderFieldCategory,
+	TaskHistoryOrderFieldDue,
+	TaskHistoryOrderFieldCompleted,
+}
+
+func (e TaskHistoryOrderField) IsValid() bool {
+	switch e {
+	case TaskHistoryOrderFieldTitle, TaskHistoryOrderFieldStatus, TaskHistoryOrderFieldCategory, TaskHistoryOrderFieldDue, TaskHistoryOrderFieldCompleted:
+		return true
+	}
+	return false
+}
+
+func (e TaskHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *TaskHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TaskHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e TaskHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Task connections can be ordered.
+type TaskOrderField string
+
+const (
+	TaskOrderFieldTitle     TaskOrderField = "title"
+	TaskOrderFieldStatus    TaskOrderField = "STATUS"
+	TaskOrderFieldCategory  TaskOrderField = "category"
+	TaskOrderFieldDue       TaskOrderField = "due"
+	TaskOrderFieldCompleted TaskOrderField = "completed"
+)
+
+var AllTaskOrderField = []TaskOrderField{
+	TaskOrderFieldTitle,
+	TaskOrderFieldStatus,
+	TaskOrderFieldCategory,
+	TaskOrderFieldDue,
+	TaskOrderFieldCompleted,
+}
+
+func (e TaskOrderField) IsValid() bool {
+	switch e {
+	case TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldCategory, TaskOrderFieldDue, TaskOrderFieldCompleted:
+		return true
+	}
+	return false
+}
+
+func (e TaskOrderField) String() string {
+	return string(e)
+}
+
+func (e *TaskOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TaskOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TaskOrderField", str)
+	}
+	return nil
+}
+
+func (e TaskOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which TemplateHistory connections can be ordered.
 type TemplateHistoryOrderField string
 
 const (
-	TemplateHistoryOrderFieldName TemplateHistoryOrderField = "name"
+	TemplateHistoryOrderFieldName         TemplateHistoryOrderField = "name"
+	TemplateHistoryOrderFieldTemplateType TemplateHistoryOrderField = "TEMPLATE_TYPE"
 )
 
 var AllTemplateHistoryOrderField = []TemplateHistoryOrderField{
 	TemplateHistoryOrderFieldName,
+	TemplateHistoryOrderFieldTemplateType,
 }
 
 func (e TemplateHistoryOrderField) IsValid() bool {
 	switch e {
-	case TemplateHistoryOrderFieldName:
+	case TemplateHistoryOrderFieldName, TemplateHistoryOrderFieldTemplateType:
 		return true
 	}
 	return false
@@ -24284,16 +26215,18 @@ func (e TemplateHistoryOrderField) MarshalGQL(w io.Writer) {
 type TemplateOrderField string
 
 const (
-	TemplateOrderFieldName TemplateOrderField = "name"
+	TemplateOrderFieldName         TemplateOrderField = "name"
+	TemplateOrderFieldTemplateType TemplateOrderField = "TEMPLATE_TYPE"
 )
 
 var AllTemplateOrderField = []TemplateOrderField{
 	TemplateOrderFieldName,
+	TemplateOrderFieldTemplateType,
 }
 
 func (e TemplateOrderField) IsValid() bool {
 	switch e {
-	case TemplateOrderFieldName:
+	case TemplateOrderFieldName, TemplateOrderFieldTemplateType:
 		return true
 	}
 	return false

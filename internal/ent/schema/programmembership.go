@@ -31,7 +31,10 @@ func (ProgramMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
-			Default(string(enums.RoleMember)),
+			Default(string(enums.RoleMember)).
+			Annotations(
+				entgql.OrderField("ROLE"),
+			),
 		field.String("program_id").Immutable(),
 		field.String("user_id").Immutable(),
 	}

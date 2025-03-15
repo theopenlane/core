@@ -495,12 +495,12 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				}
 
 				if tc.request.AddComment != nil {
-					assert.NotEmpty(t, resp.UpdateTask.Task.Comments)
-					assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments[0].Text)
+					assert.NotEmpty(t, resp.UpdateTask.Task.Comments.Edges)
+					assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments.Edges[0].Node.Text)
 
 					// there should only be one comment
-					require.Len(t, resp.UpdateTask.Task.Comments, 1)
-					taskCommentID = resp.UpdateTask.Task.Comments[0].ID
+					require.Len(t, resp.UpdateTask.Task.Comments.Edges, 1)
+					taskCommentID = resp.UpdateTask.Task.Comments.Edges[0].Node.ID
 
 					// user shouldn't be able to see the comment
 					checkResp, err := suite.client.api.GetNoteByID(viewOnlyUser.UserCtx, taskCommentID)
@@ -518,14 +518,14 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 					assert.NotNil(t, checkResp)
 				} else if tc.request.DeleteComment != nil {
 					// should not have any comments
-					assert.Len(t, resp.UpdateTask.Task.Comments, 0)
+					assert.Len(t, resp.UpdateTask.Task.Comments.Edges, 0)
 				}
 			} else if tc.updateCommentRequest != nil {
 				require.NotNil(t, commentResp)
 
 				// should only have the original comment
-				require.Len(t, commentResp.UpdateTaskComment.Task.Comments, 1)
-				assert.Equal(t, *tc.updateCommentRequest.Text, commentResp.UpdateTaskComment.Task.Comments[0].Text)
+				require.Len(t, commentResp.UpdateTaskComment.Task.Comments.Edges, 1)
+				assert.Equal(t, *tc.updateCommentRequest.Text, commentResp.UpdateTaskComment.Task.Comments.Edges[0].Node.Text)
 			}
 		})
 	}

@@ -68,6 +68,9 @@ func (Entity) Fields() []ent.Field {
 		field.String("status").
 			Comment("status of the entity").
 			Default("active").
+			Annotations(
+				entgql.OrderField("status"),
+			).
 			Optional(),
 	}
 }
@@ -86,10 +89,10 @@ func (Entity) Mixin() []ent.Mixin {
 // Edges of the Entity
 func (Entity) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("contacts", Contact.Type),
-		edge.To("documents", DocumentData.Type),
-		edge.To("notes", Note.Type),
-		edge.To("files", File.Type),
+		edge.To("contacts", Contact.Type).Annotations(entgql.RelayConnection()),
+		edge.To("documents", DocumentData.Type).Annotations(entgql.RelayConnection()),
+		edge.To("notes", Note.Type).Annotations(entgql.RelayConnection()),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 		edge.To("entity_type", EntityType.Type).
 			Field("entity_type_id").
 			Unique(),
@@ -110,6 +113,7 @@ func (Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(),
 	}

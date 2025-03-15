@@ -96,9 +96,13 @@ mutation CreateControl($input: CreateControlInput!) {
         name
       }
       programs {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       editors {
         id
@@ -165,9 +169,13 @@ query GetAllControls {
           governingBody
         }
         programs {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         editors {
           id
@@ -227,9 +235,13 @@ query GetControlByID($controlId: ID!) {
       governingBody
     }
     programs {
-      id
-      displayID
-      name
+      edges {
+        node {
+          id
+          displayID
+          name
+        }
+      }
     }
     editors {
       id
@@ -289,9 +301,13 @@ query GetControls($where: ControlWhereInput) {
           governingBody
         }
         programs {
-          id
-          displayID
-          name
+          edges {
+            node {
+              id
+              displayID
+              name
+            }
+          }
         }
         editors {
           id
@@ -352,9 +368,13 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
         governingBody
       }
       programs {
-        id
-        displayID
-        name
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
       }
       editors {
         id

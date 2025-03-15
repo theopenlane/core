@@ -32,6 +32,7 @@ func (Standard) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("name"),
 			).
 			Comment("the long name of the standard body").
 			Annotations(entx.FieldSearchable()),
@@ -39,10 +40,15 @@ func (Standard) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("short_name"),
 			).
 			Comment("short name of the standard, e.g. SOC 2, ISO 27001, etc."),
 		field.Text("framework").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("framework"),
+			).
 			Comment("unique identifier of the standard with version"),
 		field.String("description").
 			Optional().
@@ -57,8 +63,15 @@ func (Standard) Fields() []ent.Field {
 			Optional(),
 		field.String("governing_body").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("governing_body"),
+			).
 			Comment("governing body of the standard, e.g. AICPA, etc."),
 		field.Strings("domains").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Optional().
 			Comment("domains the standard covers, e.g. availability, confidentiality, etc."),
 		field.String("link").
@@ -68,6 +81,9 @@ func (Standard) Fields() []ent.Field {
 			GoType(enums.StandardStatus("")).
 			Default(enums.StandardActive.String()).
 			Optional().
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Comment("status of the standard - active, draft, and archived"),
 		field.Bool("is_public").
 			Optional().
@@ -82,6 +98,9 @@ func (Standard) Fields() []ent.Field {
 			Default(false).
 			Comment("indicates if the standard is owned by the the openlane system"),
 		field.String("standard_type").
+			Annotations(
+				entgql.OrderField("standard_type"),
+			).
 			Optional().
 			Comment("type of the standard - cybersecurity, healthcare , financial, etc."),
 		field.String("version").
@@ -93,7 +112,7 @@ func (Standard) Fields() []ent.Field {
 // Edges of the Standard
 func (Standard) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controls", Control.Type),
+		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -131,6 +150,7 @@ func (Standard) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 	}
 }

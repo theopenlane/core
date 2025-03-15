@@ -93,8 +93,8 @@ func tableOutput(out []openlaneclient.Risk) {
 	for _, i := range out {
 		programs := []string{}
 
-		for _, p := range i.Programs {
-			programs = append(programs, p.Name)
+		for _, p := range i.Programs.Edges {
+			programs = append(programs, p.Node.Name)
 		}
 
 		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.RiskType, *i.BusinessCosts, *i.Impact, *i.Likelihood, *i.Score, *i.Mitigation, strings.Join(programs, ","))

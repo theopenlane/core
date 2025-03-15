@@ -8,14 +8,22 @@ mutation CreateBulkCSVMappedControl($input: Upload!) {
       mappingType
       relation
       controls {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       subcontrols {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       tags
       updatedAt
@@ -34,14 +42,22 @@ mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
       relation
       tags
       controls {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       subcontrols {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       updatedAt
       updatedBy
@@ -58,14 +74,22 @@ mutation CreateMappedControl($input: CreateMappedControlInput!) {
       mappingType
       relation
       controls {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       subcontrols {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       tags
       updatedAt
@@ -90,14 +114,22 @@ query GetAllMappedControls {
         mappingType
         relation
         controls {
-          id
-          refCode
-          description
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
         }
         subcontrols {
-          id
-          refCode
-          description
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
         }
         tags
         updatedAt
@@ -114,14 +146,22 @@ query GetMappedControlByID($mappedControlId: ID!) {
     mappingType
     relation
     controls {
-      id
-      refCode
-      description
+      edges {
+        node {
+          id
+          refCode
+          description
+        }
+      }
     }
     subcontrols {
-      id
-      refCode
-      description
+      edges {
+        node {
+          id
+          refCode
+          description
+        }
+      }
     }
     tags
     updatedAt
@@ -139,14 +179,22 @@ query GetMappedControls($where: MappedControlWhereInput) {
         mappingType
         relation
         controls {
-          id
-          refCode
-          description
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
         }
         subcontrols {
-          id
-          refCode
-          description
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
         }
         tags
         updatedAt
@@ -164,14 +212,22 @@ mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedCo
       mappingType
       relation
       controls {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       subcontrols {
-        id
-        refCode
-        description
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
       }
       tags
       updatedAt

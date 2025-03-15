@@ -46,8 +46,12 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       updatedAt
       updatedBy
       programs {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       editors {
         id
@@ -86,8 +90,12 @@ query GetAllNarratives {
         updatedAt
         updatedBy
         programs {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         editors {
           id
@@ -119,8 +127,12 @@ query GetNarrativeByID($narrativeId: ID!) {
     updatedAt
     updatedBy
     programs {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     editors {
       id
@@ -152,8 +164,12 @@ query GetNarratives($where: NarrativeWhereInput) {
         updatedAt
         updatedBy
         programs {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         editors {
           id
@@ -186,8 +202,12 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       updatedAt
       updatedBy
       programs {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       editors {
         id

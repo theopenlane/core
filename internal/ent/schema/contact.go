@@ -36,17 +36,28 @@ func (Contact) Fields() []ent.Field {
 			MaxLen(nameMaxLen).
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("full_name"),
 			).
 			NotEmpty(),
 		field.String("title").
 			Comment("the title of the contact").
+			Annotations(
+				entgql.OrderField("title"),
+			).
 			Optional(),
 		field.String("company").
 			Comment("the company of the contact").
+			Annotations(
+				entgql.OrderField("company"),
+			).
 			Optional(),
 		field.String("email").
 			Comment("the email of the contact").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("email"),
+			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
 				return err
@@ -67,6 +78,9 @@ func (Contact) Fields() []ent.Field {
 			Optional(),
 		field.Enum("status").
 			Comment("status of the contact").
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			GoType(enums.UserStatus("")).
 			Default(enums.UserStatusActive.String()),
 	}
@@ -87,8 +101,9 @@ func (Contact) Mixin() []ent.Mixin {
 func (Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("entities", Entity.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("contacts"),
-		edge.To("files", File.Type),
+		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
 	}
 }
 
@@ -97,6 +112,7 @@ func (Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entgql.MultiOrder(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}

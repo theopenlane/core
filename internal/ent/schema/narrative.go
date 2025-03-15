@@ -29,6 +29,7 @@ func (Narrative) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("name"),
 			).
 			Comment("the name of the narrative"),
 		field.Text("description").
@@ -48,8 +49,10 @@ func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("satisfies", Control.Type).
 			Comment("which controls are satisfied by the narrative").
+			Annotations(entgql.RelayConnection()).
 			Ref("narratives"),
 		edge.From("programs", Program.Type).
+			Annotations(entgql.RelayConnection()).
 			Ref("narratives"),
 	}
 }
