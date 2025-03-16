@@ -83,9 +83,7 @@ func (ec *executionContext) unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheop
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]*model.OrgMembersInput, len(vSlice))
 	for i := range vSlice {

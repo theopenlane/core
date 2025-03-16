@@ -157,9 +157,7 @@ func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopen
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]models.AssessmentMethod, len(vSlice))
 	for i := range vSlice {
@@ -195,9 +193,7 @@ func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheo
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]models.AssessmentObjective, len(vSlice))
 	for i := range vSlice {
@@ -233,9 +229,7 @@ func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenl
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]models.ExampleEvidence, len(vSlice))
 	for i := range vSlice {
@@ -271,9 +265,7 @@ func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋt
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]models.ImplementationGuidance, len(vSlice))
 	for i := range vSlice {
@@ -319,9 +311,7 @@ func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋ
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]models.Reference, len(vSlice))
 	for i := range vSlice {
@@ -357,9 +347,7 @@ func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgq
 		return nil, nil
 	}
 	var vSlice []any
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
+	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]*graphql.Upload, len(vSlice))
 	for i := range vSlice {

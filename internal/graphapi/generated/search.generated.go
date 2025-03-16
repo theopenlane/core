@@ -3140,216 +3140,6 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case model.APITokenSearchResult:
-		return ec._APITokenSearchResult(ctx, sel, &obj)
-	case *model.APITokenSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._APITokenSearchResult(ctx, sel, obj)
-	case model.ActionPlanSearchResult:
-		return ec._ActionPlanSearchResult(ctx, sel, &obj)
-	case *model.ActionPlanSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ActionPlanSearchResult(ctx, sel, obj)
-	case model.ContactSearchResult:
-		return ec._ContactSearchResult(ctx, sel, &obj)
-	case *model.ContactSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ContactSearchResult(ctx, sel, obj)
-	case model.ControlSearchResult:
-		return ec._ControlSearchResult(ctx, sel, &obj)
-	case *model.ControlSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ControlSearchResult(ctx, sel, obj)
-	case model.ControlImplementationSearchResult:
-		return ec._ControlImplementationSearchResult(ctx, sel, &obj)
-	case *model.ControlImplementationSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ControlImplementationSearchResult(ctx, sel, obj)
-	case model.ControlObjectiveSearchResult:
-		return ec._ControlObjectiveSearchResult(ctx, sel, &obj)
-	case *model.ControlObjectiveSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ControlObjectiveSearchResult(ctx, sel, obj)
-	case model.DocumentDataSearchResult:
-		return ec._DocumentDataSearchResult(ctx, sel, &obj)
-	case *model.DocumentDataSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._DocumentDataSearchResult(ctx, sel, obj)
-	case model.EntitySearchResult:
-		return ec._EntitySearchResult(ctx, sel, &obj)
-	case *model.EntitySearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._EntitySearchResult(ctx, sel, obj)
-	case model.EntityTypeSearchResult:
-		return ec._EntityTypeSearchResult(ctx, sel, &obj)
-	case *model.EntityTypeSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._EntityTypeSearchResult(ctx, sel, obj)
-	case model.EventSearchResult:
-		return ec._EventSearchResult(ctx, sel, &obj)
-	case *model.EventSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._EventSearchResult(ctx, sel, obj)
-	case model.EvidenceSearchResult:
-		return ec._EvidenceSearchResult(ctx, sel, &obj)
-	case *model.EvidenceSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._EvidenceSearchResult(ctx, sel, obj)
-	case model.FileSearchResult:
-		return ec._FileSearchResult(ctx, sel, &obj)
-	case *model.FileSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._FileSearchResult(ctx, sel, obj)
-	case model.GroupSearchResult:
-		return ec._GroupSearchResult(ctx, sel, &obj)
-	case *model.GroupSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._GroupSearchResult(ctx, sel, obj)
-	case model.IntegrationSearchResult:
-		return ec._IntegrationSearchResult(ctx, sel, &obj)
-	case *model.IntegrationSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._IntegrationSearchResult(ctx, sel, obj)
-	case model.InternalPolicySearchResult:
-		return ec._InternalPolicySearchResult(ctx, sel, &obj)
-	case *model.InternalPolicySearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._InternalPolicySearchResult(ctx, sel, obj)
-	case model.MappedControlSearchResult:
-		return ec._MappedControlSearchResult(ctx, sel, &obj)
-	case *model.MappedControlSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._MappedControlSearchResult(ctx, sel, obj)
-	case model.NarrativeSearchResult:
-		return ec._NarrativeSearchResult(ctx, sel, &obj)
-	case *model.NarrativeSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._NarrativeSearchResult(ctx, sel, obj)
-	case model.OrgSubscriptionSearchResult:
-		return ec._OrgSubscriptionSearchResult(ctx, sel, &obj)
-	case *model.OrgSubscriptionSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._OrgSubscriptionSearchResult(ctx, sel, obj)
-	case model.OrganizationSearchResult:
-		return ec._OrganizationSearchResult(ctx, sel, &obj)
-	case *model.OrganizationSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._OrganizationSearchResult(ctx, sel, obj)
-	case model.OrganizationSettingSearchResult:
-		return ec._OrganizationSettingSearchResult(ctx, sel, &obj)
-	case *model.OrganizationSettingSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._OrganizationSettingSearchResult(ctx, sel, obj)
-	case model.PersonalAccessTokenSearchResult:
-		return ec._PersonalAccessTokenSearchResult(ctx, sel, &obj)
-	case *model.PersonalAccessTokenSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._PersonalAccessTokenSearchResult(ctx, sel, obj)
-	case model.ProcedureSearchResult:
-		return ec._ProcedureSearchResult(ctx, sel, &obj)
-	case *model.ProcedureSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ProcedureSearchResult(ctx, sel, obj)
-	case model.ProgramSearchResult:
-		return ec._ProgramSearchResult(ctx, sel, &obj)
-	case *model.ProgramSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._ProgramSearchResult(ctx, sel, obj)
-	case model.RiskSearchResult:
-		return ec._RiskSearchResult(ctx, sel, &obj)
-	case *model.RiskSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._RiskSearchResult(ctx, sel, obj)
-	case model.StandardSearchResult:
-		return ec._StandardSearchResult(ctx, sel, &obj)
-	case *model.StandardSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._StandardSearchResult(ctx, sel, obj)
-	case model.SubcontrolSearchResult:
-		return ec._SubcontrolSearchResult(ctx, sel, &obj)
-	case *model.SubcontrolSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._SubcontrolSearchResult(ctx, sel, obj)
-	case model.SubscriberSearchResult:
-		return ec._SubscriberSearchResult(ctx, sel, &obj)
-	case *model.SubscriberSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._SubscriberSearchResult(ctx, sel, obj)
-	case model.TaskSearchResult:
-		return ec._TaskSearchResult(ctx, sel, &obj)
-	case *model.TaskSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TaskSearchResult(ctx, sel, obj)
-	case model.TemplateSearchResult:
-		return ec._TemplateSearchResult(ctx, sel, &obj)
-	case *model.TemplateSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._TemplateSearchResult(ctx, sel, obj)
-	case model.UserSearchResult:
-		return ec._UserSearchResult(ctx, sel, &obj)
-	case *model.UserSearchResult:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._UserSearchResult(ctx, sel, obj)
 	case model.UserSettingSearchResult:
 		return ec._UserSettingSearchResult(ctx, sel, &obj)
 	case *model.UserSettingSearchResult:
@@ -3357,6 +3147,216 @@ func (ec *executionContext) _SearchResult(ctx context.Context, sel ast.Selection
 			return graphql.Null
 		}
 		return ec._UserSettingSearchResult(ctx, sel, obj)
+	case model.UserSearchResult:
+		return ec._UserSearchResult(ctx, sel, &obj)
+	case *model.UserSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._UserSearchResult(ctx, sel, obj)
+	case model.TemplateSearchResult:
+		return ec._TemplateSearchResult(ctx, sel, &obj)
+	case *model.TemplateSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TemplateSearchResult(ctx, sel, obj)
+	case model.TaskSearchResult:
+		return ec._TaskSearchResult(ctx, sel, &obj)
+	case *model.TaskSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TaskSearchResult(ctx, sel, obj)
+	case model.SubscriberSearchResult:
+		return ec._SubscriberSearchResult(ctx, sel, &obj)
+	case *model.SubscriberSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._SubscriberSearchResult(ctx, sel, obj)
+	case model.SubcontrolSearchResult:
+		return ec._SubcontrolSearchResult(ctx, sel, &obj)
+	case *model.SubcontrolSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._SubcontrolSearchResult(ctx, sel, obj)
+	case model.StandardSearchResult:
+		return ec._StandardSearchResult(ctx, sel, &obj)
+	case *model.StandardSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._StandardSearchResult(ctx, sel, obj)
+	case model.RiskSearchResult:
+		return ec._RiskSearchResult(ctx, sel, &obj)
+	case *model.RiskSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._RiskSearchResult(ctx, sel, obj)
+	case model.ProgramSearchResult:
+		return ec._ProgramSearchResult(ctx, sel, &obj)
+	case *model.ProgramSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ProgramSearchResult(ctx, sel, obj)
+	case model.ProcedureSearchResult:
+		return ec._ProcedureSearchResult(ctx, sel, &obj)
+	case *model.ProcedureSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ProcedureSearchResult(ctx, sel, obj)
+	case model.PersonalAccessTokenSearchResult:
+		return ec._PersonalAccessTokenSearchResult(ctx, sel, &obj)
+	case *model.PersonalAccessTokenSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonalAccessTokenSearchResult(ctx, sel, obj)
+	case model.OrganizationSettingSearchResult:
+		return ec._OrganizationSettingSearchResult(ctx, sel, &obj)
+	case *model.OrganizationSettingSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._OrganizationSettingSearchResult(ctx, sel, obj)
+	case model.OrganizationSearchResult:
+		return ec._OrganizationSearchResult(ctx, sel, &obj)
+	case *model.OrganizationSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._OrganizationSearchResult(ctx, sel, obj)
+	case model.OrgSubscriptionSearchResult:
+		return ec._OrgSubscriptionSearchResult(ctx, sel, &obj)
+	case *model.OrgSubscriptionSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._OrgSubscriptionSearchResult(ctx, sel, obj)
+	case model.NarrativeSearchResult:
+		return ec._NarrativeSearchResult(ctx, sel, &obj)
+	case *model.NarrativeSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._NarrativeSearchResult(ctx, sel, obj)
+	case model.MappedControlSearchResult:
+		return ec._MappedControlSearchResult(ctx, sel, &obj)
+	case *model.MappedControlSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._MappedControlSearchResult(ctx, sel, obj)
+	case model.InternalPolicySearchResult:
+		return ec._InternalPolicySearchResult(ctx, sel, &obj)
+	case *model.InternalPolicySearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._InternalPolicySearchResult(ctx, sel, obj)
+	case model.IntegrationSearchResult:
+		return ec._IntegrationSearchResult(ctx, sel, &obj)
+	case *model.IntegrationSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._IntegrationSearchResult(ctx, sel, obj)
+	case model.GroupSearchResult:
+		return ec._GroupSearchResult(ctx, sel, &obj)
+	case *model.GroupSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._GroupSearchResult(ctx, sel, obj)
+	case model.FileSearchResult:
+		return ec._FileSearchResult(ctx, sel, &obj)
+	case *model.FileSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._FileSearchResult(ctx, sel, obj)
+	case model.EvidenceSearchResult:
+		return ec._EvidenceSearchResult(ctx, sel, &obj)
+	case *model.EvidenceSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EvidenceSearchResult(ctx, sel, obj)
+	case model.EventSearchResult:
+		return ec._EventSearchResult(ctx, sel, &obj)
+	case *model.EventSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EventSearchResult(ctx, sel, obj)
+	case model.EntityTypeSearchResult:
+		return ec._EntityTypeSearchResult(ctx, sel, &obj)
+	case *model.EntityTypeSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EntityTypeSearchResult(ctx, sel, obj)
+	case model.EntitySearchResult:
+		return ec._EntitySearchResult(ctx, sel, &obj)
+	case *model.EntitySearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EntitySearchResult(ctx, sel, obj)
+	case model.DocumentDataSearchResult:
+		return ec._DocumentDataSearchResult(ctx, sel, &obj)
+	case *model.DocumentDataSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._DocumentDataSearchResult(ctx, sel, obj)
+	case model.ControlSearchResult:
+		return ec._ControlSearchResult(ctx, sel, &obj)
+	case *model.ControlSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ControlSearchResult(ctx, sel, obj)
+	case model.ControlObjectiveSearchResult:
+		return ec._ControlObjectiveSearchResult(ctx, sel, &obj)
+	case *model.ControlObjectiveSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ControlObjectiveSearchResult(ctx, sel, obj)
+	case model.ControlImplementationSearchResult:
+		return ec._ControlImplementationSearchResult(ctx, sel, &obj)
+	case *model.ControlImplementationSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ControlImplementationSearchResult(ctx, sel, obj)
+	case model.ContactSearchResult:
+		return ec._ContactSearchResult(ctx, sel, &obj)
+	case *model.ContactSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ContactSearchResult(ctx, sel, obj)
+	case model.ActionPlanSearchResult:
+		return ec._ActionPlanSearchResult(ctx, sel, &obj)
+	case *model.ActionPlanSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ActionPlanSearchResult(ctx, sel, obj)
+	case model.APITokenSearchResult:
+		return ec._APITokenSearchResult(ctx, sel, &obj)
+	case *model.APITokenSearchResult:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._APITokenSearchResult(ctx, sel, obj)
 	default:
 		panic(fmt.Errorf("unexpected type %T", obj))
 	}
