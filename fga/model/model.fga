@@ -29,6 +29,22 @@ type system
   relations
     define system_admin: [user, service]
 
+# a plan is a "tier"
+type plan
+  relations
+    # plans have subscriber organizations
+    define subscriber: [organization]
+    # any member of an organization subscribed to a plan becomes a "subscriber member"
+    define subscriber_member: member from subscriber
+
+# features are individual components that are the parts of a plan / tier
+type feature
+  relations
+    # features have associated plans
+    define associated_plan: [plan]
+    # users with access to a feature are those who have "subscriber member" status on the associated plan
+    define access: subscriber_member from associated_plan
+
 # organization is the highest object access
 # objects can inherit access from the organization
 # or define their own specific access
@@ -38,10 +54,21 @@ type organization
     define admin: [user] or admin from parent
     define member: [user] or owner or admin or member from parent
     define owner: [user] or owner from parent
+
+    # MKA: not sure if i should be doing this definition of subscriber_member, or if the regular "member" rolls up ^?
+    define subscriber_member: [user] or owner or admin or member from parent
+
+
     # parent inheritance
     define parent: [organization]
     # organization policies to restrict access
-    define access: [organization#member with email_domains_allowed]
+
+    # MKA: not sure if I should be appending features_enabled to access, or if access is tied to features?
+    define access: allowed_domains and features_enabled
+    define allowed_domains: [organization#member with email_domains_allowed]
+    define features_enabled: [organization#subscriber_member with feature_enabled]
+
+
     # main permission sets based on roles
     define can_delete: [service] or owner or can_delete from parent
     define can_edit: [service] or (admin and access)  or owner or can_edit from parent
@@ -93,6 +120,8 @@ type organization
     define evidence_creator: [group#member]
     define can_create_evidence: can_edit or evidence_creator
 
+    define subscription_manager: [group#member]
+    define can_manage_subscription: can_edit or subscription_manager
 
     # additional relations
     define user_in_context: [user]
@@ -360,6 +389,16 @@ type standard
     define editor: [user, service]
     # this is used for organization custom standards that are only available to the organization
     define parent: [organization]
+type subscription
+  relations
+    define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
+    define can_delete: [user, service] or parent_deleter
+    define parent_viewer: owner from parent
+    define parent_editor: owner from parent
+    define parent_deleter: owner from parent
+    define parent: [organization]
+
 
 ## Conditions
 # Public groups access; affects the view access of users in the organization
@@ -382,4 +421,8 @@ condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant
 # if the email domain is in the allowed list, it will pass
 condition email_domains_allowed(email_domain: string, allowed_domains: list<string>) {
   allowed_domains == [] || email_domain == "" || email_domain in allowed_domains
+}
+
+condition feature_enabled(feature_name: string, enabled_features: list<string>) {
+  enabled_features == [] || feature_name in enabled_features
 }

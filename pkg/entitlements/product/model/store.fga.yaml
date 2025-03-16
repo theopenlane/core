@@ -1,0 +1,114 @@
+# Documentation: https://openfga.dev/docs/modeling/advanced/entitlements
+# FGA Playground: https://play.fga.dev/sandbox/?store=entitlements
+name: Entitlements
+model_file: ./model.fga
+tuples:
+  # The Enterprise plan grants access to the Draft PRs feature
+  - user: plan:enterprise
+    relation: associated_plan
+    object: feature:draft_prs
+  # The Team plan grants access to the Draft PRs feature
+  - user: plan:team
+    relation: associated_plan
+    object: feature:draft_prs
+  # The Enterprise plan grants access to the Issues feature
+  - user: plan:enterprise
+    relation: associated_plan
+    object: feature:issues
+  # The Free plan grants access to the Issues feature
+  - user: plan:free
+    relation: associated_plan
+    object: feature:issues
+  # The Team plan grants access to the Issues feature
+  - user: plan:team
+    relation: associated_plan
+    object: feature:issues
+  # The Enterprise plan grants access to the SSO feature
+  - user: plan:enterprise
+    relation: associated_plan
+    object: feature:sso
+  # Anne is a member of the Alpha organization
+  - user: user:anne
+    relation: member
+    object: organization:alpha
+  # Beth is a member of the Brayer organization
+  - user: user:beth
+    relation: member
+    object: organization:brayer
+  # Charles is a member of the Cups organization
+  - user: user:charles
+    relation: member
+    object: organization:cups
+  # The Cups organization has subscribed to the Enterprise plan
+  - user: organization:cups
+    relation: subscriber
+    object: plan:enterprise
+  # The Alpha organization has subscribed to the Enterprise plan
+  - user: organization:alpha
+    relation: subscriber
+    object: plan:free
+  # The Brayer organization has subscribed to the Enterprise plan
+  - user: organization:brayer
+    relation: subscriber
+    object: plan:team
+tests:
+  - name: Test which users have access to different features
+    check:
+      - user: user:anne
+        object: feature:issues
+        assertions:
+          can_access: true
+      - user: user:anne
+        object: feature:draft_prs
+        assertions:
+          can_access: false
+      - user: user:anne
+        object: feature:sso
+        assertions:
+          can_access: false
+      - user: user:beth
+        object: feature:issues
+        assertions:
+          can_access: true
+      - user: user:beth
+        object: feature:draft_prs
+        assertions:
+          can_access: true
+      - user: user:beth
+        object: feature:sso
+        assertions:
+          can_access: false
+      - user: user:charles
+        object: feature:issues
+        assertions:
+          can_access: true
+      - user: user:charles
+        object: feature:draft_prs
+        assertions:
+          can_access: true
+      - user: user:charles
+        object: feature:sso
+        assertions:
+          can_access: true
+
+  - name: Test who has access to the issues feature
+    list_users:
+      - object: feature:issues
+        user_filter:
+          - type: user
+        assertions:
+          can_access:
+            users:
+              - user:charles
+              - user:beth
+              - user:anne
+
+  - name: Test which features can Charles access
+    list_objects:
+      - user: user:charles
+        type: feature
+        assertions:
+          can_access:
+            - feature:draft_prs
+            - feature:issues
+            - feature:sso

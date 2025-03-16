@@ -13,6 +13,12 @@ const (
 	OrgEmailConditionName = "email_domains_allowed"
 	// OrgAccessCheckRelation is the relation for organization access checks
 	OrgAccessCheckRelation = "access"
+
+	featureContextKey = "feature_name"
+
+	featuresConditionContextKey = "enabled_features"
+
+	OrgSubsFeaturesConditionName = "feature_enabled"
 )
 
 // NewOrganizationContextKey creates a new context key for organization checks
@@ -32,5 +38,18 @@ func NewOrganizationContextKey(e string) *map[string]any {
 func NewOrganizationConditionContext(domains []string) *map[string]any {
 	return &map[string]any{
 		conditionContextKey: domains,
+	}
+}
+
+func NewOrgSubscriptionContextKey(e string) *map[string]any {
+	return &map[string]any{
+		featureContextKey: e,
+	}
+}
+
+// NewOrgSubscriptionConditionContext creates a new context key for organization subscription condition checks
+func NewOrgSubscriptionConditionContext(features []string) *map[string]any {
+	return &map[string]any{
+		featuresConditionContextKey: features,
 	}
 }
