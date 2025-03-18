@@ -31,6 +31,7 @@ func main() {
 
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
+	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(resolvergen.WithEntGeneratedPackage(
@@ -44,6 +45,8 @@ func main() {
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),
 			searchgen.WithModelPackage(modelImport),
+			searchgen.WithRulePackage(rulePackage),
+			searchgen.WithMaxResults(100),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")

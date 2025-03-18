@@ -7,11 +7,17 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // Search is the resolver for the search field.
 func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.SearchResultConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
 	if len(query) < 3 {
 		return nil, ErrSearchQueryTooShort
 	}
@@ -271,11 +277,9 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		},
 	})
 
-	// Check all errors and return a single error if any of the searches failed
+	// log the errors for debugging
 	if len(errors) > 0 {
-		log.Error().Errs("errors", errors).Msg("search failed")
-
-		return nil, ErrSearchFailed
+		log.Error().Errs("errors", errors).Msg("search failed for one or more entities")
 	}
 
 	// return the results
@@ -505,6 +509,12 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 	}, nil
 }
 func (r *queryResolver) AdminAPITokenSearch(ctx context.Context, query string) (*model.APITokenSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	apitokenResults, err := adminSearchAPITokens(ctx, query)
 
 	if err != nil {
@@ -517,6 +527,12 @@ func (r *queryResolver) AdminAPITokenSearch(ctx context.Context, query string) (
 	}, nil
 }
 func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string) (*model.ActionPlanSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	actionplanResults, err := adminSearchActionPlans(ctx, query)
 
 	if err != nil {
@@ -529,6 +545,12 @@ func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string)
 	}, nil
 }
 func (r *queryResolver) AdminContactSearch(ctx context.Context, query string) (*model.ContactSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	contactResults, err := adminSearchContacts(ctx, query)
 
 	if err != nil {
@@ -541,6 +563,12 @@ func (r *queryResolver) AdminContactSearch(ctx context.Context, query string) (*
 	}, nil
 }
 func (r *queryResolver) AdminControlSearch(ctx context.Context, query string) (*model.ControlSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	controlResults, err := adminSearchControls(ctx, query)
 
 	if err != nil {
@@ -553,6 +581,12 @@ func (r *queryResolver) AdminControlSearch(ctx context.Context, query string) (*
 	}, nil
 }
 func (r *queryResolver) AdminControlImplementationSearch(ctx context.Context, query string) (*model.ControlImplementationSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	controlimplementationResults, err := adminSearchControlImplementations(ctx, query)
 
 	if err != nil {
@@ -565,6 +599,12 @@ func (r *queryResolver) AdminControlImplementationSearch(ctx context.Context, qu
 	}, nil
 }
 func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query string) (*model.ControlObjectiveSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	controlobjectiveResults, err := adminSearchControlObjectives(ctx, query)
 
 	if err != nil {
@@ -577,6 +617,12 @@ func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query s
 	}, nil
 }
 func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query string) (*model.DocumentDataSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	documentdataResults, err := adminSearchDocumentData(ctx, query)
 
 	if err != nil {
@@ -589,6 +635,12 @@ func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query strin
 	}, nil
 }
 func (r *queryResolver) AdminEntitySearch(ctx context.Context, query string) (*model.EntitySearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	entityResults, err := adminSearchEntities(ctx, query)
 
 	if err != nil {
@@ -601,6 +653,12 @@ func (r *queryResolver) AdminEntitySearch(ctx context.Context, query string) (*m
 	}, nil
 }
 func (r *queryResolver) AdminEntityTypeSearch(ctx context.Context, query string) (*model.EntityTypeSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	entitytypeResults, err := adminSearchEntityTypes(ctx, query)
 
 	if err != nil {
@@ -613,6 +671,12 @@ func (r *queryResolver) AdminEntityTypeSearch(ctx context.Context, query string)
 	}, nil
 }
 func (r *queryResolver) AdminEventSearch(ctx context.Context, query string) (*model.EventSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	eventResults, err := adminSearchEvents(ctx, query)
 
 	if err != nil {
@@ -625,6 +689,12 @@ func (r *queryResolver) AdminEventSearch(ctx context.Context, query string) (*mo
 	}, nil
 }
 func (r *queryResolver) AdminEvidenceSearch(ctx context.Context, query string) (*model.EvidenceSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	evidenceResults, err := adminSearchEvidences(ctx, query)
 
 	if err != nil {
@@ -637,6 +707,12 @@ func (r *queryResolver) AdminEvidenceSearch(ctx context.Context, query string) (
 	}, nil
 }
 func (r *queryResolver) AdminFileSearch(ctx context.Context, query string) (*model.FileSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	fileResults, err := adminSearchFiles(ctx, query)
 
 	if err != nil {
@@ -649,6 +725,12 @@ func (r *queryResolver) AdminFileSearch(ctx context.Context, query string) (*mod
 	}, nil
 }
 func (r *queryResolver) AdminGroupSearch(ctx context.Context, query string) (*model.GroupSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	groupResults, err := adminSearchGroups(ctx, query)
 
 	if err != nil {
@@ -661,6 +743,12 @@ func (r *queryResolver) AdminGroupSearch(ctx context.Context, query string) (*mo
 	}, nil
 }
 func (r *queryResolver) AdminIntegrationSearch(ctx context.Context, query string) (*model.IntegrationSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	integrationResults, err := adminSearchIntegrations(ctx, query)
 
 	if err != nil {
@@ -673,6 +761,12 @@ func (r *queryResolver) AdminIntegrationSearch(ctx context.Context, query string
 	}, nil
 }
 func (r *queryResolver) AdminInternalPolicySearch(ctx context.Context, query string) (*model.InternalPolicySearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	internalpolicyResults, err := adminSearchInternalPolicies(ctx, query)
 
 	if err != nil {
@@ -685,6 +779,12 @@ func (r *queryResolver) AdminInternalPolicySearch(ctx context.Context, query str
 	}, nil
 }
 func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query string) (*model.MappedControlSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	mappedcontrolResults, err := adminSearchMappedControls(ctx, query)
 
 	if err != nil {
@@ -697,6 +797,12 @@ func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query stri
 	}, nil
 }
 func (r *queryResolver) AdminNarrativeSearch(ctx context.Context, query string) (*model.NarrativeSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	narrativeResults, err := adminSearchNarratives(ctx, query)
 
 	if err != nil {
@@ -709,6 +815,12 @@ func (r *queryResolver) AdminNarrativeSearch(ctx context.Context, query string) 
 	}, nil
 }
 func (r *queryResolver) AdminOrgSubscriptionSearch(ctx context.Context, query string) (*model.OrgSubscriptionSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	orgsubscriptionResults, err := adminSearchOrgSubscriptions(ctx, query)
 
 	if err != nil {
@@ -721,6 +833,12 @@ func (r *queryResolver) AdminOrgSubscriptionSearch(ctx context.Context, query st
 	}, nil
 }
 func (r *queryResolver) AdminOrganizationSearch(ctx context.Context, query string) (*model.OrganizationSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	organizationResults, err := adminSearchOrganizations(ctx, query)
 
 	if err != nil {
@@ -733,6 +851,12 @@ func (r *queryResolver) AdminOrganizationSearch(ctx context.Context, query strin
 	}, nil
 }
 func (r *queryResolver) AdminOrganizationSettingSearch(ctx context.Context, query string) (*model.OrganizationSettingSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	organizationsettingResults, err := adminSearchOrganizationSettings(ctx, query)
 
 	if err != nil {
@@ -745,6 +869,12 @@ func (r *queryResolver) AdminOrganizationSettingSearch(ctx context.Context, quer
 	}, nil
 }
 func (r *queryResolver) AdminPersonalAccessTokenSearch(ctx context.Context, query string) (*model.PersonalAccessTokenSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	personalaccesstokenResults, err := adminSearchPersonalAccessTokens(ctx, query)
 
 	if err != nil {
@@ -757,6 +887,12 @@ func (r *queryResolver) AdminPersonalAccessTokenSearch(ctx context.Context, quer
 	}, nil
 }
 func (r *queryResolver) AdminProcedureSearch(ctx context.Context, query string) (*model.ProcedureSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	procedureResults, err := adminSearchProcedures(ctx, query)
 
 	if err != nil {
@@ -769,6 +905,12 @@ func (r *queryResolver) AdminProcedureSearch(ctx context.Context, query string) 
 	}, nil
 }
 func (r *queryResolver) AdminProgramSearch(ctx context.Context, query string) (*model.ProgramSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	programResults, err := adminSearchPrograms(ctx, query)
 
 	if err != nil {
@@ -781,6 +923,12 @@ func (r *queryResolver) AdminProgramSearch(ctx context.Context, query string) (*
 	}, nil
 }
 func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string) (*model.RiskSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	riskResults, err := adminSearchRisks(ctx, query)
 
 	if err != nil {
@@ -793,6 +941,12 @@ func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string) (*mod
 	}, nil
 }
 func (r *queryResolver) AdminStandardSearch(ctx context.Context, query string) (*model.StandardSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	standardResults, err := adminSearchStandards(ctx, query)
 
 	if err != nil {
@@ -805,6 +959,12 @@ func (r *queryResolver) AdminStandardSearch(ctx context.Context, query string) (
 	}, nil
 }
 func (r *queryResolver) AdminSubcontrolSearch(ctx context.Context, query string) (*model.SubcontrolSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	subcontrolResults, err := adminSearchSubcontrols(ctx, query)
 
 	if err != nil {
@@ -817,6 +977,12 @@ func (r *queryResolver) AdminSubcontrolSearch(ctx context.Context, query string)
 	}, nil
 }
 func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string) (*model.SubscriberSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	subscriberResults, err := adminSearchSubscribers(ctx, query)
 
 	if err != nil {
@@ -829,6 +995,12 @@ func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string)
 	}, nil
 }
 func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string) (*model.TaskSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	taskResults, err := adminSearchTasks(ctx, query)
 
 	if err != nil {
@@ -841,6 +1013,12 @@ func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string) (*mod
 	}, nil
 }
 func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string) (*model.TemplateSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	templateResults, err := adminSearchTemplates(ctx, query)
 
 	if err != nil {
@@ -853,6 +1031,12 @@ func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string) (
 	}, nil
 }
 func (r *queryResolver) AdminUserSearch(ctx context.Context, query string) (*model.UserSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	userResults, err := adminSearchUsers(ctx, query)
 
 	if err != nil {
@@ -865,6 +1049,12 @@ func (r *queryResolver) AdminUserSearch(ctx context.Context, query string) (*mod
 	}, nil
 }
 func (r *queryResolver) AdminUserSettingSearch(ctx context.Context, query string) (*model.UserSettingSearchResult, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	usersettingResults, err := adminSearchUserSettings(ctx, query)
 
 	if err != nil {
