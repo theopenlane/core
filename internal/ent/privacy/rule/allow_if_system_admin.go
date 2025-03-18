@@ -53,6 +53,25 @@ func CheckIsSystemAdmin(ctx context.Context, m ent.Mutation) (bool, error) {
 	return utils.AuthzClient(ctx, m).CheckAccess(ctx, ac)
 }
 
+// CheckIsSystemAdminWithContext checks if the user is a system admin based on the authz service
+// using the authz client from the context
+func CheckIsSystemAdminWithContext(ctx context.Context) (bool, error) {
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	ac := fgax.AccessCheck{
+		ObjectType:  SystemObject,
+		ObjectID:    SystemObjectID,
+		Relation:    fgax.SystemAdminRelation,
+		SubjectID:   au.SubjectID,
+		SubjectType: getSubjectType(au),
+	}
+
+	return utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
+}
+
 // getSubjectType gets the subject type based on the authentication type
 func getSubjectType(au *auth.AuthenticatedUser) string {
 	// determine the subject type
