@@ -116,10 +116,10 @@ func HookUser() ent.Hook {
 				userCreated.Sub = userCreated.ID
 
 				// set the subject to the user id
-				if _, err := m.Client().User.
+				if err := m.Client().User.
 					UpdateOneID(userCreated.ID).
 					SetSub(userCreated.Sub).
-					Save(ctx); err != nil {
+					Exec(ctx); err != nil {
 					return nil, err
 				}
 
@@ -277,9 +277,9 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 		Role:           &enums.RoleOwner,
 	}
 
-	if _, err := dbClient.OrgMembership.Create().
+	if err := dbClient.OrgMembership.Create().
 		SetInput(input).
-		Save(ctx); err != nil {
+		Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("unable to add user as owner to organization")
 
 		return nil, nil, err

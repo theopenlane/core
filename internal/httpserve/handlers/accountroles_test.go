@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/httpsling"
 
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/models"
 )

@@ -9,21 +9,26 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
 func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	program, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
+	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
@@ -32,7 +37,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 	builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
 	for i := range input.Members {
 		input := generated.CreateProgramMembershipInput{
-			ProgramID: program.ID,
+			ProgramID: res.ID,
 			UserID:    input.Members[i].UserID,
 			Role:      input.Members[i].Role,
 		}
@@ -40,18 +45,33 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err = c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return nil, err
 	}
 
+	query, err := withTransactionalMutation(ctx).Program.
+		Query().
+		Where(program.ID(res.ID)).
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
+	finalResult, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
 	return &model.ProgramCreatePayload{
-		Program: program,
+		Program: finalResult,
 	}, nil
 }
 
 // CreateFullProgram is the resolver for the createFullProgram field.
 func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -59,7 +79,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	}
 
 	// create the program
-	program, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
+	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
@@ -69,7 +89,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
 	for i := range input.Members {
 		input := generated.CreateProgramMembershipInput{
-			ProgramID: program.ID,
+			ProgramID: res.ID,
 			UserID:    input.Members[i].UserID,
 			Role:      input.Members[i].Role,
 		}
@@ -77,8 +97,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err = c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return nil, err
 	}
 
@@ -87,13 +106,12 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		c := withTransactionalMutation(ctx)
 		builders := make([]*generated.RiskCreate, len(input.Risks))
 		for i := range input.Risks {
-			input.Risks[i].ProgramIDs = []string{program.ID}
+			input.Risks[i].ProgramIDs = []string{res.ID}
 
 			builders[i] = c.Risk.Create().SetInput(*input.Risks[i])
 		}
 
-		_, err = c.Risk.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Risk.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -103,13 +121,12 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		c := withTransactionalMutation(ctx)
 		builders := make([]*generated.ProcedureCreate, len(input.Procedures))
 		for i := range input.Procedures {
-			input.Procedures[i].ProgramIDs = []string{program.ID}
+			input.Procedures[i].ProgramIDs = []string{res.ID}
 
 			builders[i] = c.Procedure.Create().SetInput(*input.Procedures[i])
 		}
 
-		_, err = c.Procedure.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Procedure.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -119,13 +136,12 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		c := withTransactionalMutation(ctx)
 		builders := make([]*generated.InternalPolicyCreate, len(input.InternalPolicies))
 		for i := range input.InternalPolicies {
-			input.InternalPolicies[i].ProgramIDs = []string{program.ID}
+			input.InternalPolicies[i].ProgramIDs = []string{res.ID}
 
 			builders[i] = c.InternalPolicy.Create().SetInput(*input.InternalPolicies[i])
 		}
 
-		_, err = c.InternalPolicy.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.InternalPolicy.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -133,7 +149,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	// create the controls
 	if input.Controls != nil {
 		for _, control := range input.Controls {
-			control.Control.ProgramIDs = []string{program.ID}
+			control.Control.ProgramIDs = []string{res.ID}
 			_, err := r.CreateControlWithSubcontrols(ctx, *control)
 			if err != nil {
 				return nil, err
@@ -141,13 +157,29 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		}
 	}
 
+	query, err := withTransactionalMutation(ctx).Program.
+		Query().
+		Where(program.ID(res.ID)).
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
+	finalResult, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
 	return &model.ProgramCreatePayload{
-		Program: program,
+		Program: finalResult,
 	}, nil
 }
 
 // CreateControlWithSubcontrols is the resolver for the createControlWithSubcontrols field.
 func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(*input.Control).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
@@ -163,14 +195,27 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 			builders[i] = c.Subcontrol.Create().SetInput(*input.Subcontrols[i])
 		}
 
-		_, err = c.Subcontrol.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Subcontrol.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
 
+	query, err := withTransactionalMutation(ctx).Control.
+		Query().
+		Where(control.ID(res.ID)).
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+
+	}
+
+	finalResult, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+	}
+
 	return &model.ControlCreatePayload{
-		Control: res,
+		Control: finalResult,
 	}, nil
 }
 
@@ -191,8 +236,7 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return parseRequestError(err, action{action: ActionUpdate, object: "program"})
 	}
 

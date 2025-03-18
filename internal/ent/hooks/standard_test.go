@@ -98,7 +98,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned()
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -116,7 +116,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned()
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -134,7 +134,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned().ClearIsPublic()
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -152,7 +152,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).ClearIsPublic()
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -170,7 +170,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).SetSystemOwned(true)
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -188,7 +188,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).SetIsPublic(true)
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -206,7 +206,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).SetIsPublic(true)
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -224,7 +224,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.UpdateOne(std).SetSystemOwned(true).SetIsPublic(true)
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -242,7 +242,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.Update().SetSystemOwned(true).SetIsPublic(true).Where(standard.ID(std.ID))
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -260,7 +260,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.Update().SetSystemOwned(false).Where(standard.ID(std.ID))
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -278,7 +278,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.Update().SetIsPublic(false).Where(standard.ID(std.ID))
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -296,7 +296,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -314,7 +314,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 				update := suite.client.Standard.Update().SetSystemOwned(true).Where(standard.ID(std.ID))
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()

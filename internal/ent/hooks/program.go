@@ -97,7 +97,7 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 		Role:      &enums.RoleAdmin,
 	}
 
-	if _, err := m.Client().ProgramMembership.Create().SetInput(input).Save(ctx); err != nil {
+	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error creating program membership for admin")
 
 		return err

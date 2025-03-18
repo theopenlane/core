@@ -10,11 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateHush is the resolver for the createHush field.
 func (r *mutationResolver) CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Hush.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "hush"})
@@ -27,11 +33,21 @@ func (r *mutationResolver) CreateHush(ctx context.Context, input generated.Creat
 
 // CreateBulkHush is the resolver for the createBulkHush field.
 func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateHush(ctx, input)
 }
 
 // CreateBulkCSVHush is the resolver for the createBulkCSVHush field.
 func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateHushInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -39,11 +55,18 @@ func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
 	return r.bulkCreateHush(ctx, data)
 }
 
 // UpdateHush is the resolver for the updateHush field.
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "hush"})
@@ -79,7 +102,15 @@ func (r *mutationResolver) DeleteHush(ctx context.Context, id string) (*model.Hu
 
 // Hush is the resolver for the hush field.
 func (r *queryResolver) Hush(ctx context.Context, id string) (*generated.Hush, error) {
-	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Hush.Query().Where(hush.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
 	}

@@ -55,6 +55,7 @@ type Resolver struct {
 	uploader          *objects.Objects
 	isDevelopment     bool
 	complexityLimit   int
+	maxResultLimit    *int
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -82,6 +83,13 @@ func (r Resolver) WithDevelopment(dev bool) *Resolver {
 // WithComplexityLimitConfig sets the complexity limit for the resolver
 func (r Resolver) WithComplexityLimitConfig(limit int) *Resolver {
 	r.complexityLimit = limit
+
+	return &r
+}
+
+// WithMaxResultLimit sets the max result limit for the resolver
+func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
+	r.maxResultLimit = &limit
 
 	return &r
 }

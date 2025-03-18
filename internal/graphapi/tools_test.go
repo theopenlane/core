@@ -29,6 +29,9 @@ import (
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+
+	// import generated runtime which is required to prevent cyclical dependencies
+	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 )
 
 const (
@@ -142,7 +145,7 @@ func (suite *GraphTestSuite) SetupSuite() {
 
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(t, c.db, c.objectStore)
+	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	require.NoError(t, err)
 
 	suite.client = c

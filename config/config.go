@@ -106,6 +106,8 @@ type Server struct {
 	EnableGraphExtensions bool `json:"enableGraphExtensions" koanf:"enableGraphExtensions" default:"true"`
 	// ComplexityLimit sets the maximum complexity allowed for a query
 	ComplexityLimit int `json:"complexityLimit" koanf:"complexityLimit" default:"100"`
+	// MaxResultLimit sets the maximum number of results allowed for a query
+	MaxResultLimit int `json:"maxResultLimit" koanf:"maxResultLimit" default:"100"`
 }
 
 // Auth settings including oauth2 providers and token configuration

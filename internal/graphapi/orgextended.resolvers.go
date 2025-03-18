@@ -13,11 +13,14 @@ import (
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
@@ -37,10 +40,16 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 		return nil, err
 	}
 
-	finalResult, err := withTransactionalMutation(ctx).Organization.
+	query, err := withTransactionalMutation(ctx).Organization.
 		Query().
 		WithMembers().
-		Where(entorg.IDEQ(res.Organization.ID)).Only(ctx)
+		Where(entorg.IDEQ(res.Organization.ID)).
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+	}
+
+	finalResult, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
 	}
@@ -52,6 +61,9 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 
 // CreateOrgSettings is the resolver for the createOrgSettings field.
 func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context, obj *generated.CreateOrganizationInput, data *generated.CreateOrganizationSettingInput) error {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	c := withTransactionalMutation(ctx)
 
 	orgSettings, err := c.OrganizationSetting.Create().SetInput(*data).Save(ctx)
@@ -66,6 +78,9 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 // AddOrgMembers is the resolver for the addOrgMembers field.
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if orgID == nil {
 		log.Error().Msg("unable to get org from context")
@@ -81,8 +96,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 		builders[i] = c.OrgMembership.Create().SetInput(input)
 	}
 
-	_, err := c.OrgMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.OrgMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 
@@ -138,8 +152,7 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 		settingID = &setting.ID
 	}
 
-	_, err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 

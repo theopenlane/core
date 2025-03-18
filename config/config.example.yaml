@@ -161,6 +161,7 @@ server:
         maxWorkers: 100
     idleTimeout: 30000000000
     listen: :17608
+    maxResultLimit: 100
     mime:
         defaultContentType: application/data
         enabled: true

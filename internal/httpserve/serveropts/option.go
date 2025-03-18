@@ -213,7 +213,8 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 		r := graphapi.NewResolver(c, s.Config.ObjectManager).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
 			WithDevelopment(s.Config.Settings.Server.Dev).
-			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit)
+			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
+			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

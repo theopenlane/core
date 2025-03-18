@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -19,6 +19,9 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 	if err := checkAllowedAuthType(ctx); err != nil {
 		return nil, err
 	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// get the userID from the context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
@@ -58,6 +61,9 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 	if err := checkAllowedAuthType(ctx); err != nil {
 		return nil, err
 	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// get the userID from the context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
@@ -112,6 +118,9 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 
 // TfaSetting is the resolver for the tfaSettings field.
 func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.TFASetting, error) {
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	if err := checkAllowedAuthType(ctx); err != nil {
 		return nil, err
 	}
@@ -123,7 +132,12 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 	}
 
 	if id != nil && *id != "" {
-		settings, err := withTransactionalMutation(ctx).TFASetting.Get(ctx, *id)
+		query, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.ID(*id)).CollectFields(ctx, preloads...)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+		}
+
+		settings, err := query.Only(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
 		}
@@ -131,7 +145,12 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 		return settings, nil
 	}
 
-	settings, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).Only(ctx)
+	query, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+	}
+
+	settings, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
 	}

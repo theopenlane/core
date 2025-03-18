@@ -10,26 +10,44 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
-// CreateEvent is the resolver for the createEvent field
+// CreateEvent is the resolver for the createEvent field.
 func (r *mutationResolver) CreateEvent(ctx context.Context, input generated.CreateEventInput) (*model.EventCreatePayload, error) {
-	t, err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Save(ctx)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	res, err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "event"})
 	}
 
-	return &model.EventCreatePayload{Event: t}, nil
+	return &model.EventCreatePayload{
+		Event: res,
+	}, nil
 }
 
 // CreateBulkEvent is the resolver for the createBulkEvent field.
 func (r *mutationResolver) CreateBulkEvent(ctx context.Context, input []*generated.CreateEventInput) (*model.EventBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateEvent(ctx, input)
 }
 
 // CreateBulkCSVEvent is the resolver for the createBulkCSVEvent field.
 func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateEventInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -37,25 +55,37 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
 	return r.bulkCreateEvent(ctx, data)
 }
 
-// UpdateEvent is the resolver for the updateEvent field
+// UpdateEvent is the resolver for the updateEvent field.
 func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*model.EventUpdatePayload, error) {
-	event, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	res, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
 	}
 
-	event, err = event.Update().SetInput(input).Save(ctx)
+	// setup update request
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+
+	res, err = req.Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
 	}
 
-	return &model.EventUpdatePayload{Event: event}, nil
+	return &model.EventUpdatePayload{
+		Event: res,
+	}, nil
 }
 
-// DeleteEvent is the resolver for the deleteEvent field
+// DeleteEvent is the resolver for the deleteEvent field.
 func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*model.EventDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Event.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "event"})
@@ -65,15 +95,25 @@ func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*model.E
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &model.EventDeletePayload{DeletedID: id}, nil
+	return &model.EventDeletePayload{
+		DeletedID: id,
+	}, nil
 }
 
-// Event is the resolver for the event field
+// Event is the resolver for the event field.
 func (r *queryResolver) Event(ctx context.Context, id string) (*generated.Event, error) {
-	event, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Event.Query().Where(event.ID(id)).CollectFields(ctx, preloads...)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
 	}
 
-	return event, nil
+	res, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
+	}
+
+	return res, nil
 }

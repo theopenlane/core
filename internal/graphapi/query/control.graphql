@@ -128,6 +128,13 @@ mutation DeleteControl($deleteControlId: ID!) {
 
 query GetAllControls {
   controls {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         assessmentMethods
@@ -258,8 +265,15 @@ query GetControlByID($controlId: ID!) {
   }
 }
 
-query GetControls($where: ControlWhereInput) {
-  controls(where: $where) {
+query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
+  controls(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         assessmentMethods

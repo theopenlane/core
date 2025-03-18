@@ -10,11 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateControlImplementation is the resolver for the createControlImplementation field.
 func (r *mutationResolver) CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlimplementation"})
@@ -27,11 +33,21 @@ func (r *mutationResolver) CreateControlImplementation(ctx context.Context, inpu
 
 // CreateBulkControlImplementation is the resolver for the createBulkControlImplementation field.
 func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, input []*generated.CreateControlImplementationInput) (*model.ControlImplementationBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateControlImplementation(ctx, input)
 }
 
 // CreateBulkCSVControlImplementation is the resolver for the createBulkCSVControlImplementation field.
 func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateControlImplementationInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -39,11 +55,18 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
 	return r.bulkCreateControlImplementation(ctx, data)
 }
 
 // UpdateControlImplementation is the resolver for the updateControlImplementation field.
 func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlimplementation"})
@@ -79,7 +102,15 @@ func (r *mutationResolver) DeleteControlImplementation(ctx context.Context, id s
 
 // ControlImplementation is the resolver for the controlImplementation field.
 func (r *queryResolver) ControlImplementation(ctx context.Context, id string) (*generated.ControlImplementation, error) {
-	res, err := withTransactionalMutation(ctx).ControlImplementation.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
 	}

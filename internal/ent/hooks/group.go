@@ -231,7 +231,7 @@ func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutati
 		Role:    &role,
 	}
 
-	if _, err := m.Client().GroupMembership.Create().SetInput(input).Save(ctx); err != nil {
+	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error creating group membership for admin")
 
 		return err

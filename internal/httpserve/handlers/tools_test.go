@@ -29,6 +29,9 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+
+	// import generated runtime which is required to prevent cyclical dependencies
+	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 )
 
 var (
@@ -139,7 +142,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.db = db
 
 	// add the client
-	suite.api, err = coreutils.TestClient(t, suite.db, suite.objectStore)
+	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
 	require.NoError(t, err)
 
 	// setup handler

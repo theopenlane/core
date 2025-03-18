@@ -48,6 +48,7 @@ data:
   CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.core.server.graphPool.maxWorkers | default 100 }}
   CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default true }}
   CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.core.server.complexityLimit | default 100 }}
+  CORE_SERVER_MAXRESULTLIMIT: {{ .Values.core.server.maxResultLimit | default 100 }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
   CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}

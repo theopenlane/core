@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent/dialect/sql"
+
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // generateTFAQRCode generates a QR code for the user's TFA secret

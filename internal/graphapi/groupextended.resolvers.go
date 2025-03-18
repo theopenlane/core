@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -92,6 +92,16 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) (
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
 	res, err := r.CreateGroup(ctx, groupInput)
 	if err != nil {
 		return nil, err
@@ -111,10 +121,16 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		return nil, err
 	}
 
-	finalResult, err := withTransactionalMutation(ctx).Group.
+	query, err := withTransactionalMutation(ctx).Group.
 		Query().
 		WithMembers().
-		Where(group.IDEQ(res.Group.ID)).Only(ctx)
+		Where(group.IDEQ(res.Group.ID)).
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+	}
+
+	finalResult, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -126,6 +142,9 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 
 // CreateGroupByClone is the resolver for the createGroupByClone field.
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
+	// grab preloads and set max result limits
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -232,10 +251,15 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		}
 	}
 
-	finalResult, err := withTransactionalMutation(ctx).Group.
-		Query().
+	query, err := withTransactionalMutation(ctx).Group.Query().
+		Where(group.IDEQ(res.ID)).
 		WithMembers().
-		Where(group.IDEQ(res.ID)).Only(ctx)
+		CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+	}
+
+	finalResult, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -247,9 +271,17 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
-	c := withTransactionalMutation(ctx)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	groupSettings, err := c.GroupSetting.Create().SetInput(*data).Save(ctx)
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.ErrPermissionDenied
+	}
+
+	groupSettings, err := withTransactionalMutation(ctx).GroupSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
 		return parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -261,6 +293,10 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 
 // AddGroupMembers is the resolver for the addGroupMembers field.
 func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []*generated.CreateGroupMembershipInput) error {
+	if len(data) == 0 {
+		return nil
+	}
+
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
 		log.Error().Msg("unable to get group from context")
@@ -276,8 +312,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 		builders[i] = c.GroupMembership.Create().SetInput(input)
 	}
 
-	_, err := c.GroupMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.GroupMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return parseRequestError(err, action{action: ActionUpdate, object: "group"})
 	}
 
@@ -313,6 +348,9 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 // UpdateGroupSettings is the resolver for the updateGroupSettings field.
 func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj *generated.UpdateGroupInput, data *generated.UpdateGroupSettingInput) error {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
 		log.Error().Msg("unable to get group from context")
@@ -338,12 +376,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 		settingID = &setting.ID
 	}
 
-	_, err := c.GroupSetting.UpdateOneID(*settingID).SetInput(*data).Save(ctx)
-	if err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "group"})
-	}
-
-	return nil
+	return c.GroupSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx)
 }
 
 // InheritGroupPermissions is the resolver for the inheritGroupPermissions field.

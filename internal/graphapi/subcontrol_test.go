@@ -284,7 +284,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
-			expectedErr: "organization_id is required",
+			expectedErr: "owner_id is required",
 		},
 		{
 			name: "user not authorized, not enough permissions",

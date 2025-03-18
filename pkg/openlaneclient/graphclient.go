@@ -47,7 +47,7 @@ type OpenlaneGraphClient interface {
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
 	GetControlByID(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor) (*GetControlByID, error)
-	GetControls(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
+	GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
 	GetControlHistories(ctx context.Context, where *ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlHistories, error)
@@ -6915,6 +6915,38 @@ func (t *DeleteControl_DeleteControl) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllControls_Controls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllControls_Controls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllControls_Controls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllControls_Controls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllControls_Controls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllControls_Controls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllControls_Controls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllControls_Controls_Edges_Node_ControlOwner struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -7317,7 +7349,9 @@ func (t *GetAllControls_Controls_Edges) GetNode() *GetAllControls_Controls_Edges
 }
 
 type GetAllControls_Controls struct {
-	Edges []*GetAllControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllControls_Controls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                            "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllControls_Controls) GetEdges() []*GetAllControls_Controls_Edges {
@@ -7325,6 +7359,18 @@ func (t *GetAllControls_Controls) GetEdges() []*GetAllControls_Controls_Edges {
 		t = &GetAllControls_Controls{}
 	}
 	return t.Edges
+}
+func (t *GetAllControls_Controls) GetPageInfo() *GetAllControls_Controls_PageInfo {
+	if t == nil {
+		t = &GetAllControls_Controls{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllControls_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControls_Controls{}
+	}
+	return t.TotalCount
 }
 
 type GetControlByID_Control_ControlOwner struct {
@@ -7715,6 +7761,38 @@ func (t *GetControlByID_Control) GetViewers() []*GetControlByID_Control_Viewers 
 		t = &GetControlByID_Control{}
 	}
 	return t.Viewers
+}
+
+type GetControls_Controls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetControls_Controls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControls_Controls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControls_Controls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControls_Controls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetControls_Controls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetControls_Controls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetControls_Controls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetControls_Controls_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetControls_Controls_Edges_Node_ControlOwner struct {
@@ -8119,7 +8197,9 @@ func (t *GetControls_Controls_Edges) GetNode() *GetControls_Controls_Edges_Node 
 }
 
 type GetControls_Controls struct {
-	Edges []*GetControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetControls_Controls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetControls_Controls) GetEdges() []*GetControls_Controls_Edges {
@@ -8127,6 +8207,18 @@ func (t *GetControls_Controls) GetEdges() []*GetControls_Controls_Edges {
 		t = &GetControls_Controls{}
 	}
 	return t.Edges
+}
+func (t *GetControls_Controls) GetPageInfo() *GetControls_Controls_PageInfo {
+	if t == nil {
+		t = &GetControls_Controls{}
+	}
+	return &t.PageInfo
+}
+func (t *GetControls_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControls_Controls{}
+	}
+	return t.TotalCount
 }
 
 type UpdateControl_UpdateControl_Control_ControlOwner struct {
@@ -64310,6 +64402,13 @@ func (c *Client) DeleteControl(ctx context.Context, deleteControlID string, inte
 
 const GetAllControlsDocument = `query GetAllControls {
 	controls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				assessmentMethods
@@ -64474,8 +64573,15 @@ func (c *Client) GetControlByID(ctx context.Context, controlID string, intercept
 	return &res, nil
 }
 
-const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
-	controls(where: $where) {
+const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where: ControlWhereInput) {
+	controls(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				assessmentMethods
@@ -64543,8 +64649,10 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 }
 `
 
-func (c *Client) GetControls(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
+func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
 	vars := map[string]any{
+		"first": first,
+		"last":  last,
 		"where": where,
 	}
 

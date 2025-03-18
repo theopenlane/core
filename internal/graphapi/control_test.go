@@ -113,8 +113,12 @@ func (suite *GraphTestSuite) TestQueryControls() {
 	t := suite.T()
 
 	// create multiple objects to be queried using testUser1
-	(&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// maxResults is set in test utils config for the echo server
+	maxResults := 10
+	controlsToCreate := int64(11)
+	for range controlsToCreate { // set to 11 to ensure pagination is tested
+		(&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	}
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
@@ -126,6 +130,8 @@ func (suite *GraphTestSuite) TestQueryControls() {
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
+		first           *int64
+		last            *int64
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -133,7 +139,35 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 2,
+			expectedResults: maxResults,
+		},
+		{
+			name:            "happy path, with first set",
+			client:          suite.client.api,
+			first:           lo.ToPtr(int64(5)),
+			ctx:             testUser1.UserCtx,
+			expectedResults: 5,
+		},
+		{
+			name:            "happy path, with last set",
+			client:          suite.client.api,
+			first:           lo.ToPtr(int64(3)),
+			ctx:             testUser1.UserCtx,
+			expectedResults: 3,
+		},
+		{
+			name:            "first set over max (10 in test)",
+			client:          suite.client.api,
+			first:           lo.ToPtr(int64(11)),
+			ctx:             testUser1.UserCtx,
+			expectedResults: maxResults,
+		},
+		{
+			name:            "last set over max (10 in test)",
+			client:          suite.client.api,
+			last:            lo.ToPtr(int64(11)),
+			ctx:             testUser1.UserCtx,
+			expectedResults: maxResults,
 		},
 		{
 			name:            "happy path, using read only user of the same org, no programs or groups associated",
@@ -151,7 +185,7 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 2,
+			expectedResults: maxResults,
 		},
 		{
 			name:            "another user, no controls should be returned",
@@ -163,11 +197,37 @@ func (suite *GraphTestSuite) TestQueryControls() {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
+			if tc.first != nil || tc.last != nil {
+				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil)
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				assert.Len(t, resp.Controls.Edges, tc.expectedResults)
+				assert.Equal(t, int64(11), resp.Controls.TotalCount)
+
+				// if we are pulling the last, there won't be a next page, but there will be a previous page
+				if tc.last != nil {
+					assert.True(t, resp.Controls.PageInfo.HasPreviousPage)
+				} else {
+					assert.True(t, resp.Controls.PageInfo.HasNextPage)
+				}
+
+				return
+			}
+
 			resp, err := tc.client.GetAllControls(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
 			assert.Len(t, resp.Controls.Edges, tc.expectedResults)
+
+			if tc.expectedResults > 0 {
+				assert.Equal(t, int64(controlsToCreate), resp.Controls.TotalCount)
+				assert.True(t, resp.Controls.PageInfo.HasNextPage)
+			} else {
+				assert.Equal(t, int64(0), resp.Controls.TotalCount)
+				assert.False(t, resp.Controls.PageInfo.HasNextPage)
+			}
 		})
 	}
 }
@@ -289,7 +349,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
-			expectedErr: "organization_id is required",
+			expectedErr: "owner_id is required",
 		},
 		{
 			name: "using api token",
@@ -707,27 +767,27 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 
 			if tc.request.AppendMappedCategories != nil {
-				assert.ElementsMatch(t, tc.request.MappedCategories, resp.UpdateControl.Control.MappedCategories)
+				assert.ElementsMatch(t, tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories)
 			}
 
 			if tc.request.AppendControlQuestions != nil {
-				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+				assert.ElementsMatch(t, tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions)
 			}
 
 			if tc.request.AppendAssessmentObjectives != nil {
-				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+				assert.ElementsMatch(t, tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
 			}
 
 			if tc.request.AppendAssessmentMethods != nil {
-				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+				assert.ElementsMatch(t, tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
 			}
 
 			if tc.request.AppendImplementationGuidance != nil {
-				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+				assert.ElementsMatch(t, tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
 			}
 
 			if tc.request.AppendExampleEvidence != nil {
-				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+				assert.ElementsMatch(t, tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
 			}
 
 			if tc.request.ControlOwnerID != nil {

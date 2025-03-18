@@ -8,7 +8,9 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // DeleteFile is the resolver for the deleteFile field.
@@ -28,7 +30,15 @@ func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.Fi
 
 // File is the resolver for the file field.
 func (r *queryResolver) File(ctx context.Context, id string) (*generated.File, error) {
-	res, err := withTransactionalMutation(ctx).File.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).File.Query().Where(file.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
 	}

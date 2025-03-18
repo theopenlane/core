@@ -61,7 +61,7 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 
 				update := suite.client.Standard.UpdateOne(std)
 
-				_, err = update.Save(ctx)
+				err = update.Exec(ctx)
 				require.NoError(t, err)
 
 				return update.Mutation()

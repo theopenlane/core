@@ -17,6 +17,15 @@ type {{ . }} struct {
 func ({{ . }}) Fields() []ent.Field {
     return []ent.Field{
         // Fields go here
+        // Example:
+        //	field.String("name").
+        //		Comment("the name of the cat").
+        //		Annotations(
+        //			// makes field searchable
+        //			entx.FieldSearchable(),
+        //			// allows field to be used for sort order
+        //			entgql.OrderField("due_date"),
+        //		)
     }
 }
 
@@ -34,6 +43,7 @@ func ({{ . }}) Mixin() []ent.Mixin {
 func ({{ . }}) Edges() []ent.Edge {
 	return []ent.Edge{
 		// Edges go here
+		// add the entgql.RelayConnection() for the edges that are non-unique for pagination
 	}
 }
 
