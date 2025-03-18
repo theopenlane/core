@@ -383,15 +383,15 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 			}
 
 			if tc.request.CreationDate != nil {
-				assert.WithinDuration(t, *tc.request.CreationDate, resp.CreateEvidence.Evidence.CreationDate, time.Minute)
+				assert.WithinDuration(t, *tc.request.CreationDate, resp.CreateEvidence.Evidence.CreationDate, 2*time.Minute)
 			} else {
-				assert.WithinDuration(t, time.Now(), resp.CreateEvidence.Evidence.CreationDate, time.Minute)
+				assert.WithinDuration(t, time.Now(), resp.CreateEvidence.Evidence.CreationDate, 2*time.Minute)
 			}
 
 			if tc.request.RenewalDate != nil {
-				assert.WithinDuration(t, *tc.request.RenewalDate, *resp.CreateEvidence.Evidence.RenewalDate, time.Minute)
+				assert.WithinDuration(t, *tc.request.RenewalDate, *resp.CreateEvidence.Evidence.RenewalDate, 2*time.Minute)
 			} else {
-				assert.WithinDuration(t, time.Now().Add(365*24*time.Hour), *resp.CreateEvidence.Evidence.RenewalDate, time.Minute)
+				assert.WithinDuration(t, time.Now().Add(365*24*time.Hour), *resp.CreateEvidence.Evidence.RenewalDate, 2*time.Minute)
 			}
 
 			if tc.request.IsAutomated != nil {

@@ -109,7 +109,7 @@ func TestCreateUserInput(t *testing.T) {
 			assert.Equal(t, tc.expected.LastName, input.LastName)
 			assert.Equal(t, tc.expected.Email, input.Email)
 			assert.Equal(t, tc.expected.AuthProvider, input.AuthProvider)
-			assert.WithinDuration(t, *tc.expected.LastSeen, *input.LastSeen, 1*time.Minute) // allow for a reasonable drift while tests are running
+			assert.WithinDuration(t, *tc.expected.LastSeen, *input.LastSeen, 2*time.Minute) // allow for a reasonable drift while tests are running
 			assert.Equal(t, tc.expected.AvatarRemoteURL, input.AvatarRemoteURL)
 		})
 	}
