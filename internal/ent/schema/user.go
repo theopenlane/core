@@ -3,7 +3,6 @@ package schema
 import (
 	"net/mail"
 	"net/url"
-	"strings"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -77,14 +76,6 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entgql.OrderField("display_name"),
-			).
-			Validate(
-				func(s string) error {
-					if strings.Contains(s, " ") {
-						return ErrContainsSpaces
-					}
-					return nil
-				},
 			),
 		field.String("avatar_remote_url").
 			Comment("URL of the user's remote avatar").

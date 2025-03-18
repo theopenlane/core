@@ -58,6 +58,29 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			expectedStatus: http.StatusCreated,
 		},
 		{
+			name:           "happy path, no first and last name",
+			email:          "oranges@theopenlane.io",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+		},
+		{
+			name:           "happy path, first name only",
+			email:          "berries@theopenlane.io",
+			firstName:      "Princess",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+		},
+		{
+			name:           "happy path, last name only",
+			email:          "melon@theopenlane.io",
+			lastName:       "Fiona",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+		},
+		{
 			name:               "invalid email",
 			email:              "bananas.net",
 			firstName:          "Princess",
@@ -89,10 +112,22 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			expectedStatus:     http.StatusBadRequest,
 			expectedErrorCode:  handlers.InvalidInputErrCode,
 		},
+		{
+			name:              "already registered",
+			email:             "bananas@theopenlane.io",
+			firstName:         "Princess",
+			lastName:          "Fiona",
+			password:          bonkers,
+			emailExpected:     false,
+			expectedStatus:    http.StatusConflict,
+			expectedErrorCode: handlers.UserExistsErrCode,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			suite.ClearTestData()
+
 			registerJSON := models.RegisterRequest{
 				FirstName: tc.firstName,
 				LastName:  tc.lastName,
@@ -156,19 +191,36 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				require.NoError(t, err)
 				require.Len(t, orgMemberships.OrgMemberships.Edges, 1)
 				assert.Equal(t, orgMemberships.OrgMemberships.Edges[0].Node.Role, enums.RoleOwner)
+
+				// get user to test display name
+				user, err := suite.db.User.Get(ctx, out.ID)
+				require.NoError(t, err)
+
+				// if name is set, it's used for display name, otherwise it's the email prefix
+				if tc.firstName != "" && tc.lastName != "" {
+					assert.Equal(t, strings.TrimSpace(tc.firstName+" "+tc.lastName), user.DisplayName)
+				} else {
+					assert.Equal(t, strings.Split(tc.email, "@")[0], user.DisplayName)
+				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErrMessage)
 			}
 
 			// wait for messages
 			if tc.emailExpected {
-				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
+				job := rivertest.RequireInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
 					Message: *newman.NewEmailMessageWithOptions(
 						newman.WithSubject("Please verify your email address to login to Openlane"),
 					),
 				}, nil)
 				require.NotNil(t, job)
 				require.Equal(t, []string{tc.email}, job.Args.Message.To)
+			} else {
+				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
+					Message: *newman.NewEmailMessageWithOptions(
+						newman.WithSubject("Please verify your email address to login to Openlane"),
+					),
+				}, nil)
 			}
 		})
 	}
