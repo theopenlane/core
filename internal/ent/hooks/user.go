@@ -58,7 +58,16 @@ func HookUser() ent.Hook {
 				if m.Op().Is(ent.OpCreate) {
 					displayName, _ := m.DisplayName()
 					if displayName == "" {
-						displayName = strings.Split(email, "@")[0]
+						// first try first and last name
+						firstName, _ := m.FirstName()
+						lastName, _ := m.LastName()
+
+						if firstName != "" && lastName != "" {
+							displayName = strings.TrimSpace(fmt.Sprintf("%s %s", firstName, lastName))
+						} else {
+							// if first and last name are not provided, use the email without the domain
+							displayName = strings.Split(email, "@")[0]
+						}
 
 						m.SetDisplayName(displayName)
 					}
