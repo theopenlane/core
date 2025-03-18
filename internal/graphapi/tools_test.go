@@ -145,7 +145,7 @@ func (suite *GraphTestSuite) SetupSuite() {
 
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(t, c.db, c.objectStore)
+	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	require.NoError(t, err)
 
 	suite.client = c

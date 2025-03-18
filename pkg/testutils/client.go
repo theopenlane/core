@@ -36,8 +36,8 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(t *testing.T, c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
-	e := testEchoServer(t, c, u, false)
+func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+	e := testEchoServer(c, u, false)
 
 	// setup interceptors
 	if opts == nil {
@@ -52,8 +52,8 @@ func TestClient(t *testing.T, c *ent.Client, u *objects.Objects, opts ...openlan
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(t *testing.T, c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
-	e := testEchoServer(t, c, u, true)
+func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+	e := testEchoServer(c, u, true)
 
 	// setup interceptors
 	if opts == nil {
@@ -69,8 +69,8 @@ func TestClientWithAuth(t *testing.T, c *ent.Client, u *objects.Objects, opts ..
 
 // testEchoServer creates a new echo server for testing the graph api
 // and optionally includes the middleware for authentication testing
-func testEchoServer(t *testing.T, c *ent.Client, u *objects.Objects, includeMiddleware bool) *echo.Echo {
-	srv := testGraphServer(t, c, u)
+func testEchoServer(c *ent.Client, u *objects.Objects, includeMiddleware bool) *echo.Echo {
+	srv := testGraphServer(c, u)
 
 	e := echo.New()
 
@@ -107,10 +107,12 @@ func createAuthConfig(c *ent.Client) *auth.AuthOptions {
 }
 
 // testGraphServer creates a new graphql server for testing the graph api
-func testGraphServer(t *testing.T, c *ent.Client, u *objects.Objects) *handler.Server {
+func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
-			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u)},
+			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u).
+				WithMaxResultLimit(10), // set to 10 for testing
+			},
 		))
 
 	// add all the transports to the server

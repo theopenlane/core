@@ -108,7 +108,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 
 	var err error
 
-	suite.client.apiWithPAT, err = coreutils.TestClientWithAuth(t,
+	suite.client.apiWithPAT, err = coreutils.TestClientWithAuth(
 		suite.client.db,
 		suite.client.objectStore,
 		openlaneclient.WithCredentials(authHeaderPAT))
@@ -121,7 +121,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 		BearerToken: apiToken.Token,
 	}
 
-	suite.client.apiWithToken, err = coreutils.TestClientWithAuth(t, suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	suite.client.apiWithToken, err = coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
 	require.NoError(t, err)
 }
 
