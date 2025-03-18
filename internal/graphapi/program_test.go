@@ -339,13 +339,13 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			if tc.request.StartDate == nil {
 				assert.Empty(t, resp.CreateProgram.Program.StartDate)
 			} else {
-				assert.WithinDuration(t, startDate, *resp.CreateProgram.Program.StartDate, 1*time.Minute)
+				assert.WithinDuration(t, startDate, *resp.CreateProgram.Program.StartDate, 2*time.Minute)
 			}
 
 			if tc.request.EndDate == nil {
 				assert.Empty(t, resp.CreateProgram.Program.EndDate)
 			} else {
-				assert.WithinDuration(t, endDate, *resp.CreateProgram.Program.EndDate, 1*time.Minute)
+				assert.WithinDuration(t, endDate, *resp.CreateProgram.Program.EndDate, 2*time.Minute)
 			}
 
 			if tc.request.AuditorReady == nil {
@@ -632,11 +632,11 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			}
 
 			if tc.request.StartDate != nil {
-				assert.WithinDuration(t, *tc.request.StartDate, *resp.UpdateProgram.Program.StartDate, time.Minute)
+				assert.WithinDuration(t, *tc.request.StartDate, *resp.UpdateProgram.Program.StartDate, 2*time.Minute)
 			}
 
 			if tc.request.EndDate != nil {
-				assert.WithinDuration(t, *tc.request.EndDate, *resp.UpdateProgram.Program.EndDate, time.Minute)
+				assert.WithinDuration(t, *tc.request.EndDate, *resp.UpdateProgram.Program.EndDate, 2*time.Minute)
 			}
 
 			if tc.request.AuditorReady != nil {

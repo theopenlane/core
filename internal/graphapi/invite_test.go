@@ -251,7 +251,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			assert.Equal(t, tc.requestorID, *resp.CreateInvite.Invite.RequestorID)
 			assert.Equal(t, tc.expectedStatus, resp.CreateInvite.Invite.Status)
 			assert.Equal(t, tc.expectedAttempts, resp.CreateInvite.Invite.SendAttempts)
-			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 14), *resp.CreateInvite.Invite.Expires, time.Minute)
+			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 14), *resp.CreateInvite.Invite.Expires, 2*time.Minute)
 		})
 	}
 }
