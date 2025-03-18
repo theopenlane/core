@@ -7,14 +7,13 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/iam/totp"
-
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/graphutils"
 )
 
 // HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed

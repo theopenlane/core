@@ -71,6 +71,12 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 
 // DeleteOrganization is the resolver for the deleteOrganization field.
 func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error) {
+	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
+		log.Info().Msg("organization attempted to be deleted with non-JWT auth type")
+
+		return nil, ErrResourceNotAccessibleWithToken
+	}
+
 	if err := withTransactionalMutation(ctx).Organization.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "organization"})
 	}

@@ -6,9 +6,10 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/graphutils"
 )
 
 func InterceptorSubscriptionURL() ent.Interceptor {

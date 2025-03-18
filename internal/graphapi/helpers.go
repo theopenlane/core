@@ -13,13 +13,13 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 	sliceutil "github.com/theopenlane/utils/slice"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/graphutils"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
