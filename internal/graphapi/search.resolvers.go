@@ -271,11 +271,9 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 		},
 	})
 
-	// Check all errors and return a single error if any of the searches failed
+	// log the errors for debugging
 	if len(errors) > 0 {
-		log.Error().Errs("errors", errors).Msg("search failed")
-
-		return nil, ErrSearchFailed
+		log.Error().Errs("errors", errors).Msg("search failed for one or more entities")
 	}
 
 	// return the results

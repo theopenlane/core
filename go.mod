@@ -8,7 +8,7 @@ require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
-	entgo.io/ent v0.14.3
+	entgo.io/ent v0.14.4
 	github.com/99designs/gqlgen v0.17.68
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.31.0
@@ -70,7 +70,7 @@ require (
 	github.com/theopenlane/echox v0.2.1
 	github.com/theopenlane/emailtemplates v0.1.2
 	github.com/theopenlane/entx v0.5.0
-	github.com/theopenlane/gqlgen-plugins v0.4.9
+	github.com/theopenlane/gqlgen-plugins v0.4.10
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.9.1
 	github.com/theopenlane/newman v0.1.3

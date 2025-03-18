@@ -14,8 +14,12 @@ import (
 )
 
 const (
+	// graphapiGenDir is the directory where the configuration file for gqlgen is located
 	graphapiGenDir = "internal/graphapi/generate/"
-	csvDir         = "internal/httpserve/handlers/csv"
+	// csvDir is the directory where the CSV files will be stored for example bulk operations
+	csvDir = "internal/httpserve/handlers/csv"
+	// maxSearchResultsPerObject restricts the search queries to only return a maximum of 100 results per object
+	maxSearchResultsPerObject = 100
 )
 
 func main() {
@@ -31,6 +35,7 @@ func main() {
 
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
+	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(resolvergen.WithEntGeneratedPackage(
@@ -44,6 +49,8 @@ func main() {
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),
 			searchgen.WithModelPackage(modelImport),
+			searchgen.WithRulePackage(rulePackage),
+			searchgen.WithMaxResults(maxSearchResultsPerObject),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")
