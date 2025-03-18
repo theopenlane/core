@@ -90,12 +90,14 @@ jobQueue:
         ErrorHandler: null
         FetchCooldown: 0
         FetchPollInterval: 0
+        Hooks: null
         ID: ""
         JobCleanerTimeout: 0
         JobInsertMiddleware: null
         JobTimeout: 0
         Logger: null
         MaxAttempts: 0
+        Middleware: null
         PeriodicJobs: null
         PollOnly: false
         Queues: null

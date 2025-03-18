@@ -430,8 +430,10 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**JobCleanerTimeout**|`integer`|||
 |[**JobInsertMiddleware**](#jobqueueriverconfjobinsertmiddleware)|`array`|||
 |**JobTimeout**|`integer`|||
+|[**Hooks**](#jobqueueriverconfhooks)|`array`|||
 |[**Logger**](#jobqueueriverconflogger)|`object`|||
 |**MaxAttempts**|`integer`|||
+|[**Middleware**](#jobqueueriverconfmiddleware)|`array`|||
 |[**PeriodicJobs**](#jobqueueriverconfperiodicjobs)|`array`|||
 |**PollOnly**|`boolean`|||
 |[**Queues**](#jobqueueriverconfqueues)|`object`|||
@@ -450,12 +452,22 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 **Items**
 
+<a name="jobqueueriverconfhooks"></a>
+#### jobQueue\.riverConf\.Hooks: array
+
+**Items**
+
 <a name="jobqueueriverconflogger"></a>
 #### jobQueue\.riverConf\.Logger: object
 
 **No properties.**
 
 **Additional Properties:** not allowed  
+<a name="jobqueueriverconfmiddleware"></a>
+#### jobQueue\.riverConf\.Middleware: array
+
+**Items**
+
 <a name="jobqueueriverconfperiodicjobs"></a>
 #### jobQueue\.riverConf\.PeriodicJobs: array
 

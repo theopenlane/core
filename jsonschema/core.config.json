@@ -8,7 +8,15 @@
       },
       "type": "array"
     },
+    "[]rivertype.Hook": {
+      "items": true,
+      "type": "array"
+    },
     "[]rivertype.JobInsertMiddleware": {
+      "items": true,
+      "type": "array"
+    },
+    "[]rivertype.Middleware": {
       "items": true,
       "type": "array"
     },
@@ -764,11 +772,17 @@
         "JobTimeout": {
           "type": "integer"
         },
+        "Hooks": {
+          "$ref": "#/$defs/[]rivertype.Hook"
+        },
         "Logger": {
           "$ref": "#/$defs/slog.Logger"
         },
         "MaxAttempts": {
           "type": "integer"
+        },
+        "Middleware": {
+          "$ref": "#/$defs/[]rivertype.Middleware"
         },
         "PeriodicJobs": {
           "$ref": "#/$defs/[]*river.PeriodicJob"
