@@ -41,7 +41,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.63
+	github.com/miekg/dns v1.1.64
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.5.0
 	github.com/oNaiPs/go-generate-fast v0.3.0
@@ -75,7 +75,7 @@ require (
 	github.com/theopenlane/iam v0.9.1
 	github.com/theopenlane/newman v0.1.3
 	github.com/theopenlane/riverboat v0.0.9
-	github.com/theopenlane/utils v0.4.3
+	github.com/theopenlane/utils v0.4.4
 	github.com/vektah/gqlparser/v2 v2.5.23
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
