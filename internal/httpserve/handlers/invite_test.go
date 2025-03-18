@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )

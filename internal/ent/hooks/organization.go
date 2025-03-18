@@ -501,7 +501,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 		Role:           &owner,
 	}
 
-	if _, err := m.Client().OrgMembership.Create().SetInput(input).Save(ctx); err != nil {
+	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error creating org membership for owner")
 
 		return err
@@ -532,10 +532,10 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 	// if the user has no default org, or the default org is the personal org, set the new org as the default org
 	if userSetting.Edges.DefaultOrg == nil || userSetting.Edges.DefaultOrg.ID == "" ||
 		userSetting.Edges.DefaultOrg.PersonalOrg {
-		if _, err = client.UserSetting.
+		if err = client.UserSetting.
 			UpdateOneID(userSetting.ID).
 			SetDefaultOrgID(orgID).
-			Save(ctx); err != nil {
+			Exec(ctx); err != nil {
 			return err
 		}
 	}

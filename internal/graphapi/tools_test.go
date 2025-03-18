@@ -29,6 +29,9 @@ import (
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+
+	// import generated runtime which is required to prevent cyclical dependencies
+	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 )
 
 const (

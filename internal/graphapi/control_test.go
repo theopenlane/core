@@ -289,7 +289,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
-			expectedErr: "organization_id is required",
+			expectedErr: "owner_id is required",
 		},
 		{
 			name: "using api token",
@@ -707,27 +707,27 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 
 			if tc.request.AppendMappedCategories != nil {
-				assert.ElementsMatch(t, tc.request.MappedCategories, resp.UpdateControl.Control.MappedCategories)
+				assert.ElementsMatch(t, tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories)
 			}
 
 			if tc.request.AppendControlQuestions != nil {
-				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+				assert.ElementsMatch(t, tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions)
 			}
 
 			if tc.request.AppendAssessmentObjectives != nil {
-				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+				assert.ElementsMatch(t, tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
 			}
 
 			if tc.request.AppendAssessmentMethods != nil {
-				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+				assert.ElementsMatch(t, tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
 			}
 
 			if tc.request.AppendImplementationGuidance != nil {
-				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+				assert.ElementsMatch(t, tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
 			}
 
 			if tc.request.AppendExampleEvidence != nil {
-				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+				assert.ElementsMatch(t, tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
 			}
 
 			if tc.request.ControlOwnerID != nil {

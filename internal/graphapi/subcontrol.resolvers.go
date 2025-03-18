@@ -12,17 +12,20 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubcontrol is the resolver for the createSubcontrol field.
 func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("organization_id")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Subcontrol.Create().SetInput(input).Save(ctx)
@@ -37,11 +40,29 @@ func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated
 
 // CreateBulkSubcontrol is the resolver for the createBulkSubcontrol field.
 func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateSubcontrol(ctx, input)
 }
 
 // CreateBulkCSVSubcontrol is the resolver for the createBulkCSVSubcontrol field.
 func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateSubcontrolInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -49,11 +70,26 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateSubcontrol(ctx, data)
 }
 
 // UpdateSubcontrol is the resolver for the updateSubcontrol field.
 func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Subcontrol.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
@@ -67,7 +103,7 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendMappedCategories(input.AppendMappedCategories).AppendAssessmentObjectives(input.AppendAssessmentObjectives).AppendAssessmentMethods(input.AppendAssessmentMethods).AppendControlQuestions(input.AppendControlQuestions).AppendImplementationGuidance(input.AppendImplementationGuidance).AppendExampleEvidence(input.AppendExampleEvidence).AppendReferences(input.AppendReferences)
 
 	res, err = req.Save(ctx)
 	if err != nil {
@@ -96,60 +132,12 @@ func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*mo
 
 // Subcontrol is the resolver for the subcontrol field.
 func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.Subcontrol, error) {
-	query := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id))
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
-		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeControlObjective) {
-		query.WithNamedControlObjectives("controlObjectives", func(q *generated.ControlObjectiveQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeTask) {
-		query.WithNamedTasks("tasks", func(q *generated.TaskQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeRisk) {
-		query.WithNamedRisks("risks", func(q *generated.RiskQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeEvidence) {
-		query.WithNamedEvidence("evidence", func(q *generated.EvidenceQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeNarrative) {
-		query.WithNamedNarratives("narratives", func(q *generated.NarrativeQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeProcedure) {
-		query.WithNamedProcedures("procedures", func(q *generated.ProcedureQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeInternalPolicy) {
-		query.WithNamedInternalPolicies("internalPolicies", func(q *generated.InternalPolicyQuery) {
-			q.Limit(edgesResultsLimit)
-		})
-	}
-
-	if graphutils.CheckForRequestedField(ctx, generated.TypeActionPlan) {
-		query.WithNamedActionPlans("actionPlans", func(q *generated.ActionPlanQuery) {
-			q.Limit(edgesResultsLimit)
-		})
+	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrol"})
 	}
 
 	res, err := query.Only(ctx)

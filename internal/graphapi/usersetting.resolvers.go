@@ -10,11 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateUserSetting is the resolver for the createUserSetting field.
 func (r *mutationResolver) CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).UserSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "usersetting"})
@@ -27,11 +33,21 @@ func (r *mutationResolver) CreateUserSetting(ctx context.Context, input generate
 
 // CreateBulkUserSetting is the resolver for the createBulkUserSetting field.
 func (r *mutationResolver) CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateUserSetting(ctx, input)
 }
 
 // CreateBulkCSVUserSetting is the resolver for the createBulkCSVUserSetting field.
 func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateUserSettingInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -39,34 +55,50 @@ func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input g
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
 	return r.bulkCreateUserSetting(ctx, data)
 }
 
 // UpdateUserSetting is the resolver for the updateUserSetting field.
 func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error) {
-	userSetting, err := withTransactionalMutation(ctx).UserSetting.Get(ctx, id)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	res, err := withTransactionalMutation(ctx).UserSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "usersetting"})
 	}
 
-	userSetting, err = userSetting.Update().SetInput(input).Save(ctx)
+	// setup update request
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+
+	res, err = req.Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "usersetting"})
 	}
 
-	return &model.UserSettingUpdatePayload{UserSetting: userSetting}, nil
+	return &model.UserSettingUpdatePayload{
+		UserSetting: res,
+	}, nil
 }
 
-// UserSetting is the resolver for the UserSetting field.
+// UserSetting is the resolver for the userSetting field.
 func (r *queryResolver) UserSetting(ctx context.Context, id string) (*generated.UserSetting, error) {
-	userSetting, err := withTransactionalMutation(ctx).UserSetting.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).UserSetting.Query().Where(usersetting.ID(id)).CollectFields(ctx, preloads...)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "usersetting"})
 	}
 
-	if err := generated.UserSettingEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+	res, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usersetting"})
 	}
 
-	return userSetting, nil
+	return res, nil
 }

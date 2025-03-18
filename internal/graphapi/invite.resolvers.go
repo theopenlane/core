@@ -10,12 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateInvite is the resolver for the createInvite field.
 func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -35,11 +40,29 @@ func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.Cre
 
 // CreateBulkInvite is the resolver for the createBulkInvite field.
 func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateInvite(ctx, input)
 }
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
 func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateInviteInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -47,15 +70,31 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateInvite(ctx, data)
 }
 
 // UpdateInvite is the resolver for the updateInvite field.
 func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
 	}
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -93,7 +132,15 @@ func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*model.
 
 // Invite is the resolver for the invite field.
 func (r *queryResolver) Invite(ctx context.Context, id string) (*generated.Invite, error) {
-	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Invite.Query().Where(invite.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
 	}

@@ -10,15 +10,21 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateGroup is the resolver for the createGroup field.
 func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -34,11 +40,29 @@ func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.Crea
 
 // CreateBulkGroup is the resolver for the createBulkGroup field.
 func (r *mutationResolver) CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateGroup(ctx, input)
 }
 
 // CreateBulkCSVGroup is the resolver for the createBulkCSVGroup field.
 func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateGroupInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -46,18 +70,35 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateGroup(ctx, data)
 }
 
 // UpdateGroup is the resolver for the updateGroup field.
 func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Group.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "group"})
 	}
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -91,7 +132,15 @@ func (r *mutationResolver) DeleteGroup(ctx context.Context, id string) (*model.G
 
 // Group is the resolver for the group field.
 func (r *queryResolver) Group(ctx context.Context, id string) (*generated.Group, error) {
-	res, err := withTransactionalMutation(ctx).Group.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
 	}

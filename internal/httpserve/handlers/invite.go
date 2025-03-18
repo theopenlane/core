@@ -240,22 +240,12 @@ func (i *Invite) setOrgInviteTokens(inv *generated.Invite, invToken string) erro
 
 // updateInviteStatusAccepted updates the status of an invite to "Accepted"
 func updateInviteStatusAccepted(ctx context.Context, i *generated.Invite) error {
-	_, err := transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationAccepted).Save(ctx)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationAccepted).Exec(ctx)
 }
 
 // updateInviteStatusExpired updates the status of an invite to "Expired"
 func updateInviteStatusExpired(ctx context.Context, i *generated.Invite) error {
-	_, err := transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationExpired).Save(ctx)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationExpired).Exec(ctx)
 }
 
 // BindOrganizationInviteAccept returns the OpenAPI3 operation for accepting an organization invite

@@ -8,11 +8,21 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // OrgSubscription is the resolver for the orgSubscription field.
 func (r *queryResolver) OrgSubscription(ctx context.Context, id string) (*generated.OrgSubscription, error) {
-	res, err := withTransactionalMutation(ctx).OrgSubscription.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).OrgSubscription.Query().Where(orgsubscription.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
 	}

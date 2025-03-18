@@ -33,7 +33,9 @@ func main() {
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
 
 	if err := api.Generate(cfg,
-		api.ReplacePlugin(resolvergen.New()), // replace the resolvergen plugin
+		api.ReplacePlugin(resolvergen.NewWithOptions(resolvergen.WithEntGeneratedPackage(
+			entPackage,
+		))), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),

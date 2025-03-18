@@ -10,12 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateAPIToken is the resolver for the createAPIToken field.
 func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -23,21 +28,41 @@ func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.C
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	apiToken, err := withTransactionalMutation(ctx).APIToken.Create().SetInput(input).Save(ctx)
+	res, err := withTransactionalMutation(ctx).APIToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "api token"})
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "apitoken"})
 	}
 
-	return &model.APITokenCreatePayload{APIToken: apiToken}, err
+	return &model.APITokenCreatePayload{
+		APIToken: res,
+	}, nil
 }
 
 // CreateBulkAPIToken is the resolver for the createBulkAPIToken field.
 func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateAPIToken(ctx, input)
 }
 
 // CreateBulkCSVAPIToken is the resolver for the createBulkCSVAPIToken field.
 func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateAPITokenInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -45,49 +70,80 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateAPIToken(ctx, data)
 }
 
 // UpdateAPIToken is the resolver for the updateAPIToken field.
 func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error) {
-	apiToken, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	res, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "apitoken"})
 	}
 
-	if err := setOrganizationInAuthContext(ctx, &apiToken.OwnerID); err != nil {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
 
-	apiToken, err = apiToken.Update().SetInput(input).Save(ctx)
+	// setup update request
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendScopes(input.AppendScopes)
+
+	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "apitoken"})
 	}
 
-	return &model.APITokenUpdatePayload{APIToken: apiToken}, err
+	return &model.APITokenUpdatePayload{
+		APIToken: res,
+	}, nil
 }
 
 // DeleteAPIToken is the resolver for the deleteAPIToken field.
 func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).APIToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "api token"})
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "apitoken"})
 	}
 
 	if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &model.APITokenDeletePayload{DeletedID: id}, nil
+	return &model.APITokenDeletePayload{
+		DeletedID: id,
+	}, nil
 }
 
 // APIToken is the resolver for the apiToken field.
 func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.APIToken, error) {
-	apiToken, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).APIToken.Query().Where(apitoken.ID(id)).CollectFields(ctx, preloads...)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "api token"})
+		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
 	}
 
-	return apiToken, nil
+	res, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+	}
+
+	return res, nil
 }

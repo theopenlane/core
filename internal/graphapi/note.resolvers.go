@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/graphutils"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -26,24 +26,34 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	_, err = req.Save(ctx)
-	if err != nil {
+	if err = req.Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
-	taskRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	objectRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
 	return &model.TaskUpdatePayload{
-		Task: taskRes,
+		Task: objectRes,
 	}, nil
 }
 
 // Note is the resolver for the note field.
 func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, error) {
-	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
 	}
@@ -53,11 +63,15 @@ func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, e
 
 // AddComment is the resolver for the addComment field.
 func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated.UpdateTaskInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return rout.NewMissingRequiredFieldError("organization_id")
+		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	data.TaskID = graphutils.GetStringInputVariableByName(ctx, "id")
@@ -65,9 +79,8 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 		return newNotFoundError("task")
 	}
 
-	_, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "note"})
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -80,7 +93,7 @@ func (r *updateTaskInputResolver) DeleteComment(ctx context.Context, obj *genera
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "note"})
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil

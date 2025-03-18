@@ -51,6 +51,7 @@ Server settings for the echo server
 |[**graphPool**](#servergraphpool)|`object`|PondPool contains the settings for the goroutine pool<br/>|no|
 |**enableGraphExtensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**complexityLimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
+|**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>

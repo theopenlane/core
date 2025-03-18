@@ -6,12 +6,12 @@ package graphapi
 
 import (
 	"context"
-	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -25,23 +25,25 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input generated.Creat
 
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error) {
-	user, err := withTransactionalMutation(ctx).User.Get(ctx, id)
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	res, err := withTransactionalMutation(ctx).User.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
 	}
 
-	user, err = user.Update().SetInput(input).Save(ctx)
-	if err != nil {
-		// the password field is encrypted so we cannot use the
-		// built in validation function/validation error
-		if errors.Is(err, auth.ErrPasswordTooWeak) {
-			return nil, err
-		}
+	// setup update request
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
 
+	res, err = req.Save(ctx)
+	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
 	}
 
-	return &model.UserUpdatePayload{User: user}, nil
+	return &model.UserUpdatePayload{
+		User: res,
+	}, nil
 }
 
 // DeleteUser is the resolver for the deleteUser field.
@@ -54,17 +56,27 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &model.UserDeletePayload{DeletedID: id}, nil
+	return &model.UserDeletePayload{
+		DeletedID: id,
+	}, nil
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, error) {
-	user, err := withTransactionalMutation(ctx).User.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(id)).CollectFields(ctx, preloads...)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}
 
-	return user, nil
+	res, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+	}
+
+	return res, nil
 }
 
 // Self is the resolver for the self field.
@@ -74,7 +86,15 @@ func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}
 
-	res, err := withTransactionalMutation(ctx).User.Get(ctx, userID)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(userID)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}

@@ -10,17 +10,22 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateControlObjective is the resolver for the createControlObjective field.
 func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("organization_id")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).ControlObjective.Create().SetInput(input).Save(ctx)
@@ -35,11 +40,29 @@ func (r *mutationResolver) CreateControlObjective(ctx context.Context, input gen
 
 // CreateBulkControlObjective is the resolver for the createBulkControlObjective field.
 func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateControlObjective(ctx, input)
 }
 
 // CreateBulkCSVControlObjective is the resolver for the createBulkCSVControlObjective field.
 func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateControlObjectiveInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -47,11 +70,26 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateControlObjective(ctx, data)
 }
 
 // UpdateControlObjective is the resolver for the updateControlObjective field.
 func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlobjective"})
@@ -94,7 +132,15 @@ func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string
 
 // ControlObjective is the resolver for the controlObjective field.
 func (r *queryResolver) ControlObjective(ctx context.Context, id string) (*generated.ControlObjective, error) {
-	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
 	}

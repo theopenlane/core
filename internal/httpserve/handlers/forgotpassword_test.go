@@ -13,14 +13,12 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/riverboat/pkg/jobs"
-
-	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/pkg/models"
 )
 

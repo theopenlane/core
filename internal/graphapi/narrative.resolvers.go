@@ -10,17 +10,22 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateNarrative is the resolver for the createNarrative field.
 func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.CreateNarrativeInput) (*model.NarrativeCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("organization_id")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Narrative.Create().SetInput(input).Save(ctx)
@@ -35,11 +40,29 @@ func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.
 
 // CreateBulkNarrative is the resolver for the createBulkNarrative field.
 func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*model.NarrativeBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	return r.bulkCreateNarrative(ctx, input)
 }
 
 // CreateBulkCSVNarrative is the resolver for the createBulkCSVNarrative field.
 func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateNarrativeInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -47,11 +70,26 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateNarrative(ctx, data)
 }
 
 // UpdateNarrative is the resolver for the updateNarrative field.
 func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Narrative.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "narrative"})
@@ -94,7 +132,15 @@ func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*mod
 
 // Narrative is the resolver for the narrative field.
 func (r *queryResolver) Narrative(ctx context.Context, id string) (*generated.Narrative, error) {
-	res, err := withTransactionalMutation(ctx).Narrative.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Narrative.Query().Where(narrative.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
 	}

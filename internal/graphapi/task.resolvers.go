@@ -10,15 +10,21 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -35,20 +41,28 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input generated.Creat
 // CreateBulkTask is the resolver for the createBulkTask field.
 func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
 	if len(input) == 0 {
-		return nil, nil
+		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input[0].OwnerID); err != nil {
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
+
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateTask(ctx, input)
 }
 
 // CreateBulkCSVTask is the resolver for the createBulkCSVTask field.
 func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkCreatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	data, err := unmarshalBulkData[generated.CreateTaskInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -56,18 +70,35 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateTask(ctx, data)
 }
 
 // UpdateTask is the resolver for the updateTask field.
 func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
+	// grab preloads and set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
+
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
+	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -101,7 +132,15 @@ func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.Ta
 
 // Task is the resolver for the task field.
 func (r *queryResolver) Task(ctx context.Context, id string) (*generated.Task, error) {
-	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
+	// determine all fields that were requested
+	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Task.Query().Where(task.ID(id)).CollectFields(ctx, preloads...)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+	}
+
+	res, err := query.Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
 	}

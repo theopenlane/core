@@ -40,8 +40,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err = c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return nil, err
 	}
 
@@ -77,8 +76,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err = c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return nil, err
 	}
 
@@ -92,8 +90,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			builders[i] = c.Risk.Create().SetInput(*input.Risks[i])
 		}
 
-		_, err = c.Risk.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Risk.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -108,8 +105,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			builders[i] = c.Procedure.Create().SetInput(*input.Procedures[i])
 		}
 
-		_, err = c.Procedure.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Procedure.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -124,8 +120,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			builders[i] = c.InternalPolicy.Create().SetInput(*input.InternalPolicies[i])
 		}
 
-		_, err = c.InternalPolicy.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.InternalPolicy.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -163,8 +158,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 			builders[i] = c.Subcontrol.Create().SetInput(*input.Subcontrols[i])
 		}
 
-		_, err = c.Subcontrol.CreateBulk(builders...).Save(ctx)
-		if err != nil {
+		if err := c.Subcontrol.CreateBulk(builders...).Exec(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -191,8 +185,7 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 
-	_, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
-	if err != nil {
+	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
 		return parseRequestError(err, action{action: ActionUpdate, object: "program"})
 	}
 
