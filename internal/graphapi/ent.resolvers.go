@@ -34,7 +34,7 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []string) ([]generated.No
 }
 
 // APITokens is the resolver for the apiTokens field.
-func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error) {
+func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -341,7 +341,7 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 }
 
 // DocumentDataSlice is the resolver for the documentDataSlice field.
-func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
+func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -368,7 +368,7 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 }
 
 // DocumentDataHistories is the resolver for the documentDataHistories field.
-func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataHistoryWhereInput) (*generated.DocumentDataHistoryConnection, error) {
+func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) (*generated.DocumentDataHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -451,7 +451,7 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 }
 
 // EntityTypes is the resolver for the entityTypes field.
-func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) (*generated.EntityTypeConnection, error) {
+func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) (*generated.EntityTypeConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -507,7 +507,7 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 }
 
 // Events is the resolver for the events field.
-func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) (*generated.EventConnection, error) {
+func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) (*generated.EventConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -534,7 +534,7 @@ func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string]
 }
 
 // EventHistories is the resolver for the eventHistories field.
-func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventHistoryWhereInput) (*generated.EventHistoryConnection, error) {
+func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) (*generated.EventHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -617,7 +617,7 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 }
 
 // Files is the resolver for the files field.
-func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) (*generated.FileConnection, error) {
+func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) (*generated.FileConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -644,7 +644,7 @@ func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string],
 }
 
 // FileHistories is the resolver for the fileHistories field.
-func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) (*generated.FileHistoryConnection, error) {
+func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) (*generated.FileHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -727,7 +727,7 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 }
 
 // GroupMemberships is the resolver for the groupMemberships field.
-func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
+func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -783,7 +783,7 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 }
 
 // GroupSettings is the resolver for the groupSettings field.
-func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) (*generated.GroupSettingConnection, error) {
+func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) (*generated.GroupSettingConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -810,7 +810,7 @@ func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[
 }
 
 // GroupSettingHistories is the resolver for the groupSettingHistories field.
-func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) (*generated.GroupSettingHistoryConnection, error) {
+func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) (*generated.GroupSettingHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -949,7 +949,7 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 }
 
 // InternalPolicies is the resolver for the internalPolicies field.
-func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
+func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -976,7 +976,7 @@ func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Curs
 }
 
 // InternalPolicyHistories is the resolver for the internalPolicyHistories field.
-func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyHistoryWhereInput) (*generated.InternalPolicyHistoryConnection, error) {
+func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) (*generated.InternalPolicyHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1031,7 +1031,7 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 }
 
 // MappedControls is the resolver for the mappedControls field.
-func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlOrder, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
+func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1087,7 +1087,7 @@ func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgq
 }
 
 // Narratives is the resolver for the narratives field.
-func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeOrder, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
+func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1143,7 +1143,7 @@ func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cu
 }
 
 // Notes is the resolver for the notes field.
-func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) (*generated.NoteConnection, error) {
+func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) (*generated.NoteConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1170,7 +1170,7 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 }
 
 // NoteHistories is the resolver for the noteHistories field.
-func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) (*generated.NoteHistoryConnection, error) {
+func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) (*generated.NoteHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1197,7 +1197,7 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // OrgMemberships is the resolver for the orgMemberships field.
-func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
+func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1365,7 +1365,7 @@ func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql
 }
 
 // OrganizationSettings is the resolver for the organizationSettings field.
-func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
+func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1392,7 +1392,7 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 }
 
 // OrganizationSettingHistories is the resolver for the organizationSettingHistories field.
-func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingHistoryWhereInput) (*generated.OrganizationSettingHistoryConnection, error) {
+func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) (*generated.OrganizationSettingHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1419,7 +1419,7 @@ func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after 
 }
 
 // PersonalAccessTokens is the resolver for the personalAccessTokens field.
-func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) (*generated.PersonalAccessTokenConnection, error) {
+func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) (*generated.PersonalAccessTokenConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1446,7 +1446,7 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 }
 
 // Procedures is the resolver for the procedures field.
-func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) (*generated.ProcedureConnection, error) {
+func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) (*generated.ProcedureConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1473,7 +1473,7 @@ func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[str
 }
 
 // ProcedureHistories is the resolver for the procedureHistories field.
-func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureHistoryWhereInput) (*generated.ProcedureHistoryConnection, error) {
+func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) (*generated.ProcedureHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1556,7 +1556,7 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 }
 
 // ProgramMemberships is the resolver for the programMemberships field.
-func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
+func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -1808,7 +1808,7 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 }
 
 // TfaSettings is the resolver for the tfaSettings field.
-func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) (*generated.TFASettingConnection, error) {
+func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) (*generated.TFASettingConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -2003,7 +2003,7 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 }
 
 // UserSettings is the resolver for the userSettings field.
-func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) (*generated.UserSettingConnection, error) {
+func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) (*generated.UserSettingConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 
@@ -2030,7 +2030,7 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 }
 
 // UserSettingHistories is the resolver for the userSettingHistories field.
-func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) (*generated.UserSettingHistoryConnection, error) {
+func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) (*generated.UserSettingHistoryConnection, error) {
 	// determine all fields that were requested
 	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
 

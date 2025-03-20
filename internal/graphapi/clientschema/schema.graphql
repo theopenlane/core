@@ -107,6 +107,26 @@ type APITokenEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+Ordering options for APIToken connections
+"""
+input APITokenOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order APITokens.
+	"""
+	field: APITokenOrderField!
+}
+"""
+Properties by which APIToken connections can be ordered.
+"""
+enum APITokenOrderField {
+	created_at
+	updated_at
+}
 type APITokenSearchResult {
 	apiTokens: [APIToken!]
 }
@@ -368,6 +388,10 @@ type ActionPlan implements Node {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the name of the action_plan
 	"""
 	name: String!
@@ -396,10 +420,6 @@ type ActionPlan implements Node {
 	"""
 	reviewFrequency: ActionPlanFrequency
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -424,7 +444,7 @@ type ActionPlan implements Node {
 	"""
 	delegate: Group
 	owner: Organization
-	risk(
+	risks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -455,7 +475,7 @@ type ActionPlan implements Node {
 		"""
 		where: RiskWhereInput
 	): RiskConnection!
-	control(
+	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -486,7 +506,7 @@ type ActionPlan implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	user(
+	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -517,7 +537,7 @@ type ActionPlan implements Node {
 		"""
 		where: UserWhereInput
 	): UserConnection!
-	program(
+	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -641,6 +661,10 @@ type ActionPlanHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the name of the action_plan
 	"""
 	name: String!
@@ -668,10 +692,6 @@ type ActionPlanHistory implements Node {
 	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ActionPlanHistoryFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	"""
 	the organization id that owns the object
 	"""
@@ -763,6 +783,8 @@ input ActionPlanHistoryOrder {
 Properties by which ActionPlanHistory connections can be ordered.
 """
 enum ActionPlanHistoryOrderField {
+	created_at
+	updated_at
 	due_date
 	PRIORITY
 	source
@@ -927,6 +949,24 @@ input ActionPlanHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -1017,24 +1057,6 @@ input ActionPlanHistoryWhereInput {
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
 	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
-	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -1110,6 +1132,8 @@ input ActionPlanOrder {
 Properties by which ActionPlan connections can be ordered.
 """
 enum ActionPlanOrderField {
+	created_at
+	updated_at
 	due_date
 	PRIORITY
 	source
@@ -1250,6 +1274,24 @@ input ActionPlanWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -1340,24 +1382,6 @@ input ActionPlanWhereInput {
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
 	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
-	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -1431,25 +1455,25 @@ input ActionPlanWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
-	risk edge predicates
+	risks edge predicates
 	"""
-	hasRisk: Boolean
-	hasRiskWith: [RiskWhereInput!]
+	hasRisks: Boolean
+	hasRisksWith: [RiskWhereInput!]
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
-	user edge predicates
+	users edge predicates
 	"""
-	hasUser: Boolean
-	hasUserWith: [UserWhereInput!]
+	hasUsers: Boolean
+	hasUsersWith: [UserWhereInput!]
 	"""
-	program edge predicates
+	programs edge predicates
 	"""
-	hasProgram: Boolean
-	hasProgramWith: [ProgramWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 }
 """
 The `Address` scalar type represents a physical or mailing address.
@@ -1607,6 +1631,11 @@ type Contact implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -1774,6 +1803,8 @@ input ContactHistoryOrder {
 Properties by which ContactHistory connections can be ordered.
 """
 enum ContactHistoryOrderField {
+	created_at
+	updated_at
 	full_name
 	title
 	company
@@ -2089,6 +2120,8 @@ input ContactOrder {
 Properties by which Contact connections can be ordered.
 """
 enum ContactOrderField {
+	created_at
+	updated_at
 	full_name
 	title
 	company
@@ -2593,14 +2626,44 @@ type Control implements Node {
 		"""
 		Ordering options for MappedControls returned from the connection.
 		"""
-		orderBy: MappedControlOrder
+		orderBy: [MappedControlOrder!]
 
 		"""
 		Filtering options for MappedControls returned from the connection.
 		"""
 		where: MappedControlWhereInput
 	): MappedControlConnection!
-	controlObjectives: [ControlObjective!]
+	controlObjectives(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
 	subcontrols(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -2687,7 +2750,7 @@ type Control implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -2778,6 +2841,11 @@ type Control implements Node {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
@@ -2802,6 +2870,11 @@ type Control implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
 
 		"""
 		Filtering options for InternalPolicies returned from the connection.
@@ -3053,6 +3126,8 @@ input ControlHistoryOrder {
 Properties by which ControlHistory connections can be ordered.
 """
 enum ControlHistoryOrderField {
+	created_at
+	updated_at
 	status
 	SOURCE
 	CONTROL_TYPE
@@ -3618,6 +3693,8 @@ input ControlImplementationHistoryOrder {
 Properties by which ControlImplementationHistory connections can be ordered.
 """
 enum ControlImplementationHistoryOrderField {
+	created_at
+	updated_at
 	STATUS
 	implementation_date
 	verified
@@ -3851,6 +3928,8 @@ input ControlImplementationOrder {
 Properties by which ControlImplementation connections can be ordered.
 """
 enum ControlImplementationOrderField {
+	created_at
+	updated_at
 	STATUS
 	implementation_date
 	verified
@@ -4057,10 +4136,6 @@ type ControlObjective implements Node {
 	deletedAt: Time
 	deletedBy: String
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
@@ -4068,6 +4143,10 @@ type ControlObjective implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -4259,6 +4338,11 @@ type ControlObjective implements Node {
 		last: Int
 
 		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
@@ -4283,6 +4367,11 @@ type ControlObjective implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
 
 		"""
 		Filtering options for Procedures returned from the connection.
@@ -4344,7 +4433,7 @@ type ControlObjective implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -4461,10 +4550,6 @@ type ControlObjectiveHistory implements Node {
 	deletedAt: Time
 	deletedBy: String
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
@@ -4472,6 +4557,10 @@ type ControlObjectiveHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -4569,6 +4658,8 @@ input ControlObjectiveHistoryOrder {
 Properties by which ControlObjectiveHistory connections can be ordered.
 """
 enum ControlObjectiveHistoryOrderField {
+	created_at
+	updated_at
 	name
 	status
 	SOURCE
@@ -4727,6 +4818,22 @@ input ControlObjectiveHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
+	"""
 	revision field predicates
 	"""
 	revision: String
@@ -4744,22 +4851,6 @@ input ControlObjectiveHistoryWhereInput {
 	revisionNotNil: Boolean
 	revisionEqualFold: String
 	revisionContainsFold: String
-	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -4911,6 +5002,8 @@ input ControlObjectiveOrder {
 Properties by which ControlObjective connections can be ordered.
 """
 enum ControlObjectiveOrderField {
+	created_at
+	updated_at
 	name
 	status
 	SOURCE
@@ -5045,6 +5138,22 @@ input ControlObjectiveWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
+	"""
 	revision field predicates
 	"""
 	revision: String
@@ -5062,22 +5171,6 @@ input ControlObjectiveWhereInput {
 	revisionNotNil: Boolean
 	revisionEqualFold: String
 	revisionContainsFold: String
-	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -5294,6 +5387,8 @@ input ControlOrder {
 Properties by which Control connections can be ordered.
 """
 enum ControlOrderField {
+	created_at
+	updated_at
 	status
 	SOURCE
 	CONTROL_TYPE
@@ -5749,6 +5844,10 @@ input CreateActionPlanInput {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the name of the action_plan
 	"""
 	name: String!
@@ -5776,10 +5875,6 @@ input CreateActionPlanInput {
 	the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ActionPlanFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	"""
 	due date of the action plan
 	"""
@@ -5967,13 +6062,13 @@ Input was generated by ent.
 """
 input CreateControlObjectiveInput {
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	"""
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the name of the control objective
 	"""
@@ -6110,10 +6205,10 @@ input CreateEventInput {
 	organizationIDs: [ID!]
 	inviteIDs: [ID!]
 	personalAccessTokenIDs: [ID!]
-	hushIDs: [ID!]
+	secretIDs: [ID!]
 	subscriberIDs: [ID!]
 	fileIDs: [ID!]
-	orgsubscriptionIDs: [ID!]
+	orgSubscriptionIDs: [ID!]
 }
 """
 CreateEvidenceInput is used for create Evidence object.
@@ -6234,10 +6329,10 @@ input CreateFileInput {
 	userSettingIDs: [ID!]
 	organizationSettingIDs: [ID!]
 	templateIDs: [ID!]
-	documentDatumIDs: [ID!]
-	eventIDs: [ID!]
+	documentIDs: [ID!]
 	programIDs: [ID!]
 	evidenceIDs: [ID!]
+	eventIDs: [ID!]
 }
 input CreateFullProgramInput {
 	program: CreateProgramInput!
@@ -6397,6 +6492,10 @@ input CreateInternalPolicyInput {
 	"""
 	tags: [String!]
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	"""
 	the name of the policy
 	"""
 	name: String!
@@ -6424,10 +6523,6 @@ input CreateInternalPolicyInput {
 	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: InternalPolicyFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -6627,7 +6722,7 @@ input CreateOrganizationInput {
 	groupIDs: [ID!]
 	templateIDs: [ID!]
 	integrationIDs: [ID!]
-	documentDatumIDs: [ID!]
+	documentIDs: [ID!]
 	orgSubscriptionIDs: [ID!]
 	inviteIDs: [ID!]
 	subscriberIDs: [ID!]
@@ -6724,18 +6819,6 @@ input CreatePersonalAccessTokenInput {
 	whether the token is active
 	"""
 	isActive: Boolean
-	"""
-	the reason the token was revoked
-	"""
-	revokedReason: String
-	"""
-	the user who revoked the token
-	"""
-	revokedBy: String
-	"""
-	when the token was revoked
-	"""
-	revokedAt: Time
 	ownerID: ID!
 	organizationIDs: [ID!]
 	eventIDs: [ID!]
@@ -6749,6 +6832,10 @@ input CreateProcedureInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the name of the procedure
 	"""
@@ -6777,10 +6864,6 @@ input CreateProcedureInput {
 	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ProcedureFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -6788,10 +6871,10 @@ input CreateProcedureInput {
 	delegateID: ID
 	controlIDs: [ID!]
 	internalPolicyIDs: [ID!]
+	programIDs: [ID!]
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
 	taskIDs: [ID!]
-	programIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -6919,8 +7002,8 @@ input CreateRiskInput {
 	viewerIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
-	actionPlanIDs: [ID!]
 	programIDs: [ID!]
+	actionPlanIDs: [ID!]
 	stakeholderID: ID
 	delegateID: ID
 }
@@ -7155,8 +7238,8 @@ input CreateTaskInput {
 	internalPolicyIDs: [ID!]
 	procedureIDs: [ID!]
 	controlIDs: [ID!]
-	controlObjectiveIDs: [ID!]
 	subcontrolIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	programIDs: [ID!]
 	evidenceIDs: [ID!]
 }
@@ -7306,12 +7389,12 @@ type DocumentData implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -7326,7 +7409,7 @@ type DocumentData implements Node {
 	data: Map!
 	owner: Organization
 	template: Template!
-	entity(
+	entities(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -7377,6 +7460,11 @@ type DocumentData implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -7450,12 +7538,12 @@ type DocumentDataHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -7506,6 +7594,26 @@ enum DocumentDataHistoryOpType @goModel(model: "github.com/theopenlane/entx/hist
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for DocumentDataHistory connections
+"""
+input DocumentDataHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order DocumentDataHistories.
+	"""
+	field: DocumentDataHistoryOrderField!
+}
+"""
+Properties by which DocumentDataHistory connections can be ordered.
+"""
+enum DocumentDataHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 DocumentDataHistoryWhereInput is used for filtering DocumentDataHistory objects.
@@ -7692,6 +7800,26 @@ input DocumentDataHistoryWhereInput {
 	templateIDEqualFold: String
 	templateIDContainsFold: String
 }
+"""
+Ordering options for DocumentData connections
+"""
+input DocumentDataOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order DocumentDataSlice.
+	"""
+	field: DocumentDataOrderField!
+}
+"""
+Properties by which DocumentData connections can be ordered.
+"""
+enum DocumentDataOrderField {
+	created_at
+	updated_at
+}
 type DocumentDataSearchResult {
 	documentData: [DocumentData!]
 }
@@ -7863,10 +7991,10 @@ input DocumentDataWhereInput {
 	hasTemplate: Boolean
 	hasTemplateWith: [TemplateWhereInput!]
 	"""
-	entity edge predicates
+	entities edge predicates
 	"""
-	hasEntity: Boolean
-	hasEntityWith: [EntityWhereInput!]
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
 	"""
 	files edge predicates
 	"""
@@ -7967,6 +8095,11 @@ type Entity implements Node {
 		last: Int
 
 		"""
+		Ordering options for DocumentDataSlice returned from the connection.
+		"""
+		orderBy: [DocumentDataOrder!]
+
+		"""
 		Filtering options for DocumentDataSlice returned from the connection.
 		"""
 		where: DocumentDataWhereInput
@@ -7993,6 +8126,11 @@ type Entity implements Node {
 		last: Int
 
 		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
 		Filtering options for Notes returned from the connection.
 		"""
 		where: NoteWhereInput
@@ -8017,6 +8155,11 @@ type Entity implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -8181,6 +8324,8 @@ input EntityHistoryOrder {
 Properties by which EntityHistory connections can be ordered.
 """
 enum EntityHistoryOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 	status
@@ -8443,6 +8588,8 @@ input EntityOrder {
 Properties by which Entity connections can be ordered.
 """
 enum EntityOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 	status
@@ -8639,6 +8786,8 @@ input EntityTypeHistoryOrder {
 Properties by which EntityTypeHistory connections can be ordered.
 """
 enum EntityTypeHistoryOrderField {
+	created_at
+	updated_at
 	name
 }
 """
@@ -8843,6 +8992,8 @@ input EntityTypeOrder {
 Properties by which EntityType connections can be ordered.
 """
 enum EntityTypeOrderField {
+	created_at
+	updated_at
 	name
 }
 type EntityTypeSearchResult {
@@ -9274,7 +9425,7 @@ type Event implements Node {
 	correlationID: String
 	eventType: String!
 	metadata: Map
-	user(
+	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9305,7 +9456,7 @@ type Event implements Node {
 		"""
 		where: UserWhereInput
 	): UserConnection!
-	group(
+	groups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9336,7 +9487,7 @@ type Event implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	integration(
+	integrations(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9367,7 +9518,7 @@ type Event implements Node {
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
-	organization(
+	organizations(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9398,7 +9549,7 @@ type Event implements Node {
 		"""
 		where: OrganizationWhereInput
 	): OrganizationConnection!
-	invite(
+	invites(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9429,7 +9580,7 @@ type Event implements Node {
 		"""
 		where: InviteWhereInput
 	): InviteConnection!
-	personalAccessToken(
+	personalAccessTokens(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9451,11 +9602,16 @@ type Event implements Node {
 		last: Int
 
 		"""
+		Ordering options for PersonalAccessTokens returned from the connection.
+		"""
+		orderBy: [PersonalAccessTokenOrder!]
+
+		"""
 		Filtering options for PersonalAccessTokens returned from the connection.
 		"""
 		where: PersonalAccessTokenWhereInput
 	): PersonalAccessTokenConnection!
-	hush(
+	secrets(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9486,7 +9642,7 @@ type Event implements Node {
 		"""
 		where: HushWhereInput
 	): HushConnection!
-	orgmembership(
+	orgmemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9510,14 +9666,14 @@ type Event implements Node {
 		"""
 		Ordering options for OrgMemberships returned from the connection.
 		"""
-		orderBy: OrgMembershipOrder
+		orderBy: [OrgMembershipOrder!]
 
 		"""
 		Filtering options for OrgMemberships returned from the connection.
 		"""
 		where: OrgMembershipWhereInput
 	): OrgMembershipConnection!
-	groupmembership(
+	groupmemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9541,14 +9697,14 @@ type Event implements Node {
 		"""
 		Ordering options for GroupMemberships returned from the connection.
 		"""
-		orderBy: GroupMembershipOrder
+		orderBy: [GroupMembershipOrder!]
 
 		"""
 		Filtering options for GroupMemberships returned from the connection.
 		"""
 		where: GroupMembershipWhereInput
 	): GroupMembershipConnection!
-	subscriber(
+	subscribers(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9579,7 +9735,7 @@ type Event implements Node {
 		"""
 		where: SubscriberWhereInput
 	): SubscriberConnection!
-	file(
+	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9601,11 +9757,16 @@ type Event implements Node {
 		last: Int
 
 		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
 		Filtering options for Files returned from the connection.
 		"""
 		where: FileWhereInput
 	): FileConnection!
-	orgsubscription(
+	orgSubscriptions(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -9749,6 +9910,26 @@ enum EventHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpT
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for EventHistory connections
+"""
+input EventHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order EventHistories.
+	"""
+	field: EventHistoryOrderField!
+}
+"""
+Properties by which EventHistory connections can be ordered.
+"""
+enum EventHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 EventHistoryWhereInput is used for filtering EventHistory objects.
@@ -9922,6 +10103,26 @@ input EventHistoryWhereInput {
 	eventTypeEqualFold: String
 	eventTypeContainsFold: String
 }
+"""
+Ordering options for Event connections
+"""
+input EventOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Events.
+	"""
+	field: EventOrderField!
+}
+"""
+Properties by which Event connections can be ordered.
+"""
+enum EventOrderField {
+	created_at
+	updated_at
+}
 type EventSearchResult {
 	events: [Event!]
 }
@@ -10070,65 +10271,65 @@ input EventWhereInput {
 	eventTypeEqualFold: String
 	eventTypeContainsFold: String
 	"""
-	user edge predicates
+	users edge predicates
 	"""
-	hasUser: Boolean
-	hasUserWith: [UserWhereInput!]
+	hasUsers: Boolean
+	hasUsersWith: [UserWhereInput!]
 	"""
-	group edge predicates
+	groups edge predicates
 	"""
-	hasGroup: Boolean
-	hasGroupWith: [GroupWhereInput!]
+	hasGroups: Boolean
+	hasGroupsWith: [GroupWhereInput!]
 	"""
-	integration edge predicates
+	integrations edge predicates
 	"""
-	hasIntegration: Boolean
-	hasIntegrationWith: [IntegrationWhereInput!]
+	hasIntegrations: Boolean
+	hasIntegrationsWith: [IntegrationWhereInput!]
 	"""
-	organization edge predicates
+	organizations edge predicates
 	"""
-	hasOrganization: Boolean
-	hasOrganizationWith: [OrganizationWhereInput!]
+	hasOrganizations: Boolean
+	hasOrganizationsWith: [OrganizationWhereInput!]
 	"""
-	invite edge predicates
+	invites edge predicates
 	"""
-	hasInvite: Boolean
-	hasInviteWith: [InviteWhereInput!]
+	hasInvites: Boolean
+	hasInvitesWith: [InviteWhereInput!]
 	"""
-	personal_access_token edge predicates
+	personal_access_tokens edge predicates
 	"""
-	hasPersonalAccessToken: Boolean
-	hasPersonalAccessTokenWith: [PersonalAccessTokenWhereInput!]
+	hasPersonalAccessTokens: Boolean
+	hasPersonalAccessTokensWith: [PersonalAccessTokenWhereInput!]
 	"""
-	hush edge predicates
+	secrets edge predicates
 	"""
-	hasHush: Boolean
-	hasHushWith: [HushWhereInput!]
+	hasSecrets: Boolean
+	hasSecretsWith: [HushWhereInput!]
 	"""
-	orgmembership edge predicates
+	orgmemberships edge predicates
 	"""
-	hasOrgmembership: Boolean
-	hasOrgmembershipWith: [OrgMembershipWhereInput!]
+	hasOrgmemberships: Boolean
+	hasOrgmembershipsWith: [OrgMembershipWhereInput!]
 	"""
-	groupmembership edge predicates
+	groupmemberships edge predicates
 	"""
-	hasGroupmembership: Boolean
-	hasGroupmembershipWith: [GroupMembershipWhereInput!]
+	hasGroupmemberships: Boolean
+	hasGroupmembershipsWith: [GroupMembershipWhereInput!]
 	"""
-	subscriber edge predicates
+	subscribers edge predicates
 	"""
-	hasSubscriber: Boolean
-	hasSubscriberWith: [SubscriberWhereInput!]
+	hasSubscribers: Boolean
+	hasSubscribersWith: [SubscriberWhereInput!]
 	"""
-	file edge predicates
+	files edge predicates
 	"""
-	hasFile: Boolean
-	hasFileWith: [FileWhereInput!]
+	hasFiles: Boolean
+	hasFilesWith: [FileWhereInput!]
 	"""
-	orgsubscription edge predicates
+	org_subscriptions edge predicates
 	"""
-	hasOrgsubscription: Boolean
-	hasOrgsubscriptionWith: [OrgSubscriptionWhereInput!]
+	hasOrgSubscriptions: Boolean
+	hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
 }
 type Evidence implements Node {
 	id: ID!
@@ -10136,12 +10337,12 @@ type Evidence implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -10302,6 +10503,11 @@ type Evidence implements Node {
 		last: Int
 
 		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
 		Filtering options for Files returned from the connection.
 		"""
 		where: FileWhereInput
@@ -10445,12 +10651,12 @@ type EvidenceHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -10561,6 +10767,8 @@ input EvidenceHistoryOrder {
 Properties by which EvidenceHistory connections can be ordered.
 """
 enum EvidenceHistoryOrderField {
+	created_at
+	updated_at
 	name
 	creation_date
 	renewal_date
@@ -10686,22 +10894,6 @@ input EvidenceHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -10732,6 +10924,22 @@ input EvidenceHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -10896,6 +11104,8 @@ input EvidenceOrder {
 Properties by which Evidence connections can be ordered.
 """
 enum EvidenceOrderField {
+	created_at
+	updated_at
 	name
 	creation_date
 	renewal_date
@@ -10997,22 +11207,6 @@ input EvidenceWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -11043,6 +11237,22 @@ input EvidenceWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -11290,69 +11500,9 @@ type File implements Node {
 	the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	"""
 	storagePath: String
-	user(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Users returned from the connection.
-		"""
-		orderBy: [UserOrder!]
-
-		"""
-		Filtering options for Users returned from the connection.
-		"""
-		where: UserWhereInput
-	): UserConnection!
-	organization(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Organizations returned from the connection.
-		"""
-		orderBy: [OrganizationOrder!]
-
-		"""
-		Filtering options for Organizations returned from the connection.
-		"""
-		where: OrganizationWhereInput
-	): OrganizationConnection!
-	group(
+	user: [User!]
+	organization: [Organization!]
+	groups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -11383,177 +11533,14 @@ type File implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	contact(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Contacts returned from the connection.
-		"""
-		orderBy: [ContactOrder!]
-
-		"""
-		Filtering options for Contacts returned from the connection.
-		"""
-		where: ContactWhereInput
-	): ContactConnection!
-	entity(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Entities returned from the connection.
-		"""
-		orderBy: [EntityOrder!]
-
-		"""
-		Filtering options for Entities returned from the connection.
-		"""
-		where: EntityWhereInput
-	): EntityConnection!
-	userSetting(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Filtering options for UserSettings returned from the connection.
-		"""
-		where: UserSettingWhereInput
-	): UserSettingConnection!
-	organizationSetting(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Filtering options for OrganizationSettings returned from the connection.
-		"""
-		where: OrganizationSettingWhereInput
-	): OrganizationSettingConnection!
-	template(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Templates returned from the connection.
-		"""
-		orderBy: [TemplateOrder!]
-
-		"""
-		Filtering options for Templates returned from the connection.
-		"""
-		where: TemplateWhereInput
-	): TemplateConnection!
-	documentData(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Filtering options for DocumentDataSlice returned from the connection.
-		"""
-		where: DocumentDataWhereInput
-	): DocumentDataConnection!
+	contact: [Contact!]
+	entity: [Entity!]
+	userSetting: [UserSetting!]
+	organizationSetting: [OrganizationSetting!]
+	template: [Template!]
+	document: [DocumentData!]
+	program: [Program!]
+	evidence: [Evidence!]
 	events(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -11576,72 +11563,15 @@ type File implements Node {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
 	): EventConnection!
-	program(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Programs returned from the connection.
-		"""
-		orderBy: [ProgramOrder!]
-
-		"""
-		Filtering options for Programs returned from the connection.
-		"""
-		where: ProgramWhereInput
-	): ProgramConnection!
-	evidence(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Evidences returned from the connection.
-		"""
-		orderBy: [EvidenceOrder!]
-
-		"""
-		Filtering options for Evidences returned from the connection.
-		"""
-		where: EvidenceWhereInput
-	): EvidenceConnection!
 	presignedURL: String
 }
 """
@@ -11785,6 +11715,26 @@ enum FileHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for FileHistory connections
+"""
+input FileHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order FileHistories.
+	"""
+	field: FileHistoryOrderField!
+}
+"""
+Properties by which FileHistory connections can be ordered.
+"""
+enum FileHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 FileHistoryWhereInput is used for filtering FileHistory objects.
@@ -12155,6 +12105,26 @@ input FileHistoryWhereInput {
 	storagePathEqualFold: String
 	storagePathContainsFold: String
 }
+"""
+Ordering options for File connections
+"""
+input FileOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Files.
+	"""
+	field: FileOrderField!
+}
+"""
+Properties by which File connections can be ordered.
+"""
+enum FileOrderField {
+	created_at
+	updated_at
+}
 type FileSearchResult {
 	files: [File!]
 }
@@ -12501,10 +12471,10 @@ input FileWhereInput {
 	hasOrganization: Boolean
 	hasOrganizationWith: [OrganizationWhereInput!]
 	"""
-	group edge predicates
+	groups edge predicates
 	"""
-	hasGroup: Boolean
-	hasGroupWith: [GroupWhereInput!]
+	hasGroups: Boolean
+	hasGroupsWith: [GroupWhereInput!]
 	"""
 	contact edge predicates
 	"""
@@ -12531,15 +12501,10 @@ input FileWhereInput {
 	hasTemplate: Boolean
 	hasTemplateWith: [TemplateWhereInput!]
 	"""
-	document_data edge predicates
+	document edge predicates
 	"""
-	hasDocumentData: Boolean
-	hasDocumentDataWith: [DocumentDataWhereInput!]
-	"""
-	events edge predicates
-	"""
-	hasEvents: Boolean
-	hasEventsWith: [EventWhereInput!]
+	hasDocument: Boolean
+	hasDocumentWith: [DocumentDataWhereInput!]
 	"""
 	program edge predicates
 	"""
@@ -12550,6 +12515,11 @@ input FileWhereInput {
 	"""
 	hasEvidence: Boolean
 	hasEvidenceWith: [EvidenceWhereInput!]
+	"""
+	events edge predicates
+	"""
+	hasEvents: Boolean
+	hasEventsWith: [EventWhereInput!]
 }
 type Group implements Node {
 	id: ID!
@@ -12639,6 +12609,11 @@ type Group implements Node {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
@@ -12694,6 +12669,11 @@ type Group implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -12897,6 +12877,8 @@ input GroupHistoryOrder {
 Properties by which GroupHistory connections can be ordered.
 """
 enum GroupHistoryOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 }
@@ -13145,7 +13127,37 @@ type GroupMembership implements Node {
 	userID: ID!
 	group: Group!
 	user: User!
-	events: [Event!]
+	events(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
+		Filtering options for Events returned from the connection.
+		"""
+		where: EventWhereInput
+	): EventConnection!
 }
 """
 Return response for createBulkGroupMembership mutation
@@ -13274,6 +13286,8 @@ input GroupMembershipHistoryOrder {
 Properties by which GroupMembershipHistory connections can be ordered.
 """
 enum GroupMembershipHistoryOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -13490,6 +13504,8 @@ input GroupMembershipOrder {
 Properties by which GroupMembership connections can be ordered.
 """
 enum GroupMembershipOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -13649,6 +13665,8 @@ input GroupOrder {
 Properties by which Group connections can be ordered.
 """
 enum GroupOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 }
@@ -13832,6 +13850,26 @@ enum GroupSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/hist
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for GroupSettingHistory connections
+"""
+input GroupSettingHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order GroupSettingHistories.
+	"""
+	field: GroupSettingHistoryOrderField!
+}
+"""
+Properties by which GroupSettingHistory connections can be ordered.
+"""
+enum GroupSettingHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 GroupSettingHistoryVisibility is enum for the field visibility
@@ -14045,6 +14083,26 @@ enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enu
 	INVITE_ONLY
 	APPLICATION_ONLY
 	INVITE_OR_APPLICATION
+}
+"""
+Ordering options for GroupSetting connections
+"""
+input GroupSettingOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order GroupSettings.
+	"""
+	field: GroupSettingOrderField!
+}
+"""
+Properties by which GroupSetting connections can be ordered.
+"""
+enum GroupSettingOrderField {
+	created_at
+	updated_at
 }
 """
 Return response for updateGroupSetting mutation
@@ -14615,37 +14673,7 @@ type Hush implements Node {
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
-	organization(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Organizations returned from the connection.
-		"""
-		orderBy: [OrganizationOrder!]
-
-		"""
-		Filtering options for Organizations returned from the connection.
-		"""
-		where: OrganizationWhereInput
-	): OrganizationConnection!
+	organization: [Organization!]
 	events(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -14666,6 +14694,11 @@ type Hush implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
 
 		"""
 		Filtering options for Events returned from the connection.
@@ -14813,6 +14846,8 @@ input HushHistoryOrder {
 Properties by which HushHistory connections can be ordered.
 """
 enum HushHistoryOrderField {
+	created_at
+	updated_at
 	name
 	kind
 }
@@ -15036,6 +15071,8 @@ input HushOrder {
 Properties by which Hush connections can be ordered.
 """
 enum HushOrderField {
+	created_at
+	updated_at
 	name
 	kind
 }
@@ -15240,12 +15277,12 @@ type Integration implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -15311,6 +15348,11 @@ type Integration implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
 
 		"""
 		Filtering options for Events returned from the connection.
@@ -15384,12 +15426,12 @@ type IntegrationHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -15459,6 +15501,8 @@ input IntegrationHistoryOrder {
 Properties by which IntegrationHistory connections can be ordered.
 """
 enum IntegrationHistoryOrderField {
+	created_at
+	updated_at
 	name
 	kind
 }
@@ -15682,6 +15726,8 @@ input IntegrationOrder {
 Properties by which Integration connections can be ordered.
 """
 enum IntegrationOrderField {
+	created_at
+	updated_at
 	name
 	kind
 }
@@ -15885,16 +15931,20 @@ type InternalPolicy implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the organization id that owns the object
 	"""
@@ -15927,10 +15977,6 @@ type InternalPolicy implements Node {
 	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: InternalPolicyFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -16032,6 +16078,11 @@ type InternalPolicy implements Node {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
@@ -16060,7 +16111,7 @@ type InternalPolicy implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -16215,16 +16266,20 @@ type InternalPolicyHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the organization id that owns the object
 	"""
@@ -16257,10 +16312,6 @@ type InternalPolicyHistory implements Node {
 	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: InternalPolicyHistoryFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 }
 """
 A connection to a list of items.
@@ -16318,6 +16369,26 @@ enum InternalPolicyHistoryOpType @goModel(model: "github.com/theopenlane/entx/hi
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for InternalPolicyHistory connections
+"""
+input InternalPolicyHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order InternalPolicyHistories.
+	"""
+	field: InternalPolicyHistoryOrderField!
+}
+"""
+Properties by which InternalPolicyHistory connections can be ordered.
+"""
+enum InternalPolicyHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 InternalPolicyHistoryWhereInput is used for filtering InternalPolicyHistory objects.
@@ -16486,6 +16557,24 @@ input InternalPolicyHistoryWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -16593,24 +16682,26 @@ input InternalPolicyHistoryWhereInput {
 	reviewFrequencyNotIn: [InternalPolicyHistoryFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+}
+"""
+Ordering options for InternalPolicy connections
+"""
+input InternalPolicyOrder {
 	"""
-	revision field predicates
+	The ordering direction.
 	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order InternalPolicies.
+	"""
+	field: InternalPolicyOrderField!
+}
+"""
+Properties by which InternalPolicy connections can be ordered.
+"""
+enum InternalPolicyOrderField {
+	created_at
+	updated_at
 }
 type InternalPolicySearchResult {
 	internalPolicies: [InternalPolicy!]
@@ -16755,6 +16846,24 @@ input InternalPolicyWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -16862,24 +16971,6 @@ input InternalPolicyWhereInput {
 	reviewFrequencyNotIn: [InternalPolicyFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
-	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -16992,6 +17083,11 @@ type Invite implements Node {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
@@ -17080,6 +17176,8 @@ input InviteOrder {
 Properties by which Invite connections can be ordered.
 """
 enum InviteOrderField {
+	created_at
+	updated_at
 	expires
 	STATUS
 	send_attempts
@@ -17542,6 +17640,8 @@ input MappedControlHistoryOrder {
 Properties by which MappedControlHistory connections can be ordered.
 """
 enum MappedControlHistoryOrderField {
+	created_at
+	updated_at
 	mapping_type
 }
 """
@@ -17748,6 +17848,8 @@ input MappedControlOrder {
 Properties by which MappedControl connections can be ordered.
 """
 enum MappedControlOrderField {
+	created_at
+	updated_at
 	mapping_type
 }
 type MappedControlSearchResult {
@@ -19973,6 +20075,8 @@ input NarrativeHistoryOrder {
 Properties by which NarrativeHistory connections can be ordered.
 """
 enum NarrativeHistoryOrderField {
+	created_at
+	updated_at
 	name
 }
 """
@@ -20229,6 +20333,8 @@ input NarrativeOrder {
 Properties by which Narrative connections can be ordered.
 """
 enum NarrativeOrderField {
+	created_at
+	updated_at
 	name
 }
 type NarrativeSearchResult {
@@ -20490,12 +20596,12 @@ type Note implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -20546,12 +20652,12 @@ type NoteHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -20598,6 +20704,26 @@ enum NoteHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for NoteHistory connections
+"""
+input NoteHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order NoteHistories.
+	"""
+	field: NoteHistoryOrderField!
+}
+"""
+Properties by which NoteHistory connections can be ordered.
+"""
+enum NoteHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 NoteHistoryWhereInput is used for filtering NoteHistory objects.
@@ -20719,22 +20845,6 @@ input NoteHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -20765,6 +20875,22 @@ input NoteHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -20799,6 +20925,26 @@ input NoteHistoryWhereInput {
 	textHasSuffix: String
 	textEqualFold: String
 	textContainsFold: String
+}
+"""
+Ordering options for Note connections
+"""
+input NoteOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Notes.
+	"""
+	field: NoteOrderField!
+}
+"""
+Properties by which Note connections can be ordered.
+"""
+enum NoteOrderField {
+	created_at
+	updated_at
 }
 """
 NoteWhereInput is used for filtering Note objects.
@@ -20884,22 +21030,6 @@ input NoteWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -20930,6 +21060,22 @@ input NoteWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -21159,6 +21305,11 @@ type OrgMembership implements Node {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
@@ -21291,6 +21442,8 @@ input OrgMembershipHistoryOrder {
 Properties by which OrgMembershipHistory connections can be ordered.
 """
 enum OrgMembershipHistoryOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -21508,6 +21661,8 @@ input OrgMembershipOrder {
 Properties by which OrgMembership connections can be ordered.
 """
 enum OrgMembershipOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -21657,12 +21812,12 @@ type OrgSubscription implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -21720,7 +21875,37 @@ type OrgSubscription implements Node {
 	"""
 	featureLookupKeys: [String!]
 	owner: Organization
-	events: [Event!]
+	events(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
+		Filtering options for Events returned from the connection.
+		"""
+		where: EventWhereInput
+	): EventConnection!
 	subscriptionURL: String
 	managePaymentMethods: String
 	cancellation: String
@@ -21764,12 +21949,12 @@ type OrgSubscriptionHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -21882,6 +22067,8 @@ input OrgSubscriptionHistoryOrder {
 Properties by which OrgSubscriptionHistory connections can be ordered.
 """
 enum OrgSubscriptionHistoryOrderField {
+	created_at
+	updated_at
 	product_tier
 	stripe_subscription_status
 	active
@@ -22221,6 +22408,8 @@ input OrgSubscriptionOrder {
 Properties by which OrgSubscription connections can be ordered.
 """
 enum OrgSubscriptionOrderField {
+	created_at
+	updated_at
 	product_tier
 	stripe_subscription_status
 	active
@@ -22526,12 +22715,12 @@ type Organization implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the name of the organization
 	"""
@@ -22655,6 +22844,11 @@ type Organization implements Node {
 		last: Int
 
 		"""
+		Ordering options for PersonalAccessTokens returned from the connection.
+		"""
+		orderBy: [PersonalAccessTokenOrder!]
+
+		"""
 		Filtering options for PersonalAccessTokens returned from the connection.
 		"""
 		where: PersonalAccessTokenWhereInput
@@ -22679,6 +22873,11 @@ type Organization implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for APITokens returned from the connection.
+		"""
+		orderBy: [APITokenOrder!]
 
 		"""
 		Filtering options for APITokens returned from the connection.
@@ -22708,6 +22907,11 @@ type Organization implements Node {
 		last: Int
 
 		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
 		Filtering options for Files returned from the connection.
 		"""
 		where: FileWhereInput
@@ -22732,6 +22936,11 @@ type Organization implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
 
 		"""
 		Filtering options for Events returned from the connection.
@@ -22863,7 +23072,7 @@ type Organization implements Node {
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
-	documentData(
+	documents(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -22883,6 +23092,11 @@ type Organization implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for DocumentDataSlice returned from the connection.
+		"""
+		orderBy: [DocumentDataOrder!]
 
 		"""
 		Filtering options for DocumentDataSlice returned from the connection.
@@ -23007,7 +23221,7 @@ type Organization implements Node {
 		"""
 		Ordering options for EntityTypes returned from the connection.
 		"""
-		orderBy: EntityTypeOrder
+		orderBy: [EntityTypeOrder!]
 
 		"""
 		Filtering options for EntityTypes returned from the connection.
@@ -23065,6 +23279,11 @@ type Organization implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
 
 		"""
 		Filtering options for Notes returned from the connection.
@@ -23155,6 +23374,11 @@ type Organization implements Node {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
@@ -23179,6 +23403,11 @@ type Organization implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
 
 		"""
 		Filtering options for InternalPolicies returned from the connection.
@@ -23271,7 +23500,7 @@ type Organization implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -23501,12 +23730,12 @@ type OrganizationHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the name of the organization
 	"""
@@ -23595,6 +23824,8 @@ input OrganizationHistoryOrder {
 Properties by which OrganizationHistory connections can be ordered.
 """
 enum OrganizationHistoryOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 }
@@ -23856,6 +24087,8 @@ input OrganizationOrder {
 Properties by which Organization connections can be ordered.
 """
 enum OrganizationOrderField {
+	created_at
+	updated_at
 	name
 	display_name
 }
@@ -23868,12 +24101,12 @@ type OrganizationSetting implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	domains associated with the organization
 	"""
@@ -23935,6 +24168,11 @@ type OrganizationSetting implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -24008,12 +24246,12 @@ type OrganizationSettingHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	domains associated with the organization
 	"""
@@ -24092,6 +24330,26 @@ enum OrganizationSettingHistoryOpType @goModel(model: "github.com/theopenlane/en
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for OrganizationSettingHistory connections
+"""
+input OrganizationSettingHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order OrganizationSettingHistories.
+	"""
+	field: OrganizationSettingHistoryOrderField!
+}
+"""
+Properties by which OrganizationSettingHistory connections can be ordered.
+"""
+enum OrganizationSettingHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 OrganizationSettingHistoryRegion is enum for the field geo_location
@@ -24355,6 +24613,26 @@ input OrganizationSettingHistoryWhereInput {
 	"""
 	billingNotificationsEnabled: Boolean
 	billingNotificationsEnabledNEQ: Boolean
+}
+"""
+Ordering options for OrganizationSetting connections
+"""
+input OrganizationSettingOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order OrganizationSettings.
+	"""
+	field: OrganizationSettingOrderField!
+}
+"""
+Properties by which OrganizationSetting connections can be ordered.
+"""
+enum OrganizationSettingOrderField {
+	created_at
+	updated_at
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -24929,10 +25207,10 @@ input OrganizationWhereInput {
 	hasIntegrations: Boolean
 	hasIntegrationsWith: [IntegrationWhereInput!]
 	"""
-	document_data edge predicates
+	documents edge predicates
 	"""
-	hasDocumentData: Boolean
-	hasDocumentDataWith: [DocumentDataWhereInput!]
+	hasDocuments: Boolean
+	hasDocumentsWith: [DocumentDataWhereInput!]
 	"""
 	org_subscriptions edge predicates
 	"""
@@ -25162,6 +25440,11 @@ type PersonalAccessToken implements Node {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
@@ -25223,6 +25506,29 @@ type PersonalAccessTokenEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+Ordering options for PersonalAccessToken connections
+"""
+input PersonalAccessTokenOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order PersonalAccessTokens.
+	"""
+	field: PersonalAccessTokenOrderField!
+}
+"""
+Properties by which PersonalAccessToken connections can be ordered.
+"""
+enum PersonalAccessTokenOrderField {
+	created_at
+	updated_at
+	name
+	expires_at
+	is_active
 }
 type PersonalAccessTokenSearchResult {
 	personalAccessTokens: [PersonalAccessToken!]
@@ -25474,16 +25780,20 @@ type Procedure implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the organization id that owns the object
 	"""
@@ -25516,10 +25826,6 @@ type Procedure implements Node {
 	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ProcedureFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -25590,10 +25896,46 @@ type Procedure implements Node {
 		last: Int
 
 		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
+	programs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
 	narratives(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -25618,7 +25960,7 @@ type Procedure implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -25687,37 +26029,6 @@ type Procedure implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
-	programs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Programs returned from the connection.
-		"""
-		orderBy: [ProgramOrder!]
-
-		"""
-		Filtering options for Programs returned from the connection.
-		"""
-		where: ProgramWhereInput
-	): ProgramConnection!
 }
 """
 Return response for createBulkProcedure mutation
@@ -25804,16 +26115,20 @@ type ProcedureHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
-	"""
-	tags associated with the object
-	"""
-	tags: [String!]
 	deletedAt: Time
 	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
 	"""
 	the organization id that owns the object
 	"""
@@ -25846,10 +26161,6 @@ type ProcedureHistory implements Node {
 	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ProcedureHistoryFrequency
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
 }
 """
 A connection to a list of items.
@@ -25907,6 +26218,26 @@ enum ProcedureHistoryOpType @goModel(model: "github.com/theopenlane/entx/history
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for ProcedureHistory connections
+"""
+input ProcedureHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order ProcedureHistories.
+	"""
+	field: ProcedureHistoryOrderField!
+}
+"""
+Properties by which ProcedureHistory connections can be ordered.
+"""
+enum ProcedureHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 ProcedureHistoryWhereInput is used for filtering ProcedureHistory objects.
@@ -26075,6 +26406,24 @@ input ProcedureHistoryWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -26182,24 +26531,26 @@ input ProcedureHistoryWhereInput {
 	reviewFrequencyNotIn: [ProcedureHistoryFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+}
+"""
+Ordering options for Procedure connections
+"""
+input ProcedureOrder {
 	"""
-	revision field predicates
+	The ordering direction.
 	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Procedures.
+	"""
+	field: ProcedureOrderField!
+}
+"""
+Properties by which Procedure connections can be ordered.
+"""
+enum ProcedureOrderField {
+	created_at
+	updated_at
 }
 type ProcedureSearchResult {
 	procedures: [Procedure!]
@@ -26344,6 +26695,24 @@ input ProcedureWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	revision field predicates
+	"""
+	revision: String
+	revisionNEQ: String
+	revisionIn: [String!]
+	revisionNotIn: [String!]
+	revisionGT: String
+	revisionGTE: String
+	revisionLT: String
+	revisionLTE: String
+	revisionContains: String
+	revisionHasPrefix: String
+	revisionHasSuffix: String
+	revisionIsNil: Boolean
+	revisionNotNil: Boolean
+	revisionEqualFold: String
+	revisionContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -26452,24 +26821,6 @@ input ProcedureWhereInput {
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
 	"""
-	revision field predicates
-	"""
-	revision: String
-	revisionNEQ: String
-	revisionIn: [String!]
-	revisionNotIn: [String!]
-	revisionGT: String
-	revisionGTE: String
-	revisionLT: String
-	revisionLTE: String
-	revisionContains: String
-	revisionHasPrefix: String
-	revisionHasSuffix: String
-	revisionIsNil: Boolean
-	revisionNotNil: Boolean
-	revisionEqualFold: String
-	revisionContainsFold: String
-	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -26505,6 +26856,11 @@ input ProcedureWhereInput {
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
+	programs edge predicates
+	"""
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
+	"""
 	narratives edge predicates
 	"""
 	hasNarratives: Boolean
@@ -26519,11 +26875,6 @@ input ProcedureWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
-	"""
-	programs edge predicates
-	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
 }
 type Program implements Node {
 	id: ID!
@@ -26531,12 +26882,12 @@ type Program implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -26705,6 +27056,11 @@ type Program implements Node {
 		last: Int
 
 		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
@@ -26729,6 +27085,11 @@ type Program implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
 
 		"""
 		Filtering options for Procedures returned from the connection.
@@ -26819,6 +27180,11 @@ type Program implements Node {
 		last: Int
 
 		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
 		Filtering options for Notes returned from the connection.
 		"""
 		where: NoteWhereInput
@@ -26843,6 +27209,11 @@ type Program implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -26904,14 +27275,44 @@ type Program implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
 		"""
 		where: NarrativeWhereInput
 	): NarrativeConnection!
-	actionPlans: [ActionPlan!]
+	actionPlans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ActionPlans returned from the connection.
+		"""
+		orderBy: [ActionPlanOrder!]
+
+		"""
+		Filtering options for ActionPlans returned from the connection.
+		"""
+		where: ActionPlanWhereInput
+	): ActionPlanConnection!
 	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -26967,7 +27368,7 @@ type Program implements Node {
 		"""
 		Ordering options for ProgramMemberships returned from the connection.
 		"""
-		orderBy: ProgramMembershipOrder
+		orderBy: [ProgramMembershipOrder!]
 
 		"""
 		Filtering options for ProgramMemberships returned from the connection.
@@ -27041,12 +27442,12 @@ type ProgramHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -27143,6 +27544,8 @@ input ProgramHistoryOrder {
 Properties by which ProgramHistory connections can be ordered.
 """
 enum ProgramHistoryOrderField {
+	created_at
+	updated_at
 	name
 	STATUS
 	start_date
@@ -27278,22 +27681,6 @@ input ProgramHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -27324,6 +27711,22 @@ input ProgramHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -27566,6 +27969,8 @@ input ProgramMembershipHistoryOrder {
 Properties by which ProgramMembershipHistory connections can be ordered.
 """
 enum ProgramMembershipHistoryOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -27782,6 +28187,8 @@ input ProgramMembershipOrder {
 Properties by which ProgramMembership connections can be ordered.
 """
 enum ProgramMembershipOrderField {
+	created_at
+	updated_at
 	ROLE
 }
 """
@@ -27941,6 +28348,8 @@ input ProgramOrder {
 Properties by which Program connections can be ordered.
 """
 enum ProgramOrderField {
+	created_at
+	updated_at
 	name
 	STATUS
 	start_date
@@ -28052,22 +28461,6 @@ input ProgramWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -28098,6 +28491,22 @@ input ProgramWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -28328,6 +28737,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for APITokens returned from the connection.
+		"""
+		orderBy: [APITokenOrder!]
 
 		"""
 		Filtering options for APITokens returned from the connection.
@@ -28666,6 +29080,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for DocumentDataSlice returned from the connection.
+		"""
+		orderBy: [DocumentDataOrder!]
+
+		"""
 		Filtering options for DocumentDataSlice returned from the connection.
 		"""
 		where: DocumentDataWhereInput
@@ -28690,6 +29109,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for DocumentDataHistories returned from the connection.
+		"""
+		orderBy: DocumentDataHistoryOrder
 
 		"""
 		Filtering options for DocumentDataHistories returned from the connection.
@@ -28782,7 +29206,7 @@ type Query {
 		"""
 		Ordering options for EntityTypes returned from the connection.
 		"""
-		orderBy: EntityTypeOrder
+		orderBy: [EntityTypeOrder!]
 
 		"""
 		Filtering options for EntityTypes returned from the connection.
@@ -28842,6 +29266,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
+
+		"""
 		Filtering options for Events returned from the connection.
 		"""
 		where: EventWhereInput
@@ -28866,6 +29295,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for EventHistories returned from the connection.
+		"""
+		orderBy: EventHistoryOrder
 
 		"""
 		Filtering options for EventHistories returned from the connection.
@@ -28956,6 +29390,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
 		Filtering options for Files returned from the connection.
 		"""
 		where: FileWhereInput
@@ -28980,6 +29419,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for FileHistories returned from the connection.
+		"""
+		orderBy: FileHistoryOrder
 
 		"""
 		Filtering options for FileHistories returned from the connection.
@@ -29072,7 +29516,7 @@ type Query {
 		"""
 		Ordering options for GroupMemberships returned from the connection.
 		"""
-		orderBy: GroupMembershipOrder
+		orderBy: [GroupMembershipOrder!]
 
 		"""
 		Filtering options for GroupMemberships returned from the connection.
@@ -29132,6 +29576,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for GroupSettings returned from the connection.
+		"""
+		orderBy: [GroupSettingOrder!]
+
+		"""
 		Filtering options for GroupSettings returned from the connection.
 		"""
 		where: GroupSettingWhereInput
@@ -29156,6 +29605,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for GroupSettingHistories returned from the connection.
+		"""
+		orderBy: GroupSettingHistoryOrder
 
 		"""
 		Filtering options for GroupSettingHistories returned from the connection.
@@ -29308,6 +29762,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
@@ -29332,6 +29791,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for InternalPolicyHistories returned from the connection.
+		"""
+		orderBy: InternalPolicyHistoryOrder
 
 		"""
 		Filtering options for InternalPolicyHistories returned from the connection.
@@ -29393,7 +29857,7 @@ type Query {
 		"""
 		Ordering options for MappedControls returned from the connection.
 		"""
-		orderBy: MappedControlOrder
+		orderBy: [MappedControlOrder!]
 
 		"""
 		Filtering options for MappedControls returned from the connection.
@@ -29455,7 +29919,7 @@ type Query {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -29515,6 +29979,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
 		Filtering options for Notes returned from the connection.
 		"""
 		where: NoteWhereInput
@@ -29539,6 +30008,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for NoteHistories returned from the connection.
+		"""
+		orderBy: NoteHistoryOrder
 
 		"""
 		Filtering options for NoteHistories returned from the connection.
@@ -29569,7 +30043,7 @@ type Query {
 		"""
 		Ordering options for OrgMemberships returned from the connection.
 		"""
-		orderBy: OrgMembershipOrder
+		orderBy: [OrgMembershipOrder!]
 
 		"""
 		Filtering options for OrgMemberships returned from the connection.
@@ -29753,6 +30227,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for OrganizationSettings returned from the connection.
+		"""
+		orderBy: [OrganizationSettingOrder!]
+
+		"""
 		Filtering options for OrganizationSettings returned from the connection.
 		"""
 		where: OrganizationSettingWhereInput
@@ -29777,6 +30256,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for OrganizationSettingHistories returned from the connection.
+		"""
+		orderBy: OrganizationSettingHistoryOrder
 
 		"""
 		Filtering options for OrganizationSettingHistories returned from the connection.
@@ -29805,6 +30289,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for PersonalAccessTokens returned from the connection.
+		"""
+		orderBy: [PersonalAccessTokenOrder!]
+
+		"""
 		Filtering options for PersonalAccessTokens returned from the connection.
 		"""
 		where: PersonalAccessTokenWhereInput
@@ -29831,6 +30320,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
@@ -29855,6 +30349,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for ProcedureHistories returned from the connection.
+		"""
+		orderBy: ProcedureHistoryOrder
 
 		"""
 		Filtering options for ProcedureHistories returned from the connection.
@@ -29947,7 +30446,7 @@ type Query {
 		"""
 		Ordering options for ProgramMemberships returned from the connection.
 		"""
-		orderBy: ProgramMembershipOrder
+		orderBy: [ProgramMembershipOrder!]
 
 		"""
 		Filtering options for ProgramMemberships returned from the connection.
@@ -30224,6 +30723,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for TFASettings returned from the connection.
+		"""
+		orderBy: [TFASettingOrder!]
+
+		"""
 		Filtering options for TFASettings returned from the connection.
 		"""
 		where: TFASettingWhereInput
@@ -30436,6 +30940,11 @@ type Query {
 		last: Int
 
 		"""
+		Ordering options for UserSettings returned from the connection.
+		"""
+		orderBy: [UserSettingOrder!]
+
+		"""
 		Filtering options for UserSettings returned from the connection.
 		"""
 		where: UserSettingWhereInput
@@ -30460,6 +30969,11 @@ type Query {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for UserSettingHistories returned from the connection.
+		"""
+		orderBy: UserSettingHistoryOrder
 
 		"""
 		Filtering options for UserSettingHistories returned from the connection.
@@ -31501,7 +32015,7 @@ type Risk implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	control(
+	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -31532,7 +32046,7 @@ type Risk implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	procedure(
+	procedures(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -31552,43 +32066,17 @@ type Risk implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
 
 		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
 	): ProcedureConnection!
-	actionPlans(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ActionPlans returned from the connection.
-		"""
-		orderBy: [ActionPlanOrder!]
-
-		"""
-		Filtering options for ActionPlans returned from the connection.
-		"""
-		where: ActionPlanWhereInput
-	): ActionPlanConnection!
 	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -31620,6 +32108,37 @@ type Risk implements Node {
 		"""
 		where: ProgramWhereInput
 	): ProgramConnection!
+	actionPlans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ActionPlans returned from the connection.
+		"""
+		orderBy: [ActionPlanOrder!]
+
+		"""
+		Filtering options for ActionPlans returned from the connection.
+		"""
+		where: ActionPlanWhereInput
+	): ActionPlanConnection!
 	"""
 	the group of users who are responsible for risk oversight
 	"""
@@ -31805,6 +32324,8 @@ input RiskHistoryOrder {
 Properties by which RiskHistory connections can be ordered.
 """
 enum RiskHistoryOrderField {
+	created_at
+	updated_at
 	name
 	STATUS
 	risk_type
@@ -32189,6 +32710,8 @@ input RiskOrder {
 Properties by which Risk connections can be ordered.
 """
 enum RiskOrderField {
+	created_at
+	updated_at
 	name
 	STATUS
 	risk_type
@@ -32552,25 +33075,25 @@ input RiskWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
-	procedure edge predicates
+	procedures edge predicates
 	"""
-	hasProcedure: Boolean
-	hasProcedureWith: [ProcedureWhereInput!]
-	"""
-	action_plans edge predicates
-	"""
-	hasActionPlans: Boolean
-	hasActionPlansWith: [ActionPlanWhereInput!]
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
 	"""
 	programs edge predicates
 	"""
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	action_plans edge predicates
+	"""
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	stakeholder edge predicates
 	"""
@@ -32898,6 +33421,8 @@ input StandardHistoryOrder {
 Properties by which StandardHistory connections can be ordered.
 """
 enum StandardHistoryOrderField {
+	created_at
+	updated_at
 	name
 	short_name
 	framework
@@ -33307,6 +33832,8 @@ input StandardOrder {
 Properties by which Standard connections can be ordered.
 """
 enum StandardOrderField {
+	created_at
+	updated_at
 	name
 	short_name
 	framework
@@ -33771,10 +34298,37 @@ type Subcontrol implements Node {
 	controlID: ID!
 	owner: Organization
 	control: Control!
-	"""
-	mapped subcontrols that have a relation to another control or subcontrol
-	"""
-	mappedControls: [MappedControl!]
+	mappedControls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for MappedControls returned from the connection.
+		"""
+		orderBy: [MappedControlOrder!]
+
+		"""
+		Filtering options for MappedControls returned from the connection.
+		"""
+		where: MappedControlWhereInput
+	): MappedControlConnection!
 	evidence(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -33892,7 +34446,7 @@ type Subcontrol implements Node {
 		"""
 		Ordering options for Narratives returned from the connection.
 		"""
-		orderBy: NarrativeOrder
+		orderBy: [NarrativeOrder!]
 
 		"""
 		Filtering options for Narratives returned from the connection.
@@ -33983,6 +34537,11 @@ type Subcontrol implements Node {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
@@ -34009,6 +34568,11 @@ type Subcontrol implements Node {
 		last: Int
 
 		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
@@ -34018,7 +34582,7 @@ type Subcontrol implements Node {
 	"""
 	controlOwner: Group
 	"""
-	temporary delegate for the control, used for temporary control ownership
+	temporary delegate for the subcontrol, used for temporary control ownership
 	"""
 	delegate: Group
 }
@@ -34258,6 +34822,8 @@ input SubcontrolHistoryOrder {
 Properties by which SubcontrolHistory connections can be ordered.
 """
 enum SubcontrolHistoryOrderField {
+	created_at
+	updated_at
 	status
 	SOURCE
 	CONTROL_TYPE
@@ -34607,6 +35173,8 @@ input SubcontrolOrder {
 Properties by which Subcontrol connections can be ordered.
 """
 enum SubcontrolOrderField {
+	created_at
+	updated_at
 	status
 	SOURCE
 	CONTROL_TYPE
@@ -34986,12 +35554,12 @@ type Subscriber implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -35037,6 +35605,11 @@ type Subscriber implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
 
 		"""
 		Filtering options for Events returned from the connection.
@@ -35118,6 +35691,8 @@ input SubscriberOrder {
 Properties by which Subscriber connections can be ordered.
 """
 enum SubscriberOrderField {
+	created_at
+	updated_at
 	email
 	active
 }
@@ -35385,6 +35960,26 @@ type TFASettingEdge {
 	cursor: Cursor!
 }
 """
+Ordering options for TFASetting connections
+"""
+input TFASettingOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order TFASettings.
+	"""
+	field: TFASettingOrderField!
+}
+"""
+Properties by which TFASetting connections can be ordered.
+"""
+enum TFASettingOrderField {
+	created_at
+	updated_at
+}
+"""
 Return response for updateTFASetting mutation
 """
 type TFASettingUpdatePayload {
@@ -35534,12 +36129,12 @@ type Task implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -35609,11 +36204,16 @@ type Task implements Node {
 		last: Int
 
 		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
 		Filtering options for Notes returned from the connection.
 		"""
 		where: NoteWhereInput
 	): NoteConnection!
-	group(
+	groups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35644,7 +36244,7 @@ type Task implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	internalPolicy(
+	internalPolicies(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35664,13 +36264,18 @@ type Task implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
 
 		"""
 		Filtering options for InternalPolicies returned from the connection.
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
-	procedure(
+	procedures(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35692,11 +36297,16 @@ type Task implements Node {
 		last: Int
 
 		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
 		Filtering options for Procedures returned from the connection.
 		"""
 		where: ProcedureWhereInput
 	): ProcedureConnection!
-	control(
+	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35727,38 +36337,7 @@ type Task implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	controlObjective(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlObjectives returned from the connection.
-		"""
-		orderBy: [ControlObjectiveOrder!]
-
-		"""
-		Filtering options for ControlObjectives returned from the connection.
-		"""
-		where: ControlObjectiveWhereInput
-	): ControlObjectiveConnection!
-	subcontrol(
+	subcontrols(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35789,7 +36368,38 @@ type Task implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
-	program(
+	controlObjectives(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
+	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35918,12 +36528,12 @@ type TaskHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
-	deletedAt: Time
-	deletedBy: String
 	"""
 	tags associated with the object
 	"""
@@ -36024,6 +36634,8 @@ input TaskHistoryOrder {
 Properties by which TaskHistory connections can be ordered.
 """
 enum TaskHistoryOrderField {
+	created_at
+	updated_at
 	title
 	STATUS
 	category
@@ -36160,22 +36772,6 @@ input TaskHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -36206,6 +36802,22 @@ input TaskHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -36381,6 +36993,8 @@ input TaskOrder {
 Properties by which Task connections can be ordered.
 """
 enum TaskOrderField {
+	created_at
+	updated_at
 	title
 	STATUS
 	category
@@ -36493,22 +37107,6 @@ input TaskWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDGT: String
-	displayIDGTE: String
-	displayIDLT: String
-	displayIDLTE: String
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
 	deleted_at field predicates
 	"""
 	deletedAt: Time
@@ -36539,6 +37137,22 @@ input TaskWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -36717,40 +37331,40 @@ input TaskWhereInput {
 	hasComments: Boolean
 	hasCommentsWith: [NoteWhereInput!]
 	"""
-	group edge predicates
+	groups edge predicates
 	"""
-	hasGroup: Boolean
-	hasGroupWith: [GroupWhereInput!]
+	hasGroups: Boolean
+	hasGroupsWith: [GroupWhereInput!]
 	"""
-	internal_policy edge predicates
+	internal_policies edge predicates
 	"""
-	hasInternalPolicy: Boolean
-	hasInternalPolicyWith: [InternalPolicyWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
-	procedure edge predicates
+	procedures edge predicates
 	"""
-	hasProcedure: Boolean
-	hasProcedureWith: [ProcedureWhereInput!]
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
-	control_objective edge predicates
+	subcontrols edge predicates
 	"""
-	hasControlObjective: Boolean
-	hasControlObjectiveWith: [ControlObjectiveWhereInput!]
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
-	subcontrol edge predicates
+	control_objectives edge predicates
 	"""
-	hasSubcontrol: Boolean
-	hasSubcontrolWith: [SubcontrolWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
-	program edge predicates
+	programs edge predicates
 	"""
-	hasProgram: Boolean
-	hasProgramWith: [ProgramWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -36816,6 +37430,11 @@ type Template implements Node {
 		last: Int
 
 		"""
+		Ordering options for DocumentDataSlice returned from the connection.
+		"""
+		orderBy: [DocumentDataOrder!]
+
+		"""
 		Filtering options for DocumentDataSlice returned from the connection.
 		"""
 		where: DocumentDataWhereInput
@@ -36840,6 +37459,11 @@ type Template implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -37013,6 +37637,8 @@ input TemplateHistoryOrder {
 Properties by which TemplateHistory connections can be ordered.
 """
 enum TemplateHistoryOrderField {
+	created_at
+	updated_at
 	name
 	TEMPLATE_TYPE
 }
@@ -37243,6 +37869,8 @@ input TemplateOrder {
 Properties by which Template connections can be ordered.
 """
 enum TemplateOrderField {
+	created_at
+	updated_at
 	name
 	TEMPLATE_TYPE
 }
@@ -37511,6 +38139,11 @@ input UpdateActionPlanInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
+	"""
 	the name of the action_plan
 	"""
 	name: String
@@ -37545,11 +38178,6 @@ input UpdateActionPlanInput {
 	reviewFrequency: ActionPlanFrequency
 	clearReviewFrequency: Boolean
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	clearRevision: Boolean
-	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -37572,16 +38200,16 @@ input UpdateActionPlanInput {
 	clearOwner: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
-	clearRisk: Boolean
+	clearRisks: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
+	clearControls: Boolean
 	addUserIDs: [ID!]
 	removeUserIDs: [ID!]
-	clearUser: Boolean
+	clearUsers: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
-	clearProgram: Boolean
+	clearPrograms: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -37827,16 +38455,16 @@ Input was generated by ent.
 """
 input UpdateControlObjectiveInput {
 	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	clearRevision: Boolean
-	"""
 	tags associated with the object
 	"""
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
 	"""
 	the name of the control objective
 	"""
@@ -37927,7 +38555,7 @@ input UpdateDocumentDataInput {
 	templateID: ID
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
-	clearEntity: Boolean
+	clearEntities: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
@@ -38028,34 +38656,34 @@ input UpdateEventInput {
 	clearMetadata: Boolean
 	addUserIDs: [ID!]
 	removeUserIDs: [ID!]
-	clearUser: Boolean
+	clearUsers: Boolean
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
-	clearGroup: Boolean
+	clearGroups: Boolean
 	addIntegrationIDs: [ID!]
 	removeIntegrationIDs: [ID!]
-	clearIntegration: Boolean
+	clearIntegrations: Boolean
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
-	clearOrganization: Boolean
+	clearOrganizations: Boolean
 	addInviteIDs: [ID!]
 	removeInviteIDs: [ID!]
-	clearInvite: Boolean
+	clearInvites: Boolean
 	addPersonalAccessTokenIDs: [ID!]
 	removePersonalAccessTokenIDs: [ID!]
-	clearPersonalAccessToken: Boolean
-	addHushIDs: [ID!]
-	removeHushIDs: [ID!]
-	clearHush: Boolean
+	clearPersonalAccessTokens: Boolean
+	addSecretIDs: [ID!]
+	removeSecretIDs: [ID!]
+	clearSecrets: Boolean
 	addSubscriberIDs: [ID!]
 	removeSubscriberIDs: [ID!]
-	clearSubscriber: Boolean
+	clearSubscribers: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
-	clearFile: Boolean
-	addOrgsubscriptionIDs: [ID!]
-	removeOrgsubscriptionIDs: [ID!]
-	clearOrgsubscription: Boolean
+	clearFiles: Boolean
+	addOrgSubscriptionIDs: [ID!]
+	removeOrgSubscriptionIDs: [ID!]
+	clearOrgSubscriptions: Boolean
 }
 """
 UpdateEvidenceInput is used for update Evidence object.
@@ -38208,7 +38836,7 @@ input UpdateFileInput {
 	clearOrganization: Boolean
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
-	clearGroup: Boolean
+	clearGroups: Boolean
 	addContactIDs: [ID!]
 	removeContactIDs: [ID!]
 	clearContact: Boolean
@@ -38224,18 +38852,18 @@ input UpdateFileInput {
 	addTemplateIDs: [ID!]
 	removeTemplateIDs: [ID!]
 	clearTemplate: Boolean
-	addDocumentDatumIDs: [ID!]
-	removeDocumentDatumIDs: [ID!]
-	clearDocumentData: Boolean
-	addEventIDs: [ID!]
-	removeEventIDs: [ID!]
-	clearEvents: Boolean
+	addDocumentIDs: [ID!]
+	removeDocumentIDs: [ID!]
+	clearDocument: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearProgram: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addEventIDs: [ID!]
+	removeEventIDs: [ID!]
+	clearEvents: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -38461,6 +39089,11 @@ input UpdateInternalPolicyInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
+	"""
 	the name of the policy
 	"""
 	name: String
@@ -38494,11 +39127,6 @@ input UpdateInternalPolicyInput {
 	"""
 	reviewFrequency: InternalPolicyFrequency
 	clearReviewFrequency: Boolean
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	clearRevision: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -38736,9 +39364,9 @@ input UpdateOrganizationInput {
 	addIntegrationIDs: [ID!]
 	removeIntegrationIDs: [ID!]
 	clearIntegrations: Boolean
-	addDocumentDatumIDs: [ID!]
-	removeDocumentDatumIDs: [ID!]
-	clearDocumentData: Boolean
+	addDocumentIDs: [ID!]
+	removeDocumentIDs: [ID!]
+	clearDocuments: Boolean
 	addOrgSubscriptionIDs: [ID!]
 	removeOrgSubscriptionIDs: [ID!]
 	clearOrgSubscriptions: Boolean
@@ -38893,21 +39521,6 @@ input UpdatePersonalAccessTokenInput {
 	"""
 	isActive: Boolean
 	clearIsActive: Boolean
-	"""
-	the reason the token was revoked
-	"""
-	revokedReason: String
-	clearRevokedReason: Boolean
-	"""
-	the user who revoked the token
-	"""
-	revokedBy: String
-	clearRevokedBy: Boolean
-	"""
-	when the token was revoked
-	"""
-	revokedAt: Time
-	clearRevokedAt: Boolean
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
 	clearOrganizations: Boolean
@@ -38926,6 +39539,11 @@ input UpdateProcedureInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	"""
+	revision: String
+	clearRevision: Boolean
 	"""
 	the name of the procedure
 	"""
@@ -38960,11 +39578,6 @@ input UpdateProcedureInput {
 	"""
 	reviewFrequency: ProcedureFrequency
 	clearReviewFrequency: Boolean
-	"""
-	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	"""
-	revision: String
-	clearRevision: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -38983,6 +39596,9 @@ input UpdateProcedureInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
+	addProgramIDs: [ID!]
+	removeProgramIDs: [ID!]
+	clearPrograms: Boolean
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
@@ -38992,9 +39608,6 @@ input UpdateProcedureInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
-	addProgramIDs: [ID!]
-	removeProgramIDs: [ID!]
-	clearPrograms: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -39171,16 +39784,16 @@ input UpdateRiskInput {
 	clearViewers: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
+	clearControls: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
-	clearProcedure: Boolean
-	addActionPlanIDs: [ID!]
-	removeActionPlanIDs: [ID!]
-	clearActionPlans: Boolean
+	clearProcedures: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	stakeholderID: ID
 	clearStakeholder: Boolean
 	delegateID: ID
@@ -39502,25 +40115,25 @@ input UpdateTaskInput {
 	clearComments: Boolean
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
-	clearGroup: Boolean
+	clearGroups: Boolean
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
-	clearInternalPolicy: Boolean
+	clearInternalPolicies: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
-	clearProcedure: Boolean
+	clearProcedures: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
-	addControlObjectiveIDs: [ID!]
-	removeControlObjectiveIDs: [ID!]
-	clearControlObjective: Boolean
+	clearControls: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
-	clearSubcontrol: Boolean
+	clearSubcontrols: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
-	clearProgram: Boolean
+	clearPrograms: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
@@ -39798,6 +40411,11 @@ type User implements Node {
 		last: Int
 
 		"""
+		Ordering options for PersonalAccessTokens returned from the connection.
+		"""
+		orderBy: [PersonalAccessTokenOrder!]
+
+		"""
 		Filtering options for PersonalAccessTokens returned from the connection.
 		"""
 		where: PersonalAccessTokenWhereInput
@@ -39824,13 +40442,78 @@ type User implements Node {
 		last: Int
 
 		"""
+		Ordering options for TFASettings returned from the connection.
+		"""
+		orderBy: [TFASettingOrder!]
+
+		"""
 		Filtering options for TFASettings returned from the connection.
 		"""
 		where: TFASettingWhereInput
 	): TFASettingConnection!
 	setting: UserSetting!
-	groups: [Group!]
-	organizations: [Organization!]
+	groups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	organizations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Organizations returned from the connection.
+		"""
+		orderBy: [OrganizationOrder!]
+
+		"""
+		Filtering options for Organizations returned from the connection.
+		"""
+		where: OrganizationWhereInput
+	): OrganizationConnection!
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -39851,6 +40534,11 @@ type User implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -39878,6 +40566,11 @@ type User implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Events returned from the connection.
+		"""
+		orderBy: [EventOrder!]
 
 		"""
 		Filtering options for Events returned from the connection.
@@ -40009,8 +40702,68 @@ type User implements Node {
 		where: TaskWhereInput
 	): TaskConnection!
 	programs: [Program!]
-	groupMemberships: [GroupMembership!]
-	orgMemberships: [OrgMembership!]
+	groupMemberships(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for GroupMemberships returned from the connection.
+		"""
+		orderBy: [GroupMembershipOrder!]
+
+		"""
+		Filtering options for GroupMemberships returned from the connection.
+		"""
+		where: GroupMembershipWhereInput
+	): GroupMembershipConnection!
+	orgMemberships(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for OrgMemberships returned from the connection.
+		"""
+		orderBy: [OrgMembershipOrder!]
+
+		"""
+		Filtering options for OrgMemberships returned from the connection.
+		"""
+		where: OrgMembershipWhereInput
+	): OrgMembershipConnection!
 	programMemberships: [ProgramMembership!]
 }
 """
@@ -40198,6 +40951,8 @@ input UserHistoryOrder {
 Properties by which UserHistory connections can be ordered.
 """
 enum UserHistoryOrderField {
+	created_at
+	updated_at
 	first_name
 	last_name
 	display_name
@@ -40558,6 +41313,8 @@ input UserOrder {
 Properties by which User connections can be ordered.
 """
 enum UserOrderField {
+	created_at
+	updated_at
 	first_name
 	last_name
 	display_name
@@ -40579,12 +41336,12 @@ type UserSetting implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	userID: ID
 	"""
 	user account is locked if unconfirmed or explicitly locked
@@ -40639,6 +41396,11 @@ type UserSetting implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
 
 		"""
 		Filtering options for Files returned from the connection.
@@ -40703,12 +41465,12 @@ type UserSettingHistory implements Node {
 	updatedAt: Time
 	createdBy: String
 	updatedBy: String
+	deletedAt: Time
+	deletedBy: String
 	"""
 	tags associated with the object
 	"""
 	tags: [String!]
-	deletedAt: Time
-	deletedBy: String
 	userID: String
 	"""
 	user account is locked if unconfirmed or explicitly locked
@@ -40776,6 +41538,26 @@ enum UserSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/histo
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+Ordering options for UserSettingHistory connections
+"""
+input UserSettingHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order UserSettingHistories.
+	"""
+	field: UserSettingHistoryOrderField!
+}
+"""
+Properties by which UserSettingHistory connections can be ordered.
+"""
+enum UserSettingHistoryOrderField {
+	created_at
+	updated_at
 }
 """
 UserSettingHistoryUserStatus is enum for the field status
@@ -41012,6 +41794,26 @@ input UserSettingHistoryWhereInput {
 	isTfaEnabledNEQ: Boolean
 	isTfaEnabledIsNil: Boolean
 	isTfaEnabledNotNil: Boolean
+}
+"""
+Ordering options for UserSetting connections
+"""
+input UserSettingOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order UserSettings.
+	"""
+	field: UserSettingOrderField!
+}
+"""
+Properties by which UserSetting connections can be ordered.
+"""
+enum UserSettingOrderField {
+	created_at
+	updated_at
 }
 type UserSettingSearchResult {
 	userSettings: [UserSetting!]

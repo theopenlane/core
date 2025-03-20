@@ -6,18 +6,16 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
@@ -25,7 +23,23 @@ import (
 
 // Contact holds the schema definition for the Contact entity
 type Contact struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaContact = "contact"
+
+func (Contact) Name() string {
+	return SchemaContact
+}
+
+func (Contact) GetType() any {
+	return Contact.Type
+}
+
+func (Contact) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaContact)
 }
 
 // Fields of the Contact
@@ -87,33 +101,25 @@ func (Contact) Fields() []ent.Field {
 }
 
 // Mixin of the Contact
-func (Contact) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("contacts"),
-	}
+func (c Contact) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef(c.PluralName()),
+		},
+	}.getMixins()
 }
 
 // Edges of the Contact
-func (Contact) Edges() []ent.Edge {
+func (c Contact) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("entities", Entity.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("contacts"),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeFromWithPagination(c, Entity{}),
+		defaultEdgeToWithPagination(c, File{}),
 	}
 }
 
 // Annotations of the Contact
 func (Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

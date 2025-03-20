@@ -6,25 +6,39 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // Entity holds the schema definition for the Entity entity
 type Entity struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaEntity = "entity"
+
+func (Entity) Name() string {
+	return SchemaEntity
+}
+
+func (Entity) GetType() any {
+	return Entity.Type
+}
+
+func (Entity) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaEntity)
 }
 
 // Fields of the Entity
@@ -77,25 +91,25 @@ func (Entity) Fields() []ent.Field {
 
 // Mixin of the Entity
 func (Entity) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("entities"),
-	}
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("entities"),
+		},
+	}.getMixins()
 }
 
 // Edges of the Entity
-func (Entity) Edges() []ent.Edge {
+func (e Entity) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("contacts", Contact.Type).Annotations(entgql.RelayConnection()),
-		edge.To("documents", DocumentData.Type).Annotations(entgql.RelayConnection()),
-		edge.To("notes", Note.Type).Annotations(entgql.RelayConnection()),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
-		edge.To("entity_type", EntityType.Type).
-			Field("entity_type_id").
-			Unique(),
+		defaultEdgeToWithPagination(e, Contact{}),
+		defaultEdgeToWithPagination(e, DocumentData{}),
+		defaultEdgeToWithPagination(e, Note{}),
+		defaultEdgeToWithPagination(e, File{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: EntityType{},
+			field:      "entity_type_id",
+		}),
 	}
 }
 
@@ -111,10 +125,6 @@ func (Entity) Indexes() []ent.Index {
 // Annotations of the Entity
 func (Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

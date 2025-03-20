@@ -34,14 +34,16 @@ type ProcedureHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
@@ -58,9 +60,7 @@ type ProcedureHistory struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision     string `json:"revision,omitempty"`
-	selectValues sql.SelectValues
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -74,7 +74,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldRevision:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -141,14 +141,6 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.UpdatedBy = value.String
 			}
-		case procedurehistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case procedurehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -166,6 +158,20 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
 				ph.DisplayID = value.String
+			}
+		case procedurehistory.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
+		case procedurehistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				ph.Revision = value.String
 			}
 		case procedurehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -214,12 +220,6 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				ph.ReviewFrequency = enums.Frequency(value.String)
-			}
-		case procedurehistory.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				ph.Revision = value.String
 			}
 		default:
 			ph.selectValues.Set(columns[i], values[i])
@@ -278,9 +278,6 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ph.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -289,6 +286,12 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(ph.DisplayID)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(ph.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ph.OwnerID)
@@ -313,9 +316,6 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ph.ReviewFrequency))
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(ph.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

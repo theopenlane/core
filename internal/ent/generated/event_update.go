@@ -160,14 +160,14 @@ func (eu *EventUpdate) ClearMetadata() *EventUpdate {
 	return eu
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (eu *EventUpdate) AddUserIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddUserIDs(ids...)
 	return eu
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (eu *EventUpdate) AddUser(u ...*User) *EventUpdate {
+// AddUsers adds the "users" edges to the User entity.
+func (eu *EventUpdate) AddUsers(u ...*User) *EventUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -175,14 +175,14 @@ func (eu *EventUpdate) AddUser(u ...*User) *EventUpdate {
 	return eu.AddUserIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (eu *EventUpdate) AddGroupIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddGroupIDs(ids...)
 	return eu
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (eu *EventUpdate) AddGroup(g ...*Group) *EventUpdate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (eu *EventUpdate) AddGroups(g ...*Group) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -190,14 +190,14 @@ func (eu *EventUpdate) AddGroup(g ...*Group) *EventUpdate {
 	return eu.AddGroupIDs(ids...)
 }
 
-// AddIntegrationIDs adds the "integration" edge to the Integration entity by IDs.
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (eu *EventUpdate) AddIntegrationIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddIntegrationIDs(ids...)
 	return eu
 }
 
-// AddIntegration adds the "integration" edges to the Integration entity.
-func (eu *EventUpdate) AddIntegration(i ...*Integration) *EventUpdate {
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (eu *EventUpdate) AddIntegrations(i ...*Integration) *EventUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -205,14 +205,14 @@ func (eu *EventUpdate) AddIntegration(i ...*Integration) *EventUpdate {
 	return eu.AddIntegrationIDs(ids...)
 }
 
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
+// AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (eu *EventUpdate) AddOrganizationIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddOrganizationIDs(ids...)
 	return eu
 }
 
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (eu *EventUpdate) AddOrganization(o ...*Organization) *EventUpdate {
+// AddOrganizations adds the "organizations" edges to the Organization entity.
+func (eu *EventUpdate) AddOrganizations(o ...*Organization) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -220,14 +220,14 @@ func (eu *EventUpdate) AddOrganization(o ...*Organization) *EventUpdate {
 	return eu.AddOrganizationIDs(ids...)
 }
 
-// AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
 func (eu *EventUpdate) AddInviteIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddInviteIDs(ids...)
 	return eu
 }
 
-// AddInvite adds the "invite" edges to the Invite entity.
-func (eu *EventUpdate) AddInvite(i ...*Invite) *EventUpdate {
+// AddInvites adds the "invites" edges to the Invite entity.
+func (eu *EventUpdate) AddInvites(i ...*Invite) *EventUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -235,14 +235,14 @@ func (eu *EventUpdate) AddInvite(i ...*Invite) *EventUpdate {
 	return eu.AddInviteIDs(ids...)
 }
 
-// AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
+// AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
 func (eu *EventUpdate) AddPersonalAccessTokenIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddPersonalAccessTokenIDs(ids...)
 	return eu
 }
 
-// AddPersonalAccessToken adds the "personal_access_token" edges to the PersonalAccessToken entity.
-func (eu *EventUpdate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventUpdate {
+// AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
+func (eu *EventUpdate) AddPersonalAccessTokens(p ...*PersonalAccessToken) *EventUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -250,29 +250,29 @@ func (eu *EventUpdate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventU
 	return eu.AddPersonalAccessTokenIDs(ids...)
 }
 
-// AddHushIDs adds the "hush" edge to the Hush entity by IDs.
-func (eu *EventUpdate) AddHushIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddHushIDs(ids...)
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (eu *EventUpdate) AddSecretIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddSecretIDs(ids...)
 	return eu
 }
 
-// AddHush adds the "hush" edges to the Hush entity.
-func (eu *EventUpdate) AddHush(h ...*Hush) *EventUpdate {
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (eu *EventUpdate) AddSecrets(h ...*Hush) *EventUpdate {
 	ids := make([]string, len(h))
 	for i := range h {
 		ids[i] = h[i].ID
 	}
-	return eu.AddHushIDs(ids...)
+	return eu.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmembership" edge to the OrgMembership entity by IDs.
+// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
 func (eu *EventUpdate) AddOrgmembershipIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddOrgmembershipIDs(ids...)
 	return eu
 }
 
-// AddOrgmembership adds the "orgmembership" edges to the OrgMembership entity.
-func (eu *EventUpdate) AddOrgmembership(o ...*OrgMembership) *EventUpdate {
+// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
+func (eu *EventUpdate) AddOrgmemberships(o ...*OrgMembership) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -280,14 +280,14 @@ func (eu *EventUpdate) AddOrgmembership(o ...*OrgMembership) *EventUpdate {
 	return eu.AddOrgmembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmembership" edge to the GroupMembership entity by IDs.
+// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
 func (eu *EventUpdate) AddGroupmembershipIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddGroupmembershipIDs(ids...)
 	return eu
 }
 
-// AddGroupmembership adds the "groupmembership" edges to the GroupMembership entity.
-func (eu *EventUpdate) AddGroupmembership(g ...*GroupMembership) *EventUpdate {
+// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
+func (eu *EventUpdate) AddGroupmemberships(g ...*GroupMembership) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -295,14 +295,14 @@ func (eu *EventUpdate) AddGroupmembership(g ...*GroupMembership) *EventUpdate {
 	return eu.AddGroupmembershipIDs(ids...)
 }
 
-// AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
 func (eu *EventUpdate) AddSubscriberIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddSubscriberIDs(ids...)
 	return eu
 }
 
-// AddSubscriber adds the "subscriber" edges to the Subscriber entity.
-func (eu *EventUpdate) AddSubscriber(s ...*Subscriber) *EventUpdate {
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (eu *EventUpdate) AddSubscribers(s ...*Subscriber) *EventUpdate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -310,14 +310,14 @@ func (eu *EventUpdate) AddSubscriber(s ...*Subscriber) *EventUpdate {
 	return eu.AddSubscriberIDs(ids...)
 }
 
-// AddFileIDs adds the "file" edge to the File entity by IDs.
+// AddFileIDs adds the "files" edge to the File entity by IDs.
 func (eu *EventUpdate) AddFileIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddFileIDs(ids...)
 	return eu
 }
 
-// AddFile adds the "file" edges to the File entity.
-func (eu *EventUpdate) AddFile(f ...*File) *EventUpdate {
+// AddFiles adds the "files" edges to the File entity.
+func (eu *EventUpdate) AddFiles(f ...*File) *EventUpdate {
 	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -325,19 +325,19 @@ func (eu *EventUpdate) AddFile(f ...*File) *EventUpdate {
 	return eu.AddFileIDs(ids...)
 }
 
-// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
-func (eu *EventUpdate) AddOrgsubscriptionIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddOrgsubscriptionIDs(ids...)
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (eu *EventUpdate) AddOrgSubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddOrgSubscriptionIDs(ids...)
 	return eu
 }
 
-// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
-func (eu *EventUpdate) AddOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (eu *EventUpdate) AddOrgSubscriptions(o ...*OrgSubscription) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return eu.AddOrgsubscriptionIDs(ids...)
+	return eu.AddOrgSubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -345,20 +345,20 @@ func (eu *EventUpdate) Mutation() *EventMutation {
 	return eu.mutation
 }
 
-// ClearUser clears all "user" edges to the User entity.
-func (eu *EventUpdate) ClearUser() *EventUpdate {
-	eu.mutation.ClearUser()
+// ClearUsers clears all "users" edges to the User entity.
+func (eu *EventUpdate) ClearUsers() *EventUpdate {
+	eu.mutation.ClearUsers()
 	return eu
 }
 
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
 func (eu *EventUpdate) RemoveUserIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveUserIDs(ids...)
 	return eu
 }
 
-// RemoveUser removes "user" edges to User entities.
-func (eu *EventUpdate) RemoveUser(u ...*User) *EventUpdate {
+// RemoveUsers removes "users" edges to User entities.
+func (eu *EventUpdate) RemoveUsers(u ...*User) *EventUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -366,20 +366,20 @@ func (eu *EventUpdate) RemoveUser(u ...*User) *EventUpdate {
 	return eu.RemoveUserIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (eu *EventUpdate) ClearGroup() *EventUpdate {
-	eu.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (eu *EventUpdate) ClearGroups() *EventUpdate {
+	eu.mutation.ClearGroups()
 	return eu
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (eu *EventUpdate) RemoveGroupIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveGroupIDs(ids...)
 	return eu
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (eu *EventUpdate) RemoveGroup(g ...*Group) *EventUpdate {
+// RemoveGroups removes "groups" edges to Group entities.
+func (eu *EventUpdate) RemoveGroups(g ...*Group) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -387,20 +387,20 @@ func (eu *EventUpdate) RemoveGroup(g ...*Group) *EventUpdate {
 	return eu.RemoveGroupIDs(ids...)
 }
 
-// ClearIntegration clears all "integration" edges to the Integration entity.
-func (eu *EventUpdate) ClearIntegration() *EventUpdate {
-	eu.mutation.ClearIntegration()
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (eu *EventUpdate) ClearIntegrations() *EventUpdate {
+	eu.mutation.ClearIntegrations()
 	return eu
 }
 
-// RemoveIntegrationIDs removes the "integration" edge to Integration entities by IDs.
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
 func (eu *EventUpdate) RemoveIntegrationIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveIntegrationIDs(ids...)
 	return eu
 }
 
-// RemoveIntegration removes "integration" edges to Integration entities.
-func (eu *EventUpdate) RemoveIntegration(i ...*Integration) *EventUpdate {
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (eu *EventUpdate) RemoveIntegrations(i ...*Integration) *EventUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -408,20 +408,20 @@ func (eu *EventUpdate) RemoveIntegration(i ...*Integration) *EventUpdate {
 	return eu.RemoveIntegrationIDs(ids...)
 }
 
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (eu *EventUpdate) ClearOrganization() *EventUpdate {
-	eu.mutation.ClearOrganization()
+// ClearOrganizations clears all "organizations" edges to the Organization entity.
+func (eu *EventUpdate) ClearOrganizations() *EventUpdate {
+	eu.mutation.ClearOrganizations()
 	return eu
 }
 
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
+// RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
 func (eu *EventUpdate) RemoveOrganizationIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveOrganizationIDs(ids...)
 	return eu
 }
 
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (eu *EventUpdate) RemoveOrganization(o ...*Organization) *EventUpdate {
+// RemoveOrganizations removes "organizations" edges to Organization entities.
+func (eu *EventUpdate) RemoveOrganizations(o ...*Organization) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -429,20 +429,20 @@ func (eu *EventUpdate) RemoveOrganization(o ...*Organization) *EventUpdate {
 	return eu.RemoveOrganizationIDs(ids...)
 }
 
-// ClearInvite clears all "invite" edges to the Invite entity.
-func (eu *EventUpdate) ClearInvite() *EventUpdate {
-	eu.mutation.ClearInvite()
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (eu *EventUpdate) ClearInvites() *EventUpdate {
+	eu.mutation.ClearInvites()
 	return eu
 }
 
-// RemoveInviteIDs removes the "invite" edge to Invite entities by IDs.
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
 func (eu *EventUpdate) RemoveInviteIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveInviteIDs(ids...)
 	return eu
 }
 
-// RemoveInvite removes "invite" edges to Invite entities.
-func (eu *EventUpdate) RemoveInvite(i ...*Invite) *EventUpdate {
+// RemoveInvites removes "invites" edges to Invite entities.
+func (eu *EventUpdate) RemoveInvites(i ...*Invite) *EventUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -450,20 +450,20 @@ func (eu *EventUpdate) RemoveInvite(i ...*Invite) *EventUpdate {
 	return eu.RemoveInviteIDs(ids...)
 }
 
-// ClearPersonalAccessToken clears all "personal_access_token" edges to the PersonalAccessToken entity.
-func (eu *EventUpdate) ClearPersonalAccessToken() *EventUpdate {
-	eu.mutation.ClearPersonalAccessToken()
+// ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
+func (eu *EventUpdate) ClearPersonalAccessTokens() *EventUpdate {
+	eu.mutation.ClearPersonalAccessTokens()
 	return eu
 }
 
-// RemovePersonalAccessTokenIDs removes the "personal_access_token" edge to PersonalAccessToken entities by IDs.
+// RemovePersonalAccessTokenIDs removes the "personal_access_tokens" edge to PersonalAccessToken entities by IDs.
 func (eu *EventUpdate) RemovePersonalAccessTokenIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemovePersonalAccessTokenIDs(ids...)
 	return eu
 }
 
-// RemovePersonalAccessToken removes "personal_access_token" edges to PersonalAccessToken entities.
-func (eu *EventUpdate) RemovePersonalAccessToken(p ...*PersonalAccessToken) *EventUpdate {
+// RemovePersonalAccessTokens removes "personal_access_tokens" edges to PersonalAccessToken entities.
+func (eu *EventUpdate) RemovePersonalAccessTokens(p ...*PersonalAccessToken) *EventUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -471,41 +471,41 @@ func (eu *EventUpdate) RemovePersonalAccessToken(p ...*PersonalAccessToken) *Eve
 	return eu.RemovePersonalAccessTokenIDs(ids...)
 }
 
-// ClearHush clears all "hush" edges to the Hush entity.
-func (eu *EventUpdate) ClearHush() *EventUpdate {
-	eu.mutation.ClearHush()
+// ClearSecrets clears all "secrets" edges to the Hush entity.
+func (eu *EventUpdate) ClearSecrets() *EventUpdate {
+	eu.mutation.ClearSecrets()
 	return eu
 }
 
-// RemoveHushIDs removes the "hush" edge to Hush entities by IDs.
-func (eu *EventUpdate) RemoveHushIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveHushIDs(ids...)
+// RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
+func (eu *EventUpdate) RemoveSecretIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveSecretIDs(ids...)
 	return eu
 }
 
-// RemoveHush removes "hush" edges to Hush entities.
-func (eu *EventUpdate) RemoveHush(h ...*Hush) *EventUpdate {
+// RemoveSecrets removes "secrets" edges to Hush entities.
+func (eu *EventUpdate) RemoveSecrets(h ...*Hush) *EventUpdate {
 	ids := make([]string, len(h))
 	for i := range h {
 		ids[i] = h[i].ID
 	}
-	return eu.RemoveHushIDs(ids...)
+	return eu.RemoveSecretIDs(ids...)
 }
 
-// ClearOrgmembership clears all "orgmembership" edges to the OrgMembership entity.
-func (eu *EventUpdate) ClearOrgmembership() *EventUpdate {
-	eu.mutation.ClearOrgmembership()
+// ClearOrgmemberships clears all "orgmemberships" edges to the OrgMembership entity.
+func (eu *EventUpdate) ClearOrgmemberships() *EventUpdate {
+	eu.mutation.ClearOrgmemberships()
 	return eu
 }
 
-// RemoveOrgmembershipIDs removes the "orgmembership" edge to OrgMembership entities by IDs.
+// RemoveOrgmembershipIDs removes the "orgmemberships" edge to OrgMembership entities by IDs.
 func (eu *EventUpdate) RemoveOrgmembershipIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveOrgmembershipIDs(ids...)
 	return eu
 }
 
-// RemoveOrgmembership removes "orgmembership" edges to OrgMembership entities.
-func (eu *EventUpdate) RemoveOrgmembership(o ...*OrgMembership) *EventUpdate {
+// RemoveOrgmemberships removes "orgmemberships" edges to OrgMembership entities.
+func (eu *EventUpdate) RemoveOrgmemberships(o ...*OrgMembership) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -513,20 +513,20 @@ func (eu *EventUpdate) RemoveOrgmembership(o ...*OrgMembership) *EventUpdate {
 	return eu.RemoveOrgmembershipIDs(ids...)
 }
 
-// ClearGroupmembership clears all "groupmembership" edges to the GroupMembership entity.
-func (eu *EventUpdate) ClearGroupmembership() *EventUpdate {
-	eu.mutation.ClearGroupmembership()
+// ClearGroupmemberships clears all "groupmemberships" edges to the GroupMembership entity.
+func (eu *EventUpdate) ClearGroupmemberships() *EventUpdate {
+	eu.mutation.ClearGroupmemberships()
 	return eu
 }
 
-// RemoveGroupmembershipIDs removes the "groupmembership" edge to GroupMembership entities by IDs.
+// RemoveGroupmembershipIDs removes the "groupmemberships" edge to GroupMembership entities by IDs.
 func (eu *EventUpdate) RemoveGroupmembershipIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveGroupmembershipIDs(ids...)
 	return eu
 }
 
-// RemoveGroupmembership removes "groupmembership" edges to GroupMembership entities.
-func (eu *EventUpdate) RemoveGroupmembership(g ...*GroupMembership) *EventUpdate {
+// RemoveGroupmemberships removes "groupmemberships" edges to GroupMembership entities.
+func (eu *EventUpdate) RemoveGroupmemberships(g ...*GroupMembership) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -534,20 +534,20 @@ func (eu *EventUpdate) RemoveGroupmembership(g ...*GroupMembership) *EventUpdate
 	return eu.RemoveGroupmembershipIDs(ids...)
 }
 
-// ClearSubscriber clears all "subscriber" edges to the Subscriber entity.
-func (eu *EventUpdate) ClearSubscriber() *EventUpdate {
-	eu.mutation.ClearSubscriber()
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (eu *EventUpdate) ClearSubscribers() *EventUpdate {
+	eu.mutation.ClearSubscribers()
 	return eu
 }
 
-// RemoveSubscriberIDs removes the "subscriber" edge to Subscriber entities by IDs.
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
 func (eu *EventUpdate) RemoveSubscriberIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveSubscriberIDs(ids...)
 	return eu
 }
 
-// RemoveSubscriber removes "subscriber" edges to Subscriber entities.
-func (eu *EventUpdate) RemoveSubscriber(s ...*Subscriber) *EventUpdate {
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (eu *EventUpdate) RemoveSubscribers(s ...*Subscriber) *EventUpdate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -555,20 +555,20 @@ func (eu *EventUpdate) RemoveSubscriber(s ...*Subscriber) *EventUpdate {
 	return eu.RemoveSubscriberIDs(ids...)
 }
 
-// ClearFile clears all "file" edges to the File entity.
-func (eu *EventUpdate) ClearFile() *EventUpdate {
-	eu.mutation.ClearFile()
+// ClearFiles clears all "files" edges to the File entity.
+func (eu *EventUpdate) ClearFiles() *EventUpdate {
+	eu.mutation.ClearFiles()
 	return eu
 }
 
-// RemoveFileIDs removes the "file" edge to File entities by IDs.
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
 func (eu *EventUpdate) RemoveFileIDs(ids ...string) *EventUpdate {
 	eu.mutation.RemoveFileIDs(ids...)
 	return eu
 }
 
-// RemoveFile removes "file" edges to File entities.
-func (eu *EventUpdate) RemoveFile(f ...*File) *EventUpdate {
+// RemoveFiles removes "files" edges to File entities.
+func (eu *EventUpdate) RemoveFiles(f ...*File) *EventUpdate {
 	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -576,25 +576,25 @@ func (eu *EventUpdate) RemoveFile(f ...*File) *EventUpdate {
 	return eu.RemoveFileIDs(ids...)
 }
 
-// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
-func (eu *EventUpdate) ClearOrgsubscription() *EventUpdate {
-	eu.mutation.ClearOrgsubscription()
+// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
+func (eu *EventUpdate) ClearOrgSubscriptions() *EventUpdate {
+	eu.mutation.ClearOrgSubscriptions()
 	return eu
 }
 
-// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
-func (eu *EventUpdate) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveOrgsubscriptionIDs(ids...)
+// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
+func (eu *EventUpdate) RemoveOrgSubscriptionIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveOrgSubscriptionIDs(ids...)
 	return eu
 }
 
-// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
-func (eu *EventUpdate) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdate {
+// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
+func (eu *EventUpdate) RemoveOrgSubscriptions(o ...*OrgSubscription) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return eu.RemoveOrgsubscriptionIDs(ids...)
+	return eu.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -704,12 +704,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
 	}
-	if eu.mutation.UserCleared() {
+	if eu.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -718,29 +718,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.UserEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedUserIDs(); len(nodes) > 0 && !eu.mutation.UserCleared() {
+	if nodes := eu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !eu.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.UserEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -750,14 +733,31 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if eu.mutation.GroupCleared() {
+	if nodes := eu.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.UserEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -766,12 +766,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.GroupEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedGroupIDs(); len(nodes) > 0 && !eu.mutation.GroupCleared() {
+	if nodes := eu.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !eu.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -783,12 +783,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -800,12 +800,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.IntegrationCleared() {
+	if eu.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
@@ -814,29 +814,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.IntegrationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedIntegrationIDs(); len(nodes) > 0 && !eu.mutation.IntegrationCleared() {
+	if nodes := eu.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !eu.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.IntegrationEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.IntegrationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
@@ -846,14 +829,31 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if eu.mutation.OrganizationCleared() {
+	if nodes := eu.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.IntegrationEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.OrganizationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -862,12 +862,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !eu.mutation.OrganizationCleared() {
+	if nodes := eu.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !eu.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -879,12 +879,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -896,12 +896,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.InviteCleared() {
+	if eu.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
@@ -910,29 +910,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.InviteEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedInviteIDs(); len(nodes) > 0 && !eu.mutation.InviteCleared() {
+	if nodes := eu.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !eu.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.InviteEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.InviteIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
@@ -942,14 +925,31 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if eu.mutation.PersonalAccessTokenCleared() {
+	if nodes := eu.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.InviteEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.PersonalAccessTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -958,12 +958,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedPersonalAccessTokenIDs(); len(nodes) > 0 && !eu.mutation.PersonalAccessTokenCleared() {
+	if nodes := eu.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !eu.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -975,12 +975,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.PersonalAccessTokenIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -992,12 +992,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.HushCleared() {
+	if eu.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
@@ -1006,29 +1006,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.HushEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedHushIDs(); len(nodes) > 0 && !eu.mutation.HushCleared() {
+	if nodes := eu.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !eu.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.HushEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.HushIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
@@ -1038,14 +1021,31 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if eu.mutation.OrgmembershipCleared() {
+	if nodes := eu.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.HushEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.OrgmembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1054,12 +1054,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedOrgmembershipIDs(); len(nodes) > 0 && !eu.mutation.OrgmembershipCleared() {
+	if nodes := eu.mutation.RemovedOrgmembershipsIDs(); len(nodes) > 0 && !eu.mutation.OrgmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1071,12 +1071,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1088,12 +1088,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.GroupmembershipCleared() {
+	if eu.mutation.GroupmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1102,12 +1102,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.GroupMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedGroupmembershipIDs(); len(nodes) > 0 && !eu.mutation.GroupmembershipCleared() {
+	if nodes := eu.mutation.RemovedGroupmembershipsIDs(); len(nodes) > 0 && !eu.mutation.GroupmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1119,12 +1119,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.GroupmembershipIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1136,12 +1136,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.SubscriberCleared() {
+	if eu.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -1150,12 +1150,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.SubscriberEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedSubscriberIDs(); len(nodes) > 0 && !eu.mutation.SubscriberCleared() {
+	if nodes := eu.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !eu.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -1167,12 +1167,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.SubscriberIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -1184,12 +1184,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.FileCleared() {
+	if eu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -1198,12 +1198,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.FileEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedFileIDs(); len(nodes) > 0 && !eu.mutation.FileCleared() {
+	if nodes := eu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !eu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -1215,12 +1215,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -1232,12 +1232,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.OrgsubscriptionCleared() {
+	if eu.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -1246,12 +1246,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !eu.mutation.OrgsubscriptionCleared() {
+	if nodes := eu.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !eu.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -1263,12 +1263,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -1420,14 +1420,14 @@ func (euo *EventUpdateOne) ClearMetadata() *EventUpdateOne {
 	return euo
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (euo *EventUpdateOne) AddUserIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddUserIDs(ids...)
 	return euo
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (euo *EventUpdateOne) AddUser(u ...*User) *EventUpdateOne {
+// AddUsers adds the "users" edges to the User entity.
+func (euo *EventUpdateOne) AddUsers(u ...*User) *EventUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1435,14 +1435,14 @@ func (euo *EventUpdateOne) AddUser(u ...*User) *EventUpdateOne {
 	return euo.AddUserIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (euo *EventUpdateOne) AddGroupIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddGroupIDs(ids...)
 	return euo
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (euo *EventUpdateOne) AddGroup(g ...*Group) *EventUpdateOne {
+// AddGroups adds the "groups" edges to the Group entity.
+func (euo *EventUpdateOne) AddGroups(g ...*Group) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1450,14 +1450,14 @@ func (euo *EventUpdateOne) AddGroup(g ...*Group) *EventUpdateOne {
 	return euo.AddGroupIDs(ids...)
 }
 
-// AddIntegrationIDs adds the "integration" edge to the Integration entity by IDs.
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (euo *EventUpdateOne) AddIntegrationIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddIntegrationIDs(ids...)
 	return euo
 }
 
-// AddIntegration adds the "integration" edges to the Integration entity.
-func (euo *EventUpdateOne) AddIntegration(i ...*Integration) *EventUpdateOne {
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (euo *EventUpdateOne) AddIntegrations(i ...*Integration) *EventUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1465,14 +1465,14 @@ func (euo *EventUpdateOne) AddIntegration(i ...*Integration) *EventUpdateOne {
 	return euo.AddIntegrationIDs(ids...)
 }
 
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
+// AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (euo *EventUpdateOne) AddOrganizationIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddOrganizationIDs(ids...)
 	return euo
 }
 
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (euo *EventUpdateOne) AddOrganization(o ...*Organization) *EventUpdateOne {
+// AddOrganizations adds the "organizations" edges to the Organization entity.
+func (euo *EventUpdateOne) AddOrganizations(o ...*Organization) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -1480,14 +1480,14 @@ func (euo *EventUpdateOne) AddOrganization(o ...*Organization) *EventUpdateOne {
 	return euo.AddOrganizationIDs(ids...)
 }
 
-// AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
 func (euo *EventUpdateOne) AddInviteIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddInviteIDs(ids...)
 	return euo
 }
 
-// AddInvite adds the "invite" edges to the Invite entity.
-func (euo *EventUpdateOne) AddInvite(i ...*Invite) *EventUpdateOne {
+// AddInvites adds the "invites" edges to the Invite entity.
+func (euo *EventUpdateOne) AddInvites(i ...*Invite) *EventUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1495,14 +1495,14 @@ func (euo *EventUpdateOne) AddInvite(i ...*Invite) *EventUpdateOne {
 	return euo.AddInviteIDs(ids...)
 }
 
-// AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
+// AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
 func (euo *EventUpdateOne) AddPersonalAccessTokenIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddPersonalAccessTokenIDs(ids...)
 	return euo
 }
 
-// AddPersonalAccessToken adds the "personal_access_token" edges to the PersonalAccessToken entity.
-func (euo *EventUpdateOne) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventUpdateOne {
+// AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
+func (euo *EventUpdateOne) AddPersonalAccessTokens(p ...*PersonalAccessToken) *EventUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1510,29 +1510,29 @@ func (euo *EventUpdateOne) AddPersonalAccessToken(p ...*PersonalAccessToken) *Ev
 	return euo.AddPersonalAccessTokenIDs(ids...)
 }
 
-// AddHushIDs adds the "hush" edge to the Hush entity by IDs.
-func (euo *EventUpdateOne) AddHushIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddHushIDs(ids...)
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (euo *EventUpdateOne) AddSecretIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddSecretIDs(ids...)
 	return euo
 }
 
-// AddHush adds the "hush" edges to the Hush entity.
-func (euo *EventUpdateOne) AddHush(h ...*Hush) *EventUpdateOne {
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (euo *EventUpdateOne) AddSecrets(h ...*Hush) *EventUpdateOne {
 	ids := make([]string, len(h))
 	for i := range h {
 		ids[i] = h[i].ID
 	}
-	return euo.AddHushIDs(ids...)
+	return euo.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmembership" edge to the OrgMembership entity by IDs.
+// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
 func (euo *EventUpdateOne) AddOrgmembershipIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddOrgmembershipIDs(ids...)
 	return euo
 }
 
-// AddOrgmembership adds the "orgmembership" edges to the OrgMembership entity.
-func (euo *EventUpdateOne) AddOrgmembership(o ...*OrgMembership) *EventUpdateOne {
+// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
+func (euo *EventUpdateOne) AddOrgmemberships(o ...*OrgMembership) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -1540,14 +1540,14 @@ func (euo *EventUpdateOne) AddOrgmembership(o ...*OrgMembership) *EventUpdateOne
 	return euo.AddOrgmembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmembership" edge to the GroupMembership entity by IDs.
+// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
 func (euo *EventUpdateOne) AddGroupmembershipIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddGroupmembershipIDs(ids...)
 	return euo
 }
 
-// AddGroupmembership adds the "groupmembership" edges to the GroupMembership entity.
-func (euo *EventUpdateOne) AddGroupmembership(g ...*GroupMembership) *EventUpdateOne {
+// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
+func (euo *EventUpdateOne) AddGroupmemberships(g ...*GroupMembership) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1555,14 +1555,14 @@ func (euo *EventUpdateOne) AddGroupmembership(g ...*GroupMembership) *EventUpdat
 	return euo.AddGroupmembershipIDs(ids...)
 }
 
-// AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
 func (euo *EventUpdateOne) AddSubscriberIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddSubscriberIDs(ids...)
 	return euo
 }
 
-// AddSubscriber adds the "subscriber" edges to the Subscriber entity.
-func (euo *EventUpdateOne) AddSubscriber(s ...*Subscriber) *EventUpdateOne {
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (euo *EventUpdateOne) AddSubscribers(s ...*Subscriber) *EventUpdateOne {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -1570,14 +1570,14 @@ func (euo *EventUpdateOne) AddSubscriber(s ...*Subscriber) *EventUpdateOne {
 	return euo.AddSubscriberIDs(ids...)
 }
 
-// AddFileIDs adds the "file" edge to the File entity by IDs.
+// AddFileIDs adds the "files" edge to the File entity by IDs.
 func (euo *EventUpdateOne) AddFileIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddFileIDs(ids...)
 	return euo
 }
 
-// AddFile adds the "file" edges to the File entity.
-func (euo *EventUpdateOne) AddFile(f ...*File) *EventUpdateOne {
+// AddFiles adds the "files" edges to the File entity.
+func (euo *EventUpdateOne) AddFiles(f ...*File) *EventUpdateOne {
 	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -1585,19 +1585,19 @@ func (euo *EventUpdateOne) AddFile(f ...*File) *EventUpdateOne {
 	return euo.AddFileIDs(ids...)
 }
 
-// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
-func (euo *EventUpdateOne) AddOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddOrgsubscriptionIDs(ids...)
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (euo *EventUpdateOne) AddOrgSubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddOrgSubscriptionIDs(ids...)
 	return euo
 }
 
-// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
-func (euo *EventUpdateOne) AddOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) AddOrgSubscriptions(o ...*OrgSubscription) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return euo.AddOrgsubscriptionIDs(ids...)
+	return euo.AddOrgSubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -1605,20 +1605,20 @@ func (euo *EventUpdateOne) Mutation() *EventMutation {
 	return euo.mutation
 }
 
-// ClearUser clears all "user" edges to the User entity.
-func (euo *EventUpdateOne) ClearUser() *EventUpdateOne {
-	euo.mutation.ClearUser()
+// ClearUsers clears all "users" edges to the User entity.
+func (euo *EventUpdateOne) ClearUsers() *EventUpdateOne {
+	euo.mutation.ClearUsers()
 	return euo
 }
 
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
 func (euo *EventUpdateOne) RemoveUserIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveUserIDs(ids...)
 	return euo
 }
 
-// RemoveUser removes "user" edges to User entities.
-func (euo *EventUpdateOne) RemoveUser(u ...*User) *EventUpdateOne {
+// RemoveUsers removes "users" edges to User entities.
+func (euo *EventUpdateOne) RemoveUsers(u ...*User) *EventUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1626,20 +1626,20 @@ func (euo *EventUpdateOne) RemoveUser(u ...*User) *EventUpdateOne {
 	return euo.RemoveUserIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (euo *EventUpdateOne) ClearGroup() *EventUpdateOne {
-	euo.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (euo *EventUpdateOne) ClearGroups() *EventUpdateOne {
+	euo.mutation.ClearGroups()
 	return euo
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (euo *EventUpdateOne) RemoveGroupIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveGroupIDs(ids...)
 	return euo
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (euo *EventUpdateOne) RemoveGroup(g ...*Group) *EventUpdateOne {
+// RemoveGroups removes "groups" edges to Group entities.
+func (euo *EventUpdateOne) RemoveGroups(g ...*Group) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1647,20 +1647,20 @@ func (euo *EventUpdateOne) RemoveGroup(g ...*Group) *EventUpdateOne {
 	return euo.RemoveGroupIDs(ids...)
 }
 
-// ClearIntegration clears all "integration" edges to the Integration entity.
-func (euo *EventUpdateOne) ClearIntegration() *EventUpdateOne {
-	euo.mutation.ClearIntegration()
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (euo *EventUpdateOne) ClearIntegrations() *EventUpdateOne {
+	euo.mutation.ClearIntegrations()
 	return euo
 }
 
-// RemoveIntegrationIDs removes the "integration" edge to Integration entities by IDs.
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
 func (euo *EventUpdateOne) RemoveIntegrationIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveIntegrationIDs(ids...)
 	return euo
 }
 
-// RemoveIntegration removes "integration" edges to Integration entities.
-func (euo *EventUpdateOne) RemoveIntegration(i ...*Integration) *EventUpdateOne {
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (euo *EventUpdateOne) RemoveIntegrations(i ...*Integration) *EventUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1668,20 +1668,20 @@ func (euo *EventUpdateOne) RemoveIntegration(i ...*Integration) *EventUpdateOne 
 	return euo.RemoveIntegrationIDs(ids...)
 }
 
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (euo *EventUpdateOne) ClearOrganization() *EventUpdateOne {
-	euo.mutation.ClearOrganization()
+// ClearOrganizations clears all "organizations" edges to the Organization entity.
+func (euo *EventUpdateOne) ClearOrganizations() *EventUpdateOne {
+	euo.mutation.ClearOrganizations()
 	return euo
 }
 
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
+// RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
 func (euo *EventUpdateOne) RemoveOrganizationIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveOrganizationIDs(ids...)
 	return euo
 }
 
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (euo *EventUpdateOne) RemoveOrganization(o ...*Organization) *EventUpdateOne {
+// RemoveOrganizations removes "organizations" edges to Organization entities.
+func (euo *EventUpdateOne) RemoveOrganizations(o ...*Organization) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -1689,20 +1689,20 @@ func (euo *EventUpdateOne) RemoveOrganization(o ...*Organization) *EventUpdateOn
 	return euo.RemoveOrganizationIDs(ids...)
 }
 
-// ClearInvite clears all "invite" edges to the Invite entity.
-func (euo *EventUpdateOne) ClearInvite() *EventUpdateOne {
-	euo.mutation.ClearInvite()
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (euo *EventUpdateOne) ClearInvites() *EventUpdateOne {
+	euo.mutation.ClearInvites()
 	return euo
 }
 
-// RemoveInviteIDs removes the "invite" edge to Invite entities by IDs.
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
 func (euo *EventUpdateOne) RemoveInviteIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveInviteIDs(ids...)
 	return euo
 }
 
-// RemoveInvite removes "invite" edges to Invite entities.
-func (euo *EventUpdateOne) RemoveInvite(i ...*Invite) *EventUpdateOne {
+// RemoveInvites removes "invites" edges to Invite entities.
+func (euo *EventUpdateOne) RemoveInvites(i ...*Invite) *EventUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1710,20 +1710,20 @@ func (euo *EventUpdateOne) RemoveInvite(i ...*Invite) *EventUpdateOne {
 	return euo.RemoveInviteIDs(ids...)
 }
 
-// ClearPersonalAccessToken clears all "personal_access_token" edges to the PersonalAccessToken entity.
-func (euo *EventUpdateOne) ClearPersonalAccessToken() *EventUpdateOne {
-	euo.mutation.ClearPersonalAccessToken()
+// ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
+func (euo *EventUpdateOne) ClearPersonalAccessTokens() *EventUpdateOne {
+	euo.mutation.ClearPersonalAccessTokens()
 	return euo
 }
 
-// RemovePersonalAccessTokenIDs removes the "personal_access_token" edge to PersonalAccessToken entities by IDs.
+// RemovePersonalAccessTokenIDs removes the "personal_access_tokens" edge to PersonalAccessToken entities by IDs.
 func (euo *EventUpdateOne) RemovePersonalAccessTokenIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemovePersonalAccessTokenIDs(ids...)
 	return euo
 }
 
-// RemovePersonalAccessToken removes "personal_access_token" edges to PersonalAccessToken entities.
-func (euo *EventUpdateOne) RemovePersonalAccessToken(p ...*PersonalAccessToken) *EventUpdateOne {
+// RemovePersonalAccessTokens removes "personal_access_tokens" edges to PersonalAccessToken entities.
+func (euo *EventUpdateOne) RemovePersonalAccessTokens(p ...*PersonalAccessToken) *EventUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1731,41 +1731,41 @@ func (euo *EventUpdateOne) RemovePersonalAccessToken(p ...*PersonalAccessToken) 
 	return euo.RemovePersonalAccessTokenIDs(ids...)
 }
 
-// ClearHush clears all "hush" edges to the Hush entity.
-func (euo *EventUpdateOne) ClearHush() *EventUpdateOne {
-	euo.mutation.ClearHush()
+// ClearSecrets clears all "secrets" edges to the Hush entity.
+func (euo *EventUpdateOne) ClearSecrets() *EventUpdateOne {
+	euo.mutation.ClearSecrets()
 	return euo
 }
 
-// RemoveHushIDs removes the "hush" edge to Hush entities by IDs.
-func (euo *EventUpdateOne) RemoveHushIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveHushIDs(ids...)
+// RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
+func (euo *EventUpdateOne) RemoveSecretIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveSecretIDs(ids...)
 	return euo
 }
 
-// RemoveHush removes "hush" edges to Hush entities.
-func (euo *EventUpdateOne) RemoveHush(h ...*Hush) *EventUpdateOne {
+// RemoveSecrets removes "secrets" edges to Hush entities.
+func (euo *EventUpdateOne) RemoveSecrets(h ...*Hush) *EventUpdateOne {
 	ids := make([]string, len(h))
 	for i := range h {
 		ids[i] = h[i].ID
 	}
-	return euo.RemoveHushIDs(ids...)
+	return euo.RemoveSecretIDs(ids...)
 }
 
-// ClearOrgmembership clears all "orgmembership" edges to the OrgMembership entity.
-func (euo *EventUpdateOne) ClearOrgmembership() *EventUpdateOne {
-	euo.mutation.ClearOrgmembership()
+// ClearOrgmemberships clears all "orgmemberships" edges to the OrgMembership entity.
+func (euo *EventUpdateOne) ClearOrgmemberships() *EventUpdateOne {
+	euo.mutation.ClearOrgmemberships()
 	return euo
 }
 
-// RemoveOrgmembershipIDs removes the "orgmembership" edge to OrgMembership entities by IDs.
+// RemoveOrgmembershipIDs removes the "orgmemberships" edge to OrgMembership entities by IDs.
 func (euo *EventUpdateOne) RemoveOrgmembershipIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveOrgmembershipIDs(ids...)
 	return euo
 }
 
-// RemoveOrgmembership removes "orgmembership" edges to OrgMembership entities.
-func (euo *EventUpdateOne) RemoveOrgmembership(o ...*OrgMembership) *EventUpdateOne {
+// RemoveOrgmemberships removes "orgmemberships" edges to OrgMembership entities.
+func (euo *EventUpdateOne) RemoveOrgmemberships(o ...*OrgMembership) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -1773,20 +1773,20 @@ func (euo *EventUpdateOne) RemoveOrgmembership(o ...*OrgMembership) *EventUpdate
 	return euo.RemoveOrgmembershipIDs(ids...)
 }
 
-// ClearGroupmembership clears all "groupmembership" edges to the GroupMembership entity.
-func (euo *EventUpdateOne) ClearGroupmembership() *EventUpdateOne {
-	euo.mutation.ClearGroupmembership()
+// ClearGroupmemberships clears all "groupmemberships" edges to the GroupMembership entity.
+func (euo *EventUpdateOne) ClearGroupmemberships() *EventUpdateOne {
+	euo.mutation.ClearGroupmemberships()
 	return euo
 }
 
-// RemoveGroupmembershipIDs removes the "groupmembership" edge to GroupMembership entities by IDs.
+// RemoveGroupmembershipIDs removes the "groupmemberships" edge to GroupMembership entities by IDs.
 func (euo *EventUpdateOne) RemoveGroupmembershipIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveGroupmembershipIDs(ids...)
 	return euo
 }
 
-// RemoveGroupmembership removes "groupmembership" edges to GroupMembership entities.
-func (euo *EventUpdateOne) RemoveGroupmembership(g ...*GroupMembership) *EventUpdateOne {
+// RemoveGroupmemberships removes "groupmemberships" edges to GroupMembership entities.
+func (euo *EventUpdateOne) RemoveGroupmemberships(g ...*GroupMembership) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1794,20 +1794,20 @@ func (euo *EventUpdateOne) RemoveGroupmembership(g ...*GroupMembership) *EventUp
 	return euo.RemoveGroupmembershipIDs(ids...)
 }
 
-// ClearSubscriber clears all "subscriber" edges to the Subscriber entity.
-func (euo *EventUpdateOne) ClearSubscriber() *EventUpdateOne {
-	euo.mutation.ClearSubscriber()
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (euo *EventUpdateOne) ClearSubscribers() *EventUpdateOne {
+	euo.mutation.ClearSubscribers()
 	return euo
 }
 
-// RemoveSubscriberIDs removes the "subscriber" edge to Subscriber entities by IDs.
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
 func (euo *EventUpdateOne) RemoveSubscriberIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveSubscriberIDs(ids...)
 	return euo
 }
 
-// RemoveSubscriber removes "subscriber" edges to Subscriber entities.
-func (euo *EventUpdateOne) RemoveSubscriber(s ...*Subscriber) *EventUpdateOne {
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (euo *EventUpdateOne) RemoveSubscribers(s ...*Subscriber) *EventUpdateOne {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -1815,20 +1815,20 @@ func (euo *EventUpdateOne) RemoveSubscriber(s ...*Subscriber) *EventUpdateOne {
 	return euo.RemoveSubscriberIDs(ids...)
 }
 
-// ClearFile clears all "file" edges to the File entity.
-func (euo *EventUpdateOne) ClearFile() *EventUpdateOne {
-	euo.mutation.ClearFile()
+// ClearFiles clears all "files" edges to the File entity.
+func (euo *EventUpdateOne) ClearFiles() *EventUpdateOne {
+	euo.mutation.ClearFiles()
 	return euo
 }
 
-// RemoveFileIDs removes the "file" edge to File entities by IDs.
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
 func (euo *EventUpdateOne) RemoveFileIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.RemoveFileIDs(ids...)
 	return euo
 }
 
-// RemoveFile removes "file" edges to File entities.
-func (euo *EventUpdateOne) RemoveFile(f ...*File) *EventUpdateOne {
+// RemoveFiles removes "files" edges to File entities.
+func (euo *EventUpdateOne) RemoveFiles(f ...*File) *EventUpdateOne {
 	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -1836,25 +1836,25 @@ func (euo *EventUpdateOne) RemoveFile(f ...*File) *EventUpdateOne {
 	return euo.RemoveFileIDs(ids...)
 }
 
-// ClearOrgsubscription clears all "orgsubscription" edges to the OrgSubscription entity.
-func (euo *EventUpdateOne) ClearOrgsubscription() *EventUpdateOne {
-	euo.mutation.ClearOrgsubscription()
+// ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
+func (euo *EventUpdateOne) ClearOrgSubscriptions() *EventUpdateOne {
+	euo.mutation.ClearOrgSubscriptions()
 	return euo
 }
 
-// RemoveOrgsubscriptionIDs removes the "orgsubscription" edge to OrgSubscription entities by IDs.
-func (euo *EventUpdateOne) RemoveOrgsubscriptionIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveOrgsubscriptionIDs(ids...)
+// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
+func (euo *EventUpdateOne) RemoveOrgSubscriptionIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveOrgSubscriptionIDs(ids...)
 	return euo
 }
 
-// RemoveOrgsubscription removes "orgsubscription" edges to OrgSubscription entities.
-func (euo *EventUpdateOne) RemoveOrgsubscription(o ...*OrgSubscription) *EventUpdateOne {
+// RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
+func (euo *EventUpdateOne) RemoveOrgSubscriptions(o ...*OrgSubscription) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return euo.RemoveOrgsubscriptionIDs(ids...)
+	return euo.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // Where appends a list predicates to the EventUpdate builder.
@@ -1994,12 +1994,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if euo.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
 	}
-	if euo.mutation.UserCleared() {
+	if euo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -2008,29 +2008,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.UserEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedUserIDs(); len(nodes) > 0 && !euo.mutation.UserCleared() {
+	if nodes := euo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !euo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.UserEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -2040,14 +2023,31 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if euo.mutation.GroupCleared() {
+	if nodes := euo.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.UserEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2056,12 +2056,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.GroupEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedGroupIDs(); len(nodes) > 0 && !euo.mutation.GroupCleared() {
+	if nodes := euo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !euo.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2073,12 +2073,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2090,12 +2090,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.IntegrationCleared() {
+	if euo.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
@@ -2104,29 +2104,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.IntegrationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedIntegrationIDs(); len(nodes) > 0 && !euo.mutation.IntegrationCleared() {
+	if nodes := euo.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !euo.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.IntegrationEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.IntegrationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
@@ -2136,14 +2119,31 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if euo.mutation.OrganizationCleared() {
+	if nodes := euo.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.IntegrationEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.OrganizationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -2152,12 +2152,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !euo.mutation.OrganizationCleared() {
+	if nodes := euo.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !euo.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -2169,12 +2169,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -2186,12 +2186,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.InviteCleared() {
+	if euo.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
@@ -2200,29 +2200,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.InviteEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedInviteIDs(); len(nodes) > 0 && !euo.mutation.InviteCleared() {
+	if nodes := euo.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !euo.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.InviteEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.InviteIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
@@ -2232,14 +2215,31 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if euo.mutation.PersonalAccessTokenCleared() {
+	if nodes := euo.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.InviteEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.PersonalAccessTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -2248,12 +2248,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedPersonalAccessTokenIDs(); len(nodes) > 0 && !euo.mutation.PersonalAccessTokenCleared() {
+	if nodes := euo.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !euo.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -2265,12 +2265,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.PersonalAccessTokenIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -2282,12 +2282,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.HushCleared() {
+	if euo.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
@@ -2296,29 +2296,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.HushEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedHushIDs(); len(nodes) > 0 && !euo.mutation.HushCleared() {
+	if nodes := euo.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !euo.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.HushEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.HushIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
@@ -2328,14 +2311,31 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if euo.mutation.OrgmembershipCleared() {
+	if nodes := euo.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.HushEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.OrgmembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2344,12 +2344,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedOrgmembershipIDs(); len(nodes) > 0 && !euo.mutation.OrgmembershipCleared() {
+	if nodes := euo.mutation.RemovedOrgmembershipsIDs(); len(nodes) > 0 && !euo.mutation.OrgmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2361,12 +2361,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2378,12 +2378,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.GroupmembershipCleared() {
+	if euo.mutation.GroupmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -2392,12 +2392,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.GroupMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedGroupmembershipIDs(); len(nodes) > 0 && !euo.mutation.GroupmembershipCleared() {
+	if nodes := euo.mutation.RemovedGroupmembershipsIDs(); len(nodes) > 0 && !euo.mutation.GroupmembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -2409,12 +2409,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.GroupmembershipIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -2426,12 +2426,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.SubscriberCleared() {
+	if euo.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -2440,12 +2440,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.SubscriberEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedSubscriberIDs(); len(nodes) > 0 && !euo.mutation.SubscriberCleared() {
+	if nodes := euo.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !euo.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -2457,12 +2457,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.SubscriberIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -2474,12 +2474,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.FileCleared() {
+	if euo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -2488,12 +2488,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.FileEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedFileIDs(); len(nodes) > 0 && !euo.mutation.FileCleared() {
+	if nodes := euo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !euo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -2505,12 +2505,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -2522,12 +2522,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.OrgsubscriptionCleared() {
+	if euo.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -2536,12 +2536,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedOrgsubscriptionIDs(); len(nodes) > 0 && !euo.mutation.OrgsubscriptionCleared() {
+	if nodes := euo.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !euo.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -2553,12 +2553,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),

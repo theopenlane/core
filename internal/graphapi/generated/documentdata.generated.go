@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
@@ -91,8 +91,8 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
-			case "entity":
-				return ec.fieldContext_DocumentData_entity(ctx, field)
+			case "entities":
+				return ec.fieldContext_DocumentData_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_DocumentData_files(ctx, field)
 			}
@@ -151,12 +151,12 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
@@ -167,8 +167,8 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
-			case "entity":
-				return ec.fieldContext_DocumentData_entity(ctx, field)
+			case "entities":
+				return ec.fieldContext_DocumentData_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_DocumentData_files(ctx, field)
 			}
@@ -271,12 +271,12 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
@@ -287,8 +287,8 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
 				return ec.fieldContext_DocumentData_template(ctx, field)
-			case "entity":
-				return ec.fieldContext_DocumentData_entity(ctx, field)
+			case "entities":
+				return ec.fieldContext_DocumentData_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_DocumentData_files(ctx, field)
 			}

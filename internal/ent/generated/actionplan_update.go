@@ -129,6 +129,26 @@ func (apu *ActionPlanUpdate) ClearTags() *ActionPlanUpdate {
 	return apu
 }
 
+// SetRevision sets the "revision" field.
+func (apu *ActionPlanUpdate) SetRevision(s string) *ActionPlanUpdate {
+	apu.mutation.SetRevision(s)
+	return apu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableRevision(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetRevision(*s)
+	}
+	return apu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (apu *ActionPlanUpdate) ClearRevision() *ActionPlanUpdate {
+	apu.mutation.ClearRevision()
+	return apu
+}
+
 // SetName sets the "name" field.
 func (apu *ActionPlanUpdate) SetName(s string) *ActionPlanUpdate {
 	apu.mutation.SetName(s)
@@ -263,26 +283,6 @@ func (apu *ActionPlanUpdate) ClearReviewFrequency() *ActionPlanUpdate {
 	return apu
 }
 
-// SetRevision sets the "revision" field.
-func (apu *ActionPlanUpdate) SetRevision(s string) *ActionPlanUpdate {
-	apu.mutation.SetRevision(s)
-	return apu
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableRevision(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetRevision(*s)
-	}
-	return apu
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (apu *ActionPlanUpdate) ClearRevision() *ActionPlanUpdate {
-	apu.mutation.ClearRevision()
-	return apu
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (apu *ActionPlanUpdate) SetOwnerID(s string) *ActionPlanUpdate {
 	apu.mutation.SetOwnerID(s)
@@ -406,14 +406,14 @@ func (apu *ActionPlanUpdate) SetOwner(o *Organization) *ActionPlanUpdate {
 	return apu.SetOwnerID(o.ID)
 }
 
-// AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (apu *ActionPlanUpdate) AddRiskIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddRiskIDs(ids...)
 	return apu
 }
 
-// AddRisk adds the "risk" edges to the Risk entity.
-func (apu *ActionPlanUpdate) AddRisk(r ...*Risk) *ActionPlanUpdate {
+// AddRisks adds the "risks" edges to the Risk entity.
+func (apu *ActionPlanUpdate) AddRisks(r ...*Risk) *ActionPlanUpdate {
 	ids := make([]string, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -421,14 +421,14 @@ func (apu *ActionPlanUpdate) AddRisk(r ...*Risk) *ActionPlanUpdate {
 	return apu.AddRiskIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (apu *ActionPlanUpdate) AddControlIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddControlIDs(ids...)
 	return apu
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (apu *ActionPlanUpdate) AddControl(c ...*Control) *ActionPlanUpdate {
+// AddControls adds the "controls" edges to the Control entity.
+func (apu *ActionPlanUpdate) AddControls(c ...*Control) *ActionPlanUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -436,14 +436,14 @@ func (apu *ActionPlanUpdate) AddControl(c ...*Control) *ActionPlanUpdate {
 	return apu.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (apu *ActionPlanUpdate) AddUserIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddUserIDs(ids...)
 	return apu
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (apu *ActionPlanUpdate) AddUser(u ...*User) *ActionPlanUpdate {
+// AddUsers adds the "users" edges to the User entity.
+func (apu *ActionPlanUpdate) AddUsers(u ...*User) *ActionPlanUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -451,14 +451,14 @@ func (apu *ActionPlanUpdate) AddUser(u ...*User) *ActionPlanUpdate {
 	return apu.AddUserIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (apu *ActionPlanUpdate) AddProgramIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddProgramIDs(ids...)
 	return apu
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (apu *ActionPlanUpdate) AddProgram(p ...*Program) *ActionPlanUpdate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (apu *ActionPlanUpdate) AddPrograms(p ...*Program) *ActionPlanUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -489,20 +489,20 @@ func (apu *ActionPlanUpdate) ClearOwner() *ActionPlanUpdate {
 	return apu
 }
 
-// ClearRisk clears all "risk" edges to the Risk entity.
-func (apu *ActionPlanUpdate) ClearRisk() *ActionPlanUpdate {
-	apu.mutation.ClearRisk()
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (apu *ActionPlanUpdate) ClearRisks() *ActionPlanUpdate {
+	apu.mutation.ClearRisks()
 	return apu
 }
 
-// RemoveRiskIDs removes the "risk" edge to Risk entities by IDs.
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
 func (apu *ActionPlanUpdate) RemoveRiskIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.RemoveRiskIDs(ids...)
 	return apu
 }
 
-// RemoveRisk removes "risk" edges to Risk entities.
-func (apu *ActionPlanUpdate) RemoveRisk(r ...*Risk) *ActionPlanUpdate {
+// RemoveRisks removes "risks" edges to Risk entities.
+func (apu *ActionPlanUpdate) RemoveRisks(r ...*Risk) *ActionPlanUpdate {
 	ids := make([]string, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -510,20 +510,20 @@ func (apu *ActionPlanUpdate) RemoveRisk(r ...*Risk) *ActionPlanUpdate {
 	return apu.RemoveRiskIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (apu *ActionPlanUpdate) ClearControl() *ActionPlanUpdate {
-	apu.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (apu *ActionPlanUpdate) ClearControls() *ActionPlanUpdate {
+	apu.mutation.ClearControls()
 	return apu
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (apu *ActionPlanUpdate) RemoveControlIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.RemoveControlIDs(ids...)
 	return apu
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (apu *ActionPlanUpdate) RemoveControl(c ...*Control) *ActionPlanUpdate {
+// RemoveControls removes "controls" edges to Control entities.
+func (apu *ActionPlanUpdate) RemoveControls(c ...*Control) *ActionPlanUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -531,20 +531,20 @@ func (apu *ActionPlanUpdate) RemoveControl(c ...*Control) *ActionPlanUpdate {
 	return apu.RemoveControlIDs(ids...)
 }
 
-// ClearUser clears all "user" edges to the User entity.
-func (apu *ActionPlanUpdate) ClearUser() *ActionPlanUpdate {
-	apu.mutation.ClearUser()
+// ClearUsers clears all "users" edges to the User entity.
+func (apu *ActionPlanUpdate) ClearUsers() *ActionPlanUpdate {
+	apu.mutation.ClearUsers()
 	return apu
 }
 
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
 func (apu *ActionPlanUpdate) RemoveUserIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.RemoveUserIDs(ids...)
 	return apu
 }
 
-// RemoveUser removes "user" edges to User entities.
-func (apu *ActionPlanUpdate) RemoveUser(u ...*User) *ActionPlanUpdate {
+// RemoveUsers removes "users" edges to User entities.
+func (apu *ActionPlanUpdate) RemoveUsers(u ...*User) *ActionPlanUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -552,20 +552,20 @@ func (apu *ActionPlanUpdate) RemoveUser(u ...*User) *ActionPlanUpdate {
 	return apu.RemoveUserIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (apu *ActionPlanUpdate) ClearProgram() *ActionPlanUpdate {
-	apu.mutation.ClearProgram()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (apu *ActionPlanUpdate) ClearPrograms() *ActionPlanUpdate {
+	apu.mutation.ClearPrograms()
 	return apu
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (apu *ActionPlanUpdate) RemoveProgramIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.RemoveProgramIDs(ids...)
 	return apu
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (apu *ActionPlanUpdate) RemoveProgram(p ...*Program) *ActionPlanUpdate {
+// RemovePrograms removes "programs" edges to Program entities.
+func (apu *ActionPlanUpdate) RemovePrograms(p ...*Program) *ActionPlanUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -617,6 +617,11 @@ func (apu *ActionPlanUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (apu *ActionPlanUpdate) check() error {
+	if v, ok := apu.mutation.Revision(); ok {
+		if err := actionplan.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
+		}
+	}
 	if v, ok := apu.mutation.Name(); ok {
 		if err := actionplan.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.name": %w`, err)}
@@ -630,11 +635,6 @@ func (apu *ActionPlanUpdate) check() error {
 	if v, ok := apu.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := apu.mutation.Revision(); ok {
-		if err := actionplan.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
 		}
 	}
 	if v, ok := apu.mutation.OwnerID(); ok {
@@ -709,6 +709,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.TagsCleared() {
 		_spec.ClearField(actionplan.FieldTags, field.TypeJSON)
 	}
+	if value, ok := apu.mutation.Revision(); ok {
+		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
+	}
+	if apu.mutation.RevisionCleared() {
+		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
+	}
 	if value, ok := apu.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
@@ -747,12 +753,6 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if apu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := apu.mutation.Revision(); ok {
-		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
-	}
-	if apu.mutation.RevisionCleared() {
-		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
 	}
 	if value, ok := apu.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -865,12 +865,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.RiskCleared() {
+	if apu.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -879,12 +879,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = apu.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedRiskIDs(); len(nodes) > 0 && !apu.mutation.RiskCleared() {
+	if nodes := apu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !apu.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -896,12 +896,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RiskIDs(); len(nodes) > 0 {
+	if nodes := apu.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -913,12 +913,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.ControlCleared() {
+	if apu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -927,12 +927,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = apu.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedControlIDs(); len(nodes) > 0 && !apu.mutation.ControlCleared() {
+	if nodes := apu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !apu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -944,12 +944,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := apu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -961,12 +961,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.UserCleared() {
+	if apu.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -975,12 +975,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = apu.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedUserIDs(); len(nodes) > 0 && !apu.mutation.UserCleared() {
+	if nodes := apu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !apu.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -992,12 +992,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := apu.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -1009,12 +1009,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.ProgramCleared() {
+	if apu.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1023,12 +1023,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = apu.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apu.mutation.ProgramCleared() {
+	if nodes := apu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !apu.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1040,12 +1040,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := apu.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1168,6 +1168,26 @@ func (apuo *ActionPlanUpdateOne) AppendTags(s []string) *ActionPlanUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (apuo *ActionPlanUpdateOne) ClearTags() *ActionPlanUpdateOne {
 	apuo.mutation.ClearTags()
+	return apuo
+}
+
+// SetRevision sets the "revision" field.
+func (apuo *ActionPlanUpdateOne) SetRevision(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetRevision(s)
+	return apuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableRevision(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetRevision(*s)
+	}
+	return apuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (apuo *ActionPlanUpdateOne) ClearRevision() *ActionPlanUpdateOne {
+	apuo.mutation.ClearRevision()
 	return apuo
 }
 
@@ -1305,26 +1325,6 @@ func (apuo *ActionPlanUpdateOne) ClearReviewFrequency() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetRevision sets the "revision" field.
-func (apuo *ActionPlanUpdateOne) SetRevision(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetRevision(s)
-	return apuo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableRevision(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetRevision(*s)
-	}
-	return apuo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (apuo *ActionPlanUpdateOne) ClearRevision() *ActionPlanUpdateOne {
-	apuo.mutation.ClearRevision()
-	return apuo
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (apuo *ActionPlanUpdateOne) SetOwnerID(s string) *ActionPlanUpdateOne {
 	apuo.mutation.SetOwnerID(s)
@@ -1448,14 +1448,14 @@ func (apuo *ActionPlanUpdateOne) SetOwner(o *Organization) *ActionPlanUpdateOne 
 	return apuo.SetOwnerID(o.ID)
 }
 
-// AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddRiskIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddRiskIDs(ids...)
 	return apuo
 }
 
-// AddRisk adds the "risk" edges to the Risk entity.
-func (apuo *ActionPlanUpdateOne) AddRisk(r ...*Risk) *ActionPlanUpdateOne {
+// AddRisks adds the "risks" edges to the Risk entity.
+func (apuo *ActionPlanUpdateOne) AddRisks(r ...*Risk) *ActionPlanUpdateOne {
 	ids := make([]string, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -1463,14 +1463,14 @@ func (apuo *ActionPlanUpdateOne) AddRisk(r ...*Risk) *ActionPlanUpdateOne {
 	return apuo.AddRiskIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddControlIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddControlIDs(ids...)
 	return apuo
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (apuo *ActionPlanUpdateOne) AddControl(c ...*Control) *ActionPlanUpdateOne {
+// AddControls adds the "controls" edges to the Control entity.
+func (apuo *ActionPlanUpdateOne) AddControls(c ...*Control) *ActionPlanUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1478,14 +1478,14 @@ func (apuo *ActionPlanUpdateOne) AddControl(c ...*Control) *ActionPlanUpdateOne 
 	return apuo.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddUserIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddUserIDs(ids...)
 	return apuo
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (apuo *ActionPlanUpdateOne) AddUser(u ...*User) *ActionPlanUpdateOne {
+// AddUsers adds the "users" edges to the User entity.
+func (apuo *ActionPlanUpdateOne) AddUsers(u ...*User) *ActionPlanUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1493,14 +1493,14 @@ func (apuo *ActionPlanUpdateOne) AddUser(u ...*User) *ActionPlanUpdateOne {
 	return apuo.AddUserIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddProgramIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddProgramIDs(ids...)
 	return apuo
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (apuo *ActionPlanUpdateOne) AddProgram(p ...*Program) *ActionPlanUpdateOne {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (apuo *ActionPlanUpdateOne) AddPrograms(p ...*Program) *ActionPlanUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1531,20 +1531,20 @@ func (apuo *ActionPlanUpdateOne) ClearOwner() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// ClearRisk clears all "risk" edges to the Risk entity.
-func (apuo *ActionPlanUpdateOne) ClearRisk() *ActionPlanUpdateOne {
-	apuo.mutation.ClearRisk()
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (apuo *ActionPlanUpdateOne) ClearRisks() *ActionPlanUpdateOne {
+	apuo.mutation.ClearRisks()
 	return apuo
 }
 
-// RemoveRiskIDs removes the "risk" edge to Risk entities by IDs.
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
 func (apuo *ActionPlanUpdateOne) RemoveRiskIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.RemoveRiskIDs(ids...)
 	return apuo
 }
 
-// RemoveRisk removes "risk" edges to Risk entities.
-func (apuo *ActionPlanUpdateOne) RemoveRisk(r ...*Risk) *ActionPlanUpdateOne {
+// RemoveRisks removes "risks" edges to Risk entities.
+func (apuo *ActionPlanUpdateOne) RemoveRisks(r ...*Risk) *ActionPlanUpdateOne {
 	ids := make([]string, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -1552,20 +1552,20 @@ func (apuo *ActionPlanUpdateOne) RemoveRisk(r ...*Risk) *ActionPlanUpdateOne {
 	return apuo.RemoveRiskIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (apuo *ActionPlanUpdateOne) ClearControl() *ActionPlanUpdateOne {
-	apuo.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (apuo *ActionPlanUpdateOne) ClearControls() *ActionPlanUpdateOne {
+	apuo.mutation.ClearControls()
 	return apuo
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (apuo *ActionPlanUpdateOne) RemoveControlIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.RemoveControlIDs(ids...)
 	return apuo
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (apuo *ActionPlanUpdateOne) RemoveControl(c ...*Control) *ActionPlanUpdateOne {
+// RemoveControls removes "controls" edges to Control entities.
+func (apuo *ActionPlanUpdateOne) RemoveControls(c ...*Control) *ActionPlanUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1573,20 +1573,20 @@ func (apuo *ActionPlanUpdateOne) RemoveControl(c ...*Control) *ActionPlanUpdateO
 	return apuo.RemoveControlIDs(ids...)
 }
 
-// ClearUser clears all "user" edges to the User entity.
-func (apuo *ActionPlanUpdateOne) ClearUser() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUser()
+// ClearUsers clears all "users" edges to the User entity.
+func (apuo *ActionPlanUpdateOne) ClearUsers() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUsers()
 	return apuo
 }
 
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
 func (apuo *ActionPlanUpdateOne) RemoveUserIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.RemoveUserIDs(ids...)
 	return apuo
 }
 
-// RemoveUser removes "user" edges to User entities.
-func (apuo *ActionPlanUpdateOne) RemoveUser(u ...*User) *ActionPlanUpdateOne {
+// RemoveUsers removes "users" edges to User entities.
+func (apuo *ActionPlanUpdateOne) RemoveUsers(u ...*User) *ActionPlanUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -1594,20 +1594,20 @@ func (apuo *ActionPlanUpdateOne) RemoveUser(u ...*User) *ActionPlanUpdateOne {
 	return apuo.RemoveUserIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (apuo *ActionPlanUpdateOne) ClearProgram() *ActionPlanUpdateOne {
-	apuo.mutation.ClearProgram()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (apuo *ActionPlanUpdateOne) ClearPrograms() *ActionPlanUpdateOne {
+	apuo.mutation.ClearPrograms()
 	return apuo
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (apuo *ActionPlanUpdateOne) RemoveProgramIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.RemoveProgramIDs(ids...)
 	return apuo
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (apuo *ActionPlanUpdateOne) RemoveProgram(p ...*Program) *ActionPlanUpdateOne {
+// RemovePrograms removes "programs" edges to Program entities.
+func (apuo *ActionPlanUpdateOne) RemovePrograms(p ...*Program) *ActionPlanUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1672,6 +1672,11 @@ func (apuo *ActionPlanUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (apuo *ActionPlanUpdateOne) check() error {
+	if v, ok := apuo.mutation.Revision(); ok {
+		if err := actionplan.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
+		}
+	}
 	if v, ok := apuo.mutation.Name(); ok {
 		if err := actionplan.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.name": %w`, err)}
@@ -1685,11 +1690,6 @@ func (apuo *ActionPlanUpdateOne) check() error {
 	if v, ok := apuo.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := apuo.mutation.Revision(); ok {
-		if err := actionplan.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
 		}
 	}
 	if v, ok := apuo.mutation.OwnerID(); ok {
@@ -1781,6 +1781,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.TagsCleared() {
 		_spec.ClearField(actionplan.FieldTags, field.TypeJSON)
 	}
+	if value, ok := apuo.mutation.Revision(); ok {
+		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
+	}
+	if apuo.mutation.RevisionCleared() {
+		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
+	}
 	if value, ok := apuo.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
@@ -1819,12 +1825,6 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if apuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := apuo.mutation.Revision(); ok {
-		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
-	}
-	if apuo.mutation.RevisionCleared() {
-		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
 	}
 	if value, ok := apuo.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -1937,12 +1937,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.RiskCleared() {
+	if apuo.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -1951,12 +1951,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		edge.Schema = apuo.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedRiskIDs(); len(nodes) > 0 && !apuo.mutation.RiskCleared() {
+	if nodes := apuo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !apuo.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -1968,12 +1968,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RiskIDs(); len(nodes) > 0 {
+	if nodes := apuo.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -1985,12 +1985,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.ControlCleared() {
+	if apuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1999,12 +1999,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		edge.Schema = apuo.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedControlIDs(); len(nodes) > 0 && !apuo.mutation.ControlCleared() {
+	if nodes := apuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !apuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2016,12 +2016,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := apuo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2033,12 +2033,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.UserCleared() {
+	if apuo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -2047,12 +2047,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		edge.Schema = apuo.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedUserIDs(); len(nodes) > 0 && !apuo.mutation.UserCleared() {
+	if nodes := apuo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !apuo.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -2064,12 +2064,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := apuo.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -2081,12 +2081,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.ProgramCleared() {
+	if apuo.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -2095,12 +2095,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		edge.Schema = apuo.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apuo.mutation.ProgramCleared() {
+	if nodes := apuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !apuo.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -2112,12 +2112,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := apuo.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

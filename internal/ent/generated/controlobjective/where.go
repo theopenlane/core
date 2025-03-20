@@ -98,14 +98,14 @@ func DeletedBy(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldRevision, v))
-}
-
 // DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
 func DisplayID(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldDisplayID, v))
+}
+
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldRevision, v))
 }
 
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
@@ -518,81 +518,6 @@ func DeletedByContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.ControlObjective {
-	return predicate.ControlObjective(sql.FieldContainsFold(FieldRevision, v))
-}
-
 // DisplayIDEQ applies the EQ predicate on the "display_id" field.
 func DisplayIDEQ(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldEQ(FieldDisplayID, v))
@@ -666,6 +591,81 @@ func TagsIsNil() predicate.ControlObjective {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldNotNull(FieldTags))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

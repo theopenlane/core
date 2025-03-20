@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Program_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Program_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Program_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -193,12 +193,12 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Program_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Program_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Program_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -355,12 +355,12 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Program_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Program_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Program_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":

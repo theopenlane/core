@@ -28,24 +28,24 @@ import (
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx              *QueryContext
-	order            []actionplan.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.ActionPlan
-	withApprover     *GroupQuery
-	withDelegate     *GroupQuery
-	withOwner        *OrganizationQuery
-	withRisk         *RiskQuery
-	withControl      *ControlQuery
-	withUser         *UserQuery
-	withProgram      *ProgramQuery
-	withFKs          bool
-	loadTotal        []func(context.Context, []*ActionPlan) error
-	modifiers        []func(*sql.Selector)
-	withNamedRisk    map[string]*RiskQuery
-	withNamedControl map[string]*ControlQuery
-	withNamedUser    map[string]*UserQuery
-	withNamedProgram map[string]*ProgramQuery
+	ctx               *QueryContext
+	order             []actionplan.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.ActionPlan
+	withApprover      *GroupQuery
+	withDelegate      *GroupQuery
+	withOwner         *OrganizationQuery
+	withRisks         *RiskQuery
+	withControls      *ControlQuery
+	withUsers         *UserQuery
+	withPrograms      *ProgramQuery
+	withFKs           bool
+	loadTotal         []func(context.Context, []*ActionPlan) error
+	modifiers         []func(*sql.Selector)
+	withNamedRisks    map[string]*RiskQuery
+	withNamedControls map[string]*ControlQuery
+	withNamedUsers    map[string]*UserQuery
+	withNamedPrograms map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -157,8 +157,8 @@ func (apq *ActionPlanQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryRisk chains the current query on the "risk" edge.
-func (apq *ActionPlanQuery) QueryRisk() *RiskQuery {
+// QueryRisks chains the current query on the "risks" edge.
+func (apq *ActionPlanQuery) QueryRisks() *RiskQuery {
 	query := (&RiskClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
@@ -171,7 +171,7 @@ func (apq *ActionPlanQuery) QueryRisk() *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RiskTable, actionplan.RiskPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RisksTable, actionplan.RisksPrimaryKey...),
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
@@ -182,8 +182,8 @@ func (apq *ActionPlanQuery) QueryRisk() *RiskQuery {
 	return query
 }
 
-// QueryControl chains the current query on the "control" edge.
-func (apq *ActionPlanQuery) QueryControl() *ControlQuery {
+// QueryControls chains the current query on the "controls" edge.
+func (apq *ActionPlanQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
@@ -196,7 +196,7 @@ func (apq *ActionPlanQuery) QueryControl() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlTable, actionplan.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlsTable, actionplan.ControlsPrimaryKey...),
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -207,8 +207,8 @@ func (apq *ActionPlanQuery) QueryControl() *ControlQuery {
 	return query
 }
 
-// QueryUser chains the current query on the "user" edge.
-func (apq *ActionPlanQuery) QueryUser() *UserQuery {
+// QueryUsers chains the current query on the "users" edge.
+func (apq *ActionPlanQuery) QueryUsers() *UserQuery {
 	query := (&UserClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
@@ -221,7 +221,7 @@ func (apq *ActionPlanQuery) QueryUser() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UserTable, actionplan.UserPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UsersTable, actionplan.UsersPrimaryKey...),
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -232,8 +232,8 @@ func (apq *ActionPlanQuery) QueryUser() *UserQuery {
 	return query
 }
 
-// QueryProgram chains the current query on the "program" edge.
-func (apq *ActionPlanQuery) QueryProgram() *ProgramQuery {
+// QueryPrograms chains the current query on the "programs" edge.
+func (apq *ActionPlanQuery) QueryPrograms() *ProgramQuery {
 	query := (&ProgramClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
@@ -246,7 +246,7 @@ func (apq *ActionPlanQuery) QueryProgram() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramTable, actionplan.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramsTable, actionplan.ProgramsPrimaryKey...),
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Program
@@ -452,10 +452,10 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		withApprover: apq.withApprover.Clone(),
 		withDelegate: apq.withDelegate.Clone(),
 		withOwner:    apq.withOwner.Clone(),
-		withRisk:     apq.withRisk.Clone(),
-		withControl:  apq.withControl.Clone(),
-		withUser:     apq.withUser.Clone(),
-		withProgram:  apq.withProgram.Clone(),
+		withRisks:    apq.withRisks.Clone(),
+		withControls: apq.withControls.Clone(),
+		withUsers:    apq.withUsers.Clone(),
+		withPrograms: apq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
@@ -496,47 +496,47 @@ func (apq *ActionPlanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ActionP
 	return apq
 }
 
-// WithRisk tells the query-builder to eager-load the nodes that are connected to
-// the "risk" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithRisk(opts ...func(*RiskQuery)) *ActionPlanQuery {
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithRisks(opts ...func(*RiskQuery)) *ActionPlanQuery {
 	query := (&RiskClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withRisk = query
+	apq.withRisks = query
 	return apq
 }
 
-// WithControl tells the query-builder to eager-load the nodes that are connected to
-// the "control" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithControl(opts ...func(*ControlQuery)) *ActionPlanQuery {
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithControls(opts ...func(*ControlQuery)) *ActionPlanQuery {
 	query := (&ControlClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withControl = query
+	apq.withControls = query
 	return apq
 }
 
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithUser(opts ...func(*UserQuery)) *ActionPlanQuery {
+// WithUsers tells the query-builder to eager-load the nodes that are connected to
+// the "users" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithUsers(opts ...func(*UserQuery)) *ActionPlanQuery {
 	query := (&UserClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withUser = query
+	apq.withUsers = query
 	return apq
 }
 
-// WithProgram tells the query-builder to eager-load the nodes that are connected to
-// the "program" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithProgram(opts ...func(*ProgramQuery)) *ActionPlanQuery {
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithPrograms(opts ...func(*ProgramQuery)) *ActionPlanQuery {
 	query := (&ProgramClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withProgram = query
+	apq.withPrograms = query
 	return apq
 }
 
@@ -629,10 +629,10 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			apq.withApprover != nil,
 			apq.withDelegate != nil,
 			apq.withOwner != nil,
-			apq.withRisk != nil,
-			apq.withControl != nil,
-			apq.withUser != nil,
-			apq.withProgram != nil,
+			apq.withRisks != nil,
+			apq.withControls != nil,
+			apq.withUsers != nil,
+			apq.withPrograms != nil,
 		}
 	)
 	if apq.withApprover != nil || apq.withDelegate != nil {
@@ -682,59 +682,59 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	if query := apq.withRisk; query != nil {
-		if err := apq.loadRisk(ctx, query, nodes,
-			func(n *ActionPlan) { n.Edges.Risk = []*Risk{} },
-			func(n *ActionPlan, e *Risk) { n.Edges.Risk = append(n.Edges.Risk, e) }); err != nil {
+	if query := apq.withRisks; query != nil {
+		if err := apq.loadRisks(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Risks = []*Risk{} },
+			func(n *ActionPlan, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := apq.withControl; query != nil {
-		if err := apq.loadControl(ctx, query, nodes,
-			func(n *ActionPlan) { n.Edges.Control = []*Control{} },
-			func(n *ActionPlan, e *Control) { n.Edges.Control = append(n.Edges.Control, e) }); err != nil {
+	if query := apq.withControls; query != nil {
+		if err := apq.loadControls(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Controls = []*Control{} },
+			func(n *ActionPlan, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := apq.withUser; query != nil {
-		if err := apq.loadUser(ctx, query, nodes,
-			func(n *ActionPlan) { n.Edges.User = []*User{} },
-			func(n *ActionPlan, e *User) { n.Edges.User = append(n.Edges.User, e) }); err != nil {
+	if query := apq.withUsers; query != nil {
+		if err := apq.loadUsers(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Users = []*User{} },
+			func(n *ActionPlan, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := apq.withProgram; query != nil {
-		if err := apq.loadProgram(ctx, query, nodes,
-			func(n *ActionPlan) { n.Edges.Program = []*Program{} },
-			func(n *ActionPlan, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+	if query := apq.withPrograms; query != nil {
+		if err := apq.loadPrograms(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Programs = []*Program{} },
+			func(n *ActionPlan, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range apq.withNamedRisk {
-		if err := apq.loadRisk(ctx, query, nodes,
-			func(n *ActionPlan) { n.appendNamedRisk(name) },
-			func(n *ActionPlan, e *Risk) { n.appendNamedRisk(name, e) }); err != nil {
+	for name, query := range apq.withNamedRisks {
+		if err := apq.loadRisks(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedRisks(name) },
+			func(n *ActionPlan, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range apq.withNamedControl {
-		if err := apq.loadControl(ctx, query, nodes,
-			func(n *ActionPlan) { n.appendNamedControl(name) },
-			func(n *ActionPlan, e *Control) { n.appendNamedControl(name, e) }); err != nil {
+	for name, query := range apq.withNamedControls {
+		if err := apq.loadControls(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedControls(name) },
+			func(n *ActionPlan, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range apq.withNamedUser {
-		if err := apq.loadUser(ctx, query, nodes,
-			func(n *ActionPlan) { n.appendNamedUser(name) },
-			func(n *ActionPlan, e *User) { n.appendNamedUser(name, e) }); err != nil {
+	for name, query := range apq.withNamedUsers {
+		if err := apq.loadUsers(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedUsers(name) },
+			func(n *ActionPlan, e *User) { n.appendNamedUsers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range apq.withNamedProgram {
-		if err := apq.loadProgram(ctx, query, nodes,
-			func(n *ActionPlan) { n.appendNamedProgram(name) },
-			func(n *ActionPlan, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+	for name, query := range apq.withNamedPrograms {
+		if err := apq.loadPrograms(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedPrograms(name) },
+			func(n *ActionPlan, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -839,7 +839,7 @@ func (apq *ActionPlanQuery) loadOwner(ctx context.Context, query *OrganizationQu
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Risk)) error {
+func (apq *ActionPlanQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
 	nids := make(map[string]map[*ActionPlan]struct{})
@@ -851,12 +851,12 @@ func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, node
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(actionplan.RiskTable)
+		joinT := sql.Table(actionplan.RisksTable)
 		joinT.Schema(apq.schemaConfig.RiskActionPlans)
-		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(actionplan.RiskPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(actionplan.RiskPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(actionplan.RisksPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.RisksPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(actionplan.RiskPrimaryKey[1]))
+		s.Select(joinT.C(actionplan.RisksPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -893,7 +893,7 @@ func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, node
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "risk" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -901,7 +901,7 @@ func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, node
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Control)) error {
+func (apq *ActionPlanQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
 	nids := make(map[string]map[*ActionPlan]struct{})
@@ -913,12 +913,12 @@ func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(actionplan.ControlTable)
+		joinT := sql.Table(actionplan.ControlsTable)
 		joinT.Schema(apq.schemaConfig.ControlActionPlans)
-		s.Join(joinT).On(s.C(control.FieldID), joinT.C(actionplan.ControlPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(actionplan.ControlPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(actionplan.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(actionplan.ControlPrimaryKey[1]))
+		s.Select(joinT.C(actionplan.ControlsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -955,7 +955,7 @@ func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "control" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -963,7 +963,7 @@ func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+func (apq *ActionPlanQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
 	nids := make(map[string]map[*ActionPlan]struct{})
@@ -975,12 +975,12 @@ func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, node
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(actionplan.UserTable)
+		joinT := sql.Table(actionplan.UsersTable)
 		joinT.Schema(apq.schemaConfig.UserActionPlans)
-		s.Join(joinT).On(s.C(user.FieldID), joinT.C(actionplan.UserPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(actionplan.UserPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(actionplan.UsersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(actionplan.UserPrimaryKey[1]))
+		s.Select(joinT.C(actionplan.UsersPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1017,7 +1017,7 @@ func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, node
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "users" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1025,7 +1025,7 @@ func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, node
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Program)) error {
+func (apq *ActionPlanQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
 	nids := make(map[string]map[*ActionPlan]struct{})
@@ -1037,12 +1037,12 @@ func (apq *ActionPlanQuery) loadProgram(ctx context.Context, query *ProgramQuery
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(actionplan.ProgramTable)
+		joinT := sql.Table(actionplan.ProgramsTable)
 		joinT.Schema(apq.schemaConfig.ProgramActionPlans)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(actionplan.ProgramPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(actionplan.ProgramPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(actionplan.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(actionplan.ProgramPrimaryKey[1]))
+		s.Select(joinT.C(actionplan.ProgramsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1079,7 +1079,7 @@ func (apq *ActionPlanQuery) loadProgram(ctx context.Context, query *ProgramQuery
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1189,59 +1189,59 @@ func (apq *ActionPlanQuery) Modify(modifiers ...func(s *sql.Selector)) *ActionPl
 	return apq.Select()
 }
 
-// WithNamedRisk tells the query-builder to eager-load the nodes that are connected to the "risk"
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithNamedRisk(name string, opts ...func(*RiskQuery)) *ActionPlanQuery {
+func (apq *ActionPlanQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ActionPlanQuery {
 	query := (&RiskClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if apq.withNamedRisk == nil {
-		apq.withNamedRisk = make(map[string]*RiskQuery)
+	if apq.withNamedRisks == nil {
+		apq.withNamedRisks = make(map[string]*RiskQuery)
 	}
-	apq.withNamedRisk[name] = query
+	apq.withNamedRisks[name] = query
 	return apq
 }
 
-// WithNamedControl tells the query-builder to eager-load the nodes that are connected to the "control"
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithNamedControl(name string, opts ...func(*ControlQuery)) *ActionPlanQuery {
+func (apq *ActionPlanQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ActionPlanQuery {
 	query := (&ControlClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if apq.withNamedControl == nil {
-		apq.withNamedControl = make(map[string]*ControlQuery)
+	if apq.withNamedControls == nil {
+		apq.withNamedControls = make(map[string]*ControlQuery)
 	}
-	apq.withNamedControl[name] = query
+	apq.withNamedControls[name] = query
 	return apq
 }
 
-// WithNamedUser tells the query-builder to eager-load the nodes that are connected to the "user"
+// WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithNamedUser(name string, opts ...func(*UserQuery)) *ActionPlanQuery {
+func (apq *ActionPlanQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *ActionPlanQuery {
 	query := (&UserClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if apq.withNamedUser == nil {
-		apq.withNamedUser = make(map[string]*UserQuery)
+	if apq.withNamedUsers == nil {
+		apq.withNamedUsers = make(map[string]*UserQuery)
 	}
-	apq.withNamedUser[name] = query
+	apq.withNamedUsers[name] = query
 	return apq
 }
 
-// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *ActionPlanQuery {
+func (apq *ActionPlanQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ActionPlanQuery {
 	query := (&ProgramClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if apq.withNamedProgram == nil {
-		apq.withNamedProgram = make(map[string]*ProgramQuery)
+	if apq.withNamedPrograms == nil {
+		apq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	apq.withNamedProgram[name] = query
+	apq.withNamedPrograms[name] = query
 	return apq
 }
 

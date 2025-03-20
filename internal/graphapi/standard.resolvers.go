@@ -6,9 +6,11 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -29,6 +31,11 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		// special case for standards which are system owned
+		if errors.Is(err, privacy.Deny) {
+			return nil, rout.ErrPermissionDenied
+		}
+
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
 	}
 
@@ -59,6 +66,11 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
+		// special case for standards which are system owned
+		if errors.Is(err, privacy.Deny) {
+			return nil, rout.ErrPermissionDenied
+		}
+
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
 	}
 

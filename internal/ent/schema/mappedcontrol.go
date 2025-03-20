@@ -4,18 +4,32 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	emixin "github.com/theopenlane/entx/mixin"
 )
 
 // MappedControl holds the schema definition for the MappedControl entity
 type MappedControl struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaMappedControl = "mapped_control"
+
+func (MappedControl) Name() string {
+	return SchemaMappedControl
+}
+
+func (MappedControl) GetType() any {
+	return MappedControl.Type
+}
+
+func (MappedControl) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaMappedControl)
 }
 
 // Fields of the MappedControl
@@ -34,34 +48,30 @@ func (MappedControl) Fields() []ent.Field {
 }
 
 // Edges of the MappedControl
-func (MappedControl) Edges() []ent.Edge {
+func (m MappedControl) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controls", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Comment("mapped controls that have a relation to each other"),
-		edge.To("subcontrols", Subcontrol.Type).
-			Annotations(entgql.RelayConnection()).
-			Comment("mapped subcontrols that have a relation to each other"),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: m,
+			edgeSchema: Control{},
+			comment:    "mapped controls that have a relation to each other",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: m,
+			edgeSchema: Subcontrol{},
+			comment:    "mapped subcontrols that have a relation to each other",
+		}),
 	}
 }
 
 // Mixin of the MappedControl
 func (MappedControl) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-	}
+	return getDefaultMixins()
+
 }
 
 // Annotations of the MappedControl
 func (MappedControl) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-	}
+	return []schema.Annotation{}
 }
 
 // Hooks of the MappedControl

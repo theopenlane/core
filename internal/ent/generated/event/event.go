@@ -33,92 +33,92 @@ const (
 	FieldEventType = "event_type"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
-	// EdgeGroup holds the string denoting the group edge name in mutations.
-	EdgeGroup = "group"
-	// EdgeIntegration holds the string denoting the integration edge name in mutations.
-	EdgeIntegration = "integration"
-	// EdgeOrganization holds the string denoting the organization edge name in mutations.
-	EdgeOrganization = "organization"
-	// EdgeInvite holds the string denoting the invite edge name in mutations.
-	EdgeInvite = "invite"
-	// EdgePersonalAccessToken holds the string denoting the personal_access_token edge name in mutations.
-	EdgePersonalAccessToken = "personal_access_token"
-	// EdgeHush holds the string denoting the hush edge name in mutations.
-	EdgeHush = "hush"
-	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
-	EdgeOrgmembership = "orgmembership"
-	// EdgeGroupmembership holds the string denoting the groupmembership edge name in mutations.
-	EdgeGroupmembership = "groupmembership"
-	// EdgeSubscriber holds the string denoting the subscriber edge name in mutations.
-	EdgeSubscriber = "subscriber"
-	// EdgeFile holds the string denoting the file edge name in mutations.
-	EdgeFile = "file"
-	// EdgeOrgsubscription holds the string denoting the orgsubscription edge name in mutations.
-	EdgeOrgsubscription = "orgsubscription"
+	// EdgeUsers holds the string denoting the users edge name in mutations.
+	EdgeUsers = "users"
+	// EdgeGroups holds the string denoting the groups edge name in mutations.
+	EdgeGroups = "groups"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeOrganizations holds the string denoting the organizations edge name in mutations.
+	EdgeOrganizations = "organizations"
+	// EdgeInvites holds the string denoting the invites edge name in mutations.
+	EdgeInvites = "invites"
+	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
+	EdgePersonalAccessTokens = "personal_access_tokens"
+	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
+	EdgeSecrets = "secrets"
+	// EdgeOrgmemberships holds the string denoting the orgmemberships edge name in mutations.
+	EdgeOrgmemberships = "orgmemberships"
+	// EdgeGroupmemberships holds the string denoting the groupmemberships edge name in mutations.
+	EdgeGroupmemberships = "groupmemberships"
+	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
+	EdgeSubscribers = "subscribers"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
+	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
+	EdgeOrgSubscriptions = "org_subscriptions"
 	// Table holds the table name of the event in the database.
 	Table = "events"
-	// UserTable is the table that holds the user relation/edge. The primary key declared below.
-	UserTable = "user_events"
-	// UserInverseTable is the table name for the User entity.
+	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
+	UsersTable = "user_events"
+	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// GroupTable is the table that holds the group relation/edge. The primary key declared below.
-	GroupTable = "group_events"
-	// GroupInverseTable is the table name for the Group entity.
+	UsersInverseTable = "users"
+	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
+	GroupsTable = "group_events"
+	// GroupsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
-	GroupInverseTable = "groups"
-	// IntegrationTable is the table that holds the integration relation/edge. The primary key declared below.
-	IntegrationTable = "integration_events"
-	// IntegrationInverseTable is the table name for the Integration entity.
+	GroupsInverseTable = "groups"
+	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
+	IntegrationsTable = "integration_events"
+	// IntegrationsInverseTable is the table name for the Integration entity.
 	// It exists in this package in order to avoid circular dependency with the "integration" package.
-	IntegrationInverseTable = "integrations"
-	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
-	OrganizationTable = "organization_events"
-	// OrganizationInverseTable is the table name for the Organization entity.
+	IntegrationsInverseTable = "integrations"
+	// OrganizationsTable is the table that holds the organizations relation/edge. The primary key declared below.
+	OrganizationsTable = "organization_events"
+	// OrganizationsInverseTable is the table name for the Organization entity.
 	// It exists in this package in order to avoid circular dependency with the "organization" package.
-	OrganizationInverseTable = "organizations"
-	// InviteTable is the table that holds the invite relation/edge. The primary key declared below.
-	InviteTable = "invite_events"
-	// InviteInverseTable is the table name for the Invite entity.
+	OrganizationsInverseTable = "organizations"
+	// InvitesTable is the table that holds the invites relation/edge. The primary key declared below.
+	InvitesTable = "invite_events"
+	// InvitesInverseTable is the table name for the Invite entity.
 	// It exists in this package in order to avoid circular dependency with the "invite" package.
-	InviteInverseTable = "invites"
-	// PersonalAccessTokenTable is the table that holds the personal_access_token relation/edge. The primary key declared below.
-	PersonalAccessTokenTable = "personal_access_token_events"
-	// PersonalAccessTokenInverseTable is the table name for the PersonalAccessToken entity.
+	InvitesInverseTable = "invites"
+	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge. The primary key declared below.
+	PersonalAccessTokensTable = "personal_access_token_events"
+	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
 	// It exists in this package in order to avoid circular dependency with the "personalaccesstoken" package.
-	PersonalAccessTokenInverseTable = "personal_access_tokens"
-	// HushTable is the table that holds the hush relation/edge. The primary key declared below.
-	HushTable = "hush_events"
-	// HushInverseTable is the table name for the Hush entity.
+	PersonalAccessTokensInverseTable = "personal_access_tokens"
+	// SecretsTable is the table that holds the secrets relation/edge. The primary key declared below.
+	SecretsTable = "hush_events"
+	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
-	HushInverseTable = "hushes"
-	// OrgmembershipTable is the table that holds the orgmembership relation/edge. The primary key declared below.
-	OrgmembershipTable = "org_membership_events"
-	// OrgmembershipInverseTable is the table name for the OrgMembership entity.
+	SecretsInverseTable = "hushes"
+	// OrgmembershipsTable is the table that holds the orgmemberships relation/edge. The primary key declared below.
+	OrgmembershipsTable = "org_membership_events"
+	// OrgmembershipsInverseTable is the table name for the OrgMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "orgmembership" package.
-	OrgmembershipInverseTable = "org_memberships"
-	// GroupmembershipTable is the table that holds the groupmembership relation/edge. The primary key declared below.
-	GroupmembershipTable = "group_membership_events"
-	// GroupmembershipInverseTable is the table name for the GroupMembership entity.
+	OrgmembershipsInverseTable = "org_memberships"
+	// GroupmembershipsTable is the table that holds the groupmemberships relation/edge. The primary key declared below.
+	GroupmembershipsTable = "group_membership_events"
+	// GroupmembershipsInverseTable is the table name for the GroupMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "groupmembership" package.
-	GroupmembershipInverseTable = "group_memberships"
-	// SubscriberTable is the table that holds the subscriber relation/edge. The primary key declared below.
-	SubscriberTable = "subscriber_events"
-	// SubscriberInverseTable is the table name for the Subscriber entity.
+	GroupmembershipsInverseTable = "group_memberships"
+	// SubscribersTable is the table that holds the subscribers relation/edge. The primary key declared below.
+	SubscribersTable = "subscriber_events"
+	// SubscribersInverseTable is the table name for the Subscriber entity.
 	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
-	SubscriberInverseTable = "subscribers"
-	// FileTable is the table that holds the file relation/edge. The primary key declared below.
-	FileTable = "file_events"
-	// FileInverseTable is the table name for the File entity.
+	SubscribersInverseTable = "subscribers"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "file_events"
+	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FileInverseTable = "files"
-	// OrgsubscriptionTable is the table that holds the orgsubscription relation/edge. The primary key declared below.
-	OrgsubscriptionTable = "org_subscription_events"
-	// OrgsubscriptionInverseTable is the table name for the OrgSubscription entity.
+	FilesInverseTable = "files"
+	// OrgSubscriptionsTable is the table that holds the org_subscriptions relation/edge. The primary key declared below.
+	OrgSubscriptionsTable = "org_subscription_events"
+	// OrgSubscriptionsInverseTable is the table name for the OrgSubscription entity.
 	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
-	OrgsubscriptionInverseTable = "org_subscriptions"
+	OrgSubscriptionsInverseTable = "org_subscriptions"
 )
 
 // Columns holds all SQL columns for event fields.
@@ -136,42 +136,42 @@ var Columns = []string{
 }
 
 var (
-	// UserPrimaryKey and UserColumn2 are the table columns denoting the
-	// primary key for the user relation (M2M).
-	UserPrimaryKey = []string{"user_id", "event_id"}
-	// GroupPrimaryKey and GroupColumn2 are the table columns denoting the
-	// primary key for the group relation (M2M).
-	GroupPrimaryKey = []string{"group_id", "event_id"}
-	// IntegrationPrimaryKey and IntegrationColumn2 are the table columns denoting the
-	// primary key for the integration relation (M2M).
-	IntegrationPrimaryKey = []string{"integration_id", "event_id"}
-	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
-	// primary key for the organization relation (M2M).
-	OrganizationPrimaryKey = []string{"organization_id", "event_id"}
-	// InvitePrimaryKey and InviteColumn2 are the table columns denoting the
-	// primary key for the invite relation (M2M).
-	InvitePrimaryKey = []string{"invite_id", "event_id"}
-	// PersonalAccessTokenPrimaryKey and PersonalAccessTokenColumn2 are the table columns denoting the
-	// primary key for the personal_access_token relation (M2M).
-	PersonalAccessTokenPrimaryKey = []string{"personal_access_token_id", "event_id"}
-	// HushPrimaryKey and HushColumn2 are the table columns denoting the
-	// primary key for the hush relation (M2M).
-	HushPrimaryKey = []string{"hush_id", "event_id"}
-	// OrgmembershipPrimaryKey and OrgmembershipColumn2 are the table columns denoting the
-	// primary key for the orgmembership relation (M2M).
-	OrgmembershipPrimaryKey = []string{"org_membership_id", "event_id"}
-	// GroupmembershipPrimaryKey and GroupmembershipColumn2 are the table columns denoting the
-	// primary key for the groupmembership relation (M2M).
-	GroupmembershipPrimaryKey = []string{"group_membership_id", "event_id"}
-	// SubscriberPrimaryKey and SubscriberColumn2 are the table columns denoting the
-	// primary key for the subscriber relation (M2M).
-	SubscriberPrimaryKey = []string{"subscriber_id", "event_id"}
-	// FilePrimaryKey and FileColumn2 are the table columns denoting the
-	// primary key for the file relation (M2M).
-	FilePrimaryKey = []string{"file_id", "event_id"}
-	// OrgsubscriptionPrimaryKey and OrgsubscriptionColumn2 are the table columns denoting the
-	// primary key for the orgsubscription relation (M2M).
-	OrgsubscriptionPrimaryKey = []string{"org_subscription_id", "event_id"}
+	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
+	// primary key for the users relation (M2M).
+	UsersPrimaryKey = []string{"user_id", "event_id"}
+	// GroupsPrimaryKey and GroupsColumn2 are the table columns denoting the
+	// primary key for the groups relation (M2M).
+	GroupsPrimaryKey = []string{"group_id", "event_id"}
+	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
+	// primary key for the integrations relation (M2M).
+	IntegrationsPrimaryKey = []string{"integration_id", "event_id"}
+	// OrganizationsPrimaryKey and OrganizationsColumn2 are the table columns denoting the
+	// primary key for the organizations relation (M2M).
+	OrganizationsPrimaryKey = []string{"organization_id", "event_id"}
+	// InvitesPrimaryKey and InvitesColumn2 are the table columns denoting the
+	// primary key for the invites relation (M2M).
+	InvitesPrimaryKey = []string{"invite_id", "event_id"}
+	// PersonalAccessTokensPrimaryKey and PersonalAccessTokensColumn2 are the table columns denoting the
+	// primary key for the personal_access_tokens relation (M2M).
+	PersonalAccessTokensPrimaryKey = []string{"personal_access_token_id", "event_id"}
+	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
+	// primary key for the secrets relation (M2M).
+	SecretsPrimaryKey = []string{"hush_id", "event_id"}
+	// OrgmembershipsPrimaryKey and OrgmembershipsColumn2 are the table columns denoting the
+	// primary key for the orgmemberships relation (M2M).
+	OrgmembershipsPrimaryKey = []string{"org_membership_id", "event_id"}
+	// GroupmembershipsPrimaryKey and GroupmembershipsColumn2 are the table columns denoting the
+	// primary key for the groupmemberships relation (M2M).
+	GroupmembershipsPrimaryKey = []string{"group_membership_id", "event_id"}
+	// SubscribersPrimaryKey and SubscribersColumn2 are the table columns denoting the
+	// primary key for the subscribers relation (M2M).
+	SubscribersPrimaryKey = []string{"subscriber_id", "event_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"file_id", "event_id"}
+	// OrgSubscriptionsPrimaryKey and OrgSubscriptionsColumn2 are the table columns denoting the
+	// primary key for the org_subscriptions relation (M2M).
+	OrgSubscriptionsPrimaryKey = []string{"org_subscription_id", "event_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -246,254 +246,254 @@ func ByEventType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventType, opts...).ToFunc()
 }
 
-// ByUserCount orders the results by user count.
-func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
+// ByUsersCount orders the results by users count.
+func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
 	}
 }
 
-// ByUser orders the results by user terms.
-func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByUsers orders the results by users terms.
+func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByGroupCount orders the results by group count.
-func ByGroupCount(opts ...sql.OrderTermOption) OrderOption {
+// ByGroupsCount orders the results by groups count.
+func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGroupStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newGroupsStep(), opts...)
 	}
 }
 
-// ByGroup orders the results by group terms.
-func ByGroup(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByGroups orders the results by groups terms.
+func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGroupStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByIntegrationCount orders the results by integration count.
-func ByIntegrationCount(opts ...sql.OrderTermOption) OrderOption {
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newIntegrationStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
 	}
 }
 
-// ByIntegration orders the results by integration terms.
-func ByIntegration(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByOrganizationCount orders the results by organization count.
-func ByOrganizationCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrganizationsCount orders the results by organizations count.
+func ByOrganizationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrganizationStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrganizationsStep(), opts...)
 	}
 }
 
-// ByOrganization orders the results by organization terms.
-func ByOrganization(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrganizations orders the results by organizations terms.
+func ByOrganizations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByInviteCount orders the results by invite count.
-func ByInviteCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInvitesCount orders the results by invites count.
+func ByInvitesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInviteStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInvitesStep(), opts...)
 	}
 }
 
-// ByInvite orders the results by invite terms.
-func ByInvite(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInvites orders the results by invites terms.
+func ByInvites(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInviteStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInvitesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByPersonalAccessTokenCount orders the results by personal_access_token count.
-func ByPersonalAccessTokenCount(opts ...sql.OrderTermOption) OrderOption {
+// ByPersonalAccessTokensCount orders the results by personal_access_tokens count.
+func ByPersonalAccessTokensCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPersonalAccessTokenStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newPersonalAccessTokensStep(), opts...)
 	}
 }
 
-// ByPersonalAccessToken orders the results by personal_access_token terms.
-func ByPersonalAccessToken(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByPersonalAccessTokens orders the results by personal_access_tokens terms.
+func ByPersonalAccessTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPersonalAccessTokenStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newPersonalAccessTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByHushCount orders the results by hush count.
-func ByHushCount(opts ...sql.OrderTermOption) OrderOption {
+// BySecretsCount orders the results by secrets count.
+func BySecretsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newHushStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newSecretsStep(), opts...)
 	}
 }
 
-// ByHush orders the results by hush terms.
-func ByHush(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// BySecrets orders the results by secrets terms.
+func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newHushStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newSecretsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByOrgmembershipCount orders the results by orgmembership count.
-func ByOrgmembershipCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrgmembershipsCount orders the results by orgmemberships count.
+func ByOrgmembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrgmembershipStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrgmembershipsStep(), opts...)
 	}
 }
 
-// ByOrgmembership orders the results by orgmembership terms.
-func ByOrgmembership(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrgmemberships orders the results by orgmemberships terms.
+func ByOrgmemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByGroupmembershipCount orders the results by groupmembership count.
-func ByGroupmembershipCount(opts ...sql.OrderTermOption) OrderOption {
+// ByGroupmembershipsCount orders the results by groupmemberships count.
+func ByGroupmembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGroupmembershipStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newGroupmembershipsStep(), opts...)
 	}
 }
 
-// ByGroupmembership orders the results by groupmembership terms.
-func ByGroupmembership(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByGroupmemberships orders the results by groupmemberships terms.
+func ByGroupmemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGroupmembershipStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newGroupmembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// BySubscriberCount orders the results by subscriber count.
-func BySubscriberCount(opts ...sql.OrderTermOption) OrderOption {
+// BySubscribersCount orders the results by subscribers count.
+func BySubscribersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSubscriberStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newSubscribersStep(), opts...)
 	}
 }
 
-// BySubscriber orders the results by subscriber terms.
-func BySubscriber(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// BySubscribers orders the results by subscribers terms.
+func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSubscriberStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newSubscribersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByFileCount orders the results by file count.
-func ByFileCount(opts ...sql.OrderTermOption) OrderOption {
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFileStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
 	}
 }
 
-// ByFile orders the results by file terms.
-func ByFile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFileStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByOrgsubscriptionCount orders the results by orgsubscription count.
-func ByOrgsubscriptionCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrgSubscriptionsCount orders the results by org_subscriptions count.
+func ByOrgSubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrgsubscriptionStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrgSubscriptionsStep(), opts...)
 	}
 }
 
-// ByOrgsubscription orders the results by orgsubscription terms.
-func ByOrgsubscription(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrgSubscriptions orders the results by org_subscriptions terms.
+func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgsubscriptionStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrgSubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newUserStep() *sqlgraph.Step {
+func newUsersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
+		sqlgraph.To(UsersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }
-func newGroupStep() *sqlgraph.Step {
+func newGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(GroupInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+		sqlgraph.To(GroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, GroupsTable, GroupsPrimaryKey...),
 	)
 }
-func newIntegrationStep() *sqlgraph.Step {
+func newIntegrationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(IntegrationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, IntegrationTable, IntegrationPrimaryKey...),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
 	)
 }
-func newOrganizationStep() *sqlgraph.Step {
+func newOrganizationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
+		sqlgraph.To(OrganizationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsTable, OrganizationsPrimaryKey...),
 	)
 }
-func newInviteStep() *sqlgraph.Step {
+func newInvitesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InviteInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InviteTable, InvitePrimaryKey...),
+		sqlgraph.To(InvitesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InvitesTable, InvitesPrimaryKey...),
 	)
 }
-func newPersonalAccessTokenStep() *sqlgraph.Step {
+func newPersonalAccessTokensStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PersonalAccessTokenInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, PersonalAccessTokenTable, PersonalAccessTokenPrimaryKey...),
+		sqlgraph.To(PersonalAccessTokensInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PersonalAccessTokensTable, PersonalAccessTokensPrimaryKey...),
 	)
 }
-func newHushStep() *sqlgraph.Step {
+func newSecretsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(HushInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, HushTable, HushPrimaryKey...),
+		sqlgraph.To(SecretsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SecretsTable, SecretsPrimaryKey...),
 	)
 }
-func newOrgmembershipStep() *sqlgraph.Step {
+func newOrgmembershipsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgmembershipInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrgmembershipTable, OrgmembershipPrimaryKey...),
+		sqlgraph.To(OrgmembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrgmembershipsTable, OrgmembershipsPrimaryKey...),
 	)
 }
-func newGroupmembershipStep() *sqlgraph.Step {
+func newGroupmembershipsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(GroupmembershipInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, GroupmembershipTable, GroupmembershipPrimaryKey...),
+		sqlgraph.To(GroupmembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, GroupmembershipsTable, GroupmembershipsPrimaryKey...),
 	)
 }
-func newSubscriberStep() *sqlgraph.Step {
+func newSubscribersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SubscriberInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, SubscriberTable, SubscriberPrimaryKey...),
+		sqlgraph.To(SubscribersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubscribersTable, SubscribersPrimaryKey...),
 	)
 }
-func newFileStep() *sqlgraph.Step {
+func newFilesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FileInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, FileTable, FilePrimaryKey...),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FilesTable, FilesPrimaryKey...),
 	)
 }
-func newOrgsubscriptionStep() *sqlgraph.Step {
+func newOrgSubscriptionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgsubscriptionInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrgsubscriptionTable, OrgsubscriptionPrimaryKey...),
+		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrgSubscriptionsTable, OrgSubscriptionsPrimaryKey...),
 	)
 }

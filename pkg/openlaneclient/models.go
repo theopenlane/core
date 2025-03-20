@@ -87,6 +87,14 @@ type APITokenEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+// Ordering options for APIToken connections
+type APITokenOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order APITokens.
+	Field APITokenOrderField `json:"field"`
+}
+
 type APITokenSearchResult struct {
 	APITokens []*APIToken `json:"apiTokens,omitempty"`
 }
@@ -312,6 +320,8 @@ type ActionPlan struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -326,8 +336,6 @@ type ActionPlan struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
@@ -341,10 +349,10 @@ type ActionPlan struct {
 	// temporary delegates for the action_plan, used for temporary approval
 	Delegate *Group             `json:"delegate,omitempty"`
 	Owner    *Organization      `json:"owner,omitempty"`
-	Risk     *RiskConnection    `json:"risk"`
-	Control  *ControlConnection `json:"control"`
-	User     *UserConnection    `json:"user"`
-	Program  *ProgramConnection `json:"program"`
+	Risks    *RiskConnection    `json:"risks"`
+	Controls *ControlConnection `json:"controls"`
+	Users    *UserConnection    `json:"users"`
+	Programs *ProgramConnection `json:"programs"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -398,6 +406,8 @@ type ActionPlanHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -412,8 +422,6 @@ type ActionPlanHistory struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
@@ -580,6 +588,22 @@ type ActionPlanHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -656,22 +680,6 @@ type ActionPlanHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -842,6 +850,22 @@ type ActionPlanWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -918,22 +942,6 @@ type ActionPlanWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -993,18 +1001,18 @@ type ActionPlanWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// risk edge predicates
-	HasRisk     *bool             `json:"hasRisk,omitempty"`
-	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
-	// user edge predicates
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
-	// program edge predicates
-	HasProgram     *bool                `json:"hasProgram,omitempty"`
-	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// users edge predicates
+	HasUsers     *bool             `json:"hasUsers,omitempty"`
+	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 }
 
 type AuditLog struct {
@@ -1720,7 +1728,7 @@ type Control struct {
 	Evidence               *EvidenceConnection              `json:"evidence"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	MappedControls         *MappedControlConnection         `json:"mappedControls"`
-	ControlObjectives      []*ControlObjective              `json:"controlObjectives,omitempty"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
 	Narratives             *NarrativeConnection             `json:"narratives"`
@@ -2610,12 +2618,12 @@ type ControlObjective struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the control objective
@@ -2699,12 +2707,12 @@ type ControlObjectiveHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the control objective
@@ -2879,6 +2887,20 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -2895,20 +2917,6 @@ type ControlObjectiveHistoryWhereInput struct {
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
 	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
 	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -3146,6 +3154,20 @@ type ControlObjectiveWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -3162,20 +3184,6 @@ type ControlObjectiveWhereInput struct {
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
 	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
 	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -3694,6 +3702,8 @@ type CreateAPITokenInput struct {
 type CreateActionPlanInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -3708,8 +3718,6 @@ type CreateActionPlanInput struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
@@ -3826,10 +3834,10 @@ type CreateControlInput struct {
 // CreateControlObjectiveInput is used for create ControlObjective object.
 // Input was generated by ent.
 type CreateControlObjectiveInput struct {
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
@@ -3927,10 +3935,10 @@ type CreateEventInput struct {
 	OrganizationIDs        []string       `json:"organizationIDs,omitempty"`
 	InviteIDs              []string       `json:"inviteIDs,omitempty"`
 	PersonalAccessTokenIDs []string       `json:"personalAccessTokenIDs,omitempty"`
-	HushIDs                []string       `json:"hushIDs,omitempty"`
+	SecretIDs              []string       `json:"secretIDs,omitempty"`
 	SubscriberIDs          []string       `json:"subscriberIDs,omitempty"`
 	FileIDs                []string       `json:"fileIDs,omitempty"`
-	OrgsubscriptionIDs     []string       `json:"orgsubscriptionIDs,omitempty"`
+	OrgSubscriptionIDs     []string       `json:"orgSubscriptionIDs,omitempty"`
 }
 
 // CreateEvidenceInput is used for create Evidence object.
@@ -4003,10 +4011,10 @@ type CreateFileInput struct {
 	UserSettingIDs         []string `json:"userSettingIDs,omitempty"`
 	OrganizationSettingIDs []string `json:"organizationSettingIDs,omitempty"`
 	TemplateIDs            []string `json:"templateIDs,omitempty"`
-	DocumentDatumIDs       []string `json:"documentDatumIDs,omitempty"`
-	EventIDs               []string `json:"eventIDs,omitempty"`
+	DocumentIDs            []string `json:"documentIDs,omitempty"`
 	ProgramIDs             []string `json:"programIDs,omitempty"`
 	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
+	EventIDs               []string `json:"eventIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -4122,6 +4130,8 @@ type CreateIntegrationInput struct {
 type CreateInternalPolicyInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -4135,20 +4145,18 @@ type CreateInternalPolicyInput struct {
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision            *string  `json:"revision,omitempty"`
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string `json:"editorIDs,omitempty"`
-	ApproverID          *string  `json:"approverID,omitempty"`
-	DelegateID          *string  `json:"delegateID,omitempty"`
-	ControlObjectiveIDs []string `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string `json:"controlIDs,omitempty"`
-	ProcedureIDs        []string `json:"procedureIDs,omitempty"`
-	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
-	TaskIDs             []string `json:"taskIDs,omitempty"`
-	ProgramIDs          []string `json:"programIDs,omitempty"`
+	ReviewFrequency     *enums.Frequency `json:"reviewFrequency,omitempty"`
+	OwnerID             *string          `json:"ownerID,omitempty"`
+	BlockedGroupIDs     []string         `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string         `json:"editorIDs,omitempty"`
+	ApproverID          *string          `json:"approverID,omitempty"`
+	DelegateID          *string          `json:"delegateID,omitempty"`
+	ControlObjectiveIDs []string         `json:"controlObjectiveIDs,omitempty"`
+	ControlIDs          []string         `json:"controlIDs,omitempty"`
+	ProcedureIDs        []string         `json:"procedureIDs,omitempty"`
+	NarrativeIDs        []string         `json:"narrativeIDs,omitempty"`
+	TaskIDs             []string         `json:"taskIDs,omitempty"`
+	ProgramIDs          []string         `json:"programIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -4279,7 +4287,7 @@ type CreateOrganizationInput struct {
 	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
 	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
 	IntegrationIDs             []string                        `json:"integrationIDs,omitempty"`
-	DocumentDatumIDs           []string                        `json:"documentDatumIDs,omitempty"`
+	DocumentIDs                []string                        `json:"documentIDs,omitempty"`
 	OrgSubscriptionIDs         []string                        `json:"orgSubscriptionIDs,omitempty"`
 	InviteIDs                  []string                        `json:"inviteIDs,omitempty"`
 	SubscriberIDs              []string                        `json:"subscriberIDs,omitempty"`
@@ -4343,16 +4351,10 @@ type CreatePersonalAccessTokenInput struct {
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
-	IsActive *bool `json:"isActive,omitempty"`
-	// the reason the token was revoked
-	RevokedReason *string `json:"revokedReason,omitempty"`
-	// the user who revoked the token
-	RevokedBy *string `json:"revokedBy,omitempty"`
-	// when the token was revoked
-	RevokedAt       *time.Time `json:"revokedAt,omitempty"`
-	OwnerID         string     `json:"ownerID"`
-	OrganizationIDs []string   `json:"organizationIDs,omitempty"`
-	EventIDs        []string   `json:"eventIDs,omitempty"`
+	IsActive        *bool    `json:"isActive,omitempty"`
+	OwnerID         string   `json:"ownerID"`
+	OrganizationIDs []string `json:"organizationIDs,omitempty"`
+	EventIDs        []string `json:"eventIDs,omitempty"`
 }
 
 // CreateProcedureInput is used for create Procedure object.
@@ -4360,6 +4362,8 @@ type CreatePersonalAccessTokenInput struct {
 type CreateProcedureInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
@@ -4373,20 +4377,18 @@ type CreateProcedureInput struct {
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision          *string  `json:"revision,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string `json:"editorIDs,omitempty"`
-	ApproverID        *string  `json:"approverID,omitempty"`
-	DelegateID        *string  `json:"delegateID,omitempty"`
-	ControlIDs        []string `json:"controlIDs,omitempty"`
-	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
-	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
-	RiskIDs           []string `json:"riskIDs,omitempty"`
-	TaskIDs           []string `json:"taskIDs,omitempty"`
-	ProgramIDs        []string `json:"programIDs,omitempty"`
+	ReviewFrequency   *enums.Frequency `json:"reviewFrequency,omitempty"`
+	OwnerID           *string          `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string         `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string         `json:"editorIDs,omitempty"`
+	ApproverID        *string          `json:"approverID,omitempty"`
+	DelegateID        *string          `json:"delegateID,omitempty"`
+	ControlIDs        []string         `json:"controlIDs,omitempty"`
+	InternalPolicyIDs []string         `json:"internalPolicyIDs,omitempty"`
+	ProgramIDs        []string         `json:"programIDs,omitempty"`
+	NarrativeIDs      []string         `json:"narrativeIDs,omitempty"`
+	RiskIDs           []string         `json:"riskIDs,omitempty"`
+	TaskIDs           []string         `json:"taskIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -4472,8 +4474,8 @@ type CreateRiskInput struct {
 	ViewerIDs       []string `json:"viewerIDs,omitempty"`
 	ControlIDs      []string `json:"controlIDs,omitempty"`
 	ProcedureIDs    []string `json:"procedureIDs,omitempty"`
-	ActionPlanIDs   []string `json:"actionPlanIDs,omitempty"`
 	ProgramIDs      []string `json:"programIDs,omitempty"`
+	ActionPlanIDs   []string `json:"actionPlanIDs,omitempty"`
 	StakeholderID   *string  `json:"stakeholderID,omitempty"`
 	DelegateID      *string  `json:"delegateID,omitempty"`
 }
@@ -4615,8 +4617,8 @@ type CreateTaskInput struct {
 	InternalPolicyIDs   []string   `json:"internalPolicyIDs,omitempty"`
 	ProcedureIDs        []string   `json:"procedureIDs,omitempty"`
 	ControlIDs          []string   `json:"controlIDs,omitempty"`
-	ControlObjectiveIDs []string   `json:"controlObjectiveIDs,omitempty"`
 	SubcontrolIDs       []string   `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs []string   `json:"controlObjectiveIDs,omitempty"`
 	ProgramIDs          []string   `json:"programIDs,omitempty"`
 	EvidenceIDs         []string   `json:"evidenceIDs,omitempty"`
 }
@@ -4713,10 +4715,10 @@ type DocumentData struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
@@ -4725,7 +4727,7 @@ type DocumentData struct {
 	Data     map[string]any    `json:"data"`
 	Owner    *Organization     `json:"owner,omitempty"`
 	Template *Template         `json:"template"`
-	Entity   *EntityConnection `json:"entity"`
+	Entities *EntityConnection `json:"entities"`
 	Files    *FileConnection   `json:"files"`
 }
 
@@ -4776,10 +4778,10 @@ type DocumentDataHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
@@ -4806,6 +4808,14 @@ type DocumentDataHistoryEdge struct {
 	Node *DocumentDataHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for DocumentDataHistory connections
+type DocumentDataHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order DocumentDataHistories.
+	Field DocumentDataHistoryOrderField `json:"field"`
 }
 
 // DocumentDataHistoryWhereInput is used for filtering DocumentDataHistory objects.
@@ -4968,6 +4978,14 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 }
 
+// Ordering options for DocumentData connections
+type DocumentDataOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order DocumentDataSlice.
+	Field DocumentDataOrderField `json:"field"`
+}
+
 type DocumentDataSearchResult struct {
 	DocumentData []*DocumentData `json:"documentData,omitempty"`
 }
@@ -5114,9 +5132,9 @@ type DocumentDataWhereInput struct {
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
-	// entity edge predicates
-	HasEntity     *bool               `json:"hasEntity,omitempty"`
-	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -6103,23 +6121,23 @@ type Event struct {
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags                []string                       `json:"tags,omitempty"`
-	EventID             *string                        `json:"eventID,omitempty"`
-	CorrelationID       *string                        `json:"correlationID,omitempty"`
-	EventType           string                         `json:"eventType"`
-	Metadata            map[string]any                 `json:"metadata,omitempty"`
-	User                *UserConnection                `json:"user"`
-	Group               *GroupConnection               `json:"group"`
-	Integration         *IntegrationConnection         `json:"integration"`
-	Organization        *OrganizationConnection        `json:"organization"`
-	Invite              *InviteConnection              `json:"invite"`
-	PersonalAccessToken *PersonalAccessTokenConnection `json:"personalAccessToken"`
-	Hush                *HushConnection                `json:"hush"`
-	Orgmembership       *OrgMembershipConnection       `json:"orgmembership"`
-	Groupmembership     *GroupMembershipConnection     `json:"groupmembership"`
-	Subscriber          *SubscriberConnection          `json:"subscriber"`
-	File                *FileConnection                `json:"file"`
-	Orgsubscription     *OrgSubscriptionConnection     `json:"orgsubscription"`
+	Tags                 []string                       `json:"tags,omitempty"`
+	EventID              *string                        `json:"eventID,omitempty"`
+	CorrelationID        *string                        `json:"correlationID,omitempty"`
+	EventType            string                         `json:"eventType"`
+	Metadata             map[string]any                 `json:"metadata,omitempty"`
+	Users                *UserConnection                `json:"users"`
+	Groups               *GroupConnection               `json:"groups"`
+	Integrations         *IntegrationConnection         `json:"integrations"`
+	Organizations        *OrganizationConnection        `json:"organizations"`
+	Invites              *InviteConnection              `json:"invites"`
+	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
+	Secrets              *HushConnection                `json:"secrets"`
+	Orgmemberships       *OrgMembershipConnection       `json:"orgmemberships"`
+	Groupmemberships     *GroupMembershipConnection     `json:"groupmemberships"`
+	Subscribers          *SubscriberConnection          `json:"subscribers"`
+	Files                *FileConnection                `json:"files"`
+	OrgSubscriptions     *OrgSubscriptionConnection     `json:"orgSubscriptions"`
 }
 
 func (Event) IsNode() {}
@@ -6195,6 +6213,14 @@ type EventHistoryEdge struct {
 	Node *EventHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for EventHistory connections
+type EventHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order EventHistories.
+	Field EventHistoryOrderField `json:"field"`
 }
 
 // EventHistoryWhereInput is used for filtering EventHistory objects.
@@ -6346,6 +6372,14 @@ type EventHistoryWhereInput struct {
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
 }
 
+// Ordering options for Event connections
+type EventOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Events.
+	Field EventOrderField `json:"field"`
+}
+
 type EventSearchResult struct {
 	Events []*Event `json:"events,omitempty"`
 }
@@ -6475,42 +6509,42 @@ type EventWhereInput struct {
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
-	// user edge predicates
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
-	// group edge predicates
-	HasGroup     *bool              `json:"hasGroup,omitempty"`
-	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
-	// integration edge predicates
-	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
-	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
-	// invite edge predicates
-	HasInvite     *bool               `json:"hasInvite,omitempty"`
-	HasInviteWith []*InviteWhereInput `json:"hasInviteWith,omitempty"`
-	// personal_access_token edge predicates
-	HasPersonalAccessToken     *bool                            `json:"hasPersonalAccessToken,omitempty"`
-	HasPersonalAccessTokenWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokenWith,omitempty"`
-	// hush edge predicates
-	HasHush     *bool             `json:"hasHush,omitempty"`
-	HasHushWith []*HushWhereInput `json:"hasHushWith,omitempty"`
-	// orgmembership edge predicates
-	HasOrgmembership     *bool                      `json:"hasOrgmembership,omitempty"`
-	HasOrgmembershipWith []*OrgMembershipWhereInput `json:"hasOrgmembershipWith,omitempty"`
-	// groupmembership edge predicates
-	HasGroupmembership     *bool                        `json:"hasGroupmembership,omitempty"`
-	HasGroupmembershipWith []*GroupMembershipWhereInput `json:"hasGroupmembershipWith,omitempty"`
-	// subscriber edge predicates
-	HasSubscriber     *bool                   `json:"hasSubscriber,omitempty"`
-	HasSubscriberWith []*SubscriberWhereInput `json:"hasSubscriberWith,omitempty"`
-	// file edge predicates
-	HasFile     *bool             `json:"hasFile,omitempty"`
-	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
-	// orgsubscription edge predicates
-	HasOrgsubscription     *bool                        `json:"hasOrgsubscription,omitempty"`
-	HasOrgsubscriptionWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionWith,omitempty"`
+	// users edge predicates
+	HasUsers     *bool             `json:"hasUsers,omitempty"`
+	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+	// groups edge predicates
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// organizations edge predicates
+	HasOrganizations     *bool                     `json:"hasOrganizations,omitempty"`
+	HasOrganizationsWith []*OrganizationWhereInput `json:"hasOrganizationsWith,omitempty"`
+	// invites edge predicates
+	HasInvites     *bool               `json:"hasInvites,omitempty"`
+	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
+	// personal_access_tokens edge predicates
+	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
+	HasPersonalAccessTokensWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokensWith,omitempty"`
+	// secrets edge predicates
+	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
+	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
+	// orgmemberships edge predicates
+	HasOrgmemberships     *bool                      `json:"hasOrgmemberships,omitempty"`
+	HasOrgmembershipsWith []*OrgMembershipWhereInput `json:"hasOrgmembershipsWith,omitempty"`
+	// groupmemberships edge predicates
+	HasGroupmemberships     *bool                        `json:"hasGroupmemberships,omitempty"`
+	HasGroupmembershipsWith []*GroupMembershipWhereInput `json:"hasGroupmembershipsWith,omitempty"`
+	// subscribers edge predicates
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// org_subscriptions edge predicates
+	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
+	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
 }
 
 type Evidence struct {
@@ -6519,10 +6553,10 @@ type Evidence struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -6601,10 +6635,10 @@ type EvidenceHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -6758,20 +6792,6 @@ type EvidenceHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -6799,6 +6819,20 @@ type EvidenceHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -7018,20 +7052,6 @@ type EvidenceWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7059,6 +7079,20 @@ type EvidenceWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -7242,20 +7276,20 @@ type File struct {
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath         *string                        `json:"storagePath,omitempty"`
-	User                *UserConnection                `json:"user"`
-	Organization        *OrganizationConnection        `json:"organization"`
-	Group               *GroupConnection               `json:"group"`
-	Contact             *ContactConnection             `json:"contact"`
-	Entity              *EntityConnection              `json:"entity"`
-	UserSetting         *UserSettingConnection         `json:"userSetting"`
-	OrganizationSetting *OrganizationSettingConnection `json:"organizationSetting"`
-	Template            *TemplateConnection            `json:"template"`
-	DocumentData        *DocumentDataConnection        `json:"documentData"`
-	Events              *EventConnection               `json:"events"`
-	Program             *ProgramConnection             `json:"program"`
-	Evidence            *EvidenceConnection            `json:"evidence"`
-	PresignedURL        *string                        `json:"presignedURL,omitempty"`
+	StoragePath         *string                `json:"storagePath,omitempty"`
+	User                []*User                `json:"user,omitempty"`
+	Organization        []*Organization        `json:"organization,omitempty"`
+	Groups              *GroupConnection       `json:"groups"`
+	Contact             []*Contact             `json:"contact,omitempty"`
+	Entity              []*Entity              `json:"entity,omitempty"`
+	UserSetting         []*UserSetting         `json:"userSetting,omitempty"`
+	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty"`
+	Template            []*Template            `json:"template,omitempty"`
+	Document            []*DocumentData        `json:"document,omitempty"`
+	Program             []*Program             `json:"program,omitempty"`
+	Evidence            []*Evidence            `json:"evidence,omitempty"`
+	Events              *EventConnection       `json:"events"`
+	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
 func (File) IsNode() {}
@@ -7342,6 +7376,14 @@ type FileHistoryEdge struct {
 	Node *FileHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for FileHistory connections
+type FileHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order FileHistories.
+	Field FileHistoryOrderField `json:"field"`
 }
 
 // FileHistoryWhereInput is used for filtering FileHistory objects.
@@ -7666,6 +7708,14 @@ type FileHistoryWhereInput struct {
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
 }
 
+// Ordering options for File connections
+type FileOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Files.
+	Field FileOrderField `json:"field"`
+}
+
 type FileSearchResult struct {
 	Files []*File `json:"files,omitempty"`
 }
@@ -7968,9 +8018,9 @@ type FileWhereInput struct {
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
-	// group edge predicates
-	HasGroup     *bool              `json:"hasGroup,omitempty"`
-	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// groups edge predicates
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
 	// contact edge predicates
 	HasContact     *bool                `json:"hasContact,omitempty"`
 	HasContactWith []*ContactWhereInput `json:"hasContactWith,omitempty"`
@@ -7986,18 +8036,18 @@ type FileWhereInput struct {
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
-	// document_data edge predicates
-	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
-	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
-	// events edge predicates
-	HasEvents     *bool              `json:"hasEvents,omitempty"`
-	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 	// program edge predicates
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+	// events edge predicates
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
 type Group struct {
@@ -8355,19 +8405,19 @@ type GroupMembersInput struct {
 }
 
 type GroupMembership struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	Role      enums.Role `json:"role"`
-	GroupID   string     `json:"groupID"`
-	UserID    string     `json:"userID"`
-	Group     *Group     `json:"group"`
-	User      *User      `json:"user"`
-	Events    []*Event   `json:"events,omitempty"`
+	ID        string           `json:"id"`
+	CreatedAt *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy *string          `json:"createdBy,omitempty"`
+	UpdatedBy *string          `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time       `json:"deletedAt,omitempty"`
+	DeletedBy *string          `json:"deletedBy,omitempty"`
+	Role      enums.Role       `json:"role"`
+	GroupID   string           `json:"groupID"`
+	UserID    string           `json:"userID"`
+	Group     *Group           `json:"group"`
+	User      *User            `json:"user"`
+	Events    *EventConnection `json:"events"`
 }
 
 func (GroupMembership) IsNode() {}
@@ -8863,6 +8913,14 @@ type GroupSettingHistoryEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+// Ordering options for GroupSettingHistory connections
+type GroupSettingHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order GroupSettingHistories.
+	Field GroupSettingHistoryOrderField `json:"field"`
+}
+
 // GroupSettingHistoryWhereInput is used for filtering GroupSettingHistory objects.
 // Input was generated by ent.
 type GroupSettingHistoryWhereInput struct {
@@ -9027,6 +9085,14 @@ type GroupSettingHistoryWhereInput struct {
 	GroupIDNotNil       *bool    `json:"groupIDNotNil,omitempty"`
 	GroupIDEqualFold    *string  `json:"groupIDEqualFold,omitempty"`
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
+}
+
+// Ordering options for GroupSetting connections
+type GroupSettingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order GroupSettings.
+	Field GroupSettingOrderField `json:"field"`
 }
 
 // Return response for updateGroupSetting mutation
@@ -9439,10 +9505,10 @@ type Hush struct {
 	// the kind of secret, such as sshkey, certificate, api token, etc.
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
-	SecretName   *string                 `json:"secretName,omitempty"`
-	Integrations *IntegrationConnection  `json:"integrations"`
-	Organization *OrganizationConnection `json:"organization"`
-	Events       *EventConnection        `json:"events"`
+	SecretName   *string                `json:"secretName,omitempty"`
+	Integrations *IntegrationConnection `json:"integrations"`
+	Organization []*Organization        `json:"organization,omitempty"`
+	Events       *EventConnection       `json:"events"`
 }
 
 func (Hush) IsNode() {}
@@ -9883,10 +9949,10 @@ type Integration struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -9946,10 +10012,10 @@ type IntegrationHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -10344,12 +10410,14 @@ type InternalPolicy struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
@@ -10366,9 +10434,7 @@ type InternalPolicy struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string       `json:"revision,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
+	Owner           *Organization    `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -10432,12 +10498,14 @@ type InternalPolicyHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
@@ -10454,8 +10522,6 @@ type InternalPolicyHistory struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -10476,6 +10542,14 @@ type InternalPolicyHistoryEdge struct {
 	Node *InternalPolicyHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for InternalPolicyHistory connections
+type InternalPolicyHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order InternalPolicyHistories.
+	Field InternalPolicyHistoryOrderField `json:"field"`
 }
 
 // InternalPolicyHistoryWhereInput is used for filtering InternalPolicyHistory objects.
@@ -10620,6 +10694,22 @@ type InternalPolicyHistoryWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10712,22 +10802,14 @@ type InternalPolicyHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
+}
+
+// Ordering options for InternalPolicy connections
+type InternalPolicyOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order InternalPolicies.
+	Field InternalPolicyOrderField `json:"field"`
 }
 
 type InternalPolicySearchResult struct {
@@ -10854,6 +10936,22 @@ type InternalPolicyWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10946,22 +11044,6 @@ type InternalPolicyWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -12230,10 +12312,10 @@ type Note struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
@@ -12271,10 +12353,10 @@ type NoteHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
@@ -12299,6 +12381,14 @@ type NoteHistoryEdge struct {
 	Node *NoteHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for NoteHistory connections
+type NoteHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order NoteHistories.
+	Field NoteHistoryOrderField `json:"field"`
 }
 
 // NoteHistoryWhereInput is used for filtering NoteHistory objects.
@@ -12402,20 +12492,6 @@ type NoteHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -12443,6 +12519,20 @@ type NoteHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -12473,6 +12563,14 @@ type NoteHistoryWhereInput struct {
 	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
 	TextEqualFold    *string  `json:"textEqualFold,omitempty"`
 	TextContainsFold *string  `json:"textContainsFold,omitempty"`
+}
+
+// Ordering options for Note connections
+type NoteOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Notes.
+	Field NoteOrderField `json:"field"`
 }
 
 // NoteWhereInput is used for filtering Note objects.
@@ -12546,20 +12644,6 @@ type NoteWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -12587,6 +12671,20 @@ type NoteWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13125,10 +13223,10 @@ type OrgSubscription struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
@@ -13156,12 +13254,12 @@ type OrgSubscription struct {
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys    []string      `json:"featureLookupKeys,omitempty"`
-	Owner                *Organization `json:"owner,omitempty"`
-	Events               []*Event      `json:"events,omitempty"`
-	SubscriptionURL      *string       `json:"subscriptionURL,omitempty"`
-	ManagePaymentMethods *string       `json:"managePaymentMethods,omitempty"`
-	Cancellation         *string       `json:"cancellation,omitempty"`
+	FeatureLookupKeys    []string         `json:"featureLookupKeys,omitempty"`
+	Owner                *Organization    `json:"owner,omitempty"`
+	Events               *EventConnection `json:"events"`
+	SubscriptionURL      *string          `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods *string          `json:"managePaymentMethods,omitempty"`
+	Cancellation         *string          `json:"cancellation,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}
@@ -13193,10 +13291,10 @@ type OrgSubscriptionHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
@@ -13795,10 +13893,10 @@ type Organization struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
@@ -13846,7 +13944,7 @@ type Organization struct {
 	Groups               *GroupConnection               `json:"groups"`
 	Templates            *TemplateConnection            `json:"templates"`
 	Integrations         *IntegrationConnection         `json:"integrations"`
-	DocumentData         *DocumentDataConnection        `json:"documentData"`
+	Documents            *DocumentDataConnection        `json:"documents"`
 	OrgSubscriptions     []*OrgSubscription             `json:"orgSubscriptions,omitempty"`
 	Invites              *InviteConnection              `json:"invites"`
 	Subscribers          *SubscriberConnection          `json:"subscribers"`
@@ -13916,10 +14014,10 @@ type OrganizationHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
@@ -14194,10 +14292,10 @@ type OrganizationSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -14269,10 +14367,10 @@ type OrganizationSettingHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags []string `json:"tags,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -14313,6 +14411,14 @@ type OrganizationSettingHistoryEdge struct {
 	Node *OrganizationSettingHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for OrganizationSettingHistory connections
+type OrganizationSettingHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrganizationSettingHistories.
+	Field OrganizationSettingHistoryOrderField `json:"field"`
 }
 
 // OrganizationSettingHistoryWhereInput is used for filtering OrganizationSettingHistory objects.
@@ -14533,6 +14639,14 @@ type OrganizationSettingHistoryWhereInput struct {
 	// billing_notifications_enabled field predicates
 	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
 	BillingNotificationsEnabledNeq *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
+}
+
+// Ordering options for OrganizationSetting connections
+type OrganizationSettingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order OrganizationSettings.
+	Field OrganizationSettingOrderField `json:"field"`
 }
 
 type OrganizationSettingSearchResult struct {
@@ -14991,9 +15105,9 @@ type OrganizationWhereInput struct {
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
-	// document_data edge predicates
-	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
-	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
+	// documents edge predicates
+	HasDocuments     *bool                     `json:"hasDocuments,omitempty"`
+	HasDocumentsWith []*DocumentDataWhereInput `json:"hasDocumentsWith,omitempty"`
 	// org_subscriptions edge predicates
 	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
 	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
@@ -15137,6 +15251,14 @@ type PersonalAccessTokenEdge struct {
 	Node *PersonalAccessToken `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for PersonalAccessToken connections
+type PersonalAccessTokenOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order PersonalAccessTokens.
+	Field PersonalAccessTokenOrderField `json:"field"`
 }
 
 type PersonalAccessTokenSearchResult struct {
@@ -15350,12 +15472,14 @@ type Procedure struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
@@ -15372,9 +15496,7 @@ type Procedure struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string       `json:"revision,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
+	Owner           *Organization    `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -15385,10 +15507,10 @@ type Procedure struct {
 	Delegate         *Group                    `json:"delegate,omitempty"`
 	Controls         *ControlConnection        `json:"controls"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
+	Programs         *ProgramConnection        `json:"programs"`
 	Narratives       *NarrativeConnection      `json:"narratives"`
 	Risks            *RiskConnection           `json:"risks"`
 	Tasks            *TaskConnection           `json:"tasks"`
-	Programs         *ProgramConnection        `json:"programs"`
 }
 
 func (Procedure) IsNode() {}
@@ -15438,12 +15560,14 @@ type ProcedureHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
@@ -15460,8 +15584,6 @@ type ProcedureHistory struct {
 	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -15482,6 +15604,14 @@ type ProcedureHistoryEdge struct {
 	Node *ProcedureHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ProcedureHistory connections
+type ProcedureHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ProcedureHistories.
+	Field ProcedureHistoryOrderField `json:"field"`
 }
 
 // ProcedureHistoryWhereInput is used for filtering ProcedureHistory objects.
@@ -15626,6 +15756,22 @@ type ProcedureHistoryWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15718,22 +15864,14 @@ type ProcedureHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
+}
+
+// Ordering options for Procedure connections
+type ProcedureOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Procedures.
+	Field ProcedureOrderField `json:"field"`
 }
 
 type ProcedureSearchResult struct {
@@ -15860,6 +15998,22 @@ type ProcedureWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// revision field predicates
+	Revision             *string  `json:"revision,omitempty"`
+	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
+	RevisionIn           []string `json:"revisionIn,omitempty"`
+	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
+	RevisionGt           *string  `json:"revisionGT,omitempty"`
+	RevisionGte          *string  `json:"revisionGTE,omitempty"`
+	RevisionLt           *string  `json:"revisionLT,omitempty"`
+	RevisionLte          *string  `json:"revisionLTE,omitempty"`
+	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
+	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
+	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
+	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
+	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
+	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15952,22 +16106,6 @@ type ProcedureWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// revision field predicates
-	Revision             *string  `json:"revision,omitempty"`
-	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
-	RevisionIn           []string `json:"revisionIn,omitempty"`
-	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
-	RevisionGt           *string  `json:"revisionGT,omitempty"`
-	RevisionGte          *string  `json:"revisionGTE,omitempty"`
-	RevisionLt           *string  `json:"revisionLT,omitempty"`
-	RevisionLte          *string  `json:"revisionLTE,omitempty"`
-	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
-	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
-	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
-	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
-	RevisionEqualFold    *string  `json:"revisionEqualFold,omitempty"`
-	RevisionContainsFold *string  `json:"revisionContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -15989,6 +16127,9 @@ type ProcedureWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 	// narratives edge predicates
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
 	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
@@ -15998,9 +16139,6 @@ type ProcedureWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
-	// programs edge predicates
-	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
-	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 }
 
 type Program struct {
@@ -16009,10 +16147,10 @@ type Program struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -16051,7 +16189,7 @@ type Program struct {
 	Files             *FileConnection              `json:"files"`
 	Evidence          *EvidenceConnection          `json:"evidence"`
 	Narratives        *NarrativeConnection         `json:"narratives"`
-	ActionPlans       []*ActionPlan                `json:"actionPlans,omitempty"`
+	ActionPlans       *ActionPlanConnection        `json:"actionPlans"`
 	Users             *UserConnection              `json:"users"`
 	Members           *ProgramMembershipConnection `json:"members"`
 }
@@ -16103,10 +16241,10 @@ type ProgramHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -16258,20 +16396,6 @@ type ProgramHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -16299,6 +16423,20 @@ type ProgramHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -16855,20 +16993,6 @@ type ProgramWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -16896,6 +17020,20 @@ type ProgramWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -17078,10 +17216,10 @@ type Risk struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers     []*Group              `json:"viewers,omitempty"`
-	Control     *ControlConnection    `json:"control"`
-	Procedure   *ProcedureConnection  `json:"procedure"`
-	ActionPlans *ActionPlanConnection `json:"actionPlans"`
+	Controls    *ControlConnection    `json:"controls"`
+	Procedures  *ProcedureConnection  `json:"procedures"`
 	Programs    *ProgramConnection    `json:"programs"`
+	ActionPlans *ActionPlanConnection `json:"actionPlans"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
@@ -17765,18 +17903,18 @@ type RiskWhereInput struct {
 	// viewers edge predicates
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
-	// procedure edge predicates
-	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
-	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
-	// action_plans edge predicates
-	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
-	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// procedures edge predicates
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// action_plans edge predicates
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 	// stakeholder edge predicates
 	HasStakeholder     *bool              `json:"hasStakeholder,omitempty"`
 	HasStakeholderWith []*GroupWhereInput `json:"hasStakeholderWith,omitempty"`
@@ -18646,11 +18784,10 @@ type Subcontrol struct {
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
-	ControlID string        `json:"controlID"`
-	Owner     *Organization `json:"owner,omitempty"`
-	Control   *Control      `json:"control"`
-	// mapped subcontrols that have a relation to another control or subcontrol
-	MappedControls    []*MappedControl            `json:"mappedControls,omitempty"`
+	ControlID         string                      `json:"controlID"`
+	Owner             *Organization               `json:"owner,omitempty"`
+	Control           *Control                    `json:"control"`
+	MappedControls    *MappedControlConnection    `json:"mappedControls"`
 	Evidence          *EvidenceConnection         `json:"evidence"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Tasks             *TaskConnection             `json:"tasks"`
@@ -18661,7 +18798,7 @@ type Subcontrol struct {
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
 	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
 	ControlOwner *Group `json:"controlOwner,omitempty"`
-	// temporary delegate for the control, used for temporary control ownership
+	// temporary delegate for the subcontrol, used for temporary control ownership
 	Delegate *Group `json:"delegate,omitempty"`
 }
 
@@ -19381,10 +19518,10 @@ type Subscriber struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// email address of the subscriber
@@ -19663,6 +19800,14 @@ type TFASettingEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+// Ordering options for TFASetting connections
+type TFASettingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order TFASettings.
+	Field TFASettingOrderField `json:"field"`
+}
+
 // Return response for updateTFASetting mutation
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
@@ -19789,10 +19934,10 @@ type Task struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -19814,19 +19959,19 @@ type Task struct {
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
-	AssignerID       *string                     `json:"assignerID,omitempty"`
-	Owner            *Organization               `json:"owner,omitempty"`
-	Assigner         *User                       `json:"assigner,omitempty"`
-	Assignee         *User                       `json:"assignee,omitempty"`
-	Comments         *NoteConnection             `json:"comments"`
-	Group            *GroupConnection            `json:"group"`
-	InternalPolicy   *InternalPolicyConnection   `json:"internalPolicy"`
-	Procedure        *ProcedureConnection        `json:"procedure"`
-	Control          *ControlConnection          `json:"control"`
-	ControlObjective *ControlObjectiveConnection `json:"controlObjective"`
-	Subcontrol       *SubcontrolConnection       `json:"subcontrol"`
-	Program          *ProgramConnection          `json:"program"`
-	Evidence         *EvidenceConnection         `json:"evidence"`
+	AssignerID        *string                     `json:"assignerID,omitempty"`
+	Owner             *Organization               `json:"owner,omitempty"`
+	Assigner          *User                       `json:"assigner,omitempty"`
+	Assignee          *User                       `json:"assignee,omitempty"`
+	Comments          *NoteConnection             `json:"comments"`
+	Groups            *GroupConnection            `json:"groups"`
+	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
+	Procedures        *ProcedureConnection        `json:"procedures"`
+	Controls          *ControlConnection          `json:"controls"`
+	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
+	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
+	Programs          *ProgramConnection          `json:"programs"`
+	Evidence          *EvidenceConnection         `json:"evidence"`
 }
 
 func (Task) IsNode() {}
@@ -19876,10 +20021,10 @@ type TaskHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string     `json:"displayID"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -20033,20 +20178,6 @@ type TaskHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -20074,6 +20205,20 @@ type TaskHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -20304,20 +20449,6 @@ type TaskWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// display_id field predicates
-	DisplayID             *string  `json:"displayID,omitempty"`
-	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
-	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
-	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
-	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
-	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
-	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
-	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
-	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
-	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
-	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
-	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -20345,6 +20476,20 @@ type TaskWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -20494,27 +20639,27 @@ type TaskWhereInput struct {
 	// comments edge predicates
 	HasComments     *bool             `json:"hasComments,omitempty"`
 	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
-	// group edge predicates
-	HasGroup     *bool              `json:"hasGroup,omitempty"`
-	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
-	// internal_policy edge predicates
-	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
-	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
-	// procedure edge predicates
-	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
-	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
-	// control_objective edge predicates
-	HasControlObjective     *bool                         `json:"hasControlObjective,omitempty"`
-	HasControlObjectiveWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveWith,omitempty"`
-	// subcontrol edge predicates
-	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
-	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
-	// program edge predicates
-	HasProgram     *bool                `json:"hasProgram,omitempty"`
-	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+	// groups edge predicates
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// procedures edge predicates
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// control_objectives edge predicates
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -21041,6 +21186,9 @@ type UpdateActionPlanInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// the name of the action_plan
 	Name *string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -21061,9 +21209,6 @@ type UpdateActionPlanInput struct {
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
 	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision      *string `json:"revision,omitempty"`
-	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// due date of the action plan
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
@@ -21081,16 +21226,16 @@ type UpdateActionPlanInput struct {
 	ClearOwner       *bool               `json:"clearOwner,omitempty"`
 	AddRiskIDs       []string            `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs    []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisk        *bool               `json:"clearRisk,omitempty"`
+	ClearRisks       *bool               `json:"clearRisks,omitempty"`
 	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
-	ClearControl     *bool               `json:"clearControl,omitempty"`
+	ClearControls    *bool               `json:"clearControls,omitempty"`
 	AddUserIDs       []string            `json:"addUserIDs,omitempty"`
 	RemoveUserIDs    []string            `json:"removeUserIDs,omitempty"`
-	ClearUser        *bool               `json:"clearUser,omitempty"`
+	ClearUsers       *bool               `json:"clearUsers,omitempty"`
 	AddProgramIDs    []string            `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs []string            `json:"removeProgramIDs,omitempty"`
-	ClearProgram     *bool               `json:"clearProgram,omitempty"`
+	ClearPrograms    *bool               `json:"clearPrograms,omitempty"`
 	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -21271,13 +21416,13 @@ type UpdateControlInput struct {
 // UpdateControlObjectiveInput is used for update ControlObjective object.
 // Input was generated by ent.
 type UpdateControlObjectiveInput struct {
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision      *string `json:"revision,omitempty"`
-	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// tags associated with the object
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// the name of the control objective
 	Name *string `json:"name,omitempty"`
 	// the desired outcome or target of the control objective
@@ -21349,7 +21494,7 @@ type UpdateDocumentDataInput struct {
 	TemplateID      *string        `json:"templateID,omitempty"`
 	AddEntityIDs    []string       `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntity     *bool          `json:"clearEntity,omitempty"`
+	ClearEntities   *bool          `json:"clearEntities,omitempty"`
 	AddFileIDs      []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs   []string       `json:"removeFileIDs,omitempty"`
 	ClearFiles      *bool          `json:"clearFiles,omitempty"`
@@ -21429,34 +21574,34 @@ type UpdateEventInput struct {
 	ClearMetadata                *bool          `json:"clearMetadata,omitempty"`
 	AddUserIDs                   []string       `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                []string       `json:"removeUserIDs,omitempty"`
-	ClearUser                    *bool          `json:"clearUser,omitempty"`
+	ClearUsers                   *bool          `json:"clearUsers,omitempty"`
 	AddGroupIDs                  []string       `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs               []string       `json:"removeGroupIDs,omitempty"`
-	ClearGroup                   *bool          `json:"clearGroup,omitempty"`
+	ClearGroups                  *bool          `json:"clearGroups,omitempty"`
 	AddIntegrationIDs            []string       `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs         []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegration             *bool          `json:"clearIntegration,omitempty"`
+	ClearIntegrations            *bool          `json:"clearIntegrations,omitempty"`
 	AddOrganizationIDs           []string       `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs        []string       `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool          `json:"clearOrganization,omitempty"`
+	ClearOrganizations           *bool          `json:"clearOrganizations,omitempty"`
 	AddInviteIDs                 []string       `json:"addInviteIDs,omitempty"`
 	RemoveInviteIDs              []string       `json:"removeInviteIDs,omitempty"`
-	ClearInvite                  *bool          `json:"clearInvite,omitempty"`
+	ClearInvites                 *bool          `json:"clearInvites,omitempty"`
 	AddPersonalAccessTokenIDs    []string       `json:"addPersonalAccessTokenIDs,omitempty"`
 	RemovePersonalAccessTokenIDs []string       `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessToken     *bool          `json:"clearPersonalAccessToken,omitempty"`
-	AddHushIDs                   []string       `json:"addHushIDs,omitempty"`
-	RemoveHushIDs                []string       `json:"removeHushIDs,omitempty"`
-	ClearHush                    *bool          `json:"clearHush,omitempty"`
+	ClearPersonalAccessTokens    *bool          `json:"clearPersonalAccessTokens,omitempty"`
+	AddSecretIDs                 []string       `json:"addSecretIDs,omitempty"`
+	RemoveSecretIDs              []string       `json:"removeSecretIDs,omitempty"`
+	ClearSecrets                 *bool          `json:"clearSecrets,omitempty"`
 	AddSubscriberIDs             []string       `json:"addSubscriberIDs,omitempty"`
 	RemoveSubscriberIDs          []string       `json:"removeSubscriberIDs,omitempty"`
-	ClearSubscriber              *bool          `json:"clearSubscriber,omitempty"`
+	ClearSubscribers             *bool          `json:"clearSubscribers,omitempty"`
 	AddFileIDs                   []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                []string       `json:"removeFileIDs,omitempty"`
-	ClearFile                    *bool          `json:"clearFile,omitempty"`
-	AddOrgsubscriptionIDs        []string       `json:"addOrgsubscriptionIDs,omitempty"`
-	RemoveOrgsubscriptionIDs     []string       `json:"removeOrgsubscriptionIDs,omitempty"`
-	ClearOrgsubscription         *bool          `json:"clearOrgsubscription,omitempty"`
+	ClearFiles                   *bool          `json:"clearFiles,omitempty"`
+	AddOrgSubscriptionIDs        []string       `json:"addOrgSubscriptionIDs,omitempty"`
+	RemoveOrgSubscriptionIDs     []string       `json:"removeOrgSubscriptionIDs,omitempty"`
+	ClearOrgSubscriptions        *bool          `json:"clearOrgSubscriptions,omitempty"`
 }
 
 // UpdateEvidenceInput is used for update Evidence object.
@@ -21561,7 +21706,7 @@ type UpdateFileInput struct {
 	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
 	AddGroupIDs                  []string `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs               []string `json:"removeGroupIDs,omitempty"`
-	ClearGroup                   *bool    `json:"clearGroup,omitempty"`
+	ClearGroups                  *bool    `json:"clearGroups,omitempty"`
 	AddContactIDs                []string `json:"addContactIDs,omitempty"`
 	RemoveContactIDs             []string `json:"removeContactIDs,omitempty"`
 	ClearContact                 *bool    `json:"clearContact,omitempty"`
@@ -21577,18 +21722,18 @@ type UpdateFileInput struct {
 	AddTemplateIDs               []string `json:"addTemplateIDs,omitempty"`
 	RemoveTemplateIDs            []string `json:"removeTemplateIDs,omitempty"`
 	ClearTemplate                *bool    `json:"clearTemplate,omitempty"`
-	AddDocumentDatumIDs          []string `json:"addDocumentDatumIDs,omitempty"`
-	RemoveDocumentDatumIDs       []string `json:"removeDocumentDatumIDs,omitempty"`
-	ClearDocumentData            *bool    `json:"clearDocumentData,omitempty"`
-	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
-	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
+	AddDocumentIDs               []string `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs            []string `json:"removeDocumentIDs,omitempty"`
+	ClearDocument                *bool    `json:"clearDocument,omitempty"`
 	AddProgramIDs                []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs             []string `json:"removeProgramIDs,omitempty"`
 	ClearProgram                 *bool    `json:"clearProgram,omitempty"`
 	AddEvidenceIDs               []string `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs            []string `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                *bool    `json:"clearEvidence,omitempty"`
+	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
+	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -21771,6 +21916,9 @@ type UpdateInternalPolicyInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// the name of the policy
 	Name *string `json:"name,omitempty"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -21789,11 +21937,8 @@ type UpdateInternalPolicyInput struct {
 	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
 	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
-	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
-	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision                  *string             `json:"revision,omitempty"`
-	ClearRevision             *bool               `json:"clearRevision,omitempty"`
+	ReviewFrequency           *enums.Frequency    `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency      *bool               `json:"clearReviewFrequency,omitempty"`
 	OwnerID                   *string             `json:"ownerID,omitempty"`
 	ClearOwner                *bool               `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string            `json:"addBlockedGroupIDs,omitempty"`
@@ -21991,9 +22136,9 @@ type UpdateOrganizationInput struct {
 	AddIntegrationIDs                []string                        `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs             []string                        `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations                *bool                           `json:"clearIntegrations,omitempty"`
-	AddDocumentDatumIDs              []string                        `json:"addDocumentDatumIDs,omitempty"`
-	RemoveDocumentDatumIDs           []string                        `json:"removeDocumentDatumIDs,omitempty"`
-	ClearDocumentData                *bool                           `json:"clearDocumentData,omitempty"`
+	AddDocumentIDs                   []string                        `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs                []string                        `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments                   *bool                           `json:"clearDocuments,omitempty"`
 	AddOrgSubscriptionIDs            []string                        `json:"addOrgSubscriptionIDs,omitempty"`
 	RemoveOrgSubscriptionIDs         []string                        `json:"removeOrgSubscriptionIDs,omitempty"`
 	ClearOrgSubscriptions            *bool                           `json:"clearOrgSubscriptions,omitempty"`
@@ -22116,23 +22261,14 @@ type UpdatePersonalAccessTokenInput struct {
 	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
 	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
 	// whether the token is active
-	IsActive      *bool `json:"isActive,omitempty"`
-	ClearIsActive *bool `json:"clearIsActive,omitempty"`
-	// the reason the token was revoked
-	RevokedReason      *string `json:"revokedReason,omitempty"`
-	ClearRevokedReason *bool   `json:"clearRevokedReason,omitempty"`
-	// the user who revoked the token
-	RevokedBy      *string `json:"revokedBy,omitempty"`
-	ClearRevokedBy *bool   `json:"clearRevokedBy,omitempty"`
-	// when the token was revoked
-	RevokedAt             *time.Time `json:"revokedAt,omitempty"`
-	ClearRevokedAt        *bool      `json:"clearRevokedAt,omitempty"`
-	AddOrganizationIDs    []string   `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs []string   `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganizations    *bool      `json:"clearOrganizations,omitempty"`
-	AddEventIDs           []string   `json:"addEventIDs,omitempty"`
-	RemoveEventIDs        []string   `json:"removeEventIDs,omitempty"`
-	ClearEvents           *bool      `json:"clearEvents,omitempty"`
+	IsActive              *bool    `json:"isActive,omitempty"`
+	ClearIsActive         *bool    `json:"clearIsActive,omitempty"`
+	AddOrganizationIDs    []string `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs []string `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganizations    *bool    `json:"clearOrganizations,omitempty"`
+	AddEventIDs           []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs        []string `json:"removeEventIDs,omitempty"`
+	ClearEvents           *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateProcedureInput is used for update Procedure object.
@@ -22142,6 +22278,9 @@ type UpdateProcedureInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision      *string `json:"revision,omitempty"`
+	ClearRevision *bool   `json:"clearRevision,omitempty"`
 	// the name of the procedure
 	Name *string `json:"name,omitempty"`
 	// status of the procedure, e.g. draft, published, archived, etc.
@@ -22160,11 +22299,8 @@ type UpdateProcedureInput struct {
 	ReviewDue      *time.Time `json:"reviewDue,omitempty"`
 	ClearReviewDue *bool      `json:"clearReviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
-	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
-	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision                *string             `json:"revision,omitempty"`
-	ClearRevision           *bool               `json:"clearRevision,omitempty"`
+	ReviewFrequency         *enums.Frequency    `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency    *bool               `json:"clearReviewFrequency,omitempty"`
 	OwnerID                 *string             `json:"ownerID,omitempty"`
 	ClearOwner              *bool               `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs      []string            `json:"addBlockedGroupIDs,omitempty"`
@@ -22183,6 +22319,9 @@ type UpdateProcedureInput struct {
 	AddInternalPolicyIDs    []string            `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs []string            `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies   *bool               `json:"clearInternalPolicies,omitempty"`
+	AddProgramIDs           []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool               `json:"clearPrograms,omitempty"`
 	AddNarrativeIDs         []string            `json:"addNarrativeIDs,omitempty"`
 	RemoveNarrativeIDs      []string            `json:"removeNarrativeIDs,omitempty"`
 	ClearNarratives         *bool               `json:"clearNarratives,omitempty"`
@@ -22192,9 +22331,6 @@ type UpdateProcedureInput struct {
 	AddTaskIDs              []string            `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs           []string            `json:"removeTaskIDs,omitempty"`
 	ClearTasks              *bool               `json:"clearTasks,omitempty"`
-	AddProgramIDs           []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool               `json:"clearPrograms,omitempty"`
 	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -22328,16 +22464,16 @@ type UpdateRiskInput struct {
 	ClearViewers          *bool    `json:"clearViewers,omitempty"`
 	AddControlIDs         []string `json:"addControlIDs,omitempty"`
 	RemoveControlIDs      []string `json:"removeControlIDs,omitempty"`
-	ClearControl          *bool    `json:"clearControl,omitempty"`
+	ClearControls         *bool    `json:"clearControls,omitempty"`
 	AddProcedureIDs       []string `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs    []string `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure        *bool    `json:"clearProcedure,omitempty"`
-	AddActionPlanIDs      []string `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs   []string `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans      *bool    `json:"clearActionPlans,omitempty"`
+	ClearProcedures       *bool    `json:"clearProcedures,omitempty"`
 	AddProgramIDs         []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs      []string `json:"removeProgramIDs,omitempty"`
 	ClearPrograms         *bool    `json:"clearPrograms,omitempty"`
+	AddActionPlanIDs      []string `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs   []string `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans      *bool    `json:"clearActionPlans,omitempty"`
 	StakeholderID         *string  `json:"stakeholderID,omitempty"`
 	ClearStakeholder      *bool    `json:"clearStakeholder,omitempty"`
 	DelegateID            *string  `json:"delegateID,omitempty"`
@@ -22562,25 +22698,25 @@ type UpdateTaskInput struct {
 	ClearComments             *bool            `json:"clearComments,omitempty"`
 	AddGroupIDs               []string         `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs            []string         `json:"removeGroupIDs,omitempty"`
-	ClearGroup                *bool            `json:"clearGroup,omitempty"`
+	ClearGroups               *bool            `json:"clearGroups,omitempty"`
 	AddInternalPolicyIDs      []string         `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs   []string         `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicy       *bool            `json:"clearInternalPolicy,omitempty"`
+	ClearInternalPolicies     *bool            `json:"clearInternalPolicies,omitempty"`
 	AddProcedureIDs           []string         `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs        []string         `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure            *bool            `json:"clearProcedure,omitempty"`
+	ClearProcedures           *bool            `json:"clearProcedures,omitempty"`
 	AddControlIDs             []string         `json:"addControlIDs,omitempty"`
 	RemoveControlIDs          []string         `json:"removeControlIDs,omitempty"`
-	ClearControl              *bool            `json:"clearControl,omitempty"`
-	AddControlObjectiveIDs    []string         `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string         `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjective     *bool            `json:"clearControlObjective,omitempty"`
+	ClearControls             *bool            `json:"clearControls,omitempty"`
 	AddSubcontrolIDs          []string         `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs       []string         `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrol           *bool            `json:"clearSubcontrol,omitempty"`
+	ClearSubcontrols          *bool            `json:"clearSubcontrols,omitempty"`
+	AddControlObjectiveIDs    []string         `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string         `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool            `json:"clearControlObjectives,omitempty"`
 	AddProgramIDs             []string         `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs          []string         `json:"removeProgramIDs,omitempty"`
-	ClearProgram              *bool            `json:"clearProgram,omitempty"`
+	ClearPrograms             *bool            `json:"clearPrograms,omitempty"`
 	AddEvidenceIDs            []string         `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs         []string         `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence             *bool            `json:"clearEvidence,omitempty"`
@@ -22766,8 +22902,8 @@ type User struct {
 	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	TfaSettings          *TFASettingConnection          `json:"tfaSettings"`
 	Setting              *UserSetting                   `json:"setting"`
-	Groups               []*Group                       `json:"groups,omitempty"`
-	Organizations        []*Organization                `json:"organizations,omitempty"`
+	Groups               *GroupConnection               `json:"groups"`
+	Organizations        *OrganizationConnection        `json:"organizations"`
 	Files                *FileConnection                `json:"files"`
 	AvatarFile           *File                          `json:"avatarFile,omitempty"`
 	Events               *EventConnection               `json:"events"`
@@ -22776,8 +22912,8 @@ type User struct {
 	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
 	Programs             []*Program                     `json:"programs,omitempty"`
-	GroupMemberships     []*GroupMembership             `json:"groupMemberships,omitempty"`
-	OrgMemberships       []*OrgMembership               `json:"orgMemberships,omitempty"`
+	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
+	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
 	ProgramMemberships   []*ProgramMembership           `json:"programMemberships,omitempty"`
 }
 
@@ -23189,11 +23325,11 @@ type UserSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	UserID    *string    `json:"userID,omitempty"`
+	// tags associated with the object
+	Tags   []string `json:"tags,omitempty"`
+	UserID *string  `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
@@ -23255,11 +23391,11 @@ type UserSettingHistory struct {
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	UserID    *string    `json:"userID,omitempty"`
+	Tags   []string `json:"tags,omitempty"`
+	UserID *string  `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
@@ -23294,6 +23430,14 @@ type UserSettingHistoryEdge struct {
 	Node *UserSettingHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// Ordering options for UserSettingHistory connections
+type UserSettingHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order UserSettingHistories.
+	Field UserSettingHistoryOrderField `json:"field"`
 }
 
 // UserSettingHistoryWhereInput is used for filtering UserSettingHistory objects.
@@ -23483,6 +23627,14 @@ type UserSettingHistoryWhereInput struct {
 	IsTfaEnabledNeq    *bool `json:"isTfaEnabledNEQ,omitempty"`
 	IsTfaEnabledIsNil  *bool `json:"isTfaEnabledIsNil,omitempty"`
 	IsTfaEnabledNotNil *bool `json:"isTfaEnabledNotNil,omitempty"`
+}
+
+// Ordering options for UserSetting connections
+type UserSettingOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order UserSettings.
+	Field UserSettingOrderField `json:"field"`
 }
 
 type UserSettingSearchResult struct {
@@ -23975,16 +24127,62 @@ type UserWhereInput struct {
 	HasProgramMembershipsWith []*ProgramMembershipWhereInput `json:"hasProgramMembershipsWith,omitempty"`
 }
 
+// Properties by which APIToken connections can be ordered.
+type APITokenOrderField string
+
+const (
+	APITokenOrderFieldCreatedAt APITokenOrderField = "created_at"
+	APITokenOrderFieldUpdatedAt APITokenOrderField = "updated_at"
+)
+
+var AllAPITokenOrderField = []APITokenOrderField{
+	APITokenOrderFieldCreatedAt,
+	APITokenOrderFieldUpdatedAt,
+}
+
+func (e APITokenOrderField) IsValid() bool {
+	switch e {
+	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e APITokenOrderField) String() string {
+	return string(e)
+}
+
+func (e *APITokenOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = APITokenOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid APITokenOrderField", str)
+	}
+	return nil
+}
+
+func (e APITokenOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which ActionPlanHistory connections can be ordered.
 type ActionPlanHistoryOrderField string
 
 const (
-	ActionPlanHistoryOrderFieldDueDate  ActionPlanHistoryOrderField = "due_date"
-	ActionPlanHistoryOrderFieldPriority ActionPlanHistoryOrderField = "PRIORITY"
-	ActionPlanHistoryOrderFieldSource   ActionPlanHistoryOrderField = "source"
+	ActionPlanHistoryOrderFieldCreatedAt ActionPlanHistoryOrderField = "created_at"
+	ActionPlanHistoryOrderFieldUpdatedAt ActionPlanHistoryOrderField = "updated_at"
+	ActionPlanHistoryOrderFieldDueDate   ActionPlanHistoryOrderField = "due_date"
+	ActionPlanHistoryOrderFieldPriority  ActionPlanHistoryOrderField = "PRIORITY"
+	ActionPlanHistoryOrderFieldSource    ActionPlanHistoryOrderField = "source"
 )
 
 var AllActionPlanHistoryOrderField = []ActionPlanHistoryOrderField{
+	ActionPlanHistoryOrderFieldCreatedAt,
+	ActionPlanHistoryOrderFieldUpdatedAt,
 	ActionPlanHistoryOrderFieldDueDate,
 	ActionPlanHistoryOrderFieldPriority,
 	ActionPlanHistoryOrderFieldSource,
@@ -23992,7 +24190,7 @@ var AllActionPlanHistoryOrderField = []ActionPlanHistoryOrderField{
 
 func (e ActionPlanHistoryOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanHistoryOrderFieldDueDate, ActionPlanHistoryOrderFieldPriority, ActionPlanHistoryOrderFieldSource:
+	case ActionPlanHistoryOrderFieldCreatedAt, ActionPlanHistoryOrderFieldUpdatedAt, ActionPlanHistoryOrderFieldDueDate, ActionPlanHistoryOrderFieldPriority, ActionPlanHistoryOrderFieldSource:
 		return true
 	}
 	return false
@@ -24023,12 +24221,16 @@ func (e ActionPlanHistoryOrderField) MarshalGQL(w io.Writer) {
 type ActionPlanOrderField string
 
 const (
-	ActionPlanOrderFieldDueDate  ActionPlanOrderField = "due_date"
-	ActionPlanOrderFieldPriority ActionPlanOrderField = "PRIORITY"
-	ActionPlanOrderFieldSource   ActionPlanOrderField = "source"
+	ActionPlanOrderFieldCreatedAt ActionPlanOrderField = "created_at"
+	ActionPlanOrderFieldUpdatedAt ActionPlanOrderField = "updated_at"
+	ActionPlanOrderFieldDueDate   ActionPlanOrderField = "due_date"
+	ActionPlanOrderFieldPriority  ActionPlanOrderField = "PRIORITY"
+	ActionPlanOrderFieldSource    ActionPlanOrderField = "source"
 )
 
 var AllActionPlanOrderField = []ActionPlanOrderField{
+	ActionPlanOrderFieldCreatedAt,
+	ActionPlanOrderFieldUpdatedAt,
 	ActionPlanOrderFieldDueDate,
 	ActionPlanOrderFieldPriority,
 	ActionPlanOrderFieldSource,
@@ -24036,7 +24238,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 
 func (e ActionPlanOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
+	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
 		return true
 	}
 	return false
@@ -24067,14 +24269,18 @@ func (e ActionPlanOrderField) MarshalGQL(w io.Writer) {
 type ContactHistoryOrderField string
 
 const (
-	ContactHistoryOrderFieldFullName ContactHistoryOrderField = "full_name"
-	ContactHistoryOrderFieldTitle    ContactHistoryOrderField = "title"
-	ContactHistoryOrderFieldCompany  ContactHistoryOrderField = "company"
-	ContactHistoryOrderFieldEmail    ContactHistoryOrderField = "email"
-	ContactHistoryOrderFieldStatus   ContactHistoryOrderField = "STATUS"
+	ContactHistoryOrderFieldCreatedAt ContactHistoryOrderField = "created_at"
+	ContactHistoryOrderFieldUpdatedAt ContactHistoryOrderField = "updated_at"
+	ContactHistoryOrderFieldFullName  ContactHistoryOrderField = "full_name"
+	ContactHistoryOrderFieldTitle     ContactHistoryOrderField = "title"
+	ContactHistoryOrderFieldCompany   ContactHistoryOrderField = "company"
+	ContactHistoryOrderFieldEmail     ContactHistoryOrderField = "email"
+	ContactHistoryOrderFieldStatus    ContactHistoryOrderField = "STATUS"
 )
 
 var AllContactHistoryOrderField = []ContactHistoryOrderField{
+	ContactHistoryOrderFieldCreatedAt,
+	ContactHistoryOrderFieldUpdatedAt,
 	ContactHistoryOrderFieldFullName,
 	ContactHistoryOrderFieldTitle,
 	ContactHistoryOrderFieldCompany,
@@ -24084,7 +24290,7 @@ var AllContactHistoryOrderField = []ContactHistoryOrderField{
 
 func (e ContactHistoryOrderField) IsValid() bool {
 	switch e {
-	case ContactHistoryOrderFieldFullName, ContactHistoryOrderFieldTitle, ContactHistoryOrderFieldCompany, ContactHistoryOrderFieldEmail, ContactHistoryOrderFieldStatus:
+	case ContactHistoryOrderFieldCreatedAt, ContactHistoryOrderFieldUpdatedAt, ContactHistoryOrderFieldFullName, ContactHistoryOrderFieldTitle, ContactHistoryOrderFieldCompany, ContactHistoryOrderFieldEmail, ContactHistoryOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24115,14 +24321,18 @@ func (e ContactHistoryOrderField) MarshalGQL(w io.Writer) {
 type ContactOrderField string
 
 const (
-	ContactOrderFieldFullName ContactOrderField = "full_name"
-	ContactOrderFieldTitle    ContactOrderField = "title"
-	ContactOrderFieldCompany  ContactOrderField = "company"
-	ContactOrderFieldEmail    ContactOrderField = "email"
-	ContactOrderFieldStatus   ContactOrderField = "STATUS"
+	ContactOrderFieldCreatedAt ContactOrderField = "created_at"
+	ContactOrderFieldUpdatedAt ContactOrderField = "updated_at"
+	ContactOrderFieldFullName  ContactOrderField = "full_name"
+	ContactOrderFieldTitle     ContactOrderField = "title"
+	ContactOrderFieldCompany   ContactOrderField = "company"
+	ContactOrderFieldEmail     ContactOrderField = "email"
+	ContactOrderFieldStatus    ContactOrderField = "STATUS"
 )
 
 var AllContactOrderField = []ContactOrderField{
+	ContactOrderFieldCreatedAt,
+	ContactOrderFieldUpdatedAt,
 	ContactOrderFieldFullName,
 	ContactOrderFieldTitle,
 	ContactOrderFieldCompany,
@@ -24132,7 +24342,7 @@ var AllContactOrderField = []ContactOrderField{
 
 func (e ContactOrderField) IsValid() bool {
 	switch e {
-	case ContactOrderFieldFullName, ContactOrderFieldTitle, ContactOrderFieldCompany, ContactOrderFieldEmail, ContactOrderFieldStatus:
+	case ContactOrderFieldCreatedAt, ContactOrderFieldUpdatedAt, ContactOrderFieldFullName, ContactOrderFieldTitle, ContactOrderFieldCompany, ContactOrderFieldEmail, ContactOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24163,6 +24373,8 @@ func (e ContactOrderField) MarshalGQL(w io.Writer) {
 type ControlHistoryOrderField string
 
 const (
+	ControlHistoryOrderFieldCreatedAt   ControlHistoryOrderField = "created_at"
+	ControlHistoryOrderFieldUpdatedAt   ControlHistoryOrderField = "updated_at"
 	ControlHistoryOrderFieldStatus      ControlHistoryOrderField = "status"
 	ControlHistoryOrderFieldSource      ControlHistoryOrderField = "SOURCE"
 	ControlHistoryOrderFieldControlType ControlHistoryOrderField = "CONTROL_TYPE"
@@ -24171,6 +24383,8 @@ const (
 )
 
 var AllControlHistoryOrderField = []ControlHistoryOrderField{
+	ControlHistoryOrderFieldCreatedAt,
+	ControlHistoryOrderFieldUpdatedAt,
 	ControlHistoryOrderFieldStatus,
 	ControlHistoryOrderFieldSource,
 	ControlHistoryOrderFieldControlType,
@@ -24180,7 +24394,7 @@ var AllControlHistoryOrderField = []ControlHistoryOrderField{
 
 func (e ControlHistoryOrderField) IsValid() bool {
 	switch e {
-	case ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory:
+	case ControlHistoryOrderFieldCreatedAt, ControlHistoryOrderFieldUpdatedAt, ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory:
 		return true
 	}
 	return false
@@ -24211,6 +24425,8 @@ func (e ControlHistoryOrderField) MarshalGQL(w io.Writer) {
 type ControlImplementationHistoryOrderField string
 
 const (
+	ControlImplementationHistoryOrderFieldCreatedAt          ControlImplementationHistoryOrderField = "created_at"
+	ControlImplementationHistoryOrderFieldUpdatedAt          ControlImplementationHistoryOrderField = "updated_at"
 	ControlImplementationHistoryOrderFieldStatus             ControlImplementationHistoryOrderField = "STATUS"
 	ControlImplementationHistoryOrderFieldImplementationDate ControlImplementationHistoryOrderField = "implementation_date"
 	ControlImplementationHistoryOrderFieldVerified           ControlImplementationHistoryOrderField = "verified"
@@ -24218,6 +24434,8 @@ const (
 )
 
 var AllControlImplementationHistoryOrderField = []ControlImplementationHistoryOrderField{
+	ControlImplementationHistoryOrderFieldCreatedAt,
+	ControlImplementationHistoryOrderFieldUpdatedAt,
 	ControlImplementationHistoryOrderFieldStatus,
 	ControlImplementationHistoryOrderFieldImplementationDate,
 	ControlImplementationHistoryOrderFieldVerified,
@@ -24226,7 +24444,7 @@ var AllControlImplementationHistoryOrderField = []ControlImplementationHistoryOr
 
 func (e ControlImplementationHistoryOrderField) IsValid() bool {
 	switch e {
-	case ControlImplementationHistoryOrderFieldStatus, ControlImplementationHistoryOrderFieldImplementationDate, ControlImplementationHistoryOrderFieldVerified, ControlImplementationHistoryOrderFieldVerificationDate:
+	case ControlImplementationHistoryOrderFieldCreatedAt, ControlImplementationHistoryOrderFieldUpdatedAt, ControlImplementationHistoryOrderFieldStatus, ControlImplementationHistoryOrderFieldImplementationDate, ControlImplementationHistoryOrderFieldVerified, ControlImplementationHistoryOrderFieldVerificationDate:
 		return true
 	}
 	return false
@@ -24257,6 +24475,8 @@ func (e ControlImplementationHistoryOrderField) MarshalGQL(w io.Writer) {
 type ControlImplementationOrderField string
 
 const (
+	ControlImplementationOrderFieldCreatedAt          ControlImplementationOrderField = "created_at"
+	ControlImplementationOrderFieldUpdatedAt          ControlImplementationOrderField = "updated_at"
 	ControlImplementationOrderFieldStatus             ControlImplementationOrderField = "STATUS"
 	ControlImplementationOrderFieldImplementationDate ControlImplementationOrderField = "implementation_date"
 	ControlImplementationOrderFieldVerified           ControlImplementationOrderField = "verified"
@@ -24264,6 +24484,8 @@ const (
 )
 
 var AllControlImplementationOrderField = []ControlImplementationOrderField{
+	ControlImplementationOrderFieldCreatedAt,
+	ControlImplementationOrderFieldUpdatedAt,
 	ControlImplementationOrderFieldStatus,
 	ControlImplementationOrderFieldImplementationDate,
 	ControlImplementationOrderFieldVerified,
@@ -24272,7 +24494,7 @@ var AllControlImplementationOrderField = []ControlImplementationOrderField{
 
 func (e ControlImplementationOrderField) IsValid() bool {
 	switch e {
-	case ControlImplementationOrderFieldStatus, ControlImplementationOrderFieldImplementationDate, ControlImplementationOrderFieldVerified, ControlImplementationOrderFieldVerificationDate:
+	case ControlImplementationOrderFieldCreatedAt, ControlImplementationOrderFieldUpdatedAt, ControlImplementationOrderFieldStatus, ControlImplementationOrderFieldImplementationDate, ControlImplementationOrderFieldVerified, ControlImplementationOrderFieldVerificationDate:
 		return true
 	}
 	return false
@@ -24303,6 +24525,8 @@ func (e ControlImplementationOrderField) MarshalGQL(w io.Writer) {
 type ControlObjectiveHistoryOrderField string
 
 const (
+	ControlObjectiveHistoryOrderFieldCreatedAt            ControlObjectiveHistoryOrderField = "created_at"
+	ControlObjectiveHistoryOrderFieldUpdatedAt            ControlObjectiveHistoryOrderField = "updated_at"
 	ControlObjectiveHistoryOrderFieldName                 ControlObjectiveHistoryOrderField = "name"
 	ControlObjectiveHistoryOrderFieldStatus               ControlObjectiveHistoryOrderField = "status"
 	ControlObjectiveHistoryOrderFieldSource               ControlObjectiveHistoryOrderField = "SOURCE"
@@ -24312,6 +24536,8 @@ const (
 )
 
 var AllControlObjectiveHistoryOrderField = []ControlObjectiveHistoryOrderField{
+	ControlObjectiveHistoryOrderFieldCreatedAt,
+	ControlObjectiveHistoryOrderFieldUpdatedAt,
 	ControlObjectiveHistoryOrderFieldName,
 	ControlObjectiveHistoryOrderFieldStatus,
 	ControlObjectiveHistoryOrderFieldSource,
@@ -24322,7 +24548,7 @@ var AllControlObjectiveHistoryOrderField = []ControlObjectiveHistoryOrderField{
 
 func (e ControlObjectiveHistoryOrderField) IsValid() bool {
 	switch e {
-	case ControlObjectiveHistoryOrderFieldName, ControlObjectiveHistoryOrderFieldStatus, ControlObjectiveHistoryOrderFieldSource, ControlObjectiveHistoryOrderFieldControlObjectiveType, ControlObjectiveHistoryOrderFieldCategory, ControlObjectiveHistoryOrderFieldSubcategory:
+	case ControlObjectiveHistoryOrderFieldCreatedAt, ControlObjectiveHistoryOrderFieldUpdatedAt, ControlObjectiveHistoryOrderFieldName, ControlObjectiveHistoryOrderFieldStatus, ControlObjectiveHistoryOrderFieldSource, ControlObjectiveHistoryOrderFieldControlObjectiveType, ControlObjectiveHistoryOrderFieldCategory, ControlObjectiveHistoryOrderFieldSubcategory:
 		return true
 	}
 	return false
@@ -24353,6 +24579,8 @@ func (e ControlObjectiveHistoryOrderField) MarshalGQL(w io.Writer) {
 type ControlObjectiveOrderField string
 
 const (
+	ControlObjectiveOrderFieldCreatedAt            ControlObjectiveOrderField = "created_at"
+	ControlObjectiveOrderFieldUpdatedAt            ControlObjectiveOrderField = "updated_at"
 	ControlObjectiveOrderFieldName                 ControlObjectiveOrderField = "name"
 	ControlObjectiveOrderFieldStatus               ControlObjectiveOrderField = "status"
 	ControlObjectiveOrderFieldSource               ControlObjectiveOrderField = "SOURCE"
@@ -24362,6 +24590,8 @@ const (
 )
 
 var AllControlObjectiveOrderField = []ControlObjectiveOrderField{
+	ControlObjectiveOrderFieldCreatedAt,
+	ControlObjectiveOrderFieldUpdatedAt,
 	ControlObjectiveOrderFieldName,
 	ControlObjectiveOrderFieldStatus,
 	ControlObjectiveOrderFieldSource,
@@ -24372,7 +24602,7 @@ var AllControlObjectiveOrderField = []ControlObjectiveOrderField{
 
 func (e ControlObjectiveOrderField) IsValid() bool {
 	switch e {
-	case ControlObjectiveOrderFieldName, ControlObjectiveOrderFieldStatus, ControlObjectiveOrderFieldSource, ControlObjectiveOrderFieldControlObjectiveType, ControlObjectiveOrderFieldCategory, ControlObjectiveOrderFieldSubcategory:
+	case ControlObjectiveOrderFieldCreatedAt, ControlObjectiveOrderFieldUpdatedAt, ControlObjectiveOrderFieldName, ControlObjectiveOrderFieldStatus, ControlObjectiveOrderFieldSource, ControlObjectiveOrderFieldControlObjectiveType, ControlObjectiveOrderFieldCategory, ControlObjectiveOrderFieldSubcategory:
 		return true
 	}
 	return false
@@ -24403,6 +24633,8 @@ func (e ControlObjectiveOrderField) MarshalGQL(w io.Writer) {
 type ControlOrderField string
 
 const (
+	ControlOrderFieldCreatedAt   ControlOrderField = "created_at"
+	ControlOrderFieldUpdatedAt   ControlOrderField = "updated_at"
 	ControlOrderFieldStatus      ControlOrderField = "status"
 	ControlOrderFieldSource      ControlOrderField = "SOURCE"
 	ControlOrderFieldControlType ControlOrderField = "CONTROL_TYPE"
@@ -24411,6 +24643,8 @@ const (
 )
 
 var AllControlOrderField = []ControlOrderField{
+	ControlOrderFieldCreatedAt,
+	ControlOrderFieldUpdatedAt,
 	ControlOrderFieldStatus,
 	ControlOrderFieldSource,
 	ControlOrderFieldControlType,
@@ -24420,7 +24654,7 @@ var AllControlOrderField = []ControlOrderField{
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory:
 		return true
 	}
 	return false
@@ -24447,16 +24681,104 @@ func (e ControlOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which DocumentDataHistory connections can be ordered.
+type DocumentDataHistoryOrderField string
+
+const (
+	DocumentDataHistoryOrderFieldCreatedAt DocumentDataHistoryOrderField = "created_at"
+	DocumentDataHistoryOrderFieldUpdatedAt DocumentDataHistoryOrderField = "updated_at"
+)
+
+var AllDocumentDataHistoryOrderField = []DocumentDataHistoryOrderField{
+	DocumentDataHistoryOrderFieldCreatedAt,
+	DocumentDataHistoryOrderFieldUpdatedAt,
+}
+
+func (e DocumentDataHistoryOrderField) IsValid() bool {
+	switch e {
+	case DocumentDataHistoryOrderFieldCreatedAt, DocumentDataHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e DocumentDataHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *DocumentDataHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DocumentDataHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DocumentDataHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e DocumentDataHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which DocumentData connections can be ordered.
+type DocumentDataOrderField string
+
+const (
+	DocumentDataOrderFieldCreatedAt DocumentDataOrderField = "created_at"
+	DocumentDataOrderFieldUpdatedAt DocumentDataOrderField = "updated_at"
+)
+
+var AllDocumentDataOrderField = []DocumentDataOrderField{
+	DocumentDataOrderFieldCreatedAt,
+	DocumentDataOrderFieldUpdatedAt,
+}
+
+func (e DocumentDataOrderField) IsValid() bool {
+	switch e {
+	case DocumentDataOrderFieldCreatedAt, DocumentDataOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e DocumentDataOrderField) String() string {
+	return string(e)
+}
+
+func (e *DocumentDataOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DocumentDataOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DocumentDataOrderField", str)
+	}
+	return nil
+}
+
+func (e DocumentDataOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which EntityHistory connections can be ordered.
 type EntityHistoryOrderField string
 
 const (
+	EntityHistoryOrderFieldCreatedAt   EntityHistoryOrderField = "created_at"
+	EntityHistoryOrderFieldUpdatedAt   EntityHistoryOrderField = "updated_at"
 	EntityHistoryOrderFieldName        EntityHistoryOrderField = "name"
 	EntityHistoryOrderFieldDisplayName EntityHistoryOrderField = "display_name"
 	EntityHistoryOrderFieldStatus      EntityHistoryOrderField = "status"
 )
 
 var AllEntityHistoryOrderField = []EntityHistoryOrderField{
+	EntityHistoryOrderFieldCreatedAt,
+	EntityHistoryOrderFieldUpdatedAt,
 	EntityHistoryOrderFieldName,
 	EntityHistoryOrderFieldDisplayName,
 	EntityHistoryOrderFieldStatus,
@@ -24464,7 +24786,7 @@ var AllEntityHistoryOrderField = []EntityHistoryOrderField{
 
 func (e EntityHistoryOrderField) IsValid() bool {
 	switch e {
-	case EntityHistoryOrderFieldName, EntityHistoryOrderFieldDisplayName, EntityHistoryOrderFieldStatus:
+	case EntityHistoryOrderFieldCreatedAt, EntityHistoryOrderFieldUpdatedAt, EntityHistoryOrderFieldName, EntityHistoryOrderFieldDisplayName, EntityHistoryOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24495,12 +24817,16 @@ func (e EntityHistoryOrderField) MarshalGQL(w io.Writer) {
 type EntityOrderField string
 
 const (
+	EntityOrderFieldCreatedAt   EntityOrderField = "created_at"
+	EntityOrderFieldUpdatedAt   EntityOrderField = "updated_at"
 	EntityOrderFieldName        EntityOrderField = "name"
 	EntityOrderFieldDisplayName EntityOrderField = "display_name"
 	EntityOrderFieldStatus      EntityOrderField = "status"
 )
 
 var AllEntityOrderField = []EntityOrderField{
+	EntityOrderFieldCreatedAt,
+	EntityOrderFieldUpdatedAt,
 	EntityOrderFieldName,
 	EntityOrderFieldDisplayName,
 	EntityOrderFieldStatus,
@@ -24508,7 +24834,7 @@ var AllEntityOrderField = []EntityOrderField{
 
 func (e EntityOrderField) IsValid() bool {
 	switch e {
-	case EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus:
+	case EntityOrderFieldCreatedAt, EntityOrderFieldUpdatedAt, EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24539,16 +24865,20 @@ func (e EntityOrderField) MarshalGQL(w io.Writer) {
 type EntityTypeHistoryOrderField string
 
 const (
-	EntityTypeHistoryOrderFieldName EntityTypeHistoryOrderField = "name"
+	EntityTypeHistoryOrderFieldCreatedAt EntityTypeHistoryOrderField = "created_at"
+	EntityTypeHistoryOrderFieldUpdatedAt EntityTypeHistoryOrderField = "updated_at"
+	EntityTypeHistoryOrderFieldName      EntityTypeHistoryOrderField = "name"
 )
 
 var AllEntityTypeHistoryOrderField = []EntityTypeHistoryOrderField{
+	EntityTypeHistoryOrderFieldCreatedAt,
+	EntityTypeHistoryOrderFieldUpdatedAt,
 	EntityTypeHistoryOrderFieldName,
 }
 
 func (e EntityTypeHistoryOrderField) IsValid() bool {
 	switch e {
-	case EntityTypeHistoryOrderFieldName:
+	case EntityTypeHistoryOrderFieldCreatedAt, EntityTypeHistoryOrderFieldUpdatedAt, EntityTypeHistoryOrderFieldName:
 		return true
 	}
 	return false
@@ -24579,16 +24909,20 @@ func (e EntityTypeHistoryOrderField) MarshalGQL(w io.Writer) {
 type EntityTypeOrderField string
 
 const (
-	EntityTypeOrderFieldName EntityTypeOrderField = "name"
+	EntityTypeOrderFieldCreatedAt EntityTypeOrderField = "created_at"
+	EntityTypeOrderFieldUpdatedAt EntityTypeOrderField = "updated_at"
+	EntityTypeOrderFieldName      EntityTypeOrderField = "name"
 )
 
 var AllEntityTypeOrderField = []EntityTypeOrderField{
+	EntityTypeOrderFieldCreatedAt,
+	EntityTypeOrderFieldUpdatedAt,
 	EntityTypeOrderFieldName,
 }
 
 func (e EntityTypeOrderField) IsValid() bool {
 	switch e {
-	case EntityTypeOrderFieldName:
+	case EntityTypeOrderFieldCreatedAt, EntityTypeOrderFieldUpdatedAt, EntityTypeOrderFieldName:
 		return true
 	}
 	return false
@@ -24615,10 +24949,96 @@ func (e EntityTypeOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which EventHistory connections can be ordered.
+type EventHistoryOrderField string
+
+const (
+	EventHistoryOrderFieldCreatedAt EventHistoryOrderField = "created_at"
+	EventHistoryOrderFieldUpdatedAt EventHistoryOrderField = "updated_at"
+)
+
+var AllEventHistoryOrderField = []EventHistoryOrderField{
+	EventHistoryOrderFieldCreatedAt,
+	EventHistoryOrderFieldUpdatedAt,
+}
+
+func (e EventHistoryOrderField) IsValid() bool {
+	switch e {
+	case EventHistoryOrderFieldCreatedAt, EventHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e EventHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *EventHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EventHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EventHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e EventHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Event connections can be ordered.
+type EventOrderField string
+
+const (
+	EventOrderFieldCreatedAt EventOrderField = "created_at"
+	EventOrderFieldUpdatedAt EventOrderField = "updated_at"
+)
+
+var AllEventOrderField = []EventOrderField{
+	EventOrderFieldCreatedAt,
+	EventOrderFieldUpdatedAt,
+}
+
+func (e EventOrderField) IsValid() bool {
+	switch e {
+	case EventOrderFieldCreatedAt, EventOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e EventOrderField) String() string {
+	return string(e)
+}
+
+func (e *EventOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EventOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EventOrderField", str)
+	}
+	return nil
+}
+
+func (e EventOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which EvidenceHistory connections can be ordered.
 type EvidenceHistoryOrderField string
 
 const (
+	EvidenceHistoryOrderFieldCreatedAt    EvidenceHistoryOrderField = "created_at"
+	EvidenceHistoryOrderFieldUpdatedAt    EvidenceHistoryOrderField = "updated_at"
 	EvidenceHistoryOrderFieldName         EvidenceHistoryOrderField = "name"
 	EvidenceHistoryOrderFieldCreationDate EvidenceHistoryOrderField = "creation_date"
 	EvidenceHistoryOrderFieldRenewalDate  EvidenceHistoryOrderField = "renewal_date"
@@ -24626,6 +25046,8 @@ const (
 )
 
 var AllEvidenceHistoryOrderField = []EvidenceHistoryOrderField{
+	EvidenceHistoryOrderFieldCreatedAt,
+	EvidenceHistoryOrderFieldUpdatedAt,
 	EvidenceHistoryOrderFieldName,
 	EvidenceHistoryOrderFieldCreationDate,
 	EvidenceHistoryOrderFieldRenewalDate,
@@ -24634,7 +25056,7 @@ var AllEvidenceHistoryOrderField = []EvidenceHistoryOrderField{
 
 func (e EvidenceHistoryOrderField) IsValid() bool {
 	switch e {
-	case EvidenceHistoryOrderFieldName, EvidenceHistoryOrderFieldCreationDate, EvidenceHistoryOrderFieldRenewalDate, EvidenceHistoryOrderFieldStatus:
+	case EvidenceHistoryOrderFieldCreatedAt, EvidenceHistoryOrderFieldUpdatedAt, EvidenceHistoryOrderFieldName, EvidenceHistoryOrderFieldCreationDate, EvidenceHistoryOrderFieldRenewalDate, EvidenceHistoryOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24665,6 +25087,8 @@ func (e EvidenceHistoryOrderField) MarshalGQL(w io.Writer) {
 type EvidenceOrderField string
 
 const (
+	EvidenceOrderFieldCreatedAt    EvidenceOrderField = "created_at"
+	EvidenceOrderFieldUpdatedAt    EvidenceOrderField = "updated_at"
 	EvidenceOrderFieldName         EvidenceOrderField = "name"
 	EvidenceOrderFieldCreationDate EvidenceOrderField = "creation_date"
 	EvidenceOrderFieldRenewalDate  EvidenceOrderField = "renewal_date"
@@ -24672,6 +25096,8 @@ const (
 )
 
 var AllEvidenceOrderField = []EvidenceOrderField{
+	EvidenceOrderFieldCreatedAt,
+	EvidenceOrderFieldUpdatedAt,
 	EvidenceOrderFieldName,
 	EvidenceOrderFieldCreationDate,
 	EvidenceOrderFieldRenewalDate,
@@ -24680,7 +25106,7 @@ var AllEvidenceOrderField = []EvidenceOrderField{
 
 func (e EvidenceOrderField) IsValid() bool {
 	switch e {
-	case EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus:
+	case EvidenceOrderFieldCreatedAt, EvidenceOrderFieldUpdatedAt, EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus:
 		return true
 	}
 	return false
@@ -24707,22 +25133,110 @@ func (e EvidenceOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which FileHistory connections can be ordered.
+type FileHistoryOrderField string
+
+const (
+	FileHistoryOrderFieldCreatedAt FileHistoryOrderField = "created_at"
+	FileHistoryOrderFieldUpdatedAt FileHistoryOrderField = "updated_at"
+)
+
+var AllFileHistoryOrderField = []FileHistoryOrderField{
+	FileHistoryOrderFieldCreatedAt,
+	FileHistoryOrderFieldUpdatedAt,
+}
+
+func (e FileHistoryOrderField) IsValid() bool {
+	switch e {
+	case FileHistoryOrderFieldCreatedAt, FileHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e FileHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *FileHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FileHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FileHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e FileHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which File connections can be ordered.
+type FileOrderField string
+
+const (
+	FileOrderFieldCreatedAt FileOrderField = "created_at"
+	FileOrderFieldUpdatedAt FileOrderField = "updated_at"
+)
+
+var AllFileOrderField = []FileOrderField{
+	FileOrderFieldCreatedAt,
+	FileOrderFieldUpdatedAt,
+}
+
+func (e FileOrderField) IsValid() bool {
+	switch e {
+	case FileOrderFieldCreatedAt, FileOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e FileOrderField) String() string {
+	return string(e)
+}
+
+func (e *FileOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FileOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FileOrderField", str)
+	}
+	return nil
+}
+
+func (e FileOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which GroupHistory connections can be ordered.
 type GroupHistoryOrderField string
 
 const (
+	GroupHistoryOrderFieldCreatedAt   GroupHistoryOrderField = "created_at"
+	GroupHistoryOrderFieldUpdatedAt   GroupHistoryOrderField = "updated_at"
 	GroupHistoryOrderFieldName        GroupHistoryOrderField = "name"
 	GroupHistoryOrderFieldDisplayName GroupHistoryOrderField = "display_name"
 )
 
 var AllGroupHistoryOrderField = []GroupHistoryOrderField{
+	GroupHistoryOrderFieldCreatedAt,
+	GroupHistoryOrderFieldUpdatedAt,
 	GroupHistoryOrderFieldName,
 	GroupHistoryOrderFieldDisplayName,
 }
 
 func (e GroupHistoryOrderField) IsValid() bool {
 	switch e {
-	case GroupHistoryOrderFieldName, GroupHistoryOrderFieldDisplayName:
+	case GroupHistoryOrderFieldCreatedAt, GroupHistoryOrderFieldUpdatedAt, GroupHistoryOrderFieldName, GroupHistoryOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -24753,16 +25267,20 @@ func (e GroupHistoryOrderField) MarshalGQL(w io.Writer) {
 type GroupMembershipHistoryOrderField string
 
 const (
-	GroupMembershipHistoryOrderFieldRole GroupMembershipHistoryOrderField = "ROLE"
+	GroupMembershipHistoryOrderFieldCreatedAt GroupMembershipHistoryOrderField = "created_at"
+	GroupMembershipHistoryOrderFieldUpdatedAt GroupMembershipHistoryOrderField = "updated_at"
+	GroupMembershipHistoryOrderFieldRole      GroupMembershipHistoryOrderField = "ROLE"
 )
 
 var AllGroupMembershipHistoryOrderField = []GroupMembershipHistoryOrderField{
+	GroupMembershipHistoryOrderFieldCreatedAt,
+	GroupMembershipHistoryOrderFieldUpdatedAt,
 	GroupMembershipHistoryOrderFieldRole,
 }
 
 func (e GroupMembershipHistoryOrderField) IsValid() bool {
 	switch e {
-	case GroupMembershipHistoryOrderFieldRole:
+	case GroupMembershipHistoryOrderFieldCreatedAt, GroupMembershipHistoryOrderFieldUpdatedAt, GroupMembershipHistoryOrderFieldRole:
 		return true
 	}
 	return false
@@ -24793,16 +25311,20 @@ func (e GroupMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
 type GroupMembershipOrderField string
 
 const (
-	GroupMembershipOrderFieldRole GroupMembershipOrderField = "ROLE"
+	GroupMembershipOrderFieldCreatedAt GroupMembershipOrderField = "created_at"
+	GroupMembershipOrderFieldUpdatedAt GroupMembershipOrderField = "updated_at"
+	GroupMembershipOrderFieldRole      GroupMembershipOrderField = "ROLE"
 )
 
 var AllGroupMembershipOrderField = []GroupMembershipOrderField{
+	GroupMembershipOrderFieldCreatedAt,
+	GroupMembershipOrderFieldUpdatedAt,
 	GroupMembershipOrderFieldRole,
 }
 
 func (e GroupMembershipOrderField) IsValid() bool {
 	switch e {
-	case GroupMembershipOrderFieldRole:
+	case GroupMembershipOrderFieldCreatedAt, GroupMembershipOrderFieldUpdatedAt, GroupMembershipOrderFieldRole:
 		return true
 	}
 	return false
@@ -24833,18 +25355,22 @@ func (e GroupMembershipOrderField) MarshalGQL(w io.Writer) {
 type GroupOrderField string
 
 const (
+	GroupOrderFieldCreatedAt   GroupOrderField = "created_at"
+	GroupOrderFieldUpdatedAt   GroupOrderField = "updated_at"
 	GroupOrderFieldName        GroupOrderField = "name"
 	GroupOrderFieldDisplayName GroupOrderField = "display_name"
 )
 
 var AllGroupOrderField = []GroupOrderField{
+	GroupOrderFieldCreatedAt,
+	GroupOrderFieldUpdatedAt,
 	GroupOrderFieldName,
 	GroupOrderFieldDisplayName,
 }
 
 func (e GroupOrderField) IsValid() bool {
 	switch e {
-	case GroupOrderFieldName, GroupOrderFieldDisplayName:
+	case GroupOrderFieldCreatedAt, GroupOrderFieldUpdatedAt, GroupOrderFieldName, GroupOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -24871,22 +25397,110 @@ func (e GroupOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which GroupSettingHistory connections can be ordered.
+type GroupSettingHistoryOrderField string
+
+const (
+	GroupSettingHistoryOrderFieldCreatedAt GroupSettingHistoryOrderField = "created_at"
+	GroupSettingHistoryOrderFieldUpdatedAt GroupSettingHistoryOrderField = "updated_at"
+)
+
+var AllGroupSettingHistoryOrderField = []GroupSettingHistoryOrderField{
+	GroupSettingHistoryOrderFieldCreatedAt,
+	GroupSettingHistoryOrderFieldUpdatedAt,
+}
+
+func (e GroupSettingHistoryOrderField) IsValid() bool {
+	switch e {
+	case GroupSettingHistoryOrderFieldCreatedAt, GroupSettingHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e GroupSettingHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupSettingHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupSettingHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupSettingHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupSettingHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which GroupSetting connections can be ordered.
+type GroupSettingOrderField string
+
+const (
+	GroupSettingOrderFieldCreatedAt GroupSettingOrderField = "created_at"
+	GroupSettingOrderFieldUpdatedAt GroupSettingOrderField = "updated_at"
+)
+
+var AllGroupSettingOrderField = []GroupSettingOrderField{
+	GroupSettingOrderFieldCreatedAt,
+	GroupSettingOrderFieldUpdatedAt,
+}
+
+func (e GroupSettingOrderField) IsValid() bool {
+	switch e {
+	case GroupSettingOrderFieldCreatedAt, GroupSettingOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e GroupSettingOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupSettingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupSettingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupSettingOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupSettingOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which HushHistory connections can be ordered.
 type HushHistoryOrderField string
 
 const (
-	HushHistoryOrderFieldName HushHistoryOrderField = "name"
-	HushHistoryOrderFieldKind HushHistoryOrderField = "kind"
+	HushHistoryOrderFieldCreatedAt HushHistoryOrderField = "created_at"
+	HushHistoryOrderFieldUpdatedAt HushHistoryOrderField = "updated_at"
+	HushHistoryOrderFieldName      HushHistoryOrderField = "name"
+	HushHistoryOrderFieldKind      HushHistoryOrderField = "kind"
 )
 
 var AllHushHistoryOrderField = []HushHistoryOrderField{
+	HushHistoryOrderFieldCreatedAt,
+	HushHistoryOrderFieldUpdatedAt,
 	HushHistoryOrderFieldName,
 	HushHistoryOrderFieldKind,
 }
 
 func (e HushHistoryOrderField) IsValid() bool {
 	switch e {
-	case HushHistoryOrderFieldName, HushHistoryOrderFieldKind:
+	case HushHistoryOrderFieldCreatedAt, HushHistoryOrderFieldUpdatedAt, HushHistoryOrderFieldName, HushHistoryOrderFieldKind:
 		return true
 	}
 	return false
@@ -24917,18 +25531,22 @@ func (e HushHistoryOrderField) MarshalGQL(w io.Writer) {
 type HushOrderField string
 
 const (
-	HushOrderFieldName HushOrderField = "name"
-	HushOrderFieldKind HushOrderField = "kind"
+	HushOrderFieldCreatedAt HushOrderField = "created_at"
+	HushOrderFieldUpdatedAt HushOrderField = "updated_at"
+	HushOrderFieldName      HushOrderField = "name"
+	HushOrderFieldKind      HushOrderField = "kind"
 )
 
 var AllHushOrderField = []HushOrderField{
+	HushOrderFieldCreatedAt,
+	HushOrderFieldUpdatedAt,
 	HushOrderFieldName,
 	HushOrderFieldKind,
 }
 
 func (e HushOrderField) IsValid() bool {
 	switch e {
-	case HushOrderFieldName, HushOrderFieldKind:
+	case HushOrderFieldCreatedAt, HushOrderFieldUpdatedAt, HushOrderFieldName, HushOrderFieldKind:
 		return true
 	}
 	return false
@@ -24959,18 +25577,22 @@ func (e HushOrderField) MarshalGQL(w io.Writer) {
 type IntegrationHistoryOrderField string
 
 const (
-	IntegrationHistoryOrderFieldName IntegrationHistoryOrderField = "name"
-	IntegrationHistoryOrderFieldKind IntegrationHistoryOrderField = "kind"
+	IntegrationHistoryOrderFieldCreatedAt IntegrationHistoryOrderField = "created_at"
+	IntegrationHistoryOrderFieldUpdatedAt IntegrationHistoryOrderField = "updated_at"
+	IntegrationHistoryOrderFieldName      IntegrationHistoryOrderField = "name"
+	IntegrationHistoryOrderFieldKind      IntegrationHistoryOrderField = "kind"
 )
 
 var AllIntegrationHistoryOrderField = []IntegrationHistoryOrderField{
+	IntegrationHistoryOrderFieldCreatedAt,
+	IntegrationHistoryOrderFieldUpdatedAt,
 	IntegrationHistoryOrderFieldName,
 	IntegrationHistoryOrderFieldKind,
 }
 
 func (e IntegrationHistoryOrderField) IsValid() bool {
 	switch e {
-	case IntegrationHistoryOrderFieldName, IntegrationHistoryOrderFieldKind:
+	case IntegrationHistoryOrderFieldCreatedAt, IntegrationHistoryOrderFieldUpdatedAt, IntegrationHistoryOrderFieldName, IntegrationHistoryOrderFieldKind:
 		return true
 	}
 	return false
@@ -25001,18 +25623,22 @@ func (e IntegrationHistoryOrderField) MarshalGQL(w io.Writer) {
 type IntegrationOrderField string
 
 const (
-	IntegrationOrderFieldName IntegrationOrderField = "name"
-	IntegrationOrderFieldKind IntegrationOrderField = "kind"
+	IntegrationOrderFieldCreatedAt IntegrationOrderField = "created_at"
+	IntegrationOrderFieldUpdatedAt IntegrationOrderField = "updated_at"
+	IntegrationOrderFieldName      IntegrationOrderField = "name"
+	IntegrationOrderFieldKind      IntegrationOrderField = "kind"
 )
 
 var AllIntegrationOrderField = []IntegrationOrderField{
+	IntegrationOrderFieldCreatedAt,
+	IntegrationOrderFieldUpdatedAt,
 	IntegrationOrderFieldName,
 	IntegrationOrderFieldKind,
 }
 
 func (e IntegrationOrderField) IsValid() bool {
 	switch e {
-	case IntegrationOrderFieldName, IntegrationOrderFieldKind:
+	case IntegrationOrderFieldCreatedAt, IntegrationOrderFieldUpdatedAt, IntegrationOrderFieldName, IntegrationOrderFieldKind:
 		return true
 	}
 	return false
@@ -25039,16 +25665,104 @@ func (e IntegrationOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which InternalPolicyHistory connections can be ordered.
+type InternalPolicyHistoryOrderField string
+
+const (
+	InternalPolicyHistoryOrderFieldCreatedAt InternalPolicyHistoryOrderField = "created_at"
+	InternalPolicyHistoryOrderFieldUpdatedAt InternalPolicyHistoryOrderField = "updated_at"
+)
+
+var AllInternalPolicyHistoryOrderField = []InternalPolicyHistoryOrderField{
+	InternalPolicyHistoryOrderFieldCreatedAt,
+	InternalPolicyHistoryOrderFieldUpdatedAt,
+}
+
+func (e InternalPolicyHistoryOrderField) IsValid() bool {
+	switch e {
+	case InternalPolicyHistoryOrderFieldCreatedAt, InternalPolicyHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e InternalPolicyHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *InternalPolicyHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InternalPolicyHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InternalPolicyHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e InternalPolicyHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which InternalPolicy connections can be ordered.
+type InternalPolicyOrderField string
+
+const (
+	InternalPolicyOrderFieldCreatedAt InternalPolicyOrderField = "created_at"
+	InternalPolicyOrderFieldUpdatedAt InternalPolicyOrderField = "updated_at"
+)
+
+var AllInternalPolicyOrderField = []InternalPolicyOrderField{
+	InternalPolicyOrderFieldCreatedAt,
+	InternalPolicyOrderFieldUpdatedAt,
+}
+
+func (e InternalPolicyOrderField) IsValid() bool {
+	switch e {
+	case InternalPolicyOrderFieldCreatedAt, InternalPolicyOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e InternalPolicyOrderField) String() string {
+	return string(e)
+}
+
+func (e *InternalPolicyOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InternalPolicyOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InternalPolicyOrderField", str)
+	}
+	return nil
+}
+
+func (e InternalPolicyOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which Invite connections can be ordered.
 type InviteOrderField string
 
 const (
+	InviteOrderFieldCreatedAt    InviteOrderField = "created_at"
+	InviteOrderFieldUpdatedAt    InviteOrderField = "updated_at"
 	InviteOrderFieldExpires      InviteOrderField = "expires"
 	InviteOrderFieldStatus       InviteOrderField = "STATUS"
 	InviteOrderFieldSendAttempts InviteOrderField = "send_attempts"
 )
 
 var AllInviteOrderField = []InviteOrderField{
+	InviteOrderFieldCreatedAt,
+	InviteOrderFieldUpdatedAt,
 	InviteOrderFieldExpires,
 	InviteOrderFieldStatus,
 	InviteOrderFieldSendAttempts,
@@ -25056,7 +25770,7 @@ var AllInviteOrderField = []InviteOrderField{
 
 func (e InviteOrderField) IsValid() bool {
 	switch e {
-	case InviteOrderFieldExpires, InviteOrderFieldStatus, InviteOrderFieldSendAttempts:
+	case InviteOrderFieldCreatedAt, InviteOrderFieldUpdatedAt, InviteOrderFieldExpires, InviteOrderFieldStatus, InviteOrderFieldSendAttempts:
 		return true
 	}
 	return false
@@ -25087,16 +25801,20 @@ func (e InviteOrderField) MarshalGQL(w io.Writer) {
 type MappedControlHistoryOrderField string
 
 const (
+	MappedControlHistoryOrderFieldCreatedAt   MappedControlHistoryOrderField = "created_at"
+	MappedControlHistoryOrderFieldUpdatedAt   MappedControlHistoryOrderField = "updated_at"
 	MappedControlHistoryOrderFieldMappingType MappedControlHistoryOrderField = "mapping_type"
 )
 
 var AllMappedControlHistoryOrderField = []MappedControlHistoryOrderField{
+	MappedControlHistoryOrderFieldCreatedAt,
+	MappedControlHistoryOrderFieldUpdatedAt,
 	MappedControlHistoryOrderFieldMappingType,
 }
 
 func (e MappedControlHistoryOrderField) IsValid() bool {
 	switch e {
-	case MappedControlHistoryOrderFieldMappingType:
+	case MappedControlHistoryOrderFieldCreatedAt, MappedControlHistoryOrderFieldUpdatedAt, MappedControlHistoryOrderFieldMappingType:
 		return true
 	}
 	return false
@@ -25127,16 +25845,20 @@ func (e MappedControlHistoryOrderField) MarshalGQL(w io.Writer) {
 type MappedControlOrderField string
 
 const (
+	MappedControlOrderFieldCreatedAt   MappedControlOrderField = "created_at"
+	MappedControlOrderFieldUpdatedAt   MappedControlOrderField = "updated_at"
 	MappedControlOrderFieldMappingType MappedControlOrderField = "mapping_type"
 )
 
 var AllMappedControlOrderField = []MappedControlOrderField{
+	MappedControlOrderFieldCreatedAt,
+	MappedControlOrderFieldUpdatedAt,
 	MappedControlOrderFieldMappingType,
 }
 
 func (e MappedControlOrderField) IsValid() bool {
 	switch e {
-	case MappedControlOrderFieldMappingType:
+	case MappedControlOrderFieldCreatedAt, MappedControlOrderFieldUpdatedAt, MappedControlOrderFieldMappingType:
 		return true
 	}
 	return false
@@ -25167,16 +25889,20 @@ func (e MappedControlOrderField) MarshalGQL(w io.Writer) {
 type NarrativeHistoryOrderField string
 
 const (
-	NarrativeHistoryOrderFieldName NarrativeHistoryOrderField = "name"
+	NarrativeHistoryOrderFieldCreatedAt NarrativeHistoryOrderField = "created_at"
+	NarrativeHistoryOrderFieldUpdatedAt NarrativeHistoryOrderField = "updated_at"
+	NarrativeHistoryOrderFieldName      NarrativeHistoryOrderField = "name"
 )
 
 var AllNarrativeHistoryOrderField = []NarrativeHistoryOrderField{
+	NarrativeHistoryOrderFieldCreatedAt,
+	NarrativeHistoryOrderFieldUpdatedAt,
 	NarrativeHistoryOrderFieldName,
 }
 
 func (e NarrativeHistoryOrderField) IsValid() bool {
 	switch e {
-	case NarrativeHistoryOrderFieldName:
+	case NarrativeHistoryOrderFieldCreatedAt, NarrativeHistoryOrderFieldUpdatedAt, NarrativeHistoryOrderFieldName:
 		return true
 	}
 	return false
@@ -25207,16 +25933,20 @@ func (e NarrativeHistoryOrderField) MarshalGQL(w io.Writer) {
 type NarrativeOrderField string
 
 const (
-	NarrativeOrderFieldName NarrativeOrderField = "name"
+	NarrativeOrderFieldCreatedAt NarrativeOrderField = "created_at"
+	NarrativeOrderFieldUpdatedAt NarrativeOrderField = "updated_at"
+	NarrativeOrderFieldName      NarrativeOrderField = "name"
 )
 
 var AllNarrativeOrderField = []NarrativeOrderField{
+	NarrativeOrderFieldCreatedAt,
+	NarrativeOrderFieldUpdatedAt,
 	NarrativeOrderFieldName,
 }
 
 func (e NarrativeOrderField) IsValid() bool {
 	switch e {
-	case NarrativeOrderFieldName:
+	case NarrativeOrderFieldCreatedAt, NarrativeOrderFieldUpdatedAt, NarrativeOrderFieldName:
 		return true
 	}
 	return false
@@ -25240,6 +25970,90 @@ func (e *NarrativeOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NarrativeOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which NoteHistory connections can be ordered.
+type NoteHistoryOrderField string
+
+const (
+	NoteHistoryOrderFieldCreatedAt NoteHistoryOrderField = "created_at"
+	NoteHistoryOrderFieldUpdatedAt NoteHistoryOrderField = "updated_at"
+)
+
+var AllNoteHistoryOrderField = []NoteHistoryOrderField{
+	NoteHistoryOrderFieldCreatedAt,
+	NoteHistoryOrderFieldUpdatedAt,
+}
+
+func (e NoteHistoryOrderField) IsValid() bool {
+	switch e {
+	case NoteHistoryOrderFieldCreatedAt, NoteHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e NoteHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *NoteHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NoteHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NoteHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e NoteHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Note connections can be ordered.
+type NoteOrderField string
+
+const (
+	NoteOrderFieldCreatedAt NoteOrderField = "created_at"
+	NoteOrderFieldUpdatedAt NoteOrderField = "updated_at"
+)
+
+var AllNoteOrderField = []NoteOrderField{
+	NoteOrderFieldCreatedAt,
+	NoteOrderFieldUpdatedAt,
+}
+
+func (e NoteOrderField) IsValid() bool {
+	switch e {
+	case NoteOrderFieldCreatedAt, NoteOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e NoteOrderField) String() string {
+	return string(e)
+}
+
+func (e *NoteOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NoteOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NoteOrderField", str)
+	}
+	return nil
+}
+
+func (e NoteOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -25291,16 +26105,20 @@ func (e OrderDirection) MarshalGQL(w io.Writer) {
 type OrgMembershipHistoryOrderField string
 
 const (
-	OrgMembershipHistoryOrderFieldRole OrgMembershipHistoryOrderField = "ROLE"
+	OrgMembershipHistoryOrderFieldCreatedAt OrgMembershipHistoryOrderField = "created_at"
+	OrgMembershipHistoryOrderFieldUpdatedAt OrgMembershipHistoryOrderField = "updated_at"
+	OrgMembershipHistoryOrderFieldRole      OrgMembershipHistoryOrderField = "ROLE"
 )
 
 var AllOrgMembershipHistoryOrderField = []OrgMembershipHistoryOrderField{
+	OrgMembershipHistoryOrderFieldCreatedAt,
+	OrgMembershipHistoryOrderFieldUpdatedAt,
 	OrgMembershipHistoryOrderFieldRole,
 }
 
 func (e OrgMembershipHistoryOrderField) IsValid() bool {
 	switch e {
-	case OrgMembershipHistoryOrderFieldRole:
+	case OrgMembershipHistoryOrderFieldCreatedAt, OrgMembershipHistoryOrderFieldUpdatedAt, OrgMembershipHistoryOrderFieldRole:
 		return true
 	}
 	return false
@@ -25331,16 +26149,20 @@ func (e OrgMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
 type OrgMembershipOrderField string
 
 const (
-	OrgMembershipOrderFieldRole OrgMembershipOrderField = "ROLE"
+	OrgMembershipOrderFieldCreatedAt OrgMembershipOrderField = "created_at"
+	OrgMembershipOrderFieldUpdatedAt OrgMembershipOrderField = "updated_at"
+	OrgMembershipOrderFieldRole      OrgMembershipOrderField = "ROLE"
 )
 
 var AllOrgMembershipOrderField = []OrgMembershipOrderField{
+	OrgMembershipOrderFieldCreatedAt,
+	OrgMembershipOrderFieldUpdatedAt,
 	OrgMembershipOrderFieldRole,
 }
 
 func (e OrgMembershipOrderField) IsValid() bool {
 	switch e {
-	case OrgMembershipOrderFieldRole:
+	case OrgMembershipOrderFieldCreatedAt, OrgMembershipOrderFieldUpdatedAt, OrgMembershipOrderFieldRole:
 		return true
 	}
 	return false
@@ -25371,6 +26193,8 @@ func (e OrgMembershipOrderField) MarshalGQL(w io.Writer) {
 type OrgSubscriptionHistoryOrderField string
 
 const (
+	OrgSubscriptionHistoryOrderFieldCreatedAt                OrgSubscriptionHistoryOrderField = "created_at"
+	OrgSubscriptionHistoryOrderFieldUpdatedAt                OrgSubscriptionHistoryOrderField = "updated_at"
 	OrgSubscriptionHistoryOrderFieldProductTier              OrgSubscriptionHistoryOrderField = "product_tier"
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus OrgSubscriptionHistoryOrderField = "stripe_subscription_status"
 	OrgSubscriptionHistoryOrderFieldActive                   OrgSubscriptionHistoryOrderField = "active"
@@ -25380,6 +26204,8 @@ const (
 )
 
 var AllOrgSubscriptionHistoryOrderField = []OrgSubscriptionHistoryOrderField{
+	OrgSubscriptionHistoryOrderFieldCreatedAt,
+	OrgSubscriptionHistoryOrderFieldUpdatedAt,
 	OrgSubscriptionHistoryOrderFieldProductTier,
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus,
 	OrgSubscriptionHistoryOrderFieldActive,
@@ -25390,7 +26216,7 @@ var AllOrgSubscriptionHistoryOrderField = []OrgSubscriptionHistoryOrderField{
 
 func (e OrgSubscriptionHistoryOrderField) IsValid() bool {
 	switch e {
-	case OrgSubscriptionHistoryOrderFieldProductTier, OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus, OrgSubscriptionHistoryOrderFieldActive, OrgSubscriptionHistoryOrderFieldExpiresAt, OrgSubscriptionHistoryOrderFieldTrialExpiresAt, OrgSubscriptionHistoryOrderFieldDaysUntilDue:
+	case OrgSubscriptionHistoryOrderFieldCreatedAt, OrgSubscriptionHistoryOrderFieldUpdatedAt, OrgSubscriptionHistoryOrderFieldProductTier, OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus, OrgSubscriptionHistoryOrderFieldActive, OrgSubscriptionHistoryOrderFieldExpiresAt, OrgSubscriptionHistoryOrderFieldTrialExpiresAt, OrgSubscriptionHistoryOrderFieldDaysUntilDue:
 		return true
 	}
 	return false
@@ -25421,6 +26247,8 @@ func (e OrgSubscriptionHistoryOrderField) MarshalGQL(w io.Writer) {
 type OrgSubscriptionOrderField string
 
 const (
+	OrgSubscriptionOrderFieldCreatedAt                OrgSubscriptionOrderField = "created_at"
+	OrgSubscriptionOrderFieldUpdatedAt                OrgSubscriptionOrderField = "updated_at"
 	OrgSubscriptionOrderFieldProductTier              OrgSubscriptionOrderField = "product_tier"
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus OrgSubscriptionOrderField = "stripe_subscription_status"
 	OrgSubscriptionOrderFieldActive                   OrgSubscriptionOrderField = "active"
@@ -25430,6 +26258,8 @@ const (
 )
 
 var AllOrgSubscriptionOrderField = []OrgSubscriptionOrderField{
+	OrgSubscriptionOrderFieldCreatedAt,
+	OrgSubscriptionOrderFieldUpdatedAt,
 	OrgSubscriptionOrderFieldProductTier,
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus,
 	OrgSubscriptionOrderFieldActive,
@@ -25440,7 +26270,7 @@ var AllOrgSubscriptionOrderField = []OrgSubscriptionOrderField{
 
 func (e OrgSubscriptionOrderField) IsValid() bool {
 	switch e {
-	case OrgSubscriptionOrderFieldProductTier, OrgSubscriptionOrderFieldStripeSubscriptionStatus, OrgSubscriptionOrderFieldActive, OrgSubscriptionOrderFieldExpiresAt, OrgSubscriptionOrderFieldTrialExpiresAt, OrgSubscriptionOrderFieldDaysUntilDue:
+	case OrgSubscriptionOrderFieldCreatedAt, OrgSubscriptionOrderFieldUpdatedAt, OrgSubscriptionOrderFieldProductTier, OrgSubscriptionOrderFieldStripeSubscriptionStatus, OrgSubscriptionOrderFieldActive, OrgSubscriptionOrderFieldExpiresAt, OrgSubscriptionOrderFieldTrialExpiresAt, OrgSubscriptionOrderFieldDaysUntilDue:
 		return true
 	}
 	return false
@@ -25471,18 +26301,22 @@ func (e OrgSubscriptionOrderField) MarshalGQL(w io.Writer) {
 type OrganizationHistoryOrderField string
 
 const (
+	OrganizationHistoryOrderFieldCreatedAt   OrganizationHistoryOrderField = "created_at"
+	OrganizationHistoryOrderFieldUpdatedAt   OrganizationHistoryOrderField = "updated_at"
 	OrganizationHistoryOrderFieldName        OrganizationHistoryOrderField = "name"
 	OrganizationHistoryOrderFieldDisplayName OrganizationHistoryOrderField = "display_name"
 )
 
 var AllOrganizationHistoryOrderField = []OrganizationHistoryOrderField{
+	OrganizationHistoryOrderFieldCreatedAt,
+	OrganizationHistoryOrderFieldUpdatedAt,
 	OrganizationHistoryOrderFieldName,
 	OrganizationHistoryOrderFieldDisplayName,
 }
 
 func (e OrganizationHistoryOrderField) IsValid() bool {
 	switch e {
-	case OrganizationHistoryOrderFieldName, OrganizationHistoryOrderFieldDisplayName:
+	case OrganizationHistoryOrderFieldCreatedAt, OrganizationHistoryOrderFieldUpdatedAt, OrganizationHistoryOrderFieldName, OrganizationHistoryOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -25513,18 +26347,22 @@ func (e OrganizationHistoryOrderField) MarshalGQL(w io.Writer) {
 type OrganizationOrderField string
 
 const (
+	OrganizationOrderFieldCreatedAt   OrganizationOrderField = "created_at"
+	OrganizationOrderFieldUpdatedAt   OrganizationOrderField = "updated_at"
 	OrganizationOrderFieldName        OrganizationOrderField = "name"
 	OrganizationOrderFieldDisplayName OrganizationOrderField = "display_name"
 )
 
 var AllOrganizationOrderField = []OrganizationOrderField{
+	OrganizationOrderFieldCreatedAt,
+	OrganizationOrderFieldUpdatedAt,
 	OrganizationOrderFieldName,
 	OrganizationOrderFieldDisplayName,
 }
 
 func (e OrganizationOrderField) IsValid() bool {
 	switch e {
-	case OrganizationOrderFieldName, OrganizationOrderFieldDisplayName:
+	case OrganizationOrderFieldCreatedAt, OrganizationOrderFieldUpdatedAt, OrganizationOrderFieldName, OrganizationOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -25551,10 +26389,228 @@ func (e OrganizationOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which OrganizationSettingHistory connections can be ordered.
+type OrganizationSettingHistoryOrderField string
+
+const (
+	OrganizationSettingHistoryOrderFieldCreatedAt OrganizationSettingHistoryOrderField = "created_at"
+	OrganizationSettingHistoryOrderFieldUpdatedAt OrganizationSettingHistoryOrderField = "updated_at"
+)
+
+var AllOrganizationSettingHistoryOrderField = []OrganizationSettingHistoryOrderField{
+	OrganizationSettingHistoryOrderFieldCreatedAt,
+	OrganizationSettingHistoryOrderFieldUpdatedAt,
+}
+
+func (e OrganizationSettingHistoryOrderField) IsValid() bool {
+	switch e {
+	case OrganizationSettingHistoryOrderFieldCreatedAt, OrganizationSettingHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e OrganizationSettingHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrganizationSettingHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrganizationSettingHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrganizationSettingHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e OrganizationSettingHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which OrganizationSetting connections can be ordered.
+type OrganizationSettingOrderField string
+
+const (
+	OrganizationSettingOrderFieldCreatedAt OrganizationSettingOrderField = "created_at"
+	OrganizationSettingOrderFieldUpdatedAt OrganizationSettingOrderField = "updated_at"
+)
+
+var AllOrganizationSettingOrderField = []OrganizationSettingOrderField{
+	OrganizationSettingOrderFieldCreatedAt,
+	OrganizationSettingOrderFieldUpdatedAt,
+}
+
+func (e OrganizationSettingOrderField) IsValid() bool {
+	switch e {
+	case OrganizationSettingOrderFieldCreatedAt, OrganizationSettingOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e OrganizationSettingOrderField) String() string {
+	return string(e)
+}
+
+func (e *OrganizationSettingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrganizationSettingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrganizationSettingOrderField", str)
+	}
+	return nil
+}
+
+func (e OrganizationSettingOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which PersonalAccessToken connections can be ordered.
+type PersonalAccessTokenOrderField string
+
+const (
+	PersonalAccessTokenOrderFieldCreatedAt PersonalAccessTokenOrderField = "created_at"
+	PersonalAccessTokenOrderFieldUpdatedAt PersonalAccessTokenOrderField = "updated_at"
+	PersonalAccessTokenOrderFieldName      PersonalAccessTokenOrderField = "name"
+	PersonalAccessTokenOrderFieldExpiresAt PersonalAccessTokenOrderField = "expires_at"
+	PersonalAccessTokenOrderFieldIsActive  PersonalAccessTokenOrderField = "is_active"
+)
+
+var AllPersonalAccessTokenOrderField = []PersonalAccessTokenOrderField{
+	PersonalAccessTokenOrderFieldCreatedAt,
+	PersonalAccessTokenOrderFieldUpdatedAt,
+	PersonalAccessTokenOrderFieldName,
+	PersonalAccessTokenOrderFieldExpiresAt,
+	PersonalAccessTokenOrderFieldIsActive,
+}
+
+func (e PersonalAccessTokenOrderField) IsValid() bool {
+	switch e {
+	case PersonalAccessTokenOrderFieldCreatedAt, PersonalAccessTokenOrderFieldUpdatedAt, PersonalAccessTokenOrderFieldName, PersonalAccessTokenOrderFieldExpiresAt, PersonalAccessTokenOrderFieldIsActive:
+		return true
+	}
+	return false
+}
+
+func (e PersonalAccessTokenOrderField) String() string {
+	return string(e)
+}
+
+func (e *PersonalAccessTokenOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PersonalAccessTokenOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid PersonalAccessTokenOrderField", str)
+	}
+	return nil
+}
+
+func (e PersonalAccessTokenOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ProcedureHistory connections can be ordered.
+type ProcedureHistoryOrderField string
+
+const (
+	ProcedureHistoryOrderFieldCreatedAt ProcedureHistoryOrderField = "created_at"
+	ProcedureHistoryOrderFieldUpdatedAt ProcedureHistoryOrderField = "updated_at"
+)
+
+var AllProcedureHistoryOrderField = []ProcedureHistoryOrderField{
+	ProcedureHistoryOrderFieldCreatedAt,
+	ProcedureHistoryOrderFieldUpdatedAt,
+}
+
+func (e ProcedureHistoryOrderField) IsValid() bool {
+	switch e {
+	case ProcedureHistoryOrderFieldCreatedAt, ProcedureHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e ProcedureHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProcedureHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProcedureHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProcedureHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ProcedureHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which Procedure connections can be ordered.
+type ProcedureOrderField string
+
+const (
+	ProcedureOrderFieldCreatedAt ProcedureOrderField = "created_at"
+	ProcedureOrderFieldUpdatedAt ProcedureOrderField = "updated_at"
+)
+
+var AllProcedureOrderField = []ProcedureOrderField{
+	ProcedureOrderFieldCreatedAt,
+	ProcedureOrderFieldUpdatedAt,
+}
+
+func (e ProcedureOrderField) IsValid() bool {
+	switch e {
+	case ProcedureOrderFieldCreatedAt, ProcedureOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e ProcedureOrderField) String() string {
+	return string(e)
+}
+
+func (e *ProcedureOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ProcedureOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ProcedureOrderField", str)
+	}
+	return nil
+}
+
+func (e ProcedureOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which ProgramHistory connections can be ordered.
 type ProgramHistoryOrderField string
 
 const (
+	ProgramHistoryOrderFieldCreatedAt ProgramHistoryOrderField = "created_at"
+	ProgramHistoryOrderFieldUpdatedAt ProgramHistoryOrderField = "updated_at"
 	ProgramHistoryOrderFieldName      ProgramHistoryOrderField = "name"
 	ProgramHistoryOrderFieldStatus    ProgramHistoryOrderField = "STATUS"
 	ProgramHistoryOrderFieldStartDate ProgramHistoryOrderField = "start_date"
@@ -25562,6 +26618,8 @@ const (
 )
 
 var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
+	ProgramHistoryOrderFieldCreatedAt,
+	ProgramHistoryOrderFieldUpdatedAt,
 	ProgramHistoryOrderFieldName,
 	ProgramHistoryOrderFieldStatus,
 	ProgramHistoryOrderFieldStartDate,
@@ -25570,7 +26628,7 @@ var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
 
 func (e ProgramHistoryOrderField) IsValid() bool {
 	switch e {
-	case ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
+	case ProgramHistoryOrderFieldCreatedAt, ProgramHistoryOrderFieldUpdatedAt, ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
 		return true
 	}
 	return false
@@ -25601,16 +26659,20 @@ func (e ProgramHistoryOrderField) MarshalGQL(w io.Writer) {
 type ProgramMembershipHistoryOrderField string
 
 const (
-	ProgramMembershipHistoryOrderFieldRole ProgramMembershipHistoryOrderField = "ROLE"
+	ProgramMembershipHistoryOrderFieldCreatedAt ProgramMembershipHistoryOrderField = "created_at"
+	ProgramMembershipHistoryOrderFieldUpdatedAt ProgramMembershipHistoryOrderField = "updated_at"
+	ProgramMembershipHistoryOrderFieldRole      ProgramMembershipHistoryOrderField = "ROLE"
 )
 
 var AllProgramMembershipHistoryOrderField = []ProgramMembershipHistoryOrderField{
+	ProgramMembershipHistoryOrderFieldCreatedAt,
+	ProgramMembershipHistoryOrderFieldUpdatedAt,
 	ProgramMembershipHistoryOrderFieldRole,
 }
 
 func (e ProgramMembershipHistoryOrderField) IsValid() bool {
 	switch e {
-	case ProgramMembershipHistoryOrderFieldRole:
+	case ProgramMembershipHistoryOrderFieldCreatedAt, ProgramMembershipHistoryOrderFieldUpdatedAt, ProgramMembershipHistoryOrderFieldRole:
 		return true
 	}
 	return false
@@ -25641,16 +26703,20 @@ func (e ProgramMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
 type ProgramMembershipOrderField string
 
 const (
-	ProgramMembershipOrderFieldRole ProgramMembershipOrderField = "ROLE"
+	ProgramMembershipOrderFieldCreatedAt ProgramMembershipOrderField = "created_at"
+	ProgramMembershipOrderFieldUpdatedAt ProgramMembershipOrderField = "updated_at"
+	ProgramMembershipOrderFieldRole      ProgramMembershipOrderField = "ROLE"
 )
 
 var AllProgramMembershipOrderField = []ProgramMembershipOrderField{
+	ProgramMembershipOrderFieldCreatedAt,
+	ProgramMembershipOrderFieldUpdatedAt,
 	ProgramMembershipOrderFieldRole,
 }
 
 func (e ProgramMembershipOrderField) IsValid() bool {
 	switch e {
-	case ProgramMembershipOrderFieldRole:
+	case ProgramMembershipOrderFieldCreatedAt, ProgramMembershipOrderFieldUpdatedAt, ProgramMembershipOrderFieldRole:
 		return true
 	}
 	return false
@@ -25681,6 +26747,8 @@ func (e ProgramMembershipOrderField) MarshalGQL(w io.Writer) {
 type ProgramOrderField string
 
 const (
+	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
 	ProgramOrderFieldName      ProgramOrderField = "name"
 	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
 	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
@@ -25688,6 +26756,8 @@ const (
 )
 
 var AllProgramOrderField = []ProgramOrderField{
+	ProgramOrderFieldCreatedAt,
+	ProgramOrderFieldUpdatedAt,
 	ProgramOrderFieldName,
 	ProgramOrderFieldStatus,
 	ProgramOrderFieldStartDate,
@@ -25696,7 +26766,7 @@ var AllProgramOrderField = []ProgramOrderField{
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
 		return true
 	}
 	return false
@@ -25727,6 +26797,8 @@ func (e ProgramOrderField) MarshalGQL(w io.Writer) {
 type RiskHistoryOrderField string
 
 const (
+	RiskHistoryOrderFieldCreatedAt     RiskHistoryOrderField = "created_at"
+	RiskHistoryOrderFieldUpdatedAt     RiskHistoryOrderField = "updated_at"
 	RiskHistoryOrderFieldName          RiskHistoryOrderField = "name"
 	RiskHistoryOrderFieldStatus        RiskHistoryOrderField = "STATUS"
 	RiskHistoryOrderFieldRiskType      RiskHistoryOrderField = "risk_type"
@@ -25738,6 +26810,8 @@ const (
 )
 
 var AllRiskHistoryOrderField = []RiskHistoryOrderField{
+	RiskHistoryOrderFieldCreatedAt,
+	RiskHistoryOrderFieldUpdatedAt,
 	RiskHistoryOrderFieldName,
 	RiskHistoryOrderFieldStatus,
 	RiskHistoryOrderFieldRiskType,
@@ -25750,7 +26824,7 @@ var AllRiskHistoryOrderField = []RiskHistoryOrderField{
 
 func (e RiskHistoryOrderField) IsValid() bool {
 	switch e {
-	case RiskHistoryOrderFieldName, RiskHistoryOrderFieldStatus, RiskHistoryOrderFieldRiskType, RiskHistoryOrderFieldCategory, RiskHistoryOrderFieldImpact, RiskHistoryOrderFieldLikelihood, RiskHistoryOrderFieldScore, RiskHistoryOrderFieldBusinessCosts:
+	case RiskHistoryOrderFieldCreatedAt, RiskHistoryOrderFieldUpdatedAt, RiskHistoryOrderFieldName, RiskHistoryOrderFieldStatus, RiskHistoryOrderFieldRiskType, RiskHistoryOrderFieldCategory, RiskHistoryOrderFieldImpact, RiskHistoryOrderFieldLikelihood, RiskHistoryOrderFieldScore, RiskHistoryOrderFieldBusinessCosts:
 		return true
 	}
 	return false
@@ -25781,6 +26855,8 @@ func (e RiskHistoryOrderField) MarshalGQL(w io.Writer) {
 type RiskOrderField string
 
 const (
+	RiskOrderFieldCreatedAt     RiskOrderField = "created_at"
+	RiskOrderFieldUpdatedAt     RiskOrderField = "updated_at"
 	RiskOrderFieldName          RiskOrderField = "name"
 	RiskOrderFieldStatus        RiskOrderField = "STATUS"
 	RiskOrderFieldRiskType      RiskOrderField = "risk_type"
@@ -25792,6 +26868,8 @@ const (
 )
 
 var AllRiskOrderField = []RiskOrderField{
+	RiskOrderFieldCreatedAt,
+	RiskOrderFieldUpdatedAt,
 	RiskOrderFieldName,
 	RiskOrderFieldStatus,
 	RiskOrderFieldRiskType,
@@ -25804,7 +26882,7 @@ var AllRiskOrderField = []RiskOrderField{
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldRiskType, RiskOrderFieldCategory, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldRiskType, RiskOrderFieldCategory, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
 		return true
 	}
 	return false
@@ -25835,6 +26913,8 @@ func (e RiskOrderField) MarshalGQL(w io.Writer) {
 type StandardHistoryOrderField string
 
 const (
+	StandardHistoryOrderFieldCreatedAt     StandardHistoryOrderField = "created_at"
+	StandardHistoryOrderFieldUpdatedAt     StandardHistoryOrderField = "updated_at"
 	StandardHistoryOrderFieldName          StandardHistoryOrderField = "name"
 	StandardHistoryOrderFieldShortName     StandardHistoryOrderField = "short_name"
 	StandardHistoryOrderFieldFramework     StandardHistoryOrderField = "framework"
@@ -25844,6 +26924,8 @@ const (
 )
 
 var AllStandardHistoryOrderField = []StandardHistoryOrderField{
+	StandardHistoryOrderFieldCreatedAt,
+	StandardHistoryOrderFieldUpdatedAt,
 	StandardHistoryOrderFieldName,
 	StandardHistoryOrderFieldShortName,
 	StandardHistoryOrderFieldFramework,
@@ -25854,7 +26936,7 @@ var AllStandardHistoryOrderField = []StandardHistoryOrderField{
 
 func (e StandardHistoryOrderField) IsValid() bool {
 	switch e {
-	case StandardHistoryOrderFieldName, StandardHistoryOrderFieldShortName, StandardHistoryOrderFieldFramework, StandardHistoryOrderFieldGoverningBody, StandardHistoryOrderFieldStatus, StandardHistoryOrderFieldStandardType:
+	case StandardHistoryOrderFieldCreatedAt, StandardHistoryOrderFieldUpdatedAt, StandardHistoryOrderFieldName, StandardHistoryOrderFieldShortName, StandardHistoryOrderFieldFramework, StandardHistoryOrderFieldGoverningBody, StandardHistoryOrderFieldStatus, StandardHistoryOrderFieldStandardType:
 		return true
 	}
 	return false
@@ -25885,6 +26967,8 @@ func (e StandardHistoryOrderField) MarshalGQL(w io.Writer) {
 type StandardOrderField string
 
 const (
+	StandardOrderFieldCreatedAt     StandardOrderField = "created_at"
+	StandardOrderFieldUpdatedAt     StandardOrderField = "updated_at"
 	StandardOrderFieldName          StandardOrderField = "name"
 	StandardOrderFieldShortName     StandardOrderField = "short_name"
 	StandardOrderFieldFramework     StandardOrderField = "framework"
@@ -25894,6 +26978,8 @@ const (
 )
 
 var AllStandardOrderField = []StandardOrderField{
+	StandardOrderFieldCreatedAt,
+	StandardOrderFieldUpdatedAt,
 	StandardOrderFieldName,
 	StandardOrderFieldShortName,
 	StandardOrderFieldFramework,
@@ -25904,7 +26990,7 @@ var AllStandardOrderField = []StandardOrderField{
 
 func (e StandardOrderField) IsValid() bool {
 	switch e {
-	case StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType:
+	case StandardOrderFieldCreatedAt, StandardOrderFieldUpdatedAt, StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType:
 		return true
 	}
 	return false
@@ -25935,6 +27021,8 @@ func (e StandardOrderField) MarshalGQL(w io.Writer) {
 type SubcontrolHistoryOrderField string
 
 const (
+	SubcontrolHistoryOrderFieldCreatedAt   SubcontrolHistoryOrderField = "created_at"
+	SubcontrolHistoryOrderFieldUpdatedAt   SubcontrolHistoryOrderField = "updated_at"
 	SubcontrolHistoryOrderFieldStatus      SubcontrolHistoryOrderField = "status"
 	SubcontrolHistoryOrderFieldSource      SubcontrolHistoryOrderField = "SOURCE"
 	SubcontrolHistoryOrderFieldControlType SubcontrolHistoryOrderField = "CONTROL_TYPE"
@@ -25944,6 +27032,8 @@ const (
 )
 
 var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
+	SubcontrolHistoryOrderFieldCreatedAt,
+	SubcontrolHistoryOrderFieldUpdatedAt,
 	SubcontrolHistoryOrderFieldStatus,
 	SubcontrolHistoryOrderFieldSource,
 	SubcontrolHistoryOrderFieldControlType,
@@ -25954,7 +27044,7 @@ var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
 
 func (e SubcontrolHistoryOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
+	case SubcontrolHistoryOrderFieldCreatedAt, SubcontrolHistoryOrderFieldUpdatedAt, SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -25985,6 +27075,8 @@ func (e SubcontrolHistoryOrderField) MarshalGQL(w io.Writer) {
 type SubcontrolOrderField string
 
 const (
+	SubcontrolOrderFieldCreatedAt   SubcontrolOrderField = "created_at"
+	SubcontrolOrderFieldUpdatedAt   SubcontrolOrderField = "updated_at"
 	SubcontrolOrderFieldStatus      SubcontrolOrderField = "status"
 	SubcontrolOrderFieldSource      SubcontrolOrderField = "SOURCE"
 	SubcontrolOrderFieldControlType SubcontrolOrderField = "CONTROL_TYPE"
@@ -25994,6 +27086,8 @@ const (
 )
 
 var AllSubcontrolOrderField = []SubcontrolOrderField{
+	SubcontrolOrderFieldCreatedAt,
+	SubcontrolOrderFieldUpdatedAt,
 	SubcontrolOrderFieldStatus,
 	SubcontrolOrderFieldSource,
 	SubcontrolOrderFieldControlType,
@@ -26004,7 +27098,7 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -26035,18 +27129,22 @@ func (e SubcontrolOrderField) MarshalGQL(w io.Writer) {
 type SubscriberOrderField string
 
 const (
-	SubscriberOrderFieldEmail  SubscriberOrderField = "email"
-	SubscriberOrderFieldActive SubscriberOrderField = "active"
+	SubscriberOrderFieldCreatedAt SubscriberOrderField = "created_at"
+	SubscriberOrderFieldUpdatedAt SubscriberOrderField = "updated_at"
+	SubscriberOrderFieldEmail     SubscriberOrderField = "email"
+	SubscriberOrderFieldActive    SubscriberOrderField = "active"
 )
 
 var AllSubscriberOrderField = []SubscriberOrderField{
+	SubscriberOrderFieldCreatedAt,
+	SubscriberOrderFieldUpdatedAt,
 	SubscriberOrderFieldEmail,
 	SubscriberOrderFieldActive,
 }
 
 func (e SubscriberOrderField) IsValid() bool {
 	switch e {
-	case SubscriberOrderFieldEmail, SubscriberOrderFieldActive:
+	case SubscriberOrderFieldCreatedAt, SubscriberOrderFieldUpdatedAt, SubscriberOrderFieldEmail, SubscriberOrderFieldActive:
 		return true
 	}
 	return false
@@ -26073,10 +27171,54 @@ func (e SubscriberOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+// Properties by which TFASetting connections can be ordered.
+type TFASettingOrderField string
+
+const (
+	TFASettingOrderFieldCreatedAt TFASettingOrderField = "created_at"
+	TFASettingOrderFieldUpdatedAt TFASettingOrderField = "updated_at"
+)
+
+var AllTFASettingOrderField = []TFASettingOrderField{
+	TFASettingOrderFieldCreatedAt,
+	TFASettingOrderFieldUpdatedAt,
+}
+
+func (e TFASettingOrderField) IsValid() bool {
+	switch e {
+	case TFASettingOrderFieldCreatedAt, TFASettingOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e TFASettingOrderField) String() string {
+	return string(e)
+}
+
+func (e *TFASettingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TFASettingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TFASettingOrderField", str)
+	}
+	return nil
+}
+
+func (e TFASettingOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 // Properties by which TaskHistory connections can be ordered.
 type TaskHistoryOrderField string
 
 const (
+	TaskHistoryOrderFieldCreatedAt TaskHistoryOrderField = "created_at"
+	TaskHistoryOrderFieldUpdatedAt TaskHistoryOrderField = "updated_at"
 	TaskHistoryOrderFieldTitle     TaskHistoryOrderField = "title"
 	TaskHistoryOrderFieldStatus    TaskHistoryOrderField = "STATUS"
 	TaskHistoryOrderFieldCategory  TaskHistoryOrderField = "category"
@@ -26085,6 +27227,8 @@ const (
 )
 
 var AllTaskHistoryOrderField = []TaskHistoryOrderField{
+	TaskHistoryOrderFieldCreatedAt,
+	TaskHistoryOrderFieldUpdatedAt,
 	TaskHistoryOrderFieldTitle,
 	TaskHistoryOrderFieldStatus,
 	TaskHistoryOrderFieldCategory,
@@ -26094,7 +27238,7 @@ var AllTaskHistoryOrderField = []TaskHistoryOrderField{
 
 func (e TaskHistoryOrderField) IsValid() bool {
 	switch e {
-	case TaskHistoryOrderFieldTitle, TaskHistoryOrderFieldStatus, TaskHistoryOrderFieldCategory, TaskHistoryOrderFieldDue, TaskHistoryOrderFieldCompleted:
+	case TaskHistoryOrderFieldCreatedAt, TaskHistoryOrderFieldUpdatedAt, TaskHistoryOrderFieldTitle, TaskHistoryOrderFieldStatus, TaskHistoryOrderFieldCategory, TaskHistoryOrderFieldDue, TaskHistoryOrderFieldCompleted:
 		return true
 	}
 	return false
@@ -26125,6 +27269,8 @@ func (e TaskHistoryOrderField) MarshalGQL(w io.Writer) {
 type TaskOrderField string
 
 const (
+	TaskOrderFieldCreatedAt TaskOrderField = "created_at"
+	TaskOrderFieldUpdatedAt TaskOrderField = "updated_at"
 	TaskOrderFieldTitle     TaskOrderField = "title"
 	TaskOrderFieldStatus    TaskOrderField = "STATUS"
 	TaskOrderFieldCategory  TaskOrderField = "category"
@@ -26133,6 +27279,8 @@ const (
 )
 
 var AllTaskOrderField = []TaskOrderField{
+	TaskOrderFieldCreatedAt,
+	TaskOrderFieldUpdatedAt,
 	TaskOrderFieldTitle,
 	TaskOrderFieldStatus,
 	TaskOrderFieldCategory,
@@ -26142,7 +27290,7 @@ var AllTaskOrderField = []TaskOrderField{
 
 func (e TaskOrderField) IsValid() bool {
 	switch e {
-	case TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldCategory, TaskOrderFieldDue, TaskOrderFieldCompleted:
+	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldCategory, TaskOrderFieldDue, TaskOrderFieldCompleted:
 		return true
 	}
 	return false
@@ -26173,18 +27321,22 @@ func (e TaskOrderField) MarshalGQL(w io.Writer) {
 type TemplateHistoryOrderField string
 
 const (
+	TemplateHistoryOrderFieldCreatedAt    TemplateHistoryOrderField = "created_at"
+	TemplateHistoryOrderFieldUpdatedAt    TemplateHistoryOrderField = "updated_at"
 	TemplateHistoryOrderFieldName         TemplateHistoryOrderField = "name"
 	TemplateHistoryOrderFieldTemplateType TemplateHistoryOrderField = "TEMPLATE_TYPE"
 )
 
 var AllTemplateHistoryOrderField = []TemplateHistoryOrderField{
+	TemplateHistoryOrderFieldCreatedAt,
+	TemplateHistoryOrderFieldUpdatedAt,
 	TemplateHistoryOrderFieldName,
 	TemplateHistoryOrderFieldTemplateType,
 }
 
 func (e TemplateHistoryOrderField) IsValid() bool {
 	switch e {
-	case TemplateHistoryOrderFieldName, TemplateHistoryOrderFieldTemplateType:
+	case TemplateHistoryOrderFieldCreatedAt, TemplateHistoryOrderFieldUpdatedAt, TemplateHistoryOrderFieldName, TemplateHistoryOrderFieldTemplateType:
 		return true
 	}
 	return false
@@ -26215,18 +27367,22 @@ func (e TemplateHistoryOrderField) MarshalGQL(w io.Writer) {
 type TemplateOrderField string
 
 const (
+	TemplateOrderFieldCreatedAt    TemplateOrderField = "created_at"
+	TemplateOrderFieldUpdatedAt    TemplateOrderField = "updated_at"
 	TemplateOrderFieldName         TemplateOrderField = "name"
 	TemplateOrderFieldTemplateType TemplateOrderField = "TEMPLATE_TYPE"
 )
 
 var AllTemplateOrderField = []TemplateOrderField{
+	TemplateOrderFieldCreatedAt,
+	TemplateOrderFieldUpdatedAt,
 	TemplateOrderFieldName,
 	TemplateOrderFieldTemplateType,
 }
 
 func (e TemplateOrderField) IsValid() bool {
 	switch e {
-	case TemplateOrderFieldName, TemplateOrderFieldTemplateType:
+	case TemplateOrderFieldCreatedAt, TemplateOrderFieldUpdatedAt, TemplateOrderFieldName, TemplateOrderFieldTemplateType:
 		return true
 	}
 	return false
@@ -26257,12 +27413,16 @@ func (e TemplateOrderField) MarshalGQL(w io.Writer) {
 type UserHistoryOrderField string
 
 const (
+	UserHistoryOrderFieldCreatedAt   UserHistoryOrderField = "created_at"
+	UserHistoryOrderFieldUpdatedAt   UserHistoryOrderField = "updated_at"
 	UserHistoryOrderFieldFirstName   UserHistoryOrderField = "first_name"
 	UserHistoryOrderFieldLastName    UserHistoryOrderField = "last_name"
 	UserHistoryOrderFieldDisplayName UserHistoryOrderField = "display_name"
 )
 
 var AllUserHistoryOrderField = []UserHistoryOrderField{
+	UserHistoryOrderFieldCreatedAt,
+	UserHistoryOrderFieldUpdatedAt,
 	UserHistoryOrderFieldFirstName,
 	UserHistoryOrderFieldLastName,
 	UserHistoryOrderFieldDisplayName,
@@ -26270,7 +27430,7 @@ var AllUserHistoryOrderField = []UserHistoryOrderField{
 
 func (e UserHistoryOrderField) IsValid() bool {
 	switch e {
-	case UserHistoryOrderFieldFirstName, UserHistoryOrderFieldLastName, UserHistoryOrderFieldDisplayName:
+	case UserHistoryOrderFieldCreatedAt, UserHistoryOrderFieldUpdatedAt, UserHistoryOrderFieldFirstName, UserHistoryOrderFieldLastName, UserHistoryOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -26301,12 +27461,16 @@ func (e UserHistoryOrderField) MarshalGQL(w io.Writer) {
 type UserOrderField string
 
 const (
+	UserOrderFieldCreatedAt   UserOrderField = "created_at"
+	UserOrderFieldUpdatedAt   UserOrderField = "updated_at"
 	UserOrderFieldFirstName   UserOrderField = "first_name"
 	UserOrderFieldLastName    UserOrderField = "last_name"
 	UserOrderFieldDisplayName UserOrderField = "display_name"
 )
 
 var AllUserOrderField = []UserOrderField{
+	UserOrderFieldCreatedAt,
+	UserOrderFieldUpdatedAt,
 	UserOrderFieldFirstName,
 	UserOrderFieldLastName,
 	UserOrderFieldDisplayName,
@@ -26314,7 +27478,7 @@ var AllUserOrderField = []UserOrderField{
 
 func (e UserOrderField) IsValid() bool {
 	switch e {
-	case UserOrderFieldFirstName, UserOrderFieldLastName, UserOrderFieldDisplayName:
+	case UserOrderFieldCreatedAt, UserOrderFieldUpdatedAt, UserOrderFieldFirstName, UserOrderFieldLastName, UserOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -26338,5 +27502,89 @@ func (e *UserOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e UserOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which UserSettingHistory connections can be ordered.
+type UserSettingHistoryOrderField string
+
+const (
+	UserSettingHistoryOrderFieldCreatedAt UserSettingHistoryOrderField = "created_at"
+	UserSettingHistoryOrderFieldUpdatedAt UserSettingHistoryOrderField = "updated_at"
+)
+
+var AllUserSettingHistoryOrderField = []UserSettingHistoryOrderField{
+	UserSettingHistoryOrderFieldCreatedAt,
+	UserSettingHistoryOrderFieldUpdatedAt,
+}
+
+func (e UserSettingHistoryOrderField) IsValid() bool {
+	switch e {
+	case UserSettingHistoryOrderFieldCreatedAt, UserSettingHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e UserSettingHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *UserSettingHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserSettingHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserSettingHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e UserSettingHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which UserSetting connections can be ordered.
+type UserSettingOrderField string
+
+const (
+	UserSettingOrderFieldCreatedAt UserSettingOrderField = "created_at"
+	UserSettingOrderFieldUpdatedAt UserSettingOrderField = "updated_at"
+)
+
+var AllUserSettingOrderField = []UserSettingOrderField{
+	UserSettingOrderFieldCreatedAt,
+	UserSettingOrderFieldUpdatedAt,
+}
+
+func (e UserSettingOrderField) IsValid() bool {
+	switch e {
+	case UserSettingOrderFieldCreatedAt, UserSettingOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e UserSettingOrderField) String() string {
+	return string(e)
+}
+
+func (e *UserSettingOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserSettingOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserSettingOrderField", str)
+	}
+	return nil
+}
+
+func (e UserSettingOrderField) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

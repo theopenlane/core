@@ -112,12 +112,6 @@ func (ehc *EvidenceHistoryCreate) SetNillableUpdatedBy(s *string) *EvidenceHisto
 	return ehc
 }
 
-// SetDisplayID sets the "display_id" field.
-func (ehc *EvidenceHistoryCreate) SetDisplayID(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetDisplayID(s)
-	return ehc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ehc *EvidenceHistoryCreate) SetDeletedAt(t time.Time) *EvidenceHistoryCreate {
 	ehc.mutation.SetDeletedAt(t)
@@ -143,6 +137,12 @@ func (ehc *EvidenceHistoryCreate) SetNillableDeletedBy(s *string) *EvidenceHisto
 	if s != nil {
 		ehc.SetDeletedBy(*s)
 	}
+	return ehc
+}
+
+// SetDisplayID sets the "display_id" field.
+func (ehc *EvidenceHistoryCreate) SetDisplayID(s string) *EvidenceHistoryCreate {
+	ehc.mutation.SetDisplayID(s)
 	return ehc
 }
 
@@ -462,10 +462,6 @@ func (ehc *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Crea
 		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ehc.mutation.DisplayID(); ok {
-		_spec.SetField(evidencehistory.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := ehc.mutation.DeletedAt(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -473,6 +469,10 @@ func (ehc *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Crea
 	if value, ok := ehc.mutation.DeletedBy(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ehc.mutation.DisplayID(); ok {
+		_spec.SetField(evidencehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := ehc.mutation.Tags(); ok {
 		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)

@@ -98,6 +98,11 @@ func DeletedBy(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldRevision, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldName, v))
@@ -121,11 +126,6 @@ func ApprovalRequired(v bool) predicate.ActionPlan {
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
 func ReviewDue(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldReviewDue, v))
-}
-
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldRevision, v))
 }
 
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
@@ -528,6 +528,81 @@ func TagsNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldTags))
 }
 
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContainsFold(FieldRevision, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldName, v))
@@ -893,81 +968,6 @@ func ReviewFrequencyNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldReviewFrequency))
 }
 
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContainsFold(FieldRevision, v))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldOwnerID, v))
@@ -1295,12 +1295,12 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.ActionPlan {
 	})
 }
 
-// HasRisk applies the HasEdge predicate on the "risk" edge.
-func HasRisk() predicate.ActionPlan {
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, RiskTable, RiskPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
@@ -1309,10 +1309,10 @@ func HasRisk() predicate.ActionPlan {
 	})
 }
 
-// HasRiskWith applies the HasEdge predicate on the "risk" edge with a given conditions (other predicates).
-func HasRiskWith(preds ...predicate.Risk) predicate.ActionPlan {
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newRiskStep()
+		step := newRisksStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskActionPlans
@@ -1324,12 +1324,12 @@ func HasRiskWith(preds ...predicate.Risk) predicate.ActionPlan {
 	})
 }
 
-// HasControl applies the HasEdge predicate on the "control" edge.
-func HasControl() predicate.ActionPlan {
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
@@ -1338,10 +1338,10 @@ func HasControl() predicate.ActionPlan {
 	})
 }
 
-// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
-func HasControlWith(preds ...predicate.Control) predicate.ActionPlan {
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newControlStep()
+		step := newControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlActionPlans
@@ -1353,12 +1353,12 @@ func HasControlWith(preds ...predicate.Control) predicate.ActionPlan {
 	})
 }
 
-// HasUser applies the HasEdge predicate on the "user" edge.
-func HasUser() predicate.ActionPlan {
+// HasUsers applies the HasEdge predicate on the "users" edge.
+func HasUsers() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
@@ -1367,10 +1367,10 @@ func HasUser() predicate.ActionPlan {
 	})
 }
 
-// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
-func HasUserWith(preds ...predicate.User) predicate.ActionPlan {
+// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
+func HasUsersWith(preds ...predicate.User) predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newUserStep()
+		step := newUsersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserActionPlans
@@ -1382,12 +1382,12 @@ func HasUserWith(preds ...predicate.User) predicate.ActionPlan {
 	})
 }
 
-// HasProgram applies the HasEdge predicate on the "program" edge.
-func HasProgram() predicate.ActionPlan {
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
@@ -1396,10 +1396,10 @@ func HasProgram() predicate.ActionPlan {
 	})
 }
 
-// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
-func HasProgramWith(preds ...predicate.Program) predicate.ActionPlan {
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newProgramStep()
+		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramActionPlans

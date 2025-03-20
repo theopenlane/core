@@ -73,24 +73,6 @@ func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
 	return ipu
 }
 
-// SetTags sets the "tags" field.
-func (ipu *InternalPolicyUpdate) SetTags(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetTags(s)
-	return ipu
-}
-
-// AppendTags appends s to the "tags" field.
-func (ipu *InternalPolicyUpdate) AppendTags(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendTags(s)
-	return ipu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ipu *InternalPolicyUpdate) ClearTags() *InternalPolicyUpdate {
-	ipu.mutation.ClearTags()
-	return ipu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ipu *InternalPolicyUpdate) SetDeletedAt(t time.Time) *InternalPolicyUpdate {
 	ipu.mutation.SetDeletedAt(t)
@@ -128,6 +110,44 @@ func (ipu *InternalPolicyUpdate) SetNillableDeletedBy(s *string) *InternalPolicy
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ipu *InternalPolicyUpdate) ClearDeletedBy() *InternalPolicyUpdate {
 	ipu.mutation.ClearDeletedBy()
+	return ipu
+}
+
+// SetTags sets the "tags" field.
+func (ipu *InternalPolicyUpdate) SetTags(s []string) *InternalPolicyUpdate {
+	ipu.mutation.SetTags(s)
+	return ipu
+}
+
+// AppendTags appends s to the "tags" field.
+func (ipu *InternalPolicyUpdate) AppendTags(s []string) *InternalPolicyUpdate {
+	ipu.mutation.AppendTags(s)
+	return ipu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ipu *InternalPolicyUpdate) ClearTags() *InternalPolicyUpdate {
+	ipu.mutation.ClearTags()
+	return ipu
+}
+
+// SetRevision sets the "revision" field.
+func (ipu *InternalPolicyUpdate) SetRevision(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetRevision(s)
+	return ipu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableRevision(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetRevision(*s)
+	}
+	return ipu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (ipu *InternalPolicyUpdate) ClearRevision() *InternalPolicyUpdate {
+	ipu.mutation.ClearRevision()
 	return ipu
 }
 
@@ -282,26 +302,6 @@ func (ipu *InternalPolicyUpdate) SetNillableReviewFrequency(e *enums.Frequency) 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
 func (ipu *InternalPolicyUpdate) ClearReviewFrequency() *InternalPolicyUpdate {
 	ipu.mutation.ClearReviewFrequency()
-	return ipu
-}
-
-// SetRevision sets the "revision" field.
-func (ipu *InternalPolicyUpdate) SetRevision(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetRevision(s)
-	return ipu
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableRevision(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetRevision(*s)
-	}
-	return ipu
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (ipu *InternalPolicyUpdate) ClearRevision() *InternalPolicyUpdate {
-	ipu.mutation.ClearRevision()
 	return ipu
 }
 
@@ -703,6 +703,11 @@ func (ipu *InternalPolicyUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ipu *InternalPolicyUpdate) check() error {
+	if v, ok := ipu.mutation.Revision(); ok {
+		if err := internalpolicy.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
+		}
+	}
 	if v, ok := ipu.mutation.OwnerID(); ok {
 		if err := internalpolicy.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
@@ -721,11 +726,6 @@ func (ipu *InternalPolicyUpdate) check() error {
 	if v, ok := ipu.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := ipu.mutation.Revision(); ok {
-		if err := internalpolicy.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -767,17 +767,6 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if ipu.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ipu.mutation.Tags(); ok {
-		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ipu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, internalpolicy.FieldTags, value)
-		})
-	}
-	if ipu.mutation.TagsCleared() {
-		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ipu.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -789,6 +778,23 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ipu.mutation.Tags(); ok {
+		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ipu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicy.FieldTags, value)
+		})
+	}
+	if ipu.mutation.TagsCleared() {
+		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
+	}
+	if value, ok := ipu.mutation.Revision(); ok {
+		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
+	}
+	if ipu.mutation.RevisionCleared() {
+		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
 	if value, ok := ipu.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
@@ -828,12 +834,6 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := ipu.mutation.Revision(); ok {
-		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
-	}
-	if ipu.mutation.RevisionCleared() {
-		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
 	if ipu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1368,24 +1368,6 @@ func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
-// SetTags sets the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) SetTags(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetTags(s)
-	return ipuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) AppendTags(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendTags(s)
-	return ipuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) ClearTags() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearTags()
-	return ipuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ipuo *InternalPolicyUpdateOne) SetDeletedAt(t time.Time) *InternalPolicyUpdateOne {
 	ipuo.mutation.SetDeletedAt(t)
@@ -1423,6 +1405,44 @@ func (ipuo *InternalPolicyUpdateOne) SetNillableDeletedBy(s *string) *InternalPo
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ipuo *InternalPolicyUpdateOne) ClearDeletedBy() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearDeletedBy()
+	return ipuo
+}
+
+// SetTags sets the "tags" field.
+func (ipuo *InternalPolicyUpdateOne) SetTags(s []string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetTags(s)
+	return ipuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (ipuo *InternalPolicyUpdateOne) AppendTags(s []string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AppendTags(s)
+	return ipuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ipuo *InternalPolicyUpdateOne) ClearTags() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearTags()
+	return ipuo
+}
+
+// SetRevision sets the "revision" field.
+func (ipuo *InternalPolicyUpdateOne) SetRevision(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetRevision(s)
+	return ipuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableRevision(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetRevision(*s)
+	}
+	return ipuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (ipuo *InternalPolicyUpdateOne) ClearRevision() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearRevision()
 	return ipuo
 }
 
@@ -1577,26 +1597,6 @@ func (ipuo *InternalPolicyUpdateOne) SetNillableReviewFrequency(e *enums.Frequen
 // ClearReviewFrequency clears the value of the "review_frequency" field.
 func (ipuo *InternalPolicyUpdateOne) ClearReviewFrequency() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearReviewFrequency()
-	return ipuo
-}
-
-// SetRevision sets the "revision" field.
-func (ipuo *InternalPolicyUpdateOne) SetRevision(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetRevision(s)
-	return ipuo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableRevision(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetRevision(*s)
-	}
-	return ipuo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (ipuo *InternalPolicyUpdateOne) ClearRevision() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearRevision()
 	return ipuo
 }
 
@@ -2011,6 +2011,11 @@ func (ipuo *InternalPolicyUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ipuo *InternalPolicyUpdateOne) check() error {
+	if v, ok := ipuo.mutation.Revision(); ok {
+		if err := internalpolicy.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
+		}
+	}
 	if v, ok := ipuo.mutation.OwnerID(); ok {
 		if err := internalpolicy.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
@@ -2029,11 +2034,6 @@ func (ipuo *InternalPolicyUpdateOne) check() error {
 	if v, ok := ipuo.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := ipuo.mutation.Revision(); ok {
-		if err := internalpolicy.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -2092,17 +2092,6 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if ipuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.Tags(); ok {
-		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ipuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, internalpolicy.FieldTags, value)
-		})
-	}
-	if ipuo.mutation.TagsCleared() {
-		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ipuo.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -2114,6 +2103,23 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ipuo.mutation.Tags(); ok {
+		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ipuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicy.FieldTags, value)
+		})
+	}
+	if ipuo.mutation.TagsCleared() {
+		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
+	}
+	if value, ok := ipuo.mutation.Revision(); ok {
+		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
+	}
+	if ipuo.mutation.RevisionCleared() {
+		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
 	if value, ok := ipuo.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
@@ -2153,12 +2159,6 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := ipuo.mutation.Revision(); ok {
-		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
-	}
-	if ipuo.mutation.RevisionCleared() {
-		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
 	if ipuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

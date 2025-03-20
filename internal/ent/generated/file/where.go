@@ -1555,12 +1555,12 @@ func HasOrganizationWith(preds ...predicate.Organization) predicate.File {
 	})
 }
 
-// HasGroup applies the HasEdge predicate on the "group" edge.
-func HasGroup() predicate.File {
+// HasGroups applies the HasEdge predicate on the "groups" edge.
+func HasGroups() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, GroupsTable, GroupsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
@@ -1569,10 +1569,10 @@ func HasGroup() predicate.File {
 	})
 }
 
-// HasGroupWith applies the HasEdge predicate on the "group" edge with a given conditions (other predicates).
-func HasGroupWith(preds ...predicate.Group) predicate.File {
+// HasGroupsWith applies the HasEdge predicate on the "groups" edge with a given conditions (other predicates).
+func HasGroupsWith(preds ...predicate.Group) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newGroupStep()
+		step := newGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.GroupFiles
@@ -1729,12 +1729,12 @@ func HasTemplateWith(preds ...predicate.Template) predicate.File {
 	})
 }
 
-// HasDocumentData applies the HasEdge predicate on the "document_data" edge.
-func HasDocumentData() predicate.File {
+// HasDocument applies the HasEdge predicate on the "document" edge.
+func HasDocument() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, DocumentDataTable, DocumentDataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, DocumentTable, DocumentPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
@@ -1743,42 +1743,13 @@ func HasDocumentData() predicate.File {
 	})
 }
 
-// HasDocumentDataWith applies the HasEdge predicate on the "document_data" edge with a given conditions (other predicates).
-func HasDocumentDataWith(preds ...predicate.DocumentData) predicate.File {
+// HasDocumentWith applies the HasEdge predicate on the "document" edge with a given conditions (other predicates).
+func HasDocumentWith(preds ...predicate.DocumentData) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newDocumentDataStep()
+		step := newDocumentStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.DocumentDataFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEvents applies the HasEdge predicate on the "events" edge.
-func HasEvents() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.FileEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEventsWith applies the HasEdge predicate on the "events" edge with a given conditions (other predicates).
-func HasEventsWith(preds ...predicate.Event) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newEventsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.FileEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1837,6 +1808,35 @@ func HasEvidenceWith(preds ...predicate.Evidence) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvents applies the HasEdge predicate on the "events" edge.
+func HasEvents() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.FileEvents
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEventsWith applies the HasEdge predicate on the "events" edge with a given conditions (other predicates).
+func HasEventsWith(preds ...predicate.Event) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.FileEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

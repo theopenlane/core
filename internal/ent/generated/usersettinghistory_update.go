@@ -65,24 +65,6 @@ func (ushu *UserSettingHistoryUpdate) ClearUpdatedBy() *UserSettingHistoryUpdate
 	return ushu
 }
 
-// SetTags sets the "tags" field.
-func (ushu *UserSettingHistoryUpdate) SetTags(s []string) *UserSettingHistoryUpdate {
-	ushu.mutation.SetTags(s)
-	return ushu
-}
-
-// AppendTags appends s to the "tags" field.
-func (ushu *UserSettingHistoryUpdate) AppendTags(s []string) *UserSettingHistoryUpdate {
-	ushu.mutation.AppendTags(s)
-	return ushu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ushu *UserSettingHistoryUpdate) ClearTags() *UserSettingHistoryUpdate {
-	ushu.mutation.ClearTags()
-	return ushu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ushu *UserSettingHistoryUpdate) SetDeletedAt(t time.Time) *UserSettingHistoryUpdate {
 	ushu.mutation.SetDeletedAt(t)
@@ -120,6 +102,24 @@ func (ushu *UserSettingHistoryUpdate) SetNillableDeletedBy(s *string) *UserSetti
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ushu *UserSettingHistoryUpdate) ClearDeletedBy() *UserSettingHistoryUpdate {
 	ushu.mutation.ClearDeletedBy()
+	return ushu
+}
+
+// SetTags sets the "tags" field.
+func (ushu *UserSettingHistoryUpdate) SetTags(s []string) *UserSettingHistoryUpdate {
+	ushu.mutation.SetTags(s)
+	return ushu
+}
+
+// AppendTags appends s to the "tags" field.
+func (ushu *UserSettingHistoryUpdate) AppendTags(s []string) *UserSettingHistoryUpdate {
+	ushu.mutation.AppendTags(s)
+	return ushu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ushu *UserSettingHistoryUpdate) ClearTags() *UserSettingHistoryUpdate {
+	ushu.mutation.ClearTags()
 	return ushu
 }
 
@@ -375,17 +375,6 @@ func (ushu *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	if ushu.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersettinghistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ushu.mutation.Tags(); ok {
-		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ushu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, usersettinghistory.FieldTags, value)
-		})
-	}
-	if ushu.mutation.TagsCleared() {
-		_spec.ClearField(usersettinghistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ushu.mutation.DeletedAt(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -397,6 +386,17 @@ func (ushu *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if ushu.mutation.DeletedByCleared() {
 		_spec.ClearField(usersettinghistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ushu.mutation.Tags(); ok {
+		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ushu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, usersettinghistory.FieldTags, value)
+		})
+	}
+	if ushu.mutation.TagsCleared() {
+		_spec.ClearField(usersettinghistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ushu.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)
@@ -499,24 +499,6 @@ func (ushuo *UserSettingHistoryUpdateOne) ClearUpdatedBy() *UserSettingHistoryUp
 	return ushuo
 }
 
-// SetTags sets the "tags" field.
-func (ushuo *UserSettingHistoryUpdateOne) SetTags(s []string) *UserSettingHistoryUpdateOne {
-	ushuo.mutation.SetTags(s)
-	return ushuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (ushuo *UserSettingHistoryUpdateOne) AppendTags(s []string) *UserSettingHistoryUpdateOne {
-	ushuo.mutation.AppendTags(s)
-	return ushuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ushuo *UserSettingHistoryUpdateOne) ClearTags() *UserSettingHistoryUpdateOne {
-	ushuo.mutation.ClearTags()
-	return ushuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ushuo *UserSettingHistoryUpdateOne) SetDeletedAt(t time.Time) *UserSettingHistoryUpdateOne {
 	ushuo.mutation.SetDeletedAt(t)
@@ -554,6 +536,24 @@ func (ushuo *UserSettingHistoryUpdateOne) SetNillableDeletedBy(s *string) *UserS
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ushuo *UserSettingHistoryUpdateOne) ClearDeletedBy() *UserSettingHistoryUpdateOne {
 	ushuo.mutation.ClearDeletedBy()
+	return ushuo
+}
+
+// SetTags sets the "tags" field.
+func (ushuo *UserSettingHistoryUpdateOne) SetTags(s []string) *UserSettingHistoryUpdateOne {
+	ushuo.mutation.SetTags(s)
+	return ushuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (ushuo *UserSettingHistoryUpdateOne) AppendTags(s []string) *UserSettingHistoryUpdateOne {
+	ushuo.mutation.AppendTags(s)
+	return ushuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ushuo *UserSettingHistoryUpdateOne) ClearTags() *UserSettingHistoryUpdateOne {
+	ushuo.mutation.ClearTags()
 	return ushuo
 }
 
@@ -839,17 +839,6 @@ func (ushuo *UserSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *U
 	if ushuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersettinghistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ushuo.mutation.Tags(); ok {
-		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ushuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, usersettinghistory.FieldTags, value)
-		})
-	}
-	if ushuo.mutation.TagsCleared() {
-		_spec.ClearField(usersettinghistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ushuo.mutation.DeletedAt(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -861,6 +850,17 @@ func (ushuo *UserSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *U
 	}
 	if ushuo.mutation.DeletedByCleared() {
 		_spec.ClearField(usersettinghistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ushuo.mutation.Tags(); ok {
+		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ushuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, usersettinghistory.FieldTags, value)
+		})
+	}
+	if ushuo.mutation.TagsCleared() {
+		_spec.ClearField(usersettinghistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ushuo.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)

@@ -112,12 +112,6 @@ func (phc *ProgramHistoryCreate) SetNillableUpdatedBy(s *string) *ProgramHistory
 	return phc
 }
 
-// SetDisplayID sets the "display_id" field.
-func (phc *ProgramHistoryCreate) SetDisplayID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetDisplayID(s)
-	return phc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (phc *ProgramHistoryCreate) SetDeletedAt(t time.Time) *ProgramHistoryCreate {
 	phc.mutation.SetDeletedAt(t)
@@ -143,6 +137,12 @@ func (phc *ProgramHistoryCreate) SetNillableDeletedBy(s *string) *ProgramHistory
 	if s != nil {
 		phc.SetDeletedBy(*s)
 	}
+	return phc
+}
+
+// SetDisplayID sets the "display_id" field.
+func (phc *ProgramHistoryCreate) SetDisplayID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetDisplayID(s)
 	return phc
 }
 
@@ -457,10 +457,6 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := phc.mutation.DisplayID(); ok {
-		_spec.SetField(programhistory.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := phc.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -468,6 +464,10 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.DeletedBy(); ok {
 		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := phc.mutation.DisplayID(); ok {
+		_spec.SetField(programhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := phc.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)

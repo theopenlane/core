@@ -23,12 +23,12 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldTemplateID holds the string denoting the template_id field in the database.
@@ -39,8 +39,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
-	// EdgeEntity holds the string denoting the entity edge name in mutations.
-	EdgeEntity = "entity"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the documentdata in the database.
@@ -59,11 +59,11 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
-	// EntityTable is the table that holds the entity relation/edge. The primary key declared below.
-	EntityTable = "entity_documents"
-	// EntityInverseTable is the table name for the Entity entity.
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "entity_documents"
+	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityInverseTable = "entities"
+	EntitiesInverseTable = "entities"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "document_data_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -78,18 +78,18 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldTags,
 	FieldOwnerID,
 	FieldTemplateID,
 	FieldData,
 }
 
 var (
-	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
-	// primary key for the entity relation (M2M).
-	EntityPrimaryKey = []string{"entity_id", "document_data_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"entity_id", "document_data_id"}
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"document_data_id", "file_id"}
@@ -190,17 +190,17 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByEntityCount orders the results by entity count.
-func ByEntityCount(opts ...sql.OrderTermOption) OrderOption {
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntityStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
 	}
 }
 
-// ByEntity orders the results by entity terms.
-func ByEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntityStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -231,11 +231,11 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 	)
 }
-func newEntityStep() *sqlgraph.Step {
+func newEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntityInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

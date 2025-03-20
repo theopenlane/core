@@ -326,14 +326,14 @@ func (tu *TaskUpdate) AddComments(n ...*Note) *TaskUpdate {
 	return tu.AddCommentIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (tu *TaskUpdate) AddGroupIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddGroupIDs(ids...)
 	return tu
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (tu *TaskUpdate) AddGroup(g ...*Group) *TaskUpdate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (tu *TaskUpdate) AddGroups(g ...*Group) *TaskUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -341,14 +341,14 @@ func (tu *TaskUpdate) AddGroup(g ...*Group) *TaskUpdate {
 	return tu.AddGroupIDs(ids...)
 }
 
-// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (tu *TaskUpdate) AddInternalPolicyIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddInternalPolicyIDs(ids...)
 	return tu
 }
 
-// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
-func (tu *TaskUpdate) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (tu *TaskUpdate) AddInternalPolicies(i ...*InternalPolicy) *TaskUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -356,14 +356,14 @@ func (tu *TaskUpdate) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
 	return tu.AddInternalPolicyIDs(ids...)
 }
 
-// AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (tu *TaskUpdate) AddProcedureIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddProcedureIDs(ids...)
 	return tu
 }
 
-// AddProcedure adds the "procedure" edges to the Procedure entity.
-func (tu *TaskUpdate) AddProcedure(p ...*Procedure) *TaskUpdate {
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (tu *TaskUpdate) AddProcedures(p ...*Procedure) *TaskUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -371,14 +371,14 @@ func (tu *TaskUpdate) AddProcedure(p ...*Procedure) *TaskUpdate {
 	return tu.AddProcedureIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (tu *TaskUpdate) AddControlIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddControlIDs(ids...)
 	return tu
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (tu *TaskUpdate) AddControl(c ...*Control) *TaskUpdate {
+// AddControls adds the "controls" edges to the Control entity.
+func (tu *TaskUpdate) AddControls(c ...*Control) *TaskUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -386,29 +386,14 @@ func (tu *TaskUpdate) AddControl(c ...*Control) *TaskUpdate {
 	return tu.AddControlIDs(ids...)
 }
 
-// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
-func (tu *TaskUpdate) AddControlObjectiveIDs(ids ...string) *TaskUpdate {
-	tu.mutation.AddControlObjectiveIDs(ids...)
-	return tu
-}
-
-// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
-func (tu *TaskUpdate) AddControlObjective(c ...*ControlObjective) *TaskUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return tu.AddControlObjectiveIDs(ids...)
-}
-
-// AddSubcontrolIDs adds the "subcontrol" edge to the Subcontrol entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (tu *TaskUpdate) AddSubcontrolIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddSubcontrolIDs(ids...)
 	return tu
 }
 
-// AddSubcontrol adds the "subcontrol" edges to the Subcontrol entity.
-func (tu *TaskUpdate) AddSubcontrol(s ...*Subcontrol) *TaskUpdate {
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (tu *TaskUpdate) AddSubcontrols(s ...*Subcontrol) *TaskUpdate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -416,14 +401,29 @@ func (tu *TaskUpdate) AddSubcontrol(s ...*Subcontrol) *TaskUpdate {
 	return tu.AddSubcontrolIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (tu *TaskUpdate) AddControlObjectiveIDs(ids ...string) *TaskUpdate {
+	tu.mutation.AddControlObjectiveIDs(ids...)
+	return tu
+}
+
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (tu *TaskUpdate) AddControlObjectives(c ...*ControlObjective) *TaskUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return tu.AddControlObjectiveIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (tu *TaskUpdate) AddProgramIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddProgramIDs(ids...)
 	return tu
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (tu *TaskUpdate) AddProgram(p ...*Program) *TaskUpdate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (tu *TaskUpdate) AddPrograms(p ...*Program) *TaskUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -484,20 +484,20 @@ func (tu *TaskUpdate) RemoveComments(n ...*Note) *TaskUpdate {
 	return tu.RemoveCommentIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (tu *TaskUpdate) ClearGroup() *TaskUpdate {
-	tu.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (tu *TaskUpdate) ClearGroups() *TaskUpdate {
+	tu.mutation.ClearGroups()
 	return tu
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (tu *TaskUpdate) RemoveGroupIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveGroupIDs(ids...)
 	return tu
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (tu *TaskUpdate) RemoveGroup(g ...*Group) *TaskUpdate {
+// RemoveGroups removes "groups" edges to Group entities.
+func (tu *TaskUpdate) RemoveGroups(g ...*Group) *TaskUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -505,20 +505,20 @@ func (tu *TaskUpdate) RemoveGroup(g ...*Group) *TaskUpdate {
 	return tu.RemoveGroupIDs(ids...)
 }
 
-// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
-func (tu *TaskUpdate) ClearInternalPolicy() *TaskUpdate {
-	tu.mutation.ClearInternalPolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (tu *TaskUpdate) ClearInternalPolicies() *TaskUpdate {
+	tu.mutation.ClearInternalPolicies()
 	return tu
 }
 
-// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
 func (tu *TaskUpdate) RemoveInternalPolicyIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveInternalPolicyIDs(ids...)
 	return tu
 }
 
-// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
-func (tu *TaskUpdate) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (tu *TaskUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *TaskUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -526,20 +526,20 @@ func (tu *TaskUpdate) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
 	return tu.RemoveInternalPolicyIDs(ids...)
 }
 
-// ClearProcedure clears all "procedure" edges to the Procedure entity.
-func (tu *TaskUpdate) ClearProcedure() *TaskUpdate {
-	tu.mutation.ClearProcedure()
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (tu *TaskUpdate) ClearProcedures() *TaskUpdate {
+	tu.mutation.ClearProcedures()
 	return tu
 }
 
-// RemoveProcedureIDs removes the "procedure" edge to Procedure entities by IDs.
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
 func (tu *TaskUpdate) RemoveProcedureIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveProcedureIDs(ids...)
 	return tu
 }
 
-// RemoveProcedure removes "procedure" edges to Procedure entities.
-func (tu *TaskUpdate) RemoveProcedure(p ...*Procedure) *TaskUpdate {
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (tu *TaskUpdate) RemoveProcedures(p ...*Procedure) *TaskUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -547,20 +547,20 @@ func (tu *TaskUpdate) RemoveProcedure(p ...*Procedure) *TaskUpdate {
 	return tu.RemoveProcedureIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (tu *TaskUpdate) ClearControl() *TaskUpdate {
-	tu.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (tu *TaskUpdate) ClearControls() *TaskUpdate {
+	tu.mutation.ClearControls()
 	return tu
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (tu *TaskUpdate) RemoveControlIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveControlIDs(ids...)
 	return tu
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (tu *TaskUpdate) RemoveControl(c ...*Control) *TaskUpdate {
+// RemoveControls removes "controls" edges to Control entities.
+func (tu *TaskUpdate) RemoveControls(c ...*Control) *TaskUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -568,41 +568,20 @@ func (tu *TaskUpdate) RemoveControl(c ...*Control) *TaskUpdate {
 	return tu.RemoveControlIDs(ids...)
 }
 
-// ClearControlObjective clears all "control_objective" edges to the ControlObjective entity.
-func (tu *TaskUpdate) ClearControlObjective() *TaskUpdate {
-	tu.mutation.ClearControlObjective()
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (tu *TaskUpdate) ClearSubcontrols() *TaskUpdate {
+	tu.mutation.ClearSubcontrols()
 	return tu
 }
 
-// RemoveControlObjectiveIDs removes the "control_objective" edge to ControlObjective entities by IDs.
-func (tu *TaskUpdate) RemoveControlObjectiveIDs(ids ...string) *TaskUpdate {
-	tu.mutation.RemoveControlObjectiveIDs(ids...)
-	return tu
-}
-
-// RemoveControlObjective removes "control_objective" edges to ControlObjective entities.
-func (tu *TaskUpdate) RemoveControlObjective(c ...*ControlObjective) *TaskUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return tu.RemoveControlObjectiveIDs(ids...)
-}
-
-// ClearSubcontrol clears all "subcontrol" edges to the Subcontrol entity.
-func (tu *TaskUpdate) ClearSubcontrol() *TaskUpdate {
-	tu.mutation.ClearSubcontrol()
-	return tu
-}
-
-// RemoveSubcontrolIDs removes the "subcontrol" edge to Subcontrol entities by IDs.
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
 func (tu *TaskUpdate) RemoveSubcontrolIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveSubcontrolIDs(ids...)
 	return tu
 }
 
-// RemoveSubcontrol removes "subcontrol" edges to Subcontrol entities.
-func (tu *TaskUpdate) RemoveSubcontrol(s ...*Subcontrol) *TaskUpdate {
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (tu *TaskUpdate) RemoveSubcontrols(s ...*Subcontrol) *TaskUpdate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -610,20 +589,41 @@ func (tu *TaskUpdate) RemoveSubcontrol(s ...*Subcontrol) *TaskUpdate {
 	return tu.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (tu *TaskUpdate) ClearProgram() *TaskUpdate {
-	tu.mutation.ClearProgram()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (tu *TaskUpdate) ClearControlObjectives() *TaskUpdate {
+	tu.mutation.ClearControlObjectives()
 	return tu
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (tu *TaskUpdate) RemoveControlObjectiveIDs(ids ...string) *TaskUpdate {
+	tu.mutation.RemoveControlObjectiveIDs(ids...)
+	return tu
+}
+
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (tu *TaskUpdate) RemoveControlObjectives(c ...*ControlObjective) *TaskUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return tu.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (tu *TaskUpdate) ClearPrograms() *TaskUpdate {
+	tu.mutation.ClearPrograms()
+	return tu
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (tu *TaskUpdate) RemoveProgramIDs(ids ...string) *TaskUpdate {
 	tu.mutation.RemoveProgramIDs(ids...)
 	return tu
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (tu *TaskUpdate) RemoveProgram(p ...*Program) *TaskUpdate {
+// RemovePrograms removes "programs" edges to Program entities.
+func (tu *TaskUpdate) RemovePrograms(p ...*Program) *TaskUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -914,12 +914,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.GroupCleared() {
+	if tu.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -928,29 +928,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.GroupTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedGroupIDs(); len(nodes) > 0 && !tu.mutation.GroupCleared() {
+	if nodes := tu.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !tu.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.GroupTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tu.mutation.GroupIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -960,14 +943,31 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if tu.mutation.InternalPolicyCleared() {
+	if nodes := tu.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -976,12 +976,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !tu.mutation.InternalPolicyCleared() {
+	if nodes := tu.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !tu.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -993,12 +993,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1010,12 +1010,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.ProcedureCleared() {
+	if tu.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -1024,12 +1024,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.ProcedureTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedProcedureIDs(); len(nodes) > 0 && !tu.mutation.ProcedureCleared() {
+	if nodes := tu.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !tu.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -1041,12 +1041,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.ProcedureIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -1058,12 +1058,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.ControlCleared() {
+	if tu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1072,12 +1072,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.ControlTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedControlIDs(); len(nodes) > 0 && !tu.mutation.ControlCleared() {
+	if nodes := tu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !tu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1089,12 +1089,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1106,60 +1106,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.ControlObjectiveCleared() {
+	if tu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tu.mutation.RemovedControlObjectiveIDs(); len(nodes) > 0 && !tu.mutation.ControlObjectiveCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tu.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if tu.mutation.SubcontrolCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -1168,12 +1120,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.SubcontrolTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedSubcontrolIDs(); len(nodes) > 0 && !tu.mutation.SubcontrolCleared() {
+	if nodes := tu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !tu.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -1185,12 +1137,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.SubcontrolIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -1202,12 +1154,60 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.ProgramCleared() {
+	if tu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !tu.mutation.ControlObjectivesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1216,12 +1216,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.ProgramTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !tu.mutation.ProgramCleared() {
+	if nodes := tu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !tu.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1233,12 +1233,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1605,14 +1605,14 @@ func (tuo *TaskUpdateOne) AddComments(n ...*Note) *TaskUpdateOne {
 	return tuo.AddCommentIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (tuo *TaskUpdateOne) AddGroupIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddGroupIDs(ids...)
 	return tuo
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (tuo *TaskUpdateOne) AddGroup(g ...*Group) *TaskUpdateOne {
+// AddGroups adds the "groups" edges to the Group entity.
+func (tuo *TaskUpdateOne) AddGroups(g ...*Group) *TaskUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1620,14 +1620,14 @@ func (tuo *TaskUpdateOne) AddGroup(g ...*Group) *TaskUpdateOne {
 	return tuo.AddGroupIDs(ids...)
 }
 
-// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (tuo *TaskUpdateOne) AddInternalPolicyIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddInternalPolicyIDs(ids...)
 	return tuo
 }
 
-// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
-func (tuo *TaskUpdateOne) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdateOne {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (tuo *TaskUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *TaskUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1635,14 +1635,14 @@ func (tuo *TaskUpdateOne) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdateOne
 	return tuo.AddInternalPolicyIDs(ids...)
 }
 
-// AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (tuo *TaskUpdateOne) AddProcedureIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddProcedureIDs(ids...)
 	return tuo
 }
 
-// AddProcedure adds the "procedure" edges to the Procedure entity.
-func (tuo *TaskUpdateOne) AddProcedure(p ...*Procedure) *TaskUpdateOne {
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (tuo *TaskUpdateOne) AddProcedures(p ...*Procedure) *TaskUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1650,14 +1650,14 @@ func (tuo *TaskUpdateOne) AddProcedure(p ...*Procedure) *TaskUpdateOne {
 	return tuo.AddProcedureIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (tuo *TaskUpdateOne) AddControlIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddControlIDs(ids...)
 	return tuo
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (tuo *TaskUpdateOne) AddControl(c ...*Control) *TaskUpdateOne {
+// AddControls adds the "controls" edges to the Control entity.
+func (tuo *TaskUpdateOne) AddControls(c ...*Control) *TaskUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1665,29 +1665,14 @@ func (tuo *TaskUpdateOne) AddControl(c ...*Control) *TaskUpdateOne {
 	return tuo.AddControlIDs(ids...)
 }
 
-// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
-func (tuo *TaskUpdateOne) AddControlObjectiveIDs(ids ...string) *TaskUpdateOne {
-	tuo.mutation.AddControlObjectiveIDs(ids...)
-	return tuo
-}
-
-// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
-func (tuo *TaskUpdateOne) AddControlObjective(c ...*ControlObjective) *TaskUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return tuo.AddControlObjectiveIDs(ids...)
-}
-
-// AddSubcontrolIDs adds the "subcontrol" edge to the Subcontrol entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (tuo *TaskUpdateOne) AddSubcontrolIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddSubcontrolIDs(ids...)
 	return tuo
 }
 
-// AddSubcontrol adds the "subcontrol" edges to the Subcontrol entity.
-func (tuo *TaskUpdateOne) AddSubcontrol(s ...*Subcontrol) *TaskUpdateOne {
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (tuo *TaskUpdateOne) AddSubcontrols(s ...*Subcontrol) *TaskUpdateOne {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -1695,14 +1680,29 @@ func (tuo *TaskUpdateOne) AddSubcontrol(s ...*Subcontrol) *TaskUpdateOne {
 	return tuo.AddSubcontrolIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (tuo *TaskUpdateOne) AddControlObjectiveIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.AddControlObjectiveIDs(ids...)
+	return tuo
+}
+
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (tuo *TaskUpdateOne) AddControlObjectives(c ...*ControlObjective) *TaskUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return tuo.AddControlObjectiveIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (tuo *TaskUpdateOne) AddProgramIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddProgramIDs(ids...)
 	return tuo
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (tuo *TaskUpdateOne) AddProgram(p ...*Program) *TaskUpdateOne {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (tuo *TaskUpdateOne) AddPrograms(p ...*Program) *TaskUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1763,20 +1763,20 @@ func (tuo *TaskUpdateOne) RemoveComments(n ...*Note) *TaskUpdateOne {
 	return tuo.RemoveCommentIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (tuo *TaskUpdateOne) ClearGroup() *TaskUpdateOne {
-	tuo.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (tuo *TaskUpdateOne) ClearGroups() *TaskUpdateOne {
+	tuo.mutation.ClearGroups()
 	return tuo
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (tuo *TaskUpdateOne) RemoveGroupIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveGroupIDs(ids...)
 	return tuo
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (tuo *TaskUpdateOne) RemoveGroup(g ...*Group) *TaskUpdateOne {
+// RemoveGroups removes "groups" edges to Group entities.
+func (tuo *TaskUpdateOne) RemoveGroups(g ...*Group) *TaskUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -1784,20 +1784,20 @@ func (tuo *TaskUpdateOne) RemoveGroup(g ...*Group) *TaskUpdateOne {
 	return tuo.RemoveGroupIDs(ids...)
 }
 
-// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
-func (tuo *TaskUpdateOne) ClearInternalPolicy() *TaskUpdateOne {
-	tuo.mutation.ClearInternalPolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (tuo *TaskUpdateOne) ClearInternalPolicies() *TaskUpdateOne {
+	tuo.mutation.ClearInternalPolicies()
 	return tuo
 }
 
-// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
 func (tuo *TaskUpdateOne) RemoveInternalPolicyIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveInternalPolicyIDs(ids...)
 	return tuo
 }
 
-// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
-func (tuo *TaskUpdateOne) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdateOne {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (tuo *TaskUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *TaskUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -1805,20 +1805,20 @@ func (tuo *TaskUpdateOne) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdate
 	return tuo.RemoveInternalPolicyIDs(ids...)
 }
 
-// ClearProcedure clears all "procedure" edges to the Procedure entity.
-func (tuo *TaskUpdateOne) ClearProcedure() *TaskUpdateOne {
-	tuo.mutation.ClearProcedure()
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (tuo *TaskUpdateOne) ClearProcedures() *TaskUpdateOne {
+	tuo.mutation.ClearProcedures()
 	return tuo
 }
 
-// RemoveProcedureIDs removes the "procedure" edge to Procedure entities by IDs.
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
 func (tuo *TaskUpdateOne) RemoveProcedureIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveProcedureIDs(ids...)
 	return tuo
 }
 
-// RemoveProcedure removes "procedure" edges to Procedure entities.
-func (tuo *TaskUpdateOne) RemoveProcedure(p ...*Procedure) *TaskUpdateOne {
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (tuo *TaskUpdateOne) RemoveProcedures(p ...*Procedure) *TaskUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1826,20 +1826,20 @@ func (tuo *TaskUpdateOne) RemoveProcedure(p ...*Procedure) *TaskUpdateOne {
 	return tuo.RemoveProcedureIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (tuo *TaskUpdateOne) ClearControl() *TaskUpdateOne {
-	tuo.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (tuo *TaskUpdateOne) ClearControls() *TaskUpdateOne {
+	tuo.mutation.ClearControls()
 	return tuo
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (tuo *TaskUpdateOne) RemoveControlIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveControlIDs(ids...)
 	return tuo
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (tuo *TaskUpdateOne) RemoveControl(c ...*Control) *TaskUpdateOne {
+// RemoveControls removes "controls" edges to Control entities.
+func (tuo *TaskUpdateOne) RemoveControls(c ...*Control) *TaskUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1847,41 +1847,20 @@ func (tuo *TaskUpdateOne) RemoveControl(c ...*Control) *TaskUpdateOne {
 	return tuo.RemoveControlIDs(ids...)
 }
 
-// ClearControlObjective clears all "control_objective" edges to the ControlObjective entity.
-func (tuo *TaskUpdateOne) ClearControlObjective() *TaskUpdateOne {
-	tuo.mutation.ClearControlObjective()
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (tuo *TaskUpdateOne) ClearSubcontrols() *TaskUpdateOne {
+	tuo.mutation.ClearSubcontrols()
 	return tuo
 }
 
-// RemoveControlObjectiveIDs removes the "control_objective" edge to ControlObjective entities by IDs.
-func (tuo *TaskUpdateOne) RemoveControlObjectiveIDs(ids ...string) *TaskUpdateOne {
-	tuo.mutation.RemoveControlObjectiveIDs(ids...)
-	return tuo
-}
-
-// RemoveControlObjective removes "control_objective" edges to ControlObjective entities.
-func (tuo *TaskUpdateOne) RemoveControlObjective(c ...*ControlObjective) *TaskUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return tuo.RemoveControlObjectiveIDs(ids...)
-}
-
-// ClearSubcontrol clears all "subcontrol" edges to the Subcontrol entity.
-func (tuo *TaskUpdateOne) ClearSubcontrol() *TaskUpdateOne {
-	tuo.mutation.ClearSubcontrol()
-	return tuo
-}
-
-// RemoveSubcontrolIDs removes the "subcontrol" edge to Subcontrol entities by IDs.
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
 func (tuo *TaskUpdateOne) RemoveSubcontrolIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveSubcontrolIDs(ids...)
 	return tuo
 }
 
-// RemoveSubcontrol removes "subcontrol" edges to Subcontrol entities.
-func (tuo *TaskUpdateOne) RemoveSubcontrol(s ...*Subcontrol) *TaskUpdateOne {
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (tuo *TaskUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *TaskUpdateOne {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -1889,20 +1868,41 @@ func (tuo *TaskUpdateOne) RemoveSubcontrol(s ...*Subcontrol) *TaskUpdateOne {
 	return tuo.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (tuo *TaskUpdateOne) ClearProgram() *TaskUpdateOne {
-	tuo.mutation.ClearProgram()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (tuo *TaskUpdateOne) ClearControlObjectives() *TaskUpdateOne {
+	tuo.mutation.ClearControlObjectives()
 	return tuo
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (tuo *TaskUpdateOne) RemoveControlObjectiveIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.RemoveControlObjectiveIDs(ids...)
+	return tuo
+}
+
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (tuo *TaskUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *TaskUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return tuo.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (tuo *TaskUpdateOne) ClearPrograms() *TaskUpdateOne {
+	tuo.mutation.ClearPrograms()
+	return tuo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (tuo *TaskUpdateOne) RemoveProgramIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.RemoveProgramIDs(ids...)
 	return tuo
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (tuo *TaskUpdateOne) RemoveProgram(p ...*Program) *TaskUpdateOne {
+// RemovePrograms removes "programs" edges to Program entities.
+func (tuo *TaskUpdateOne) RemovePrograms(p ...*Program) *TaskUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -2223,12 +2223,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.GroupCleared() {
+	if tuo.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2237,29 +2237,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.GroupTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedGroupIDs(); len(nodes) > 0 && !tuo.mutation.GroupCleared() {
+	if nodes := tuo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !tuo.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.GroupTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tuo.mutation.GroupIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2269,14 +2252,31 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if tuo.mutation.InternalPolicyCleared() {
+	if nodes := tuo.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2285,12 +2285,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !tuo.mutation.InternalPolicyCleared() {
+	if nodes := tuo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !tuo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2302,12 +2302,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2319,12 +2319,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.ProcedureCleared() {
+	if tuo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -2333,12 +2333,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.ProcedureTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedProcedureIDs(); len(nodes) > 0 && !tuo.mutation.ProcedureCleared() {
+	if nodes := tuo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !tuo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -2350,12 +2350,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.ProcedureIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -2367,12 +2367,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.ControlCleared() {
+	if tuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2381,12 +2381,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.ControlTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedControlIDs(); len(nodes) > 0 && !tuo.mutation.ControlCleared() {
+	if nodes := tuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !tuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2398,12 +2398,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2415,60 +2415,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.ControlObjectiveCleared() {
+	if tuo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tuo.mutation.RemovedControlObjectiveIDs(); len(nodes) > 0 && !tuo.mutation.ControlObjectiveCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := tuo.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if tuo.mutation.SubcontrolCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -2477,12 +2429,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.SubcontrolTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedSubcontrolIDs(); len(nodes) > 0 && !tuo.mutation.SubcontrolCleared() {
+	if nodes := tuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !tuo.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -2494,12 +2446,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.SubcontrolIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -2511,12 +2463,60 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.ProgramCleared() {
+	if tuo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !tuo.mutation.ControlObjectivesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -2525,12 +2525,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.ProgramTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !tuo.mutation.ProgramCleared() {
+	if nodes := tuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !tuo.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -2542,12 +2542,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

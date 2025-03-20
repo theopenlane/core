@@ -4,21 +4,35 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
 type Integration struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaIntegration = "integration"
+
+func (Integration) Name() string {
+	return SchemaIntegration
+}
+
+func (Integration) GetType() any {
+	return Integration.Type
+}
+
+func (Integration) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaIntegration)
 }
 
 // Fields of the Integration
@@ -45,35 +59,31 @@ func (Integration) Fields() []ent.Field {
 }
 
 // Edges of the Integration
-func (Integration) Edges() []ent.Edge {
+func (i Integration) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("secrets", Hush.Type).
-			Annotations(entgql.RelayConnection()).
-			Comment("the secrets associated with the integration"),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Hush{},
+			comment:    "the secrets associated with the integration",
+		}),
+		defaultEdgeToWithPagination(i, Event{}),
 	}
 }
 
 // Annotations of the Integration
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}
 }
 
 // Mixin of the Integration
 func (Integration) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("integrations"),
-	}
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("integrations"),
+		},
+	}.getMixins()
 }
 
 // Policy of the Integration

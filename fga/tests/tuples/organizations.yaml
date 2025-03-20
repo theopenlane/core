@@ -22,3 +22,17 @@
 - user: user:ulid-of-member
   relation: member
   object: organization:restricted
+# setup group for group creator access check
+- user: organization:openlane
+  relation: parent
+  object: group:evidence-creator
+  condition:
+    name: public_group
+    context:
+      public: false
+- user: user:ulid-of-member
+  relation: member
+  object: group:evidence-creator
+- user: group:evidence-creator#member
+  relation: evidence_creator
+  object: organization:openlane

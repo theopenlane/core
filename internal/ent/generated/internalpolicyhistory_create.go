@@ -112,12 +112,6 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableUpdatedBy(s *string) *Intern
 	return iphc
 }
 
-// SetTags sets the "tags" field.
-func (iphc *InternalPolicyHistoryCreate) SetTags(s []string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetTags(s)
-	return iphc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (iphc *InternalPolicyHistoryCreate) SetDeletedAt(t time.Time) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetDeletedAt(t)
@@ -149,6 +143,26 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableDeletedBy(s *string) *Intern
 // SetDisplayID sets the "display_id" field.
 func (iphc *InternalPolicyHistoryCreate) SetDisplayID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetDisplayID(s)
+	return iphc
+}
+
+// SetTags sets the "tags" field.
+func (iphc *InternalPolicyHistoryCreate) SetTags(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetTags(s)
+	return iphc
+}
+
+// SetRevision sets the "revision" field.
+func (iphc *InternalPolicyHistoryCreate) SetRevision(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetRevision(s)
+	return iphc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableRevision(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetRevision(*s)
+	}
 	return iphc
 }
 
@@ -256,20 +270,6 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableReviewFrequency(e *enums.Fre
 	return iphc
 }
 
-// SetRevision sets the "revision" field.
-func (iphc *InternalPolicyHistoryCreate) SetRevision(s string) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetRevision(s)
-	return iphc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (iphc *InternalPolicyHistoryCreate) SetNillableRevision(s *string) *InternalPolicyHistoryCreate {
-	if s != nil {
-		iphc.SetRevision(*s)
-	}
-	return iphc
-}
-
 // SetID sets the "id" field.
 func (iphc *InternalPolicyHistoryCreate) SetID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetID(s)
@@ -335,6 +335,10 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 		v := internalpolicyhistory.DefaultTags
 		iphc.mutation.SetTags(v)
 	}
+	if _, ok := iphc.mutation.Revision(); !ok {
+		v := internalpolicyhistory.DefaultRevision
+		iphc.mutation.SetRevision(v)
+	}
 	if _, ok := iphc.mutation.Status(); !ok {
 		v := internalpolicyhistory.DefaultStatus
 		iphc.mutation.SetStatus(v)
@@ -350,10 +354,6 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 	if _, ok := iphc.mutation.ReviewFrequency(); !ok {
 		v := internalpolicyhistory.DefaultReviewFrequency
 		iphc.mutation.SetReviewFrequency(v)
-	}
-	if _, ok := iphc.mutation.Revision(); !ok {
-		v := internalpolicyhistory.DefaultRevision
-		iphc.mutation.SetRevision(v)
 	}
 	if _, ok := iphc.mutation.ID(); !ok {
 		v := internalpolicyhistory.DefaultID()
@@ -454,10 +454,6 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := iphc.mutation.Tags(); ok {
-		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := iphc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -469,6 +465,14 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.DisplayID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
+	}
+	if value, ok := iphc.mutation.Tags(); ok {
+		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
+	if value, ok := iphc.mutation.Revision(); ok {
+		_spec.SetField(internalpolicyhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := iphc.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
@@ -501,10 +505,6 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := iphc.mutation.Revision(); ok {
-		_spec.SetField(internalpolicyhistory.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	return _node, _spec
 }

@@ -4,9 +4,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -18,7 +18,23 @@ import (
 
 // Onboarding holds the schema definition for the Onboarding entity
 type Onboarding struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaOnboarding = "onboarding"
+
+func (Onboarding) Name() string {
+	return SchemaOnboarding
+}
+
+func (Onboarding) GetType() any {
+	return Onboarding.Type
+}
+
+func (Onboarding) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOnboarding)
 }
 
 // Fields of the Onboarding
@@ -55,12 +71,14 @@ func (Onboarding) Mixin() []ent.Mixin {
 }
 
 // Edges of the Onboarding
-func (Onboarding) Edges() []ent.Edge {
+func (o Onboarding) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("organization", Organization.Type).
-			Unique().
-			Immutable().
-			Field("organization_id"),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: Organization{},
+			field:      "organization_id",
+			immutable:  true,
+		}),
 	}
 }
 

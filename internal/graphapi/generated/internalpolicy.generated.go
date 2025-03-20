@@ -75,14 +75,16 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
@@ -99,8 +101,6 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -179,14 +179,16 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
@@ -203,8 +205,6 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -327,14 +327,16 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 			case "name":
@@ -351,8 +353,6 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

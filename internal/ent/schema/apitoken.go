@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/utils/keygen"
@@ -17,14 +17,29 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // APIToken holds the schema definition for the APIToken entity.
 type APIToken struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaAPIToken = "api_token"
+
+func (APIToken) Name() string {
+	return SchemaAPIToken
+}
+
+func (APIToken) GetType() any {
+	return APIToken.Type
+}
+
+func (APIToken) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaAPIToken)
 }
 
 // Fields of the APIToken
@@ -90,25 +105,20 @@ func (APIToken) Indexes() []ent.Index {
 }
 
 // Mixin of the APIToken
-func (APIToken) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnedMixin(
-			ObjectOwnedMixin{
-				Ref: "api_tokens",
-			}),
-	}
+func (a APIToken) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnedMixin(
+				ObjectOwnedMixin{
+					Ref: a.PluralName(),
+				}),
+		},
+	}.getMixins()
 }
 
 // Annotations of the APIToken
 func (APIToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		history.Annotations{
 			Exclude: true,
 		},

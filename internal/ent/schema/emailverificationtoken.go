@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/entx/history"
@@ -25,7 +26,23 @@ import (
 
 // EmailVerificationToken holds the schema definition for the EmailVerificationToken entity
 type EmailVerificationToken struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaEmailVerificationToken = "email_verification_token"
+
+func (EmailVerificationToken) Name() string {
+	return SchemaEmailVerificationToken
+}
+
+func (EmailVerificationToken) GetType() any {
+	return EmailVerificationToken.Type
+}
+
+func (EmailVerificationToken) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaEmailVerificationToken)
 }
 
 // Fields of the EmailVerificationToken
@@ -58,13 +75,13 @@ func (EmailVerificationToken) Edges() []ent.Edge {
 }
 
 // Mixin of the EmailVerificationToken
-func (EmailVerificationToken) Mixin() []ent.Mixin {
+func (e EmailVerificationToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		UserOwnedMixin{
-			Ref:               "email_verification_tokens",
+			Ref:               e.PluralName(),
 			SkipOASGeneration: true,
 			SkipInterceptor:   interceptors.SkipAll,
 			SkipTokenType: []token.PrivacyToken{

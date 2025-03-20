@@ -32,12 +32,12 @@ type ControlObjective struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the control objective
@@ -234,7 +234,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldRevision, controlobjective.FieldDisplayID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldRevision, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -295,12 +295,6 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.DeletedBy = value.String
 			}
-		case controlobjective.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				co.Revision = value.String
-			}
 		case controlobjective.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
@@ -314,6 +308,12 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &co.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case controlobjective.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				co.Revision = value.String
 			}
 		case controlobjective.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -482,14 +482,14 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(co.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(co.Revision)
-	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(co.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", co.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(co.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(co.OwnerID)

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -33,7 +34,23 @@ const (
 
 // User holds the schema definition for the User entity.
 type User struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaUser = "user"
+
+func (User) Name() string {
+	return SchemaUser
+}
+
+func (User) GetType() any {
+	return User.Type
+}
+
+func (User) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaUser)
 }
 
 // Mixin of the User
@@ -46,6 +63,7 @@ func (User) Mixin() []ent.Mixin {
 			SingleFieldIndex:      true,
 		},
 		emixin.TagMixin{},
+		mixin.AnnotationMixin{},
 	}
 }
 
@@ -138,46 +156,72 @@ func (User) Indexes() []ent.Index {
 }
 
 // Edges of the User
-func (User) Edges() []ent.Edge {
+func (u User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("personal_access_tokens", PersonalAccessToken.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection()),
-		edge.To("tfa_settings", TFASetting.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection()),
-		edge.To("setting", UserSetting.Type).
-			Required().
-			Unique().
-			Annotations(
-				entx.CascadeAnnotationField("User"),
-			),
-		edge.To("email_verification_tokens", EmailVerificationToken.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection()),
-		edge.To("password_reset_tokens", PasswordResetToken.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection()),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
+			edgeSchema:         PersonalAccessToken{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
+			edgeSchema:         TFASetting{},
+			cascadeDeleteOwner: true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema:    u,
+			name:          "setting",
+			t:             UserSetting.Type,
+			required:      true,
+			cascadeDelete: "User",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
+			edgeSchema:         EmailVerificationToken{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
+			edgeSchema:         PasswordResetToken{},
+			cascadeDeleteOwner: true,
+		}),
+
 		edge.To("groups", Group.Type).
+			Annotations(entgql.RelayConnection()).
 			Through("group_memberships", GroupMembership.Type),
 		edge.To("organizations", Organization.Type).
+			Annotations(entgql.RelayConnection()).
 			Through("org_memberships", OrgMembership.Type),
-		edge.To("webauthn", Webauthn.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection()),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
-		edge.To("avatar_file", File.Type).
-			Field("avatar_local_file_id").Unique(),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
-		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
-		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
-		edge.To("assigner_tasks", Task.Type).Annotations(entgql.RelayConnection()),
-		edge.To("assignee_tasks", Task.Type).Annotations(entgql.RelayConnection()),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         u,
+			name:               Webauthn{}.Name(),
+			t:                  Webauthn.Type,
+			cascadeDeleteOwner: true,
+		}),
+
+		defaultEdgeToWithPagination(u, File{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: u,
+			name:       "avatar_file",
+			t:          File.Type,
+			field:      "avatar_local_file_id",
+		}),
+
+		defaultEdgeToWithPagination(u, Event{}),
+		defaultEdgeToWithPagination(u, ActionPlan{}),
+		defaultEdgeToWithPagination(u, Subcontrol{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "assigner_tasks",
+			t:          Task.Type,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "assignee_tasks",
+			t:          Task.Type,
+		}),
+
 		edge.To("programs", Program.Type).
 			Through("program_memberships", ProgramMembership.Type),
 	}
@@ -186,10 +230,6 @@ func (User) Edges() []ent.Edge {
 // Annotations of the User
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete users from groups and orgs when the user is deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

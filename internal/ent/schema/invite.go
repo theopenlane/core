@@ -8,18 +8,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -32,7 +30,23 @@ const (
 
 // Invite holds the schema definition for the Invite entity
 type Invite struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaInvite = "invite"
+
+func (Invite) Name() string {
+	return SchemaInvite
+}
+
+func (Invite) GetType() any {
+	return Invite.Type
+}
+
+func (Invite) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaInvite)
 }
 
 // Fields of the Invite
@@ -94,19 +108,19 @@ func (Invite) Fields() []ent.Field {
 }
 
 // Mixin of the Invite
-func (Invite) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		NewOrgOwnedMixin(
-			ObjectOwnedMixin{
-				Ref: "invites",
-				SkipTokenType: []token.PrivacyToken{
-					&token.OrgInviteToken{},
-				},
-			}),
-	}
+func (i Invite) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnedMixin(
+				ObjectOwnedMixin{
+					Ref: i.PluralName(),
+					SkipTokenType: []token.PrivacyToken{
+						&token.OrgInviteToken{},
+					},
+				}),
+		},
+	}.getMixins()
 }
 
 // Indexes of the Invite
@@ -118,19 +132,15 @@ func (Invite) Indexes() []ent.Index {
 }
 
 // Edges of the Invite
-func (Invite) Edges() []ent.Edge {
+func (i Invite) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(i, Event{}),
 	}
 }
 
 // Annotations of the Invite
 func (Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,

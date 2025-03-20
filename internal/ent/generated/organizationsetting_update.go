@@ -68,24 +68,6 @@ func (osu *OrganizationSettingUpdate) ClearUpdatedBy() *OrganizationSettingUpdat
 	return osu
 }
 
-// SetTags sets the "tags" field.
-func (osu *OrganizationSettingUpdate) SetTags(s []string) *OrganizationSettingUpdate {
-	osu.mutation.SetTags(s)
-	return osu
-}
-
-// AppendTags appends s to the "tags" field.
-func (osu *OrganizationSettingUpdate) AppendTags(s []string) *OrganizationSettingUpdate {
-	osu.mutation.AppendTags(s)
-	return osu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (osu *OrganizationSettingUpdate) ClearTags() *OrganizationSettingUpdate {
-	osu.mutation.ClearTags()
-	return osu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (osu *OrganizationSettingUpdate) SetDeletedAt(t time.Time) *OrganizationSettingUpdate {
 	osu.mutation.SetDeletedAt(t)
@@ -123,6 +105,24 @@ func (osu *OrganizationSettingUpdate) SetNillableDeletedBy(s *string) *Organizat
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (osu *OrganizationSettingUpdate) ClearDeletedBy() *OrganizationSettingUpdate {
 	osu.mutation.ClearDeletedBy()
+	return osu
+}
+
+// SetTags sets the "tags" field.
+func (osu *OrganizationSettingUpdate) SetTags(s []string) *OrganizationSettingUpdate {
+	osu.mutation.SetTags(s)
+	return osu
+}
+
+// AppendTags appends s to the "tags" field.
+func (osu *OrganizationSettingUpdate) AppendTags(s []string) *OrganizationSettingUpdate {
+	osu.mutation.AppendTags(s)
+	return osu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (osu *OrganizationSettingUpdate) ClearTags() *OrganizationSettingUpdate {
+	osu.mutation.ClearTags()
 	return osu
 }
 
@@ -476,17 +476,6 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	if osu.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.Tags(); ok {
-		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := osu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsetting.FieldTags, value)
-		})
-	}
-	if osu.mutation.TagsCleared() {
-		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
-	}
 	if value, ok := osu.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -498,6 +487,17 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if osu.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := osu.mutation.Tags(); ok {
+		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := osu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldTags, value)
+		})
+	}
+	if osu.mutation.TagsCleared() {
+		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
 	}
 	if value, ok := osu.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)
@@ -695,24 +695,6 @@ func (osuo *OrganizationSettingUpdateOne) ClearUpdatedBy() *OrganizationSettingU
 	return osuo
 }
 
-// SetTags sets the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) SetTags(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetTags(s)
-	return osuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) AppendTags(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.AppendTags(s)
-	return osuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) ClearTags() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearTags()
-	return osuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (osuo *OrganizationSettingUpdateOne) SetDeletedAt(t time.Time) *OrganizationSettingUpdateOne {
 	osuo.mutation.SetDeletedAt(t)
@@ -750,6 +732,24 @@ func (osuo *OrganizationSettingUpdateOne) SetNillableDeletedBy(s *string) *Organ
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (osuo *OrganizationSettingUpdateOne) ClearDeletedBy() *OrganizationSettingUpdateOne {
 	osuo.mutation.ClearDeletedBy()
+	return osuo
+}
+
+// SetTags sets the "tags" field.
+func (osuo *OrganizationSettingUpdateOne) SetTags(s []string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetTags(s)
+	return osuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (osuo *OrganizationSettingUpdateOne) AppendTags(s []string) *OrganizationSettingUpdateOne {
+	osuo.mutation.AppendTags(s)
+	return osuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (osuo *OrganizationSettingUpdateOne) ClearTags() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearTags()
 	return osuo
 }
 
@@ -1133,17 +1133,6 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if osuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.Tags(); ok {
-		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := osuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsetting.FieldTags, value)
-		})
-	}
-	if osuo.mutation.TagsCleared() {
-		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
-	}
 	if value, ok := osuo.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1155,6 +1144,17 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if osuo.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := osuo.mutation.Tags(); ok {
+		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := osuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldTags, value)
+		})
+	}
+	if osuo.mutation.TagsCleared() {
+		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
 	}
 	if value, ok := osuo.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)

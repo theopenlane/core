@@ -4,19 +4,16 @@ import (
 	"net/mail"
 	"regexp"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
@@ -25,7 +22,23 @@ import (
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
 type OrganizationSetting struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaOrganizationSetting = "organization_setting"
+
+func (OrganizationSetting) Name() string {
+	return SchemaOrganizationSetting
+}
+
+func (OrganizationSetting) GetType() any {
+	return OrganizationSetting.Type
+}
+
+func (OrganizationSetting) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrganizationSetting)
 }
 
 // Fields of the OrganizationSetting
@@ -78,23 +91,26 @@ func (OrganizationSetting) Fields() []ent.Field {
 }
 
 // Edges of the OrganizationSetting
-func (OrganizationSetting) Edges() []ent.Edge {
+func (o OrganizationSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("organization", Organization.Type).Ref("setting").Field("organization_id").Unique(),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: Organization{},
+			field:      "organization_id",
+			ref:        "setting",
+		}),
+		defaultEdgeToWithPagination(o, File{}),
 	}
 }
 
 // Annotations of the OrganizationSetting
 func (OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SettingsChecks("organization"),
 	}
 }
 
+// Hooks of the OrganizationSetting
 func (OrganizationSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookOrganizationCreatePolicy(),
@@ -111,12 +127,7 @@ func (OrganizationSetting) Interceptors() []ent.Interceptor {
 
 // Mixin of the OrganizationSetting
 func (OrganizationSetting) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return getDefaultMixins()
 }
 
 // Policy defines the privacy policy of the OrganizationSetting

@@ -17,10 +17,23 @@ import (
 // and denys if it is and the user is not a system admin
 func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 	return privacy.StandardMutationRuleFunc(func(ctx context.Context, m *generated.StandardMutation) error {
-		systemOwned, ok := m.SystemOwned()
+		systemOwned, _ := m.SystemOwned()
+		isPublic, _ := m.IsPublic()
+		freeToUse, _ := m.FreeToUse()
+
+		hasAdminField := systemOwned || isPublic || freeToUse
+
+		allowAdmin, err := CheckIsSystemAdmin(ctx, m)
+		if err != nil {
+			return err
+		}
+
+		if allowAdmin {
+			return privacy.Allow
+		}
 
 		// if the field was not in the mutation, check the database
-		if !ok {
+		if !hasAdminField {
 			switch m.Op() {
 			case ent.OpCreate:
 				// on create check if system owned is being set, if not continue
@@ -33,6 +46,7 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 					return err
 				}
 
+				// we don't need to check the other fields on update, just if the standard is system owned
 				standards, err := m.Client().Standard.Query().Where(standard.IDIn(ids...)).Select("system_owned").All(ctx)
 				if err != nil {
 					return err
@@ -41,23 +55,14 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 				// if we have one system owned standard, set to true and continue
 				for _, s := range standards {
 					if s.SystemOwned {
-						systemOwned = true
+						hasAdminField = true
 						break
 					}
 				}
 			}
 		}
 
-		allowAdmin, err := CheckIsSystemAdmin(ctx, m)
-		if err != nil {
-			return err
-		}
-
-		if allowAdmin {
-			return privacy.Allow
-		}
-
-		if systemOwned && !allowAdmin {
+		if hasAdminField && !allowAdmin {
 			return privacy.Denyf("user is not a system admin")
 		}
 

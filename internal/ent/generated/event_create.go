@@ -148,14 +148,14 @@ func (ec *EventCreate) SetNillableID(s *string) *EventCreate {
 	return ec
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (ec *EventCreate) AddUserIDs(ids ...string) *EventCreate {
 	ec.mutation.AddUserIDs(ids...)
 	return ec
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (ec *EventCreate) AddUser(u ...*User) *EventCreate {
+// AddUsers adds the "users" edges to the User entity.
+func (ec *EventCreate) AddUsers(u ...*User) *EventCreate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -163,14 +163,14 @@ func (ec *EventCreate) AddUser(u ...*User) *EventCreate {
 	return ec.AddUserIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (ec *EventCreate) AddGroupIDs(ids ...string) *EventCreate {
 	ec.mutation.AddGroupIDs(ids...)
 	return ec
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (ec *EventCreate) AddGroup(g ...*Group) *EventCreate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (ec *EventCreate) AddGroups(g ...*Group) *EventCreate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -178,14 +178,14 @@ func (ec *EventCreate) AddGroup(g ...*Group) *EventCreate {
 	return ec.AddGroupIDs(ids...)
 }
 
-// AddIntegrationIDs adds the "integration" edge to the Integration entity by IDs.
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (ec *EventCreate) AddIntegrationIDs(ids ...string) *EventCreate {
 	ec.mutation.AddIntegrationIDs(ids...)
 	return ec
 }
 
-// AddIntegration adds the "integration" edges to the Integration entity.
-func (ec *EventCreate) AddIntegration(i ...*Integration) *EventCreate {
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (ec *EventCreate) AddIntegrations(i ...*Integration) *EventCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -193,14 +193,14 @@ func (ec *EventCreate) AddIntegration(i ...*Integration) *EventCreate {
 	return ec.AddIntegrationIDs(ids...)
 }
 
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
+// AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (ec *EventCreate) AddOrganizationIDs(ids ...string) *EventCreate {
 	ec.mutation.AddOrganizationIDs(ids...)
 	return ec
 }
 
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (ec *EventCreate) AddOrganization(o ...*Organization) *EventCreate {
+// AddOrganizations adds the "organizations" edges to the Organization entity.
+func (ec *EventCreate) AddOrganizations(o ...*Organization) *EventCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -208,14 +208,14 @@ func (ec *EventCreate) AddOrganization(o ...*Organization) *EventCreate {
 	return ec.AddOrganizationIDs(ids...)
 }
 
-// AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
 func (ec *EventCreate) AddInviteIDs(ids ...string) *EventCreate {
 	ec.mutation.AddInviteIDs(ids...)
 	return ec
 }
 
-// AddInvite adds the "invite" edges to the Invite entity.
-func (ec *EventCreate) AddInvite(i ...*Invite) *EventCreate {
+// AddInvites adds the "invites" edges to the Invite entity.
+func (ec *EventCreate) AddInvites(i ...*Invite) *EventCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -223,14 +223,14 @@ func (ec *EventCreate) AddInvite(i ...*Invite) *EventCreate {
 	return ec.AddInviteIDs(ids...)
 }
 
-// AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
+// AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
 func (ec *EventCreate) AddPersonalAccessTokenIDs(ids ...string) *EventCreate {
 	ec.mutation.AddPersonalAccessTokenIDs(ids...)
 	return ec
 }
 
-// AddPersonalAccessToken adds the "personal_access_token" edges to the PersonalAccessToken entity.
-func (ec *EventCreate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventCreate {
+// AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
+func (ec *EventCreate) AddPersonalAccessTokens(p ...*PersonalAccessToken) *EventCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -238,29 +238,29 @@ func (ec *EventCreate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventC
 	return ec.AddPersonalAccessTokenIDs(ids...)
 }
 
-// AddHushIDs adds the "hush" edge to the Hush entity by IDs.
-func (ec *EventCreate) AddHushIDs(ids ...string) *EventCreate {
-	ec.mutation.AddHushIDs(ids...)
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (ec *EventCreate) AddSecretIDs(ids ...string) *EventCreate {
+	ec.mutation.AddSecretIDs(ids...)
 	return ec
 }
 
-// AddHush adds the "hush" edges to the Hush entity.
-func (ec *EventCreate) AddHush(h ...*Hush) *EventCreate {
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (ec *EventCreate) AddSecrets(h ...*Hush) *EventCreate {
 	ids := make([]string, len(h))
 	for i := range h {
 		ids[i] = h[i].ID
 	}
-	return ec.AddHushIDs(ids...)
+	return ec.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmembership" edge to the OrgMembership entity by IDs.
+// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
 func (ec *EventCreate) AddOrgmembershipIDs(ids ...string) *EventCreate {
 	ec.mutation.AddOrgmembershipIDs(ids...)
 	return ec
 }
 
-// AddOrgmembership adds the "orgmembership" edges to the OrgMembership entity.
-func (ec *EventCreate) AddOrgmembership(o ...*OrgMembership) *EventCreate {
+// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
+func (ec *EventCreate) AddOrgmemberships(o ...*OrgMembership) *EventCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
@@ -268,14 +268,14 @@ func (ec *EventCreate) AddOrgmembership(o ...*OrgMembership) *EventCreate {
 	return ec.AddOrgmembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmembership" edge to the GroupMembership entity by IDs.
+// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
 func (ec *EventCreate) AddGroupmembershipIDs(ids ...string) *EventCreate {
 	ec.mutation.AddGroupmembershipIDs(ids...)
 	return ec
 }
 
-// AddGroupmembership adds the "groupmembership" edges to the GroupMembership entity.
-func (ec *EventCreate) AddGroupmembership(g ...*GroupMembership) *EventCreate {
+// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
+func (ec *EventCreate) AddGroupmemberships(g ...*GroupMembership) *EventCreate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -283,14 +283,14 @@ func (ec *EventCreate) AddGroupmembership(g ...*GroupMembership) *EventCreate {
 	return ec.AddGroupmembershipIDs(ids...)
 }
 
-// AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
 func (ec *EventCreate) AddSubscriberIDs(ids ...string) *EventCreate {
 	ec.mutation.AddSubscriberIDs(ids...)
 	return ec
 }
 
-// AddSubscriber adds the "subscriber" edges to the Subscriber entity.
-func (ec *EventCreate) AddSubscriber(s ...*Subscriber) *EventCreate {
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (ec *EventCreate) AddSubscribers(s ...*Subscriber) *EventCreate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -298,14 +298,14 @@ func (ec *EventCreate) AddSubscriber(s ...*Subscriber) *EventCreate {
 	return ec.AddSubscriberIDs(ids...)
 }
 
-// AddFileIDs adds the "file" edge to the File entity by IDs.
+// AddFileIDs adds the "files" edge to the File entity by IDs.
 func (ec *EventCreate) AddFileIDs(ids ...string) *EventCreate {
 	ec.mutation.AddFileIDs(ids...)
 	return ec
 }
 
-// AddFile adds the "file" edges to the File entity.
-func (ec *EventCreate) AddFile(f ...*File) *EventCreate {
+// AddFiles adds the "files" edges to the File entity.
+func (ec *EventCreate) AddFiles(f ...*File) *EventCreate {
 	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -313,19 +313,19 @@ func (ec *EventCreate) AddFile(f ...*File) *EventCreate {
 	return ec.AddFileIDs(ids...)
 }
 
-// AddOrgsubscriptionIDs adds the "orgsubscription" edge to the OrgSubscription entity by IDs.
-func (ec *EventCreate) AddOrgsubscriptionIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOrgsubscriptionIDs(ids...)
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (ec *EventCreate) AddOrgSubscriptionIDs(ids ...string) *EventCreate {
+	ec.mutation.AddOrgSubscriptionIDs(ids...)
 	return ec
 }
 
-// AddOrgsubscription adds the "orgsubscription" edges to the OrgSubscription entity.
-func (ec *EventCreate) AddOrgsubscription(o ...*OrgSubscription) *EventCreate {
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (ec *EventCreate) AddOrgSubscriptions(o ...*OrgSubscription) *EventCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return ec.AddOrgsubscriptionIDs(ids...)
+	return ec.AddOrgSubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -470,12 +470,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if nodes := ec.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.UserTable,
-			Columns: event.UserPrimaryKey,
+			Table:   event.UsersTable,
+			Columns: event.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -487,12 +487,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupTable,
-			Columns: event.GroupPrimaryKey,
+			Table:   event.GroupsTable,
+			Columns: event.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -504,12 +504,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.IntegrationIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.IntegrationTable,
-			Columns: event.IntegrationPrimaryKey,
+			Table:   event.IntegrationsTable,
+			Columns: event.IntegrationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
@@ -521,12 +521,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrganizationTable,
-			Columns: event.OrganizationPrimaryKey,
+			Table:   event.OrganizationsTable,
+			Columns: event.OrganizationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -538,12 +538,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.InviteIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.InviteTable,
-			Columns: event.InvitePrimaryKey,
+			Table:   event.InvitesTable,
+			Columns: event.InvitesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
@@ -555,12 +555,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.PersonalAccessTokenIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.PersonalAccessTokenTable,
-			Columns: event.PersonalAccessTokenPrimaryKey,
+			Table:   event.PersonalAccessTokensTable,
+			Columns: event.PersonalAccessTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
@@ -572,12 +572,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.HushIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.HushTable,
-			Columns: event.HushPrimaryKey,
+			Table:   event.SecretsTable,
+			Columns: event.SecretsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
@@ -589,12 +589,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipTable,
-			Columns: event.OrgmembershipPrimaryKey,
+			Table:   event.OrgmembershipsTable,
+			Columns: event.OrgmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -606,12 +606,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.GroupmembershipIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipTable,
-			Columns: event.GroupmembershipPrimaryKey,
+			Table:   event.GroupmembershipsTable,
+			Columns: event.GroupmembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -623,12 +623,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.SubscriberIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.SubscriberTable,
-			Columns: event.SubscriberPrimaryKey,
+			Table:   event.SubscribersTable,
+			Columns: event.SubscribersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
@@ -640,12 +640,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.FileTable,
-			Columns: event.FilePrimaryKey,
+			Table:   event.FilesTable,
+			Columns: event.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
@@ -657,12 +657,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrgsubscriptionIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgsubscriptionTable,
-			Columns: event.OrgsubscriptionPrimaryKey,
+			Table:   event.OrgSubscriptionsTable,
+			Columns: event.OrgSubscriptionsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),

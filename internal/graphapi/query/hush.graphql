@@ -14,11 +14,7 @@ mutation CreateBulkCSVHush($input: Upload!) {
         }
       }
       organization {
-        edges {
-          node {
-            id
-          }
-        }
+        id
       }
       events {
         edges {
@@ -47,11 +43,7 @@ mutation CreateBulkHush($input: [CreateHushInput!]) {
         }
       }
       organization {
-        edges {
-          node {
-            id
-          }
-        }
+        id
       }
       events {
         edges {
@@ -80,11 +72,7 @@ mutation CreateHush($input: CreateHushInput!) {
         }
       }
       organization {
-        edges {
-          node {
-            id
-          }
-        }
+        id
       }
       events {
         edges {
@@ -114,11 +102,7 @@ query GetAllHushes {
           }
         }
         organization {
-          edges {
-            node {
-              id
-            }
-          }
+          id
         }
         events {
           edges {
@@ -151,11 +135,7 @@ query GetHushByID($hushId: ID!) {
       }
     }
     organization {
-      edges {
-        node {
-          id
-        }
-      }
+      id
     }
     events {
       edges {
@@ -188,11 +168,7 @@ query GetHushes($where: HushWhereInput) {
           }
         }
         organization {
-          edges {
-            node {
-              id
-            }
-          }
+          id
         }
         events {
           edges {
@@ -226,11 +202,7 @@ mutation UpdateHush($updateHushId: ID!, $input: UpdateHushInput!) {
         }
       }
       organization {
-        edges {
-          node {
-            id
-          }
-        }
+        id
       }
       events {
         edges {

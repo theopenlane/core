@@ -392,16 +392,6 @@ func UpdatedByContainsFold(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.Subscriber {
-	return predicate.Subscriber(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.Subscriber {
-	return predicate.Subscriber(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldDeletedAt, v))
@@ -525,6 +515,16 @@ func DeletedByEqualFold(v string) predicate.Subscriber {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotNull(FieldTags))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

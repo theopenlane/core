@@ -73,6 +73,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTags(tags)
 	}
 
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -99,10 +103,6 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
-	}
-
-	if revision, exists := m.Revision(); exists {
-		create = create.SetRevision(revision)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -193,6 +193,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(actionplan.Tags)
 		}
 
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(actionplan.Revision)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -233,12 +239,6 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetReviewFrequency(reviewFrequency)
 		} else {
 			create = create.SetReviewFrequency(actionplan.ReviewFrequency)
-		}
-
-		if revision, exists := m.Revision(); exists {
-			create = create.SetRevision(revision)
-		} else {
-			create = create.SetRevision(actionplan.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -304,6 +304,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedAt(actionplan.DeletedAt).
 			SetDeletedBy(actionplan.DeletedBy).
 			SetTags(actionplan.Tags).
+			SetRevision(actionplan.Revision).
 			SetName(actionplan.Name).
 			SetStatus(actionplan.Status).
 			SetActionPlanType(actionplan.ActionPlanType).
@@ -311,7 +312,6 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetApprovalRequired(actionplan.ApprovalRequired).
 			SetReviewDue(actionplan.ReviewDue).
 			SetReviewFrequency(actionplan.ReviewFrequency).
-			SetRevision(actionplan.Revision).
 			SetOwnerID(actionplan.OwnerID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
@@ -1194,16 +1194,16 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if revision, exists := m.Revision(); exists {
-		create = create.SetRevision(revision)
-	}
-
 	if displayID, exists := m.DisplayID(); exists {
 		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -1304,12 +1304,6 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDeletedBy(controlobjective.DeletedBy)
 		}
 
-		if revision, exists := m.Revision(); exists {
-			create = create.SetRevision(revision)
-		} else {
-			create = create.SetRevision(controlobjective.Revision)
-		}
-
 		if displayID, exists := m.DisplayID(); exists {
 			create = create.SetDisplayID(displayID)
 		} else {
@@ -1320,6 +1314,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(controlobjective.Tags)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(controlobjective.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -1408,9 +1408,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedBy(controlobjective.UpdatedBy).
 			SetDeletedAt(controlobjective.DeletedAt).
 			SetDeletedBy(controlobjective.DeletedBy).
-			SetRevision(controlobjective.Revision).
 			SetDisplayID(controlobjective.DisplayID).
 			SetTags(controlobjective.Tags).
+			SetRevision(controlobjective.Revision).
 			SetOwnerID(controlobjective.OwnerID).
 			SetName(controlobjective.Name).
 			SetDesiredOutcome(controlobjective.DesiredOutcome).
@@ -1459,16 +1459,16 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -1537,12 +1537,6 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(documentdata.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(documentdata.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -1553,6 +1547,12 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(documentdata.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(documentdata.Tags)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -1609,9 +1609,9 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(documentdata.UpdatedAt).
 			SetCreatedBy(documentdata.CreatedBy).
 			SetUpdatedBy(documentdata.UpdatedBy).
-			SetTags(documentdata.Tags).
 			SetDeletedAt(documentdata.DeletedAt).
 			SetDeletedBy(documentdata.DeletedBy).
+			SetTags(documentdata.Tags).
 			SetOwnerID(documentdata.OwnerID).
 			SetTemplateID(documentdata.TemplateID).
 			SetData(documentdata.Data).
@@ -2265,16 +2265,16 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -2375,12 +2375,6 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(evidence.UpdatedBy)
 		}
 
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(evidence.DisplayID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -2391,6 +2385,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(evidence.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(evidence.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -2495,9 +2495,9 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(evidence.UpdatedAt).
 			SetCreatedBy(evidence.CreatedBy).
 			SetUpdatedBy(evidence.UpdatedBy).
-			SetDisplayID(evidence.DisplayID).
 			SetDeletedAt(evidence.DeletedAt).
 			SetDeletedBy(evidence.DeletedBy).
+			SetDisplayID(evidence.DisplayID).
 			SetTags(evidence.Tags).
 			SetOwnerID(evidence.OwnerID).
 			SetName(evidence.Name).
@@ -3716,16 +3716,16 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -3798,12 +3798,6 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(integration.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(integration.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -3814,6 +3808,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(integration.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(integration.Tags)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -3876,9 +3876,9 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(integration.UpdatedAt).
 			SetCreatedBy(integration.CreatedBy).
 			SetUpdatedBy(integration.UpdatedBy).
-			SetTags(integration.Tags).
 			SetDeletedAt(integration.DeletedAt).
 			SetDeletedBy(integration.DeletedBy).
+			SetTags(integration.Tags).
 			SetOwnerID(integration.OwnerID).
 			SetName(integration.Name).
 			SetDescription(integration.Description).
@@ -3923,10 +3923,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -3937,6 +3933,14 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if displayID, exists := m.DisplayID(); exists {
 		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -3969,10 +3973,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
-	}
-
-	if revision, exists := m.Revision(); exists {
-		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -4029,12 +4029,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(internalpolicy.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(internalpolicy.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -4051,6 +4045,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDisplayID(displayID)
 		} else {
 			create = create.SetDisplayID(internalpolicy.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(internalpolicy.Tags)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(internalpolicy.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -4101,12 +4107,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetReviewFrequency(internalpolicy.ReviewFrequency)
 		}
 
-		if revision, exists := m.Revision(); exists {
-			create = create.SetRevision(revision)
-		} else {
-			create = create.SetRevision(internalpolicy.Revision)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4143,10 +4143,11 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(internalpolicy.UpdatedAt).
 			SetCreatedBy(internalpolicy.CreatedBy).
 			SetUpdatedBy(internalpolicy.UpdatedBy).
-			SetTags(internalpolicy.Tags).
 			SetDeletedAt(internalpolicy.DeletedAt).
 			SetDeletedBy(internalpolicy.DeletedBy).
 			SetDisplayID(internalpolicy.DisplayID).
+			SetTags(internalpolicy.Tags).
+			SetRevision(internalpolicy.Revision).
 			SetOwnerID(internalpolicy.OwnerID).
 			SetName(internalpolicy.Name).
 			SetStatus(internalpolicy.Status).
@@ -4155,7 +4156,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetApprovalRequired(internalpolicy.ApprovalRequired).
 			SetReviewDue(internalpolicy.ReviewDue).
 			SetReviewFrequency(internalpolicy.ReviewFrequency).
-			SetRevision(internalpolicy.Revision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4599,16 +4599,16 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -4673,12 +4673,6 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(note.UpdatedBy)
 		}
 
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(note.DisplayID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -4689,6 +4683,12 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(note.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(note.DisplayID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -4739,9 +4739,9 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(note.UpdatedAt).
 			SetCreatedBy(note.CreatedBy).
 			SetUpdatedBy(note.UpdatedBy).
-			SetDisplayID(note.DisplayID).
 			SetDeletedAt(note.DeletedAt).
 			SetDeletedBy(note.DeletedBy).
+			SetDisplayID(note.DisplayID).
 			SetOwnerID(note.OwnerID).
 			SetText(note.Text).
 			Save(ctx)
@@ -4969,16 +4969,16 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -5091,12 +5091,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(orgsubscription.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5107,6 +5101,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(orgsubscription.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(orgsubscription.Tags)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -5229,9 +5229,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(orgsubscription.UpdatedAt).
 			SetCreatedBy(orgsubscription.CreatedBy).
 			SetUpdatedBy(orgsubscription.UpdatedBy).
-			SetTags(orgsubscription.Tags).
 			SetDeletedAt(orgsubscription.DeletedAt).
 			SetDeletedBy(orgsubscription.DeletedBy).
+			SetTags(orgsubscription.Tags).
 			SetOwnerID(orgsubscription.OwnerID).
 			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
 			SetProductTier(orgsubscription.ProductTier).
@@ -5286,16 +5286,16 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -5388,12 +5388,6 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(organization.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(organization.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5404,6 +5398,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(organization.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(organization.Tags)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -5496,9 +5496,9 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(organization.UpdatedAt).
 			SetCreatedBy(organization.CreatedBy).
 			SetUpdatedBy(organization.UpdatedBy).
-			SetTags(organization.Tags).
 			SetDeletedAt(organization.DeletedAt).
 			SetDeletedBy(organization.DeletedBy).
+			SetTags(organization.Tags).
 			SetName(organization.Name).
 			SetDisplayName(organization.DisplayName).
 			SetDescription(organization.Description).
@@ -5548,16 +5548,16 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if domains, exists := m.Domains(); exists {
@@ -5654,12 +5654,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedBy(organizationsetting.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(organizationsetting.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5670,6 +5664,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(organizationsetting.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(organizationsetting.Tags)
 		}
 
 		if domains, exists := m.Domains(); exists {
@@ -5768,9 +5768,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetUpdatedAt(organizationsetting.UpdatedAt).
 			SetCreatedBy(organizationsetting.CreatedBy).
 			SetUpdatedBy(organizationsetting.UpdatedBy).
-			SetTags(organizationsetting.Tags).
 			SetDeletedAt(organizationsetting.DeletedAt).
 			SetDeletedBy(organizationsetting.DeletedBy).
+			SetTags(organizationsetting.Tags).
 			SetDomains(organizationsetting.Domains).
 			SetBillingContact(organizationsetting.BillingContact).
 			SetBillingEmail(organizationsetting.BillingEmail).
@@ -5821,10 +5821,6 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -5835,6 +5831,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if displayID, exists := m.DisplayID(); exists {
 		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -5867,10 +5871,6 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
-	}
-
-	if revision, exists := m.Revision(); exists {
-		create = create.SetRevision(revision)
 	}
 
 	_, err := create.Save(ctx)
@@ -5927,12 +5927,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(procedure.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(procedure.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -5949,6 +5943,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDisplayID(displayID)
 		} else {
 			create = create.SetDisplayID(procedure.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(procedure.Tags)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(procedure.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -5999,12 +6005,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(procedure.ReviewFrequency)
 		}
 
-		if revision, exists := m.Revision(); exists {
-			create = create.SetRevision(revision)
-		} else {
-			create = create.SetRevision(procedure.Revision)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6041,10 +6041,11 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(procedure.UpdatedAt).
 			SetCreatedBy(procedure.CreatedBy).
 			SetUpdatedBy(procedure.UpdatedBy).
-			SetTags(procedure.Tags).
 			SetDeletedAt(procedure.DeletedAt).
 			SetDeletedBy(procedure.DeletedBy).
 			SetDisplayID(procedure.DisplayID).
+			SetTags(procedure.Tags).
+			SetRevision(procedure.Revision).
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetStatus(procedure.Status).
@@ -6053,7 +6054,6 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetApprovalRequired(procedure.ApprovalRequired).
 			SetReviewDue(procedure.ReviewDue).
 			SetReviewFrequency(procedure.ReviewFrequency).
-			SetRevision(procedure.Revision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6094,16 +6094,16 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -6200,12 +6200,6 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(program.UpdatedBy)
 		}
 
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(program.DisplayID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -6216,6 +6210,12 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(program.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(program.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -6314,9 +6314,9 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(program.UpdatedAt).
 			SetCreatedBy(program.CreatedBy).
 			SetUpdatedBy(program.UpdatedBy).
-			SetDisplayID(program.DisplayID).
 			SetDeletedAt(program.DeletedAt).
 			SetDeletedBy(program.DeletedBy).
+			SetDisplayID(program.DisplayID).
 			SetTags(program.Tags).
 			SetOwnerID(program.OwnerID).
 			SetName(program.Name).
@@ -7547,16 +7547,16 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -7657,12 +7657,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(task.UpdatedBy)
 		}
 
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(task.DisplayID)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -7673,6 +7667,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(task.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(task.DisplayID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -7777,9 +7777,9 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(task.UpdatedAt).
 			SetCreatedBy(task.CreatedBy).
 			SetUpdatedBy(task.UpdatedBy).
-			SetDisplayID(task.DisplayID).
 			SetDeletedAt(task.DeletedAt).
 			SetDeletedBy(task.DeletedBy).
+			SetDisplayID(task.DisplayID).
 			SetTags(task.Tags).
 			SetOwnerID(task.OwnerID).
 			SetTitle(task.Title).
@@ -8366,16 +8366,16 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
 	if deletedBy, exists := m.DeletedBy(); exists {
 		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
 	}
 
 	if userID, exists := m.UserID(); exists {
@@ -8468,12 +8468,6 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(usersetting.UpdatedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(usersetting.Tags)
-		}
-
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -8484,6 +8478,12 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(usersetting.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(usersetting.Tags)
 		}
 
 		if userID, exists := m.UserID(); exists {
@@ -8576,9 +8576,9 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(usersetting.UpdatedAt).
 			SetCreatedBy(usersetting.CreatedBy).
 			SetUpdatedBy(usersetting.UpdatedBy).
-			SetTags(usersetting.Tags).
 			SetDeletedAt(usersetting.DeletedAt).
 			SetDeletedBy(usersetting.DeletedBy).
+			SetTags(usersetting.Tags).
 			SetUserID(usersetting.UserID).
 			SetLocked(usersetting.Locked).
 			SetNillableSilencedAt(usersetting.SilencedAt).

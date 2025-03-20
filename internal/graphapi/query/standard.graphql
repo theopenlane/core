@@ -8,6 +8,7 @@ mutation CreateStandard($input: CreateStandardInput!) {
       framework
       freeToUse
       governingBody
+      governingBodyLogoURL
       id
       isPublic
       link
@@ -22,6 +23,22 @@ mutation CreateStandard($input: CreateStandardInput!) {
       updatedAt
       updatedBy
       version
+      controls {
+        totalCount
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
+      }
     }
   }
 }
@@ -34,6 +51,13 @@ mutation DeleteStandard($deleteStandardId: ID!) {
 
 query GetAllStandards {
   standards {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         createdAt
@@ -43,6 +67,7 @@ query GetAllStandards {
         framework
         freeToUse
         governingBody
+        governingBodyLogoURL
         id
         isPublic
         link
@@ -57,11 +82,26 @@ query GetAllStandards {
         updatedAt
         updatedBy
         version
+        controls {
+          totalCount
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
+        }
       }
     }
   }
 }
-
 query GetStandardByID($standardId: ID!) {
   standard(id: $standardId) {
     createdAt
@@ -71,6 +111,7 @@ query GetStandardByID($standardId: ID!) {
     framework
     freeToUse
     governingBody
+    governingBodyLogoURL
     id
     isPublic
     link
@@ -85,11 +126,34 @@ query GetStandardByID($standardId: ID!) {
     updatedAt
     updatedBy
     version
+    controls {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          refCode
+          description
+        }
+      }
+    }
   }
 }
 
-query GetStandards($where: StandardWhereInput) {
-  standards(where: $where) {
+query GetStandards($first: Int, $last: Int, $where: StandardWhereInput) {
+  standards(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         createdAt
@@ -99,6 +163,7 @@ query GetStandards($where: StandardWhereInput) {
         framework
         freeToUse
         governingBody
+        governingBodyLogoURL
         id
         isPublic
         link
@@ -113,11 +178,26 @@ query GetStandards($where: StandardWhereInput) {
         updatedAt
         updatedBy
         version
+        controls {
+          totalCount
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              refCode
+              description
+            }
+          }
+        }
       }
     }
   }
 }
-
 mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
   updateStandard(id: $updateStandardId, input: $input) {
     standard {
@@ -128,6 +208,7 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
       framework
       freeToUse
       governingBody
+      governingBodyLogoURL
       id
       isPublic
       link
@@ -142,6 +223,22 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
       updatedAt
       updatedBy
       version
+      controls {
+        totalCount
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            refCode
+            description
+          }
+        }
+      }
     }
   }
 }

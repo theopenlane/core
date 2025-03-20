@@ -65,24 +65,6 @@ func (phu *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetTags sets the "tags" field.
-func (phu *ProcedureHistoryUpdate) SetTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetTags(s)
-	return phu
-}
-
-// AppendTags appends s to the "tags" field.
-func (phu *ProcedureHistoryUpdate) AppendTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendTags(s)
-	return phu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
-	phu.mutation.ClearTags()
-	return phu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (phu *ProcedureHistoryUpdate) SetDeletedAt(t time.Time) *ProcedureHistoryUpdate {
 	phu.mutation.SetDeletedAt(t)
@@ -120,6 +102,44 @@ func (phu *ProcedureHistoryUpdate) SetNillableDeletedBy(s *string) *ProcedureHis
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (phu *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
 	phu.mutation.ClearDeletedBy()
+	return phu
+}
+
+// SetTags sets the "tags" field.
+func (phu *ProcedureHistoryUpdate) SetTags(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetTags(s)
+	return phu
+}
+
+// AppendTags appends s to the "tags" field.
+func (phu *ProcedureHistoryUpdate) AppendTags(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendTags(s)
+	return phu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
+	phu.mutation.ClearTags()
+	return phu
+}
+
+// SetRevision sets the "revision" field.
+func (phu *ProcedureHistoryUpdate) SetRevision(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetRevision(s)
+	return phu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableRevision(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetRevision(*s)
+	}
+	return phu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (phu *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
+	phu.mutation.ClearRevision()
 	return phu
 }
 
@@ -277,26 +297,6 @@ func (phu *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdat
 	return phu
 }
 
-// SetRevision sets the "revision" field.
-func (phu *ProcedureHistoryUpdate) SetRevision(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetRevision(s)
-	return phu
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableRevision(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetRevision(*s)
-	}
-	return phu
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (phu *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
-	phu.mutation.ClearRevision()
-	return phu
-}
-
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return phu.mutation
@@ -392,17 +392,6 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := phu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
-	if phu.mutation.TagsCleared() {
-		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := phu.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -414,6 +403,23 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := phu.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTags, value)
+		})
+	}
+	if phu.mutation.TagsCleared() {
+		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
+	}
+	if phu.mutation.RevisionCleared() {
+		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	if value, ok := phu.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
@@ -459,12 +465,6 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := phu.mutation.Revision(); ok {
-		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
-	}
-	if phu.mutation.RevisionCleared() {
-		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -522,24 +522,6 @@ func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetTags sets the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) SetTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetTags(s)
-	return phuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendTags(s)
-	return phuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearTags()
-	return phuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (phuo *ProcedureHistoryUpdateOne) SetDeletedAt(t time.Time) *ProcedureHistoryUpdateOne {
 	phuo.mutation.SetDeletedAt(t)
@@ -577,6 +559,44 @@ func (phuo *ProcedureHistoryUpdateOne) SetNillableDeletedBy(s *string) *Procedur
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (phuo *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateOne {
 	phuo.mutation.ClearDeletedBy()
+	return phuo
+}
+
+// SetTags sets the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) SetTags(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetTags(s)
+	return phuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendTags(s)
+	return phuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearTags()
+	return phuo
+}
+
+// SetRevision sets the "revision" field.
+func (phuo *ProcedureHistoryUpdateOne) SetRevision(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetRevision(s)
+	return phuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableRevision(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetRevision(*s)
+	}
+	return phuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearRevision()
 	return phuo
 }
 
@@ -734,26 +754,6 @@ func (phuo *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryU
 	return phuo
 }
 
-// SetRevision sets the "revision" field.
-func (phuo *ProcedureHistoryUpdateOne) SetRevision(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetRevision(s)
-	return phuo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableRevision(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetRevision(*s)
-	}
-	return phuo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearRevision()
-	return phuo
-}
-
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phuo *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return phuo.mutation
@@ -879,17 +879,6 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := phuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
-	if phuo.mutation.TagsCleared() {
-		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := phuo.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -901,6 +890,23 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := phuo.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTags, value)
+		})
+	}
+	if phuo.mutation.TagsCleared() {
+		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
+	}
+	if phuo.mutation.RevisionCleared() {
+		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	if value, ok := phuo.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
@@ -946,12 +952,6 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := phuo.mutation.Revision(); ok {
-		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
-	}
-	if phuo.mutation.RevisionCleared() {
-		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

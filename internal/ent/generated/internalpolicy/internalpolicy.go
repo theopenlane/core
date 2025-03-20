@@ -26,14 +26,16 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -50,8 +52,6 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -150,10 +150,11 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
+	FieldTags,
+	FieldRevision,
 	FieldOwnerID,
 	FieldName,
 	FieldStatus,
@@ -162,7 +163,6 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
-	FieldRevision,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
@@ -225,10 +225,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
 	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	DisplayIDValidator func(string) error
+	// DefaultTags holds the default value on creation for the "tags" field.
+	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -237,10 +241,6 @@ var (
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
-	// DefaultRevision holds the default value on creation for the "revision" field.
-	DefaultRevision string
-	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
-	RevisionValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -312,6 +312,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -350,11 +355,6 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

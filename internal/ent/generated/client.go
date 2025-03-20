@@ -1344,15 +1344,15 @@ func (c *ActionPlanClient) QueryOwner(ap *ActionPlan) *OrganizationQuery {
 	return query
 }
 
-// QueryRisk queries the risk edge of a ActionPlan.
-func (c *ActionPlanClient) QueryRisk(ap *ActionPlan) *RiskQuery {
+// QueryRisks queries the risks edge of a ActionPlan.
+func (c *ActionPlanClient) QueryRisks(ap *ActionPlan) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RiskTable, actionplan.RiskPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RisksTable, actionplan.RisksPrimaryKey...),
 		)
 		schemaConfig := ap.schemaConfig
 		step.To.Schema = schemaConfig.Risk
@@ -1363,15 +1363,15 @@ func (c *ActionPlanClient) QueryRisk(ap *ActionPlan) *RiskQuery {
 	return query
 }
 
-// QueryControl queries the control edge of a ActionPlan.
-func (c *ActionPlanClient) QueryControl(ap *ActionPlan) *ControlQuery {
+// QueryControls queries the controls edge of a ActionPlan.
+func (c *ActionPlanClient) QueryControls(ap *ActionPlan) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlTable, actionplan.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlsTable, actionplan.ControlsPrimaryKey...),
 		)
 		schemaConfig := ap.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -1382,15 +1382,15 @@ func (c *ActionPlanClient) QueryControl(ap *ActionPlan) *ControlQuery {
 	return query
 }
 
-// QueryUser queries the user edge of a ActionPlan.
-func (c *ActionPlanClient) QueryUser(ap *ActionPlan) *UserQuery {
+// QueryUsers queries the users edge of a ActionPlan.
+func (c *ActionPlanClient) QueryUsers(ap *ActionPlan) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UserTable, actionplan.UserPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UsersTable, actionplan.UsersPrimaryKey...),
 		)
 		schemaConfig := ap.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -1401,15 +1401,15 @@ func (c *ActionPlanClient) QueryUser(ap *ActionPlan) *UserQuery {
 	return query
 }
 
-// QueryProgram queries the program edge of a ActionPlan.
-func (c *ActionPlanClient) QueryProgram(ap *ActionPlan) *ProgramQuery {
+// QueryPrograms queries the programs edge of a ActionPlan.
+func (c *ActionPlanClient) QueryPrograms(ap *ActionPlan) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramTable, actionplan.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramsTable, actionplan.ProgramsPrimaryKey...),
 		)
 		schemaConfig := ap.schemaConfig
 		step.To.Schema = schemaConfig.Program
@@ -3487,15 +3487,15 @@ func (c *DocumentDataClient) QueryTemplate(dd *DocumentData) *TemplateQuery {
 	return query
 }
 
-// QueryEntity queries the entity edge of a DocumentData.
-func (c *DocumentDataClient) QueryEntity(dd *DocumentData) *EntityQuery {
+// QueryEntities queries the entities edge of a DocumentData.
+func (c *DocumentDataClient) QueryEntities(dd *DocumentData) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := dd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntityTable, documentdata.EntityPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntitiesTable, documentdata.EntitiesPrimaryKey...),
 		)
 		schemaConfig := dd.schemaConfig
 		step.To.Schema = schemaConfig.Entity
@@ -4638,15 +4638,15 @@ func (c *EventClient) GetX(ctx context.Context, id string) *Event {
 	return obj
 }
 
-// QueryUser queries the user edge of a Event.
-func (c *EventClient) QueryUser(e *Event) *UserQuery {
+// QueryUsers queries the users edge of a Event.
+func (c *EventClient) QueryUsers(e *Event) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.UserTable, event.UserPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.UsersTable, event.UsersPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -4657,15 +4657,15 @@ func (c *EventClient) QueryUser(e *Event) *UserQuery {
 	return query
 }
 
-// QueryGroup queries the group edge of a Event.
-func (c *EventClient) QueryGroup(e *Event) *GroupQuery {
+// QueryGroups queries the groups edge of a Event.
+func (c *EventClient) QueryGroups(e *Event) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupTable, event.GroupPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupsTable, event.GroupsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -4676,15 +4676,15 @@ func (c *EventClient) QueryGroup(e *Event) *GroupQuery {
 	return query
 }
 
-// QueryIntegration queries the integration edge of a Event.
-func (c *EventClient) QueryIntegration(e *Event) *IntegrationQuery {
+// QueryIntegrations queries the integrations edge of a Event.
+func (c *EventClient) QueryIntegrations(e *Event) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.IntegrationTable, event.IntegrationPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.IntegrationsTable, event.IntegrationsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Integration
@@ -4695,15 +4695,15 @@ func (c *EventClient) QueryIntegration(e *Event) *IntegrationQuery {
 	return query
 }
 
-// QueryOrganization queries the organization edge of a Event.
-func (c *EventClient) QueryOrganization(e *Event) *OrganizationQuery {
+// QueryOrganizations queries the organizations edge of a Event.
+func (c *EventClient) QueryOrganizations(e *Event) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.OrganizationTable, event.OrganizationPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrganizationsTable, event.OrganizationsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Organization
@@ -4714,15 +4714,15 @@ func (c *EventClient) QueryOrganization(e *Event) *OrganizationQuery {
 	return query
 }
 
-// QueryInvite queries the invite edge of a Event.
-func (c *EventClient) QueryInvite(e *Event) *InviteQuery {
+// QueryInvites queries the invites edge of a Event.
+func (c *EventClient) QueryInvites(e *Event) *InviteQuery {
 	query := (&InviteClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(invite.Table, invite.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.InviteTable, event.InvitePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.InvitesTable, event.InvitesPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Invite
@@ -4733,15 +4733,15 @@ func (c *EventClient) QueryInvite(e *Event) *InviteQuery {
 	return query
 }
 
-// QueryPersonalAccessToken queries the personal_access_token edge of a Event.
-func (c *EventClient) QueryPersonalAccessToken(e *Event) *PersonalAccessTokenQuery {
+// QueryPersonalAccessTokens queries the personal_access_tokens edge of a Event.
+func (c *EventClient) QueryPersonalAccessTokens(e *Event) *PersonalAccessTokenQuery {
 	query := (&PersonalAccessTokenClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.PersonalAccessTokenTable, event.PersonalAccessTokenPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.PersonalAccessTokensTable, event.PersonalAccessTokensPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.PersonalAccessToken
@@ -4752,15 +4752,15 @@ func (c *EventClient) QueryPersonalAccessToken(e *Event) *PersonalAccessTokenQue
 	return query
 }
 
-// QueryHush queries the hush edge of a Event.
-func (c *EventClient) QueryHush(e *Event) *HushQuery {
+// QuerySecrets queries the secrets edge of a Event.
+func (c *EventClient) QuerySecrets(e *Event) *HushQuery {
 	query := (&HushClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(hush.Table, hush.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.HushTable, event.HushPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.SecretsTable, event.SecretsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Hush
@@ -4771,15 +4771,15 @@ func (c *EventClient) QueryHush(e *Event) *HushQuery {
 	return query
 }
 
-// QueryOrgmembership queries the orgmembership edge of a Event.
-func (c *EventClient) QueryOrgmembership(e *Event) *OrgMembershipQuery {
+// QueryOrgmemberships queries the orgmemberships edge of a Event.
+func (c *EventClient) QueryOrgmemberships(e *Event) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgmembershipTable, event.OrgmembershipPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgmembershipsTable, event.OrgmembershipsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
@@ -4790,15 +4790,15 @@ func (c *EventClient) QueryOrgmembership(e *Event) *OrgMembershipQuery {
 	return query
 }
 
-// QueryGroupmembership queries the groupmembership edge of a Event.
-func (c *EventClient) QueryGroupmembership(e *Event) *GroupMembershipQuery {
+// QueryGroupmemberships queries the groupmemberships edge of a Event.
+func (c *EventClient) QueryGroupmemberships(e *Event) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupmembershipTable, event.GroupmembershipPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupmembershipsTable, event.GroupmembershipsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.GroupMembership
@@ -4809,15 +4809,15 @@ func (c *EventClient) QueryGroupmembership(e *Event) *GroupMembershipQuery {
 	return query
 }
 
-// QuerySubscriber queries the subscriber edge of a Event.
-func (c *EventClient) QuerySubscriber(e *Event) *SubscriberQuery {
+// QuerySubscribers queries the subscribers edge of a Event.
+func (c *EventClient) QuerySubscribers(e *Event) *SubscriberQuery {
 	query := (&SubscriberClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.SubscriberTable, event.SubscriberPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.SubscribersTable, event.SubscribersPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Subscriber
@@ -4828,15 +4828,15 @@ func (c *EventClient) QuerySubscriber(e *Event) *SubscriberQuery {
 	return query
 }
 
-// QueryFile queries the file edge of a Event.
-func (c *EventClient) QueryFile(e *Event) *FileQuery {
+// QueryFiles queries the files edge of a Event.
+func (c *EventClient) QueryFiles(e *Event) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.FileTable, event.FilePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.FilesTable, event.FilesPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.File
@@ -4847,15 +4847,15 @@ func (c *EventClient) QueryFile(e *Event) *FileQuery {
 	return query
 }
 
-// QueryOrgsubscription queries the orgsubscription edge of a Event.
-func (c *EventClient) QueryOrgsubscription(e *Event) *OrgSubscriptionQuery {
+// QueryOrgSubscriptions queries the org_subscriptions edge of a Event.
+func (c *EventClient) QueryOrgSubscriptions(e *Event) *OrgSubscriptionQuery {
 	query := (&OrgSubscriptionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgsubscriptionTable, event.OrgsubscriptionPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgSubscriptionsTable, event.OrgSubscriptionsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.OrgSubscription
@@ -5573,15 +5573,15 @@ func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
 	return query
 }
 
-// QueryGroup queries the group edge of a File.
-func (c *FileClient) QueryGroup(f *File) *GroupQuery {
+// QueryGroups queries the groups edge of a File.
+func (c *FileClient) QueryGroups(f *File) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupTable, file.GroupPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupsTable, file.GroupsPrimaryKey...),
 		)
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -5687,38 +5687,19 @@ func (c *FileClient) QueryTemplate(f *File) *TemplateQuery {
 	return query
 }
 
-// QueryDocumentData queries the document_data edge of a File.
-func (c *FileClient) QueryDocumentData(f *File) *DocumentDataQuery {
+// QueryDocument queries the document edge of a File.
+func (c *FileClient) QueryDocument(f *File) *DocumentDataQuery {
 	query := (&DocumentDataClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.DocumentDataTable, file.DocumentDataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.DocumentTable, file.DocumentPrimaryKey...),
 		)
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.DocumentDataFiles
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEvents queries the events edge of a File.
-func (c *FileClient) QueryEvents(f *File) *EventQuery {
-	query := (&EventClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(event.Table, event.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, file.EventsTable, file.EventsPrimaryKey...),
-		)
-		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.FileEvents
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5757,6 +5738,25 @@ func (c *FileClient) QueryEvidence(f *File) *EvidenceQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a File.
+func (c *FileClient) QueryEvents(f *File) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, file.EventsTable, file.EventsPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.FileEvents
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10950,15 +10950,15 @@ func (c *OrganizationClient) QueryIntegrations(o *Organization) *IntegrationQuer
 	return query
 }
 
-// QueryDocumentData queries the document_data edge of a Organization.
-func (c *OrganizationClient) QueryDocumentData(o *Organization) *DocumentDataQuery {
+// QueryDocuments queries the documents edge of a Organization.
+func (c *OrganizationClient) QueryDocuments(o *Organization) *DocumentDataQuery {
 	query := (&DocumentDataClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := o.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentsTable, organization.DocumentsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
@@ -12404,6 +12404,25 @@ func (c *ProcedureClient) QueryInternalPolicies(pr *Procedure) *InternalPolicyQu
 	return query
 }
 
+// QueryPrograms queries the programs edge of a Procedure.
+func (c *ProcedureClient) QueryPrograms(pr *Procedure) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryNarratives queries the narratives edge of a Procedure.
 func (c *ProcedureClient) QueryNarratives(pr *Procedure) *NarrativeQuery {
 	query := (&NarrativeClient{config: c.config}).Query()
@@ -12455,25 +12474,6 @@ func (c *ProcedureClient) QueryTasks(pr *Procedure) *TaskQuery {
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPrograms queries the programs edge of a Procedure.
-func (c *ProcedureClient) QueryPrograms(pr *Procedure) *ProgramQuery {
-	query := (&ProgramClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(procedure.Table, procedure.FieldID, id),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
-		)
-		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramProcedures
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13762,15 +13762,15 @@ func (c *RiskClient) QueryViewers(r *Risk) *GroupQuery {
 	return query
 }
 
-// QueryControl queries the control edge of a Risk.
-func (c *RiskClient) QueryControl(r *Risk) *ControlQuery {
+// QueryControls queries the controls edge of a Risk.
+func (c *RiskClient) QueryControls(r *Risk) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, risk.ControlTable, risk.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.ControlsTable, risk.ControlsPrimaryKey...),
 		)
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -13781,38 +13781,19 @@ func (c *RiskClient) QueryControl(r *Risk) *ControlQuery {
 	return query
 }
 
-// QueryProcedure queries the procedure edge of a Risk.
-func (c *RiskClient) QueryProcedure(r *Risk) *ProcedureQuery {
+// QueryProcedures queries the procedures edge of a Risk.
+func (c *RiskClient) QueryProcedures(r *Risk) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
 			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProcedureTable, risk.ProcedurePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProceduresTable, risk.ProceduresPrimaryKey...),
 		)
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureRisks
-		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryActionPlans queries the action_plans edge of a Risk.
-func (c *RiskClient) QueryActionPlans(r *Risk) *ActionPlanQuery {
-	query := (&ActionPlanClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := r.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(risk.Table, risk.FieldID, id),
-			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, risk.ActionPlansTable, risk.ActionPlansPrimaryKey...),
-		)
-		schemaConfig := r.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.RiskActionPlans
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13832,6 +13813,25 @@ func (c *RiskClient) QueryPrograms(r *Risk) *ProgramQuery {
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Risk.
+func (c *RiskClient) QueryActionPlans(r *Risk) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.ActionPlansTable, risk.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15371,15 +15371,15 @@ func (c *TaskClient) QueryComments(t *Task) *NoteQuery {
 	return query
 }
 
-// QueryGroup queries the group edge of a Task.
-func (c *TaskClient) QueryGroup(t *Task) *GroupQuery {
+// QueryGroups queries the groups edge of a Task.
+func (c *TaskClient) QueryGroups(t *Task) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.GroupTable, task.GroupPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.GroupsTable, task.GroupsPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -15390,15 +15390,15 @@ func (c *TaskClient) QueryGroup(t *Task) *GroupQuery {
 	return query
 }
 
-// QueryInternalPolicy queries the internal_policy edge of a Task.
-func (c *TaskClient) QueryInternalPolicy(t *Task) *InternalPolicyQuery {
+// QueryInternalPolicies queries the internal_policies edge of a Task.
+func (c *TaskClient) QueryInternalPolicies(t *Task) *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.InternalPolicyTable, task.InternalPolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.InternalPoliciesTable, task.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -15409,15 +15409,15 @@ func (c *TaskClient) QueryInternalPolicy(t *Task) *InternalPolicyQuery {
 	return query
 }
 
-// QueryProcedure queries the procedure edge of a Task.
-func (c *TaskClient) QueryProcedure(t *Task) *ProcedureQuery {
+// QueryProcedures queries the procedures edge of a Task.
+func (c *TaskClient) QueryProcedures(t *Task) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.ProcedureTable, task.ProcedurePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ProceduresTable, task.ProceduresPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
@@ -15428,15 +15428,15 @@ func (c *TaskClient) QueryProcedure(t *Task) *ProcedureQuery {
 	return query
 }
 
-// QueryControl queries the control edge of a Task.
-func (c *TaskClient) QueryControl(t *Task) *ControlQuery {
+// QueryControls queries the controls edge of a Task.
+func (c *TaskClient) QueryControls(t *Task) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlTable, task.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlsTable, task.ControlsPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -15447,34 +15447,15 @@ func (c *TaskClient) QueryControl(t *Task) *ControlQuery {
 	return query
 }
 
-// QueryControlObjective queries the control_objective edge of a Task.
-func (c *TaskClient) QueryControlObjective(t *Task) *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(task.Table, task.FieldID, id),
-			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlObjectiveTable, task.ControlObjectivePrimaryKey...),
-		)
-		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QuerySubcontrol queries the subcontrol edge of a Task.
-func (c *TaskClient) QuerySubcontrol(t *Task) *SubcontrolQuery {
+// QuerySubcontrols queries the subcontrols edge of a Task.
+func (c *TaskClient) QuerySubcontrols(t *Task) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.SubcontrolTable, task.SubcontrolPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.SubcontrolsTable, task.SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
@@ -15485,15 +15466,34 @@ func (c *TaskClient) QuerySubcontrol(t *Task) *SubcontrolQuery {
 	return query
 }
 
-// QueryProgram queries the program edge of a Task.
-func (c *TaskClient) QueryProgram(t *Task) *ProgramQuery {
+// QueryControlObjectives queries the control_objectives edge of a Task.
+func (c *TaskClient) QueryControlObjectives(t *Task) *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlObjectivesTable, task.ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Task.
+func (c *TaskClient) QueryPrograms(t *Task) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.ProgramTable, task.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ProgramsTable, task.ProgramsPrimaryKey...),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Program

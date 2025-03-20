@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -153,8 +154,8 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 	})
 
 	// delete created orgs
-	(&OrganizationCleanup{client: suite.client, ID: org1.ID}).MustDelete(reqCtx, t)
-	(&OrganizationCleanup{client: suite.client, ID: org2.ID}).MustDelete(reqCtx2, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org1.ID}).MustDelete(reqCtx, suite)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(reqCtx2, suite)
 }
 
 func (suite *GraphTestSuite) TestQueryGroups() {

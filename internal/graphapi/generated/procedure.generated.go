@@ -75,14 +75,16 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
@@ -99,8 +101,6 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -115,14 +115,14 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
+			case "programs":
+				return ec.fieldContext_Procedure_programs(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Procedure_narratives(ctx, field)
 			case "risks":
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -179,14 +179,16 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
@@ -203,8 +205,6 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -219,14 +219,14 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
+			case "programs":
+				return ec.fieldContext_Procedure_programs(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Procedure_narratives(ctx, field)
 			case "risks":
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -327,14 +327,16 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Procedure_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Procedure_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Procedure_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Procedure_ownerID(ctx, field)
 			case "name":
@@ -351,8 +353,6 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -367,14 +367,14 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_controls(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
+			case "programs":
+				return ec.fieldContext_Procedure_programs(ctx, field)
 			case "narratives":
 				return ec.fieldContext_Procedure_narratives(ctx, field)
 			case "risks":
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},

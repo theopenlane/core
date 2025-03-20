@@ -28,6 +28,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	orgID := user.Edges.OrgMemberships[0].ID
 
 	ctx := auth.NewTestContextWithOrgID(user.ID, orgID)
+	ctx = generated.NewContext(ctx, suite.client)
 
 	tests := []struct {
 		name           string

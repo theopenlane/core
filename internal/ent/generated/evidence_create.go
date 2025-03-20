@@ -84,12 +84,6 @@ func (ec *EvidenceCreate) SetNillableUpdatedBy(s *string) *EvidenceCreate {
 	return ec
 }
 
-// SetDisplayID sets the "display_id" field.
-func (ec *EvidenceCreate) SetDisplayID(s string) *EvidenceCreate {
-	ec.mutation.SetDisplayID(s)
-	return ec
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ec *EvidenceCreate) SetDeletedAt(t time.Time) *EvidenceCreate {
 	ec.mutation.SetDeletedAt(t)
@@ -115,6 +109,12 @@ func (ec *EvidenceCreate) SetNillableDeletedBy(s *string) *EvidenceCreate {
 	if s != nil {
 		ec.SetDeletedBy(*s)
 	}
+	return ec
+}
+
+// SetDisplayID sets the "display_id" field.
+func (ec *EvidenceCreate) SetDisplayID(s string) *EvidenceCreate {
+	ec.mutation.SetDisplayID(s)
 	return ec
 }
 
@@ -537,10 +537,6 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_spec.SetField(evidence.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ec.mutation.DisplayID(); ok {
-		_spec.SetField(evidence.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := ec.mutation.DeletedAt(); ok {
 		_spec.SetField(evidence.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -548,6 +544,10 @@ func (ec *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.DeletedBy(); ok {
 		_spec.SetField(evidence.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ec.mutation.DisplayID(); ok {
+		_spec.SetField(evidence.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := ec.mutation.Tags(); ok {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)

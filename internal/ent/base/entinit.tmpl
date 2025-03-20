@@ -10,7 +10,24 @@ import (
 
 // {{ . }} holds the schema definition for the {{ . }} entity
 type {{ . }} struct {
-    ent.Schema
+  	CustomSchema
+
+	ent.Schema
+}
+
+// Schema{{ . }}is the name of the schema in snake case
+const Schema{{ . }} = "{{ . }}"
+
+func ({{ . }}) Name() string {
+	return SchemaA{{ . }}
+}
+
+func ({{ . }}) GetType() any {
+	return {{ . }}.Type
+}
+
+func ({{ . }}) PluralName() string {
+	return pluralize.NewClient().Plural(Schema{{ . }})
 }
 
 // Fields of the {{ . }}
@@ -31,19 +48,17 @@ func ({{ . }}) Fields() []ent.Field {
 
 // Mixin of the {{ . }}
 func ({{ . }}) Mixin() []ent.Mixin {
-    return []ent.Mixin{
-		NewAuditMixin(),
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-    }
+	// getDefaultMixins returns the default mixins for all entities
+	// see mixingConfig{} for more configuration options
+	return getDefaultMixins()
 }
 
 // Edges of the {{ . }}
 func ({{ . }}) Edges() []ent.Edge {
 	return []ent.Edge{
 		// Edges go here
-		// add the entgql.RelayConnection() for the edges that are non-unique for pagination
+		// see defaultEdgeToWithPagination() and similar functions
+		// in default.go for helper functions
 	}
 }
 
@@ -55,11 +70,9 @@ func ({{ . }}) Indexes() []ent.Index {
 // Annotations of the {{ . }}
 func ({{ . }}) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-
-        // the above annotations create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead
+		// the AnnotationMixin provides the common annotations for
+		// to create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead and set the mixinConfig to `excludeAnnotations: true
+		`
         // if you do not need the graphql bits
 		// entgql.Skip(entgql.SkipAll),
 		// entx.SchemaGenSkip(true),

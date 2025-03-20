@@ -80,12 +80,6 @@ func (ddc *DocumentDataCreate) SetNillableUpdatedBy(s *string) *DocumentDataCrea
 	return ddc
 }
 
-// SetTags sets the "tags" field.
-func (ddc *DocumentDataCreate) SetTags(s []string) *DocumentDataCreate {
-	ddc.mutation.SetTags(s)
-	return ddc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ddc *DocumentDataCreate) SetDeletedAt(t time.Time) *DocumentDataCreate {
 	ddc.mutation.SetDeletedAt(t)
@@ -111,6 +105,12 @@ func (ddc *DocumentDataCreate) SetNillableDeletedBy(s *string) *DocumentDataCrea
 	if s != nil {
 		ddc.SetDeletedBy(*s)
 	}
+	return ddc
+}
+
+// SetTags sets the "tags" field.
+func (ddc *DocumentDataCreate) SetTags(s []string) *DocumentDataCreate {
+	ddc.mutation.SetTags(s)
 	return ddc
 }
 
@@ -164,14 +164,14 @@ func (ddc *DocumentDataCreate) SetTemplate(t *Template) *DocumentDataCreate {
 	return ddc.SetTemplateID(t.ID)
 }
 
-// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (ddc *DocumentDataCreate) AddEntityIDs(ids ...string) *DocumentDataCreate {
 	ddc.mutation.AddEntityIDs(ids...)
 	return ddc
 }
 
-// AddEntity adds the "entity" edges to the Entity entity.
-func (ddc *DocumentDataCreate) AddEntity(e ...*Entity) *DocumentDataCreate {
+// AddEntities adds the "entities" edges to the Entity entity.
+func (ddc *DocumentDataCreate) AddEntities(e ...*Entity) *DocumentDataCreate {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
@@ -327,10 +327,6 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ddc.mutation.Tags(); ok {
-		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ddc.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -338,6 +334,10 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 	if value, ok := ddc.mutation.DeletedBy(); ok {
 		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ddc.mutation.Tags(); ok {
+		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := ddc.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
@@ -379,12 +379,12 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_node.TemplateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ddc.mutation.EntityIDs(); len(nodes) > 0 {
+	if nodes := ddc.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),

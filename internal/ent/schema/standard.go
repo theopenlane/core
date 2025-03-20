@@ -6,15 +6,15 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -22,7 +22,23 @@ import (
 
 // Standard defines the standard schema.
 type Standard struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaStandard = "standard"
+
+func (Standard) Name() string {
+	return SchemaStandard
+}
+
+func (Standard) GetType() any {
+	return Standard.Type
+}
+
+func (Standard) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaStandard)
 }
 
 // Fields returns standard fields.
@@ -110,25 +126,23 @@ func (Standard) Fields() []ent.Field {
 }
 
 // Edges of the Standard
-func (Standard) Edges() []ent.Edge {
+func (s Standard) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(s, Control{}),
 	}
 }
 
 // Mixin of the Standard
-func (Standard) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.RevisionMixin{},
-		NewOrgOwnedMixin(ObjectOwnedMixin{
-			Ref:                      "standards",
-			AllowEmptyForSystemAdmin: true, // allow empty org_id
-		}),
-	}
+func (s Standard) Mixin() []ent.Mixin {
+	return mixinConfig{
+		includeRevision: true,
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnedMixin(ObjectOwnedMixin{
+				Ref:                      s.PluralName(),
+				AllowEmptyForSystemAdmin: true, // allow empty owner_id
+			}),
+		},
+	}.getMixins()
 }
 
 // Hooks of the Standard
@@ -148,10 +162,7 @@ func (Standard) Interceptors() []ent.Interceptor {
 // Annotations of the Standard
 func (Standard) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -163,9 +174,8 @@ func (Standard) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
-			privacy.AlwaysDenyRule(),    // deny all other mutations for now
-			// policy.CheckCreateAccess(), // TODO (sfunk): fix create access for org owned standards
-			// privacy.AlwaysAllowRule(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.StandardMutation](),
 		),
 	)
 }

@@ -32,12 +32,12 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldDisplayID holds the string denoting the display_id field in the database.
-	FieldDisplayID = "display_id"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldDisplayID holds the string denoting the display_id field in the database.
+	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -74,9 +74,9 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldDisplayID,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
 	FieldName,
@@ -192,11 +192,6 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByDisplayID orders the results by the display_id field.
-func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
-}
-
 // ByDeletedAt orders the results by the deleted_at field.
 func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
@@ -205,6 +200,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByDisplayID orders the results by the display_id field.
+func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

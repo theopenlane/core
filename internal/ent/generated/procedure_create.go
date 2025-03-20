@@ -85,12 +85,6 @@ func (pc *ProcedureCreate) SetNillableUpdatedBy(s *string) *ProcedureCreate {
 	return pc
 }
 
-// SetTags sets the "tags" field.
-func (pc *ProcedureCreate) SetTags(s []string) *ProcedureCreate {
-	pc.mutation.SetTags(s)
-	return pc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (pc *ProcedureCreate) SetDeletedAt(t time.Time) *ProcedureCreate {
 	pc.mutation.SetDeletedAt(t)
@@ -122,6 +116,26 @@ func (pc *ProcedureCreate) SetNillableDeletedBy(s *string) *ProcedureCreate {
 // SetDisplayID sets the "display_id" field.
 func (pc *ProcedureCreate) SetDisplayID(s string) *ProcedureCreate {
 	pc.mutation.SetDisplayID(s)
+	return pc
+}
+
+// SetTags sets the "tags" field.
+func (pc *ProcedureCreate) SetTags(s []string) *ProcedureCreate {
+	pc.mutation.SetTags(s)
+	return pc
+}
+
+// SetRevision sets the "revision" field.
+func (pc *ProcedureCreate) SetRevision(s string) *ProcedureCreate {
+	pc.mutation.SetRevision(s)
+	return pc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableRevision(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetRevision(*s)
+	}
 	return pc
 }
 
@@ -225,20 +239,6 @@ func (pc *ProcedureCreate) SetReviewFrequency(e enums.Frequency) *ProcedureCreat
 func (pc *ProcedureCreate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureCreate {
 	if e != nil {
 		pc.SetReviewFrequency(*e)
-	}
-	return pc
-}
-
-// SetRevision sets the "revision" field.
-func (pc *ProcedureCreate) SetRevision(s string) *ProcedureCreate {
-	pc.mutation.SetRevision(s)
-	return pc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableRevision(s *string) *ProcedureCreate {
-	if s != nil {
-		pc.SetRevision(*s)
 	}
 	return pc
 }
@@ -360,6 +360,21 @@ func (pc *ProcedureCreate) AddInternalPolicies(i ...*InternalPolicy) *ProcedureC
 	return pc.AddInternalPolicyIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (pc *ProcedureCreate) AddProgramIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddProgramIDs(ids...)
+	return pc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (pc *ProcedureCreate) AddPrograms(p ...*Program) *ProcedureCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddProgramIDs(ids...)
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (pc *ProcedureCreate) AddNarrativeIDs(ids ...string) *ProcedureCreate {
 	pc.mutation.AddNarrativeIDs(ids...)
@@ -403,21 +418,6 @@ func (pc *ProcedureCreate) AddTasks(t ...*Task) *ProcedureCreate {
 		ids[i] = t[i].ID
 	}
 	return pc.AddTaskIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (pc *ProcedureCreate) AddProgramIDs(ids ...string) *ProcedureCreate {
-	pc.mutation.AddProgramIDs(ids...)
-	return pc
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (pc *ProcedureCreate) AddPrograms(p ...*Program) *ProcedureCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -475,6 +475,10 @@ func (pc *ProcedureCreate) defaults() error {
 		v := procedure.DefaultTags
 		pc.mutation.SetTags(v)
 	}
+	if _, ok := pc.mutation.Revision(); !ok {
+		v := procedure.DefaultRevision
+		pc.mutation.SetRevision(v)
+	}
 	if _, ok := pc.mutation.Status(); !ok {
 		v := procedure.DefaultStatus
 		pc.mutation.SetStatus(v)
@@ -490,10 +494,6 @@ func (pc *ProcedureCreate) defaults() error {
 	if _, ok := pc.mutation.ReviewFrequency(); !ok {
 		v := procedure.DefaultReviewFrequency
 		pc.mutation.SetReviewFrequency(v)
-	}
-	if _, ok := pc.mutation.Revision(); !ok {
-		v := procedure.DefaultRevision
-		pc.mutation.SetRevision(v)
 	}
 	if _, ok := pc.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
@@ -513,6 +513,11 @@ func (pc *ProcedureCreate) check() error {
 	if v, ok := pc.mutation.DisplayID(); ok {
 		if err := procedure.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.display_id": %w`, err)}
+		}
+	}
+	if v, ok := pc.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
 	if v, ok := pc.mutation.OwnerID(); ok {
@@ -536,11 +541,6 @@ func (pc *ProcedureCreate) check() error {
 	if v, ok := pc.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := pc.mutation.Revision(); ok {
-		if err := procedure.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -595,10 +595,6 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pc.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := pc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -610,6 +606,14 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.DisplayID(); ok {
 		_spec.SetField(procedure.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
+	}
+	if value, ok := pc.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
+	if value, ok := pc.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
@@ -638,10 +642,6 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := pc.mutation.Revision(); ok {
-		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -765,6 +765,23 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := pc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -811,23 +828,6 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProcedureTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pc.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

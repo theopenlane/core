@@ -357,16 +357,6 @@ func UpdatedByContainsFold(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.DocumentData {
-	return predicate.DocumentData(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.DocumentData {
-	return predicate.DocumentData(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldEQ(FieldDeletedAt, v))
@@ -490,6 +480,16 @@ func DeletedByEqualFold(v string) predicate.DocumentData {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.DocumentData {
+	return predicate.DocumentData(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.DocumentData {
+	return predicate.DocumentData(sql.FieldNotNull(FieldTags))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -690,12 +690,12 @@ func HasTemplateWith(preds ...predicate.Template) predicate.DocumentData {
 	})
 }
 
-// HasEntity applies the HasEdge predicate on the "entity" edge.
-func HasEntity() predicate.DocumentData {
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.DocumentData {
 	return predicate.DocumentData(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
@@ -704,10 +704,10 @@ func HasEntity() predicate.DocumentData {
 	})
 }
 
-// HasEntityWith applies the HasEdge predicate on the "entity" edge with a given conditions (other predicates).
-func HasEntityWith(preds ...predicate.Entity) predicate.DocumentData {
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.DocumentData {
 	return predicate.DocumentData(func(s *sql.Selector) {
-		step := newEntityStep()
+		step := newEntitiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityDocuments

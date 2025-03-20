@@ -41,10 +41,10 @@ type ProcedureQuery struct {
 	withDelegate              *GroupQuery
 	withControls              *ControlQuery
 	withInternalPolicies      *InternalPolicyQuery
+	withPrograms              *ProgramQuery
 	withNarratives            *NarrativeQuery
 	withRisks                 *RiskQuery
 	withTasks                 *TaskQuery
-	withPrograms              *ProgramQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Procedure) error
 	modifiers                 []func(*sql.Selector)
@@ -52,10 +52,10 @@ type ProcedureQuery struct {
 	withNamedEditors          map[string]*GroupQuery
 	withNamedControls         map[string]*ControlQuery
 	withNamedInternalPolicies map[string]*InternalPolicyQuery
+	withNamedPrograms         map[string]*ProgramQuery
 	withNamedNarratives       map[string]*NarrativeQuery
 	withNamedRisks            map[string]*RiskQuery
 	withNamedTasks            map[string]*TaskQuery
-	withNamedPrograms         map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -267,6 +267,31 @@ func (pq *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	return query
 }
 
+// QueryPrograms chains the current query on the "programs" edge.
+func (pq *ProcedureQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryNarratives chains the current query on the "narratives" edge.
 func (pq *ProcedureQuery) QueryNarratives() *NarrativeQuery {
 	query := (&NarrativeClient{config: pq.config}).Query()
@@ -336,31 +361,6 @@ func (pq *ProcedureQuery) QueryTasks() *TaskQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryPrograms chains the current query on the "programs" edge.
-func (pq *ProcedureQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
-		)
-		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramProcedures
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -566,10 +566,10 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		withDelegate:         pq.withDelegate.Clone(),
 		withControls:         pq.withControls.Clone(),
 		withInternalPolicies: pq.withInternalPolicies.Clone(),
+		withPrograms:         pq.withPrograms.Clone(),
 		withNarratives:       pq.withNarratives.Clone(),
 		withRisks:            pq.withRisks.Clone(),
 		withTasks:            pq.withTasks.Clone(),
-		withPrograms:         pq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -654,6 +654,17 @@ func (pq *ProcedureQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery
 	return pq
 }
 
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithPrograms(opts ...func(*ProgramQuery)) *ProcedureQuery {
+	query := (&ProgramClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPrograms = query
+	return pq
+}
+
 // WithNarratives tells the query-builder to eager-load the nodes that are connected to
 // the "narratives" edge. The optional arguments are used to configure the query builder of the edge.
 func (pq *ProcedureQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ProcedureQuery {
@@ -684,17 +695,6 @@ func (pq *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
 		opt(query)
 	}
 	pq.withTasks = query
-	return pq
-}
-
-// WithPrograms tells the query-builder to eager-load the nodes that are connected to
-// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithPrograms(opts ...func(*ProgramQuery)) *ProcedureQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withPrograms = query
 	return pq
 }
 
@@ -791,10 +791,10 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			pq.withDelegate != nil,
 			pq.withControls != nil,
 			pq.withInternalPolicies != nil,
+			pq.withPrograms != nil,
 			pq.withNarratives != nil,
 			pq.withRisks != nil,
 			pq.withTasks != nil,
-			pq.withPrograms != nil,
 		}
 	)
 	if pq.withApprover != nil || pq.withDelegate != nil {
@@ -872,6 +872,13 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	if query := pq.withPrograms; query != nil {
+		if err := pq.loadPrograms(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Programs = []*Program{} },
+			func(n *Procedure, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withNarratives; query != nil {
 		if err := pq.loadNarratives(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Narratives = []*Narrative{} },
@@ -890,13 +897,6 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := pq.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Tasks = []*Task{} },
 			func(n *Procedure, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := pq.withPrograms; query != nil {
-		if err := pq.loadPrograms(ctx, query, nodes,
-			func(n *Procedure) { n.Edges.Programs = []*Program{} },
-			func(n *Procedure, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -928,6 +928,13 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	for name, query := range pq.withNamedPrograms {
+		if err := pq.loadPrograms(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedPrograms(name) },
+			func(n *Procedure, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range pq.withNamedNarratives {
 		if err := pq.loadNarratives(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedNarratives(name) },
@@ -946,13 +953,6 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := pq.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedTasks(name) },
 			func(n *Procedure, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range pq.withNamedPrograms {
-		if err := pq.loadPrograms(ctx, query, nodes,
-			func(n *Procedure) { n.appendNamedPrograms(name) },
-			func(n *Procedure, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1305,6 +1305,68 @@ func (pq *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	return nil
 }
+func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Procedure)
+	nids := make(map[string]map[*Procedure]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(procedure.ProgramsTable)
+		joinT.Schema(pq.schemaConfig.ProgramProcedures)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(procedure.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(procedure.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(procedure.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (pq *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Narrative)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Procedure)
@@ -1453,68 +1515,6 @@ func (pq *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Procedure)
-	nids := make(map[string]map[*Procedure]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(procedure.ProgramsTable)
-		joinT.Schema(pq.schemaConfig.ProgramProcedures)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(procedure.ProgramsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(procedure.ProgramsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(procedure.ProgramsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1680,6 +1680,20 @@ func (pq *ProcedureQuery) WithNamedInternalPolicies(name string, opts ...func(*I
 	return pq
 }
 
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ProcedureQuery {
+	query := (&ProgramClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPrograms == nil {
+		pq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	pq.withNamedPrograms[name] = query
+	return pq
+}
+
 // WithNamedNarratives tells the query-builder to eager-load the nodes that are connected to the "narratives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (pq *ProcedureQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *ProcedureQuery {
@@ -1719,20 +1733,6 @@ func (pq *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) 
 		pq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	pq.withNamedTasks[name] = query
-	return pq
-}
-
-// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ProcedureQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if pq.withNamedPrograms == nil {
-		pq.withNamedPrograms = make(map[string]*ProgramQuery)
-	}
-	pq.withNamedPrograms[name] = query
 	return pq
 }
 

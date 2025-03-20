@@ -1,11 +1,9 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -13,14 +11,29 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InternalPolicy defines the policy schema.
 type InternalPolicy struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaInternalPolicy = "internal_policy"
+
+func (InternalPolicy) Name() string {
+	return SchemaInternalPolicy
+}
+
+func (InternalPolicy) GetType() any {
+	return InternalPolicy.Type
+}
+
+func (InternalPolicy) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaInternalPolicy)
 }
 
 // Fields returns policy fields.
@@ -29,42 +42,36 @@ func (InternalPolicy) Fields() []ent.Field {
 }
 
 // Edges of the InternalPolicy
-func (InternalPolicy) Edges() []ent.Edge {
+func (i InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
-		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
-		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
-		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
-		edge.From("programs", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("internal_policies"),
+		defaultEdgeToWithPagination(i, ControlObjective{}),
+		defaultEdgeToWithPagination(i, Control{}),
+		defaultEdgeToWithPagination(i, Procedure{}),
+		defaultEdgeToWithPagination(i, Narrative{}),
+		defaultEdgeToWithPagination(i, Task{}),
+		defaultEdgeFromWithPagination(i, Program{}),
 	}
 }
 
 // Mixin of the InternalPolicy
 func (InternalPolicy) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.NewIDMixinWithPrefixedID("PLC"),
-		// all policies must be associated to an organization
-		NewOrgOwnMixinWithRef("internal_policies"),
-		// add group edit permissions to the procedure
-		NewGroupPermissionsMixin(false),
-
-		DocumentMixin{DocumentType: "policy"}, // policies are documents
-		mixin.RevisionMixin{},                 // include revisions on all documents
-	}
+	return mixinConfig{
+		prefix:          "PLC",
+		includeRevision: true,
+		additionalMixins: []ent.Mixin{
+			// all policies must be associated to an organization
+			NewOrgOwnMixinWithRef("internal_policies"),
+			// add group edit permissions to the procedure
+			NewGroupPermissionsMixin(false),
+			// policies are documents
+			DocumentMixin{DocumentType: "policy"},
+		},
+	}.getMixins()
 }
 
 // Annotations of the InternalPolicy
 func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

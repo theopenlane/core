@@ -75,8 +75,8 @@ type FileEdges struct {
 	User []*User `json:"user,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization []*Organization `json:"organization,omitempty"`
-	// Group holds the value of the group edge.
-	Group []*Group `json:"group,omitempty"`
+	// Groups holds the value of the groups edge.
+	Groups []*Group `json:"groups,omitempty"`
 	// Contact holds the value of the contact edge.
 	Contact []*Contact `json:"contact,omitempty"`
 	// Entity holds the value of the entity edge.
@@ -87,14 +87,14 @@ type FileEdges struct {
 	OrganizationSetting []*OrganizationSetting `json:"organization_setting,omitempty"`
 	// Template holds the value of the template edge.
 	Template []*Template `json:"template,omitempty"`
-	// DocumentData holds the value of the document_data edge.
-	DocumentData []*DocumentData `json:"document_data,omitempty"`
-	// Events holds the value of the events edge.
-	Events []*Event `json:"events,omitempty"`
+	// Document holds the value of the document edge.
+	Document []*DocumentData `json:"document,omitempty"`
 	// Program holds the value of the program edge.
 	Program []*Program `json:"program,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Events holds the value of the events edge.
+	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [12]bool
@@ -103,16 +103,16 @@ type FileEdges struct {
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
-	namedGroup               map[string][]*Group
+	namedGroups              map[string][]*Group
 	namedContact             map[string][]*Contact
 	namedEntity              map[string][]*Entity
 	namedUserSetting         map[string][]*UserSetting
 	namedOrganizationSetting map[string][]*OrganizationSetting
 	namedTemplate            map[string][]*Template
-	namedDocumentData        map[string][]*DocumentData
-	namedEvents              map[string][]*Event
+	namedDocument            map[string][]*DocumentData
 	namedProgram             map[string][]*Program
 	namedEvidence            map[string][]*Evidence
+	namedEvents              map[string][]*Event
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -133,13 +133,13 @@ func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
 	return nil, &NotLoadedError{edge: "organization"}
 }
 
-// GroupOrErr returns the Group value or an error if the edge
+// GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) GroupOrErr() ([]*Group, error) {
+func (e FileEdges) GroupsOrErr() ([]*Group, error) {
 	if e.loadedTypes[2] {
-		return e.Group, nil
+		return e.Groups, nil
 	}
-	return nil, &NotLoadedError{edge: "group"}
+	return nil, &NotLoadedError{edge: "groups"}
 }
 
 // ContactOrErr returns the Contact value or an error if the edge
@@ -187,28 +187,19 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
-// DocumentDataOrErr returns the DocumentData value or an error if the edge
+// DocumentOrErr returns the Document value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) DocumentDataOrErr() ([]*DocumentData, error) {
+func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
 	if e.loadedTypes[8] {
-		return e.DocumentData, nil
+		return e.Document, nil
 	}
-	return nil, &NotLoadedError{edge: "document_data"}
-}
-
-// EventsOrErr returns the Events value or an error if the edge
-// was not loaded in eager-loading.
-func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[9] {
-		return e.Events, nil
-	}
-	return nil, &NotLoadedError{edge: "events"}
+	return nil, &NotLoadedError{edge: "document"}
 }
 
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[9] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -217,10 +208,19 @@ func (e FileEdges) ProgramOrErr() ([]*Program, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// EventsOrErr returns the Events value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) EventsOrErr() ([]*Event, error) {
+	if e.loadedTypes[11] {
+		return e.Events, nil
+	}
+	return nil, &NotLoadedError{edge: "events"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -408,9 +408,9 @@ func (f *File) QueryOrganization() *OrganizationQuery {
 	return NewFileClient(f.config).QueryOrganization(f)
 }
 
-// QueryGroup queries the "group" edge of the File entity.
-func (f *File) QueryGroup() *GroupQuery {
-	return NewFileClient(f.config).QueryGroup(f)
+// QueryGroups queries the "groups" edge of the File entity.
+func (f *File) QueryGroups() *GroupQuery {
+	return NewFileClient(f.config).QueryGroups(f)
 }
 
 // QueryContact queries the "contact" edge of the File entity.
@@ -438,14 +438,9 @@ func (f *File) QueryTemplate() *TemplateQuery {
 	return NewFileClient(f.config).QueryTemplate(f)
 }
 
-// QueryDocumentData queries the "document_data" edge of the File entity.
-func (f *File) QueryDocumentData() *DocumentDataQuery {
-	return NewFileClient(f.config).QueryDocumentData(f)
-}
-
-// QueryEvents queries the "events" edge of the File entity.
-func (f *File) QueryEvents() *EventQuery {
-	return NewFileClient(f.config).QueryEvents(f)
+// QueryDocument queries the "document" edge of the File entity.
+func (f *File) QueryDocument() *DocumentDataQuery {
+	return NewFileClient(f.config).QueryDocument(f)
 }
 
 // QueryProgram queries the "program" edge of the File entity.
@@ -456,6 +451,11 @@ func (f *File) QueryProgram() *ProgramQuery {
 // QueryEvidence queries the "evidence" edge of the File entity.
 func (f *File) QueryEvidence() *EvidenceQuery {
 	return NewFileClient(f.config).QueryEvidence(f)
+}
+
+// QueryEvents queries the "events" edge of the File entity.
+func (f *File) QueryEvents() *EventQuery {
+	return NewFileClient(f.config).QueryEvents(f)
 }
 
 // Update returns a builder for updating this File.
@@ -595,27 +595,27 @@ func (f *File) appendNamedOrganization(name string, edges ...*Organization) {
 	}
 }
 
-// NamedGroup returns the Group named value or an error if the edge was not
+// NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedGroup(name string) ([]*Group, error) {
-	if f.Edges.namedGroup == nil {
+func (f *File) NamedGroups(name string) ([]*Group, error) {
+	if f.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedGroup[name]
+	nodes, ok := f.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedGroup(name string, edges ...*Group) {
-	if f.Edges.namedGroup == nil {
-		f.Edges.namedGroup = make(map[string][]*Group)
+func (f *File) appendNamedGroups(name string, edges ...*Group) {
+	if f.Edges.namedGroups == nil {
+		f.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedGroup[name] = []*Group{}
+		f.Edges.namedGroups[name] = []*Group{}
 	} else {
-		f.Edges.namedGroup[name] = append(f.Edges.namedGroup[name], edges...)
+		f.Edges.namedGroups[name] = append(f.Edges.namedGroups[name], edges...)
 	}
 }
 
@@ -739,51 +739,27 @@ func (f *File) appendNamedTemplate(name string, edges ...*Template) {
 	}
 }
 
-// NamedDocumentData returns the DocumentData named value or an error if the edge was not
+// NamedDocument returns the Document named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedDocumentData(name string) ([]*DocumentData, error) {
-	if f.Edges.namedDocumentData == nil {
+func (f *File) NamedDocument(name string) ([]*DocumentData, error) {
+	if f.Edges.namedDocument == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedDocumentData[name]
+	nodes, ok := f.Edges.namedDocument[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedDocumentData(name string, edges ...*DocumentData) {
-	if f.Edges.namedDocumentData == nil {
-		f.Edges.namedDocumentData = make(map[string][]*DocumentData)
+func (f *File) appendNamedDocument(name string, edges ...*DocumentData) {
+	if f.Edges.namedDocument == nil {
+		f.Edges.namedDocument = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedDocumentData[name] = []*DocumentData{}
+		f.Edges.namedDocument[name] = []*DocumentData{}
 	} else {
-		f.Edges.namedDocumentData[name] = append(f.Edges.namedDocumentData[name], edges...)
-	}
-}
-
-// NamedEvents returns the Events named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (f *File) NamedEvents(name string) ([]*Event, error) {
-	if f.Edges.namedEvents == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := f.Edges.namedEvents[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (f *File) appendNamedEvents(name string, edges ...*Event) {
-	if f.Edges.namedEvents == nil {
-		f.Edges.namedEvents = make(map[string][]*Event)
-	}
-	if len(edges) == 0 {
-		f.Edges.namedEvents[name] = []*Event{}
-	} else {
-		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
+		f.Edges.namedDocument[name] = append(f.Edges.namedDocument[name], edges...)
 	}
 }
 
@@ -832,6 +808,30 @@ func (f *File) appendNamedEvidence(name string, edges ...*Evidence) {
 		f.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		f.Edges.namedEvidence[name] = append(f.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedEvents returns the Events named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedEvents(name string) ([]*Event, error) {
+	if f.Edges.namedEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedEvents(name string, edges ...*Event) {
+	if f.Edges.namedEvents == nil {
+		f.Edges.namedEvents = make(map[string][]*Event)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedEvents[name] = []*Event{}
+	} else {
+		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
 	}
 }
 

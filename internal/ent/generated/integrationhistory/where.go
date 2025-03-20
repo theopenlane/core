@@ -510,16 +510,6 @@ func UpdatedByContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.IntegrationHistory {
-	return predicate.IntegrationHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -643,6 +633,16 @@ func DeletedByEqualFold(v string) predicate.IntegrationHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldTags))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

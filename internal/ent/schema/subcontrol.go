@@ -5,24 +5,38 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Subcontrol defines the file schema.
 type Subcontrol struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaSubcontrol = "subcontrol"
+
+func (Subcontrol) Name() string {
+	return SchemaSubcontrol
+}
+
+func (Subcontrol) GetType() any {
+	return Subcontrol.Type
+}
+
+func (Subcontrol) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaSubcontrol)
 }
 
 // Fields returns file fields.
@@ -46,62 +60,65 @@ func (Subcontrol) Fields() []ent.Field {
 }
 
 // Edges of the Subcontrol
-func (Subcontrol) Edges() []ent.Edge {
+func (s Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
 		// subcontrols are required to have a parent control
-		edge.From("control", Control.Type).
-			Unique().
-			Field("control_id").
-			Required().
-			Ref("subcontrols"),
-
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: Control{},
+			field:      "control_id",
+			required:   true,
+		}),
 		// controls can be mapped to other controls as a reference
-		edge.From("mapped_controls", MappedControl.Type).
-			Ref("subcontrols").
-			Comment("mapped subcontrols that have a relation to another control or subcontrol"),
-
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: MappedControl{},
+			comment:    "mapped subcontrols that have a relation to another control or subcontrol",
+		}),
 		// evidence can be associated with the control
-		edge.From("evidence", Evidence.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("subcontrols"),
-
-		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeFromWithPagination(s, Evidence{}),
+		defaultEdgeToWithPagination(s, ControlObjective{}),
 
 		// sub controls can have associated task, narratives, risks, and action plans
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
-		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
-		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
-		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(s, Task{}),
+		defaultEdgeToWithPagination(s, Narrative{}),
+		defaultEdgeToWithPagination(s, Risk{}),
+		defaultEdgeToWithPagination(s, ActionPlan{}),
 
 		// policies and procedures are used to implement the subcontrol
-		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
-		edge.To("internal_policies", InternalPolicy.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(s, Procedure{}),
+		defaultEdgeToWithPagination(s, InternalPolicy{}),
 
 		// owner is the user who is responsible for the subcontrol
-		edge.To("control_owner", Group.Type).
-			Unique().
-			Comment("the user who is responsible for the subcontrol, defaults to the parent control owner if not set"),
-		edge.To("delegate", Group.Type).
-			Unique().
-			Comment("temporary delegate for the control, used for temporary control ownership"),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			name:       "control_owner",
+			t:          Group.Type,
+			comment:    "the user who is responsible for the subcontrol, defaults to the parent control owner if not set",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			name:       "delegate",
+			t:          Group.Type,
+			comment:    "temporary delegate for the subcontrol, used for temporary control ownership",
+		}),
 	}
 }
 
 // Mixin of the Subcontrol
-func (Subcontrol) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.NewIDMixinWithPrefixedID("SCL"),
-		emixin.TagMixin{},
-		// subcontrols can inherit permissions from the parent control
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:               []string{"control_id"},
-			WithOrganizationOwner:    true,
-			AllowEmptyForSystemAdmin: true, // allow organization owner to be empty
-			Ref:                      "subcontrols",
-		}),
-	}
+func (s Subcontrol) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix: "SCL",
+		additionalMixins: []ent.Mixin{
+			// subcontrols can inherit permissions from the parent control
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:               []string{"control_id"},
+				WithOrganizationOwner:    true,
+				AllowEmptyForSystemAdmin: true, // allow organization owner to be empty
+				Ref:                      s.PluralName(),
+			}),
+		},
+	}.getMixins()
 }
 
 func (Subcontrol) Indexes() []ent.Index {
@@ -117,10 +134,6 @@ func (Subcontrol) Indexes() []ent.Index {
 // Annotations of the Subcontrol
 func (Subcontrol) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

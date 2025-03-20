@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Organization_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Organization_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -141,8 +141,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_templates(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Organization_integrations(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "documents":
+				return ec.fieldContext_Organization_documents(ctx, field)
 			case "orgSubscriptions":
 				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "invites":
@@ -239,12 +239,12 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Organization_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Organization_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -305,8 +305,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_templates(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Organization_integrations(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "documents":
+				return ec.fieldContext_Organization_documents(ctx, field)
 			case "orgSubscriptions":
 				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "invites":
@@ -447,12 +447,12 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Organization_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Organization_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -513,8 +513,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_templates(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Organization_integrations(ctx, field)
-			case "documentData":
-				return ec.fieldContext_Organization_documentData(ctx, field)
+			case "documents":
+				return ec.fieldContext_Organization_documents(ctx, field)
 			case "orgSubscriptions":
 				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 			case "invites":

@@ -13,7 +13,23 @@ import (
 
 // Webauthn holds the schema definition for the Webauthn entity
 type Webauthn struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaWebauthn = "webauthn"
+
+func (Webauthn) Name() string {
+	return SchemaWebauthn
+}
+
+func (Webauthn) GetType() any {
+	return Webauthn.Type
+}
+
+func (Webauthn) PluralName() string {
+	return SchemaWebauthn // special case for webauthn
 }
 
 // Fields of the Webauthn
@@ -54,13 +70,13 @@ func (Webauthn) Fields() []ent.Field {
 }
 
 // Mixin of the Webauthn
-func (Webauthn) Mixin() []ent.Mixin {
+func (w Webauthn) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		UserOwnedMixin{
-			Ref:               "webauthn",
+			Ref:               w.PluralName(),
 			SkipOASGeneration: true,
 		},
 	}

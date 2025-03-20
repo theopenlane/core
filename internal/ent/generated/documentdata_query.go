@@ -26,18 +26,18 @@ import (
 // DocumentDataQuery is the builder for querying DocumentData entities.
 type DocumentDataQuery struct {
 	config
-	ctx             *QueryContext
-	order           []documentdata.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.DocumentData
-	withOwner       *OrganizationQuery
-	withTemplate    *TemplateQuery
-	withEntity      *EntityQuery
-	withFiles       *FileQuery
-	loadTotal       []func(context.Context, []*DocumentData) error
-	modifiers       []func(*sql.Selector)
-	withNamedEntity map[string]*EntityQuery
-	withNamedFiles  map[string]*FileQuery
+	ctx               *QueryContext
+	order             []documentdata.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.DocumentData
+	withOwner         *OrganizationQuery
+	withTemplate      *TemplateQuery
+	withEntities      *EntityQuery
+	withFiles         *FileQuery
+	loadTotal         []func(context.Context, []*DocumentData) error
+	modifiers         []func(*sql.Selector)
+	withNamedEntities map[string]*EntityQuery
+	withNamedFiles    map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -124,8 +124,8 @@ func (ddq *DocumentDataQuery) QueryTemplate() *TemplateQuery {
 	return query
 }
 
-// QueryEntity chains the current query on the "entity" edge.
-func (ddq *DocumentDataQuery) QueryEntity() *EntityQuery {
+// QueryEntities chains the current query on the "entities" edge.
+func (ddq *DocumentDataQuery) QueryEntities() *EntityQuery {
 	query := (&EntityClient{config: ddq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ddq.prepareQuery(ctx); err != nil {
@@ -138,7 +138,7 @@ func (ddq *DocumentDataQuery) QueryEntity() *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntityTable, documentdata.EntityPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntitiesTable, documentdata.EntitiesPrimaryKey...),
 		)
 		schemaConfig := ddq.schemaConfig
 		step.To.Schema = schemaConfig.Entity
@@ -368,7 +368,7 @@ func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
 		predicates:   append([]predicate.DocumentData{}, ddq.predicates...),
 		withOwner:    ddq.withOwner.Clone(),
 		withTemplate: ddq.withTemplate.Clone(),
-		withEntity:   ddq.withEntity.Clone(),
+		withEntities: ddq.withEntities.Clone(),
 		withFiles:    ddq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       ddq.sql.Clone(),
@@ -399,14 +399,14 @@ func (ddq *DocumentDataQuery) WithTemplate(opts ...func(*TemplateQuery)) *Docume
 	return ddq
 }
 
-// WithEntity tells the query-builder to eager-load the nodes that are connected to
-// the "entity" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithEntity(opts ...func(*EntityQuery)) *DocumentDataQuery {
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DocumentDataQuery) WithEntities(opts ...func(*EntityQuery)) *DocumentDataQuery {
 	query := (&EntityClient{config: ddq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ddq.withEntity = query
+	ddq.withEntities = query
 	return ddq
 }
 
@@ -508,7 +508,7 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		loadedTypes = [4]bool{
 			ddq.withOwner != nil,
 			ddq.withTemplate != nil,
-			ddq.withEntity != nil,
+			ddq.withEntities != nil,
 			ddq.withFiles != nil,
 		}
 	)
@@ -547,10 +547,10 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
-	if query := ddq.withEntity; query != nil {
-		if err := ddq.loadEntity(ctx, query, nodes,
-			func(n *DocumentData) { n.Edges.Entity = []*Entity{} },
-			func(n *DocumentData, e *Entity) { n.Edges.Entity = append(n.Edges.Entity, e) }); err != nil {
+	if query := ddq.withEntities; query != nil {
+		if err := ddq.loadEntities(ctx, query, nodes,
+			func(n *DocumentData) { n.Edges.Entities = []*Entity{} },
+			func(n *DocumentData, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -561,10 +561,10 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
-	for name, query := range ddq.withNamedEntity {
-		if err := ddq.loadEntity(ctx, query, nodes,
-			func(n *DocumentData) { n.appendNamedEntity(name) },
-			func(n *DocumentData, e *Entity) { n.appendNamedEntity(name, e) }); err != nil {
+	for name, query := range ddq.withNamedEntities {
+		if err := ddq.loadEntities(ctx, query, nodes,
+			func(n *DocumentData) { n.appendNamedEntities(name) },
+			func(n *DocumentData, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -641,7 +641,7 @@ func (ddq *DocumentDataQuery) loadTemplate(ctx context.Context, query *TemplateQ
 	}
 	return nil
 }
-func (ddq *DocumentDataQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Entity)) error {
+func (ddq *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Entity)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*DocumentData)
 	nids := make(map[string]map[*DocumentData]struct{})
@@ -653,12 +653,12 @@ func (ddq *DocumentDataQuery) loadEntity(ctx context.Context, query *EntityQuery
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(documentdata.EntityTable)
+		joinT := sql.Table(documentdata.EntitiesTable)
 		joinT.Schema(ddq.schemaConfig.EntityDocuments)
-		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(documentdata.EntityPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(documentdata.EntityPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(documentdata.EntitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(documentdata.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(documentdata.EntityPrimaryKey[1]))
+		s.Select(joinT.C(documentdata.EntitiesPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -695,7 +695,7 @@ func (ddq *DocumentDataQuery) loadEntity(ctx context.Context, query *EntityQuery
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "entity" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -870,17 +870,17 @@ func (ddq *DocumentDataQuery) Modify(modifiers ...func(s *sql.Selector)) *Docume
 	return ddq.Select()
 }
 
-// WithNamedEntity tells the query-builder to eager-load the nodes that are connected to the "entity"
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithNamedEntity(name string, opts ...func(*EntityQuery)) *DocumentDataQuery {
+func (ddq *DocumentDataQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *DocumentDataQuery {
 	query := (&EntityClient{config: ddq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if ddq.withNamedEntity == nil {
-		ddq.withNamedEntity = make(map[string]*EntityQuery)
+	if ddq.withNamedEntities == nil {
+		ddq.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	ddq.withNamedEntity[name] = query
+	ddq.withNamedEntities[name] = query
 	return ddq
 }
 

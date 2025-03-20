@@ -112,12 +112,6 @@ func (thc *TaskHistoryCreate) SetNillableUpdatedBy(s *string) *TaskHistoryCreate
 	return thc
 }
 
-// SetDisplayID sets the "display_id" field.
-func (thc *TaskHistoryCreate) SetDisplayID(s string) *TaskHistoryCreate {
-	thc.mutation.SetDisplayID(s)
-	return thc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (thc *TaskHistoryCreate) SetDeletedAt(t time.Time) *TaskHistoryCreate {
 	thc.mutation.SetDeletedAt(t)
@@ -143,6 +137,12 @@ func (thc *TaskHistoryCreate) SetNillableDeletedBy(s *string) *TaskHistoryCreate
 	if s != nil {
 		thc.SetDeletedBy(*s)
 	}
+	return thc
+}
+
+// SetDisplayID sets the "display_id" field.
+func (thc *TaskHistoryCreate) SetDisplayID(s string) *TaskHistoryCreate {
+	thc.mutation.SetDisplayID(s)
 	return thc
 }
 
@@ -450,10 +450,6 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := thc.mutation.DisplayID(); ok {
-		_spec.SetField(taskhistory.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := thc.mutation.DeletedAt(); ok {
 		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -461,6 +457,10 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := thc.mutation.DeletedBy(); ok {
 		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := thc.mutation.DisplayID(); ok {
+		_spec.SetField(taskhistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := thc.mutation.Tags(); ok {
 		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)

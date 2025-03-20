@@ -12,15 +12,14 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -33,7 +32,23 @@ const (
 
 // Organization holds the schema definition for the Organization entity - organizations are the top level tenancy construct in the system
 type Organization struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaOrganization = "organization"
+
+func (Organization) Name() string {
+	return SchemaOrganization
+}
+
+func (Organization) GetType() any {
+	return Organization.Type
+}
+
+func (Organization) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrganization)
 }
 
 // Fields of the Organization
@@ -115,7 +130,7 @@ func (Organization) Fields() []ent.Field {
 }
 
 // Edges of the Organization
-func (Organization) Edges() []ent.Edge {
+func (o Organization) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("children", Organization.Type).
 			Annotations(
@@ -130,14 +145,15 @@ func (Organization) Edges() []ent.Edge {
 				entx.CascadeAnnotationField("Child"),
 			),
 
-		edge.To("setting", OrganizationSetting.Type).
-			Unique().
-			Annotations(
-				entx.CascadeAnnotationField("Organization"),
-			),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema:    o,
+			name:          "setting",
+			t:             OrganizationSetting.Type,
+			cascadeDelete: "Organization",
+		}),
+		defaultEdgeToWithPagination(o, PersonalAccessToken{}),
+		defaultEdgeToWithPagination(o, APIToken{}),
 
-		edge.To("personal_access_tokens", PersonalAccessToken.Type).Annotations(entgql.RelayConnection()),
-		edge.To("api_tokens", APIToken.Type).Annotations(entgql.RelayConnection()),
 		edge.From("users", User.Type).
 			Ref("organizations").
 			// Skip the mutation input for the users edge
@@ -147,129 +163,138 @@ func (Organization) Edges() []ent.Edge {
 
 		// files can be owned by an organization, but don't have to be
 		// only those with the organization id set should be cascade deleted
-		edge.To("files", File.Type).
-			Annotations(entx.CascadeAnnotationField("Organization"),
-				entgql.RelayConnection()),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
-		edge.To("secrets", Hush.Type).Annotations(entgql.RelayConnection()),
-		edge.To("avatar_file", File.Type).
-			Field("avatar_local_file_id").Unique(),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: File{},
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("Organization"), // 1:m so we override the default
+			},
+		}),
+
+		defaultEdgeToWithPagination(o, Event{}),
+		defaultEdgeToWithPagination(o, Hush{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: o,
+			name:       "avatar_file",
+			t:          File.Type,
+			field:      "avatar_local_file_id",
+		}),
 
 		// Organization owns the following entities
-		edge.To("groups", Group.Type).
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Group{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Template{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Integration{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         DocumentData{},
+			cascadeDeleteOwner: true,
+		}),
+		edge.To(OrgSubscription{}.PluralName(), OrgSubscription.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
 			),
-		edge.To("templates", Template.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("integrations", Integration.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("document_data", DocumentData.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("org_subscriptions", OrgSubscription.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-			),
-		edge.To("invites", Invite.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("subscribers", Subscriber.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("entities", Entity.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("entity_types", EntityType.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("contacts", Contact.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("notes", Note.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("tasks", Task.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("programs", Program.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("procedures", Procedure.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("internal_policies", InternalPolicy.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("risks", Risk.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("control_objectives", ControlObjective.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("narratives", Narrative.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("controls", Control.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("subcontrols", Subcontrol.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("evidence", Evidence.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("standards", Standard.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
-		edge.To("action_plans", ActionPlan.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Owner"),
-				entgql.RelayConnection(),
-			),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Invite{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Subscriber{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Entity{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         EntityType{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Contact{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Note{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Task{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Program{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Procedure{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         InternalPolicy{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Risk{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         ControlObjective{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Narrative{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Control{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Subcontrol{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Evidence{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Standard{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         ActionPlan{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 
@@ -286,10 +311,6 @@ func (Organization) Indexes() []ent.Index {
 // Annotations of the Organization
 func (Organization) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete org members when orgs are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{
@@ -305,14 +326,12 @@ func (Organization) Annotations() []schema.Annotation {
 
 // Mixin of the Organization
 func (Organization) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		// add group based create permissions
-		NewGroupBasedCreateAccessMixin(),
-	}
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			// add group based create permissions
+			NewGroupBasedCreateAccessMixin(),
+		},
+	}.getMixins()
 }
 
 // Policy defines the privacy policy of the Organization.

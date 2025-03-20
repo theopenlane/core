@@ -80,12 +80,6 @@ func (usc *UserSettingCreate) SetNillableUpdatedBy(s *string) *UserSettingCreate
 	return usc
 }
 
-// SetTags sets the "tags" field.
-func (usc *UserSettingCreate) SetTags(s []string) *UserSettingCreate {
-	usc.mutation.SetTags(s)
-	return usc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (usc *UserSettingCreate) SetDeletedAt(t time.Time) *UserSettingCreate {
 	usc.mutation.SetDeletedAt(t)
@@ -111,6 +105,12 @@ func (usc *UserSettingCreate) SetNillableDeletedBy(s *string) *UserSettingCreate
 	if s != nil {
 		usc.SetDeletedBy(*s)
 	}
+	return usc
+}
+
+// SetTags sets the "tags" field.
+func (usc *UserSettingCreate) SetTags(s []string) *UserSettingCreate {
+	usc.mutation.SetTags(s)
 	return usc
 }
 
@@ -446,10 +446,6 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := usc.mutation.Tags(); ok {
-		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := usc.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -457,6 +453,10 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 	if value, ok := usc.mutation.DeletedBy(); ok {
 		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := usc.mutation.Tags(); ok {
+		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := usc.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)

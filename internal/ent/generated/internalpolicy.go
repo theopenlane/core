@@ -29,14 +29,16 @@ type InternalPolicy struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the policy
@@ -53,8 +55,6 @@ type InternalPolicy struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                        InternalPolicyEdges `json:"edges"`
@@ -219,7 +219,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldRevision:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -276,14 +276,6 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.UpdatedBy = value.String
 			}
-		case internalpolicy.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case internalpolicy.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -301,6 +293,20 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
 				ip.DisplayID = value.String
+			}
+		case internalpolicy.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
+		case internalpolicy.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				ip.Revision = value.String
 			}
 		case internalpolicy.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -349,12 +355,6 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				ip.ReviewFrequency = enums.Frequency(value.String)
-			}
-		case internalpolicy.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				ip.Revision = value.String
 			}
 		case internalpolicy.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -487,9 +487,6 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ip.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ip.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -498,6 +495,12 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(ip.DisplayID)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(ip.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ip.OwnerID)
@@ -522,9 +525,6 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ip.ReviewFrequency))
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(ip.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }

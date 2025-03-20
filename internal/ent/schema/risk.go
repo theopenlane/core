@@ -4,15 +4,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -20,7 +18,23 @@ import (
 
 // Risk defines the risk schema.
 type Risk struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaRisk = "risk"
+
+func (Risk) Name() string {
+	return SchemaRisk
+}
+
+func (Risk) GetType() any {
+	return Risk.Type
+}
+
+func (Risk) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaRisk)
 }
 
 // Fields returns risk fields.
@@ -92,55 +106,49 @@ func (Risk) Fields() []ent.Field {
 }
 
 // Edges of the Risk
-func (Risk) Edges() []ent.Edge {
+func (r Risk) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("control", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("risks"),
-		edge.From("procedure", Procedure.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("risks"),
-		edge.To("action_plans", ActionPlan.Type).Annotations(entgql.RelayConnection()),
-		edge.From("programs", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
-
-		edge.To("stakeholder", Group.Type).
-			Unique().
-			Comment("the group of users who are responsible for risk oversight"),
-		edge.To("delegate", Group.Type).
-			Unique().
-			Comment("temporary delegates for the risk, used for temporary ownership"),
+		defaultEdgeFromWithPagination(r, Control{}),
+		defaultEdgeFromWithPagination(r, Procedure{}),
+		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
+		defaultEdgeToWithPagination(r, ActionPlan{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: r,
+			name:       "stakeholder",
+			t:          Group.Type,
+			comment:    "the group of users who are responsible for risk oversight",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: r,
+			name:       "delegate",
+			t:          Group.Type,
+			comment:    "temporary delegates for the risk, used for temporary ownership",
+		}),
 	}
 }
 
 // Mixin of the Risk
-func (Risk) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.NewIDMixinWithPrefixedID("RSK"),
-		emixin.TagMixin{},
-		// risks inherit permissions from the associated programs, but must have an organization as well
-		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
-		// it will also create program parent tuples for the risk when a program is associated to the risk
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"program_id", "control_id", "procedure_id", "control_objective_id", "internal_policy_id", "subcontrol_id"},
-			WithOrganizationOwner: true,
-			Ref:                   "risks",
-		}),
-		// add groups permissions with viewer, editor, and blocked groups
-		NewGroupPermissionsMixin(true),
-	}
+func (r Risk) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix: "RSK",
+		additionalMixins: []ent.Mixin{
+			// risks inherit permissions from the associated programs, but must have an organization as well
+			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
+			// it will also create program parent tuples for the risk when a program is associated to the risk
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:            []string{"program_id", "control_id", "procedure_id", "control_objective_id", "internal_policy_id", "subcontrol_id"},
+				WithOrganizationOwner: true,
+				Ref:                   r.PluralName(),
+			}),
+			// add groups permissions with viewer, editor, and blocked groups
+			NewGroupPermissionsMixin(true),
+		},
+	}.getMixins()
 }
 
 // Annotations of the Risk
 func (Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

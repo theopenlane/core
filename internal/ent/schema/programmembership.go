@@ -5,25 +5,39 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ProgramMembership holds the schema definition for the ProgramMembership entity
 type ProgramMembership struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaProgramMembership = "programmembership"
+
+func (ProgramMembership) Name() string {
+	return SchemaProgramMembership
+}
+
+func (ProgramMembership) GetType() any {
+	return ProgramMembership.Type
+}
+
+func (ProgramMembership) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaProgramMembership)
 }
 
 // Fields of the ProgramMembership
@@ -41,33 +55,36 @@ func (ProgramMembership) Fields() []ent.Field {
 }
 
 // Edges of the ProgramMembership
-func (ProgramMembership) Edges() []ent.Edge {
+func (p ProgramMembership) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("program", Program.Type).
-			Field("program_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("user", User.Type).
-			Field("user_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("orgmembership", OrgMembership.Type).
-			Immutable().
-			Unique().
-			Annotations(
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Program{},
+			required:   true,
+			immutable:  true,
+			field:      "program_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: User{},
+			required:   true,
+			immutable:  true,
+			field:      "user_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: OrgMembership{}, // ensure this isn't messed up
+			immutable:  true,
+			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
-			),
+			},
+		}),
 	}
 }
 
 // Annotations of the ProgramMembership
 func (ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.MembershipChecks("program"),
 	}
 }
@@ -82,11 +99,7 @@ func (ProgramMembership) Indexes() []ent.Index {
 
 // Mixin of the ProgramMembership
 func (ProgramMembership) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{excludeTags: true}.getMixins()
 }
 
 // Hooks of the ProgramMembership

@@ -432,14 +432,14 @@ func (fu *FileUpdate) AddOrganization(o ...*Organization) *FileUpdate {
 	return fu.AddOrganizationIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (fu *FileUpdate) AddGroupIDs(ids ...string) *FileUpdate {
 	fu.mutation.AddGroupIDs(ids...)
 	return fu
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (fu *FileUpdate) AddGroup(g ...*Group) *FileUpdate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (fu *FileUpdate) AddGroups(g ...*Group) *FileUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -522,34 +522,19 @@ func (fu *FileUpdate) AddTemplate(t ...*Template) *FileUpdate {
 	return fu.AddTemplateIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (fu *FileUpdate) AddDocumentDatumIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "document" edge to the DocumentData entity by IDs.
+func (fu *FileUpdate) AddDocumentIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddDocumentIDs(ids...)
 	return fu
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (fu *FileUpdate) AddDocumentData(d ...*DocumentData) *FileUpdate {
+// AddDocument adds the "document" edges to the DocumentData entity.
+func (fu *FileUpdate) AddDocument(d ...*DocumentData) *FileUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fu.AddDocumentDatumIDs(ids...)
-}
-
-// AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (fu *FileUpdate) AddEventIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddEventIDs(ids...)
-	return fu
-}
-
-// AddEvents adds the "events" edges to the Event entity.
-func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fu.AddEventIDs(ids...)
+	return fu.AddDocumentIDs(ids...)
 }
 
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
@@ -580,6 +565,21 @@ func (fu *FileUpdate) AddEvidence(e ...*Evidence) *FileUpdate {
 		ids[i] = e[i].ID
 	}
 	return fu.AddEvidenceIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fu *FileUpdate) AddEventIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddEventIDs(ids...)
+	return fu
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddEventIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -629,20 +629,20 @@ func (fu *FileUpdate) RemoveOrganization(o ...*Organization) *FileUpdate {
 	return fu.RemoveOrganizationIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (fu *FileUpdate) ClearGroup() *FileUpdate {
-	fu.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (fu *FileUpdate) ClearGroups() *FileUpdate {
+	fu.mutation.ClearGroups()
 	return fu
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (fu *FileUpdate) RemoveGroupIDs(ids ...string) *FileUpdate {
 	fu.mutation.RemoveGroupIDs(ids...)
 	return fu
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (fu *FileUpdate) RemoveGroup(g ...*Group) *FileUpdate {
+// RemoveGroups removes "groups" edges to Group entities.
+func (fu *FileUpdate) RemoveGroups(g ...*Group) *FileUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -755,46 +755,25 @@ func (fu *FileUpdate) RemoveTemplate(t ...*Template) *FileUpdate {
 	return fu.RemoveTemplateIDs(ids...)
 }
 
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (fu *FileUpdate) ClearDocumentData() *FileUpdate {
-	fu.mutation.ClearDocumentData()
+// ClearDocument clears all "document" edges to the DocumentData entity.
+func (fu *FileUpdate) ClearDocument() *FileUpdate {
+	fu.mutation.ClearDocument()
 	return fu
 }
 
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (fu *FileUpdate) RemoveDocumentDatumIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveDocumentDatumIDs(ids...)
+// RemoveDocumentIDs removes the "document" edge to DocumentData entities by IDs.
+func (fu *FileUpdate) RemoveDocumentIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveDocumentIDs(ids...)
 	return fu
 }
 
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (fu *FileUpdate) RemoveDocumentData(d ...*DocumentData) *FileUpdate {
+// RemoveDocument removes "document" edges to DocumentData entities.
+func (fu *FileUpdate) RemoveDocument(d ...*DocumentData) *FileUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fu.RemoveDocumentDatumIDs(ids...)
-}
-
-// ClearEvents clears all "events" edges to the Event entity.
-func (fu *FileUpdate) ClearEvents() *FileUpdate {
-	fu.mutation.ClearEvents()
-	return fu
-}
-
-// RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (fu *FileUpdate) RemoveEventIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveEventIDs(ids...)
-	return fu
-}
-
-// RemoveEvents removes "events" edges to Event entities.
-func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fu.RemoveEventIDs(ids...)
+	return fu.RemoveDocumentIDs(ids...)
 }
 
 // ClearProgram clears all "program" edges to the Program entity.
@@ -837,6 +816,27 @@ func (fu *FileUpdate) RemoveEvidence(e ...*Evidence) *FileUpdate {
 		ids[i] = e[i].ID
 	}
 	return fu.RemoveEvidenceIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (fu *FileUpdate) ClearEvents() *FileUpdate {
+	fu.mutation.ClearEvents()
+	return fu
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (fu *FileUpdate) RemoveEventIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveEventIDs(ids...)
+	return fu
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1132,12 +1132,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.GroupCleared() {
+	if fu.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -1146,12 +1146,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = fu.schemaConfig.GroupFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fu.mutation.GroupCleared() {
+	if nodes := fu.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !fu.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -1163,12 +1163,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -1420,12 +1420,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.DocumentDataCleared() {
+	if fu.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1434,29 +1434,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = fu.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !fu.mutation.DocumentDataCleared() {
+	if nodes := fu.mutation.RemovedDocumentIDs(); len(nodes) > 0 && !fu.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.DocumentDataFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.DocumentDataIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1466,51 +1449,20 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if fu.mutation.EventsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.FileEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fu.mutation.EventsCleared() {
+	if nodes := fu.mutation.DocumentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
+			Inverse: true,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.FileEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.EventsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.FileEvents
+		edge.Schema = fu.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1607,6 +1559,54 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = fu.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2024,14 +2024,14 @@ func (fuo *FileUpdateOne) AddOrganization(o ...*Organization) *FileUpdateOne {
 	return fuo.AddOrganizationIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (fuo *FileUpdateOne) AddGroupIDs(ids ...string) *FileUpdateOne {
 	fuo.mutation.AddGroupIDs(ids...)
 	return fuo
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (fuo *FileUpdateOne) AddGroup(g ...*Group) *FileUpdateOne {
+// AddGroups adds the "groups" edges to the Group entity.
+func (fuo *FileUpdateOne) AddGroups(g ...*Group) *FileUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -2114,34 +2114,19 @@ func (fuo *FileUpdateOne) AddTemplate(t ...*Template) *FileUpdateOne {
 	return fuo.AddTemplateIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (fuo *FileUpdateOne) AddDocumentDatumIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "document" edge to the DocumentData entity by IDs.
+func (fuo *FileUpdateOne) AddDocumentIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddDocumentIDs(ids...)
 	return fuo
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (fuo *FileUpdateOne) AddDocumentData(d ...*DocumentData) *FileUpdateOne {
+// AddDocument adds the "document" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) AddDocument(d ...*DocumentData) *FileUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fuo.AddDocumentDatumIDs(ids...)
-}
-
-// AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (fuo *FileUpdateOne) AddEventIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddEventIDs(ids...)
-	return fuo
-}
-
-// AddEvents adds the "events" edges to the Event entity.
-func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fuo.AddEventIDs(ids...)
+	return fuo.AddDocumentIDs(ids...)
 }
 
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
@@ -2172,6 +2157,21 @@ func (fuo *FileUpdateOne) AddEvidence(e ...*Evidence) *FileUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return fuo.AddEvidenceIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fuo *FileUpdateOne) AddEventIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddEventIDs(ids...)
+	return fuo
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddEventIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -2221,20 +2221,20 @@ func (fuo *FileUpdateOne) RemoveOrganization(o ...*Organization) *FileUpdateOne 
 	return fuo.RemoveOrganizationIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (fuo *FileUpdateOne) ClearGroup() *FileUpdateOne {
-	fuo.mutation.ClearGroup()
+// ClearGroups clears all "groups" edges to the Group entity.
+func (fuo *FileUpdateOne) ClearGroups() *FileUpdateOne {
+	fuo.mutation.ClearGroups()
 	return fuo
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
 func (fuo *FileUpdateOne) RemoveGroupIDs(ids ...string) *FileUpdateOne {
 	fuo.mutation.RemoveGroupIDs(ids...)
 	return fuo
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (fuo *FileUpdateOne) RemoveGroup(g ...*Group) *FileUpdateOne {
+// RemoveGroups removes "groups" edges to Group entities.
+func (fuo *FileUpdateOne) RemoveGroups(g ...*Group) *FileUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -2347,46 +2347,25 @@ func (fuo *FileUpdateOne) RemoveTemplate(t ...*Template) *FileUpdateOne {
 	return fuo.RemoveTemplateIDs(ids...)
 }
 
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (fuo *FileUpdateOne) ClearDocumentData() *FileUpdateOne {
-	fuo.mutation.ClearDocumentData()
+// ClearDocument clears all "document" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) ClearDocument() *FileUpdateOne {
+	fuo.mutation.ClearDocument()
 	return fuo
 }
 
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (fuo *FileUpdateOne) RemoveDocumentDatumIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveDocumentDatumIDs(ids...)
+// RemoveDocumentIDs removes the "document" edge to DocumentData entities by IDs.
+func (fuo *FileUpdateOne) RemoveDocumentIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveDocumentIDs(ids...)
 	return fuo
 }
 
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (fuo *FileUpdateOne) RemoveDocumentData(d ...*DocumentData) *FileUpdateOne {
+// RemoveDocument removes "document" edges to DocumentData entities.
+func (fuo *FileUpdateOne) RemoveDocument(d ...*DocumentData) *FileUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fuo.RemoveDocumentDatumIDs(ids...)
-}
-
-// ClearEvents clears all "events" edges to the Event entity.
-func (fuo *FileUpdateOne) ClearEvents() *FileUpdateOne {
-	fuo.mutation.ClearEvents()
-	return fuo
-}
-
-// RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (fuo *FileUpdateOne) RemoveEventIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveEventIDs(ids...)
-	return fuo
-}
-
-// RemoveEvents removes "events" edges to Event entities.
-func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fuo.RemoveEventIDs(ids...)
+	return fuo.RemoveDocumentIDs(ids...)
 }
 
 // ClearProgram clears all "program" edges to the Program entity.
@@ -2429,6 +2408,27 @@ func (fuo *FileUpdateOne) RemoveEvidence(e ...*Evidence) *FileUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return fuo.RemoveEvidenceIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (fuo *FileUpdateOne) ClearEvents() *FileUpdateOne {
+	fuo.mutation.ClearEvents()
+	return fuo
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (fuo *FileUpdateOne) RemoveEventIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveEventIDs(ids...)
+	return fuo
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -2754,12 +2754,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.GroupCleared() {
+	if fuo.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2768,12 +2768,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		edge.Schema = fuo.schemaConfig.GroupFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fuo.mutation.GroupCleared() {
+	if nodes := fuo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !fuo.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2785,12 +2785,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -3042,12 +3042,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.DocumentDataCleared() {
+	if fuo.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -3056,29 +3056,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		edge.Schema = fuo.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !fuo.mutation.DocumentDataCleared() {
+	if nodes := fuo.mutation.RemovedDocumentIDs(); len(nodes) > 0 && !fuo.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.DocumentDataFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.DocumentDataIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -3088,51 +3071,20 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if fuo.mutation.EventsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.FileEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fuo.mutation.EventsCleared() {
+	if nodes := fuo.mutation.DocumentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
+			Inverse: true,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.FileEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.EventsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.FileEvents
+		edge.Schema = fuo.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3229,6 +3181,54 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -23,12 +23,12 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
@@ -91,8 +91,8 @@ const (
 	EdgeTemplates = "templates"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
-	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
-	EdgeDocumentData = "document_data"
+	// EdgeDocuments holds the string denoting the documents edge name in mutations.
+	EdgeDocuments = "documents"
 	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
 	EdgeOrgSubscriptions = "org_subscriptions"
 	// EdgeInvites holds the string denoting the invites edge name in mutations.
@@ -273,13 +273,13 @@ const (
 	IntegrationsInverseTable = "integrations"
 	// IntegrationsColumn is the table column denoting the integrations relation/edge.
 	IntegrationsColumn = "owner_id"
-	// DocumentDataTable is the table that holds the document_data relation/edge.
-	DocumentDataTable = "document_data"
-	// DocumentDataInverseTable is the table name for the DocumentData entity.
+	// DocumentsTable is the table that holds the documents relation/edge.
+	DocumentsTable = "document_data"
+	// DocumentsInverseTable is the table name for the DocumentData entity.
 	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentDataInverseTable = "document_data"
-	// DocumentDataColumn is the table column denoting the document_data relation/edge.
-	DocumentDataColumn = "owner_id"
+	DocumentsInverseTable = "document_data"
+	// DocumentsColumn is the table column denoting the documents relation/edge.
+	DocumentsColumn = "owner_id"
 	// OrgSubscriptionsTable is the table that holds the org_subscriptions relation/edge.
 	OrgSubscriptionsTable = "org_subscriptions"
 	// OrgSubscriptionsInverseTable is the table name for the OrgSubscription entity.
@@ -429,9 +429,9 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldTags,
 	FieldName,
 	FieldDisplayName,
 	FieldDescription,
@@ -878,17 +878,17 @@ func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByDocumentDataCount orders the results by document_data count.
-func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
+// ByDocumentsCount orders the results by documents count.
+func ByDocumentsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newDocumentsStep(), opts...)
 	}
 }
 
-// ByDocumentData orders the results by document_data terms.
-func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByDocuments orders the results by documents terms.
+func ByDocuments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newDocumentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1325,11 +1325,11 @@ func newIntegrationsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
 	)
 }
-func newDocumentDataStep() *sqlgraph.Step {
+func newDocumentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentDataInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DocumentDataTable, DocumentDataColumn),
+		sqlgraph.To(DocumentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DocumentsTable, DocumentsColumn),
 	)
 }
 func newOrgSubscriptionsStep() *sqlgraph.Step {

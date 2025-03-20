@@ -4,11 +4,14 @@ import (
 	"context"
 
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
 )
 
 var (
@@ -22,6 +25,8 @@ var (
 	viewOnlyUser2 testUserDetails
 	// adminUser is a test user that is an admin of the first user's organization
 	adminUser testUserDetails
+	// systemAdminUser is a test user that is a system admin
+	systemAdminUser testUserDetails
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -78,6 +83,9 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 // as well as an api token and personal access token for the first user
 func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	t := suite.T()
+
+	// create system admin user
+	systemAdminUser = suite.systemAdminBuilder(ctx)
 
 	// create test users
 	testUser1 = suite.userBuilder(ctx)
@@ -137,4 +145,22 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDeta
 
 	// update the user context for the org member
 	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
+}
+
+func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context) testUserDetails {
+	newUser := suite.userBuilder(ctx)
+
+	req := fgax.TupleRequest{
+		SubjectID:   newUser.ID,
+		SubjectType: auth.UserSubjectType,
+		ObjectID:    rule.SystemObjectID,
+		ObjectType:  rule.SystemObject,
+		Relation:    fgax.SystemAdminRelation,
+	}
+
+	// add system admin relation for user
+	_, err := suite.client.db.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
+	require.NoError(suite.T(), err)
+
+	return newUser
 }

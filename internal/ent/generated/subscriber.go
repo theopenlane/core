@@ -27,12 +27,12 @@ type Subscriber struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// email address of the subscriber
@@ -150,14 +150,6 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedBy = value.String
 			}
-		case subscriber.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case subscriber.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -169,6 +161,14 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				s.DeletedBy = value.String
+			}
+		case subscriber.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
 			}
 		case subscriber.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -283,14 +283,14 @@ func (s *Subscriber) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(s.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(s.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", s.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(s.OwnerID)

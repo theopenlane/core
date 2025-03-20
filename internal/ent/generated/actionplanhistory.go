@@ -40,6 +40,8 @@ type ActionPlanHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -54,8 +56,6 @@ type ActionPlanHistory struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
@@ -78,7 +78,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case actionplanhistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldRevision, actionplanhistory.FieldOwnerID, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldOwnerID, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -165,6 +165,12 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case actionplanhistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				aph.Revision = value.String
+			}
 		case actionplanhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -206,12 +212,6 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				aph.ReviewFrequency = enums.Frequency(value.String)
-			}
-		case actionplanhistory.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				aph.Revision = value.String
 			}
 		case actionplanhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -303,6 +303,9 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", aph.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(aph.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(aph.Name)
 	builder.WriteString(", ")
@@ -323,9 +326,6 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", aph.ReviewFrequency))
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(aph.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(aph.OwnerID)

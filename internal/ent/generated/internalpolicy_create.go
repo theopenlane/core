@@ -85,12 +85,6 @@ func (ipc *InternalPolicyCreate) SetNillableUpdatedBy(s *string) *InternalPolicy
 	return ipc
 }
 
-// SetTags sets the "tags" field.
-func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetTags(s)
-	return ipc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ipc *InternalPolicyCreate) SetDeletedAt(t time.Time) *InternalPolicyCreate {
 	ipc.mutation.SetDeletedAt(t)
@@ -122,6 +116,26 @@ func (ipc *InternalPolicyCreate) SetNillableDeletedBy(s *string) *InternalPolicy
 // SetDisplayID sets the "display_id" field.
 func (ipc *InternalPolicyCreate) SetDisplayID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetDisplayID(s)
+	return ipc
+}
+
+// SetTags sets the "tags" field.
+func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetTags(s)
+	return ipc
+}
+
+// SetRevision sets the "revision" field.
+func (ipc *InternalPolicyCreate) SetRevision(s string) *InternalPolicyCreate {
+	ipc.mutation.SetRevision(s)
+	return ipc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableRevision(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetRevision(*s)
+	}
 	return ipc
 }
 
@@ -225,20 +239,6 @@ func (ipc *InternalPolicyCreate) SetReviewFrequency(e enums.Frequency) *Internal
 func (ipc *InternalPolicyCreate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyCreate {
 	if e != nil {
 		ipc.SetReviewFrequency(*e)
-	}
-	return ipc
-}
-
-// SetRevision sets the "revision" field.
-func (ipc *InternalPolicyCreate) SetRevision(s string) *InternalPolicyCreate {
-	ipc.mutation.SetRevision(s)
-	return ipc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableRevision(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetRevision(*s)
 	}
 	return ipc
 }
@@ -475,6 +475,10 @@ func (ipc *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultTags
 		ipc.mutation.SetTags(v)
 	}
+	if _, ok := ipc.mutation.Revision(); !ok {
+		v := internalpolicy.DefaultRevision
+		ipc.mutation.SetRevision(v)
+	}
 	if _, ok := ipc.mutation.Status(); !ok {
 		v := internalpolicy.DefaultStatus
 		ipc.mutation.SetStatus(v)
@@ -490,10 +494,6 @@ func (ipc *InternalPolicyCreate) defaults() error {
 	if _, ok := ipc.mutation.ReviewFrequency(); !ok {
 		v := internalpolicy.DefaultReviewFrequency
 		ipc.mutation.SetReviewFrequency(v)
-	}
-	if _, ok := ipc.mutation.Revision(); !ok {
-		v := internalpolicy.DefaultRevision
-		ipc.mutation.SetRevision(v)
 	}
 	if _, ok := ipc.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
@@ -513,6 +513,11 @@ func (ipc *InternalPolicyCreate) check() error {
 	if v, ok := ipc.mutation.DisplayID(); ok {
 		if err := internalpolicy.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.display_id": %w`, err)}
+		}
+	}
+	if v, ok := ipc.mutation.Revision(); ok {
+		if err := internalpolicy.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
 	if v, ok := ipc.mutation.OwnerID(); ok {
@@ -536,11 +541,6 @@ func (ipc *InternalPolicyCreate) check() error {
 	if v, ok := ipc.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := ipc.mutation.Revision(); ok {
-		if err := internalpolicy.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -595,10 +595,6 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ipc.mutation.Tags(); ok {
-		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ipc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -610,6 +606,14 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.DisplayID(); ok {
 		_spec.SetField(internalpolicy.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
+	}
+	if value, ok := ipc.mutation.Tags(); ok {
+		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
+	if value, ok := ipc.mutation.Revision(); ok {
+		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := ipc.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
@@ -638,10 +642,6 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := ipc.mutation.Revision(); ok {
-		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

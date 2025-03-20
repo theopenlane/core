@@ -4,21 +4,35 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ActionPlan defines the actionplan schema.
 type ActionPlan struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaActionPlan = "action_plan"
+
+func (ActionPlan) Name() string {
+	return SchemaActionPlan
+}
+
+func (ActionPlan) GetType() any {
+	return ActionPlan.Type
+}
+
+func (ActionPlan) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaActionPlan)
 }
 
 // Fields returns actionplan fields.
@@ -47,45 +61,28 @@ func (ActionPlan) Fields() []ent.Field {
 }
 
 // Edges of the ActionPlan
-func (ActionPlan) Edges() []ent.Edge {
+func (a ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("risk", Risk.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("action_plans"),
-		edge.From("control", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("action_plans"),
-		edge.From("user", User.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("action_plans"),
-		edge.From("program", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("action_plans"),
+		defaultEdgeFromWithPagination(a, Risk{}),
+		defaultEdgeFromWithPagination(a, Control{}),
+		defaultEdgeFromWithPagination(a, User{}),
+		defaultEdgeFromWithPagination(a, Program{}),
 	}
 }
 
 // Mixin of the ActionPlan
-func (ActionPlan) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-
-		DocumentMixin{DocumentType: "action_plan"},
-		mixin.RevisionMixin{},
-		// all action plans must be associated to an organization
-		NewOrgOwnMixinWithRef("action_plans"),
-	}
+func (a ActionPlan) Mixin() []ent.Mixin {
+	return mixinConfig{
+		includeRevision: true,
+		additionalMixins: []ent.Mixin{
+			DocumentMixin{DocumentType: a.Name()},
+			NewOrgOwnMixinWithRef(a.PluralName()),
+		}}.getMixins()
 }
 
 // Annotations of the ActionPlan
 func (ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

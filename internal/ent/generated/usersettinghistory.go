@@ -34,12 +34,12 @@ type UserSettingHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -139,14 +139,6 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				ush.UpdatedBy = value.String
 			}
-		case usersettinghistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ush.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case usersettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -158,6 +150,14 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				ush.DeletedBy = value.String
+			}
+		case usersettinghistory.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ush.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
 			}
 		case usersettinghistory.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -273,14 +273,14 @@ func (ush *UserSettingHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ush.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ush.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ush.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(ush.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", ush.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(ush.UserID)

@@ -35,6 +35,8 @@ type ActionPlan struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -49,8 +51,6 @@ type ActionPlan struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
@@ -76,24 +76,24 @@ type ActionPlanEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// Risk holds the value of the risk edge.
-	Risk []*Risk `json:"risk,omitempty"`
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
-	// User holds the value of the user edge.
-	User []*User `json:"user,omitempty"`
-	// Program holds the value of the program edge.
-	Program []*Program `json:"program,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Users holds the value of the users edge.
+	Users []*User `json:"users,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
 	totalCount [7]map[string]int
 
-	namedRisk    map[string][]*Risk
-	namedControl map[string][]*Control
-	namedUser    map[string][]*User
-	namedProgram map[string][]*Program
+	namedRisks    map[string][]*Risk
+	namedControls map[string][]*Control
+	namedUsers    map[string][]*User
+	namedPrograms map[string][]*Program
 }
 
 // ApproverOrErr returns the Approver value or an error if the edge
@@ -129,40 +129,40 @@ func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// RiskOrErr returns the Risk value or an error if the edge
+// RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
-func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
+func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
 	if e.loadedTypes[3] {
-		return e.Risk, nil
+		return e.Risks, nil
 	}
-	return nil, &NotLoadedError{edge: "risk"}
+	return nil, &NotLoadedError{edge: "risks"}
 }
 
-// ControlOrErr returns the Control value or an error if the edge
+// ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
-func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
+func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[4] {
-		return e.Control, nil
+		return e.Controls, nil
 	}
-	return nil, &NotLoadedError{edge: "control"}
+	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// UserOrErr returns the User value or an error if the edge
+// UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
-func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
+func (e ActionPlanEdges) UsersOrErr() ([]*User, error) {
 	if e.loadedTypes[5] {
-		return e.User, nil
+		return e.Users, nil
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "users"}
 }
 
-// ProgramOrErr returns the Program value or an error if the edge
+// ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
-func (e ActionPlanEdges) ProgramOrErr() ([]*Program, error) {
+func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 	if e.loadedTypes[6] {
-		return e.Program, nil
+		return e.Programs, nil
 	}
-	return nil, &NotLoadedError{edge: "program"}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -174,7 +174,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldRevision, actionplan.FieldOwnerID, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldOwnerID, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -249,6 +249,12 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case actionplan.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				ap.Revision = value.String
+			}
 		case actionplan.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -290,12 +296,6 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				ap.ReviewFrequency = enums.Frequency(value.String)
-			}
-		case actionplan.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				ap.Revision = value.String
 			}
 		case actionplan.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -370,24 +370,24 @@ func (ap *ActionPlan) QueryOwner() *OrganizationQuery {
 	return NewActionPlanClient(ap.config).QueryOwner(ap)
 }
 
-// QueryRisk queries the "risk" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryRisk() *RiskQuery {
-	return NewActionPlanClient(ap.config).QueryRisk(ap)
+// QueryRisks queries the "risks" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryRisks() *RiskQuery {
+	return NewActionPlanClient(ap.config).QueryRisks(ap)
 }
 
-// QueryControl queries the "control" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryControl() *ControlQuery {
-	return NewActionPlanClient(ap.config).QueryControl(ap)
+// QueryControls queries the "controls" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryControls() *ControlQuery {
+	return NewActionPlanClient(ap.config).QueryControls(ap)
 }
 
-// QueryUser queries the "user" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryUser() *UserQuery {
-	return NewActionPlanClient(ap.config).QueryUser(ap)
+// QueryUsers queries the "users" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryUsers() *UserQuery {
+	return NewActionPlanClient(ap.config).QueryUsers(ap)
 }
 
-// QueryProgram queries the "program" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryProgram() *ProgramQuery {
-	return NewActionPlanClient(ap.config).QueryProgram(ap)
+// QueryPrograms queries the "programs" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryPrograms() *ProgramQuery {
+	return NewActionPlanClient(ap.config).QueryPrograms(ap)
 }
 
 // Update returns a builder for updating this ActionPlan.
@@ -434,6 +434,9 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ap.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(ap.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ap.Name)
 	builder.WriteString(", ")
@@ -455,9 +458,6 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ap.ReviewFrequency))
 	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(ap.Revision)
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ap.OwnerID)
 	builder.WriteString(", ")
@@ -473,99 +473,99 @@ func (ap *ActionPlan) String() string {
 	return builder.String()
 }
 
-// NamedRisk returns the Risk named value or an error if the edge was not
+// NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedRisk(name string) ([]*Risk, error) {
-	if ap.Edges.namedRisk == nil {
+func (ap *ActionPlan) NamedRisks(name string) ([]*Risk, error) {
+	if ap.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedRisk[name]
+	nodes, ok := ap.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedRisk(name string, edges ...*Risk) {
-	if ap.Edges.namedRisk == nil {
-		ap.Edges.namedRisk = make(map[string][]*Risk)
+func (ap *ActionPlan) appendNamedRisks(name string, edges ...*Risk) {
+	if ap.Edges.namedRisks == nil {
+		ap.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedRisk[name] = []*Risk{}
+		ap.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		ap.Edges.namedRisk[name] = append(ap.Edges.namedRisk[name], edges...)
+		ap.Edges.namedRisks[name] = append(ap.Edges.namedRisks[name], edges...)
 	}
 }
 
-// NamedControl returns the Control named value or an error if the edge was not
+// NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedControl(name string) ([]*Control, error) {
-	if ap.Edges.namedControl == nil {
+func (ap *ActionPlan) NamedControls(name string) ([]*Control, error) {
+	if ap.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedControl[name]
+	nodes, ok := ap.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedControl(name string, edges ...*Control) {
-	if ap.Edges.namedControl == nil {
-		ap.Edges.namedControl = make(map[string][]*Control)
+func (ap *ActionPlan) appendNamedControls(name string, edges ...*Control) {
+	if ap.Edges.namedControls == nil {
+		ap.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedControl[name] = []*Control{}
+		ap.Edges.namedControls[name] = []*Control{}
 	} else {
-		ap.Edges.namedControl[name] = append(ap.Edges.namedControl[name], edges...)
+		ap.Edges.namedControls[name] = append(ap.Edges.namedControls[name], edges...)
 	}
 }
 
-// NamedUser returns the User named value or an error if the edge was not
+// NamedUsers returns the Users named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedUser(name string) ([]*User, error) {
-	if ap.Edges.namedUser == nil {
+func (ap *ActionPlan) NamedUsers(name string) ([]*User, error) {
+	if ap.Edges.namedUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedUser[name]
+	nodes, ok := ap.Edges.namedUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedUser(name string, edges ...*User) {
-	if ap.Edges.namedUser == nil {
-		ap.Edges.namedUser = make(map[string][]*User)
+func (ap *ActionPlan) appendNamedUsers(name string, edges ...*User) {
+	if ap.Edges.namedUsers == nil {
+		ap.Edges.namedUsers = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedUser[name] = []*User{}
+		ap.Edges.namedUsers[name] = []*User{}
 	} else {
-		ap.Edges.namedUser[name] = append(ap.Edges.namedUser[name], edges...)
+		ap.Edges.namedUsers[name] = append(ap.Edges.namedUsers[name], edges...)
 	}
 }
 
-// NamedProgram returns the Program named value or an error if the edge was not
+// NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedProgram(name string) ([]*Program, error) {
-	if ap.Edges.namedProgram == nil {
+func (ap *ActionPlan) NamedPrograms(name string) ([]*Program, error) {
+	if ap.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedProgram[name]
+	nodes, ok := ap.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedProgram(name string, edges ...*Program) {
-	if ap.Edges.namedProgram == nil {
-		ap.Edges.namedProgram = make(map[string][]*Program)
+func (ap *ActionPlan) appendNamedPrograms(name string, edges ...*Program) {
+	if ap.Edges.namedPrograms == nil {
+		ap.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedProgram[name] = []*Program{}
+		ap.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		ap.Edges.namedProgram[name] = append(ap.Edges.namedProgram[name], edges...)
+		ap.Edges.namedPrograms[name] = append(ap.Edges.namedPrograms[name], edges...)
 	}
 }
 

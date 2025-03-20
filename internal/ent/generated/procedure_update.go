@@ -73,24 +73,6 @@ func (pu *ProcedureUpdate) ClearUpdatedBy() *ProcedureUpdate {
 	return pu
 }
 
-// SetTags sets the "tags" field.
-func (pu *ProcedureUpdate) SetTags(s []string) *ProcedureUpdate {
-	pu.mutation.SetTags(s)
-	return pu
-}
-
-// AppendTags appends s to the "tags" field.
-func (pu *ProcedureUpdate) AppendTags(s []string) *ProcedureUpdate {
-	pu.mutation.AppendTags(s)
-	return pu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (pu *ProcedureUpdate) ClearTags() *ProcedureUpdate {
-	pu.mutation.ClearTags()
-	return pu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (pu *ProcedureUpdate) SetDeletedAt(t time.Time) *ProcedureUpdate {
 	pu.mutation.SetDeletedAt(t)
@@ -128,6 +110,44 @@ func (pu *ProcedureUpdate) SetNillableDeletedBy(s *string) *ProcedureUpdate {
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (pu *ProcedureUpdate) ClearDeletedBy() *ProcedureUpdate {
 	pu.mutation.ClearDeletedBy()
+	return pu
+}
+
+// SetTags sets the "tags" field.
+func (pu *ProcedureUpdate) SetTags(s []string) *ProcedureUpdate {
+	pu.mutation.SetTags(s)
+	return pu
+}
+
+// AppendTags appends s to the "tags" field.
+func (pu *ProcedureUpdate) AppendTags(s []string) *ProcedureUpdate {
+	pu.mutation.AppendTags(s)
+	return pu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (pu *ProcedureUpdate) ClearTags() *ProcedureUpdate {
+	pu.mutation.ClearTags()
+	return pu
+}
+
+// SetRevision sets the "revision" field.
+func (pu *ProcedureUpdate) SetRevision(s string) *ProcedureUpdate {
+	pu.mutation.SetRevision(s)
+	return pu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableRevision(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetRevision(*s)
+	}
+	return pu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (pu *ProcedureUpdate) ClearRevision() *ProcedureUpdate {
+	pu.mutation.ClearRevision()
 	return pu
 }
 
@@ -285,26 +305,6 @@ func (pu *ProcedureUpdate) ClearReviewFrequency() *ProcedureUpdate {
 	return pu
 }
 
-// SetRevision sets the "revision" field.
-func (pu *ProcedureUpdate) SetRevision(s string) *ProcedureUpdate {
-	pu.mutation.SetRevision(s)
-	return pu
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableRevision(s *string) *ProcedureUpdate {
-	if s != nil {
-		pu.SetRevision(*s)
-	}
-	return pu
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (pu *ProcedureUpdate) ClearRevision() *ProcedureUpdate {
-	pu.mutation.ClearRevision()
-	return pu
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -408,6 +408,21 @@ func (pu *ProcedureUpdate) AddInternalPolicies(i ...*InternalPolicy) *ProcedureU
 	return pu.AddInternalPolicyIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (pu *ProcedureUpdate) AddProgramIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddProgramIDs(ids...)
+	return pu
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (pu *ProcedureUpdate) AddPrograms(p ...*Program) *ProcedureUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddProgramIDs(ids...)
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (pu *ProcedureUpdate) AddNarrativeIDs(ids ...string) *ProcedureUpdate {
 	pu.mutation.AddNarrativeIDs(ids...)
@@ -451,21 +466,6 @@ func (pu *ProcedureUpdate) AddTasks(t ...*Task) *ProcedureUpdate {
 		ids[i] = t[i].ID
 	}
 	return pu.AddTaskIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (pu *ProcedureUpdate) AddProgramIDs(ids ...string) *ProcedureUpdate {
-	pu.mutation.AddProgramIDs(ids...)
-	return pu
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (pu *ProcedureUpdate) AddPrograms(p ...*Program) *ProcedureUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.AddProgramIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -575,6 +575,27 @@ func (pu *ProcedureUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *Procedu
 	return pu.RemoveInternalPolicyIDs(ids...)
 }
 
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (pu *ProcedureUpdate) ClearPrograms() *ProcedureUpdate {
+	pu.mutation.ClearPrograms()
+	return pu
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (pu *ProcedureUpdate) RemoveProgramIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveProgramIDs(ids...)
+	return pu
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (pu *ProcedureUpdate) RemovePrograms(p ...*Program) *ProcedureUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveProgramIDs(ids...)
+}
+
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
 func (pu *ProcedureUpdate) ClearNarratives() *ProcedureUpdate {
 	pu.mutation.ClearNarratives()
@@ -638,27 +659,6 @@ func (pu *ProcedureUpdate) RemoveTasks(t ...*Task) *ProcedureUpdate {
 	return pu.RemoveTaskIDs(ids...)
 }
 
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (pu *ProcedureUpdate) ClearPrograms() *ProcedureUpdate {
-	pu.mutation.ClearPrograms()
-	return pu
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (pu *ProcedureUpdate) RemoveProgramIDs(ids ...string) *ProcedureUpdate {
-	pu.mutation.RemoveProgramIDs(ids...)
-	return pu
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (pu *ProcedureUpdate) RemovePrograms(p ...*Program) *ProcedureUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.RemoveProgramIDs(ids...)
-}
-
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *ProcedureUpdate) Save(ctx context.Context) (int, error) {
 	if err := pu.defaults(); err != nil {
@@ -703,6 +703,11 @@ func (pu *ProcedureUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (pu *ProcedureUpdate) check() error {
+	if v, ok := pu.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
+		}
+	}
 	if v, ok := pu.mutation.OwnerID(); ok {
 		if err := procedure.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
@@ -721,11 +726,6 @@ func (pu *ProcedureUpdate) check() error {
 	if v, ok := pu.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := pu.mutation.Revision(); ok {
-		if err := procedure.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -767,17 +767,6 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedure.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := pu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedure.FieldTags, value)
-		})
-	}
-	if pu.mutation.TagsCleared() {
-		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
-	}
 	if value, ok := pu.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -789,6 +778,23 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.DeletedByCleared() {
 		_spec.ClearField(procedure.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTags, value)
+		})
+	}
+	if pu.mutation.TagsCleared() {
+		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
+	}
+	if pu.mutation.RevisionCleared() {
+		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
@@ -828,12 +834,6 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := pu.mutation.Revision(); ok {
-		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
-	}
-	if pu.mutation.RevisionCleared() {
-		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1120,6 +1120,54 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !pu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if pu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1264,54 +1312,6 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !pu.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	_spec.Node.Schema = pu.schemaConfig.Procedure
 	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
 	_spec.AddModifiers(pu.modifiers...)
@@ -1368,24 +1368,6 @@ func (puo *ProcedureUpdateOne) ClearUpdatedBy() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetTags sets the "tags" field.
-func (puo *ProcedureUpdateOne) SetTags(s []string) *ProcedureUpdateOne {
-	puo.mutation.SetTags(s)
-	return puo
-}
-
-// AppendTags appends s to the "tags" field.
-func (puo *ProcedureUpdateOne) AppendTags(s []string) *ProcedureUpdateOne {
-	puo.mutation.AppendTags(s)
-	return puo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (puo *ProcedureUpdateOne) ClearTags() *ProcedureUpdateOne {
-	puo.mutation.ClearTags()
-	return puo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (puo *ProcedureUpdateOne) SetDeletedAt(t time.Time) *ProcedureUpdateOne {
 	puo.mutation.SetDeletedAt(t)
@@ -1423,6 +1405,44 @@ func (puo *ProcedureUpdateOne) SetNillableDeletedBy(s *string) *ProcedureUpdateO
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (puo *ProcedureUpdateOne) ClearDeletedBy() *ProcedureUpdateOne {
 	puo.mutation.ClearDeletedBy()
+	return puo
+}
+
+// SetTags sets the "tags" field.
+func (puo *ProcedureUpdateOne) SetTags(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetTags(s)
+	return puo
+}
+
+// AppendTags appends s to the "tags" field.
+func (puo *ProcedureUpdateOne) AppendTags(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendTags(s)
+	return puo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (puo *ProcedureUpdateOne) ClearTags() *ProcedureUpdateOne {
+	puo.mutation.ClearTags()
+	return puo
+}
+
+// SetRevision sets the "revision" field.
+func (puo *ProcedureUpdateOne) SetRevision(s string) *ProcedureUpdateOne {
+	puo.mutation.SetRevision(s)
+	return puo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableRevision(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetRevision(*s)
+	}
+	return puo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (puo *ProcedureUpdateOne) ClearRevision() *ProcedureUpdateOne {
+	puo.mutation.ClearRevision()
 	return puo
 }
 
@@ -1580,26 +1600,6 @@ func (puo *ProcedureUpdateOne) ClearReviewFrequency() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetRevision sets the "revision" field.
-func (puo *ProcedureUpdateOne) SetRevision(s string) *ProcedureUpdateOne {
-	puo.mutation.SetRevision(s)
-	return puo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableRevision(s *string) *ProcedureUpdateOne {
-	if s != nil {
-		puo.SetRevision(*s)
-	}
-	return puo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (puo *ProcedureUpdateOne) ClearRevision() *ProcedureUpdateOne {
-	puo.mutation.ClearRevision()
-	return puo
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -1703,6 +1703,21 @@ func (puo *ProcedureUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *Proced
 	return puo.AddInternalPolicyIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (puo *ProcedureUpdateOne) AddProgramIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddProgramIDs(ids...)
+	return puo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (puo *ProcedureUpdateOne) AddPrograms(p ...*Program) *ProcedureUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddProgramIDs(ids...)
+}
+
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
 func (puo *ProcedureUpdateOne) AddNarrativeIDs(ids ...string) *ProcedureUpdateOne {
 	puo.mutation.AddNarrativeIDs(ids...)
@@ -1746,21 +1761,6 @@ func (puo *ProcedureUpdateOne) AddTasks(t ...*Task) *ProcedureUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return puo.AddTaskIDs(ids...)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (puo *ProcedureUpdateOne) AddProgramIDs(ids ...string) *ProcedureUpdateOne {
-	puo.mutation.AddProgramIDs(ids...)
-	return puo
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (puo *ProcedureUpdateOne) AddPrograms(p ...*Program) *ProcedureUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.AddProgramIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -1870,6 +1870,27 @@ func (puo *ProcedureUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *Pro
 	return puo.RemoveInternalPolicyIDs(ids...)
 }
 
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (puo *ProcedureUpdateOne) ClearPrograms() *ProcedureUpdateOne {
+	puo.mutation.ClearPrograms()
+	return puo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveProgramIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveProgramIDs(ids...)
+	return puo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (puo *ProcedureUpdateOne) RemovePrograms(p ...*Program) *ProcedureUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveProgramIDs(ids...)
+}
+
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
 func (puo *ProcedureUpdateOne) ClearNarratives() *ProcedureUpdateOne {
 	puo.mutation.ClearNarratives()
@@ -1933,27 +1954,6 @@ func (puo *ProcedureUpdateOne) RemoveTasks(t ...*Task) *ProcedureUpdateOne {
 	return puo.RemoveTaskIDs(ids...)
 }
 
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (puo *ProcedureUpdateOne) ClearPrograms() *ProcedureUpdateOne {
-	puo.mutation.ClearPrograms()
-	return puo
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (puo *ProcedureUpdateOne) RemoveProgramIDs(ids ...string) *ProcedureUpdateOne {
-	puo.mutation.RemoveProgramIDs(ids...)
-	return puo
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (puo *ProcedureUpdateOne) RemovePrograms(p ...*Program) *ProcedureUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.RemoveProgramIDs(ids...)
-}
-
 // Where appends a list predicates to the ProcedureUpdate builder.
 func (puo *ProcedureUpdateOne) Where(ps ...predicate.Procedure) *ProcedureUpdateOne {
 	puo.mutation.Where(ps...)
@@ -2011,6 +2011,11 @@ func (puo *ProcedureUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (puo *ProcedureUpdateOne) check() error {
+	if v, ok := puo.mutation.Revision(); ok {
+		if err := procedure.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
+		}
+	}
 	if v, ok := puo.mutation.OwnerID(); ok {
 		if err := procedure.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
@@ -2029,11 +2034,6 @@ func (puo *ProcedureUpdateOne) check() error {
 	if v, ok := puo.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := puo.mutation.Revision(); ok {
-		if err := procedure.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
 	return nil
@@ -2092,17 +2092,6 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedure.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.Tags(); ok {
-		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := puo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedure.FieldTags, value)
-		})
-	}
-	if puo.mutation.TagsCleared() {
-		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
-	}
 	if value, ok := puo.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -2114,6 +2103,23 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.DeletedByCleared() {
 		_spec.ClearField(procedure.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.Tags(); ok {
+		_spec.SetField(procedure.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTags, value)
+		})
+	}
+	if puo.mutation.TagsCleared() {
+		_spec.ClearField(procedure.FieldTags, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.Revision(); ok {
+		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
+	}
+	if puo.mutation.RevisionCleared() {
+		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
@@ -2153,12 +2159,6 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := puo.mutation.Revision(); ok {
-		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
-	}
-	if puo.mutation.RevisionCleared() {
-		_spec.ClearField(procedure.FieldRevision, field.TypeString)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2445,6 +2445,54 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if puo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !puo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if puo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2584,54 +2632,6 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProcedureTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !puo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   procedure.ProgramsTable,
-			Columns: procedure.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

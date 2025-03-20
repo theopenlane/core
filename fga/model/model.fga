@@ -61,6 +61,11 @@ type organization
     #     define [object]_creator: [group#member]
     #     define can_create_[object]: can_edit or [object]_creator
 
+
+    # system owned standard creation
+    define standard_creator: [group#member]
+    define can_create_standard: can_edit or standard_creator
+
     define control_creator: [group#member]
     define can_create_control: can_edit or control_creator
     # subcontrols inherit access from their parent control

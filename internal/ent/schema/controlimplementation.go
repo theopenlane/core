@@ -4,19 +4,33 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	emixin "github.com/theopenlane/entx/mixin"
 )
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
 type ControlImplementation struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaImplementation = "control_implementation"
+
+func (ControlImplementation) Name() string {
+	return SchemaImplementation
+}
+
+func (ControlImplementation) GetType() any {
+	return ControlImplementation.Type
+}
+
+func (ControlImplementation) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaImplementation)
 }
 
 // Fields of the ControlImplementation
@@ -56,31 +70,19 @@ func (ControlImplementation) Fields() []ent.Field {
 
 // Mixin of the ControlImplementation
 func (ControlImplementation) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-	}
+	return getDefaultMixins()
 }
 
 // Edges of the ControlImplementation
-func (ControlImplementation) Edges() []ent.Edge {
+func (c ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("controls", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_implementations"),
+		defaultEdgeFromWithPagination(c, Control{}),
 	}
 }
 
 // Annotations of the ControlImplementation
 func (ControlImplementation) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-	}
+	return []schema.Annotation{}
 }
 
 // Policy of the ControlImplementation

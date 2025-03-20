@@ -88,12 +88,6 @@ func (tc *TaskCreate) SetNillableUpdatedBy(s *string) *TaskCreate {
 	return tc
 }
 
-// SetDisplayID sets the "display_id" field.
-func (tc *TaskCreate) SetDisplayID(s string) *TaskCreate {
-	tc.mutation.SetDisplayID(s)
-	return tc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (tc *TaskCreate) SetDeletedAt(t time.Time) *TaskCreate {
 	tc.mutation.SetDeletedAt(t)
@@ -119,6 +113,12 @@ func (tc *TaskCreate) SetNillableDeletedBy(s *string) *TaskCreate {
 	if s != nil {
 		tc.SetDeletedBy(*s)
 	}
+	return tc
+}
+
+// SetDisplayID sets the "display_id" field.
+func (tc *TaskCreate) SetDisplayID(s string) *TaskCreate {
+	tc.mutation.SetDisplayID(s)
 	return tc
 }
 
@@ -304,14 +304,14 @@ func (tc *TaskCreate) AddComments(n ...*Note) *TaskCreate {
 	return tc.AddCommentIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (tc *TaskCreate) AddGroupIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddGroupIDs(ids...)
 	return tc
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (tc *TaskCreate) AddGroup(g ...*Group) *TaskCreate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (tc *TaskCreate) AddGroups(g ...*Group) *TaskCreate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -319,14 +319,14 @@ func (tc *TaskCreate) AddGroup(g ...*Group) *TaskCreate {
 	return tc.AddGroupIDs(ids...)
 }
 
-// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (tc *TaskCreate) AddInternalPolicyIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddInternalPolicyIDs(ids...)
 	return tc
 }
 
-// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
-func (tc *TaskCreate) AddInternalPolicy(i ...*InternalPolicy) *TaskCreate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (tc *TaskCreate) AddInternalPolicies(i ...*InternalPolicy) *TaskCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
@@ -334,14 +334,14 @@ func (tc *TaskCreate) AddInternalPolicy(i ...*InternalPolicy) *TaskCreate {
 	return tc.AddInternalPolicyIDs(ids...)
 }
 
-// AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (tc *TaskCreate) AddProcedureIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddProcedureIDs(ids...)
 	return tc
 }
 
-// AddProcedure adds the "procedure" edges to the Procedure entity.
-func (tc *TaskCreate) AddProcedure(p ...*Procedure) *TaskCreate {
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (tc *TaskCreate) AddProcedures(p ...*Procedure) *TaskCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -349,14 +349,14 @@ func (tc *TaskCreate) AddProcedure(p ...*Procedure) *TaskCreate {
 	return tc.AddProcedureIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (tc *TaskCreate) AddControlIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddControlIDs(ids...)
 	return tc
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (tc *TaskCreate) AddControl(c ...*Control) *TaskCreate {
+// AddControls adds the "controls" edges to the Control entity.
+func (tc *TaskCreate) AddControls(c ...*Control) *TaskCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -364,29 +364,14 @@ func (tc *TaskCreate) AddControl(c ...*Control) *TaskCreate {
 	return tc.AddControlIDs(ids...)
 }
 
-// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
-func (tc *TaskCreate) AddControlObjectiveIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddControlObjectiveIDs(ids...)
-	return tc
-}
-
-// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
-func (tc *TaskCreate) AddControlObjective(c ...*ControlObjective) *TaskCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return tc.AddControlObjectiveIDs(ids...)
-}
-
-// AddSubcontrolIDs adds the "subcontrol" edge to the Subcontrol entity by IDs.
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
 func (tc *TaskCreate) AddSubcontrolIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddSubcontrolIDs(ids...)
 	return tc
 }
 
-// AddSubcontrol adds the "subcontrol" edges to the Subcontrol entity.
-func (tc *TaskCreate) AddSubcontrol(s ...*Subcontrol) *TaskCreate {
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (tc *TaskCreate) AddSubcontrols(s ...*Subcontrol) *TaskCreate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -394,14 +379,29 @@ func (tc *TaskCreate) AddSubcontrol(s ...*Subcontrol) *TaskCreate {
 	return tc.AddSubcontrolIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (tc *TaskCreate) AddControlObjectiveIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddControlObjectiveIDs(ids...)
+	return tc
+}
+
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (tc *TaskCreate) AddControlObjectives(c ...*ControlObjective) *TaskCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return tc.AddControlObjectiveIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (tc *TaskCreate) AddProgramIDs(ids ...string) *TaskCreate {
 	tc.mutation.AddProgramIDs(ids...)
 	return tc
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (tc *TaskCreate) AddProgram(p ...*Program) *TaskCreate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (tc *TaskCreate) AddPrograms(p ...*Program) *TaskCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -576,10 +576,6 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tc.mutation.DisplayID(); ok {
-		_spec.SetField(task.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := tc.mutation.DeletedAt(); ok {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -587,6 +583,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.DeletedBy(); ok {
 		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := tc.mutation.DisplayID(); ok {
+		_spec.SetField(task.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := tc.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
@@ -691,12 +691,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.GroupTable,
-			Columns: task.GroupPrimaryKey,
+			Table:   task.GroupsTable,
+			Columns: task.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -708,12 +708,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.InternalPolicyTable,
-			Columns: task.InternalPolicyPrimaryKey,
+			Table:   task.InternalPoliciesTable,
+			Columns: task.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -725,12 +725,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ProcedureIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProcedureTable,
-			Columns: task.ProcedurePrimaryKey,
+			Table:   task.ProceduresTable,
+			Columns: task.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
@@ -742,12 +742,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlTable,
-			Columns: task.ControlPrimaryKey,
+			Table:   task.ControlsTable,
+			Columns: task.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -759,29 +759,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ControlObjectiveTable,
-			Columns: task.ControlObjectivePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = tc.schemaConfig.ControlObjectiveTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := tc.mutation.SubcontrolIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   task.SubcontrolTable,
-			Columns: task.SubcontrolPrimaryKey,
+			Table:   task.SubcontrolsTable,
+			Columns: task.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -793,12 +776,29 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.ProgramTable,
-			Columns: task.ProgramPrimaryKey,
+			Table:   task.ControlObjectivesTable,
+			Columns: task.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ProgramsTable,
+			Columns: task.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

@@ -5,25 +5,39 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // GroupMembership holds the schema definition for the GroupMembership entity
 type GroupMembership struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaGroupMembership = "groupmembership"
+
+func (GroupMembership) Name() string {
+	return SchemaGroupMembership
+}
+
+func (GroupMembership) GetType() any {
+	return GroupMembership.Type
+}
+
+func (GroupMembership) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaGroupMembership)
 }
 
 // Fields of the GroupMembership
@@ -41,34 +55,37 @@ func (GroupMembership) Fields() []ent.Field {
 }
 
 // Edges of the GroupMembership
-func (GroupMembership) Edges() []ent.Edge {
+func (g GroupMembership) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("group", Group.Type).
-			Field("group_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("user", User.Type).
-			Field("user_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("orgmembership", OrgMembership.Type).
-			Immutable().
-			Unique().
-			Annotations(
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: Group{},
+			required:   true,
+			immutable:  true,
+			field:      "group_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: User{},
+			required:   true,
+			immutable:  true,
+			field:      "user_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: OrgMembership{},
+			immutable:  true,
+			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
-			),
-		edge.To("events", Event.Type),
+			},
+		}),
+		defaultEdgeToWithPagination(g, Event{}),
 	}
 }
 
 // Annotations of the GroupMembership
 func (GroupMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.MembershipChecks("group"),
 	}
 }
@@ -83,11 +100,7 @@ func (GroupMembership) Indexes() []ent.Index {
 
 // Mixin of the GroupMembership
 func (GroupMembership) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{excludeTags: true}.getMixins()
 }
 
 // Interceptors of the GroupMembership

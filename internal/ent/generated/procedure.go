@@ -29,14 +29,16 @@ type Procedure struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
@@ -53,8 +55,6 @@ type Procedure struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -81,14 +81,14 @@ type ProcedureEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// InternalPolicies holds the value of the internal_policies edge.
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
-	// Programs holds the value of the programs edge.
-	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [11]bool
@@ -99,10 +99,10 @@ type ProcedureEdges struct {
 	namedEditors          map[string][]*Group
 	namedControls         map[string][]*Control
 	namedInternalPolicies map[string][]*InternalPolicy
+	namedPrograms         map[string][]*Program
 	namedNarratives       map[string][]*Narrative
 	namedRisks            map[string][]*Risk
 	namedTasks            map[string][]*Task
-	namedPrograms         map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -174,10 +174,19 @@ func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[7] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
+}
+
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -186,7 +195,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -195,19 +204,10 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
-}
-
-// ProgramsOrErr returns the Programs value or an error if the edge
-// was not loaded in eager-loading.
-func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
-		return e.Programs, nil
-	}
-	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -219,7 +219,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldRevision:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -276,14 +276,6 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedBy = value.String
 			}
-		case procedure.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case procedure.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -301,6 +293,20 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
 				pr.DisplayID = value.String
+			}
+		case procedure.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
+			}
+		case procedure.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				pr.Revision = value.String
 			}
 		case procedure.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -349,12 +355,6 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				pr.ReviewFrequency = enums.Frequency(value.String)
-			}
-		case procedure.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				pr.Revision = value.String
 			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -432,6 +432,11 @@ func (pr *Procedure) QueryInternalPolicies() *InternalPolicyQuery {
 	return NewProcedureClient(pr.config).QueryInternalPolicies(pr)
 }
 
+// QueryPrograms queries the "programs" edge of the Procedure entity.
+func (pr *Procedure) QueryPrograms() *ProgramQuery {
+	return NewProcedureClient(pr.config).QueryPrograms(pr)
+}
+
 // QueryNarratives queries the "narratives" edge of the Procedure entity.
 func (pr *Procedure) QueryNarratives() *NarrativeQuery {
 	return NewProcedureClient(pr.config).QueryNarratives(pr)
@@ -445,11 +450,6 @@ func (pr *Procedure) QueryRisks() *RiskQuery {
 // QueryTasks queries the "tasks" edge of the Procedure entity.
 func (pr *Procedure) QueryTasks() *TaskQuery {
 	return NewProcedureClient(pr.config).QueryTasks(pr)
-}
-
-// QueryPrograms queries the "programs" edge of the Procedure entity.
-func (pr *Procedure) QueryPrograms() *ProgramQuery {
-	return NewProcedureClient(pr.config).QueryPrograms(pr)
 }
 
 // Update returns a builder for updating this Procedure.
@@ -487,9 +487,6 @@ func (pr *Procedure) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pr.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -498,6 +495,12 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(pr.DisplayID)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(pr.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(pr.OwnerID)
@@ -522,9 +525,6 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", pr.ReviewFrequency))
-	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(pr.Revision)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -625,6 +625,30 @@ func (pr *Procedure) appendNamedInternalPolicies(name string, edges ...*Internal
 	}
 }
 
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Procedure) NamedPrograms(name string) ([]*Program, error) {
+	if pr.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Procedure) appendNamedPrograms(name string, edges ...*Program) {
+	if pr.Edges.namedPrograms == nil {
+		pr.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		pr.Edges.namedPrograms[name] = append(pr.Edges.namedPrograms[name], edges...)
+	}
+}
+
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (pr *Procedure) NamedNarratives(name string) ([]*Narrative, error) {
@@ -694,30 +718,6 @@ func (pr *Procedure) appendNamedTasks(name string, edges ...*Task) {
 		pr.Edges.namedTasks[name] = []*Task{}
 	} else {
 		pr.Edges.namedTasks[name] = append(pr.Edges.namedTasks[name], edges...)
-	}
-}
-
-// NamedPrograms returns the Programs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (pr *Procedure) NamedPrograms(name string) ([]*Program, error) {
-	if pr.Edges.namedPrograms == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := pr.Edges.namedPrograms[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (pr *Procedure) appendNamedPrograms(name string, edges ...*Program) {
-	if pr.Edges.namedPrograms == nil {
-		pr.Edges.namedPrograms = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		pr.Edges.namedPrograms[name] = []*Program{}
-	} else {
-		pr.Edges.namedPrograms[name] = append(pr.Edges.namedPrograms[name], edges...)
 	}
 }
 

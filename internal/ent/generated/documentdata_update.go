@@ -67,24 +67,6 @@ func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
 	return ddu
 }
 
-// SetTags sets the "tags" field.
-func (ddu *DocumentDataUpdate) SetTags(s []string) *DocumentDataUpdate {
-	ddu.mutation.SetTags(s)
-	return ddu
-}
-
-// AppendTags appends s to the "tags" field.
-func (ddu *DocumentDataUpdate) AppendTags(s []string) *DocumentDataUpdate {
-	ddu.mutation.AppendTags(s)
-	return ddu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ddu *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
-	ddu.mutation.ClearTags()
-	return ddu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ddu *DocumentDataUpdate) SetDeletedAt(t time.Time) *DocumentDataUpdate {
 	ddu.mutation.SetDeletedAt(t)
@@ -125,6 +107,24 @@ func (ddu *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
 	return ddu
 }
 
+// SetTags sets the "tags" field.
+func (ddu *DocumentDataUpdate) SetTags(s []string) *DocumentDataUpdate {
+	ddu.mutation.SetTags(s)
+	return ddu
+}
+
+// AppendTags appends s to the "tags" field.
+func (ddu *DocumentDataUpdate) AppendTags(s []string) *DocumentDataUpdate {
+	ddu.mutation.AppendTags(s)
+	return ddu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ddu *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
+	ddu.mutation.ClearTags()
+	return ddu
+}
+
 // SetTemplateID sets the "template_id" field.
 func (ddu *DocumentDataUpdate) SetTemplateID(s string) *DocumentDataUpdate {
 	ddu.mutation.SetTemplateID(s)
@@ -150,14 +150,14 @@ func (ddu *DocumentDataUpdate) SetTemplate(t *Template) *DocumentDataUpdate {
 	return ddu.SetTemplateID(t.ID)
 }
 
-// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (ddu *DocumentDataUpdate) AddEntityIDs(ids ...string) *DocumentDataUpdate {
 	ddu.mutation.AddEntityIDs(ids...)
 	return ddu
 }
 
-// AddEntity adds the "entity" edges to the Entity entity.
-func (ddu *DocumentDataUpdate) AddEntity(e ...*Entity) *DocumentDataUpdate {
+// AddEntities adds the "entities" edges to the Entity entity.
+func (ddu *DocumentDataUpdate) AddEntities(e ...*Entity) *DocumentDataUpdate {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
@@ -191,20 +191,20 @@ func (ddu *DocumentDataUpdate) ClearTemplate() *DocumentDataUpdate {
 	return ddu
 }
 
-// ClearEntity clears all "entity" edges to the Entity entity.
-func (ddu *DocumentDataUpdate) ClearEntity() *DocumentDataUpdate {
-	ddu.mutation.ClearEntity()
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (ddu *DocumentDataUpdate) ClearEntities() *DocumentDataUpdate {
+	ddu.mutation.ClearEntities()
 	return ddu
 }
 
-// RemoveEntityIDs removes the "entity" edge to Entity entities by IDs.
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
 func (ddu *DocumentDataUpdate) RemoveEntityIDs(ids ...string) *DocumentDataUpdate {
 	ddu.mutation.RemoveEntityIDs(ids...)
 	return ddu
 }
 
-// RemoveEntity removes "entity" edges to Entity entities.
-func (ddu *DocumentDataUpdate) RemoveEntity(e ...*Entity) *DocumentDataUpdate {
+// RemoveEntities removes "entities" edges to Entity entities.
+func (ddu *DocumentDataUpdate) RemoveEntities(e ...*Entity) *DocumentDataUpdate {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
@@ -319,17 +319,6 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ddu.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ddu.mutation.Tags(); ok {
-		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ddu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdata.FieldTags, value)
-		})
-	}
-	if ddu.mutation.TagsCleared() {
-		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ddu.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -341,6 +330,17 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ddu.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ddu.mutation.Tags(); ok {
+		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ddu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, documentdata.FieldTags, value)
+		})
+	}
+	if ddu.mutation.TagsCleared() {
+		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ddu.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
@@ -376,12 +376,12 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ddu.mutation.EntityCleared() {
+	if ddu.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -390,12 +390,12 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = ddu.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.RemovedEntityIDs(); len(nodes) > 0 && !ddu.mutation.EntityCleared() {
+	if nodes := ddu.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ddu.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -407,12 +407,12 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.EntityIDs(); len(nodes) > 0 {
+	if nodes := ddu.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -528,24 +528,6 @@ func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// SetTags sets the "tags" field.
-func (dduo *DocumentDataUpdateOne) SetTags(s []string) *DocumentDataUpdateOne {
-	dduo.mutation.SetTags(s)
-	return dduo
-}
-
-// AppendTags appends s to the "tags" field.
-func (dduo *DocumentDataUpdateOne) AppendTags(s []string) *DocumentDataUpdateOne {
-	dduo.mutation.AppendTags(s)
-	return dduo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (dduo *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
-	dduo.mutation.ClearTags()
-	return dduo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (dduo *DocumentDataUpdateOne) SetDeletedAt(t time.Time) *DocumentDataUpdateOne {
 	dduo.mutation.SetDeletedAt(t)
@@ -586,6 +568,24 @@ func (dduo *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
 	return dduo
 }
 
+// SetTags sets the "tags" field.
+func (dduo *DocumentDataUpdateOne) SetTags(s []string) *DocumentDataUpdateOne {
+	dduo.mutation.SetTags(s)
+	return dduo
+}
+
+// AppendTags appends s to the "tags" field.
+func (dduo *DocumentDataUpdateOne) AppendTags(s []string) *DocumentDataUpdateOne {
+	dduo.mutation.AppendTags(s)
+	return dduo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (dduo *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
+	dduo.mutation.ClearTags()
+	return dduo
+}
+
 // SetTemplateID sets the "template_id" field.
 func (dduo *DocumentDataUpdateOne) SetTemplateID(s string) *DocumentDataUpdateOne {
 	dduo.mutation.SetTemplateID(s)
@@ -611,14 +611,14 @@ func (dduo *DocumentDataUpdateOne) SetTemplate(t *Template) *DocumentDataUpdateO
 	return dduo.SetTemplateID(t.ID)
 }
 
-// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (dduo *DocumentDataUpdateOne) AddEntityIDs(ids ...string) *DocumentDataUpdateOne {
 	dduo.mutation.AddEntityIDs(ids...)
 	return dduo
 }
 
-// AddEntity adds the "entity" edges to the Entity entity.
-func (dduo *DocumentDataUpdateOne) AddEntity(e ...*Entity) *DocumentDataUpdateOne {
+// AddEntities adds the "entities" edges to the Entity entity.
+func (dduo *DocumentDataUpdateOne) AddEntities(e ...*Entity) *DocumentDataUpdateOne {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
@@ -652,20 +652,20 @@ func (dduo *DocumentDataUpdateOne) ClearTemplate() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// ClearEntity clears all "entity" edges to the Entity entity.
-func (dduo *DocumentDataUpdateOne) ClearEntity() *DocumentDataUpdateOne {
-	dduo.mutation.ClearEntity()
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (dduo *DocumentDataUpdateOne) ClearEntities() *DocumentDataUpdateOne {
+	dduo.mutation.ClearEntities()
 	return dduo
 }
 
-// RemoveEntityIDs removes the "entity" edge to Entity entities by IDs.
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
 func (dduo *DocumentDataUpdateOne) RemoveEntityIDs(ids ...string) *DocumentDataUpdateOne {
 	dduo.mutation.RemoveEntityIDs(ids...)
 	return dduo
 }
 
-// RemoveEntity removes "entity" edges to Entity entities.
-func (dduo *DocumentDataUpdateOne) RemoveEntity(e ...*Entity) *DocumentDataUpdateOne {
+// RemoveEntities removes "entities" edges to Entity entities.
+func (dduo *DocumentDataUpdateOne) RemoveEntities(e ...*Entity) *DocumentDataUpdateOne {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
@@ -810,17 +810,6 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	if dduo.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := dduo.mutation.Tags(); ok {
-		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := dduo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdata.FieldTags, value)
-		})
-	}
-	if dduo.mutation.TagsCleared() {
-		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
-	}
 	if value, ok := dduo.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -832,6 +821,17 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	}
 	if dduo.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := dduo.mutation.Tags(); ok {
+		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := dduo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, documentdata.FieldTags, value)
+		})
+	}
+	if dduo.mutation.TagsCleared() {
+		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
 	if value, ok := dduo.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
@@ -867,12 +867,12 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if dduo.mutation.EntityCleared() {
+	if dduo.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -881,12 +881,12 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		edge.Schema = dduo.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.RemovedEntityIDs(); len(nodes) > 0 && !dduo.mutation.EntityCleared() {
+	if nodes := dduo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !dduo.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -898,12 +898,12 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.EntityIDs(); len(nodes) > 0 {
+	if nodes := dduo.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   documentdata.EntityTable,
-			Columns: documentdata.EntityPrimaryKey,
+			Table:   documentdata.EntitiesTable,
+			Columns: documentdata.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),

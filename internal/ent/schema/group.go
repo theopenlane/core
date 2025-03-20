@@ -11,21 +11,36 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // Group holds the schema definition for the Group entity
 type Group struct {
+	CustomSchema
+
 	ent.Schema
+}
+
+const SchemaGroup = "group"
+
+func (Group) Name() string {
+	return SchemaGroup
+}
+
+func (Group) GetType() any {
+	return Group.Type
+}
+
+func (Group) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaGroup)
 }
 
 // Fields of the Group
@@ -80,75 +95,78 @@ func (Group) Fields() []ent.Field {
 }
 
 // Edges of the Group
-func (Group) Edges() []ent.Edge {
+func (g Group) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("setting", GroupSetting.Type).
-			Unique().
-			Annotations(
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: g,
+			name:       "setting",
+			t:          GroupSetting.Type,
+			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("Group"),
-			),
+			},
+		}),
 		edge.From("users", User.Type).
 			Ref("groups").
 			// Skip the mutation input for the users edge
 			// this should be done via the members edge
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
 			Through("members", GroupMembership.Type),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
-		edge.To("integrations", Integration.Type).Annotations(entgql.RelayConnection()),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(g, Event{}),
+		defaultEdgeToWithPagination(g, Integration{}),
+		defaultEdgeToWithPagination(g, File{}),
+		defaultEdgeToWithPagination(g, Task{}),
 	}
 }
 
 // Mixin of the Group
 func (Group) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.NewIDMixinWithPrefixedID("GRP"),
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("groups"),
-		// Add the reverse edges for m:m relationships permissions based on the groups
-		GroupPermissionsEdgesMixin{
-			EdgeInfo: []EdgeInfo{
-				{
-					Name:            "procedure",
-					Type:            Procedure.Type,
-					ViewPermissions: false,
-				},
-				{
-					Name:            "internal_policy",
-					Type:            InternalPolicy.Type,
-					ViewPermissions: false,
-				},
-				{
-					Name:            "program",
-					Type:            Program.Type,
-					ViewPermissions: true,
-				},
-				{
-					Name:            "risk",
-					Type:            Risk.Type,
-					ViewPermissions: true,
-				},
-				{
-					Name:            "control_objective",
-					Type:            ControlObjective.Type,
-					ViewPermissions: true,
-				},
-				{
-					Name:            "control",
-					Type:            Control.Type,
-					ViewPermissions: true,
-				},
-				{
-					Name:            "narrative",
-					Type:            Narrative.Type,
-					ViewPermissions: true,
+	return mixinConfig{
+		prefix: "GRP",
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("groups"),
+			// Add the reverse edges for m:m relationships permissions based on the groups
+			GroupPermissionsEdgesMixin{
+				EdgeInfo: []EdgeInfo{
+					{
+						Name:            Procedure{}.Name(),
+						Type:            Procedure.Type,
+						ViewPermissions: false,
+					},
+					{
+						Name:            InternalPolicy{}.Name(),
+						Type:            InternalPolicy.Type,
+						ViewPermissions: false,
+					},
+					{
+						Name:            Program{}.Name(),
+						Type:            Program.Type,
+						ViewPermissions: true,
+					},
+					{
+						Name:            Risk{}.Name(),
+						Type:            Risk.Type,
+						ViewPermissions: true,
+					},
+					{
+						Name:            ControlObjective{}.Name(),
+						Type:            ControlObjective.Type,
+						ViewPermissions: true,
+					},
+					{
+						Name:            Control{}.Name(),
+						Type:            Control.Type,
+						ViewPermissions: true,
+					},
+					{
+						Name:            Narrative{}.Name(),
+						Type:            Narrative.Type,
+						ViewPermissions: true,
+					},
 				},
 			},
 		},
-	}
+	}.getMixins()
 }
 
 // Indexes of the Group
@@ -165,10 +183,6 @@ func (Group) Indexes() []ent.Index {
 // Annotations of the Group
 func (Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

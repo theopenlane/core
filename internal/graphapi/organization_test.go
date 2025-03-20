@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/enums"
@@ -138,7 +139,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 	// setup deleted org
 	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	// delete said org
-	(&OrganizationCleanup{client: suite.client, ID: orgToDelete.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(testUser1.UserCtx, suite)
 
 	// avatar file setup
 	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
@@ -477,7 +478,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			require.Len(t, managedGroups.Groups.Edges, 3)
 
 			// cleanup org
-			(&OrganizationCleanup{client: suite.client, ID: resp.CreateOrganization.Organization.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(testUser1.UserCtx, suite)
 		})
 	}
 }
@@ -788,8 +789,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 		})
 	}
 
-	(&OrganizationCleanup{client: suite.client, ID: org.ID}).MustDelete(reqCtx, t)
-	(&UserCleanup{client: suite.client, ID: testUser1.ID}).MustDelete(reqCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(reqCtx, suite)
+	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user1.ID}).MustDelete(reqCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteOrganization() {

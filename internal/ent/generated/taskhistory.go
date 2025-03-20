@@ -34,12 +34,12 @@ type TaskHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -74,7 +74,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDisplayID, taskhistory.FieldDeletedBy, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -141,12 +141,6 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.UpdatedBy = value.String
 			}
-		case taskhistory.FieldDisplayID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_id", values[i])
-			} else if value.Valid {
-				th.DisplayID = value.String
-			}
 		case taskhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -158,6 +152,12 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				th.DeletedBy = value.String
+			}
+		case taskhistory.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				th.DisplayID = value.String
 			}
 		case taskhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -284,14 +284,14 @@ func (th *TaskHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(th.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("display_id=")
-	builder.WriteString(th.DisplayID)
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(th.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(th.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(th.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", th.Tags))

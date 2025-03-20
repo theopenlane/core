@@ -28,12 +28,12 @@ type Evidence struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -166,7 +166,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDisplayID, evidence.FieldDeletedBy, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
@@ -215,12 +215,6 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.UpdatedBy = value.String
 			}
-		case evidence.FieldDisplayID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_id", values[i])
-			} else if value.Valid {
-				e.DisplayID = value.String
-			}
 		case evidence.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -232,6 +226,12 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				e.DeletedBy = value.String
+			}
+		case evidence.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				e.DisplayID = value.String
 			}
 		case evidence.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -384,14 +384,14 @@ func (e *Evidence) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(e.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("display_id=")
-	builder.WriteString(e.DisplayID)
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(e.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(e.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", e.Tags))
