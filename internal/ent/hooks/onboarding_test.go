@@ -19,6 +19,9 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 
+	// add the client to the context for hooks
+	userCtx = generated.NewContext(userCtx, suite.client)
+
 	name := "MITB"
 
 	testCases := []struct {

@@ -26,14 +26,16 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -50,8 +52,6 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -66,14 +66,14 @@ const (
 	EdgeControls = "controls"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
 	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
 	EdgeNarratives = "narratives"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
-	// EdgePrograms holds the string denoting the programs edge name in mutations.
-	EdgePrograms = "programs"
 	// Table holds the table name of the procedure in the database.
 	Table = "procedures"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -117,6 +117,11 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "program_procedures"
+	// ProgramsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramsInverseTable = "programs"
 	// NarrativesTable is the table that holds the narratives relation/edge.
 	NarrativesTable = "narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
@@ -134,11 +139,6 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
-	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "program_procedures"
-	// ProgramsInverseTable is the table name for the Program entity.
-	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramsInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for procedure fields.
@@ -148,10 +148,11 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
+	FieldTags,
+	FieldRevision,
 	FieldOwnerID,
 	FieldName,
 	FieldStatus,
@@ -160,7 +161,6 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
-	FieldRevision,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
@@ -185,15 +185,15 @@ var (
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "procedure_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"program_id", "procedure_id"}
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"procedure_id", "risk_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"procedure_id", "task_id"}
-	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
-	// primary key for the programs relation (M2M).
-	ProgramsPrimaryKey = []string{"program_id", "procedure_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -226,10 +226,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
 	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	DisplayIDValidator func(string) error
+	// DefaultTags holds the default value on creation for the "tags" field.
+	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -238,10 +242,6 @@ var (
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
-	// DefaultRevision holds the default value on creation for the "revision" field.
-	DefaultRevision string
-	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
-	RevisionValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -313,6 +313,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -351,11 +356,6 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -435,6 +435,20 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
+	}
+}
+
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByNarrativesCount orders the results by narratives count.
 func ByNarrativesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -474,20 +488,6 @@ func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByProgramsCount orders the results by programs count.
-func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
-	}
-}
-
-// ByPrograms orders the results by programs terms.
-func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -539,6 +539,13 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
+func newProgramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
 func newNarrativesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -558,13 +565,6 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
-	)
-}
-func newProgramsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
 

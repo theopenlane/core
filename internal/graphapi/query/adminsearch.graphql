@@ -18,18 +18,18 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          revision
           name
           actionPlanType
           details
-          revision
           ownerID
           source
         }
       }
       ... on ContactSearchResult {
         contacts {
-          id
           deletedBy
+          id
           tags
           ownerID
           fullName
@@ -65,8 +65,8 @@ query AdminSearch($query: String!) {
       }
       ... on ControlImplementationSearchResult {
         controlImplementations {
-          id
           deletedBy
+          id
           tags
           details
         }
@@ -74,10 +74,10 @@ query AdminSearch($query: String!) {
       ... on ControlObjectiveSearchResult {
         controlObjectives {
           deletedBy
-          revision
           id
           displayID
           tags
+          revision
           ownerID
           name
           desiredOutcome
@@ -89,9 +89,9 @@ query AdminSearch($query: String!) {
       }
       ... on DocumentDataSearchResult {
         documentData {
+          deletedBy
           id
           tags
-          deletedBy
           ownerID
           templateID
           data
@@ -99,8 +99,8 @@ query AdminSearch($query: String!) {
       }
       ... on EntitySearchResult {
         entities {
-          id
           deletedBy
+          id
           tags
           ownerID
           name
@@ -113,8 +113,8 @@ query AdminSearch($query: String!) {
       }
       ... on EntityTypeSearchResult {
         entityTypes {
-          id
           deletedBy
+          id
           tags
           ownerID
           name
@@ -132,9 +132,9 @@ query AdminSearch($query: String!) {
       }
       ... on EvidenceSearchResult {
         evidences {
+          deletedBy
           id
           displayID
-          deletedBy
           tags
           ownerID
           name
@@ -175,9 +175,9 @@ query AdminSearch($query: String!) {
       }
       ... on IntegrationSearchResult {
         integrations {
+          deletedBy
           id
           tags
-          deletedBy
           ownerID
           name
           kind
@@ -185,21 +185,21 @@ query AdminSearch($query: String!) {
       }
       ... on InternalPolicySearchResult {
         internalPolicies {
-          tags
           deletedBy
           id
           displayID
+          tags
+          revision
           ownerID
           name
           policyType
           details
-          revision
         }
       }
       ... on MappedControlSearchResult {
         mappedControls {
-          id
           deletedBy
+          id
           tags
           mappingType
           relation
@@ -219,9 +219,9 @@ query AdminSearch($query: String!) {
       }
       ... on OrgSubscriptionSearchResult {
         orgSubscriptions {
+          deletedBy
           id
           tags
-          deletedBy
           ownerID
           stripeSubscriptionID
           productTier
@@ -236,9 +236,9 @@ query AdminSearch($query: String!) {
       }
       ... on OrganizationSearchResult {
         organizations {
+          deletedBy
           id
           tags
-          deletedBy
           name
           displayName
           avatarRemoteURL
@@ -247,9 +247,9 @@ query AdminSearch($query: String!) {
       }
       ... on OrganizationSettingSearchResult {
         organizationSettings {
+          deletedBy
           id
           tags
-          deletedBy
           domains
           billingContact
           billingEmail
@@ -273,22 +273,22 @@ query AdminSearch($query: String!) {
       }
       ... on ProcedureSearchResult {
         procedures {
-          tags
           deletedBy
           id
           displayID
+          tags
+          revision
           ownerID
           name
           procedureType
           details
-          revision
         }
       }
       ... on ProgramSearchResult {
         programs {
+          deletedBy
           id
           displayID
-          deletedBy
           tags
           ownerID
           name
@@ -354,9 +354,9 @@ query AdminSearch($query: String!) {
       }
       ... on SubscriberSearchResult {
         subscribers {
+          deletedBy
           id
           tags
-          deletedBy
           ownerID
           email
           phoneNumber
@@ -364,9 +364,9 @@ query AdminSearch($query: String!) {
       }
       ... on TaskSearchResult {
         tasks {
+          deletedBy
           id
           displayID
-          deletedBy
           tags
           ownerID
           title
@@ -406,9 +406,9 @@ query AdminSearch($query: String!) {
       }
       ... on UserSettingSearchResult {
         userSettings {
+          deletedBy
           id
           tags
-          deletedBy
           userID
         }
       }

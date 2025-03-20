@@ -65,24 +65,6 @@ func (oshu *OrgSubscriptionHistoryUpdate) ClearUpdatedBy() *OrgSubscriptionHisto
 	return oshu
 }
 
-// SetTags sets the "tags" field.
-func (oshu *OrgSubscriptionHistoryUpdate) SetTags(s []string) *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.SetTags(s)
-	return oshu
-}
-
-// AppendTags appends s to the "tags" field.
-func (oshu *OrgSubscriptionHistoryUpdate) AppendTags(s []string) *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.AppendTags(s)
-	return oshu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (oshu *OrgSubscriptionHistoryUpdate) ClearTags() *OrgSubscriptionHistoryUpdate {
-	oshu.mutation.ClearTags()
-	return oshu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (oshu *OrgSubscriptionHistoryUpdate) SetDeletedAt(t time.Time) *OrgSubscriptionHistoryUpdate {
 	oshu.mutation.SetDeletedAt(t)
@@ -120,6 +102,24 @@ func (oshu *OrgSubscriptionHistoryUpdate) SetNillableDeletedBy(s *string) *OrgSu
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (oshu *OrgSubscriptionHistoryUpdate) ClearDeletedBy() *OrgSubscriptionHistoryUpdate {
 	oshu.mutation.ClearDeletedBy()
+	return oshu
+}
+
+// SetTags sets the "tags" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetTags(s []string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetTags(s)
+	return oshu
+}
+
+// AppendTags appends s to the "tags" field.
+func (oshu *OrgSubscriptionHistoryUpdate) AppendTags(s []string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.AppendTags(s)
+	return oshu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearTags() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearTags()
 	return oshu
 }
 
@@ -470,17 +470,6 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if oshu.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := oshu.mutation.Tags(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := oshu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldTags, value)
-		})
-	}
-	if oshu.mutation.TagsCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := oshu.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -492,6 +481,17 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if oshu.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := oshu.mutation.Tags(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := oshu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscriptionhistory.FieldTags, value)
+		})
+	}
+	if oshu.mutation.TagsCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := oshu.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)
@@ -640,24 +640,6 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearUpdatedBy() *OrgSubscriptionH
 	return oshuo
 }
 
-// SetTags sets the "tags" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) SetTags(s []string) *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.SetTags(s)
-	return oshuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) AppendTags(s []string) *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.AppendTags(s)
-	return oshuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearTags() *OrgSubscriptionHistoryUpdateOne {
-	oshuo.mutation.ClearTags()
-	return oshuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (oshuo *OrgSubscriptionHistoryUpdateOne) SetDeletedAt(t time.Time) *OrgSubscriptionHistoryUpdateOne {
 	oshuo.mutation.SetDeletedAt(t)
@@ -695,6 +677,24 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableDeletedBy(s *string) *O
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearDeletedBy() *OrgSubscriptionHistoryUpdateOne {
 	oshuo.mutation.ClearDeletedBy()
+	return oshuo
+}
+
+// SetTags sets the "tags" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetTags(s []string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetTags(s)
+	return oshuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) AppendTags(s []string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.AppendTags(s)
+	return oshuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearTags() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearTags()
 	return oshuo
 }
 
@@ -1075,17 +1075,6 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if oshuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.Tags(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := oshuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscriptionhistory.FieldTags, value)
-		})
-	}
-	if oshuo.mutation.TagsCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := oshuo.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1097,6 +1086,17 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if oshuo.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.Tags(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := oshuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscriptionhistory.FieldTags, value)
+		})
+	}
+	if oshuo.mutation.TagsCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := oshuo.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)

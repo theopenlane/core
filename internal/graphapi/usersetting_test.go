@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
@@ -86,7 +87,7 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 		})
 	}
 
-	(&UserCleanup{client: suite.client, ID: user2.ID}).MustDelete(reqCtx, t)
+	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user2.ID}).MustDelete(reqCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestQueryUserSettings() {

@@ -85,30 +85,30 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "user":
-				return ec.fieldContext_Event_user(ctx, field)
-			case "group":
-				return ec.fieldContext_Event_group(ctx, field)
-			case "integration":
-				return ec.fieldContext_Event_integration(ctx, field)
-			case "organization":
-				return ec.fieldContext_Event_organization(ctx, field)
-			case "invite":
-				return ec.fieldContext_Event_invite(ctx, field)
-			case "personalAccessToken":
-				return ec.fieldContext_Event_personalAccessToken(ctx, field)
-			case "hush":
-				return ec.fieldContext_Event_hush(ctx, field)
-			case "orgmembership":
-				return ec.fieldContext_Event_orgmembership(ctx, field)
-			case "groupmembership":
-				return ec.fieldContext_Event_groupmembership(ctx, field)
-			case "subscriber":
-				return ec.fieldContext_Event_subscriber(ctx, field)
-			case "file":
-				return ec.fieldContext_Event_file(ctx, field)
-			case "orgsubscription":
-				return ec.fieldContext_Event_orgsubscription(ctx, field)
+			case "users":
+				return ec.fieldContext_Event_users(ctx, field)
+			case "groups":
+				return ec.fieldContext_Event_groups(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Event_integrations(ctx, field)
+			case "organizations":
+				return ec.fieldContext_Event_organizations(ctx, field)
+			case "invites":
+				return ec.fieldContext_Event_invites(ctx, field)
+			case "personalAccessTokens":
+				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
+			case "secrets":
+				return ec.fieldContext_Event_secrets(ctx, field)
+			case "orgmemberships":
+				return ec.fieldContext_Event_orgmemberships(ctx, field)
+			case "groupmemberships":
+				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Event_subscribers(ctx, field)
+			case "files":
+				return ec.fieldContext_Event_files(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -175,30 +175,30 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "user":
-				return ec.fieldContext_Event_user(ctx, field)
-			case "group":
-				return ec.fieldContext_Event_group(ctx, field)
-			case "integration":
-				return ec.fieldContext_Event_integration(ctx, field)
-			case "organization":
-				return ec.fieldContext_Event_organization(ctx, field)
-			case "invite":
-				return ec.fieldContext_Event_invite(ctx, field)
-			case "personalAccessToken":
-				return ec.fieldContext_Event_personalAccessToken(ctx, field)
-			case "hush":
-				return ec.fieldContext_Event_hush(ctx, field)
-			case "orgmembership":
-				return ec.fieldContext_Event_orgmembership(ctx, field)
-			case "groupmembership":
-				return ec.fieldContext_Event_groupmembership(ctx, field)
-			case "subscriber":
-				return ec.fieldContext_Event_subscriber(ctx, field)
-			case "file":
-				return ec.fieldContext_Event_file(ctx, field)
-			case "orgsubscription":
-				return ec.fieldContext_Event_orgsubscription(ctx, field)
+			case "users":
+				return ec.fieldContext_Event_users(ctx, field)
+			case "groups":
+				return ec.fieldContext_Event_groups(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Event_integrations(ctx, field)
+			case "organizations":
+				return ec.fieldContext_Event_organizations(ctx, field)
+			case "invites":
+				return ec.fieldContext_Event_invites(ctx, field)
+			case "personalAccessTokens":
+				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
+			case "secrets":
+				return ec.fieldContext_Event_secrets(ctx, field)
+			case "orgmemberships":
+				return ec.fieldContext_Event_orgmemberships(ctx, field)
+			case "groupmemberships":
+				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Event_subscribers(ctx, field)
+			case "files":
+				return ec.fieldContext_Event_files(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -309,30 +309,30 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "user":
-				return ec.fieldContext_Event_user(ctx, field)
-			case "group":
-				return ec.fieldContext_Event_group(ctx, field)
-			case "integration":
-				return ec.fieldContext_Event_integration(ctx, field)
-			case "organization":
-				return ec.fieldContext_Event_organization(ctx, field)
-			case "invite":
-				return ec.fieldContext_Event_invite(ctx, field)
-			case "personalAccessToken":
-				return ec.fieldContext_Event_personalAccessToken(ctx, field)
-			case "hush":
-				return ec.fieldContext_Event_hush(ctx, field)
-			case "orgmembership":
-				return ec.fieldContext_Event_orgmembership(ctx, field)
-			case "groupmembership":
-				return ec.fieldContext_Event_groupmembership(ctx, field)
-			case "subscriber":
-				return ec.fieldContext_Event_subscriber(ctx, field)
-			case "file":
-				return ec.fieldContext_Event_file(ctx, field)
-			case "orgsubscription":
-				return ec.fieldContext_Event_orgsubscription(ctx, field)
+			case "users":
+				return ec.fieldContext_Event_users(ctx, field)
+			case "groups":
+				return ec.fieldContext_Event_groups(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Event_integrations(ctx, field)
+			case "organizations":
+				return ec.fieldContext_Event_organizations(ctx, field)
+			case "invites":
+				return ec.fieldContext_Event_invites(ctx, field)
+			case "personalAccessTokens":
+				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
+			case "secrets":
+				return ec.fieldContext_Event_secrets(ctx, field)
+			case "orgmemberships":
+				return ec.fieldContext_Event_orgmemberships(ctx, field)
+			case "groupmemberships":
+				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "subscribers":
+				return ec.fieldContext_Event_subscribers(ctx, field)
+			case "files":
+				return ec.fieldContext_Event_files(ctx, field)
+			case "orgSubscriptions":
+				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},

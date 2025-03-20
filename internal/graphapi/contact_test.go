@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -81,8 +82,7 @@ func (suite *GraphTestSuite) TestQueryContact() {
 		})
 	}
 
-	// delete created org and contact
-	(&ContactCleanup{client: suite.client, ID: contact.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestQueryContacts() {

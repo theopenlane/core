@@ -32,6 +32,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -46,8 +48,6 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
@@ -62,14 +62,14 @@ const (
 	EdgeDelegate = "delegate"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeRisk holds the string denoting the risk edge name in mutations.
-	EdgeRisk = "risk"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
-	// EdgeProgram holds the string denoting the program edge name in mutations.
-	EdgeProgram = "program"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeUsers holds the string denoting the users edge name in mutations.
+	EdgeUsers = "users"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
 	// ApproverTable is the table that holds the approver relation/edge.
@@ -93,26 +93,26 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// RiskTable is the table that holds the risk relation/edge. The primary key declared below.
-	RiskTable = "risk_action_plans"
-	// RiskInverseTable is the table name for the Risk entity.
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "risk_action_plans"
+	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
-	RiskInverseTable = "risks"
-	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_action_plans"
-	// ControlInverseTable is the table name for the Control entity.
+	RisksInverseTable = "risks"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_action_plans"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// UserTable is the table that holds the user relation/edge. The primary key declared below.
-	UserTable = "user_action_plans"
-	// UserInverseTable is the table name for the User entity.
+	ControlsInverseTable = "controls"
+	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
+	UsersTable = "user_action_plans"
+	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
-	ProgramTable = "program_action_plans"
-	// ProgramInverseTable is the table name for the Program entity.
+	UsersInverseTable = "users"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "program_action_plans"
+	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramInverseTable = "programs"
+	ProgramsInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for actionplan fields.
@@ -125,6 +125,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldRevision,
 	FieldName,
 	FieldStatus,
 	FieldActionPlanType,
@@ -132,7 +133,6 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
-	FieldRevision,
 	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
@@ -148,18 +148,18 @@ var ForeignKeys = []string{
 }
 
 var (
-	// RiskPrimaryKey and RiskColumn2 are the table columns denoting the
-	// primary key for the risk relation (M2M).
-	RiskPrimaryKey = []string{"risk_id", "action_plan_id"}
-	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
-	// primary key for the control relation (M2M).
-	ControlPrimaryKey = []string{"control_id", "action_plan_id"}
-	// UserPrimaryKey and UserColumn2 are the table columns denoting the
-	// primary key for the user relation (M2M).
-	UserPrimaryKey = []string{"user_id", "action_plan_id"}
-	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
-	// primary key for the program relation (M2M).
-	ProgramPrimaryKey = []string{"program_id", "action_plan_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"risk_id", "action_plan_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "action_plan_id"}
+	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
+	// primary key for the users relation (M2M).
+	UsersPrimaryKey = []string{"user_id", "action_plan_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"program_id", "action_plan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -194,16 +194,16 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
-	// DefaultRevision holds the default value on creation for the "revision" field.
-	DefaultRevision string
-	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
-	RevisionValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -282,6 +282,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -315,11 +320,6 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -363,59 +363,59 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByRiskCount orders the results by risk count.
-func ByRiskCount(opts ...sql.OrderTermOption) OrderOption {
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newRiskStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
 	}
 }
 
-// ByRisk orders the results by risk terms.
-func ByRisk(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newRiskStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
 	}
 }
 
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByUserCount orders the results by user count.
-func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
+// ByUsersCount orders the results by users count.
+func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
 	}
 }
 
-// ByUser orders the results by user terms.
-func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByUsers orders the results by users terms.
+func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByProgramCount orders the results by program count.
-func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
 	}
 }
 
-// ByProgram orders the results by program terms.
-func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newApproverStep() *sqlgraph.Step {
@@ -439,32 +439,32 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newRiskStep() *sqlgraph.Step {
+func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(RiskInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, RiskTable, RiskPrimaryKey...),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
 	)
 }
-func newControlStep() *sqlgraph.Step {
+func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
-func newUserStep() *sqlgraph.Step {
+func newUsersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
+		sqlgraph.To(UsersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }
-func newProgramStep() *sqlgraph.Step {
+func newProgramsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
 

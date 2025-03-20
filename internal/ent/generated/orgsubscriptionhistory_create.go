@@ -112,12 +112,6 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(s *string) *OrgSu
 	return oshc
 }
 
-// SetTags sets the "tags" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetTags(s []string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetTags(s)
-	return oshc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetDeletedAt(t time.Time) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetDeletedAt(t)
@@ -143,6 +137,12 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedBy(s *string) *OrgSu
 	if s != nil {
 		oshc.SetDeletedBy(*s)
 	}
+	return oshc
+}
+
+// SetTags sets the "tags" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetTags(s []string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetTags(s)
 	return oshc
 }
 
@@ -481,10 +481,6 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := oshc.mutation.Tags(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := oshc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -492,6 +488,10 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := oshc.mutation.Tags(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := oshc.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)

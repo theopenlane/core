@@ -111,12 +111,6 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedBy(s *string) *Document
 	return ddhc
 }
 
-// SetTags sets the "tags" field.
-func (ddhc *DocumentDataHistoryCreate) SetTags(s []string) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetTags(s)
-	return ddhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ddhc *DocumentDataHistoryCreate) SetDeletedAt(t time.Time) *DocumentDataHistoryCreate {
 	ddhc.mutation.SetDeletedAt(t)
@@ -142,6 +136,12 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableDeletedBy(s *string) *Document
 	if s != nil {
 		ddhc.SetDeletedBy(*s)
 	}
+	return ddhc
+}
+
+// SetTags sets the "tags" field.
+func (ddhc *DocumentDataHistoryCreate) SetTags(s []string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetTags(s)
 	return ddhc
 }
 
@@ -325,10 +325,6 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ddhc.mutation.Tags(); ok {
-		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ddhc.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -336,6 +332,10 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 	if value, ok := ddhc.mutation.DeletedBy(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ddhc.mutation.Tags(); ok {
+		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := ddhc.mutation.OwnerID(); ok {
 		_spec.SetField(documentdatahistory.FieldOwnerID, field.TypeString, value)

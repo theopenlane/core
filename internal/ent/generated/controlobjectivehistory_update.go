@@ -105,6 +105,24 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearDeletedBy() *ControlObjectiveHis
 	return cohu
 }
 
+// SetTags sets the "tags" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetTags(s []string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetTags(s)
+	return cohu
+}
+
+// AppendTags appends s to the "tags" field.
+func (cohu *ControlObjectiveHistoryUpdate) AppendTags(s []string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.AppendTags(s)
+	return cohu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearTags() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearTags()
+	return cohu
+}
+
 // SetRevision sets the "revision" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetRevision(s string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetRevision(s)
@@ -122,24 +140,6 @@ func (cohu *ControlObjectiveHistoryUpdate) SetNillableRevision(s *string) *Contr
 // ClearRevision clears the value of the "revision" field.
 func (cohu *ControlObjectiveHistoryUpdate) ClearRevision() *ControlObjectiveHistoryUpdate {
 	cohu.mutation.ClearRevision()
-	return cohu
-}
-
-// SetTags sets the "tags" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetTags(s []string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetTags(s)
-	return cohu
-}
-
-// AppendTags appends s to the "tags" field.
-func (cohu *ControlObjectiveHistoryUpdate) AppendTags(s []string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.AppendTags(s)
-	return cohu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearTags() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearTags()
 	return cohu
 }
 
@@ -379,12 +379,6 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cohu.mutation.Revision(); ok {
-		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
-	}
-	if cohu.mutation.RevisionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
-	}
 	if value, ok := cohu.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
 	}
@@ -395,6 +389,12 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	}
 	if cohu.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := cohu.mutation.Revision(); ok {
+		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
+	}
+	if cohu.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
 	}
 	if cohu.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
@@ -534,6 +534,24 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDeletedBy() *ControlObjectiv
 	return cohuo
 }
 
+// SetTags sets the "tags" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetTags(s []string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetTags(s)
+	return cohuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) AppendTags(s []string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.AppendTags(s)
+	return cohuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearTags() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearTags()
+	return cohuo
+}
+
 // SetRevision sets the "revision" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) SetRevision(s string) *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.SetRevision(s)
@@ -551,24 +569,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableRevision(s *string) *C
 // ClearRevision clears the value of the "revision" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearRevision() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearRevision()
-	return cohuo
-}
-
-// SetTags sets the "tags" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetTags(s []string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetTags(s)
-	return cohuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) AppendTags(s []string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.AppendTags(s)
-	return cohuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearTags() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearTags()
 	return cohuo
 }
 
@@ -838,12 +838,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.Revision(); ok {
-		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
-	}
-	if cohuo.mutation.RevisionCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
-	}
 	if value, ok := cohuo.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
 	}
@@ -854,6 +848,12 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if cohuo.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := cohuo.mutation.Revision(); ok {
+		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
+	}
+	if cohuo.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
 	}
 	if cohuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)

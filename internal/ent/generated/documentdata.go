@@ -28,12 +28,12 @@ type DocumentData struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the template id of the document
@@ -52,8 +52,8 @@ type DocumentDataEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
-	// Entity holds the value of the entity edge.
-	Entity []*Entity `json:"entity,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -62,8 +62,8 @@ type DocumentDataEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [4]map[string]int
 
-	namedEntity map[string][]*Entity
-	namedFiles  map[string][]*File
+	namedEntities map[string][]*Entity
+	namedFiles    map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -88,13 +88,13 @@ func (e DocumentDataEdges) TemplateOrErr() (*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
-// EntityOrErr returns the Entity value or an error if the edge
+// EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
-func (e DocumentDataEdges) EntityOrErr() ([]*Entity, error) {
+func (e DocumentDataEdges) EntitiesOrErr() ([]*Entity, error) {
 	if e.loadedTypes[2] {
-		return e.Entity, nil
+		return e.Entities, nil
 	}
-	return nil, &NotLoadedError{edge: "entity"}
+	return nil, &NotLoadedError{edge: "entities"}
 }
 
 // FilesOrErr returns the Files value or an error if the edge
@@ -162,14 +162,6 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				dd.UpdatedBy = value.String
 			}
-		case documentdata.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &dd.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case documentdata.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -181,6 +173,14 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				dd.DeletedBy = value.String
+			}
+		case documentdata.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &dd.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
 			}
 		case documentdata.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -225,9 +225,9 @@ func (dd *DocumentData) QueryTemplate() *TemplateQuery {
 	return NewDocumentDataClient(dd.config).QueryTemplate(dd)
 }
 
-// QueryEntity queries the "entity" edge of the DocumentData entity.
-func (dd *DocumentData) QueryEntity() *EntityQuery {
-	return NewDocumentDataClient(dd.config).QueryEntity(dd)
+// QueryEntities queries the "entities" edge of the DocumentData entity.
+func (dd *DocumentData) QueryEntities() *EntityQuery {
+	return NewDocumentDataClient(dd.config).QueryEntities(dd)
 }
 
 // QueryFiles queries the "files" edge of the DocumentData entity.
@@ -270,14 +270,14 @@ func (dd *DocumentData) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(dd.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", dd.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(dd.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(dd.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", dd.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(dd.OwnerID)
@@ -291,27 +291,27 @@ func (dd *DocumentData) String() string {
 	return builder.String()
 }
 
-// NamedEntity returns the Entity named value or an error if the edge was not
+// NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (dd *DocumentData) NamedEntity(name string) ([]*Entity, error) {
-	if dd.Edges.namedEntity == nil {
+func (dd *DocumentData) NamedEntities(name string) ([]*Entity, error) {
+	if dd.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := dd.Edges.namedEntity[name]
+	nodes, ok := dd.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (dd *DocumentData) appendNamedEntity(name string, edges ...*Entity) {
-	if dd.Edges.namedEntity == nil {
-		dd.Edges.namedEntity = make(map[string][]*Entity)
+func (dd *DocumentData) appendNamedEntities(name string, edges ...*Entity) {
+	if dd.Edges.namedEntities == nil {
+		dd.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		dd.Edges.namedEntity[name] = []*Entity{}
+		dd.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		dd.Edges.namedEntity[name] = append(dd.Edges.namedEntity[name], edges...)
+		dd.Edges.namedEntities[name] = append(dd.Edges.namedEntities[name], edges...)
 	}
 }
 

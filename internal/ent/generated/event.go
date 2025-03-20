@@ -44,156 +44,156 @@ type Event struct {
 
 // EventEdges holds the relations/edges for other nodes in the graph.
 type EventEdges struct {
-	// User holds the value of the user edge.
-	User []*User `json:"user,omitempty"`
-	// Group holds the value of the group edge.
-	Group []*Group `json:"group,omitempty"`
-	// Integration holds the value of the integration edge.
-	Integration []*Integration `json:"integration,omitempty"`
-	// Organization holds the value of the organization edge.
-	Organization []*Organization `json:"organization,omitempty"`
-	// Invite holds the value of the invite edge.
-	Invite []*Invite `json:"invite,omitempty"`
-	// PersonalAccessToken holds the value of the personal_access_token edge.
-	PersonalAccessToken []*PersonalAccessToken `json:"personal_access_token,omitempty"`
-	// Hush holds the value of the hush edge.
-	Hush []*Hush `json:"hush,omitempty"`
-	// Orgmembership holds the value of the orgmembership edge.
-	Orgmembership []*OrgMembership `json:"orgmembership,omitempty"`
-	// Groupmembership holds the value of the groupmembership edge.
-	Groupmembership []*GroupMembership `json:"groupmembership,omitempty"`
-	// Subscriber holds the value of the subscriber edge.
-	Subscriber []*Subscriber `json:"subscriber,omitempty"`
-	// File holds the value of the file edge.
-	File []*File `json:"file,omitempty"`
-	// Orgsubscription holds the value of the orgsubscription edge.
-	Orgsubscription []*OrgSubscription `json:"orgsubscription,omitempty"`
+	// Users holds the value of the users edge.
+	Users []*User `json:"users,omitempty"`
+	// Groups holds the value of the groups edge.
+	Groups []*Group `json:"groups,omitempty"`
+	// Integrations holds the value of the integrations edge.
+	Integrations []*Integration `json:"integrations,omitempty"`
+	// Organizations holds the value of the organizations edge.
+	Organizations []*Organization `json:"organizations,omitempty"`
+	// Invites holds the value of the invites edge.
+	Invites []*Invite `json:"invites,omitempty"`
+	// PersonalAccessTokens holds the value of the personal_access_tokens edge.
+	PersonalAccessTokens []*PersonalAccessToken `json:"personal_access_tokens,omitempty"`
+	// Secrets holds the value of the secrets edge.
+	Secrets []*Hush `json:"secrets,omitempty"`
+	// Orgmemberships holds the value of the orgmemberships edge.
+	Orgmemberships []*OrgMembership `json:"orgmemberships,omitempty"`
+	// Groupmemberships holds the value of the groupmemberships edge.
+	Groupmemberships []*GroupMembership `json:"groupmemberships,omitempty"`
+	// Subscribers holds the value of the subscribers edge.
+	Subscribers []*Subscriber `json:"subscribers,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
+	// OrgSubscriptions holds the value of the org_subscriptions edge.
+	OrgSubscriptions []*OrgSubscription `json:"org_subscriptions,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
 	totalCount [12]map[string]int
 
-	namedUser                map[string][]*User
-	namedGroup               map[string][]*Group
-	namedIntegration         map[string][]*Integration
-	namedOrganization        map[string][]*Organization
-	namedInvite              map[string][]*Invite
-	namedPersonalAccessToken map[string][]*PersonalAccessToken
-	namedHush                map[string][]*Hush
-	namedOrgmembership       map[string][]*OrgMembership
-	namedGroupmembership     map[string][]*GroupMembership
-	namedSubscriber          map[string][]*Subscriber
-	namedFile                map[string][]*File
-	namedOrgsubscription     map[string][]*OrgSubscription
+	namedUsers                map[string][]*User
+	namedGroups               map[string][]*Group
+	namedIntegrations         map[string][]*Integration
+	namedOrganizations        map[string][]*Organization
+	namedInvites              map[string][]*Invite
+	namedPersonalAccessTokens map[string][]*PersonalAccessToken
+	namedSecrets              map[string][]*Hush
+	namedOrgmemberships       map[string][]*OrgMembership
+	namedGroupmemberships     map[string][]*GroupMembership
+	namedSubscribers          map[string][]*Subscriber
+	namedFiles                map[string][]*File
+	namedOrgSubscriptions     map[string][]*OrgSubscription
 }
 
-// UserOrErr returns the User value or an error if the edge
+// UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) UserOrErr() ([]*User, error) {
+func (e EventEdges) UsersOrErr() ([]*User, error) {
 	if e.loadedTypes[0] {
-		return e.User, nil
+		return e.Users, nil
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "users"}
 }
 
-// GroupOrErr returns the Group value or an error if the edge
+// GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) GroupOrErr() ([]*Group, error) {
+func (e EventEdges) GroupsOrErr() ([]*Group, error) {
 	if e.loadedTypes[1] {
-		return e.Group, nil
+		return e.Groups, nil
 	}
-	return nil, &NotLoadedError{edge: "group"}
+	return nil, &NotLoadedError{edge: "groups"}
 }
 
-// IntegrationOrErr returns the Integration value or an error if the edge
+// IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) IntegrationOrErr() ([]*Integration, error) {
+func (e EventEdges) IntegrationsOrErr() ([]*Integration, error) {
 	if e.loadedTypes[2] {
-		return e.Integration, nil
+		return e.Integrations, nil
 	}
-	return nil, &NotLoadedError{edge: "integration"}
+	return nil, &NotLoadedError{edge: "integrations"}
 }
 
-// OrganizationOrErr returns the Organization value or an error if the edge
+// OrganizationsOrErr returns the Organizations value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) OrganizationOrErr() ([]*Organization, error) {
+func (e EventEdges) OrganizationsOrErr() ([]*Organization, error) {
 	if e.loadedTypes[3] {
-		return e.Organization, nil
+		return e.Organizations, nil
 	}
-	return nil, &NotLoadedError{edge: "organization"}
+	return nil, &NotLoadedError{edge: "organizations"}
 }
 
-// InviteOrErr returns the Invite value or an error if the edge
+// InvitesOrErr returns the Invites value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) InviteOrErr() ([]*Invite, error) {
+func (e EventEdges) InvitesOrErr() ([]*Invite, error) {
 	if e.loadedTypes[4] {
-		return e.Invite, nil
+		return e.Invites, nil
 	}
-	return nil, &NotLoadedError{edge: "invite"}
+	return nil, &NotLoadedError{edge: "invites"}
 }
 
-// PersonalAccessTokenOrErr returns the PersonalAccessToken value or an error if the edge
+// PersonalAccessTokensOrErr returns the PersonalAccessTokens value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) PersonalAccessTokenOrErr() ([]*PersonalAccessToken, error) {
+func (e EventEdges) PersonalAccessTokensOrErr() ([]*PersonalAccessToken, error) {
 	if e.loadedTypes[5] {
-		return e.PersonalAccessToken, nil
+		return e.PersonalAccessTokens, nil
 	}
-	return nil, &NotLoadedError{edge: "personal_access_token"}
+	return nil, &NotLoadedError{edge: "personal_access_tokens"}
 }
 
-// HushOrErr returns the Hush value or an error if the edge
+// SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) HushOrErr() ([]*Hush, error) {
+func (e EventEdges) SecretsOrErr() ([]*Hush, error) {
 	if e.loadedTypes[6] {
-		return e.Hush, nil
+		return e.Secrets, nil
 	}
-	return nil, &NotLoadedError{edge: "hush"}
+	return nil, &NotLoadedError{edge: "secrets"}
 }
 
-// OrgmembershipOrErr returns the Orgmembership value or an error if the edge
+// OrgmembershipsOrErr returns the Orgmemberships value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) OrgmembershipOrErr() ([]*OrgMembership, error) {
+func (e EventEdges) OrgmembershipsOrErr() ([]*OrgMembership, error) {
 	if e.loadedTypes[7] {
-		return e.Orgmembership, nil
+		return e.Orgmemberships, nil
 	}
-	return nil, &NotLoadedError{edge: "orgmembership"}
+	return nil, &NotLoadedError{edge: "orgmemberships"}
 }
 
-// GroupmembershipOrErr returns the Groupmembership value or an error if the edge
+// GroupmembershipsOrErr returns the Groupmemberships value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) GroupmembershipOrErr() ([]*GroupMembership, error) {
+func (e EventEdges) GroupmembershipsOrErr() ([]*GroupMembership, error) {
 	if e.loadedTypes[8] {
-		return e.Groupmembership, nil
+		return e.Groupmemberships, nil
 	}
-	return nil, &NotLoadedError{edge: "groupmembership"}
+	return nil, &NotLoadedError{edge: "groupmemberships"}
 }
 
-// SubscriberOrErr returns the Subscriber value or an error if the edge
+// SubscribersOrErr returns the Subscribers value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
+func (e EventEdges) SubscribersOrErr() ([]*Subscriber, error) {
 	if e.loadedTypes[9] {
-		return e.Subscriber, nil
+		return e.Subscribers, nil
 	}
-	return nil, &NotLoadedError{edge: "subscriber"}
+	return nil, &NotLoadedError{edge: "subscribers"}
 }
 
-// FileOrErr returns the File value or an error if the edge
+// FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) FileOrErr() ([]*File, error) {
+func (e EventEdges) FilesOrErr() ([]*File, error) {
 	if e.loadedTypes[10] {
-		return e.File, nil
+		return e.Files, nil
 	}
-	return nil, &NotLoadedError{edge: "file"}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
-// OrgsubscriptionOrErr returns the Orgsubscription value or an error if the edge
+// OrgSubscriptionsOrErr returns the OrgSubscriptions value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) OrgsubscriptionOrErr() ([]*OrgSubscription, error) {
+func (e EventEdges) OrgSubscriptionsOrErr() ([]*OrgSubscription, error) {
 	if e.loadedTypes[11] {
-		return e.Orgsubscription, nil
+		return e.OrgSubscriptions, nil
 	}
-	return nil, &NotLoadedError{edge: "orgsubscription"}
+	return nil, &NotLoadedError{edge: "org_subscriptions"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -299,64 +299,64 @@ func (e *Event) Value(name string) (ent.Value, error) {
 	return e.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the Event entity.
-func (e *Event) QueryUser() *UserQuery {
-	return NewEventClient(e.config).QueryUser(e)
+// QueryUsers queries the "users" edge of the Event entity.
+func (e *Event) QueryUsers() *UserQuery {
+	return NewEventClient(e.config).QueryUsers(e)
 }
 
-// QueryGroup queries the "group" edge of the Event entity.
-func (e *Event) QueryGroup() *GroupQuery {
-	return NewEventClient(e.config).QueryGroup(e)
+// QueryGroups queries the "groups" edge of the Event entity.
+func (e *Event) QueryGroups() *GroupQuery {
+	return NewEventClient(e.config).QueryGroups(e)
 }
 
-// QueryIntegration queries the "integration" edge of the Event entity.
-func (e *Event) QueryIntegration() *IntegrationQuery {
-	return NewEventClient(e.config).QueryIntegration(e)
+// QueryIntegrations queries the "integrations" edge of the Event entity.
+func (e *Event) QueryIntegrations() *IntegrationQuery {
+	return NewEventClient(e.config).QueryIntegrations(e)
 }
 
-// QueryOrganization queries the "organization" edge of the Event entity.
-func (e *Event) QueryOrganization() *OrganizationQuery {
-	return NewEventClient(e.config).QueryOrganization(e)
+// QueryOrganizations queries the "organizations" edge of the Event entity.
+func (e *Event) QueryOrganizations() *OrganizationQuery {
+	return NewEventClient(e.config).QueryOrganizations(e)
 }
 
-// QueryInvite queries the "invite" edge of the Event entity.
-func (e *Event) QueryInvite() *InviteQuery {
-	return NewEventClient(e.config).QueryInvite(e)
+// QueryInvites queries the "invites" edge of the Event entity.
+func (e *Event) QueryInvites() *InviteQuery {
+	return NewEventClient(e.config).QueryInvites(e)
 }
 
-// QueryPersonalAccessToken queries the "personal_access_token" edge of the Event entity.
-func (e *Event) QueryPersonalAccessToken() *PersonalAccessTokenQuery {
-	return NewEventClient(e.config).QueryPersonalAccessToken(e)
+// QueryPersonalAccessTokens queries the "personal_access_tokens" edge of the Event entity.
+func (e *Event) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
+	return NewEventClient(e.config).QueryPersonalAccessTokens(e)
 }
 
-// QueryHush queries the "hush" edge of the Event entity.
-func (e *Event) QueryHush() *HushQuery {
-	return NewEventClient(e.config).QueryHush(e)
+// QuerySecrets queries the "secrets" edge of the Event entity.
+func (e *Event) QuerySecrets() *HushQuery {
+	return NewEventClient(e.config).QuerySecrets(e)
 }
 
-// QueryOrgmembership queries the "orgmembership" edge of the Event entity.
-func (e *Event) QueryOrgmembership() *OrgMembershipQuery {
-	return NewEventClient(e.config).QueryOrgmembership(e)
+// QueryOrgmemberships queries the "orgmemberships" edge of the Event entity.
+func (e *Event) QueryOrgmemberships() *OrgMembershipQuery {
+	return NewEventClient(e.config).QueryOrgmemberships(e)
 }
 
-// QueryGroupmembership queries the "groupmembership" edge of the Event entity.
-func (e *Event) QueryGroupmembership() *GroupMembershipQuery {
-	return NewEventClient(e.config).QueryGroupmembership(e)
+// QueryGroupmemberships queries the "groupmemberships" edge of the Event entity.
+func (e *Event) QueryGroupmemberships() *GroupMembershipQuery {
+	return NewEventClient(e.config).QueryGroupmemberships(e)
 }
 
-// QuerySubscriber queries the "subscriber" edge of the Event entity.
-func (e *Event) QuerySubscriber() *SubscriberQuery {
-	return NewEventClient(e.config).QuerySubscriber(e)
+// QuerySubscribers queries the "subscribers" edge of the Event entity.
+func (e *Event) QuerySubscribers() *SubscriberQuery {
+	return NewEventClient(e.config).QuerySubscribers(e)
 }
 
-// QueryFile queries the "file" edge of the Event entity.
-func (e *Event) QueryFile() *FileQuery {
-	return NewEventClient(e.config).QueryFile(e)
+// QueryFiles queries the "files" edge of the Event entity.
+func (e *Event) QueryFiles() *FileQuery {
+	return NewEventClient(e.config).QueryFiles(e)
 }
 
-// QueryOrgsubscription queries the "orgsubscription" edge of the Event entity.
-func (e *Event) QueryOrgsubscription() *OrgSubscriptionQuery {
-	return NewEventClient(e.config).QueryOrgsubscription(e)
+// QueryOrgSubscriptions queries the "org_subscriptions" edge of the Event entity.
+func (e *Event) QueryOrgSubscriptions() *OrgSubscriptionQuery {
+	return NewEventClient(e.config).QueryOrgSubscriptions(e)
 }
 
 // Update returns a builder for updating this Event.
@@ -412,291 +412,291 @@ func (e *Event) String() string {
 	return builder.String()
 }
 
-// NamedUser returns the User named value or an error if the edge was not
+// NamedUsers returns the Users named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedUser(name string) ([]*User, error) {
-	if e.Edges.namedUser == nil {
+func (e *Event) NamedUsers(name string) ([]*User, error) {
+	if e.Edges.namedUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedUser[name]
+	nodes, ok := e.Edges.namedUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedUser(name string, edges ...*User) {
-	if e.Edges.namedUser == nil {
-		e.Edges.namedUser = make(map[string][]*User)
+func (e *Event) appendNamedUsers(name string, edges ...*User) {
+	if e.Edges.namedUsers == nil {
+		e.Edges.namedUsers = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedUser[name] = []*User{}
+		e.Edges.namedUsers[name] = []*User{}
 	} else {
-		e.Edges.namedUser[name] = append(e.Edges.namedUser[name], edges...)
+		e.Edges.namedUsers[name] = append(e.Edges.namedUsers[name], edges...)
 	}
 }
 
-// NamedGroup returns the Group named value or an error if the edge was not
+// NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedGroup(name string) ([]*Group, error) {
-	if e.Edges.namedGroup == nil {
+func (e *Event) NamedGroups(name string) ([]*Group, error) {
+	if e.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedGroup[name]
+	nodes, ok := e.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedGroup(name string, edges ...*Group) {
-	if e.Edges.namedGroup == nil {
-		e.Edges.namedGroup = make(map[string][]*Group)
+func (e *Event) appendNamedGroups(name string, edges ...*Group) {
+	if e.Edges.namedGroups == nil {
+		e.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedGroup[name] = []*Group{}
+		e.Edges.namedGroups[name] = []*Group{}
 	} else {
-		e.Edges.namedGroup[name] = append(e.Edges.namedGroup[name], edges...)
+		e.Edges.namedGroups[name] = append(e.Edges.namedGroups[name], edges...)
 	}
 }
 
-// NamedIntegration returns the Integration named value or an error if the edge was not
+// NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedIntegration(name string) ([]*Integration, error) {
-	if e.Edges.namedIntegration == nil {
+func (e *Event) NamedIntegrations(name string) ([]*Integration, error) {
+	if e.Edges.namedIntegrations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedIntegration[name]
+	nodes, ok := e.Edges.namedIntegrations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedIntegration(name string, edges ...*Integration) {
-	if e.Edges.namedIntegration == nil {
-		e.Edges.namedIntegration = make(map[string][]*Integration)
+func (e *Event) appendNamedIntegrations(name string, edges ...*Integration) {
+	if e.Edges.namedIntegrations == nil {
+		e.Edges.namedIntegrations = make(map[string][]*Integration)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedIntegration[name] = []*Integration{}
+		e.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
-		e.Edges.namedIntegration[name] = append(e.Edges.namedIntegration[name], edges...)
+		e.Edges.namedIntegrations[name] = append(e.Edges.namedIntegrations[name], edges...)
 	}
 }
 
-// NamedOrganization returns the Organization named value or an error if the edge was not
+// NamedOrganizations returns the Organizations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedOrganization(name string) ([]*Organization, error) {
-	if e.Edges.namedOrganization == nil {
+func (e *Event) NamedOrganizations(name string) ([]*Organization, error) {
+	if e.Edges.namedOrganizations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedOrganization[name]
+	nodes, ok := e.Edges.namedOrganizations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedOrganization(name string, edges ...*Organization) {
-	if e.Edges.namedOrganization == nil {
-		e.Edges.namedOrganization = make(map[string][]*Organization)
+func (e *Event) appendNamedOrganizations(name string, edges ...*Organization) {
+	if e.Edges.namedOrganizations == nil {
+		e.Edges.namedOrganizations = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedOrganization[name] = []*Organization{}
+		e.Edges.namedOrganizations[name] = []*Organization{}
 	} else {
-		e.Edges.namedOrganization[name] = append(e.Edges.namedOrganization[name], edges...)
+		e.Edges.namedOrganizations[name] = append(e.Edges.namedOrganizations[name], edges...)
 	}
 }
 
-// NamedInvite returns the Invite named value or an error if the edge was not
+// NamedInvites returns the Invites named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedInvite(name string) ([]*Invite, error) {
-	if e.Edges.namedInvite == nil {
+func (e *Event) NamedInvites(name string) ([]*Invite, error) {
+	if e.Edges.namedInvites == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedInvite[name]
+	nodes, ok := e.Edges.namedInvites[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedInvite(name string, edges ...*Invite) {
-	if e.Edges.namedInvite == nil {
-		e.Edges.namedInvite = make(map[string][]*Invite)
+func (e *Event) appendNamedInvites(name string, edges ...*Invite) {
+	if e.Edges.namedInvites == nil {
+		e.Edges.namedInvites = make(map[string][]*Invite)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedInvite[name] = []*Invite{}
+		e.Edges.namedInvites[name] = []*Invite{}
 	} else {
-		e.Edges.namedInvite[name] = append(e.Edges.namedInvite[name], edges...)
+		e.Edges.namedInvites[name] = append(e.Edges.namedInvites[name], edges...)
 	}
 }
 
-// NamedPersonalAccessToken returns the PersonalAccessToken named value or an error if the edge was not
+// NamedPersonalAccessTokens returns the PersonalAccessTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedPersonalAccessToken(name string) ([]*PersonalAccessToken, error) {
-	if e.Edges.namedPersonalAccessToken == nil {
+func (e *Event) NamedPersonalAccessTokens(name string) ([]*PersonalAccessToken, error) {
+	if e.Edges.namedPersonalAccessTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedPersonalAccessToken[name]
+	nodes, ok := e.Edges.namedPersonalAccessTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedPersonalAccessToken(name string, edges ...*PersonalAccessToken) {
-	if e.Edges.namedPersonalAccessToken == nil {
-		e.Edges.namedPersonalAccessToken = make(map[string][]*PersonalAccessToken)
+func (e *Event) appendNamedPersonalAccessTokens(name string, edges ...*PersonalAccessToken) {
+	if e.Edges.namedPersonalAccessTokens == nil {
+		e.Edges.namedPersonalAccessTokens = make(map[string][]*PersonalAccessToken)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedPersonalAccessToken[name] = []*PersonalAccessToken{}
+		e.Edges.namedPersonalAccessTokens[name] = []*PersonalAccessToken{}
 	} else {
-		e.Edges.namedPersonalAccessToken[name] = append(e.Edges.namedPersonalAccessToken[name], edges...)
+		e.Edges.namedPersonalAccessTokens[name] = append(e.Edges.namedPersonalAccessTokens[name], edges...)
 	}
 }
 
-// NamedHush returns the Hush named value or an error if the edge was not
+// NamedSecrets returns the Secrets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedHush(name string) ([]*Hush, error) {
-	if e.Edges.namedHush == nil {
+func (e *Event) NamedSecrets(name string) ([]*Hush, error) {
+	if e.Edges.namedSecrets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedHush[name]
+	nodes, ok := e.Edges.namedSecrets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedHush(name string, edges ...*Hush) {
-	if e.Edges.namedHush == nil {
-		e.Edges.namedHush = make(map[string][]*Hush)
+func (e *Event) appendNamedSecrets(name string, edges ...*Hush) {
+	if e.Edges.namedSecrets == nil {
+		e.Edges.namedSecrets = make(map[string][]*Hush)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedHush[name] = []*Hush{}
+		e.Edges.namedSecrets[name] = []*Hush{}
 	} else {
-		e.Edges.namedHush[name] = append(e.Edges.namedHush[name], edges...)
+		e.Edges.namedSecrets[name] = append(e.Edges.namedSecrets[name], edges...)
 	}
 }
 
-// NamedOrgmembership returns the Orgmembership named value or an error if the edge was not
+// NamedOrgmemberships returns the Orgmemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedOrgmembership(name string) ([]*OrgMembership, error) {
-	if e.Edges.namedOrgmembership == nil {
+func (e *Event) NamedOrgmemberships(name string) ([]*OrgMembership, error) {
+	if e.Edges.namedOrgmemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedOrgmembership[name]
+	nodes, ok := e.Edges.namedOrgmemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedOrgmembership(name string, edges ...*OrgMembership) {
-	if e.Edges.namedOrgmembership == nil {
-		e.Edges.namedOrgmembership = make(map[string][]*OrgMembership)
+func (e *Event) appendNamedOrgmemberships(name string, edges ...*OrgMembership) {
+	if e.Edges.namedOrgmemberships == nil {
+		e.Edges.namedOrgmemberships = make(map[string][]*OrgMembership)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedOrgmembership[name] = []*OrgMembership{}
+		e.Edges.namedOrgmemberships[name] = []*OrgMembership{}
 	} else {
-		e.Edges.namedOrgmembership[name] = append(e.Edges.namedOrgmembership[name], edges...)
+		e.Edges.namedOrgmemberships[name] = append(e.Edges.namedOrgmemberships[name], edges...)
 	}
 }
 
-// NamedGroupmembership returns the Groupmembership named value or an error if the edge was not
+// NamedGroupmemberships returns the Groupmemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedGroupmembership(name string) ([]*GroupMembership, error) {
-	if e.Edges.namedGroupmembership == nil {
+func (e *Event) NamedGroupmemberships(name string) ([]*GroupMembership, error) {
+	if e.Edges.namedGroupmemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedGroupmembership[name]
+	nodes, ok := e.Edges.namedGroupmemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedGroupmembership(name string, edges ...*GroupMembership) {
-	if e.Edges.namedGroupmembership == nil {
-		e.Edges.namedGroupmembership = make(map[string][]*GroupMembership)
+func (e *Event) appendNamedGroupmemberships(name string, edges ...*GroupMembership) {
+	if e.Edges.namedGroupmemberships == nil {
+		e.Edges.namedGroupmemberships = make(map[string][]*GroupMembership)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedGroupmembership[name] = []*GroupMembership{}
+		e.Edges.namedGroupmemberships[name] = []*GroupMembership{}
 	} else {
-		e.Edges.namedGroupmembership[name] = append(e.Edges.namedGroupmembership[name], edges...)
+		e.Edges.namedGroupmemberships[name] = append(e.Edges.namedGroupmemberships[name], edges...)
 	}
 }
 
-// NamedSubscriber returns the Subscriber named value or an error if the edge was not
+// NamedSubscribers returns the Subscribers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedSubscriber(name string) ([]*Subscriber, error) {
-	if e.Edges.namedSubscriber == nil {
+func (e *Event) NamedSubscribers(name string) ([]*Subscriber, error) {
+	if e.Edges.namedSubscribers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedSubscriber[name]
+	nodes, ok := e.Edges.namedSubscribers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedSubscriber(name string, edges ...*Subscriber) {
-	if e.Edges.namedSubscriber == nil {
-		e.Edges.namedSubscriber = make(map[string][]*Subscriber)
+func (e *Event) appendNamedSubscribers(name string, edges ...*Subscriber) {
+	if e.Edges.namedSubscribers == nil {
+		e.Edges.namedSubscribers = make(map[string][]*Subscriber)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedSubscriber[name] = []*Subscriber{}
+		e.Edges.namedSubscribers[name] = []*Subscriber{}
 	} else {
-		e.Edges.namedSubscriber[name] = append(e.Edges.namedSubscriber[name], edges...)
+		e.Edges.namedSubscribers[name] = append(e.Edges.namedSubscribers[name], edges...)
 	}
 }
 
-// NamedFile returns the File named value or an error if the edge was not
+// NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedFile(name string) ([]*File, error) {
-	if e.Edges.namedFile == nil {
+func (e *Event) NamedFiles(name string) ([]*File, error) {
+	if e.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedFile[name]
+	nodes, ok := e.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedFile(name string, edges ...*File) {
-	if e.Edges.namedFile == nil {
-		e.Edges.namedFile = make(map[string][]*File)
+func (e *Event) appendNamedFiles(name string, edges ...*File) {
+	if e.Edges.namedFiles == nil {
+		e.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedFile[name] = []*File{}
+		e.Edges.namedFiles[name] = []*File{}
 	} else {
-		e.Edges.namedFile[name] = append(e.Edges.namedFile[name], edges...)
+		e.Edges.namedFiles[name] = append(e.Edges.namedFiles[name], edges...)
 	}
 }
 
-// NamedOrgsubscription returns the Orgsubscription named value or an error if the edge was not
+// NamedOrgSubscriptions returns the OrgSubscriptions named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedOrgsubscription(name string) ([]*OrgSubscription, error) {
-	if e.Edges.namedOrgsubscription == nil {
+func (e *Event) NamedOrgSubscriptions(name string) ([]*OrgSubscription, error) {
+	if e.Edges.namedOrgSubscriptions == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedOrgsubscription[name]
+	nodes, ok := e.Edges.namedOrgSubscriptions[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedOrgsubscription(name string, edges ...*OrgSubscription) {
-	if e.Edges.namedOrgsubscription == nil {
-		e.Edges.namedOrgsubscription = make(map[string][]*OrgSubscription)
+func (e *Event) appendNamedOrgSubscriptions(name string, edges ...*OrgSubscription) {
+	if e.Edges.namedOrgSubscriptions == nil {
+		e.Edges.namedOrgSubscriptions = make(map[string][]*OrgSubscription)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedOrgsubscription[name] = []*OrgSubscription{}
+		e.Edges.namedOrgSubscriptions[name] = []*OrgSubscription{}
 	} else {
-		e.Edges.namedOrgsubscription[name] = append(e.Edges.namedOrgsubscription[name], edges...)
+		e.Edges.namedOrgSubscriptions[name] = append(e.Edges.namedOrgSubscriptions[name], edges...)
 	}
 }
 

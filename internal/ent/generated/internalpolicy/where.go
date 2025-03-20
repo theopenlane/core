@@ -103,6 +103,11 @@ func DisplayID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldOwnerID, v))
@@ -131,11 +136,6 @@ func ApprovalRequired(v bool) predicate.InternalPolicy {
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
 func ReviewDue(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldReviewDue, v))
-}
-
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -388,16 +388,6 @@ func UpdatedByContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldDeletedAt, v))
@@ -586,6 +576,91 @@ func DisplayIDEqualFold(v string) predicate.InternalPolicy {
 // DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
 func DisplayIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldDisplayID, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldTags))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1026,81 +1101,6 @@ func ReviewFrequencyIsNil() predicate.InternalPolicy {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldReviewFrequency))
-}
-
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

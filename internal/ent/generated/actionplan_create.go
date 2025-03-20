@@ -117,6 +117,20 @@ func (apc *ActionPlanCreate) SetTags(s []string) *ActionPlanCreate {
 	return apc
 }
 
+// SetRevision sets the "revision" field.
+func (apc *ActionPlanCreate) SetRevision(s string) *ActionPlanCreate {
+	apc.mutation.SetRevision(s)
+	return apc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableRevision(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetRevision(*s)
+	}
+	return apc
+}
+
 // SetName sets the "name" field.
 func (apc *ActionPlanCreate) SetName(s string) *ActionPlanCreate {
 	apc.mutation.SetName(s)
@@ -203,20 +217,6 @@ func (apc *ActionPlanCreate) SetReviewFrequency(e enums.Frequency) *ActionPlanCr
 func (apc *ActionPlanCreate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanCreate {
 	if e != nil {
 		apc.SetReviewFrequency(*e)
-	}
-	return apc
-}
-
-// SetRevision sets the "revision" field.
-func (apc *ActionPlanCreate) SetRevision(s string) *ActionPlanCreate {
-	apc.mutation.SetRevision(s)
-	return apc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableRevision(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetRevision(*s)
 	}
 	return apc
 }
@@ -334,14 +334,14 @@ func (apc *ActionPlanCreate) SetOwner(o *Organization) *ActionPlanCreate {
 	return apc.SetOwnerID(o.ID)
 }
 
-// AddRiskIDs adds the "risk" edge to the Risk entity by IDs.
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (apc *ActionPlanCreate) AddRiskIDs(ids ...string) *ActionPlanCreate {
 	apc.mutation.AddRiskIDs(ids...)
 	return apc
 }
 
-// AddRisk adds the "risk" edges to the Risk entity.
-func (apc *ActionPlanCreate) AddRisk(r ...*Risk) *ActionPlanCreate {
+// AddRisks adds the "risks" edges to the Risk entity.
+func (apc *ActionPlanCreate) AddRisks(r ...*Risk) *ActionPlanCreate {
 	ids := make([]string, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -349,14 +349,14 @@ func (apc *ActionPlanCreate) AddRisk(r ...*Risk) *ActionPlanCreate {
 	return apc.AddRiskIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (apc *ActionPlanCreate) AddControlIDs(ids ...string) *ActionPlanCreate {
 	apc.mutation.AddControlIDs(ids...)
 	return apc
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (apc *ActionPlanCreate) AddControl(c ...*Control) *ActionPlanCreate {
+// AddControls adds the "controls" edges to the Control entity.
+func (apc *ActionPlanCreate) AddControls(c ...*Control) *ActionPlanCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -364,14 +364,14 @@ func (apc *ActionPlanCreate) AddControl(c ...*Control) *ActionPlanCreate {
 	return apc.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
+// AddUserIDs adds the "users" edge to the User entity by IDs.
 func (apc *ActionPlanCreate) AddUserIDs(ids ...string) *ActionPlanCreate {
 	apc.mutation.AddUserIDs(ids...)
 	return apc
 }
 
-// AddUser adds the "user" edges to the User entity.
-func (apc *ActionPlanCreate) AddUser(u ...*User) *ActionPlanCreate {
+// AddUsers adds the "users" edges to the User entity.
+func (apc *ActionPlanCreate) AddUsers(u ...*User) *ActionPlanCreate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
@@ -379,14 +379,14 @@ func (apc *ActionPlanCreate) AddUser(u ...*User) *ActionPlanCreate {
 	return apc.AddUserIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (apc *ActionPlanCreate) AddProgramIDs(ids ...string) *ActionPlanCreate {
 	apc.mutation.AddProgramIDs(ids...)
 	return apc
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (apc *ActionPlanCreate) AddProgram(p ...*Program) *ActionPlanCreate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (apc *ActionPlanCreate) AddPrograms(p ...*Program) *ActionPlanCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -449,6 +449,10 @@ func (apc *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultTags
 		apc.mutation.SetTags(v)
 	}
+	if _, ok := apc.mutation.Revision(); !ok {
+		v := actionplan.DefaultRevision
+		apc.mutation.SetRevision(v)
+	}
 	if _, ok := apc.mutation.Status(); !ok {
 		v := actionplan.DefaultStatus
 		apc.mutation.SetStatus(v)
@@ -465,10 +469,6 @@ func (apc *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultReviewFrequency
 		apc.mutation.SetReviewFrequency(v)
 	}
-	if _, ok := apc.mutation.Revision(); !ok {
-		v := actionplan.DefaultRevision
-		apc.mutation.SetRevision(v)
-	}
 	if _, ok := apc.mutation.ID(); !ok {
 		if actionplan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.DefaultID (forgotten import generated/runtime?)")
@@ -481,6 +481,11 @@ func (apc *ActionPlanCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (apc *ActionPlanCreate) check() error {
+	if v, ok := apc.mutation.Revision(); ok {
+		if err := actionplan.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
+		}
+	}
 	if _, ok := apc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlan.name"`)}
 	}
@@ -497,11 +502,6 @@ func (apc *ActionPlanCreate) check() error {
 	if v, ok := apc.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := apc.mutation.Revision(); ok {
-		if err := actionplan.RevisionValidator(v); err != nil {
-			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
 		}
 	}
 	if v, ok := apc.mutation.OwnerID(); ok {
@@ -578,6 +578,10 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := apc.mutation.Revision(); ok {
+		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := apc.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -605,10 +609,6 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplan.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := apc.mutation.Revision(); ok {
-		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	if value, ok := apc.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -676,12 +676,12 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := apc.mutation.RiskIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.RiskTable,
-			Columns: actionplan.RiskPrimaryKey,
+			Table:   actionplan.RisksTable,
+			Columns: actionplan.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
@@ -693,12 +693,12 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := apc.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ControlTable,
-			Columns: actionplan.ControlPrimaryKey,
+			Table:   actionplan.ControlsTable,
+			Columns: actionplan.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -710,12 +710,12 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := apc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.UserTable,
-			Columns: actionplan.UserPrimaryKey,
+			Table:   actionplan.UsersTable,
+			Columns: actionplan.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -727,12 +727,12 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := apc.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   actionplan.ProgramTable,
-			Columns: actionplan.ProgramPrimaryKey,
+			Table:   actionplan.ProgramsTable,
+			Columns: actionplan.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

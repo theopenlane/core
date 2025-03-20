@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -70,8 +71,8 @@ func (suite *GraphTestSuite) TestQueryEntityType() {
 		})
 	}
 
-	// delete created org and entityType
-	(&EntityTypeCleanup{client: suite.client, ID: entityType.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created entityType
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entityType.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestQueryEntityTypes() {

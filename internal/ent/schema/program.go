@@ -7,21 +7,36 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 )
 
 // Program holds the schema definition for the Program entity
 type Program struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaProgram = "program"
+
+func (Program) Name() string {
+	return SchemaProgram
+}
+
+func (Program) GetType() any {
+	return Program.Type
+}
+
+func (Program) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaProgram)
 }
 
 // Fields of the Program
@@ -73,45 +88,44 @@ func (Program) Fields() []ent.Field {
 
 // Mixin of the Program
 func (Program) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.NewIDMixinWithPrefixedID("PRG"),
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		// all programs must be associated to an organization
-		NewOrgOwnMixinWithRef("programs"),
-		// add group permissions to the program
-		NewGroupPermissionsMixin(true),
-	}
+	return mixinConfig{
+		prefix: "PRG",
+		additionalMixins: []ent.Mixin{
+			// all programs must be associated to an organization
+			NewOrgOwnMixinWithRef("programs"),
+			// add group permissions to the program
+			NewGroupPermissionsMixin(true),
+		},
+	}.getMixins()
 }
 
 // Edges of the Program
-func (Program) Edges() []ent.Edge {
+func (p Program) Edges() []ent.Edge {
 	return []ent.Edge{
 		// programs can have 1:many controls
-		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Control{}),
 		// programs can have 1:many subcontrols
-		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Subcontrol{}),
 		// programs can have 1:many control objectives
-		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, ControlObjective{}),
 		// programs can have 1:many associated policies
-		edge.To("internal_policies", InternalPolicy.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, InternalPolicy{}),
 		// programs can have 1:many associated procedures
-		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Procedure{}),
 		// programs can have 1:many associated risks
-		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Risk{}),
 		// programs can have 1:many associated tasks
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Task{}),
 		// programs can have 1:many associated notes (comments)
-		edge.To("notes", Note.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Note{}),
 		// programs can have 1:many associated files
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, File{}),
 		// programs can be many:many with evidence
-		edge.To("evidence", Evidence.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Evidence{}),
 		// programs can have 1:many associated narratives
-		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(p, Narrative{}),
 		// programs can have 1:many associated action plans
-		edge.To("action_plans", ActionPlan.Type),
+		defaultEdgeToWithPagination(p, ActionPlan{}),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge
@@ -124,10 +138,6 @@ func (Program) Edges() []ent.Edge {
 // Annotations of the Program
 func (Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

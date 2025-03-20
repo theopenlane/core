@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Evidence_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Evidence_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Evidence_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
@@ -173,12 +173,12 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Evidence_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Evidence_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Evidence_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
@@ -315,12 +315,12 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Evidence_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Evidence_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Evidence_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Evidence_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
@@ -25,7 +26,23 @@ import (
 
 // PasswordResetToken holds the schema definition for the PasswordResetToken entity
 type PasswordResetToken struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaPasswordResetToken = "password_reset_token"
+
+func (PasswordResetToken) Name() string {
+	return SchemaPasswordResetToken
+}
+
+func (PasswordResetToken) GetType() any {
+	return PasswordResetToken.Type
+}
+
+func (PasswordResetToken) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaPasswordResetToken)
 }
 
 // Fields of the PasswordResetToken
@@ -53,13 +70,13 @@ func (PasswordResetToken) Fields() []ent.Field {
 }
 
 // Mixin of the PasswordResetToken
-func (PasswordResetToken) Mixin() []ent.Mixin {
+func (p PasswordResetToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		UserOwnedMixin{
-			Ref:               "password_reset_tokens",
+			Ref:               p.PluralName(),
 			SkipOASGeneration: true,
 			SkipInterceptor:   interceptors.SkipAll,
 		},

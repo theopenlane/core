@@ -32,14 +32,16 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
+	// FieldTags holds the string denoting the tags field in the database.
+	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -56,8 +58,6 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// Table holds the table name of the procedurehistory in the database.
 	Table = "procedure_history"
 )
@@ -72,10 +72,11 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldTags,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
+	FieldTags,
+	FieldRevision,
 	FieldOwnerID,
 	FieldName,
 	FieldStatus,
@@ -84,7 +85,6 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
-	FieldRevision,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -114,12 +114,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
 	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
-	// DefaultRevision holds the default value on creation for the "revision" field.
-	DefaultRevision string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -216,6 +216,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -254,11 +259,6 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 var (

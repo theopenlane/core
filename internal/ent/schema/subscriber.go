@@ -8,19 +8,17 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -28,7 +26,23 @@ import (
 
 // Subscriber holds the schema definition for the Subscriber entity
 type Subscriber struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaSubscriber = "subscriber"
+
+func (Subscriber) Name() string {
+	return SchemaSubscriber
+}
+
+func (Subscriber) GetType() any {
+	return Subscriber.Type
+}
+
+func (Subscriber) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaSubscriber)
 }
 
 // Fields of the Subscriber
@@ -82,28 +96,24 @@ func (Subscriber) Fields() []ent.Field {
 }
 
 // Mixin of the Subscriber
-func (Subscriber) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		NewOrgOwnedMixin(
-			ObjectOwnedMixin{
-				Ref: "subscribers",
+func (s Subscriber) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnedMixin(ObjectOwnedMixin{
+				Ref: s.PluralName(),
 				SkipTokenType: []token.PrivacyToken{
 					&token.VerifyToken{},
 					&token.SignUpToken{},
 				},
-			},
-		),
-	}
+			}),
+		},
+	}.getMixins()
 }
 
 // Edges of the Subscriber
-func (Subscriber) Edges() []ent.Edge {
+func (s Subscriber) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(s, Event{}),
 	}
 }
 
@@ -127,10 +137,6 @@ func (Subscriber) Indexes() []ent.Index {
 // Annotations of the Subscriber
 func (Subscriber) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,

@@ -88,11 +88,6 @@ func UpdatedBy(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
-func DisplayID(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldDisplayID, v))
-}
-
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDeletedAt, v))
@@ -101,6 +96,11 @@ func DeletedAt(v time.Time) predicate.Task {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldDisplayID, v))
 }
 
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
@@ -398,71 +398,6 @@ func UpdatedByContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// DisplayIDEQ applies the EQ predicate on the "display_id" field.
-func DisplayIDEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldDisplayID, v))
-}
-
-// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
-func DisplayIDNEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldNEQ(FieldDisplayID, v))
-}
-
-// DisplayIDIn applies the In predicate on the "display_id" field.
-func DisplayIDIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldIn(FieldDisplayID, vs...))
-}
-
-// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
-func DisplayIDNotIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldNotIn(FieldDisplayID, vs...))
-}
-
-// DisplayIDGT applies the GT predicate on the "display_id" field.
-func DisplayIDGT(v string) predicate.Task {
-	return predicate.Task(sql.FieldGT(FieldDisplayID, v))
-}
-
-// DisplayIDGTE applies the GTE predicate on the "display_id" field.
-func DisplayIDGTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldGTE(FieldDisplayID, v))
-}
-
-// DisplayIDLT applies the LT predicate on the "display_id" field.
-func DisplayIDLT(v string) predicate.Task {
-	return predicate.Task(sql.FieldLT(FieldDisplayID, v))
-}
-
-// DisplayIDLTE applies the LTE predicate on the "display_id" field.
-func DisplayIDLTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldLTE(FieldDisplayID, v))
-}
-
-// DisplayIDContains applies the Contains predicate on the "display_id" field.
-func DisplayIDContains(v string) predicate.Task {
-	return predicate.Task(sql.FieldContains(FieldDisplayID, v))
-}
-
-// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
-func DisplayIDHasPrefix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasPrefix(FieldDisplayID, v))
-}
-
-// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
-func DisplayIDHasSuffix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasSuffix(FieldDisplayID, v))
-}
-
-// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
-func DisplayIDEqualFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldEqualFold(FieldDisplayID, v))
-}
-
-// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
-func DisplayIDContainsFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldContainsFold(FieldDisplayID, v))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDeletedAt, v))
@@ -586,6 +521,71 @@ func DeletedByEqualFold(v string) predicate.Task {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldDisplayID, v))
+}
+
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldDisplayID, v))
+}
+
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldDisplayID, v))
+}
+
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldDisplayID, v))
+}
+
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldDisplayID, v))
+}
+
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldDisplayID, v))
+}
+
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldDisplayID, v))
+}
+
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldDisplayID, v))
+}
+
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldDisplayID, v))
+}
+
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldDisplayID, v))
+}
+
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.
@@ -1359,12 +1359,12 @@ func HasCommentsWith(preds ...predicate.Note) predicate.Task {
 	})
 }
 
-// HasGroup applies the HasEdge predicate on the "group" edge.
-func HasGroup() predicate.Task {
+// HasGroups applies the HasEdge predicate on the "groups" edge.
+func HasGroups() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, GroupsTable, GroupsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
@@ -1373,10 +1373,10 @@ func HasGroup() predicate.Task {
 	})
 }
 
-// HasGroupWith applies the HasEdge predicate on the "group" edge with a given conditions (other predicates).
-func HasGroupWith(preds ...predicate.Group) predicate.Task {
+// HasGroupsWith applies the HasEdge predicate on the "groups" edge with a given conditions (other predicates).
+func HasGroupsWith(preds ...predicate.Group) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newGroupStep()
+		step := newGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.GroupTasks
@@ -1388,12 +1388,12 @@ func HasGroupWith(preds ...predicate.Group) predicate.Task {
 	})
 }
 
-// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
-func HasInternalPolicy() predicate.Task {
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -1402,10 +1402,10 @@ func HasInternalPolicy() predicate.Task {
 	})
 }
 
-// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
-func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Task {
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newInternalPolicyStep()
+		step := newInternalPoliciesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyTasks
@@ -1417,12 +1417,12 @@ func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Task {
 	})
 }
 
-// HasProcedure applies the HasEdge predicate on the "procedure" edge.
-func HasProcedure() predicate.Task {
+// HasProcedures applies the HasEdge predicate on the "procedures" edge.
+func HasProcedures() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Procedure
@@ -1431,10 +1431,10 @@ func HasProcedure() predicate.Task {
 	})
 }
 
-// HasProcedureWith applies the HasEdge predicate on the "procedure" edge with a given conditions (other predicates).
-func HasProcedureWith(preds ...predicate.Procedure) predicate.Task {
+// HasProceduresWith applies the HasEdge predicate on the "procedures" edge with a given conditions (other predicates).
+func HasProceduresWith(preds ...predicate.Procedure) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newProcedureStep()
+		step := newProceduresStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureTasks
@@ -1446,12 +1446,12 @@ func HasProcedureWith(preds ...predicate.Procedure) predicate.Task {
 	})
 }
 
-// HasControl applies the HasEdge predicate on the "control" edge.
-func HasControl() predicate.Task {
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
@@ -1460,10 +1460,10 @@ func HasControl() predicate.Task {
 	})
 }
 
-// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
-func HasControlWith(preds ...predicate.Control) predicate.Task {
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newControlStep()
+		step := newControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlTasks
@@ -1475,41 +1475,12 @@ func HasControlWith(preds ...predicate.Control) predicate.Task {
 	})
 }
 
-// HasControlObjective applies the HasEdge predicate on the "control_objective" edge.
-func HasControlObjective() predicate.Task {
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveTable, ControlObjectivePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasControlObjectiveWith applies the HasEdge predicate on the "control_objective" edge with a given conditions (other predicates).
-func HasControlObjectiveWith(preds ...predicate.ControlObjective) predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		step := newControlObjectiveStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasSubcontrol applies the HasEdge predicate on the "subcontrol" edge.
-func HasSubcontrol() predicate.Task {
-	return predicate.Task(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolTable, SubcontrolPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
@@ -1518,10 +1489,10 @@ func HasSubcontrol() predicate.Task {
 	})
 }
 
-// HasSubcontrolWith applies the HasEdge predicate on the "subcontrol" edge with a given conditions (other predicates).
-func HasSubcontrolWith(preds ...predicate.Subcontrol) predicate.Task {
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newSubcontrolStep()
+		step := newSubcontrolsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolTasks
@@ -1533,12 +1504,41 @@ func HasSubcontrolWith(preds ...predicate.Subcontrol) predicate.Task {
 	})
 }
 
-// HasProgram applies the HasEdge predicate on the "program" edge.
-func HasProgram() predicate.Task {
+// HasControlObjectives applies the HasEdge predicate on the "control_objectives" edge.
+func HasControlObjectives() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlObjectivesWith applies the HasEdge predicate on the "control_objectives" edge with a given conditions (other predicates).
+func HasControlObjectivesWith(preds ...predicate.ControlObjective) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newControlObjectivesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
@@ -1547,10 +1547,10 @@ func HasProgram() predicate.Task {
 	})
 }
 
-// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
-func HasProgramWith(preds ...predicate.Program) predicate.Task {
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newProgramStep()
+		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramTasks

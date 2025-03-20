@@ -29,12 +29,12 @@ type Task struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -73,20 +73,20 @@ type TaskEdges struct {
 	Assignee *User `json:"assignee,omitempty"`
 	// conversations related to the task
 	Comments []*Note `json:"comments,omitempty"`
-	// Group holds the value of the group edge.
-	Group []*Group `json:"group,omitempty"`
-	// InternalPolicy holds the value of the internal_policy edge.
-	InternalPolicy []*InternalPolicy `json:"internal_policy,omitempty"`
-	// Procedure holds the value of the procedure edge.
-	Procedure []*Procedure `json:"procedure,omitempty"`
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
-	// ControlObjective holds the value of the control_objective edge.
-	ControlObjective []*ControlObjective `json:"control_objective,omitempty"`
-	// Subcontrol holds the value of the subcontrol edge.
-	Subcontrol []*Subcontrol `json:"subcontrol,omitempty"`
-	// Program holds the value of the program edge.
-	Program []*Program `json:"program,omitempty"`
+	// Groups holds the value of the groups edge.
+	Groups []*Group `json:"groups,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// Procedures holds the value of the procedures edge.
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -95,15 +95,15 @@ type TaskEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [12]map[string]int
 
-	namedComments         map[string][]*Note
-	namedGroup            map[string][]*Group
-	namedInternalPolicy   map[string][]*InternalPolicy
-	namedProcedure        map[string][]*Procedure
-	namedControl          map[string][]*Control
-	namedControlObjective map[string][]*ControlObjective
-	namedSubcontrol       map[string][]*Subcontrol
-	namedProgram          map[string][]*Program
-	namedEvidence         map[string][]*Evidence
+	namedComments          map[string][]*Note
+	namedGroups            map[string][]*Group
+	namedInternalPolicies  map[string][]*InternalPolicy
+	namedProcedures        map[string][]*Procedure
+	namedControls          map[string][]*Control
+	namedSubcontrols       map[string][]*Subcontrol
+	namedControlObjectives map[string][]*ControlObjective
+	namedPrograms          map[string][]*Program
+	namedEvidence          map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -148,67 +148,67 @@ func (e TaskEdges) CommentsOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "comments"}
 }
 
-// GroupOrErr returns the Group value or an error if the edge
+// GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) GroupOrErr() ([]*Group, error) {
+func (e TaskEdges) GroupsOrErr() ([]*Group, error) {
 	if e.loadedTypes[4] {
-		return e.Group, nil
+		return e.Groups, nil
 	}
-	return nil, &NotLoadedError{edge: "group"}
+	return nil, &NotLoadedError{edge: "groups"}
 }
 
-// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
+func (e TaskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[5] {
-		return e.InternalPolicy, nil
+		return e.InternalPolicies, nil
 	}
-	return nil, &NotLoadedError{edge: "internal_policy"}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
-// ProcedureOrErr returns the Procedure value or an error if the edge
+// ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
+func (e TaskEdges) ProceduresOrErr() ([]*Procedure, error) {
 	if e.loadedTypes[6] {
-		return e.Procedure, nil
+		return e.Procedures, nil
 	}
-	return nil, &NotLoadedError{edge: "procedure"}
+	return nil, &NotLoadedError{edge: "procedures"}
 }
 
-// ControlOrErr returns the Control value or an error if the edge
+// ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) ControlOrErr() ([]*Control, error) {
+func (e TaskEdges) ControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[7] {
-		return e.Control, nil
+		return e.Controls, nil
 	}
-	return nil, &NotLoadedError{edge: "control"}
+	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
+func (e TaskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	if e.loadedTypes[8] {
-		return e.ControlObjective, nil
+		return e.Subcontrols, nil
 	}
-	return nil, &NotLoadedError{edge: "control_objective"}
+	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
-// SubcontrolOrErr returns the Subcontrol value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
+func (e TaskEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[9] {
-		return e.Subcontrol, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "subcontrol"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
-// ProgramOrErr returns the Program value or an error if the edge
+// ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
+func (e TaskEdges) ProgramsOrErr() ([]*Program, error) {
 	if e.loadedTypes[10] {
-		return e.Program, nil
+		return e.Programs, nil
 	}
-	return nil, &NotLoadedError{edge: "program"}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -227,7 +227,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldTags:
 			values[i] = new([]byte)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDisplayID, task.FieldDeletedBy, task.FieldOwnerID, task.FieldTitle, task.FieldDescription, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTitle, task.FieldDescription, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt, task.FieldDue, task.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -276,12 +276,6 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.UpdatedBy = value.String
 			}
-		case task.FieldDisplayID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_id", values[i])
-			} else if value.Valid {
-				t.DisplayID = value.String
-			}
 		case task.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -293,6 +287,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				t.DeletedBy = value.String
+			}
+		case task.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				t.DisplayID = value.String
 			}
 		case task.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -395,39 +395,39 @@ func (t *Task) QueryComments() *NoteQuery {
 	return NewTaskClient(t.config).QueryComments(t)
 }
 
-// QueryGroup queries the "group" edge of the Task entity.
-func (t *Task) QueryGroup() *GroupQuery {
-	return NewTaskClient(t.config).QueryGroup(t)
+// QueryGroups queries the "groups" edge of the Task entity.
+func (t *Task) QueryGroups() *GroupQuery {
+	return NewTaskClient(t.config).QueryGroups(t)
 }
 
-// QueryInternalPolicy queries the "internal_policy" edge of the Task entity.
-func (t *Task) QueryInternalPolicy() *InternalPolicyQuery {
-	return NewTaskClient(t.config).QueryInternalPolicy(t)
+// QueryInternalPolicies queries the "internal_policies" edge of the Task entity.
+func (t *Task) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewTaskClient(t.config).QueryInternalPolicies(t)
 }
 
-// QueryProcedure queries the "procedure" edge of the Task entity.
-func (t *Task) QueryProcedure() *ProcedureQuery {
-	return NewTaskClient(t.config).QueryProcedure(t)
+// QueryProcedures queries the "procedures" edge of the Task entity.
+func (t *Task) QueryProcedures() *ProcedureQuery {
+	return NewTaskClient(t.config).QueryProcedures(t)
 }
 
-// QueryControl queries the "control" edge of the Task entity.
-func (t *Task) QueryControl() *ControlQuery {
-	return NewTaskClient(t.config).QueryControl(t)
+// QueryControls queries the "controls" edge of the Task entity.
+func (t *Task) QueryControls() *ControlQuery {
+	return NewTaskClient(t.config).QueryControls(t)
 }
 
-// QueryControlObjective queries the "control_objective" edge of the Task entity.
-func (t *Task) QueryControlObjective() *ControlObjectiveQuery {
-	return NewTaskClient(t.config).QueryControlObjective(t)
+// QuerySubcontrols queries the "subcontrols" edge of the Task entity.
+func (t *Task) QuerySubcontrols() *SubcontrolQuery {
+	return NewTaskClient(t.config).QuerySubcontrols(t)
 }
 
-// QuerySubcontrol queries the "subcontrol" edge of the Task entity.
-func (t *Task) QuerySubcontrol() *SubcontrolQuery {
-	return NewTaskClient(t.config).QuerySubcontrol(t)
+// QueryControlObjectives queries the "control_objectives" edge of the Task entity.
+func (t *Task) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewTaskClient(t.config).QueryControlObjectives(t)
 }
 
-// QueryProgram queries the "program" edge of the Task entity.
-func (t *Task) QueryProgram() *ProgramQuery {
-	return NewTaskClient(t.config).QueryProgram(t)
+// QueryPrograms queries the "programs" edge of the Task entity.
+func (t *Task) QueryPrograms() *ProgramQuery {
+	return NewTaskClient(t.config).QueryPrograms(t)
 }
 
 // QueryEvidence queries the "evidence" edge of the Task entity.
@@ -470,14 +470,14 @@ func (t *Task) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(t.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("display_id=")
-	builder.WriteString(t.DisplayID)
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(t.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(t.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(t.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", t.Tags))
@@ -539,171 +539,171 @@ func (t *Task) appendNamedComments(name string, edges ...*Note) {
 	}
 }
 
-// NamedGroup returns the Group named value or an error if the edge was not
+// NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedGroup(name string) ([]*Group, error) {
-	if t.Edges.namedGroup == nil {
+func (t *Task) NamedGroups(name string) ([]*Group, error) {
+	if t.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedGroup[name]
+	nodes, ok := t.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedGroup(name string, edges ...*Group) {
-	if t.Edges.namedGroup == nil {
-		t.Edges.namedGroup = make(map[string][]*Group)
+func (t *Task) appendNamedGroups(name string, edges ...*Group) {
+	if t.Edges.namedGroups == nil {
+		t.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedGroup[name] = []*Group{}
+		t.Edges.namedGroups[name] = []*Group{}
 	} else {
-		t.Edges.namedGroup[name] = append(t.Edges.namedGroup[name], edges...)
+		t.Edges.namedGroups[name] = append(t.Edges.namedGroups[name], edges...)
 	}
 }
 
-// NamedInternalPolicy returns the InternalPolicy named value or an error if the edge was not
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedInternalPolicy(name string) ([]*InternalPolicy, error) {
-	if t.Edges.namedInternalPolicy == nil {
+func (t *Task) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if t.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedInternalPolicy[name]
+	nodes, ok := t.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedInternalPolicy(name string, edges ...*InternalPolicy) {
-	if t.Edges.namedInternalPolicy == nil {
-		t.Edges.namedInternalPolicy = make(map[string][]*InternalPolicy)
+func (t *Task) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if t.Edges.namedInternalPolicies == nil {
+		t.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedInternalPolicy[name] = []*InternalPolicy{}
+		t.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		t.Edges.namedInternalPolicy[name] = append(t.Edges.namedInternalPolicy[name], edges...)
+		t.Edges.namedInternalPolicies[name] = append(t.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
-// NamedProcedure returns the Procedure named value or an error if the edge was not
+// NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedProcedure(name string) ([]*Procedure, error) {
-	if t.Edges.namedProcedure == nil {
+func (t *Task) NamedProcedures(name string) ([]*Procedure, error) {
+	if t.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedProcedure[name]
+	nodes, ok := t.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedProcedure(name string, edges ...*Procedure) {
-	if t.Edges.namedProcedure == nil {
-		t.Edges.namedProcedure = make(map[string][]*Procedure)
+func (t *Task) appendNamedProcedures(name string, edges ...*Procedure) {
+	if t.Edges.namedProcedures == nil {
+		t.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedProcedure[name] = []*Procedure{}
+		t.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		t.Edges.namedProcedure[name] = append(t.Edges.namedProcedure[name], edges...)
+		t.Edges.namedProcedures[name] = append(t.Edges.namedProcedures[name], edges...)
 	}
 }
 
-// NamedControl returns the Control named value or an error if the edge was not
+// NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedControl(name string) ([]*Control, error) {
-	if t.Edges.namedControl == nil {
+func (t *Task) NamedControls(name string) ([]*Control, error) {
+	if t.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedControl[name]
+	nodes, ok := t.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedControl(name string, edges ...*Control) {
-	if t.Edges.namedControl == nil {
-		t.Edges.namedControl = make(map[string][]*Control)
+func (t *Task) appendNamedControls(name string, edges ...*Control) {
+	if t.Edges.namedControls == nil {
+		t.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedControl[name] = []*Control{}
+		t.Edges.namedControls[name] = []*Control{}
 	} else {
-		t.Edges.namedControl[name] = append(t.Edges.namedControl[name], edges...)
+		t.Edges.namedControls[name] = append(t.Edges.namedControls[name], edges...)
 	}
 }
 
-// NamedControlObjective returns the ControlObjective named value or an error if the edge was not
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedControlObjective(name string) ([]*ControlObjective, error) {
-	if t.Edges.namedControlObjective == nil {
+func (t *Task) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if t.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedControlObjective[name]
+	nodes, ok := t.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedControlObjective(name string, edges ...*ControlObjective) {
-	if t.Edges.namedControlObjective == nil {
-		t.Edges.namedControlObjective = make(map[string][]*ControlObjective)
+func (t *Task) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if t.Edges.namedSubcontrols == nil {
+		t.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedControlObjective[name] = []*ControlObjective{}
+		t.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		t.Edges.namedControlObjective[name] = append(t.Edges.namedControlObjective[name], edges...)
+		t.Edges.namedSubcontrols[name] = append(t.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
-// NamedSubcontrol returns the Subcontrol named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedSubcontrol(name string) ([]*Subcontrol, error) {
-	if t.Edges.namedSubcontrol == nil {
+func (t *Task) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if t.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedSubcontrol[name]
+	nodes, ok := t.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedSubcontrol(name string, edges ...*Subcontrol) {
-	if t.Edges.namedSubcontrol == nil {
-		t.Edges.namedSubcontrol = make(map[string][]*Subcontrol)
+func (t *Task) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if t.Edges.namedControlObjectives == nil {
+		t.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedSubcontrol[name] = []*Subcontrol{}
+		t.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		t.Edges.namedSubcontrol[name] = append(t.Edges.namedSubcontrol[name], edges...)
+		t.Edges.namedControlObjectives[name] = append(t.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
-// NamedProgram returns the Program named value or an error if the edge was not
+// NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedProgram(name string) ([]*Program, error) {
-	if t.Edges.namedProgram == nil {
+func (t *Task) NamedPrograms(name string) ([]*Program, error) {
+	if t.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedProgram[name]
+	nodes, ok := t.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedProgram(name string, edges ...*Program) {
-	if t.Edges.namedProgram == nil {
-		t.Edges.namedProgram = make(map[string][]*Program)
+func (t *Task) appendNamedPrograms(name string, edges ...*Program) {
+	if t.Edges.namedPrograms == nil {
+		t.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedProgram[name] = []*Program{}
+		t.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		t.Edges.namedProgram[name] = append(t.Edges.namedProgram[name], edges...)
+		t.Edges.namedPrograms[name] = append(t.Edges.namedPrograms[name], edges...)
 	}
 }
 

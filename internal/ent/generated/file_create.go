@@ -330,14 +330,14 @@ func (fc *FileCreate) AddOrganization(o ...*Organization) *FileCreate {
 	return fc.AddOrganizationIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (fc *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
 	fc.mutation.AddGroupIDs(ids...)
 	return fc
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (fc *FileCreate) AddGroup(g ...*Group) *FileCreate {
+// AddGroups adds the "groups" edges to the Group entity.
+func (fc *FileCreate) AddGroups(g ...*Group) *FileCreate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
@@ -420,34 +420,19 @@ func (fc *FileCreate) AddTemplate(t ...*Template) *FileCreate {
 	return fc.AddTemplateIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (fc *FileCreate) AddDocumentDatumIDs(ids ...string) *FileCreate {
-	fc.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "document" edge to the DocumentData entity by IDs.
+func (fc *FileCreate) AddDocumentIDs(ids ...string) *FileCreate {
+	fc.mutation.AddDocumentIDs(ids...)
 	return fc
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (fc *FileCreate) AddDocumentData(d ...*DocumentData) *FileCreate {
+// AddDocument adds the "document" edges to the DocumentData entity.
+func (fc *FileCreate) AddDocument(d ...*DocumentData) *FileCreate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fc.AddDocumentDatumIDs(ids...)
-}
-
-// AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (fc *FileCreate) AddEventIDs(ids ...string) *FileCreate {
-	fc.mutation.AddEventIDs(ids...)
-	return fc
-}
-
-// AddEvents adds the "events" edges to the Event entity.
-func (fc *FileCreate) AddEvents(e ...*Event) *FileCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fc.AddEventIDs(ids...)
+	return fc.AddDocumentIDs(ids...)
 }
 
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
@@ -478,6 +463,21 @@ func (fc *FileCreate) AddEvidence(e ...*Evidence) *FileCreate {
 		ids[i] = e[i].ID
 	}
 	return fc.AddEvidenceIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fc *FileCreate) AddEventIDs(ids ...string) *FileCreate {
+	fc.mutation.AddEventIDs(ids...)
+	return fc
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fc *FileCreate) AddEvents(e ...*Event) *FileCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddEventIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -720,12 +720,12 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.GroupsTable,
+			Columns: file.GroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -822,35 +822,18 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.DocumentDataIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.DocumentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentDataTable,
-			Columns: file.DocumentDataPrimaryKey,
+			Table:   file.DocumentTable,
+			Columns: file.DocumentPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fc.schemaConfig.DocumentDataFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := fc.mutation.EventsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   file.EventsTable,
-			Columns: file.EventsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fc.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -885,6 +868,23 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = fc.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

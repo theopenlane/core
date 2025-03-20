@@ -172,6 +172,7 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 // CreateActionPlanInput represents a mutation input for creating actionplans.
 type CreateActionPlanInput struct {
 	Tags             []string
+	Revision         *string
 	Name             string
 	Status           *enums.DocumentStatus
 	ActionPlanType   *string
@@ -179,7 +180,6 @@ type CreateActionPlanInput struct {
 	ApprovalRequired *bool
 	ReviewDue        *time.Time
 	ReviewFrequency  *enums.Frequency
-	Revision         *string
 	DueDate          *time.Time
 	Priority         *enums.Priority
 	Source           *string
@@ -196,6 +196,9 @@ type CreateActionPlanInput struct {
 func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -215,9 +218,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
@@ -262,6 +262,8 @@ type UpdateActionPlanInput struct {
 	ClearTags             bool
 	Tags                  []string
 	AppendTags            []string
+	ClearRevision         bool
+	Revision              *string
 	Name                  *string
 	ClearStatus           bool
 	Status                *enums.DocumentStatus
@@ -275,8 +277,6 @@ type UpdateActionPlanInput struct {
 	ReviewDue             *time.Time
 	ClearReviewFrequency  bool
 	ReviewFrequency       *enums.Frequency
-	ClearRevision         bool
-	Revision              *string
 	ClearDueDate          bool
 	DueDate               *time.Time
 	ClearPriority         bool
@@ -289,16 +289,16 @@ type UpdateActionPlanInput struct {
 	DelegateID            *string
 	ClearOwner            bool
 	OwnerID               *string
-	ClearRisk             bool
+	ClearRisks            bool
 	AddRiskIDs            []string
 	RemoveRiskIDs         []string
-	ClearControl          bool
+	ClearControls         bool
 	AddControlIDs         []string
 	RemoveControlIDs      []string
-	ClearUser             bool
+	ClearUsers            bool
 	AddUserIDs            []string
 	RemoveUserIDs         []string
-	ClearProgram          bool
+	ClearPrograms         bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
 }
@@ -313,6 +313,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -353,12 +359,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
 	}
-	if i.ClearRevision {
-		m.ClearRevision()
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
-	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
 	}
@@ -395,8 +395,8 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if i.ClearRisk {
-		m.ClearRisk()
+	if i.ClearRisks {
+		m.ClearRisks()
 	}
 	if v := i.AddRiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
@@ -404,8 +404,8 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if i.ClearControls {
+		m.ClearControls()
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -413,8 +413,8 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
-	if i.ClearUser {
-		m.ClearUser()
+	if i.ClearUsers {
+		m.ClearUsers()
 	}
 	if v := i.AddUserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -422,8 +422,8 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
 	}
-	if i.ClearProgram {
-		m.ClearProgram()
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
 	if v := i.AddProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -1273,8 +1273,8 @@ func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationI
 
 // CreateControlObjectiveInput represents a mutation input for creating controlobjectives.
 type CreateControlObjectiveInput struct {
-	Revision             *string
 	Tags                 []string
+	Revision             *string
 	Name                 string
 	DesiredOutcome       *string
 	Status               *string
@@ -1299,11 +1299,11 @@ type CreateControlObjectiveInput struct {
 
 // Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
 func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
-	}
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.DesiredOutcome; v != nil {
@@ -1373,11 +1373,11 @@ func (c *ControlObjectiveCreate) SetInput(i CreateControlObjectiveInput) *Contro
 
 // UpdateControlObjectiveInput represents a mutation input for updating controlobjectives.
 type UpdateControlObjectiveInput struct {
-	ClearRevision             bool
-	Revision                  *string
 	ClearTags                 bool
 	Tags                      []string
 	AppendTags                []string
+	ClearRevision             bool
+	Revision                  *string
 	Name                      *string
 	ClearDesiredOutcome       bool
 	DesiredOutcome            *string
@@ -1431,12 +1431,6 @@ type UpdateControlObjectiveInput struct {
 
 // Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
 func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
-	if i.ClearRevision {
-		m.ClearRevision()
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
-	}
 	if i.ClearTags {
 		m.ClearTags()
 	}
@@ -1445,6 +1439,12 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -1650,7 +1650,7 @@ type UpdateDocumentDataInput struct {
 	AppendTags      []string
 	Data            map[string]interface{}
 	TemplateID      *string
-	ClearEntity     bool
+	ClearEntities   bool
 	AddEntityIDs    []string
 	RemoveEntityIDs []string
 	ClearFiles      bool
@@ -1675,8 +1675,8 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
 	}
-	if i.ClearEntity {
-		m.ClearEntity()
+	if i.ClearEntities {
+		m.ClearEntities()
 	}
 	if v := i.AddEntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
@@ -2006,10 +2006,10 @@ type CreateEventInput struct {
 	OrganizationIDs        []string
 	InviteIDs              []string
 	PersonalAccessTokenIDs []string
-	HushIDs                []string
+	SecretIDs              []string
 	SubscriberIDs          []string
 	FileIDs                []string
-	OrgsubscriptionIDs     []string
+	OrgSubscriptionIDs     []string
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -2045,8 +2045,8 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
 	}
-	if v := i.HushIDs; len(v) > 0 {
-		m.AddHushIDs(v...)
+	if v := i.SecretIDs; len(v) > 0 {
+		m.AddSecretIDs(v...)
 	}
 	if v := i.SubscriberIDs; len(v) > 0 {
 		m.AddSubscriberIDs(v...)
@@ -2054,8 +2054,8 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
-	if v := i.OrgsubscriptionIDs; len(v) > 0 {
-		m.AddOrgsubscriptionIDs(v...)
+	if v := i.OrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
 	}
 }
 
@@ -2077,36 +2077,36 @@ type UpdateEventInput struct {
 	EventType                    *string
 	ClearMetadata                bool
 	Metadata                     map[string]interface{}
-	ClearUser                    bool
+	ClearUsers                   bool
 	AddUserIDs                   []string
 	RemoveUserIDs                []string
-	ClearGroup                   bool
+	ClearGroups                  bool
 	AddGroupIDs                  []string
 	RemoveGroupIDs               []string
-	ClearIntegration             bool
+	ClearIntegrations            bool
 	AddIntegrationIDs            []string
 	RemoveIntegrationIDs         []string
-	ClearOrganization            bool
+	ClearOrganizations           bool
 	AddOrganizationIDs           []string
 	RemoveOrganizationIDs        []string
-	ClearInvite                  bool
+	ClearInvites                 bool
 	AddInviteIDs                 []string
 	RemoveInviteIDs              []string
-	ClearPersonalAccessToken     bool
+	ClearPersonalAccessTokens    bool
 	AddPersonalAccessTokenIDs    []string
 	RemovePersonalAccessTokenIDs []string
-	ClearHush                    bool
-	AddHushIDs                   []string
-	RemoveHushIDs                []string
-	ClearSubscriber              bool
+	ClearSecrets                 bool
+	AddSecretIDs                 []string
+	RemoveSecretIDs              []string
+	ClearSubscribers             bool
 	AddSubscriberIDs             []string
 	RemoveSubscriberIDs          []string
-	ClearFile                    bool
+	ClearFiles                   bool
 	AddFileIDs                   []string
 	RemoveFileIDs                []string
-	ClearOrgsubscription         bool
-	AddOrgsubscriptionIDs        []string
-	RemoveOrgsubscriptionIDs     []string
+	ClearOrgSubscriptions        bool
+	AddOrgSubscriptionIDs        []string
+	RemoveOrgSubscriptionIDs     []string
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -2141,8 +2141,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
 	}
-	if i.ClearUser {
-		m.ClearUser()
+	if i.ClearUsers {
+		m.ClearUsers()
 	}
 	if v := i.AddUserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -2150,8 +2150,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
 	}
-	if i.ClearGroup {
-		m.ClearGroup()
+	if i.ClearGroups {
+		m.ClearGroups()
 	}
 	if v := i.AddGroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -2159,8 +2159,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveGroupIDs; len(v) > 0 {
 		m.RemoveGroupIDs(v...)
 	}
-	if i.ClearIntegration {
-		m.ClearIntegration()
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
 	}
 	if v := i.AddIntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
@@ -2168,8 +2168,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
 	}
-	if i.ClearOrganization {
-		m.ClearOrganization()
+	if i.ClearOrganizations {
+		m.ClearOrganizations()
 	}
 	if v := i.AddOrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
@@ -2177,8 +2177,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveOrganizationIDs; len(v) > 0 {
 		m.RemoveOrganizationIDs(v...)
 	}
-	if i.ClearInvite {
-		m.ClearInvite()
+	if i.ClearInvites {
+		m.ClearInvites()
 	}
 	if v := i.AddInviteIDs; len(v) > 0 {
 		m.AddInviteIDs(v...)
@@ -2186,8 +2186,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveInviteIDs; len(v) > 0 {
 		m.RemoveInviteIDs(v...)
 	}
-	if i.ClearPersonalAccessToken {
-		m.ClearPersonalAccessToken()
+	if i.ClearPersonalAccessTokens {
+		m.ClearPersonalAccessTokens()
 	}
 	if v := i.AddPersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
@@ -2195,17 +2195,17 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemovePersonalAccessTokenIDs; len(v) > 0 {
 		m.RemovePersonalAccessTokenIDs(v...)
 	}
-	if i.ClearHush {
-		m.ClearHush()
+	if i.ClearSecrets {
+		m.ClearSecrets()
 	}
-	if v := i.AddHushIDs; len(v) > 0 {
-		m.AddHushIDs(v...)
+	if v := i.AddSecretIDs; len(v) > 0 {
+		m.AddSecretIDs(v...)
 	}
-	if v := i.RemoveHushIDs; len(v) > 0 {
-		m.RemoveHushIDs(v...)
+	if v := i.RemoveSecretIDs; len(v) > 0 {
+		m.RemoveSecretIDs(v...)
 	}
-	if i.ClearSubscriber {
-		m.ClearSubscriber()
+	if i.ClearSubscribers {
+		m.ClearSubscribers()
 	}
 	if v := i.AddSubscriberIDs; len(v) > 0 {
 		m.AddSubscriberIDs(v...)
@@ -2213,8 +2213,8 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveSubscriberIDs; len(v) > 0 {
 		m.RemoveSubscriberIDs(v...)
 	}
-	if i.ClearFile {
-		m.ClearFile()
+	if i.ClearFiles {
+		m.ClearFiles()
 	}
 	if v := i.AddFileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -2222,14 +2222,14 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
-	if i.ClearOrgsubscription {
-		m.ClearOrgsubscription()
+	if i.ClearOrgSubscriptions {
+		m.ClearOrgSubscriptions()
 	}
-	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
-		m.AddOrgsubscriptionIDs(v...)
+	if v := i.AddOrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
 	}
-	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
-		m.RemoveOrgsubscriptionIDs(v...)
+	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgSubscriptionIDs(v...)
 	}
 }
 
@@ -2517,10 +2517,10 @@ type CreateFileInput struct {
 	UserSettingIDs         []string
 	OrganizationSettingIDs []string
 	TemplateIDs            []string
-	DocumentDatumIDs       []string
-	EventIDs               []string
+	DocumentIDs            []string
 	ProgramIDs             []string
 	EvidenceIDs            []string
+	EventIDs               []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -2585,17 +2585,17 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.TemplateIDs; len(v) > 0 {
 		m.AddTemplateIDs(v...)
 	}
-	if v := i.DocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
-	}
-	if v := i.EventIDs; len(v) > 0 {
-		m.AddEventIDs(v...)
+	if v := i.DocumentIDs; len(v) > 0 {
+		m.AddDocumentIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
 	}
 }
 
@@ -2639,7 +2639,7 @@ type UpdateFileInput struct {
 	ClearOrganization            bool
 	AddOrganizationIDs           []string
 	RemoveOrganizationIDs        []string
-	ClearGroup                   bool
+	ClearGroups                  bool
 	AddGroupIDs                  []string
 	RemoveGroupIDs               []string
 	ClearContact                 bool
@@ -2657,18 +2657,18 @@ type UpdateFileInput struct {
 	ClearTemplate                bool
 	AddTemplateIDs               []string
 	RemoveTemplateIDs            []string
-	ClearDocumentData            bool
-	AddDocumentDatumIDs          []string
-	RemoveDocumentDatumIDs       []string
-	ClearEvents                  bool
-	AddEventIDs                  []string
-	RemoveEventIDs               []string
+	ClearDocument                bool
+	AddDocumentIDs               []string
+	RemoveDocumentIDs            []string
 	ClearProgram                 bool
 	AddProgramIDs                []string
 	RemoveProgramIDs             []string
 	ClearEvidence                bool
 	AddEvidenceIDs               []string
 	RemoveEvidenceIDs            []string
+	ClearEvents                  bool
+	AddEventIDs                  []string
+	RemoveEventIDs               []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -2769,8 +2769,8 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveOrganizationIDs; len(v) > 0 {
 		m.RemoveOrganizationIDs(v...)
 	}
-	if i.ClearGroup {
-		m.ClearGroup()
+	if i.ClearGroups {
+		m.ClearGroups()
 	}
 	if v := i.AddGroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -2823,23 +2823,14 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveTemplateIDs; len(v) > 0 {
 		m.RemoveTemplateIDs(v...)
 	}
-	if i.ClearDocumentData {
-		m.ClearDocumentData()
+	if i.ClearDocument {
+		m.ClearDocument()
 	}
-	if v := i.AddDocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
+	if v := i.AddDocumentIDs; len(v) > 0 {
+		m.AddDocumentIDs(v...)
 	}
-	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
-		m.RemoveDocumentDatumIDs(v...)
-	}
-	if i.ClearEvents {
-		m.ClearEvents()
-	}
-	if v := i.AddEventIDs; len(v) > 0 {
-		m.AddEventIDs(v...)
-	}
-	if v := i.RemoveEventIDs; len(v) > 0 {
-		m.RemoveEventIDs(v...)
+	if v := i.RemoveDocumentIDs; len(v) > 0 {
+		m.RemoveDocumentIDs(v...)
 	}
 	if i.ClearProgram {
 		m.ClearProgram()
@@ -2858,6 +2849,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
 	}
 }
 
@@ -3760,6 +3760,7 @@ func (c *IntegrationUpdateOne) SetInput(i UpdateIntegrationInput) *IntegrationUp
 // CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
 type CreateInternalPolicyInput struct {
 	Tags                []string
+	Revision            *string
 	Name                string
 	Status              *enums.DocumentStatus
 	PolicyType          *string
@@ -3767,7 +3768,6 @@ type CreateInternalPolicyInput struct {
 	ApprovalRequired    *bool
 	ReviewDue           *time.Time
 	ReviewFrequency     *enums.Frequency
-	Revision            *string
 	OwnerID             *string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
@@ -3785,6 +3785,9 @@ type CreateInternalPolicyInput struct {
 func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -3804,9 +3807,6 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3854,6 +3854,8 @@ type UpdateInternalPolicyInput struct {
 	ClearTags                 bool
 	Tags                      []string
 	AppendTags                []string
+	ClearRevision             bool
+	Revision                  *string
 	Name                      *string
 	ClearStatus               bool
 	Status                    *enums.DocumentStatus
@@ -3867,8 +3869,6 @@ type UpdateInternalPolicyInput struct {
 	ReviewDue                 *time.Time
 	ClearReviewFrequency      bool
 	ReviewFrequency           *enums.Frequency
-	ClearRevision             bool
-	Revision                  *string
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearBlockedGroups        bool
@@ -3912,6 +3912,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
@@ -3950,12 +3956,6 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if i.ClearRevision {
-		m.ClearRevision()
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -4619,7 +4619,7 @@ type CreateOrganizationInput struct {
 	GroupIDs                   []string
 	TemplateIDs                []string
 	IntegrationIDs             []string
-	DocumentDatumIDs           []string
+	DocumentIDs                []string
 	OrgSubscriptionIDs         []string
 	InviteIDs                  []string
 	SubscriberIDs              []string
@@ -4725,8 +4725,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
-	if v := i.DocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
+	if v := i.DocumentIDs; len(v) > 0 {
+		m.AddDocumentIDs(v...)
 	}
 	if v := i.OrgSubscriptionIDs; len(v) > 0 {
 		m.AddOrgSubscriptionIDs(v...)
@@ -4861,9 +4861,9 @@ type UpdateOrganizationInput struct {
 	ClearIntegrations                bool
 	AddIntegrationIDs                []string
 	RemoveIntegrationIDs             []string
-	ClearDocumentData                bool
-	AddDocumentDatumIDs              []string
-	RemoveDocumentDatumIDs           []string
+	ClearDocuments                   bool
+	AddDocumentIDs                   []string
+	RemoveDocumentIDs                []string
 	ClearOrgSubscriptions            bool
 	AddOrgSubscriptionIDs            []string
 	RemoveOrgSubscriptionIDs         []string
@@ -5123,14 +5123,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
 	}
-	if i.ClearDocumentData {
-		m.ClearDocumentData()
+	if i.ClearDocuments {
+		m.ClearDocuments()
 	}
-	if v := i.AddDocumentDatumIDs; len(v) > 0 {
-		m.AddDocumentDatumIDs(v...)
+	if v := i.AddDocumentIDs; len(v) > 0 {
+		m.AddDocumentIDs(v...)
 	}
-	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
-		m.RemoveDocumentDatumIDs(v...)
+	if v := i.RemoveDocumentIDs; len(v) > 0 {
+		m.RemoveDocumentIDs(v...)
 	}
 	if i.ClearOrgSubscriptions {
 		m.ClearOrgSubscriptions()
@@ -5516,9 +5516,6 @@ type CreatePersonalAccessTokenInput struct {
 	Scopes          []string
 	LastUsedAt      *time.Time
 	IsActive        *bool
-	RevokedReason   *string
-	RevokedBy       *string
-	RevokedAt       *time.Time
 	OwnerID         string
 	OrganizationIDs []string
 	EventIDs        []string
@@ -5544,15 +5541,6 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.IsActive; v != nil {
 		m.SetIsActive(*v)
-	}
-	if v := i.RevokedReason; v != nil {
-		m.SetRevokedReason(*v)
-	}
-	if v := i.RevokedBy; v != nil {
-		m.SetRevokedBy(*v)
-	}
-	if v := i.RevokedAt; v != nil {
-		m.SetRevokedAt(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
 	if v := i.OrganizationIDs; len(v) > 0 {
@@ -5584,12 +5572,6 @@ type UpdatePersonalAccessTokenInput struct {
 	LastUsedAt            *time.Time
 	ClearIsActive         bool
 	IsActive              *bool
-	ClearRevokedReason    bool
-	RevokedReason         *string
-	ClearRevokedBy        bool
-	RevokedBy             *string
-	ClearRevokedAt        bool
-	RevokedAt             *time.Time
 	ClearOrganizations    bool
 	AddOrganizationIDs    []string
 	RemoveOrganizationIDs []string
@@ -5639,24 +5621,6 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	if v := i.IsActive; v != nil {
 		m.SetIsActive(*v)
 	}
-	if i.ClearRevokedReason {
-		m.ClearRevokedReason()
-	}
-	if v := i.RevokedReason; v != nil {
-		m.SetRevokedReason(*v)
-	}
-	if i.ClearRevokedBy {
-		m.ClearRevokedBy()
-	}
-	if v := i.RevokedBy; v != nil {
-		m.SetRevokedBy(*v)
-	}
-	if i.ClearRevokedAt {
-		m.ClearRevokedAt()
-	}
-	if v := i.RevokedAt; v != nil {
-		m.SetRevokedAt(*v)
-	}
 	if i.ClearOrganizations {
 		m.ClearOrganizations()
 	}
@@ -5692,6 +5656,7 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 // CreateProcedureInput represents a mutation input for creating procedures.
 type CreateProcedureInput struct {
 	Tags              []string
+	Revision          *string
 	Name              string
 	Status            *enums.DocumentStatus
 	ProcedureType     *string
@@ -5699,7 +5664,6 @@ type CreateProcedureInput struct {
 	ApprovalRequired  *bool
 	ReviewDue         *time.Time
 	ReviewFrequency   *enums.Frequency
-	Revision          *string
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -5707,16 +5671,19 @@ type CreateProcedureInput struct {
 	DelegateID        *string
 	ControlIDs        []string
 	InternalPolicyIDs []string
+	ProgramIDs        []string
 	NarrativeIDs      []string
 	RiskIDs           []string
 	TaskIDs           []string
-	ProgramIDs        []string
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
 func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -5736,9 +5703,6 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -5761,6 +5725,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
 	}
@@ -5769,9 +5736,6 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
-	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
 	}
 }
 
@@ -5786,6 +5750,8 @@ type UpdateProcedureInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearRevision           bool
+	Revision                *string
 	Name                    *string
 	ClearStatus             bool
 	Status                  *enums.DocumentStatus
@@ -5799,8 +5765,6 @@ type UpdateProcedureInput struct {
 	ReviewDue               *time.Time
 	ClearReviewFrequency    bool
 	ReviewFrequency         *enums.Frequency
-	ClearRevision           bool
-	Revision                *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearBlockedGroups      bool
@@ -5819,6 +5783,9 @@ type UpdateProcedureInput struct {
 	ClearInternalPolicies   bool
 	AddInternalPolicyIDs    []string
 	RemoveInternalPolicyIDs []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
 	ClearNarratives         bool
 	AddNarrativeIDs         []string
 	RemoveNarrativeIDs      []string
@@ -5828,9 +5795,6 @@ type UpdateProcedureInput struct {
 	ClearTasks              bool
 	AddTaskIDs              []string
 	RemoveTaskIDs           []string
-	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -5843,6 +5807,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -5882,12 +5852,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if i.ClearRevision {
-		m.ClearRevision()
-	}
-	if v := i.Revision; v != nil {
-		m.SetRevision(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5943,6 +5907,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
 	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
 	}
@@ -5969,15 +5942,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
-	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
 	}
 }
 
@@ -6434,8 +6398,8 @@ type CreateRiskInput struct {
 	ViewerIDs       []string
 	ControlIDs      []string
 	ProcedureIDs    []string
-	ActionPlanIDs   []string
 	ProgramIDs      []string
+	ActionPlanIDs   []string
 	StakeholderID   *string
 	DelegateID      *string
 }
@@ -6491,11 +6455,11 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
-	if v := i.ActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.StakeholderID; v != nil {
 		m.SetStakeholderID(*v)
@@ -6544,18 +6508,18 @@ type UpdateRiskInput struct {
 	ClearViewers          bool
 	AddViewerIDs          []string
 	RemoveViewerIDs       []string
-	ClearControl          bool
+	ClearControls         bool
 	AddControlIDs         []string
 	RemoveControlIDs      []string
-	ClearProcedure        bool
+	ClearProcedures       bool
 	AddProcedureIDs       []string
 	RemoveProcedureIDs    []string
-	ClearActionPlans      bool
-	AddActionPlanIDs      []string
-	RemoveActionPlanIDs   []string
 	ClearPrograms         bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
+	ClearActionPlans      bool
+	AddActionPlanIDs      []string
+	RemoveActionPlanIDs   []string
 	ClearStakeholder      bool
 	StakeholderID         *string
 	ClearDelegate         bool
@@ -6657,8 +6621,8 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if i.ClearControls {
+		m.ClearControls()
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -6666,23 +6630,14 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
-	if i.ClearProcedure {
-		m.ClearProcedure()
+	if i.ClearProcedures {
+		m.ClearProcedures()
 	}
 	if v := i.AddProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
-	}
-	if i.ClearActionPlans {
-		m.ClearActionPlans()
-	}
-	if v := i.AddActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
-	if v := i.RemoveActionPlanIDs; len(v) > 0 {
-		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -6692,6 +6647,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
+	}
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
+	}
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearStakeholder {
 		m.ClearStakeholder()
@@ -7573,8 +7537,8 @@ type CreateTaskInput struct {
 	InternalPolicyIDs   []string
 	ProcedureIDs        []string
 	ControlIDs          []string
-	ControlObjectiveIDs []string
 	SubcontrolIDs       []string
+	ControlObjectiveIDs []string
 	ProgramIDs          []string
 	EvidenceIDs         []string
 }
@@ -7627,11 +7591,11 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
-	if v := i.ControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -7671,25 +7635,25 @@ type UpdateTaskInput struct {
 	ClearComments             bool
 	AddCommentIDs             []string
 	RemoveCommentIDs          []string
-	ClearGroup                bool
+	ClearGroups               bool
 	AddGroupIDs               []string
 	RemoveGroupIDs            []string
-	ClearInternalPolicy       bool
+	ClearInternalPolicies     bool
 	AddInternalPolicyIDs      []string
 	RemoveInternalPolicyIDs   []string
-	ClearProcedure            bool
+	ClearProcedures           bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
-	ClearControl              bool
+	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
-	ClearControlObjective     bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearSubcontrol           bool
+	ClearSubcontrols          bool
 	AddSubcontrolIDs          []string
 	RemoveSubcontrolIDs       []string
-	ClearProgram              bool
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
+	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
 	ClearEvidence             bool
@@ -7765,8 +7729,8 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
 	}
-	if i.ClearGroup {
-		m.ClearGroup()
+	if i.ClearGroups {
+		m.ClearGroups()
 	}
 	if v := i.AddGroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -7774,8 +7738,8 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveGroupIDs; len(v) > 0 {
 		m.RemoveGroupIDs(v...)
 	}
-	if i.ClearInternalPolicy {
-		m.ClearInternalPolicy()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
 	if v := i.AddInternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
@@ -7783,8 +7747,8 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
 	}
-	if i.ClearProcedure {
-		m.ClearProcedure()
+	if i.ClearProcedures {
+		m.ClearProcedures()
 	}
 	if v := i.AddProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -7792,8 +7756,8 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if i.ClearControls {
+		m.ClearControls()
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -7801,17 +7765,8 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
-	if i.ClearControlObjective {
-		m.ClearControlObjective()
-	}
-	if v := i.AddControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
-		m.RemoveControlObjectiveIDs(v...)
-	}
-	if i.ClearSubcontrol {
-		m.ClearSubcontrol()
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
 	}
 	if v := i.AddSubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
@@ -7819,8 +7774,17 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
 	}
-	if i.ClearProgram {
-		m.ClearProgram()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
+	}
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
 	if v := i.AddProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)

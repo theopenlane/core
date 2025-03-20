@@ -38,6 +38,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -52,8 +54,6 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldRevision holds the string denoting the revision field in the database.
-	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
@@ -79,6 +79,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldRevision,
 	FieldName,
 	FieldStatus,
 	FieldActionPlanType,
@@ -86,7 +87,6 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
-	FieldRevision,
 	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
@@ -120,12 +120,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
 	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
-	// DefaultRevision holds the default value on creation for the "revision" field.
-	DefaultRevision string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -227,6 +227,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -260,11 +265,6 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByRevision orders the results by the revision field.
-func ByRevision(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

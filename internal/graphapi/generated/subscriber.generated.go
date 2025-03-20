@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 				return ec.fieldContext_Subscriber_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subscriber_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subscriber_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subscriber_ownerID(ctx, field)
 			case "email":
@@ -153,12 +153,12 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subscriber_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subscriber_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subscriber_ownerID(ctx, field)
 			case "email":
@@ -275,12 +275,12 @@ func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subscriber_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Subscriber_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subscriber_ownerID(ctx, field)
 			case "email":

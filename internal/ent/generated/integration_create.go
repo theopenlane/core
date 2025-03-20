@@ -79,12 +79,6 @@ func (ic *IntegrationCreate) SetNillableUpdatedBy(s *string) *IntegrationCreate 
 	return ic
 }
 
-// SetTags sets the "tags" field.
-func (ic *IntegrationCreate) SetTags(s []string) *IntegrationCreate {
-	ic.mutation.SetTags(s)
-	return ic
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ic *IntegrationCreate) SetDeletedAt(t time.Time) *IntegrationCreate {
 	ic.mutation.SetDeletedAt(t)
@@ -110,6 +104,12 @@ func (ic *IntegrationCreate) SetNillableDeletedBy(s *string) *IntegrationCreate 
 	if s != nil {
 		ic.SetDeletedBy(*s)
 	}
+	return ic
+}
+
+// SetTags sets the "tags" field.
+func (ic *IntegrationCreate) SetTags(s []string) *IntegrationCreate {
+	ic.mutation.SetTags(s)
 	return ic
 }
 
@@ -342,10 +342,6 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ic.mutation.Tags(); ok {
-		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ic.mutation.DeletedAt(); ok {
 		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -353,6 +349,10 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := ic.mutation.DeletedBy(); ok {
 		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ic.mutation.Tags(); ok {
+		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := ic.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)

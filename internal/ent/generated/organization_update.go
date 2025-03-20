@@ -95,24 +95,6 @@ func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
 	return ou
 }
 
-// SetTags sets the "tags" field.
-func (ou *OrganizationUpdate) SetTags(s []string) *OrganizationUpdate {
-	ou.mutation.SetTags(s)
-	return ou
-}
-
-// AppendTags appends s to the "tags" field.
-func (ou *OrganizationUpdate) AppendTags(s []string) *OrganizationUpdate {
-	ou.mutation.AppendTags(s)
-	return ou
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ou *OrganizationUpdate) ClearTags() *OrganizationUpdate {
-	ou.mutation.ClearTags()
-	return ou
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ou *OrganizationUpdate) SetDeletedAt(t time.Time) *OrganizationUpdate {
 	ou.mutation.SetDeletedAt(t)
@@ -150,6 +132,24 @@ func (ou *OrganizationUpdate) SetNillableDeletedBy(s *string) *OrganizationUpdat
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ou *OrganizationUpdate) ClearDeletedBy() *OrganizationUpdate {
 	ou.mutation.ClearDeletedBy()
+	return ou
+}
+
+// SetTags sets the "tags" field.
+func (ou *OrganizationUpdate) SetTags(s []string) *OrganizationUpdate {
+	ou.mutation.SetTags(s)
+	return ou
+}
+
+// AppendTags appends s to the "tags" field.
+func (ou *OrganizationUpdate) AppendTags(s []string) *OrganizationUpdate {
+	ou.mutation.AppendTags(s)
+	return ou
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ou *OrganizationUpdate) ClearTags() *OrganizationUpdate {
+	ou.mutation.ClearTags()
 	return ou
 }
 
@@ -590,19 +590,19 @@ func (ou *OrganizationUpdate) AddIntegrations(i ...*Integration) *OrganizationUp
 	return ou.AddIntegrationIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (ou *OrganizationUpdate) AddDocumentDatumIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
+func (ou *OrganizationUpdate) AddDocumentIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddDocumentIDs(ids...)
 	return ou
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) AddDocumentData(d ...*DocumentData) *OrganizationUpdate {
+// AddDocuments adds the "documents" edges to the DocumentData entity.
+func (ou *OrganizationUpdate) AddDocuments(d ...*DocumentData) *OrganizationUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return ou.AddDocumentDatumIDs(ids...)
+	return ou.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
@@ -1321,25 +1321,25 @@ func (ou *OrganizationUpdate) RemoveIntegrations(i ...*Integration) *Organizatio
 	return ou.RemoveIntegrationIDs(ids...)
 }
 
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) ClearDocumentData() *OrganizationUpdate {
-	ou.mutation.ClearDocumentData()
+// ClearDocuments clears all "documents" edges to the DocumentData entity.
+func (ou *OrganizationUpdate) ClearDocuments() *OrganizationUpdate {
+	ou.mutation.ClearDocuments()
 	return ou
 }
 
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (ou *OrganizationUpdate) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveDocumentDatumIDs(ids...)
+// RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
+func (ou *OrganizationUpdate) RemoveDocumentIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveDocumentIDs(ids...)
 	return ou
 }
 
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (ou *OrganizationUpdate) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdate {
+// RemoveDocuments removes "documents" edges to DocumentData entities.
+func (ou *OrganizationUpdate) RemoveDocuments(d ...*DocumentData) *OrganizationUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return ou.RemoveDocumentDatumIDs(ids...)
+	return ou.RemoveDocumentIDs(ids...)
 }
 
 // ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
@@ -1867,17 +1867,6 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ou.mutation.Tags(); ok {
-		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ou.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organization.FieldTags, value)
-		})
-	}
-	if ou.mutation.TagsCleared() {
-		_spec.ClearField(organization.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ou.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1889,6 +1878,17 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.DeletedByCleared() {
 		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ou.mutation.Tags(); ok {
+		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ou.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldTags, value)
+		})
+	}
+	if ou.mutation.TagsCleared() {
+		_spec.ClearField(organization.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ou.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
@@ -2915,12 +2915,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.DocumentDataCleared() {
+	if ou.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -2929,12 +2929,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = ou.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ou.mutation.DocumentDataCleared() {
+	if nodes := ou.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !ou.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -2946,12 +2946,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.DocumentDataIDs(); len(nodes) > 0 {
+	if nodes := ou.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -3979,24 +3979,6 @@ func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetTags sets the "tags" field.
-func (ouo *OrganizationUpdateOne) SetTags(s []string) *OrganizationUpdateOne {
-	ouo.mutation.SetTags(s)
-	return ouo
-}
-
-// AppendTags appends s to the "tags" field.
-func (ouo *OrganizationUpdateOne) AppendTags(s []string) *OrganizationUpdateOne {
-	ouo.mutation.AppendTags(s)
-	return ouo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ouo *OrganizationUpdateOne) ClearTags() *OrganizationUpdateOne {
-	ouo.mutation.ClearTags()
-	return ouo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ouo *OrganizationUpdateOne) SetDeletedAt(t time.Time) *OrganizationUpdateOne {
 	ouo.mutation.SetDeletedAt(t)
@@ -4034,6 +4016,24 @@ func (ouo *OrganizationUpdateOne) SetNillableDeletedBy(s *string) *OrganizationU
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ouo *OrganizationUpdateOne) ClearDeletedBy() *OrganizationUpdateOne {
 	ouo.mutation.ClearDeletedBy()
+	return ouo
+}
+
+// SetTags sets the "tags" field.
+func (ouo *OrganizationUpdateOne) SetTags(s []string) *OrganizationUpdateOne {
+	ouo.mutation.SetTags(s)
+	return ouo
+}
+
+// AppendTags appends s to the "tags" field.
+func (ouo *OrganizationUpdateOne) AppendTags(s []string) *OrganizationUpdateOne {
+	ouo.mutation.AppendTags(s)
+	return ouo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ouo *OrganizationUpdateOne) ClearTags() *OrganizationUpdateOne {
+	ouo.mutation.ClearTags()
 	return ouo
 }
 
@@ -4474,19 +4474,19 @@ func (ouo *OrganizationUpdateOne) AddIntegrations(i ...*Integration) *Organizati
 	return ouo.AddIntegrationIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (ouo *OrganizationUpdateOne) AddDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
+func (ouo *OrganizationUpdateOne) AddDocumentIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddDocumentIDs(ids...)
 	return ouo
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) AddDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
+// AddDocuments adds the "documents" edges to the DocumentData entity.
+func (ouo *OrganizationUpdateOne) AddDocuments(d ...*DocumentData) *OrganizationUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return ouo.AddDocumentDatumIDs(ids...)
+	return ouo.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
@@ -5205,25 +5205,25 @@ func (ouo *OrganizationUpdateOne) RemoveIntegrations(i ...*Integration) *Organiz
 	return ouo.RemoveIntegrationIDs(ids...)
 }
 
-// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) ClearDocumentData() *OrganizationUpdateOne {
-	ouo.mutation.ClearDocumentData()
+// ClearDocuments clears all "documents" edges to the DocumentData entity.
+func (ouo *OrganizationUpdateOne) ClearDocuments() *OrganizationUpdateOne {
+	ouo.mutation.ClearDocuments()
 	return ouo
 }
 
-// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveDocumentDatumIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveDocumentDatumIDs(ids...)
+// RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveDocumentIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveDocumentIDs(ids...)
 	return ouo
 }
 
-// RemoveDocumentData removes "document_data" edges to DocumentData entities.
-func (ouo *OrganizationUpdateOne) RemoveDocumentData(d ...*DocumentData) *OrganizationUpdateOne {
+// RemoveDocuments removes "documents" edges to DocumentData entities.
+func (ouo *OrganizationUpdateOne) RemoveDocuments(d ...*DocumentData) *OrganizationUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return ouo.RemoveDocumentDatumIDs(ids...)
+	return ouo.RemoveDocumentIDs(ids...)
 }
 
 // ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
@@ -5781,17 +5781,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ouo.mutation.Tags(); ok {
-		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ouo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organization.FieldTags, value)
-		})
-	}
-	if ouo.mutation.TagsCleared() {
-		_spec.ClearField(organization.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ouo.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -5803,6 +5792,17 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.DeletedByCleared() {
 		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ouo.mutation.Tags(); ok {
+		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ouo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldTags, value)
+		})
+	}
+	if ouo.mutation.TagsCleared() {
+		_spec.ClearField(organization.FieldTags, field.TypeJSON)
 	}
 	if value, ok := ouo.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
@@ -6829,12 +6829,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.DocumentDataCleared() {
+	if ouo.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -6843,12 +6843,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		edge.Schema = ouo.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !ouo.mutation.DocumentDataCleared() {
+	if nodes := ouo.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !ouo.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -6860,12 +6860,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.DocumentDataIDs(); len(nodes) > 0 {
+	if nodes := ouo.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),

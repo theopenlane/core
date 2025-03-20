@@ -16,12 +16,20 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
       sub
       tags
       orgMemberships {
-        id
-        organizationID
+        edges {
+          node {
+            id
+            organizationID
+          }
+        }
       }
       groupMemberships {
-        id
-        groupID
+        edges {
+          node {
+            id
+            groupID
+          }
+        }
       }
       setting {
         defaultOrg {
@@ -162,12 +170,16 @@ query GetUserByID($userId: ID!) {
       updatedBy
     }
     organizations {
-      id
-      name
-      personalOrg
-      members {
-        id
-        role
+      edges {
+        node {
+          id
+          name
+          personalOrg
+          members {
+            id
+            role
+          }
+        }
       }
     }
     updatedAt
@@ -212,11 +224,17 @@ query GetUserByIDWithOrgs($userId: ID!) {
       updatedBy
     }
     orgMemberships {
-      id
-      role
-      user {
-        firstName
-        lastName
+      edges {
+        node {
+          id
+          role
+          id
+          role
+          user {
+            firstName
+            lastName
+          }
+        }
       }
     }
     createdAt
@@ -244,10 +262,20 @@ mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: U
       sub
       tags
       groupMemberships {
-        id
+        edges {
+          node {
+            id
+            groupID
+          }
+        }
       }
       orgMemberships {
-        id
+        edges {
+          node {
+            id
+            organizationID
+          }
+        }
       }
       setting {
         defaultOrg {

@@ -79,12 +79,6 @@ func (osc *OrgSubscriptionCreate) SetNillableUpdatedBy(s *string) *OrgSubscripti
 	return osc
 }
 
-// SetTags sets the "tags" field.
-func (osc *OrgSubscriptionCreate) SetTags(s []string) *OrgSubscriptionCreate {
-	osc.mutation.SetTags(s)
-	return osc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (osc *OrgSubscriptionCreate) SetDeletedAt(t time.Time) *OrgSubscriptionCreate {
 	osc.mutation.SetDeletedAt(t)
@@ -110,6 +104,12 @@ func (osc *OrgSubscriptionCreate) SetNillableDeletedBy(s *string) *OrgSubscripti
 	if s != nil {
 		osc.SetDeletedBy(*s)
 	}
+	return osc
+}
+
+// SetTags sets the "tags" field.
+func (osc *OrgSubscriptionCreate) SetTags(s []string) *OrgSubscriptionCreate {
+	osc.mutation.SetTags(s)
 	return osc
 }
 
@@ -458,10 +458,6 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := osc.mutation.Tags(); ok {
-		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := osc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -469,6 +465,10 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	if value, ok := osc.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := osc.mutation.Tags(); ok {
+		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := osc.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)

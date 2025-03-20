@@ -111,6 +111,11 @@ func DisplayID(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -139,11 +144,6 @@ func ApprovalRequired(v bool) predicate.ProcedureHistory {
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
 func ReviewDue(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldReviewDue, v))
-}
-
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldEQ(FieldRevision, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -531,16 +531,6 @@ func UpdatedByContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -729,6 +719,91 @@ func DisplayIDEqualFold(v string) predicate.ProcedureHistory {
 // DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
 func DisplayIDContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldDisplayID, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldTags))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1169,81 +1244,6 @@ func ReviewFrequencyIsNil() predicate.ProcedureHistory {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldNotNull(FieldReviewFrequency))
-}
-
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.ProcedureHistory {
-	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // And groups predicates with the AND operator between them.

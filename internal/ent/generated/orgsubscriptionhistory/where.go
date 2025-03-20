@@ -545,16 +545,6 @@ func UpdatedByContainsFold(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -678,6 +668,16 @@ func DeletedByEqualFold(v string) predicate.OrgSubscriptionHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldTags))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

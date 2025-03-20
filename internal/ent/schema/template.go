@@ -5,34 +5,37 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Template holds the schema definition for the Template entity
 type Template struct {
+	SchemaFuncs
+
 	ent.Schema
 }
 
-// Mixin of the Template
-func (Template) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("templates"),
-	}
+const SchemaTemplate = "template"
+
+func (Template) Name() string {
+	return SchemaTemplate
+}
+
+func (Template) GetType() any {
+	return Template.Type
+}
+
+func (Template) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaTemplate)
 }
 
 // Fields of the Template
@@ -66,15 +69,24 @@ func (Template) Fields() []ent.Field {
 	}
 }
 
+// Mixin of the Template
+func (Template) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("templates"),
+		},
+	}.getMixins()
+}
+
 // Edges of the Template
-func (Template) Edges() []ent.Edge {
+func (t Template) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("documents", DocumentData.Type).
-			Annotations(
-				entx.CascadeAnnotationField("Template"),
-				entgql.RelayConnection(),
-			),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			edgeSchema:    DocumentData{},
+			cascadeDelete: "Template",
+		}),
+		defaultEdgeToWithPagination(t, File{}),
 	}
 }
 
@@ -90,10 +102,6 @@ func (Template) Indexes() []ent.Index {
 // Annotations of the Template
 func (Template) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

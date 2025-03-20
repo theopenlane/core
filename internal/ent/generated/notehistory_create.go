@@ -111,12 +111,6 @@ func (nhc *NoteHistoryCreate) SetNillableUpdatedBy(s *string) *NoteHistoryCreate
 	return nhc
 }
 
-// SetDisplayID sets the "display_id" field.
-func (nhc *NoteHistoryCreate) SetDisplayID(s string) *NoteHistoryCreate {
-	nhc.mutation.SetDisplayID(s)
-	return nhc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (nhc *NoteHistoryCreate) SetDeletedAt(t time.Time) *NoteHistoryCreate {
 	nhc.mutation.SetDeletedAt(t)
@@ -142,6 +136,12 @@ func (nhc *NoteHistoryCreate) SetNillableDeletedBy(s *string) *NoteHistoryCreate
 	if s != nil {
 		nhc.SetDeletedBy(*s)
 	}
+	return nhc
+}
+
+// SetDisplayID sets the "display_id" field.
+func (nhc *NoteHistoryCreate) SetDisplayID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetDisplayID(s)
 	return nhc
 }
 
@@ -315,10 +315,6 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := nhc.mutation.DisplayID(); ok {
-		_spec.SetField(notehistory.FieldDisplayID, field.TypeString, value)
-		_node.DisplayID = value
-	}
 	if value, ok := nhc.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -326,6 +322,10 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 	if value, ok := nhc.mutation.DeletedBy(); ok {
 		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := nhc.mutation.DisplayID(); ok {
+		_spec.SetField(notehistory.FieldDisplayID, field.TypeString, value)
+		_node.DisplayID = value
 	}
 	if value, ok := nhc.mutation.OwnerID(); ok {
 		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)

@@ -388,16 +388,6 @@ func UpdatedByContainsFold(v string) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.UserSetting {
-	return predicate.UserSetting(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.UserSetting {
-	return predicate.UserSetting(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldEQ(FieldDeletedAt, v))
@@ -521,6 +511,16 @@ func DeletedByEqualFold(v string) predicate.UserSetting {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotNull(FieldTags))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.

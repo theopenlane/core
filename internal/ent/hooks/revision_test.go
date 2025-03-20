@@ -22,6 +22,9 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 	orgID := testUser.Edges.OrgMemberships[0].ID
 	ctx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
 
+	// add the client to the context for hooks
+	ctx = generated.NewContext(ctx, suite.client)
+
 	patchCtx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(patchCtx, &models.Patch)
 

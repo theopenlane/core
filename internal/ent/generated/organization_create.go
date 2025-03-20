@@ -107,12 +107,6 @@ func (oc *OrganizationCreate) SetNillableUpdatedBy(s *string) *OrganizationCreat
 	return oc
 }
 
-// SetTags sets the "tags" field.
-func (oc *OrganizationCreate) SetTags(s []string) *OrganizationCreate {
-	oc.mutation.SetTags(s)
-	return oc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (oc *OrganizationCreate) SetDeletedAt(t time.Time) *OrganizationCreate {
 	oc.mutation.SetDeletedAt(t)
@@ -138,6 +132,12 @@ func (oc *OrganizationCreate) SetNillableDeletedBy(s *string) *OrganizationCreat
 	if s != nil {
 		oc.SetDeletedBy(*s)
 	}
+	return oc
+}
+
+// SetTags sets the "tags" field.
+func (oc *OrganizationCreate) SetTags(s []string) *OrganizationCreate {
+	oc.mutation.SetTags(s)
 	return oc
 }
 
@@ -615,19 +615,19 @@ func (oc *OrganizationCreate) AddIntegrations(i ...*Integration) *OrganizationCr
 	return oc.AddIntegrationIDs(ids...)
 }
 
-// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
-func (oc *OrganizationCreate) AddDocumentDatumIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddDocumentDatumIDs(ids...)
+// AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
+func (oc *OrganizationCreate) AddDocumentIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddDocumentIDs(ids...)
 	return oc
 }
 
-// AddDocumentData adds the "document_data" edges to the DocumentData entity.
-func (oc *OrganizationCreate) AddDocumentData(d ...*DocumentData) *OrganizationCreate {
+// AddDocuments adds the "documents" edges to the DocumentData entity.
+func (oc *OrganizationCreate) AddDocuments(d ...*DocumentData) *OrganizationCreate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return oc.AddDocumentDatumIDs(ids...)
+	return oc.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
@@ -1092,10 +1092,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := oc.mutation.Tags(); ok {
-		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := oc.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -1103,6 +1099,10 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.DeletedBy(); ok {
 		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := oc.mutation.Tags(); ok {
+		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := oc.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
@@ -1515,12 +1515,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.DocumentDataIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentDataTable,
-			Columns: []string{organization.DocumentDataColumn},
+			Table:   organization.DocumentsTable,
+			Columns: []string{organization.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),

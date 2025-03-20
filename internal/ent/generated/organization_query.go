@@ -79,7 +79,7 @@ type OrganizationQuery struct {
 	withGroups                        *GroupQuery
 	withTemplates                     *TemplateQuery
 	withIntegrations                  *IntegrationQuery
-	withDocumentData                  *DocumentDataQuery
+	withDocuments                     *DocumentDataQuery
 	withOrgSubscriptions              *OrgSubscriptionQuery
 	withInvites                       *InviteQuery
 	withSubscribers                   *SubscriberQuery
@@ -121,7 +121,7 @@ type OrganizationQuery struct {
 	withNamedGroups                   map[string]*GroupQuery
 	withNamedTemplates                map[string]*TemplateQuery
 	withNamedIntegrations             map[string]*IntegrationQuery
-	withNamedDocumentData             map[string]*DocumentDataQuery
+	withNamedDocuments                map[string]*DocumentDataQuery
 	withNamedOrgSubscriptions         map[string]*OrgSubscriptionQuery
 	withNamedInvites                  map[string]*InviteQuery
 	withNamedSubscribers              map[string]*SubscriberQuery
@@ -728,8 +728,8 @@ func (oq *OrganizationQuery) QueryIntegrations() *IntegrationQuery {
 	return query
 }
 
-// QueryDocumentData chains the current query on the "document_data" edge.
-func (oq *OrganizationQuery) QueryDocumentData() *DocumentDataQuery {
+// QueryDocuments chains the current query on the "documents" edge.
+func (oq *OrganizationQuery) QueryDocuments() *DocumentDataQuery {
 	query := (&DocumentDataClient{config: oq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := oq.prepareQuery(ctx); err != nil {
@@ -742,7 +742,7 @@ func (oq *OrganizationQuery) QueryDocumentData() *DocumentDataQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataTable, organization.DocumentDataColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentsTable, organization.DocumentsColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
@@ -1467,7 +1467,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withGroups:                   oq.withGroups.Clone(),
 		withTemplates:                oq.withTemplates.Clone(),
 		withIntegrations:             oq.withIntegrations.Clone(),
-		withDocumentData:             oq.withDocumentData.Clone(),
+		withDocuments:                oq.withDocuments.Clone(),
 		withOrgSubscriptions:         oq.withOrgSubscriptions.Clone(),
 		withInvites:                  oq.withInvites.Clone(),
 		withSubscribers:              oq.withSubscribers.Clone(),
@@ -1737,14 +1737,14 @@ func (oq *OrganizationQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *
 	return oq
 }
 
-// WithDocumentData tells the query-builder to eager-load the nodes that are connected to
-// the "document_data" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithDocumentData(opts ...func(*DocumentDataQuery)) *OrganizationQuery {
+// WithDocuments tells the query-builder to eager-load the nodes that are connected to
+// the "documents" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithDocuments(opts ...func(*DocumentDataQuery)) *OrganizationQuery {
 	query := (&DocumentDataClient{config: oq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	oq.withDocumentData = query
+	oq.withDocuments = query
 	return oq
 }
 
@@ -2075,7 +2075,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withGroups != nil,
 			oq.withTemplates != nil,
 			oq.withIntegrations != nil,
-			oq.withDocumentData != nil,
+			oq.withDocuments != nil,
 			oq.withOrgSubscriptions != nil,
 			oq.withInvites != nil,
 			oq.withSubscribers != nil,
@@ -2278,10 +2278,10 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := oq.withDocumentData; query != nil {
-		if err := oq.loadDocumentData(ctx, query, nodes,
-			func(n *Organization) { n.Edges.DocumentData = []*DocumentData{} },
-			func(n *Organization, e *DocumentData) { n.Edges.DocumentData = append(n.Edges.DocumentData, e) }); err != nil {
+	if query := oq.withDocuments; query != nil {
+		if err := oq.loadDocuments(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Documents = []*DocumentData{} },
+			func(n *Organization, e *DocumentData) { n.Edges.Documents = append(n.Edges.Documents, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2564,10 +2564,10 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range oq.withNamedDocumentData {
-		if err := oq.loadDocumentData(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedDocumentData(name) },
-			func(n *Organization, e *DocumentData) { n.appendNamedDocumentData(name, e) }); err != nil {
+	for name, query := range oq.withNamedDocuments {
+		if err := oq.loadDocuments(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDocuments(name) },
+			func(n *Organization, e *DocumentData) { n.appendNamedDocuments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3548,7 +3548,7 @@ func (oq *OrganizationQuery) loadIntegrations(ctx context.Context, query *Integr
 	}
 	return nil
 }
-func (oq *OrganizationQuery) loadDocumentData(ctx context.Context, query *DocumentDataQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DocumentData)) error {
+func (oq *OrganizationQuery) loadDocuments(ctx context.Context, query *DocumentDataQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DocumentData)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
 	for i := range nodes {
@@ -3562,7 +3562,7 @@ func (oq *OrganizationQuery) loadDocumentData(ctx context.Context, query *Docume
 		query.ctx.AppendFieldOnce(documentdata.FieldOwnerID)
 	}
 	query.Where(predicate.DocumentData(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.DocumentDataColumn), fks...))
+		s.Where(sql.InValues(s.C(organization.DocumentsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -4558,17 +4558,17 @@ func (oq *OrganizationQuery) WithNamedIntegrations(name string, opts ...func(*In
 	return oq
 }
 
-// WithNamedDocumentData tells the query-builder to eager-load the nodes that are connected to the "document_data"
+// WithNamedDocuments tells the query-builder to eager-load the nodes that are connected to the "documents"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedDocumentData(name string, opts ...func(*DocumentDataQuery)) *OrganizationQuery {
+func (oq *OrganizationQuery) WithNamedDocuments(name string, opts ...func(*DocumentDataQuery)) *OrganizationQuery {
 	query := (&DocumentDataClient{config: oq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if oq.withNamedDocumentData == nil {
-		oq.withNamedDocumentData = make(map[string]*DocumentDataQuery)
+	if oq.withNamedDocuments == nil {
+		oq.withNamedDocuments = make(map[string]*DocumentDataQuery)
 	}
-	oq.withNamedDocumentData[name] = query
+	oq.withNamedDocuments[name] = query
 	return oq
 }
 

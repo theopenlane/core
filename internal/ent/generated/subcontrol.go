@@ -109,7 +109,7 @@ type SubcontrolEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// the user who is responsible for the subcontrol, defaults to the parent control owner if not set
 	ControlOwner *Group `json:"control_owner,omitempty"`
-	// temporary delegate for the control, used for temporary control ownership
+	// temporary delegate for the subcontrol, used for temporary control ownership
 	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.

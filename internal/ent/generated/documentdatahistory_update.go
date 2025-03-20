@@ -64,24 +64,6 @@ func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedBy() *DocumentDataHistoryUpda
 	return ddhu
 }
 
-// SetTags sets the "tags" field.
-func (ddhu *DocumentDataHistoryUpdate) SetTags(s []string) *DocumentDataHistoryUpdate {
-	ddhu.mutation.SetTags(s)
-	return ddhu
-}
-
-// AppendTags appends s to the "tags" field.
-func (ddhu *DocumentDataHistoryUpdate) AppendTags(s []string) *DocumentDataHistoryUpdate {
-	ddhu.mutation.AppendTags(s)
-	return ddhu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ddhu *DocumentDataHistoryUpdate) ClearTags() *DocumentDataHistoryUpdate {
-	ddhu.mutation.ClearTags()
-	return ddhu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ddhu *DocumentDataHistoryUpdate) SetDeletedAt(t time.Time) *DocumentDataHistoryUpdate {
 	ddhu.mutation.SetDeletedAt(t)
@@ -119,6 +101,24 @@ func (ddhu *DocumentDataHistoryUpdate) SetNillableDeletedBy(s *string) *Document
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ddhu *DocumentDataHistoryUpdate) ClearDeletedBy() *DocumentDataHistoryUpdate {
 	ddhu.mutation.ClearDeletedBy()
+	return ddhu
+}
+
+// SetTags sets the "tags" field.
+func (ddhu *DocumentDataHistoryUpdate) SetTags(s []string) *DocumentDataHistoryUpdate {
+	ddhu.mutation.SetTags(s)
+	return ddhu
+}
+
+// AppendTags appends s to the "tags" field.
+func (ddhu *DocumentDataHistoryUpdate) AppendTags(s []string) *DocumentDataHistoryUpdate {
+	ddhu.mutation.AppendTags(s)
+	return ddhu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ddhu *DocumentDataHistoryUpdate) ClearTags() *DocumentDataHistoryUpdate {
+	ddhu.mutation.ClearTags()
 	return ddhu
 }
 
@@ -219,17 +219,6 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if ddhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ddhu.mutation.Tags(); ok {
-		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ddhu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdatahistory.FieldTags, value)
-		})
-	}
-	if ddhu.mutation.TagsCleared() {
-		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ddhu.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -241,6 +230,17 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if ddhu.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ddhu.mutation.Tags(); ok {
+		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ddhu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, documentdatahistory.FieldTags, value)
+		})
+	}
+	if ddhu.mutation.TagsCleared() {
+		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
 	}
 	if ddhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)
@@ -307,24 +307,6 @@ func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedBy() *DocumentDataHistory
 	return ddhuo
 }
 
-// SetTags sets the "tags" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetTags(s []string) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.SetTags(s)
-	return ddhuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) AppendTags(s []string) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.AppendTags(s)
-	return ddhuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) ClearTags() *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.ClearTags()
-	return ddhuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ddhuo *DocumentDataHistoryUpdateOne) SetDeletedAt(t time.Time) *DocumentDataHistoryUpdateOne {
 	ddhuo.mutation.SetDeletedAt(t)
@@ -362,6 +344,24 @@ func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableDeletedBy(s *string) *Docu
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (ddhuo *DocumentDataHistoryUpdateOne) ClearDeletedBy() *DocumentDataHistoryUpdateOne {
 	ddhuo.mutation.ClearDeletedBy()
+	return ddhuo
+}
+
+// SetTags sets the "tags" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetTags(s []string) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.SetTags(s)
+	return ddhuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) AppendTags(s []string) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.AppendTags(s)
+	return ddhuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) ClearTags() *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.ClearTags()
 	return ddhuo
 }
 
@@ -492,17 +492,6 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if ddhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ddhuo.mutation.Tags(); ok {
-		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := ddhuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdatahistory.FieldTags, value)
-		})
-	}
-	if ddhuo.mutation.TagsCleared() {
-		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
-	}
 	if value, ok := ddhuo.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -514,6 +503,17 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if ddhuo.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := ddhuo.mutation.Tags(); ok {
+		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := ddhuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, documentdatahistory.FieldTags, value)
+		})
+	}
+	if ddhuo.mutation.TagsCleared() {
+		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
 	}
 	if ddhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)

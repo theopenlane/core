@@ -28,13 +28,6 @@ type OrganizationBuilder struct {
 	AllowedDomains []string
 }
 
-type OrganizationCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type GroupBuilder struct {
 	client *client
 
@@ -45,13 +38,6 @@ type GroupBuilder struct {
 	ProgramEditorsIDs []string
 }
 
-type GroupCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type UserBuilder struct {
 	client *client
 
@@ -60,13 +46,6 @@ type UserBuilder struct {
 	LastName  string
 	Email     string
 	Password  string
-}
-
-type UserCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type TFASettingBuilder struct {
@@ -84,13 +63,6 @@ type OrgMemberBuilder struct {
 	Role   string
 }
 
-type OrgMemberCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type GroupMemberBuilder struct {
 	client *client
 
@@ -100,26 +72,12 @@ type GroupMemberBuilder struct {
 	Role    string
 }
 
-type GroupMemberCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type InviteBuilder struct {
 	client *client
 
 	// Fields
 	Recipient string
 	Role      string
-}
-
-type InviteCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type PersonalAccessTokenBuilder struct {
@@ -166,25 +124,11 @@ type EntityBuilder struct {
 	Owner       string
 }
 
-type EntityCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type EntityTypeBuilder struct {
 	client *client
 
 	// Fields
 	Name string
-}
-
-type EntityTypeCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type ContactBuilder struct {
@@ -198,13 +142,6 @@ type ContactBuilder struct {
 	Title   string
 	Company string
 	Status  enums.UserStatus
-}
-
-type ContactCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type TaskBuilder struct {
@@ -308,6 +245,17 @@ type EvidenceBuilder struct {
 	ControlID string
 }
 
+type StandardBuilder struct {
+	client *client
+
+	// Fields
+	Name        string
+	Framework   string
+	SystemOwned bool
+	IsPublic    bool
+	ControlIDs  []string
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -319,6 +267,54 @@ func randomName(t *testing.T) string {
 	require.NoError(t, err)
 
 	return f.Name
+}
+
+// DeleteClient is an interface for deleting entities
+// client must implement DeleteOneID method that has ExecX method
+type DeleteClient[T DeleteExec] interface {
+	DeleteOneID(string) T
+}
+
+// DeleteExec is an interface for executing delete operations
+// that will panic if an error occurs
+type DeleteExec interface {
+	ExecX(ctx context.Context)
+	Exec(ctx context.Context) error
+}
+
+// Cleanup is a struct for cleaning up entities
+type Cleanup[T DeleteExec] struct {
+	client DeleteClient[T]
+
+	// Fields
+	ID  string
+	IDs []string
+}
+
+// MustDelete deletes the entities without authz checks for the type
+// this should normally look like this:
+// type: generated.OrganizationDeleteOne (replace Organization with the entity you want to delete)
+// client: suite.client.db.Organization (replace Organization with the entity you want to delete)
+//
+//	(&Cleanup[*generated.OrganizationDeleteOne]{
+//		client: suite.client.db.Organization,
+//		ID: resp.CreateOrganization.Organization.ID}).
+//		MustDelete(testUser1.UserCtx, suite)
+func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSuite) {
+	// add client to context for hooks that expect the client to be in the context
+	ctx = ent.NewContext(ctx, suite.client.db)
+
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	for _, id := range c.IDs {
+		err := c.client.DeleteOneID(id).Exec(ctx)
+		require.NoError(suite.T(), err)
+	}
+
+	if c.ID != "" {
+		err := c.client.DeleteOneID(c.ID).Exec(ctx)
+		require.NoError(suite.T(), err)
+	}
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
@@ -364,13 +360,6 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	return org
 }
 
-// MustDelete is used to cleanup, without authz checks, orgs in the database
-func (o *OrganizationCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	o.client.db.Organization.DeleteOneID(o.ID).ExecX(ctx)
-}
-
 // MustNew user builder is used to create, without authz checks, users in the database
 func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -408,13 +397,6 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	require.NoError(t, err)
 
 	return user
-}
-
-// MustDelete is used to cleanup, without authz checks, users in the database
-func (u *UserCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	u.client.db.User.DeleteOneID(u.ID).ExecX(ctx)
 }
 
 // MustNew tfa settings builder is used to create, without authz checks, tfa settings in the database
@@ -457,13 +439,6 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 	return orgMembers
 }
 
-// MustDelete is used to cleanup, without authz checks, org members in the database
-func (om *OrgMemberCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	om.client.db.OrgMembership.DeleteOneID(om.ID).ExecX(ctx)
-}
-
 // MustNew group builder is used to create, without authz checks, groups in the database
 func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -494,14 +469,6 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	return group
 }
 
-// MustDelete is used to cleanup, without authz checks, groups in the database
-func (g *GroupCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	err := g.client.db.Group.DeleteOneID(g.ID).Exec(ctx)
-	require.NoError(t, err)
-}
-
 // MustNew invite builder is used to create, without authz checks, invites in the database
 func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -523,13 +490,6 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 	invite := inviteQuery.SaveX(ctx)
 
 	return invite
-}
-
-// MustDelete is used to cleanup, without authz checks, invites in the database
-func (i *InviteCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	i.client.db.Invite.DeleteOneID(i.ID).ExecX(ctx)
 }
 
 // MustNew subscriber builder is used to create, without authz checks, subscribers in the database
@@ -643,13 +603,6 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 	return groupMember
 }
 
-// MustDelete is used to cleanup, without authz checks, group members in the database
-func (gm *GroupMemberCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	gm.client.db.GroupMembership.DeleteOneID(gm.ID).ExecX(ctx)
-}
-
 // MustNew entity type builder is used to create, without authz checks, entity types in the database
 func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EntityType {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -663,13 +616,6 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 		SaveX(ctx)
 
 	return entityType
-}
-
-// MustDelete is used to cleanup, without authz checks, entities in the database
-func (e *EntityTypeCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	e.client.db.EntityType.DeleteOneID(e.ID).ExecX(ctx)
 }
 
 // MustNew entity builder is used to create, without authz checks, entities in the database
@@ -701,13 +647,6 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SaveX(ctx)
 
 	return entity
-}
-
-// MustDelete is used to cleanup, without authz checks, entities in the database
-func (e *EntityCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	e.client.db.Entity.DeleteOneID(e.ID).ExecX(ctx)
 }
 
 // MustNew contact builder is used to create, without authz checks, contacts in the database
@@ -749,13 +688,6 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 		SaveX(ctx)
 
 	return entity
-}
-
-// MustDelete is used to cleanup, without authz checks, contacts in the database
-func (c *ContactCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	c.client.db.Contact.DeleteOneID(c.ID).ExecX(ctx)
 }
 
 // MustNew task builder is used to create, without authz checks, tasks in the database
@@ -1057,4 +989,27 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 		SaveX(ctx)
 
 	return control
+}
+
+// MustNew standard builder is used to create, without authz checks, standards in the database
+func (e *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standard {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if e.Name == "" {
+		e.Name = gofakeit.AppName()
+	}
+
+	if e.Framework == "" {
+		e.Framework = "MITB Framework"
+	}
+
+	Standard := e.client.db.Standard.Create().
+		SetName(e.Name).
+		SetFramework(e.Framework).
+		SetSystemOwned(e.SystemOwned).
+		SetIsPublic(e.IsPublic).
+		AddControlIDs(e.ControlIDs...).
+		SaveX(ctx)
+
+	return Standard
 }

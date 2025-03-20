@@ -4,23 +4,37 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 )
 
 // Task holds the schema definition for the Task entity
 type Task struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaTask = "task"
+
+func (Task) Name() string {
+	return SchemaTask
+}
+
+func (Task) GetType() any {
+	return Task.Type
+}
+
+func (Task) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaTask)
 }
 
 // Fields of the Task
@@ -77,66 +91,56 @@ func (Task) Fields() []ent.Field {
 }
 
 // Mixin of the Task
-func (Task) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.NewIDMixinWithPrefixedID("TSK"),
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id"},
-			WithOrganizationOwner: true,
-			Ref:                   "tasks",
-		}),
-	}
+func (t Task) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix: "TSK",
+		additionalMixins: []ent.Mixin{
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id"},
+				WithOrganizationOwner: true,
+				Ref:                   t.PluralName(),
+			}),
+		},
+	}.getMixins()
 }
 
 // Edges of the Task
-func (Task) Edges() []ent.Edge {
+func (t Task) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("assigner", User.Type).
-			Ref("assigner_tasks").
-			Field("assigner_id").
-			Unique(),
-		edge.From("assignee", User.Type).
-			Ref("assignee_tasks").
-			Field("assignee_id").
-			Unique(),
-		edge.To("comments", Note.Type).
-			Annotations(entgql.RelayConnection()).
-			Comment("conversations related to the task"),
-		edge.From("group", Group.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("internal_policy", InternalPolicy.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("procedure", Procedure.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("control", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("control_objective", ControlObjective.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("subcontrol", Subcontrol.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.From("program", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("tasks"),
-		edge.To("evidence", Evidence.Type).Annotations(entgql.RelayConnection()),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			name:       "assigner",
+			t:          User.Type,
+			field:      "assigner_id",
+			ref:        "assigner_tasks",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			name:       "assignee",
+			t:          User.Type,
+			field:      "assignee_id",
+			ref:        "assignee_tasks",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the task",
+		}),
+		defaultEdgeFromWithPagination(t, Group{}),
+		defaultEdgeFromWithPagination(t, InternalPolicy{}),
+		defaultEdgeFromWithPagination(t, Procedure{}),
+		defaultEdgeFromWithPagination(t, Control{}),
+		defaultEdgeFromWithPagination(t, Subcontrol{}),
+		defaultEdgeFromWithPagination(t, ControlObjective{}),
+		defaultEdgeFromWithPagination(t, Program{}),
+		defaultEdgeToWithPagination(t, Evidence{}),
 	}
 }
 
 // Annotations of the Task
 func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

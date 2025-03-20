@@ -500,16 +500,6 @@ func UpdatedByContainsFold(v string) predicate.DocumentDataHistory {
 	return predicate.DocumentDataHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.DocumentDataHistory {
-	return predicate.DocumentDataHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.DocumentDataHistory {
-	return predicate.DocumentDataHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.DocumentDataHistory {
 	return predicate.DocumentDataHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -633,6 +623,16 @@ func DeletedByEqualFold(v string) predicate.DocumentDataHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.DocumentDataHistory {
 	return predicate.DocumentDataHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.DocumentDataHistory {
+	return predicate.DocumentDataHistory(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.DocumentDataHistory {
+	return predicate.DocumentDataHistory(sql.FieldNotNull(FieldTags))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -103,7 +104,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 	}
 
 	// delete created group
-	(&GroupCleanup{client: suite.client, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
@@ -246,10 +247,9 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 		})
 	}
 
-	// delete created group and users
-	(&GroupCleanup{client: suite.client, ID: group1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&OrgMemberCleanup{client: suite.client, ID: orgMember1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&OrgMemberCleanup{client: suite.client, ID: orgMember2.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created groups and org members
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group1.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {

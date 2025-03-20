@@ -4,19 +4,33 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
 type Hush struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaHush = "secret"
+
+func (Hush) Name() string {
+	return SchemaHush
+}
+
+func (Hush) GetType() any {
+	return Hush.Type
+}
+
+func (Hush) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaHush)
 }
 
 // Fields of the Hush
@@ -56,36 +70,26 @@ func (Hush) Fields() []ent.Field {
 }
 
 // Edges of the Hush
-func (Hush) Edges() []ent.Edge {
+func (h Hush) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("integrations", Integration.Type).
-			Comment("the integration associated with the secret").
-			Annotations(entgql.RelayConnection()).
-			Ref("secrets"),
-		edge.From("organization", Organization.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("secrets"),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: h,
+			edgeSchema: Integration{},
+			comment:    "the integration associated with the secret",
+		}),
+		defaultEdgeFrom(h, Organization{}),
+		defaultEdgeToWithPagination(h, Event{}),
 	}
 }
 
 // Annotations of the Hushhh
 func (Hush) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-	}
+	return []schema.Annotation{}
 }
 
 // Mixin of the Hush shhhh
 func (Hush) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{excludeTags: true}.getMixins()
 }
 
 // Hooks of the Hush

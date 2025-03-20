@@ -6,18 +6,33 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // TFASetting holds the schema definition for the TFASetting entity
 type TFASetting struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaTFASetting = "tfa_setting"
+
+func (TFASetting) Name() string {
+	return SchemaTFASetting
+}
+
+func (TFASetting) GetType() any {
+	return TFASetting.Type
+}
+
+func (TFASetting) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaTFASetting)
 }
 
 // Fields of the TFASetting
@@ -66,18 +81,18 @@ func (TFASetting) Fields() []ent.Field {
 }
 
 // Mixin of the TFASetting
-func (TFASetting) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		UserOwnedMixin{
-			Ref:             "tfa_settings",
-			Optional:        true,
-			AllowUpdate:     false,
-			SoftDeleteIndex: true,
+func (t TFASetting) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			UserOwnedMixin{
+				Ref:             t.PluralName(),
+				Optional:        true,
+				AllowUpdate:     false,
+				SoftDeleteIndex: true,
+			},
 		},
-	}
+	}.getMixins()
 }
 
 // Hooks of the TFASetting
@@ -92,9 +107,6 @@ func (TFASetting) Hooks() []ent.Hook {
 // Annotations of the TFASetting
 func (TFASetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		history.Annotations{
 			Exclude: true,
 		},

@@ -112,12 +112,6 @@ func (ushc *UserSettingHistoryCreate) SetNillableUpdatedBy(s *string) *UserSetti
 	return ushc
 }
 
-// SetTags sets the "tags" field.
-func (ushc *UserSettingHistoryCreate) SetTags(s []string) *UserSettingHistoryCreate {
-	ushc.mutation.SetTags(s)
-	return ushc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ushc *UserSettingHistoryCreate) SetDeletedAt(t time.Time) *UserSettingHistoryCreate {
 	ushc.mutation.SetDeletedAt(t)
@@ -143,6 +137,12 @@ func (ushc *UserSettingHistoryCreate) SetNillableDeletedBy(s *string) *UserSetti
 	if s != nil {
 		ushc.SetDeletedBy(*s)
 	}
+	return ushc
+}
+
+// SetTags sets the "tags" field.
+func (ushc *UserSettingHistoryCreate) SetTags(s []string) *UserSettingHistoryCreate {
+	ushc.mutation.SetTags(s)
 	return ushc
 }
 
@@ -454,10 +454,6 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 		_spec.SetField(usersettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ushc.mutation.Tags(); ok {
-		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ushc.mutation.DeletedAt(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -465,6 +461,10 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 	if value, ok := ushc.mutation.DeletedBy(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ushc.mutation.Tags(); ok {
+		_spec.SetField(usersettinghistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := ushc.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)

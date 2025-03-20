@@ -32,12 +32,12 @@ type NoteHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// a shortened prefixed id field to use as a human readable identifier
-	DisplayID string `json:"display_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"display_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
@@ -52,7 +52,7 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDisplayID, notehistory.FieldDeletedBy, notehistory.FieldOwnerID, notehistory.FieldText:
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -119,12 +119,6 @@ func (nh *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.UpdatedBy = value.String
 			}
-		case notehistory.FieldDisplayID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_id", values[i])
-			} else if value.Valid {
-				nh.DisplayID = value.String
-			}
 		case notehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -136,6 +130,12 @@ func (nh *NoteHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				nh.DeletedBy = value.String
+			}
+		case notehistory.FieldDisplayID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_id", values[i])
+			} else if value.Valid {
+				nh.DisplayID = value.String
 			}
 		case notehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -206,14 +206,14 @@ func (nh *NoteHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(nh.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("display_id=")
-	builder.WriteString(nh.DisplayID)
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(nh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(nh.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_id=")
+	builder.WriteString(nh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(nh.OwnerID)

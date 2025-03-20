@@ -67,24 +67,6 @@ func (osu *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
 	return osu
 }
 
-// SetTags sets the "tags" field.
-func (osu *OrgSubscriptionUpdate) SetTags(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.SetTags(s)
-	return osu
-}
-
-// AppendTags appends s to the "tags" field.
-func (osu *OrgSubscriptionUpdate) AppendTags(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.AppendTags(s)
-	return osu
-}
-
-// ClearTags clears the value of the "tags" field.
-func (osu *OrgSubscriptionUpdate) ClearTags() *OrgSubscriptionUpdate {
-	osu.mutation.ClearTags()
-	return osu
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (osu *OrgSubscriptionUpdate) SetDeletedAt(t time.Time) *OrgSubscriptionUpdate {
 	osu.mutation.SetDeletedAt(t)
@@ -122,6 +104,24 @@ func (osu *OrgSubscriptionUpdate) SetNillableDeletedBy(s *string) *OrgSubscripti
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (osu *OrgSubscriptionUpdate) ClearDeletedBy() *OrgSubscriptionUpdate {
 	osu.mutation.ClearDeletedBy()
+	return osu
+}
+
+// SetTags sets the "tags" field.
+func (osu *OrgSubscriptionUpdate) SetTags(s []string) *OrgSubscriptionUpdate {
+	osu.mutation.SetTags(s)
+	return osu
+}
+
+// AppendTags appends s to the "tags" field.
+func (osu *OrgSubscriptionUpdate) AppendTags(s []string) *OrgSubscriptionUpdate {
+	osu.mutation.AppendTags(s)
+	return osu
+}
+
+// ClearTags clears the value of the "tags" field.
+func (osu *OrgSubscriptionUpdate) ClearTags() *OrgSubscriptionUpdate {
+	osu.mutation.ClearTags()
 	return osu
 }
 
@@ -535,17 +535,6 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	if osu.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.Tags(); ok {
-		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := osu.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscription.FieldTags, value)
-		})
-	}
-	if osu.mutation.TagsCleared() {
-		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
-	}
 	if value, ok := osu.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -557,6 +546,17 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if osu.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := osu.mutation.Tags(); ok {
+		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := osu.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscription.FieldTags, value)
+		})
+	}
+	if osu.mutation.TagsCleared() {
+		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
 	if value, ok := osu.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
@@ -778,24 +778,6 @@ func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne
 	return osuo
 }
 
-// SetTags sets the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) SetTags(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetTags(s)
-	return osuo
-}
-
-// AppendTags appends s to the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) AppendTags(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AppendTags(s)
-	return osuo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearTags() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearTags()
-	return osuo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (osuo *OrgSubscriptionUpdateOne) SetDeletedAt(t time.Time) *OrgSubscriptionUpdateOne {
 	osuo.mutation.SetDeletedAt(t)
@@ -833,6 +815,24 @@ func (osuo *OrgSubscriptionUpdateOne) SetNillableDeletedBy(s *string) *OrgSubscr
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (osuo *OrgSubscriptionUpdateOne) ClearDeletedBy() *OrgSubscriptionUpdateOne {
 	osuo.mutation.ClearDeletedBy()
+	return osuo
+}
+
+// SetTags sets the "tags" field.
+func (osuo *OrgSubscriptionUpdateOne) SetTags(s []string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetTags(s)
+	return osuo
+}
+
+// AppendTags appends s to the "tags" field.
+func (osuo *OrgSubscriptionUpdateOne) AppendTags(s []string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AppendTags(s)
+	return osuo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearTags() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearTags()
 	return osuo
 }
 
@@ -1276,17 +1276,6 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	if osuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.Tags(); ok {
-		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := osuo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, orgsubscription.FieldTags, value)
-		})
-	}
-	if osuo.mutation.TagsCleared() {
-		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
-	}
 	if value, ok := osuo.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1298,6 +1287,17 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	}
 	if osuo.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := osuo.mutation.Tags(); ok {
+		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := osuo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscription.FieldTags, value)
+		})
+	}
+	if osuo.mutation.TagsCleared() {
+		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
 	if value, ok := osuo.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)

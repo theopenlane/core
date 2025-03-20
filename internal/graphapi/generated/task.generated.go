@@ -75,12 +75,12 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
@@ -111,20 +111,20 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_assignee(ctx, field)
 			case "comments":
 				return ec.fieldContext_Task_comments(ctx, field)
-			case "group":
-				return ec.fieldContext_Task_group(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Task_internalPolicy(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Task_procedure(ctx, field)
-			case "control":
-				return ec.fieldContext_Task_control(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Task_controlObjective(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Task_subcontrol(ctx, field)
-			case "program":
-				return ec.fieldContext_Task_program(ctx, field)
+			case "groups":
+				return ec.fieldContext_Task_groups(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Task_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Task_procedures(ctx, field)
+			case "controls":
+				return ec.fieldContext_Task_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Task_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Task_controlObjectives(ctx, field)
+			case "programs":
+				return ec.fieldContext_Task_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}
@@ -183,12 +183,12 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
@@ -219,20 +219,20 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assignee(ctx, field)
 			case "comments":
 				return ec.fieldContext_Task_comments(ctx, field)
-			case "group":
-				return ec.fieldContext_Task_group(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Task_internalPolicy(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Task_procedure(ctx, field)
-			case "control":
-				return ec.fieldContext_Task_control(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Task_controlObjective(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Task_subcontrol(ctx, field)
-			case "program":
-				return ec.fieldContext_Task_program(ctx, field)
+			case "groups":
+				return ec.fieldContext_Task_groups(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Task_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Task_procedures(ctx, field)
+			case "controls":
+				return ec.fieldContext_Task_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Task_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Task_controlObjectives(ctx, field)
+			case "programs":
+				return ec.fieldContext_Task_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}
@@ -335,12 +335,12 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "ownerID":
@@ -371,20 +371,20 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_assignee(ctx, field)
 			case "comments":
 				return ec.fieldContext_Task_comments(ctx, field)
-			case "group":
-				return ec.fieldContext_Task_group(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Task_internalPolicy(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Task_procedure(ctx, field)
-			case "control":
-				return ec.fieldContext_Task_control(ctx, field)
-			case "controlObjective":
-				return ec.fieldContext_Task_controlObjective(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Task_subcontrol(ctx, field)
-			case "program":
-				return ec.fieldContext_Task_program(ctx, field)
+			case "groups":
+				return ec.fieldContext_Task_groups(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Task_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Task_procedures(ctx, field)
+			case "controls":
+				return ec.fieldContext_Task_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Task_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Task_controlObjectives(ctx, field)
+			case "programs":
+				return ec.fieldContext_Task_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}

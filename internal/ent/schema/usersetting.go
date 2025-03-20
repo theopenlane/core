@@ -4,15 +4,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -21,17 +19,28 @@ import (
 
 // UserSetting holds the schema definition for the User entity.
 type UserSetting struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaUserSetting = "user_setting"
+
+func (UserSetting) Name() string {
+	return SchemaUserSetting
+}
+
+func (UserSetting) GetType() any {
+	return UserSetting.Type
+}
+
+func (UserSetting) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaUserSetting)
 }
 
 // Mixin of the UserSetting
 func (UserSetting) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return getDefaultMixins()
 }
 
 // Fields of the UserSetting
@@ -75,27 +84,27 @@ func (UserSetting) Fields() []ent.Field {
 }
 
 // Edges of the UserSetting
-func (UserSetting) Edges() []ent.Edge {
+func (u UserSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).
-			Ref("setting").
-			Unique().
-			Field("user_id"),
-		edge.To("default_org", Organization.Type).
-			Unique().
-			Comment("organization to load on user login"),
-		edge.To("files", File.Type).
-			Annotations(entgql.RelayConnection()),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: u,
+			edgeSchema: User{},
+			ref:        "setting",
+			field:      "user_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: u,
+			name:       "default_org",
+			t:          Organization.Type,
+			comment:    "organization to load on user login",
+		}),
+		defaultEdgeToWithPagination(u, File{}),
 	}
 }
 
 // Annotations of the UserSetting
 func (UserSetting) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-	}
+	return []schema.Annotation{}
 }
 
 // Hooks of the UserSetting.

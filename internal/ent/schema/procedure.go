@@ -1,26 +1,39 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Procedure defines the procedure schema.
 type Procedure struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaProcedure = "procedure"
+
+func (Procedure) Name() string {
+	return SchemaProcedure
+}
+
+func (Procedure) GetType() any {
+	return Procedure.Type
+}
+
+func (Procedure) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaProcedure)
 }
 
 // Fields returns procedure fields.
@@ -29,45 +42,35 @@ func (Procedure) Fields() []ent.Field {
 }
 
 // Edges of the Procedure
-func (Procedure) Edges() []ent.Edge {
+func (p Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("controls", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("procedures"),
-		edge.From("internal_policies", InternalPolicy.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("procedures"),
-		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
-		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
-		edge.From("programs", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("procedures"),
+		defaultEdgeFromWithPagination(p, Control{}),
+		defaultEdgeFromWithPagination(p, InternalPolicy{}),
+		defaultEdgeFromWithPagination(p, Program{}),
+		defaultEdgeToWithPagination(p, Narrative{}),
+		defaultEdgeToWithPagination(p, Risk{}),
+		defaultEdgeToWithPagination(p, Task{}),
 	}
 }
 
 // Mixin of the Procedure
 func (Procedure) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.NewIDMixinWithPrefixedID("PRD"),
-		NewOrgOwnMixinWithRef("procedures"),
-		// add group edit permissions to the procedure
-		NewGroupPermissionsMixin(false),
-
-		DocumentMixin{DocumentType: "procedure"}, // all procedures are documents
-		mixin.RevisionMixin{},                    // include revisions on all documents
-	}
+	return mixinConfig{
+		prefix:          "PRD",
+		includeRevision: true,
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("procedures"),
+			// add group edit permissions to the procedure
+			NewGroupPermissionsMixin(false),
+			// all procedures are documents
+			DocumentMixin{DocumentType: "procedure"},
+		},
+	}.getMixins()
 }
 
 // Annotations of the Procedure
 func (Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

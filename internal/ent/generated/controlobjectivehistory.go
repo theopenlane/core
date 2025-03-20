@@ -38,12 +38,12 @@ type ControlObjectiveHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision string `json:"revision,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the control objective
@@ -72,7 +72,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -151,12 +151,6 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.DeletedBy = value.String
 			}
-		case controlobjectivehistory.FieldRevision:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field revision", values[i])
-			} else if value.Valid {
-				coh.Revision = value.String
-			}
 		case controlobjectivehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
@@ -170,6 +164,12 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 				if err := json.Unmarshal(*value, &coh.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case controlobjectivehistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				coh.Revision = value.String
 			}
 		case controlobjectivehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -282,14 +282,14 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(coh.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("revision=")
-	builder.WriteString(coh.Revision)
-	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(coh.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", coh.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(coh.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(coh.OwnerID)

@@ -64,14 +64,14 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
-	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
-	EdgeProcedure = "procedure"
-	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
-	EdgeActionPlans = "action_plans"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
+	EdgeProcedures = "procedures"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgeStakeholder holds the string denoting the stakeholder edge name in mutations.
 	EdgeStakeholder = "stakeholder"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -100,26 +100,26 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
-	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_risks"
-	// ControlInverseTable is the table name for the Control entity.
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_risks"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// ProcedureTable is the table that holds the procedure relation/edge. The primary key declared below.
-	ProcedureTable = "procedure_risks"
-	// ProcedureInverseTable is the table name for the Procedure entity.
+	ControlsInverseTable = "controls"
+	// ProceduresTable is the table that holds the procedures relation/edge. The primary key declared below.
+	ProceduresTable = "procedure_risks"
+	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
-	ProcedureInverseTable = "procedures"
-	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
-	ActionPlansTable = "risk_action_plans"
-	// ActionPlansInverseTable is the table name for the ActionPlan entity.
-	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
-	ActionPlansInverseTable = "action_plans"
+	ProceduresInverseTable = "procedures"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_risks"
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "risk_action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
 	// StakeholderTable is the table that holds the stakeholder relation/edge.
 	StakeholderTable = "risks"
 	// StakeholderInverseTable is the table name for the Group entity.
@@ -179,18 +179,18 @@ var (
 	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
 	// primary key for the viewers relation (M2M).
 	ViewersPrimaryKey = []string{"risk_id", "group_id"}
-	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
-	// primary key for the control relation (M2M).
-	ControlPrimaryKey = []string{"control_id", "risk_id"}
-	// ProcedurePrimaryKey and ProcedureColumn2 are the table columns denoting the
-	// primary key for the procedure relation (M2M).
-	ProcedurePrimaryKey = []string{"procedure_id", "risk_id"}
-	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
-	// primary key for the action_plans relation (M2M).
-	ActionPlansPrimaryKey = []string{"risk_id", "action_plan_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "risk_id"}
+	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
+	// primary key for the procedures relation (M2M).
+	ProceduresPrimaryKey = []string{"procedure_id", "risk_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "risk_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"risk_id", "action_plan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -418,45 +418,31 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
 	}
 }
 
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByProcedureCount orders the results by procedure count.
-func ByProcedureCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProceduresCount orders the results by procedures count.
+func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProcedureStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
 	}
 }
 
-// ByProcedure orders the results by procedure terms.
-func ByProcedure(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByProcedures orders the results by procedures terms.
+func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByActionPlansCount orders the results by action_plans count.
-func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
-	}
-}
-
-// ByActionPlans orders the results by action_plans terms.
-func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -471,6 +457,20 @@ func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
+	}
+}
+
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -515,25 +515,18 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
-func newControlStep() *sqlgraph.Step {
+func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
-func newProcedureStep() *sqlgraph.Step {
+func newProceduresStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProcedureInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
-	)
-}
-func newActionPlansStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ActionPlansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+		sqlgraph.To(ProceduresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {
@@ -541,6 +534,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newActionPlansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
 func newStakeholderStep() *sqlgraph.Step {

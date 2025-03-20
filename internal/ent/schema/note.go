@@ -1,26 +1,39 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Note holds the schema definition for the Note entity
 type Note struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaNote = "note"
+
+func (Note) Name() string {
+	return SchemaNote
+}
+
+func (Note) GetType() any {
+	return Note.Type
+}
+
+func (Note) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaNote)
 }
 
 // Fields of the Note
@@ -33,34 +46,35 @@ func (Note) Fields() []ent.Field {
 }
 
 // Mixin of the Note
-func (Note) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.NewIDMixinWithPrefixedID("NTE"),
-		mixin.SoftDeleteMixin{},
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
-			WithOrganizationOwner: true,
-			OwnerRelation:         fgax.OwnerRelation,
-			Ref:                   "notes",
-		})}
+func (n Note) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix:      "NTE",
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
+				WithOrganizationOwner: true,
+				OwnerRelation:         fgax.OwnerRelation,
+				Ref:                   n.PluralName(),
+			}),
+		},
+	}.getMixins()
 }
 
 // Edges of the Note
-func (Note) Edges() []ent.Edge {
+func (n Note) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("task", Task.Type).
-			Ref("comments").
-			Unique(),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Task{},
+			ref:        "comments",
+		}),
 	}
 }
 
 // Annotations of the Note
 func (Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.SelfAccessChecks(),
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),

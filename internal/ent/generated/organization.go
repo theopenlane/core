@@ -28,12 +28,12 @@ type Organization struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
 	Name string `json:"name,omitempty"`
 	// The organization's displayed 'friendly' name
@@ -104,8 +104,8 @@ type OrganizationEdges struct {
 	Templates []*Template `json:"templates,omitempty"`
 	// Integrations holds the value of the integrations edge.
 	Integrations []*Integration `json:"integrations,omitempty"`
-	// DocumentData holds the value of the document_data edge.
-	DocumentData []*DocumentData `json:"document_data,omitempty"`
+	// Documents holds the value of the documents edge.
+	Documents []*DocumentData `json:"documents,omitempty"`
 	// OrgSubscriptions holds the value of the org_subscriptions edge.
 	OrgSubscriptions []*OrgSubscription `json:"org_subscriptions,omitempty"`
 	// Invites holds the value of the invites edge.
@@ -171,7 +171,7 @@ type OrganizationEdges struct {
 	namedGroups                   map[string][]*Group
 	namedTemplates                map[string][]*Template
 	namedIntegrations             map[string][]*Integration
-	namedDocumentData             map[string][]*DocumentData
+	namedDocuments                map[string][]*DocumentData
 	namedOrgSubscriptions         map[string][]*OrgSubscription
 	namedInvites                  map[string][]*Invite
 	namedSubscribers              map[string][]*Subscriber
@@ -398,13 +398,13 @@ func (e OrganizationEdges) IntegrationsOrErr() ([]*Integration, error) {
 	return nil, &NotLoadedError{edge: "integrations"}
 }
 
-// DocumentDataOrErr returns the DocumentData value or an error if the edge
+// DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) DocumentDataOrErr() ([]*DocumentData, error) {
+func (e OrganizationEdges) DocumentsOrErr() ([]*DocumentData, error) {
 	if e.loadedTypes[22] {
-		return e.DocumentData, nil
+		return e.Documents, nil
 	}
-	return nil, &NotLoadedError{edge: "document_data"}
+	return nil, &NotLoadedError{edge: "documents"}
 }
 
 // OrgSubscriptionsOrErr returns the OrgSubscriptions value or an error if the edge
@@ -645,14 +645,6 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.UpdatedBy = value.String
 			}
-		case organization.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case organization.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
@@ -664,6 +656,14 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				o.DeletedBy = value.String
+			}
+		case organization.FieldTags:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &o.Tags); err != nil {
+					return fmt.Errorf("unmarshal field tags: %w", err)
+				}
 			}
 		case organization.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -845,9 +845,9 @@ func (o *Organization) QueryIntegrations() *IntegrationQuery {
 	return NewOrganizationClient(o.config).QueryIntegrations(o)
 }
 
-// QueryDocumentData queries the "document_data" edge of the Organization entity.
-func (o *Organization) QueryDocumentData() *DocumentDataQuery {
-	return NewOrganizationClient(o.config).QueryDocumentData(o)
+// QueryDocuments queries the "documents" edge of the Organization entity.
+func (o *Organization) QueryDocuments() *DocumentDataQuery {
+	return NewOrganizationClient(o.config).QueryDocuments(o)
 }
 
 // QueryOrgSubscriptions queries the "org_subscriptions" edge of the Organization entity.
@@ -985,14 +985,14 @@ func (o *Organization) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(o.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", o.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(o.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(o.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("tags=")
+	builder.WriteString(fmt.Sprintf("%v", o.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(o.Name)
@@ -1486,27 +1486,27 @@ func (o *Organization) appendNamedIntegrations(name string, edges ...*Integratio
 	}
 }
 
-// NamedDocumentData returns the DocumentData named value or an error if the edge was not
+// NamedDocuments returns the Documents named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedDocumentData(name string) ([]*DocumentData, error) {
-	if o.Edges.namedDocumentData == nil {
+func (o *Organization) NamedDocuments(name string) ([]*DocumentData, error) {
+	if o.Edges.namedDocuments == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedDocumentData[name]
+	nodes, ok := o.Edges.namedDocuments[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedDocumentData(name string, edges ...*DocumentData) {
-	if o.Edges.namedDocumentData == nil {
-		o.Edges.namedDocumentData = make(map[string][]*DocumentData)
+func (o *Organization) appendNamedDocuments(name string, edges ...*DocumentData) {
+	if o.Edges.namedDocuments == nil {
+		o.Edges.namedDocuments = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedDocumentData[name] = []*DocumentData{}
+		o.Edges.namedDocuments[name] = []*DocumentData{}
 	} else {
-		o.Edges.namedDocumentData[name] = append(o.Edges.namedDocumentData[name], edges...)
+		o.Edges.namedDocuments[name] = append(o.Edges.namedDocuments[name], edges...)
 	}
 }
 

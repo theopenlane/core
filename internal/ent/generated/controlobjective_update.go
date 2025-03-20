@@ -115,6 +115,24 @@ func (cou *ControlObjectiveUpdate) ClearDeletedBy() *ControlObjectiveUpdate {
 	return cou
 }
 
+// SetTags sets the "tags" field.
+func (cou *ControlObjectiveUpdate) SetTags(s []string) *ControlObjectiveUpdate {
+	cou.mutation.SetTags(s)
+	return cou
+}
+
+// AppendTags appends s to the "tags" field.
+func (cou *ControlObjectiveUpdate) AppendTags(s []string) *ControlObjectiveUpdate {
+	cou.mutation.AppendTags(s)
+	return cou
+}
+
+// ClearTags clears the value of the "tags" field.
+func (cou *ControlObjectiveUpdate) ClearTags() *ControlObjectiveUpdate {
+	cou.mutation.ClearTags()
+	return cou
+}
+
 // SetRevision sets the "revision" field.
 func (cou *ControlObjectiveUpdate) SetRevision(s string) *ControlObjectiveUpdate {
 	cou.mutation.SetRevision(s)
@@ -132,24 +150,6 @@ func (cou *ControlObjectiveUpdate) SetNillableRevision(s *string) *ControlObject
 // ClearRevision clears the value of the "revision" field.
 func (cou *ControlObjectiveUpdate) ClearRevision() *ControlObjectiveUpdate {
 	cou.mutation.ClearRevision()
-	return cou
-}
-
-// SetTags sets the "tags" field.
-func (cou *ControlObjectiveUpdate) SetTags(s []string) *ControlObjectiveUpdate {
-	cou.mutation.SetTags(s)
-	return cou
-}
-
-// AppendTags appends s to the "tags" field.
-func (cou *ControlObjectiveUpdate) AppendTags(s []string) *ControlObjectiveUpdate {
-	cou.mutation.AppendTags(s)
-	return cou
-}
-
-// ClearTags clears the value of the "tags" field.
-func (cou *ControlObjectiveUpdate) ClearTags() *ControlObjectiveUpdate {
-	cou.mutation.ClearTags()
 	return cou
 }
 
@@ -834,12 +834,6 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cou.mutation.Revision(); ok {
-		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
-	}
-	if cou.mutation.RevisionCleared() {
-		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
-	}
 	if value, ok := cou.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
 	}
@@ -850,6 +844,12 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if cou.mutation.TagsCleared() {
 		_spec.ClearField(controlobjective.FieldTags, field.TypeJSON)
+	}
+	if value, ok := cou.mutation.Revision(); ok {
+		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
+	}
+	if cou.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
 	}
 	if value, ok := cou.mutation.Name(); ok {
 		_spec.SetField(controlobjective.FieldName, field.TypeString, value)
@@ -1562,6 +1562,24 @@ func (couo *ControlObjectiveUpdateOne) ClearDeletedBy() *ControlObjectiveUpdateO
 	return couo
 }
 
+// SetTags sets the "tags" field.
+func (couo *ControlObjectiveUpdateOne) SetTags(s []string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetTags(s)
+	return couo
+}
+
+// AppendTags appends s to the "tags" field.
+func (couo *ControlObjectiveUpdateOne) AppendTags(s []string) *ControlObjectiveUpdateOne {
+	couo.mutation.AppendTags(s)
+	return couo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (couo *ControlObjectiveUpdateOne) ClearTags() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearTags()
+	return couo
+}
+
 // SetRevision sets the "revision" field.
 func (couo *ControlObjectiveUpdateOne) SetRevision(s string) *ControlObjectiveUpdateOne {
 	couo.mutation.SetRevision(s)
@@ -1579,24 +1597,6 @@ func (couo *ControlObjectiveUpdateOne) SetNillableRevision(s *string) *ControlOb
 // ClearRevision clears the value of the "revision" field.
 func (couo *ControlObjectiveUpdateOne) ClearRevision() *ControlObjectiveUpdateOne {
 	couo.mutation.ClearRevision()
-	return couo
-}
-
-// SetTags sets the "tags" field.
-func (couo *ControlObjectiveUpdateOne) SetTags(s []string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetTags(s)
-	return couo
-}
-
-// AppendTags appends s to the "tags" field.
-func (couo *ControlObjectiveUpdateOne) AppendTags(s []string) *ControlObjectiveUpdateOne {
-	couo.mutation.AppendTags(s)
-	return couo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (couo *ControlObjectiveUpdateOne) ClearTags() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearTags()
 	return couo
 }
 
@@ -2311,12 +2311,6 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.DeletedByCleared() {
 		_spec.ClearField(controlobjective.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := couo.mutation.Revision(); ok {
-		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
-	}
-	if couo.mutation.RevisionCleared() {
-		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
-	}
 	if value, ok := couo.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
 	}
@@ -2327,6 +2321,12 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	}
 	if couo.mutation.TagsCleared() {
 		_spec.ClearField(controlobjective.FieldTags, field.TypeJSON)
+	}
+	if value, ok := couo.mutation.Revision(); ok {
+		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
+	}
+	if couo.mutation.RevisionCleared() {
+		_spec.ClearField(controlobjective.FieldRevision, field.TypeString)
 	}
 	if value, ok := couo.mutation.Name(); ok {
 		_spec.SetField(controlobjective.FieldName, field.TypeString, value)

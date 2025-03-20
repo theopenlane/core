@@ -6286,6 +6286,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
@@ -6300,8 +6302,6 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -6316,14 +6316,14 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
-			case "risk":
-				return ec.fieldContext_ActionPlan_risk(ctx, field)
-			case "control":
-				return ec.fieldContext_ActionPlan_control(ctx, field)
-			case "user":
-				return ec.fieldContext_ActionPlan_user(ctx, field)
-			case "program":
-				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "risks":
+				return ec.fieldContext_ActionPlan_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_ActionPlan_controls(ctx, field)
+			case "users":
+				return ec.fieldContext_ActionPlan_users(ctx, field)
+			case "programs":
+				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -6386,6 +6386,8 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
@@ -6400,8 +6402,6 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -6416,14 +6416,14 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
-			case "risk":
-				return ec.fieldContext_ActionPlan_risk(ctx, field)
-			case "control":
-				return ec.fieldContext_ActionPlan_control(ctx, field)
-			case "user":
-				return ec.fieldContext_ActionPlan_user(ctx, field)
-			case "program":
-				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "risks":
+				return ec.fieldContext_ActionPlan_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_ActionPlan_controls(ctx, field)
+			case "users":
+				return ec.fieldContext_ActionPlan_users(ctx, field)
+			case "programs":
+				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -6530,6 +6530,8 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "name":
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
@@ -6544,8 +6546,6 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
-			case "revision":
-				return ec.fieldContext_ActionPlan_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -6560,14 +6560,14 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
-			case "risk":
-				return ec.fieldContext_ActionPlan_risk(ctx, field)
-			case "control":
-				return ec.fieldContext_ActionPlan_control(ctx, field)
-			case "user":
-				return ec.fieldContext_ActionPlan_user(ctx, field)
-			case "program":
-				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "risks":
+				return ec.fieldContext_ActionPlan_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_ActionPlan_controls(ctx, field)
+			case "users":
+				return ec.fieldContext_ActionPlan_users(ctx, field)
+			case "programs":
+				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},

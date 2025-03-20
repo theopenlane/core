@@ -113,14 +113,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "control":
-				return ec.fieldContext_Risk_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Risk_procedure(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
+			case "controls":
+				return ec.fieldContext_Risk_controls(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Risk_procedures(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
@@ -219,14 +219,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "control":
-				return ec.fieldContext_Risk_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Risk_procedure(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
+			case "controls":
+				return ec.fieldContext_Risk_controls(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Risk_procedures(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
@@ -369,14 +369,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "control":
-				return ec.fieldContext_Risk_control(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Risk_procedure(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
+			case "controls":
+				return ec.fieldContext_Risk_controls(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Risk_procedures(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":

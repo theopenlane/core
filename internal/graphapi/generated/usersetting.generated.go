@@ -74,12 +74,12 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -158,12 +158,12 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -242,12 +242,12 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":

@@ -1,27 +1,40 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // GroupSetting holds the schema definition for the GroupSetting entity
 type GroupSetting struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaGroupSetting = "group_setting"
+
+func (GroupSetting) Name() string {
+	return SchemaGroupSetting
+}
+
+func (GroupSetting) GetType() any {
+	return GroupSetting.Type
+}
+
+func (GroupSetting) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaGroupSetting)
 }
 
 // Fields of the GroupSetting.
@@ -50,21 +63,20 @@ func (GroupSetting) Fields() []ent.Field {
 }
 
 // Edges of the GroupSetting
-func (GroupSetting) Edges() []ent.Edge {
+func (g GroupSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("group", Group.Type).
-			Ref("setting").
-			Field("group_id").
-			Unique(),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: Group{},
+			field:      "group_id",
+			ref:        "setting",
+		}),
 	}
 }
 
 // Annotations of the GroupSetting
 func (GroupSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SettingsChecks("group"),
 	}
 }
@@ -85,11 +97,9 @@ func (GroupSetting) Interceptors() []ent.Interceptor {
 
 // Mixin of the GroupSetting
 func (GroupSetting) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{
+		excludeTags: true,
+	}.getMixins()
 }
 
 // Policy defines the privacy policy of the GroupSetting

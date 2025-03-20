@@ -535,16 +535,6 @@ func UpdatedByContainsFold(v string) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.OrganizationHistory {
-	return predicate.OrganizationHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.OrganizationHistory {
-	return predicate.OrganizationHistory(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -668,6 +658,16 @@ func DeletedByEqualFold(v string) predicate.OrganizationHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.OrganizationHistory {
 	return predicate.OrganizationHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.OrganizationHistory {
+	return predicate.OrganizationHistory(sql.FieldNotNull(FieldTags))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

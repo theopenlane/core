@@ -111,12 +111,6 @@ func (ohc *OrganizationHistoryCreate) SetNillableUpdatedBy(s *string) *Organizat
 	return ohc
 }
 
-// SetTags sets the "tags" field.
-func (ohc *OrganizationHistoryCreate) SetTags(s []string) *OrganizationHistoryCreate {
-	ohc.mutation.SetTags(s)
-	return ohc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (ohc *OrganizationHistoryCreate) SetDeletedAt(t time.Time) *OrganizationHistoryCreate {
 	ohc.mutation.SetDeletedAt(t)
@@ -142,6 +136,12 @@ func (ohc *OrganizationHistoryCreate) SetNillableDeletedBy(s *string) *Organizat
 	if s != nil {
 		ohc.SetDeletedBy(*s)
 	}
+	return ohc
+}
+
+// SetTags sets the "tags" field.
+func (ohc *OrganizationHistoryCreate) SetTags(s []string) *OrganizationHistoryCreate {
+	ohc.mutation.SetTags(s)
 	return ohc
 }
 
@@ -436,10 +436,6 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ohc.mutation.Tags(); ok {
-		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := ohc.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -447,6 +443,10 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	if value, ok := ohc.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ohc.mutation.Tags(); ok {
+		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := ohc.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)

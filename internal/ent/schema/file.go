@@ -4,21 +4,35 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // File defines the file schema.
 type File struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaFile = "file"
+
+func (File) Name() string {
+	return SchemaFile
+}
+
+func (File) GetType() any {
+	return File.Type
+}
+
+func (File) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaFile)
 }
 
 // Fields returns file fields.
@@ -71,67 +85,40 @@ func (File) Fields() []ent.Field {
 }
 
 // Edges of the File
-func (File) Edges() []ent.Edge {
+func (f File) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("organization", Organization.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("group", Group.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("contact", Contact.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("entity", Entity.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("user_setting", UserSetting.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("organization_setting", OrganizationSetting.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("template", Template.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("document_data", DocumentData.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
-		edge.From("program", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
-		edge.From("evidence", Evidence.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("files"),
+		defaultEdgeFrom(f, User{}),
+		defaultEdgeFrom(f, Organization{}),
+		defaultEdgeFromWithPagination(f, Group{}),
+		defaultEdgeFrom(f, Contact{}),
+		defaultEdgeFrom(f, Entity{}),
+		defaultEdgeFrom(f, UserSetting{}),
+		defaultEdgeFrom(f, OrganizationSetting{}),
+		defaultEdgeFrom(f, Template{}),
+		defaultEdgeFrom(f, DocumentData{}),
+		defaultEdgeFrom(f, Program{}),
+		defaultEdgeFrom(f, Evidence{}),
+		defaultEdgeToWithPagination(f, Event{}),
 	}
 }
 
 // Mixin of the File
-func (File) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames: []string{"organization_id", "program_id", "control_id", "procedure_id", "template_id", "subcontrol_id", "document_data_id", "contact_id", "internal_policy_id", "narrative_id", "evidence_id"},
-			Ref:        "files",
-			HookFuncs:  []HookFunc{}, // use an empty hook, file processing is handled in middleware
+func (f File) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames: []string{"organization_id", "program_id", "control_id", "procedure_id", "template_id", "subcontrol_id", "document_data_id", "contact_id", "internal_policy_id", "narrative_id", "evidence_id"},
+				Ref:        f.PluralName(),
+				HookFuncs:  []HookFunc{}, // use an empty hook, file processing is handled in middleware
 
-		}),
-	}
+			}),
+		},
+	}.getMixins()
 }
 
 // Annotations of the File
 func (File) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

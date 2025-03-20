@@ -61,8 +61,8 @@ const (
 	EdgeUser = "user"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
-	// EdgeGroup holds the string denoting the group edge name in mutations.
-	EdgeGroup = "group"
+	// EdgeGroups holds the string denoting the groups edge name in mutations.
+	EdgeGroups = "groups"
 	// EdgeContact holds the string denoting the contact edge name in mutations.
 	EdgeContact = "contact"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
@@ -73,14 +73,14 @@ const (
 	EdgeOrganizationSetting = "organization_setting"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
-	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
-	EdgeDocumentData = "document_data"
-	// EdgeEvents holds the string denoting the events edge name in mutations.
-	EdgeEvents = "events"
+	// EdgeDocument holds the string denoting the document edge name in mutations.
+	EdgeDocument = "document"
 	// EdgeProgram holds the string denoting the program edge name in mutations.
 	EdgeProgram = "program"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
+	// EdgeEvents holds the string denoting the events edge name in mutations.
+	EdgeEvents = "events"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -93,11 +93,11 @@ const (
 	// OrganizationInverseTable is the table name for the Organization entity.
 	// It exists in this package in order to avoid circular dependency with the "organization" package.
 	OrganizationInverseTable = "organizations"
-	// GroupTable is the table that holds the group relation/edge. The primary key declared below.
-	GroupTable = "group_files"
-	// GroupInverseTable is the table name for the Group entity.
+	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
+	GroupsTable = "group_files"
+	// GroupsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
-	GroupInverseTable = "groups"
+	GroupsInverseTable = "groups"
 	// ContactTable is the table that holds the contact relation/edge. The primary key declared below.
 	ContactTable = "contact_files"
 	// ContactInverseTable is the table name for the Contact entity.
@@ -123,16 +123,11 @@ const (
 	// TemplateInverseTable is the table name for the Template entity.
 	// It exists in this package in order to avoid circular dependency with the "template" package.
 	TemplateInverseTable = "templates"
-	// DocumentDataTable is the table that holds the document_data relation/edge. The primary key declared below.
-	DocumentDataTable = "document_data_files"
-	// DocumentDataInverseTable is the table name for the DocumentData entity.
+	// DocumentTable is the table that holds the document relation/edge. The primary key declared below.
+	DocumentTable = "document_data_files"
+	// DocumentInverseTable is the table name for the DocumentData entity.
 	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentDataInverseTable = "document_data"
-	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
-	EventsTable = "file_events"
-	// EventsInverseTable is the table name for the Event entity.
-	// It exists in this package in order to avoid circular dependency with the "event" package.
-	EventsInverseTable = "events"
+	DocumentInverseTable = "document_data"
 	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
 	ProgramTable = "program_files"
 	// ProgramInverseTable is the table name for the Program entity.
@@ -143,6 +138,11 @@ const (
 	// EvidenceInverseTable is the table name for the Evidence entity.
 	// It exists in this package in order to avoid circular dependency with the "evidence" package.
 	EvidenceInverseTable = "evidences"
+	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
+	EventsTable = "file_events"
+	// EventsInverseTable is the table name for the Event entity.
+	// It exists in this package in order to avoid circular dependency with the "event" package.
+	EventsInverseTable = "events"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -178,9 +178,9 @@ var (
 	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
 	// primary key for the organization relation (M2M).
 	OrganizationPrimaryKey = []string{"organization_id", "file_id"}
-	// GroupPrimaryKey and GroupColumn2 are the table columns denoting the
-	// primary key for the group relation (M2M).
-	GroupPrimaryKey = []string{"group_id", "file_id"}
+	// GroupsPrimaryKey and GroupsColumn2 are the table columns denoting the
+	// primary key for the groups relation (M2M).
+	GroupsPrimaryKey = []string{"group_id", "file_id"}
 	// ContactPrimaryKey and ContactColumn2 are the table columns denoting the
 	// primary key for the contact relation (M2M).
 	ContactPrimaryKey = []string{"contact_id", "file_id"}
@@ -196,18 +196,18 @@ var (
 	// TemplatePrimaryKey and TemplateColumn2 are the table columns denoting the
 	// primary key for the template relation (M2M).
 	TemplatePrimaryKey = []string{"template_id", "file_id"}
-	// DocumentDataPrimaryKey and DocumentDataColumn2 are the table columns denoting the
-	// primary key for the document_data relation (M2M).
-	DocumentDataPrimaryKey = []string{"document_data_id", "file_id"}
-	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
-	// primary key for the events relation (M2M).
-	EventsPrimaryKey = []string{"file_id", "event_id"}
+	// DocumentPrimaryKey and DocumentColumn2 are the table columns denoting the
+	// primary key for the document relation (M2M).
+	DocumentPrimaryKey = []string{"document_data_id", "file_id"}
 	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
 	// primary key for the program relation (M2M).
 	ProgramPrimaryKey = []string{"program_id", "file_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"evidence_id", "file_id"}
+	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
+	// primary key for the events relation (M2M).
+	EventsPrimaryKey = []string{"file_id", "event_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -376,17 +376,17 @@ func ByOrganization(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByGroupCount orders the results by group count.
-func ByGroupCount(opts ...sql.OrderTermOption) OrderOption {
+// ByGroupsCount orders the results by groups count.
+func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGroupStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newGroupsStep(), opts...)
 	}
 }
 
-// ByGroup orders the results by group terms.
-func ByGroup(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByGroups orders the results by groups terms.
+func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGroupStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -460,31 +460,17 @@ func ByTemplate(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByDocumentDataCount orders the results by document_data count.
-func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
+// ByDocumentCount orders the results by document count.
+func ByDocumentCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newDocumentStep(), opts...)
 	}
 }
 
-// ByDocumentData orders the results by document_data terms.
-func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByDocument orders the results by document terms.
+func ByDocument(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEventsCount orders the results by events count.
-func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
-	}
-}
-
-// ByEvents orders the results by events terms.
-func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -515,6 +501,20 @@ func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEventsCount orders the results by events count.
+func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
+	}
+}
+
+// ByEvents orders the results by events terms.
+func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -529,11 +529,11 @@ func newOrganizationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
 	)
 }
-func newGroupStep() *sqlgraph.Step {
+func newGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(GroupInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+		sqlgraph.To(GroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, GroupsTable, GroupsPrimaryKey...),
 	)
 }
 func newContactStep() *sqlgraph.Step {
@@ -571,18 +571,11 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, TemplateTable, TemplatePrimaryKey...),
 	)
 }
-func newDocumentDataStep() *sqlgraph.Step {
+func newDocumentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentDataInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, DocumentDataTable, DocumentDataPrimaryKey...),
-	)
-}
-func newEventsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EventsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+		sqlgraph.To(DocumentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DocumentTable, DocumentPrimaryKey...),
 	)
 }
 func newProgramStep() *sqlgraph.Step {
@@ -597,5 +590,12 @@ func newEvidenceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EvidenceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
+	)
+}
+func newEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 	)
 }

@@ -5,19 +5,17 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -26,7 +24,23 @@ import (
 
 // OrgMembership holds the schema definition for the OrgMembership entity
 type OrgMembership struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaOrgMembership = "orgmembership"
+
+func (OrgMembership) Name() string {
+	return SchemaOrgMembership
+}
+
+func (OrgMembership) GetType() any {
+	return OrgMembership.Type
+}
+
+func (OrgMembership) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrgMembership)
 }
 
 // Fields of the OrgMembership
@@ -45,28 +59,29 @@ func (OrgMembership) Fields() []ent.Field {
 }
 
 // Edges of the OrgMembership
-func (OrgMembership) Edges() []ent.Edge {
+func (o OrgMembership) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("organization", Organization.Type).
-			Field("organization_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("user", User.Type).
-			Field("user_id").
-			Required().
-			Unique().
-			Immutable(),
-		edge.To("events", Event.Type).Annotations(entgql.RelayConnection()),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: Organization{},
+			required:   true,
+			immutable:  true,
+			field:      "organization_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: User{},
+			required:   true,
+			immutable:  true,
+			field:      "user_id",
+		}),
+		defaultEdgeToWithPagination(o, Event{}),
 	}
 }
 
 // Annotations of the OrgMembership
 func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.MembershipChecks("organization"),
 		// Delete groups + program members when orgmembership is deleted
 		entx.CascadeThroughAnnotationField(
@@ -93,11 +108,7 @@ func (OrgMembership) Indexes() []ent.Index {
 
 // Mixin of the OrgMembership
 func (OrgMembership) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{excludeTags: true}.getMixins()
 }
 
 // Hooks of the OrgMembership

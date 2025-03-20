@@ -20,6 +20,18 @@ tests:
           audit_log_viewer: true
           can_invite_members: true
           can_invite_admins: true
+          can_create_standard: true
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_control_objective: true
+          can_create_group: true
+          can_create_internal_policy: true
+          can_create_narrative: true
+          can_create_procedure: true
+          can_create_program: true
+          can_create_risk: true
+          can_create_template: true
+          can_create_evidence: true
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -34,6 +46,18 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: false
+          can_create_standard: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_template: false
+          can_create_evidence: true # group tuple set to allow
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -46,6 +70,18 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: true
+          can_create_standard: true
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_control_objective: true
+          can_create_group: true
+          can_create_internal_policy: true
+          can_create_narrative: true
+          can_create_procedure: true
+          can_create_program: true
+          can_create_risk: true
+          can_create_template: true
+          can_create_evidence: true
       - user: service:ulid-of-service-viewer
         object: organization:openlane # parent org
         assertions:
@@ -58,6 +94,18 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: false
+          can_create_standard: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_template: false
+          can_create_evidence: false
       - user: user:ulid-of-admin
         object: organization:openlane # parent org
         context:
@@ -100,6 +148,18 @@ tests:
           audit_log_viewer: true
           can_invite_members: true
           can_invite_admins: true
+          can_create_standard: true
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_control_objective: true
+          can_create_group: true
+          can_create_internal_policy: true
+          can_create_narrative: true
+          can_create_procedure: true
+          can_create_program: true
+          can_create_risk: true
+          can_create_template: true
+          can_create_evidence: true
       - user: user:ulid-of-member
         object: organization:foo # child org
         context:

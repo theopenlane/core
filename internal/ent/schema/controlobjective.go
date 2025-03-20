@@ -4,15 +4,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -20,7 +18,23 @@ import (
 
 // ControlObjective defines the controlobjective schema.
 type ControlObjective struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaControlObjective = "control_objective"
+
+func (ControlObjective) Name() string {
+	return SchemaControlObjective
+}
+
+func (ControlObjective) GetType() any {
+	return ControlObjective.Type
+}
+
+func (ControlObjective) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaControlObjective)
 }
 
 // Fields returns controlobjective fields.
@@ -74,65 +88,44 @@ func (ControlObjective) Fields() []ent.Field {
 }
 
 // Edges of the ControlObjective
-func (ControlObjective) Edges() []ent.Edge {
+func (c ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("programs", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_objectives"),
-		edge.From("evidence", Evidence.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_objectives"),
-
-		// control objectives can map to multiple controls and subcontrols
-		edge.From("controls", Control.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_objectives"),
-		edge.From("subcontrols", Subcontrol.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_objectives"),
-
-		edge.From("internal_policies", InternalPolicy.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("control_objectives"),
-
-		edge.To("procedures", Procedure.Type).Annotations(entgql.RelayConnection()),
-
-		edge.To("risks", Risk.Type).Annotations(entgql.RelayConnection()),
-		edge.To("narratives", Narrative.Type).Annotations(entgql.RelayConnection()),
-
-		edge.To("tasks", Task.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeFromWithPagination(c, Program{}),
+		defaultEdgeFromWithPagination(c, Evidence{}),
+		defaultEdgeFromWithPagination(c, Control{}),
+		defaultEdgeFromWithPagination(c, Subcontrol{}),
+		defaultEdgeFromWithPagination(c, InternalPolicy{}),
+		defaultEdgeToWithPagination(c, Procedure{}),
+		defaultEdgeToWithPagination(c, Risk{}),
+		defaultEdgeToWithPagination(c, Narrative{}),
+		defaultEdgeToWithPagination(c, Task{}),
 	}
 }
 
 // Mixin of the ControlObjective
-func (ControlObjective) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		mixin.RevisionMixin{},
-		emixin.NewIDMixinWithPrefixedID("CLO"),
-		emixin.TagMixin{},
-		// control objectives inherit permissions from the associated programs, but must have an organization as well
-		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
-		// it will also create program parent tuples for the control objective when a program is associated to the control objectives
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:               []string{"program_id", "control_id", "subcontrol_id"},
-			WithOrganizationOwner:    true,
-			AllowEmptyForSystemAdmin: true, // allow empty organization owner for system owned
-			Ref:                      "control_objectives",
-		}),
-		// add groups permissions with viewer, editor, and blocked groups
-		NewGroupPermissionsMixin(true),
-	}
+func (c ControlObjective) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix:          "CLO",
+		includeRevision: true,
+		additionalMixins: []ent.Mixin{
+			// control objectives inherit permissions from the associated programs, but must have an organization as well
+			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
+			// it will also create program parent tuples for the control objective when a program is associated to the control objectives
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:               []string{"program_id", "control_id", "subcontrol_id"},
+				WithOrganizationOwner:    true,
+				AllowEmptyForSystemAdmin: true, // allow empty organization owner for system owned
+				Ref:                      c.PluralName(),
+			}),
+			// add groups permissions with viewer, editor, and blocked groups
+			NewGroupPermissionsMixin(true),
+		},
+	}.getMixins()
 }
 
 // Annotations of the ControlObjective
 func (ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }

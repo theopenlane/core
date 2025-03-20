@@ -103,6 +103,11 @@ func DisplayID(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldOwnerID, v))
@@ -131,11 +136,6 @@ func ApprovalRequired(v bool) predicate.Procedure {
 // ReviewDue applies equality check predicate on the "review_due" field. It's identical to ReviewDueEQ.
 func ReviewDue(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldReviewDue, v))
-}
-
-// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
-func Revision(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -388,16 +388,6 @@ func UpdatedByContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldTags))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDeletedAt, v))
@@ -586,6 +576,91 @@ func DisplayIDEqualFold(v string) predicate.Procedure {
 // DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
 func DisplayIDContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldDisplayID, v))
+}
+
+// TagsIsNil applies the IsNil predicate on the "tags" field.
+func TagsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldTags))
+}
+
+// TagsNotNil applies the NotNil predicate on the "tags" field.
+func TagsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldTags))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1028,81 +1103,6 @@ func ReviewFrequencyNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldReviewFrequency))
 }
 
-// RevisionEQ applies the EQ predicate on the "revision" field.
-func RevisionEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldRevision, v))
-}
-
-// RevisionNEQ applies the NEQ predicate on the "revision" field.
-func RevisionNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldRevision, v))
-}
-
-// RevisionIn applies the In predicate on the "revision" field.
-func RevisionIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldRevision, vs...))
-}
-
-// RevisionNotIn applies the NotIn predicate on the "revision" field.
-func RevisionNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldRevision, vs...))
-}
-
-// RevisionGT applies the GT predicate on the "revision" field.
-func RevisionGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldRevision, v))
-}
-
-// RevisionGTE applies the GTE predicate on the "revision" field.
-func RevisionGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldRevision, v))
-}
-
-// RevisionLT applies the LT predicate on the "revision" field.
-func RevisionLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldRevision, v))
-}
-
-// RevisionLTE applies the LTE predicate on the "revision" field.
-func RevisionLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldRevision, v))
-}
-
-// RevisionContains applies the Contains predicate on the "revision" field.
-func RevisionContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldRevision, v))
-}
-
-// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
-func RevisionHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldRevision, v))
-}
-
-// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
-func RevisionHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldRevision, v))
-}
-
-// RevisionIsNil applies the IsNil predicate on the "revision" field.
-func RevisionIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldRevision))
-}
-
-// RevisionNotNil applies the NotNil predicate on the "revision" field.
-func RevisionNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldRevision))
-}
-
-// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
-func RevisionEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldRevision, v))
-}
-
-// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
-func RevisionContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldRevision, v))
-}
-
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
@@ -1306,6 +1306,35 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Proced
 	})
 }
 
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newProgramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasNarratives applies the HasEdge predicate on the "narratives" edge.
 func HasNarratives() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
@@ -1385,35 +1414,6 @@ func HasTasksWith(preds ...predicate.Task) predicate.Procedure {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasPrograms applies the HasEdge predicate on the "programs" edge.
-func HasPrograms() predicate.Procedure {
-	return predicate.Procedure(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramProcedures
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
-func HasProgramsWith(preds ...predicate.Program) predicate.Procedure {
-	return predicate.Procedure(func(s *sql.Selector) {
-		step := newProgramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramProcedures
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

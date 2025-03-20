@@ -4,20 +4,34 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
 type OrgSubscription struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaOrgSubscription = "org_subscription"
+
+func (OrgSubscription) Name() string {
+	return SchemaOrgSubscription
+}
+
+func (OrgSubscription) GetType() any {
+	return OrgSubscription.Type
+}
+
+func (OrgSubscription) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrgSubscription)
 }
 
 // Fields of the OrgSubscription
@@ -89,19 +103,19 @@ func (OrgSubscription) Fields() []ent.Field {
 }
 
 // Mixin of the OrgSubscription
-func (OrgSubscription) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		mixin.SoftDeleteMixin{},
-		NewOrgOwnedMixin(ObjectOwnedMixin{
-			Ref: "org_subscriptions",
-			SkipTokenType: []token.PrivacyToken{
-				&token.SignUpToken{},
-			},
-			HookFuncs: []HookFunc{}, // empty to skip the default hooks
-		})}
+func (o OrgSubscription) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeAnnotations: true,
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnedMixin(ObjectOwnedMixin{
+				Ref: o.PluralName(),
+				SkipTokenType: []token.PrivacyToken{
+					&token.SignUpToken{},
+				},
+				HookFuncs: []HookFunc{}, // empty to skip the default hooks
+			}),
+		},
+	}.getMixins()
 }
 
 // Annotations of the OrgSubscription
@@ -121,8 +135,8 @@ func (OrgSubscription) Interceptors() []ent.Interceptor {
 }
 
 // Edges of the OrgSubscription
-func (OrgSubscription) Edges() []ent.Edge {
+func (o OrgSubscription) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("events", Event.Type),
+		defaultEdgeToWithPagination(o, Event{}),
 	}
 }

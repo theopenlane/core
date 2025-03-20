@@ -88,11 +88,6 @@ func UpdatedBy(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
-func DisplayID(v string) predicate.Program {
-	return predicate.Program(sql.FieldEQ(FieldDisplayID, v))
-}
-
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldDeletedAt, v))
@@ -101,6 +96,11 @@ func DeletedAt(v time.Time) predicate.Program {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
+func DisplayID(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldDisplayID, v))
 }
 
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
@@ -393,71 +393,6 @@ func UpdatedByContainsFold(v string) predicate.Program {
 	return predicate.Program(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// DisplayIDEQ applies the EQ predicate on the "display_id" field.
-func DisplayIDEQ(v string) predicate.Program {
-	return predicate.Program(sql.FieldEQ(FieldDisplayID, v))
-}
-
-// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
-func DisplayIDNEQ(v string) predicate.Program {
-	return predicate.Program(sql.FieldNEQ(FieldDisplayID, v))
-}
-
-// DisplayIDIn applies the In predicate on the "display_id" field.
-func DisplayIDIn(vs ...string) predicate.Program {
-	return predicate.Program(sql.FieldIn(FieldDisplayID, vs...))
-}
-
-// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
-func DisplayIDNotIn(vs ...string) predicate.Program {
-	return predicate.Program(sql.FieldNotIn(FieldDisplayID, vs...))
-}
-
-// DisplayIDGT applies the GT predicate on the "display_id" field.
-func DisplayIDGT(v string) predicate.Program {
-	return predicate.Program(sql.FieldGT(FieldDisplayID, v))
-}
-
-// DisplayIDGTE applies the GTE predicate on the "display_id" field.
-func DisplayIDGTE(v string) predicate.Program {
-	return predicate.Program(sql.FieldGTE(FieldDisplayID, v))
-}
-
-// DisplayIDLT applies the LT predicate on the "display_id" field.
-func DisplayIDLT(v string) predicate.Program {
-	return predicate.Program(sql.FieldLT(FieldDisplayID, v))
-}
-
-// DisplayIDLTE applies the LTE predicate on the "display_id" field.
-func DisplayIDLTE(v string) predicate.Program {
-	return predicate.Program(sql.FieldLTE(FieldDisplayID, v))
-}
-
-// DisplayIDContains applies the Contains predicate on the "display_id" field.
-func DisplayIDContains(v string) predicate.Program {
-	return predicate.Program(sql.FieldContains(FieldDisplayID, v))
-}
-
-// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
-func DisplayIDHasPrefix(v string) predicate.Program {
-	return predicate.Program(sql.FieldHasPrefix(FieldDisplayID, v))
-}
-
-// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
-func DisplayIDHasSuffix(v string) predicate.Program {
-	return predicate.Program(sql.FieldHasSuffix(FieldDisplayID, v))
-}
-
-// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
-func DisplayIDEqualFold(v string) predicate.Program {
-	return predicate.Program(sql.FieldEqualFold(FieldDisplayID, v))
-}
-
-// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
-func DisplayIDContainsFold(v string) predicate.Program {
-	return predicate.Program(sql.FieldContainsFold(FieldDisplayID, v))
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldDeletedAt, v))
@@ -581,6 +516,71 @@ func DeletedByEqualFold(v string) predicate.Program {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.Program {
 	return predicate.Program(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// DisplayIDEQ applies the EQ predicate on the "display_id" field.
+func DisplayIDEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldDisplayID, v))
+}
+
+// DisplayIDNEQ applies the NEQ predicate on the "display_id" field.
+func DisplayIDNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldDisplayID, v))
+}
+
+// DisplayIDIn applies the In predicate on the "display_id" field.
+func DisplayIDIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDNotIn applies the NotIn predicate on the "display_id" field.
+func DisplayIDNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldDisplayID, vs...))
+}
+
+// DisplayIDGT applies the GT predicate on the "display_id" field.
+func DisplayIDGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldDisplayID, v))
+}
+
+// DisplayIDGTE applies the GTE predicate on the "display_id" field.
+func DisplayIDGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldDisplayID, v))
+}
+
+// DisplayIDLT applies the LT predicate on the "display_id" field.
+func DisplayIDLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldDisplayID, v))
+}
+
+// DisplayIDLTE applies the LTE predicate on the "display_id" field.
+func DisplayIDLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldDisplayID, v))
+}
+
+// DisplayIDContains applies the Contains predicate on the "display_id" field.
+func DisplayIDContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldDisplayID, v))
+}
+
+// DisplayIDHasPrefix applies the HasPrefix predicate on the "display_id" field.
+func DisplayIDHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldDisplayID, v))
+}
+
+// DisplayIDHasSuffix applies the HasSuffix predicate on the "display_id" field.
+func DisplayIDHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldDisplayID, v))
+}
+
+// DisplayIDEqualFold applies the EqualFold predicate on the "display_id" field.
+func DisplayIDEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldDisplayID, v))
+}
+
+// DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
+func DisplayIDContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.

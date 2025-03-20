@@ -146,6 +146,20 @@ func (aphc *ActionPlanHistoryCreate) SetTags(s []string) *ActionPlanHistoryCreat
 	return aphc
 }
 
+// SetRevision sets the "revision" field.
+func (aphc *ActionPlanHistoryCreate) SetRevision(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetRevision(s)
+	return aphc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableRevision(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetRevision(*s)
+	}
+	return aphc
+}
+
 // SetName sets the "name" field.
 func (aphc *ActionPlanHistoryCreate) SetName(s string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetName(s)
@@ -232,20 +246,6 @@ func (aphc *ActionPlanHistoryCreate) SetReviewFrequency(e enums.Frequency) *Acti
 func (aphc *ActionPlanHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanHistoryCreate {
 	if e != nil {
 		aphc.SetReviewFrequency(*e)
-	}
-	return aphc
-}
-
-// SetRevision sets the "revision" field.
-func (aphc *ActionPlanHistoryCreate) SetRevision(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetRevision(s)
-	return aphc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableRevision(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetRevision(*s)
 	}
 	return aphc
 }
@@ -371,6 +371,10 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 		v := actionplanhistory.DefaultTags
 		aphc.mutation.SetTags(v)
 	}
+	if _, ok := aphc.mutation.Revision(); !ok {
+		v := actionplanhistory.DefaultRevision
+		aphc.mutation.SetRevision(v)
+	}
 	if _, ok := aphc.mutation.Status(); !ok {
 		v := actionplanhistory.DefaultStatus
 		aphc.mutation.SetStatus(v)
@@ -386,10 +390,6 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 	if _, ok := aphc.mutation.ReviewFrequency(); !ok {
 		v := actionplanhistory.DefaultReviewFrequency
 		aphc.mutation.SetReviewFrequency(v)
-	}
-	if _, ok := aphc.mutation.Revision(); !ok {
-		v := actionplanhistory.DefaultRevision
-		aphc.mutation.SetRevision(v)
 	}
 	if _, ok := aphc.mutation.ID(); !ok {
 		v := actionplanhistory.DefaultID()
@@ -504,6 +504,10 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := aphc.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := aphc.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -531,10 +535,6 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplanhistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := aphc.mutation.Revision(); ok {
-		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	if value, ok := aphc.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

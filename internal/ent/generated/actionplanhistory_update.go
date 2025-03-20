@@ -123,6 +123,26 @@ func (aphu *ActionPlanHistoryUpdate) ClearTags() *ActionPlanHistoryUpdate {
 	return aphu
 }
 
+// SetRevision sets the "revision" field.
+func (aphu *ActionPlanHistoryUpdate) SetRevision(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetRevision(s)
+	return aphu
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableRevision(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetRevision(*s)
+	}
+	return aphu
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (aphu *ActionPlanHistoryUpdate) ClearRevision() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearRevision()
+	return aphu
+}
+
 // SetName sets the "name" field.
 func (aphu *ActionPlanHistoryUpdate) SetName(s string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetName(s)
@@ -254,26 +274,6 @@ func (aphu *ActionPlanHistoryUpdate) SetNillableReviewFrequency(e *enums.Frequen
 // ClearReviewFrequency clears the value of the "review_frequency" field.
 func (aphu *ActionPlanHistoryUpdate) ClearReviewFrequency() *ActionPlanHistoryUpdate {
 	aphu.mutation.ClearReviewFrequency()
-	return aphu
-}
-
-// SetRevision sets the "revision" field.
-func (aphu *ActionPlanHistoryUpdate) SetRevision(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetRevision(s)
-	return aphu
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableRevision(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetRevision(*s)
-	}
-	return aphu
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (aphu *ActionPlanHistoryUpdate) ClearRevision() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearRevision()
 	return aphu
 }
 
@@ -480,6 +480,12 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.TagsCleared() {
 		_spec.ClearField(actionplanhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := aphu.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+	}
+	if aphu.mutation.RevisionCleared() {
+		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
+	}
 	if value, ok := aphu.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 	}
@@ -518,12 +524,6 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if aphu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := aphu.mutation.Revision(); ok {
-		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
-	}
-	if aphu.mutation.RevisionCleared() {
-		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
 	}
 	if value, ok := aphu.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
@@ -663,6 +663,26 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearTags() *ActionPlanHistoryUpdateOne
 	return aphuo
 }
 
+// SetRevision sets the "revision" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetRevision(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetRevision(s)
+	return aphuo
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableRevision(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetRevision(*s)
+	}
+	return aphuo
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearRevision() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearRevision()
+	return aphuo
+}
+
 // SetName sets the "name" field.
 func (aphuo *ActionPlanHistoryUpdateOne) SetName(s string) *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.SetName(s)
@@ -794,26 +814,6 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableReviewFrequency(e *enums.Fre
 // ClearReviewFrequency clears the value of the "review_frequency" field.
 func (aphuo *ActionPlanHistoryUpdateOne) ClearReviewFrequency() *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.ClearReviewFrequency()
-	return aphuo
-}
-
-// SetRevision sets the "revision" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetRevision(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetRevision(s)
-	return aphuo
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableRevision(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetRevision(*s)
-	}
-	return aphuo
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearRevision() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearRevision()
 	return aphuo
 }
 
@@ -1050,6 +1050,12 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if aphuo.mutation.TagsCleared() {
 		_spec.ClearField(actionplanhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := aphuo.mutation.Revision(); ok {
+		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
+	}
+	if aphuo.mutation.RevisionCleared() {
+		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
+	}
 	if value, ok := aphuo.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)
 	}
@@ -1088,12 +1094,6 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if aphuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
-	}
-	if value, ok := aphuo.mutation.Revision(); ok {
-		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
-	}
-	if aphuo.mutation.RevisionCleared() {
-		_spec.ClearField(actionplanhistory.FieldRevision, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

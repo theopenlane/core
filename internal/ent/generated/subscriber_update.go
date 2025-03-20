@@ -66,24 +66,6 @@ func (su *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
 	return su
 }
 
-// SetTags sets the "tags" field.
-func (su *SubscriberUpdate) SetTags(s []string) *SubscriberUpdate {
-	su.mutation.SetTags(s)
-	return su
-}
-
-// AppendTags appends s to the "tags" field.
-func (su *SubscriberUpdate) AppendTags(s []string) *SubscriberUpdate {
-	su.mutation.AppendTags(s)
-	return su
-}
-
-// ClearTags clears the value of the "tags" field.
-func (su *SubscriberUpdate) ClearTags() *SubscriberUpdate {
-	su.mutation.ClearTags()
-	return su
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (su *SubscriberUpdate) SetDeletedAt(t time.Time) *SubscriberUpdate {
 	su.mutation.SetDeletedAt(t)
@@ -121,6 +103,24 @@ func (su *SubscriberUpdate) SetNillableDeletedBy(s *string) *SubscriberUpdate {
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (su *SubscriberUpdate) ClearDeletedBy() *SubscriberUpdate {
 	su.mutation.ClearDeletedBy()
+	return su
+}
+
+// SetTags sets the "tags" field.
+func (su *SubscriberUpdate) SetTags(s []string) *SubscriberUpdate {
+	su.mutation.SetTags(s)
+	return su
+}
+
+// AppendTags appends s to the "tags" field.
+func (su *SubscriberUpdate) AppendTags(s []string) *SubscriberUpdate {
+	su.mutation.AppendTags(s)
+	return su
+}
+
+// ClearTags clears the value of the "tags" field.
+func (su *SubscriberUpdate) ClearTags() *SubscriberUpdate {
+	su.mutation.ClearTags()
 	return su
 }
 
@@ -414,17 +414,6 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedByCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.Tags(); ok {
-		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := su.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, subscriber.FieldTags, value)
-		})
-	}
-	if su.mutation.TagsCleared() {
-		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
-	}
 	if value, ok := su.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -436,6 +425,17 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DeletedByCleared() {
 		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := su.mutation.Tags(); ok {
+		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := su.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subscriber.FieldTags, value)
+		})
+	}
+	if su.mutation.TagsCleared() {
+		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
 	if value, ok := su.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
@@ -599,24 +599,6 @@ func (suo *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
 	return suo
 }
 
-// SetTags sets the "tags" field.
-func (suo *SubscriberUpdateOne) SetTags(s []string) *SubscriberUpdateOne {
-	suo.mutation.SetTags(s)
-	return suo
-}
-
-// AppendTags appends s to the "tags" field.
-func (suo *SubscriberUpdateOne) AppendTags(s []string) *SubscriberUpdateOne {
-	suo.mutation.AppendTags(s)
-	return suo
-}
-
-// ClearTags clears the value of the "tags" field.
-func (suo *SubscriberUpdateOne) ClearTags() *SubscriberUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (suo *SubscriberUpdateOne) SetDeletedAt(t time.Time) *SubscriberUpdateOne {
 	suo.mutation.SetDeletedAt(t)
@@ -654,6 +636,24 @@ func (suo *SubscriberUpdateOne) SetNillableDeletedBy(s *string) *SubscriberUpdat
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (suo *SubscriberUpdateOne) ClearDeletedBy() *SubscriberUpdateOne {
 	suo.mutation.ClearDeletedBy()
+	return suo
+}
+
+// SetTags sets the "tags" field.
+func (suo *SubscriberUpdateOne) SetTags(s []string) *SubscriberUpdateOne {
+	suo.mutation.SetTags(s)
+	return suo
+}
+
+// AppendTags appends s to the "tags" field.
+func (suo *SubscriberUpdateOne) AppendTags(s []string) *SubscriberUpdateOne {
+	suo.mutation.AppendTags(s)
+	return suo
+}
+
+// ClearTags clears the value of the "tags" field.
+func (suo *SubscriberUpdateOne) ClearTags() *SubscriberUpdateOne {
+	suo.mutation.ClearTags()
 	return suo
 }
 
@@ -977,17 +977,6 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	if suo.mutation.UpdatedByCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.Tags(); ok {
-		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := suo.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, subscriber.FieldTags, value)
-		})
-	}
-	if suo.mutation.TagsCleared() {
-		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
-	}
 	if value, ok := suo.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -999,6 +988,17 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	}
 	if suo.mutation.DeletedByCleared() {
 		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := suo.mutation.Tags(); ok {
+		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
+	}
+	if value, ok := suo.mutation.AppendedTags(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subscriber.FieldTags, value)
+		})
+	}
+	if suo.mutation.TagsCleared() {
+		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
 	if value, ok := suo.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)

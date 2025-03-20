@@ -78,12 +78,6 @@ func (sc *SubscriberCreate) SetNillableUpdatedBy(s *string) *SubscriberCreate {
 	return sc
 }
 
-// SetTags sets the "tags" field.
-func (sc *SubscriberCreate) SetTags(s []string) *SubscriberCreate {
-	sc.mutation.SetTags(s)
-	return sc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (sc *SubscriberCreate) SetDeletedAt(t time.Time) *SubscriberCreate {
 	sc.mutation.SetDeletedAt(t)
@@ -109,6 +103,12 @@ func (sc *SubscriberCreate) SetNillableDeletedBy(s *string) *SubscriberCreate {
 	if s != nil {
 		sc.SetDeletedBy(*s)
 	}
+	return sc
+}
+
+// SetTags sets the "tags" field.
+func (sc *SubscriberCreate) SetTags(s []string) *SubscriberCreate {
+	sc.mutation.SetTags(s)
 	return sc
 }
 
@@ -417,10 +417,6 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sc.mutation.Tags(); ok {
-		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -428,6 +424,10 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DeletedBy(); ok {
 		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := sc.mutation.Tags(); ok {
+		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
 	}
 	if value, ok := sc.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)

@@ -112,12 +112,6 @@ func (phc *ProcedureHistoryCreate) SetNillableUpdatedBy(s *string) *ProcedureHis
 	return phc
 }
 
-// SetTags sets the "tags" field.
-func (phc *ProcedureHistoryCreate) SetTags(s []string) *ProcedureHistoryCreate {
-	phc.mutation.SetTags(s)
-	return phc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
 func (phc *ProcedureHistoryCreate) SetDeletedAt(t time.Time) *ProcedureHistoryCreate {
 	phc.mutation.SetDeletedAt(t)
@@ -149,6 +143,26 @@ func (phc *ProcedureHistoryCreate) SetNillableDeletedBy(s *string) *ProcedureHis
 // SetDisplayID sets the "display_id" field.
 func (phc *ProcedureHistoryCreate) SetDisplayID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetDisplayID(s)
+	return phc
+}
+
+// SetTags sets the "tags" field.
+func (phc *ProcedureHistoryCreate) SetTags(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetTags(s)
+	return phc
+}
+
+// SetRevision sets the "revision" field.
+func (phc *ProcedureHistoryCreate) SetRevision(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetRevision(s)
+	return phc
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableRevision(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetRevision(*s)
+	}
 	return phc
 }
 
@@ -256,20 +270,6 @@ func (phc *ProcedureHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency
 	return phc
 }
 
-// SetRevision sets the "revision" field.
-func (phc *ProcedureHistoryCreate) SetRevision(s string) *ProcedureHistoryCreate {
-	phc.mutation.SetRevision(s)
-	return phc
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (phc *ProcedureHistoryCreate) SetNillableRevision(s *string) *ProcedureHistoryCreate {
-	if s != nil {
-		phc.SetRevision(*s)
-	}
-	return phc
-}
-
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -335,6 +335,10 @@ func (phc *ProcedureHistoryCreate) defaults() {
 		v := procedurehistory.DefaultTags
 		phc.mutation.SetTags(v)
 	}
+	if _, ok := phc.mutation.Revision(); !ok {
+		v := procedurehistory.DefaultRevision
+		phc.mutation.SetRevision(v)
+	}
 	if _, ok := phc.mutation.Status(); !ok {
 		v := procedurehistory.DefaultStatus
 		phc.mutation.SetStatus(v)
@@ -350,10 +354,6 @@ func (phc *ProcedureHistoryCreate) defaults() {
 	if _, ok := phc.mutation.ReviewFrequency(); !ok {
 		v := procedurehistory.DefaultReviewFrequency
 		phc.mutation.SetReviewFrequency(v)
-	}
-	if _, ok := phc.mutation.Revision(); !ok {
-		v := procedurehistory.DefaultRevision
-		phc.mutation.SetRevision(v)
 	}
 	if _, ok := phc.mutation.ID(); !ok {
 		v := procedurehistory.DefaultID()
@@ -454,10 +454,6 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := phc.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := phc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -469,6 +465,14 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.DisplayID(); ok {
 		_spec.SetField(procedurehistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
+	}
+	if value, ok := phc.mutation.Tags(); ok {
+		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
+		_node.Tags = value
+	}
+	if value, ok := phc.mutation.Revision(); ok {
+		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := phc.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
@@ -501,10 +505,6 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := phc.mutation.Revision(); ok {
-		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
-		_node.Revision = value
 	}
 	return _node, _spec
 }

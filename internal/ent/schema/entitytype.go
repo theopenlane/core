@@ -6,16 +6,14 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
@@ -26,7 +24,23 @@ const (
 
 // EntityType holds the schema definition for the EntityType entity
 type EntityType struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaEntityType = "entity_type"
+
+func (EntityType) Name() string {
+	return SchemaEntityType
+}
+
+func (EntityType) GetType() any {
+	return EntityType.Type
+}
+
+func (EntityType) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaEntityType)
 }
 
 // Fields of the EntityType
@@ -48,19 +62,17 @@ func (EntityType) Fields() []ent.Field {
 
 // Mixin of the EntityType
 func (EntityType) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("entity_types"),
-	}
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			NewOrgOwnMixinWithRef("entity_types"),
+		},
+	}.getMixins()
 }
 
 // Edges of the EntityType
-func (EntityType) Edges() []ent.Edge {
+func (e EntityType) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("entities", Entity.Type).Annotations(entgql.RelayConnection()),
+		defaultEdgeToWithPagination(e, Entity{}),
 	}
 }
 
@@ -76,9 +88,6 @@ func (EntityType) Indexes() []ent.Index {
 // Annotations of the EntityType
 func (EntityType) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

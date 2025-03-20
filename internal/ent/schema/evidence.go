@@ -6,17 +6,14 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/entx"
-	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
@@ -24,7 +21,23 @@ import (
 
 // Evidence holds the schema definition for the Evidence entity
 type Evidence struct {
+	SchemaFuncs
+
 	ent.Schema
+}
+
+const SchemaEvidence = "evidence"
+
+func (Evidence) Name() string {
+	return SchemaEvidence
+}
+
+func (Evidence) GetType() any {
+	return Evidence.Type
+}
+
+func (Evidence) PluralName() string {
+	return SchemaEvidence // special case because evidences is a weird plural
 }
 
 // Fields of the Evidence
@@ -79,42 +92,34 @@ func (Evidence) Fields() []ent.Field {
 }
 
 // Mixin of the Evidence
-func (Evidence) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.NewIDMixinWithPrefixedID("EVD"),
-		mixin.SoftDeleteMixin{},
-		emixin.TagMixin{},
-		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames:            []string{"control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id", "procedure_id", "internal_policy_id"}, // used to create parent tuples for the evidence
-			WithOrganizationOwner: true,
-			Ref:                   "evidence",
-		})}
+func (e Evidence) Mixin() []ent.Mixin {
+	return mixinConfig{
+		prefix: "EVD",
+		additionalMixins: []ent.Mixin{
+			NewObjectOwnedMixin(ObjectOwnedMixin{
+				FieldNames:            []string{"control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id", "procedure_id", "internal_policy_id"}, // used to create parent tuples for the evidence
+				WithOrganizationOwner: true,
+				Ref:                   e.PluralName(),
+			}),
+		},
+	}.getMixins()
 }
 
 // Edges of the Evidence
-func (Evidence) Edges() []ent.Edge {
+func (e Evidence) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("control_objectives", ControlObjective.Type).Annotations(entgql.RelayConnection()),
-		edge.To("controls", Control.Type).Annotations(entgql.RelayConnection()),
-		edge.To("subcontrols", Subcontrol.Type).Annotations(entgql.RelayConnection()),
-		edge.To("files", File.Type).Annotations(entgql.RelayConnection()),
-		edge.From("programs", Program.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("evidence"),
-		edge.From("tasks", Task.Type).
-			Annotations(entgql.RelayConnection()).
-			Ref("evidence"),
+		defaultEdgeToWithPagination(e, ControlObjective{}),
+		defaultEdgeToWithPagination(e, Control{}),
+		defaultEdgeToWithPagination(e, Subcontrol{}),
+		defaultEdgeToWithPagination(e, File{}),
+		defaultEdgeFromWithPagination(e, Program{}),
+		defaultEdgeFromWithPagination(e, Task{}),
 	}
 }
 
 // Annotations of the Evidence
 func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entgql.QueryField(),
-		entgql.RelayConnection(),
-		entgql.MultiOrder(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.SelfAccessChecks(),
 	}
 }
