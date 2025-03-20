@@ -43,7 +43,7 @@ require (
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/miekg/dns v1.1.64
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/nyaruka/phonenumbers v1.5.0
+	github.com/nyaruka/phonenumbers v1.6.0
 	github.com/oNaiPs/go-generate-fast v0.3.0
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/openfga/go-sdk v0.6.5
