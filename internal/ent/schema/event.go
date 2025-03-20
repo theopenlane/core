@@ -71,6 +71,6 @@ func (Event) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		mixin.AnnotationMixin{},
+		mixin.GraphQLAnnotationMixin{},
 	}
 }

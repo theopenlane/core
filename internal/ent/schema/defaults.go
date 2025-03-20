@@ -73,7 +73,7 @@ func (m mixinConfig) getMixins() []ent.Mixin {
 
 	// exclude annotations if specified
 	if !m.excludeAnnotations {
-		mixins = append(mixins, mixin.AnnotationMixin{})
+		mixins = append(mixins, mixin.GraphQLAnnotationMixin{})
 	}
 
 	return append(mixins, m.additionalMixins...)

@@ -63,7 +63,7 @@ func (User) Mixin() []ent.Mixin {
 			SingleFieldIndex:      true,
 		},
 		emixin.TagMixin{},
-		mixin.AnnotationMixin{},
+		mixin.GraphQLAnnotationMixin{},
 	}
 }
 

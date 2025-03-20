@@ -6,13 +6,15 @@ import (
 	"entgo.io/ent/schema/mixin"
 )
 
-// AnnotationMixin implements the revision pattern for schemas.
-type AnnotationMixin struct {
+// GraphQLAnnotationMixin implements the revision pattern for schemas.
+// it will add default annotations to the schema used for most schemas that have full
+// graphql support
+type GraphQLAnnotationMixin struct {
 	mixin.Schema
 }
 
 // Annotations of the AnnotationMixin.
-func (AnnotationMixin) Annotations() []schema.Annotation {
+func (GraphQLAnnotationMixin) Annotations() []schema.Annotation {
 	return defaultAnnotations
 }
 
