@@ -22,7 +22,7 @@ import (
 
 // Standard defines the standard schema.
 type Standard struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

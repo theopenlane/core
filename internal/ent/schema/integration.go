@@ -16,7 +16,7 @@ import (
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
 type Integration struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

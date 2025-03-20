@@ -15,7 +15,7 @@ import (
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
 type OrgSubscription struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

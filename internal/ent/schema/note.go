@@ -17,7 +17,7 @@ import (
 
 // Note holds the schema definition for the Note entity
 type Note struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

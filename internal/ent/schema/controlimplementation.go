@@ -14,7 +14,7 @@ import (
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
 type ControlImplementation struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

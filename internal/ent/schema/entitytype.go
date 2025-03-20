@@ -24,7 +24,7 @@ const (
 
 // EntityType holds the schema definition for the EntityType entity
 type EntityType struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

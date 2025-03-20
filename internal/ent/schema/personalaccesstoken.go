@@ -20,7 +20,7 @@ import (
 
 // PersonalAccessToken holds the schema definition for the PersonalAccessToken entity.
 type PersonalAccessToken struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

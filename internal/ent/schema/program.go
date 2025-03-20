@@ -20,7 +20,7 @@ import (
 
 // Program holds the schema definition for the Program entity
 type Program struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

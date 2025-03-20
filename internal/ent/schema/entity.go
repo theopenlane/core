@@ -22,7 +22,7 @@ import (
 
 // Entity holds the schema definition for the Entity entity
 type Entity struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

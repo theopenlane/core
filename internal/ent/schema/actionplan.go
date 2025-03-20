@@ -16,7 +16,7 @@ import (
 
 // ActionPlan defines the actionplan schema.
 type ActionPlan struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

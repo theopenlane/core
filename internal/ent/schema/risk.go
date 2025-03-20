@@ -18,7 +18,7 @@ import (
 
 // Risk defines the risk schema.
 type Risk struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

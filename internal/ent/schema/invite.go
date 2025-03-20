@@ -30,7 +30,7 @@ const (
 
 // Invite holds the schema definition for the Invite entity
 type Invite struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

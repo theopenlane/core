@@ -18,7 +18,7 @@ import (
 
 // Control defines the control schema.
 type Control struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

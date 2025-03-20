@@ -26,7 +26,7 @@ import (
 
 // Subscriber holds the schema definition for the Subscriber entity
 type Subscriber struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

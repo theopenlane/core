@@ -13,7 +13,7 @@ import (
 
 // MappedControl holds the schema definition for the MappedControl entity
 type MappedControl struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

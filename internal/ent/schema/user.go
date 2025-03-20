@@ -34,7 +34,7 @@ const (
 
 // User holds the schema definition for the User entity.
 type User struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

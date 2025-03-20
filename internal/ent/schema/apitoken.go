@@ -23,7 +23,7 @@ import (
 
 // APIToken holds the schema definition for the APIToken entity.
 type APIToken struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

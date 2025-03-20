@@ -24,7 +24,7 @@ import (
 
 // Group holds the schema definition for the Group entity
 type Group struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

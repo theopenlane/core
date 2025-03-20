@@ -22,7 +22,7 @@ import (
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
 type OrganizationSetting struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

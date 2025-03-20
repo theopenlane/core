@@ -11,14 +11,9 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 )
 
-// CustomSchema defines a custom schema that includes additional functionality
-// including Name and PluralName methods
-type CustomSchema struct {
-	SchemaFuncs
-}
-
 // SchemaFuncs defines the methods that a custom schema must implement
 // in order to use the helper functions provided by this file
+// including Name(), PluralName(), and GetType()
 type SchemaFuncs interface {
 	Name() string
 	PluralName() string

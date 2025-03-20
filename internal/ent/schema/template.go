@@ -19,7 +19,7 @@ import (
 
 // Template holds the schema definition for the Template entity
 type Template struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

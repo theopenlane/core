@@ -26,7 +26,7 @@ import (
 
 // PasswordResetToken holds the schema definition for the PasswordResetToken entity
 type PasswordResetToken struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

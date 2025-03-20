@@ -18,7 +18,7 @@ import (
 
 // ControlObjective defines the controlobjective schema.
 type ControlObjective struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

@@ -11,7 +11,7 @@ import (
 
 // Event holds the schema definition for the Event entity
 type Event struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

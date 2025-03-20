@@ -23,7 +23,7 @@ import (
 
 // Contact holds the schema definition for the Contact entity
 type Contact struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

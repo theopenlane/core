@@ -20,7 +20,7 @@ import (
 
 // Subcontrol defines the file schema.
 type Subcontrol struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

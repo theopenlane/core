@@ -19,7 +19,7 @@ import (
 
 // UserSetting holds the schema definition for the User entity.
 type UserSetting struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

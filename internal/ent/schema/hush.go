@@ -14,7 +14,7 @@ import (
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
 type Hush struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

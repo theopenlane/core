@@ -17,7 +17,7 @@ import (
 
 // Narrative defines the narrative schema
 type Narrative struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

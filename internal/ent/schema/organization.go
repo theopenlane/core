@@ -32,7 +32,7 @@ const (
 
 // Organization holds the schema definition for the Organization entity - organizations are the top level tenancy construct in the system
 type Organization struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

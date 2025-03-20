@@ -18,7 +18,7 @@ import (
 
 // GroupSetting holds the schema definition for the GroupSetting entity
 type GroupSetting struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

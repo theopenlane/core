@@ -16,7 +16,7 @@ import (
 
 // TFASetting holds the schema definition for the TFASetting entity
 type TFASetting struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

@@ -21,7 +21,7 @@ import (
 
 // Evidence holds the schema definition for the Evidence entity
 type Evidence struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

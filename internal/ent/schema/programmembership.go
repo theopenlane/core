@@ -21,7 +21,7 @@ import (
 
 // ProgramMembership holds the schema definition for the ProgramMembership entity
 type ProgramMembership struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

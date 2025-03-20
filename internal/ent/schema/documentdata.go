@@ -15,7 +15,7 @@ import (
 
 // DocumentData holds the schema definition for the DocumentData entity
 type DocumentData struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

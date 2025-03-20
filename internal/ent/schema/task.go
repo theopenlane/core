@@ -18,7 +18,7 @@ import (
 
 // Task holds the schema definition for the Task entity
 type Task struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

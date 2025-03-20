@@ -18,7 +18,7 @@ import (
 
 // Onboarding holds the schema definition for the Onboarding entity
 type Onboarding struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

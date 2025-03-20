@@ -21,7 +21,7 @@ import (
 
 // GroupMembership holds the schema definition for the GroupMembership entity
 type GroupMembership struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

@@ -26,7 +26,7 @@ import (
 
 // EmailVerificationToken holds the schema definition for the EmailVerificationToken entity
 type EmailVerificationToken struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

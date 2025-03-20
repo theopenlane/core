@@ -13,7 +13,7 @@ import (
 
 // Webauthn holds the schema definition for the Webauthn entity
 type Webauthn struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

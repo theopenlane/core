@@ -17,7 +17,7 @@ import (
 
 // InternalPolicy defines the policy schema.
 type InternalPolicy struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

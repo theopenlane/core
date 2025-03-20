@@ -17,7 +17,7 @@ import (
 
 // Procedure defines the procedure schema.
 type Procedure struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }

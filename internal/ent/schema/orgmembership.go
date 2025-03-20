@@ -24,7 +24,7 @@ import (
 
 // OrgMembership holds the schema definition for the OrgMembership entity
 type OrgMembership struct {
-	CustomSchema
+	SchemaFuncs
 
 	ent.Schema
 }
