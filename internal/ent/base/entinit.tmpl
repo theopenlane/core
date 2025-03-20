@@ -19,7 +19,7 @@ type {{ . }} struct {
 const Schema{{ . }} = "{{ . }}"
 
 func ({{ . }}) Name() string {
-	return SchemaA{{ . }}
+	return Schema{{ . }}
 }
 
 func ({{ . }}) GetType() any {
@@ -72,7 +72,7 @@ func ({{ . }}) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// the AnnotationMixin provides the common annotations for
 		// to create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead and set the mixinConfig to `excludeAnnotations: true
-		`
+
         // if you do not need the graphql bits
 		// entgql.Skip(entgql.SkipAll),
 		// entx.SchemaGenSkip(true),
