@@ -27,17 +27,24 @@ type SchemaFuncs interface {
 
 // mixinConfig defines the configuration for the mixins that can be used
 type mixinConfig struct {
-	prefix             string
-	excludeTags        bool
-	includeRevision    bool
+	// prefix is the prefix to use for the IDMixin, if left empty it will use the default IDMixin
+	prefix string
+	// excludeTags if true, the TagMixin will be excluded
+	excludeTags bool
+	// includeRevision if true, the RevisionMixin will be included
+	includeRevision bool
+	// excludeAnnotations if true, the AnnotationMixin will be excluded
 	excludeAnnotations bool
-	additionalMixins   []ent.Mixin
+	// additionalMixins are any additional mixins that will be included
+	additionalMixins []ent.Mixin
 }
 
 // baseDefaultMixins defines the default mixins that are always included and cannot be excluded
 // using the config
 var baseDefaultMixins = []ent.Mixin{
+	// audit mixin includes created_at, updated_at, and created_by
 	emixin.AuditMixin{},
+	// soft delete mixin includes deleted_at and history tables
 	mixin.SoftDeleteMixin{},
 }
 
@@ -149,6 +156,8 @@ func getType(schema any) any {
 }
 
 // edgeToWithPagination uses the provided edge definition to create an edge with pagination
+// for the given edge schema, this should be used when there will be a 1:M relationship or M:M relationship
+// to the edge schema
 func edgeToWithPagination(e *edgeDefinition) ent.Edge {
 	defaultAnnotations := []schema.Annotation{entgql.RelayConnection()}
 	if e.annotations != nil {
@@ -163,6 +172,8 @@ func edgeToWithPagination(e *edgeDefinition) ent.Edge {
 }
 
 // edgeFromWithPagination uses the provided edge definition to create an inverse edge with pagination
+// this should be used when there will be a M:M relationship, if its a 1:M relationship use defaultEdgeFrom
+// for a single edge
 func edgeFromWithPagination(e *edgeDefinition) ent.Edge {
 	defaultAnnotations := []schema.Annotation{entgql.RelayConnection()}
 	if e.annotations != nil {
@@ -177,7 +188,8 @@ func edgeFromWithPagination(e *edgeDefinition) ent.Edge {
 }
 
 // defaultEdgeToWithPagination uses the default edge definition to create an edge with pagination
-// for the given edge schema
+// for the given edge schema, to be used for a 1:M relationship or M:M relationship using all default
+// settings
 func defaultEdgeToWithPagination(from any, edgeSchema any) ent.Edge {
 	return edgeToWithPagination(&edgeDefinition{
 		edgeSchema: edgeSchema,
@@ -186,7 +198,7 @@ func defaultEdgeToWithPagination(from any, edgeSchema any) ent.Edge {
 }
 
 // defaultEdgeFromWithPagination uses the default edge definition to create an edge with pagination
-// for the given edge schema
+// for the given edge schema, to be used for a M:M relationship using all default settings
 func defaultEdgeFromWithPagination(from any, edgeSchema any) ent.Edge {
 	return edgeFromWithPagination(&edgeDefinition{
 		edgeSchema: edgeSchema,
@@ -195,6 +207,8 @@ func defaultEdgeFromWithPagination(from any, edgeSchema any) ent.Edge {
 }
 
 // defaultEdgeFrom uses the default edge definition to create an inverse edge for a 1:M relationship
+// for the given edge schema, using all default settings (the name will be singular vs the plural used in edgeTo inverse)
+// it will not include the pagination annotations because of the singular side of the relationship
 func defaultEdgeFrom(from any, edgeSchema any) ent.Edge {
 	e := &edgeDefinition{
 		edgeSchema: edgeSchema,
@@ -207,7 +221,8 @@ func defaultEdgeFrom(from any, edgeSchema any) ent.Edge {
 }
 
 // getEdgeDetails retrieves the edge details based on the edge schema by retrieving the name and type
-// and setting them on the edge definition
+// and setting them on the edge definition including the name (singular or plural based on the bool)
+// and type of the edge
 func (e *edgeDefinition) getEdgeDetails(plural bool) {
 	if e.edgeSchema == nil {
 		return
@@ -223,21 +238,22 @@ func (e *edgeDefinition) getEdgeDetails(plural bool) {
 	e.t = getType(e.edgeSchema)
 }
 
-// uniqueEdgeTo uses the provided edge definition to create an unique edge
+// uniqueEdgeTo uses the provided edge definition to create an unique edge for 1:1 relationships
 func uniqueEdgeTo(e *edgeDefinition) ent.Edge {
 	e.getEdgeDetails(false)
 
 	return basicEdgeTo(e, true)
 }
 
-// uniqueEdgeFrom uses the provided edge definition to create the inverse unique edge
+// uniqueEdgeFrom uses the provided edge definition to create the inverse unique edge for 1:1 relationships
 func uniqueEdgeFrom(e *edgeDefinition) ent.Edge {
 	e.getEdgeDetails(false)
 
 	return basicEdgeFrom(e, true)
 }
 
-// basicEdgeToDesc uses the provided edge definition to create an edge
+// basicEdgeTo uses the provided edge definition to create an edge with all the properties
+// this is used by the above functions, and is not intended to be called directly
 func basicEdgeTo(e *edgeDefinition, unique bool) ent.Edge {
 	validateEdgeDefinition(e)
 
@@ -281,11 +297,12 @@ func basicEdgeTo(e *edgeDefinition, unique bool) ent.Edge {
 	return edgeTo
 }
 
-// basicEdgeFromDesc uses the provided edge definition to create the inverse edge
+// basicEdgeFromDesc uses the provided edge definition to create the inverse edge for a 1:1 relationship
+// this is used by the above functions, and is not intended to be called directly
 func basicEdgeFrom(e *edgeDefinition, unique bool) ent.Edge {
 	if e.ref == "" {
 		if e.fromSchema == nil {
-			log.Fatal().Msg("edgeDefinition: edgeFrom must be set")
+			log.Fatal().Msg("edgeDefinition: fromSchema must be set")
 		}
 
 		e.ref = getPluralName(e.fromSchema)
@@ -294,8 +311,6 @@ func basicEdgeFrom(e *edgeDefinition, unique bool) ent.Edge {
 	validateEdgeDefinition(e)
 
 	edgeFrom := edge.From(e.name, e.t).Ref(e.ref)
-
-	// edgeFrom.Descriptor().RefName = e.ref
 
 	if unique {
 		edgeFrom.Unique()
