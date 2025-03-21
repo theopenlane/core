@@ -3415,54 +3415,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"procedure_editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"Procedure",
-	)
-	graph.MustAddE(
-		"procedure_blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"Procedure",
-	)
-	graph.MustAddE(
-		"internal_policy_editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"InternalPolicy",
-	)
-	graph.MustAddE(
-		"internal_policy_blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"InternalPolicy",
-	)
-	graph.MustAddE(
 		"program_editors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3641,6 +3593,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Group",
 		"Narrative",
+	)
+	graph.MustAddE(
+		"procedure_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"procedure_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"internal_policy_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
+		"internal_policy_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
 	)
 	graph.MustAddE(
 		"setting",
@@ -10300,62 +10300,6 @@ func (f *GroupFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
-// WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
-func (f *GroupFilter) WhereHasProcedureEditors() {
-	f.Where(entql.HasEdge("procedure_editors"))
-}
-
-// WhereHasProcedureEditorsWith applies a predicate to check if query has an edge procedure_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasProcedureEditorsWith(preds ...predicate.Procedure) {
-	f.Where(entql.HasEdgeWith("procedure_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasProcedureBlockedGroups applies a predicate to check if query has an edge procedure_blocked_groups.
-func (f *GroupFilter) WhereHasProcedureBlockedGroups() {
-	f.Where(entql.HasEdge("procedure_blocked_groups"))
-}
-
-// WhereHasProcedureBlockedGroupsWith applies a predicate to check if query has an edge procedure_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Procedure) {
-	f.Where(entql.HasEdgeWith("procedure_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasInternalPolicyEditors applies a predicate to check if query has an edge internal_policy_editors.
-func (f *GroupFilter) WhereHasInternalPolicyEditors() {
-	f.Where(entql.HasEdge("internal_policy_editors"))
-}
-
-// WhereHasInternalPolicyEditorsWith applies a predicate to check if query has an edge internal_policy_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internal_policy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasInternalPolicyBlockedGroups applies a predicate to check if query has an edge internal_policy_blocked_groups.
-func (f *GroupFilter) WhereHasInternalPolicyBlockedGroups() {
-	f.Where(entql.HasEdge("internal_policy_blocked_groups"))
-}
-
-// WhereHasInternalPolicyBlockedGroupsWith applies a predicate to check if query has an edge internal_policy_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internal_policy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasProgramEditors applies a predicate to check if query has an edge program_editors.
 func (f *GroupFilter) WhereHasProgramEditors() {
 	f.Where(entql.HasEdge("program_editors"))
@@ -10560,6 +10504,62 @@ func (f *GroupFilter) WhereHasNarrativeViewers() {
 // WhereHasNarrativeViewersWith applies a predicate to check if query has an edge narrative_viewers with a given conditions (other predicates).
 func (f *GroupFilter) WhereHasNarrativeViewersWith(preds ...predicate.Narrative) {
 	f.Where(entql.HasEdgeWith("narrative_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
+func (f *GroupFilter) WhereHasProcedureEditors() {
+	f.Where(entql.HasEdge("procedure_editors"))
+}
+
+// WhereHasProcedureEditorsWith applies a predicate to check if query has an edge procedure_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureEditorsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedureBlockedGroups applies a predicate to check if query has an edge procedure_blocked_groups.
+func (f *GroupFilter) WhereHasProcedureBlockedGroups() {
+	f.Where(entql.HasEdge("procedure_blocked_groups"))
+}
+
+// WhereHasProcedureBlockedGroupsWith applies a predicate to check if query has an edge procedure_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicyEditors applies a predicate to check if query has an edge internal_policy_editors.
+func (f *GroupFilter) WhereHasInternalPolicyEditors() {
+	f.Where(entql.HasEdge("internal_policy_editors"))
+}
+
+// WhereHasInternalPolicyEditorsWith applies a predicate to check if query has an edge internal_policy_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicyBlockedGroups applies a predicate to check if query has an edge internal_policy_blocked_groups.
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroups() {
+	f.Where(entql.HasEdge("internal_policy_blocked_groups"))
+}
+
+// WhereHasInternalPolicyBlockedGroupsWith applies a predicate to check if query has an edge internal_policy_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

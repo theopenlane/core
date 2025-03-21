@@ -302,9 +302,7 @@ type Cleanup[T DeleteExec] struct {
 //		MustDelete(testUser1.UserCtx, suite)
 func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSuite) {
 	// add client to context for hooks that expect the client to be in the context
-	ctx = ent.NewContext(ctx, suite.client.db)
-
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, suite.client.db)
 
 	for _, id := range c.IDs {
 		err := c.client.DeleteOneID(id).Exec(ctx)
@@ -317,15 +315,19 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSu
 	}
 }
 
-// MustNew organization builder is used to create, without authz checks, orgs in the database
-func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
-	// no auth, so allow policy
+// setContext is a helper function to set the context for the client
+// setting privacy to allow and adding the client to the context
+func setContext(ctx context.Context, db *ent.Client) context.Context {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// add client to context
-	// the organization hook expects the client to be in the context
-	// which happens automatically when using the graph resolvers
-	ctx = ent.NewContext(ctx, o.client.db)
+	return ent.NewContext(ctx, db)
+}
+
+// MustNew organization builder is used to create, without authz checks, orgs in the database
+func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
+	// no auth, so allow policy
+	ctx = setContext(ctx, o.client.db)
 
 	if o.Name == "" {
 		o.Name = randomName(t)
@@ -362,7 +364,7 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 
 // MustNew user builder is used to create, without authz checks, users in the database
 func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, u.client.db)
 
 	if u.FirstName == "" {
 		u.FirstName = gofakeit.FirstName()
@@ -413,7 +415,7 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T, userID s
 
 // MustNew org members builder is used to create, without authz checks, org members in the database
 func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgMembership {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, om.client.db)
 
 	if om.OrgID == "" {
 		org := (&OrganizationBuilder{client: om.client}).MustNew(ctx, t)
@@ -441,7 +443,7 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 
 // MustNew group builder is used to create, without authz checks, groups in the database
 func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, g.client.db)
 
 	if g.Name == "" {
 		g.Name = randomName(t)
@@ -471,7 +473,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 
 // MustNew invite builder is used to create, without authz checks, invites in the database
 func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, i.client.db)
 
 	// create user if not provided
 	rec := i.Recipient
@@ -494,7 +496,7 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 
 // MustNew subscriber builder is used to create, without authz checks, subscribers in the database
 func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subscriber {
-	reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	reqCtx := setContext(ctx, i.client.db)
 
 	// create user if not provided
 	rec := i.Email
@@ -512,7 +514,7 @@ func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subs
 
 // MustNew personal access tokens builder is used to create, without authz checks, personal access tokens in the database
 func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.PersonalAccessToken {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, pat.client.db)
 
 	if pat.Name == "" {
 		pat.Name = gofakeit.AppName()
@@ -549,7 +551,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew api tokens builder is used to create, without authz checks, api tokens in the database
 func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APIToken {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, at.client.db)
 
 	if at.Name == "" {
 		at.Name = gofakeit.AppName()
@@ -583,7 +585,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 
 // MustNew user builder is used to create, without authz checks, group members in the database
 func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.GroupMembership {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, gm.client.db)
 
 	if gm.GroupID == "" {
 		group := (&GroupBuilder{client: gm.client}).MustNew(ctx, t)
@@ -605,7 +607,7 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 
 // MustNew entity type builder is used to create, without authz checks, entity types in the database
 func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EntityType {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, e.client.db)
 
 	if e.Name == "" {
 		e.Name = randomName(t)
@@ -620,7 +622,7 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 
 // MustNew entity builder is used to create, without authz checks, entities in the database
 func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, e.client.db)
 
 	if e.Name == "" {
 		e.Name = gofakeit.AppName()
@@ -651,7 +653,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 
 // MustNew contact builder is used to create, without authz checks, contacts in the database
 func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.Name == "" {
 		c.Name = gofakeit.AppName()
@@ -692,10 +694,7 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 
 // MustNew task builder is used to create, without authz checks, tasks in the database
 func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
-	// add client to context, required for hooks that expect the client to be in the context
-	ctx = ent.NewContext(ctx, c.client.db)
-
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.Title == "" {
 		c.Title = gofakeit.AppName()
@@ -736,7 +735,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 
 // MustNew program builder is used to create, without authz checks, programs in the database
 func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, p.client.db)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -771,7 +770,7 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 // MustNew user builder is used to create, without authz checks, program members in the database
 func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ProgramMembership {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, pm.client.db)
 
 	if pm.ProgramID == "" {
 		program := (&ProgramBuilder{client: pm.client}).MustNew(ctx, t)
@@ -800,10 +799,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 // MustNew procedure builder is used to create, without authz checks, procedures in the database
 func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Procedure {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, p.client.db)
+	ctx = setContext(ctx, p.client.db)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -824,10 +820,7 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 
 // MustNew policy builder is used to create, without authz checks, policies in the database
 func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.InternalPolicy {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, p.client.db)
+	ctx = setContext(ctx, p.client.db)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -842,10 +835,7 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 // MustNew risk builder is used to create, without authz checks, risks in the database
 func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, r.client.db)
+	ctx = setContext(ctx, r.client.db)
 
 	if r.Name == "" {
 		r.Name = gofakeit.AppName()
@@ -866,10 +856,7 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 
 // MustNew control objective builder is used to create, without authz checks, control objectives in the database
 func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlObjective {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, c.client.db)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.Name == "" {
 		c.Name = gofakeit.AppName()
@@ -890,10 +877,7 @@ func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *en
 
 // MustNew narrative builder is used to create, without authz checks, narratives in the database
 func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narrative {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, n.client.db)
+	ctx = setContext(ctx, n.client.db)
 
 	if n.Name == "" {
 		n.Name = gofakeit.AppName()
@@ -914,10 +898,7 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 
 // MustNew control builder is used to create, without authz checks, controls in the database
 func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, c.client.db)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.Name == "" {
 		c.Name = gofakeit.UUID()
@@ -938,10 +919,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 // MustNew subcontrol builder is used to create, without authz checks, subcontrols in the database
 func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subcontrol {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, s.client.db)
+	ctx = setContext(ctx, s.client.db)
 
 	if s.Name == "" {
 		s.Name = gofakeit.UUID()
@@ -965,10 +943,7 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 
 // MustNew control builder is used to create, without authz checks, controls in the database
 func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	ctx = ent.NewContext(ctx, c.client.db)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.Name == "" {
 		c.Name = gofakeit.AppName()
@@ -992,23 +967,23 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 }
 
 // MustNew standard builder is used to create, without authz checks, standards in the database
-func (e *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standard {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standard {
+	ctx = setContext(ctx, s.client.db)
 
-	if e.Name == "" {
-		e.Name = gofakeit.AppName()
+	if s.Name == "" {
+		s.Name = gofakeit.AppName()
 	}
 
-	if e.Framework == "" {
-		e.Framework = "MITB Framework"
+	if s.Framework == "" {
+		s.Framework = "MITB Framework"
 	}
 
-	Standard := e.client.db.Standard.Create().
-		SetName(e.Name).
-		SetFramework(e.Framework).
-		SetSystemOwned(e.SystemOwned).
-		SetIsPublic(e.IsPublic).
-		AddControlIDs(e.ControlIDs...).
+	Standard := s.client.db.Standard.Create().
+		SetName(s.Name).
+		SetFramework(s.Framework).
+		SetSystemOwned(s.SystemOwned).
+		SetIsPublic(s.IsPublic).
+		AddControlIDs(s.ControlIDs...).
 		SaveX(ctx)
 
 	return Standard

@@ -80,14 +80,10 @@ func (e EmailVerificationToken) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
-		UserOwnedMixin{
-			Ref:               e.PluralName(),
-			SkipOASGeneration: true,
-			SkipInterceptor:   interceptors.SkipAll,
-			SkipTokenType: []token.PrivacyToken{
-				&token.VerifyToken{},
-			},
-		},
+		newUserOwnedMixin(e,
+			withSkipInterceptor(interceptors.SkipAll),
+			withSkipTokenTypesUsers(&token.VerifyToken{}),
+		),
 	}
 }
 

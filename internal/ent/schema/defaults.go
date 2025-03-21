@@ -20,6 +20,18 @@ type SchemaFuncs interface {
 	GetType() any
 }
 
+// toSchemaFuncs converts the provided schema of type any to a SchemaFuncs
+// in order to call the required methods
+// if the schema does not implement SchemaFuncs, it will fatal error
+func toSchemaFuncs(schema any) SchemaFuncs {
+	sch, ok := schema.(SchemaFuncs)
+	if !ok {
+		log.Fatal().Msg("schema must implement SchemaFuncs")
+	}
+
+	return sch
+}
+
 // mixinConfig defines the configuration for the mixins that can be used
 type mixinConfig struct {
 	// prefix is the prefix to use for the IDMixin, if left empty it will use the default IDMixin
@@ -116,38 +128,23 @@ type edgeDefinition struct {
 
 // getPluralName returns the plural name of the schema
 func getPluralName(schema any) string {
-	sch, ok := schema.(SchemaFuncs)
-	if ok {
-		return sch.PluralName()
-	}
+	sch := toSchemaFuncs(schema)
 
-	log.Fatal().Msgf("schema must implement SchemaFuncs, %T does not", schema)
-
-	return ""
+	return sch.PluralName()
 }
 
 // getName returns the name of the schema
 func getName(schema any) string {
-	sch, ok := schema.(SchemaFuncs)
-	if ok {
-		return sch.Name()
-	}
+	sch := toSchemaFuncs(schema)
 
-	log.Fatal().Msgf("schema must implement SchemaFuncs, %T does not", schema)
-
-	return ""
+	return sch.Name()
 }
 
 // getType returns the type of the schema
 func getType(schema any) any {
-	sch, ok := schema.(SchemaFuncs)
-	if ok {
-		return sch.GetType()
-	}
+	sch := toSchemaFuncs(schema)
 
-	log.Fatal().Msgf("schema must implement ent.Schema, %T does not", schema)
-
-	return nil
+	return sch.GetType()
 }
 
 // edgeToWithPagination uses the provided edge definition to create an edge with pagination

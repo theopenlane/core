@@ -75,8 +75,8 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 	return mixinConfig{
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			DocumentMixin{DocumentType: a.Name()},
-			NewOrgOwnMixinWithRef(a.PluralName()),
+			NewDocumentMixin(a),
+			newOrgOwnedMixin(a),
 		}}.getMixins()
 }
 

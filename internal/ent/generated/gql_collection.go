@@ -9581,58 +9581,6 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				fieldSeen[group.FieldOwnerID] = struct{}{}
 			}
 
-		case "procedureEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "procedureBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "internalPolicyEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedInternalPolicyEditors(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
-
-		case "internalPolicyBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedInternalPolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
-
 		case "programEditors":
 			var (
 				alias = field.Alias
@@ -9825,6 +9773,58 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				return err
 			}
 			gr.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "procedureEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "procedureBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicyEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalPolicyEditors(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicyBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalPolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 

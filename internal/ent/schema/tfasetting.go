@@ -85,12 +85,10 @@ func (t TFASetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			UserOwnedMixin{
-				Ref:             t.PluralName(),
-				Optional:        true,
-				AllowUpdate:     false,
-				SoftDeleteIndex: true,
-			},
+			newUserOwnedMixin(t,
+				withOptionalUser(),
+				withSoftDeleteIndex(),
+			),
 		},
 	}.getMixins()
 }

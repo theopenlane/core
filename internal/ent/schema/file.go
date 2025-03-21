@@ -106,12 +106,12 @@ func (f File) Edges() []ent.Edge {
 func (f File) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames: []string{"organization_id", "program_id", "control_id", "procedure_id", "template_id", "subcontrol_id", "document_data_id", "contact_id", "internal_policy_id", "narrative_id", "evidence_id"},
-				Ref:        f.PluralName(),
-				HookFuncs:  []HookFunc{}, // use an empty hook, file processing is handled in middleware
-
-			}),
+			newObjectOwnedMixin(f,
+				withParents(
+					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
+					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}), // used to create parent tuples for the file
+				withHookFuncs(), // use an empty hook, file processing is handled in middleware
+			),
 		},
 	}.getMixins()
 }

@@ -20,6 +20,14 @@ type DocumentMixin struct {
 	DocumentType string
 }
 
+func NewDocumentMixin(schema any) DocumentMixin {
+	sch := toSchemaFuncs(schema)
+
+	return DocumentMixin{
+		DocumentType: sch.Name(),
+	}
+}
+
 // Fields of the DocumentMixin.
 func (d DocumentMixin) Fields() []ent.Field {
 	return getDocumentFields(d.DocumentType)

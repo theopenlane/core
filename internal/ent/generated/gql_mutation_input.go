@@ -2882,10 +2882,6 @@ type CreateGroupInput struct {
 	LogoURL                         *string
 	DisplayName                     *string
 	OwnerID                         *string
-	ProcedureEditorIDs              []string
-	ProcedureBlockedGroupIDs        []string
-	InternalPolicyEditorIDs         []string
-	InternalPolicyBlockedGroupIDs   []string
 	ProgramEditorIDs                []string
 	ProgramBlockedGroupIDs          []string
 	ProgramViewerIDs                []string
@@ -2901,6 +2897,10 @@ type CreateGroupInput struct {
 	NarrativeEditorIDs              []string
 	NarrativeBlockedGroupIDs        []string
 	NarrativeViewerIDs              []string
+	ProcedureEditorIDs              []string
+	ProcedureBlockedGroupIDs        []string
+	InternalPolicyEditorIDs         []string
+	InternalPolicyBlockedGroupIDs   []string
 	SettingID                       *string
 	EventIDs                        []string
 	IntegrationIDs                  []string
@@ -2928,18 +2928,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.ProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.InternalPolicyEditorIDs; len(v) > 0 {
-		m.AddInternalPolicyEditorIDs(v...)
-	}
-	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalPolicyBlockedGroupIDs(v...)
 	}
 	if v := i.ProgramEditorIDs; len(v) > 0 {
 		m.AddProgramEditorIDs(v...)
@@ -2986,6 +2974,18 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.NarrativeViewerIDs; len(v) > 0 {
 		m.AddNarrativeViewerIDs(v...)
 	}
+	if v := i.ProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.InternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
+	}
+	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
+	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
@@ -3024,18 +3024,6 @@ type UpdateGroupInput struct {
 	DisplayName                           *string
 	ClearOwner                            bool
 	OwnerID                               *string
-	ClearProcedureEditors                 bool
-	AddProcedureEditorIDs                 []string
-	RemoveProcedureEditorIDs              []string
-	ClearProcedureBlockedGroups           bool
-	AddProcedureBlockedGroupIDs           []string
-	RemoveProcedureBlockedGroupIDs        []string
-	ClearInternalPolicyEditors            bool
-	AddInternalPolicyEditorIDs            []string
-	RemoveInternalPolicyEditorIDs         []string
-	ClearInternalPolicyBlockedGroups      bool
-	AddInternalPolicyBlockedGroupIDs      []string
-	RemoveInternalPolicyBlockedGroupIDs   []string
 	ClearProgramEditors                   bool
 	AddProgramEditorIDs                   []string
 	RemoveProgramEditorIDs                []string
@@ -3081,6 +3069,18 @@ type UpdateGroupInput struct {
 	ClearNarrativeViewers                 bool
 	AddNarrativeViewerIDs                 []string
 	RemoveNarrativeViewerIDs              []string
+	ClearProcedureEditors                 bool
+	AddProcedureEditorIDs                 []string
+	RemoveProcedureEditorIDs              []string
+	ClearProcedureBlockedGroups           bool
+	AddProcedureBlockedGroupIDs           []string
+	RemoveProcedureBlockedGroupIDs        []string
+	ClearInternalPolicyEditors            bool
+	AddInternalPolicyEditorIDs            []string
+	RemoveInternalPolicyEditorIDs         []string
+	ClearInternalPolicyBlockedGroups      bool
+	AddInternalPolicyBlockedGroupIDs      []string
+	RemoveInternalPolicyBlockedGroupIDs   []string
 	ClearSetting                          bool
 	SettingID                             *string
 	ClearEvents                           bool
@@ -3137,42 +3137,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearProcedureEditors {
-		m.ClearProcedureEditors()
-	}
-	if v := i.AddProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
-		m.RemoveProcedureEditorIDs(v...)
-	}
-	if i.ClearProcedureBlockedGroups {
-		m.ClearProcedureBlockedGroups()
-	}
-	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
-		m.RemoveProcedureBlockedGroupIDs(v...)
-	}
-	if i.ClearInternalPolicyEditors {
-		m.ClearInternalPolicyEditors()
-	}
-	if v := i.AddInternalPolicyEditorIDs; len(v) > 0 {
-		m.AddInternalPolicyEditorIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyEditorIDs; len(v) > 0 {
-		m.RemoveInternalPolicyEditorIDs(v...)
-	}
-	if i.ClearInternalPolicyBlockedGroups {
-		m.ClearInternalPolicyBlockedGroups()
-	}
-	if v := i.AddInternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalPolicyBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.RemoveInternalPolicyBlockedGroupIDs(v...)
 	}
 	if i.ClearProgramEditors {
 		m.ClearProgramEditors()
@@ -3308,6 +3272,42 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
 		m.RemoveNarrativeViewerIDs(v...)
+	}
+	if i.ClearProcedureEditors {
+		m.ClearProcedureEditors()
+	}
+	if v := i.AddProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
+		m.RemoveProcedureEditorIDs(v...)
+	}
+	if i.ClearProcedureBlockedGroups {
+		m.ClearProcedureBlockedGroups()
+	}
+	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
+		m.RemoveProcedureBlockedGroupIDs(v...)
+	}
+	if i.ClearInternalPolicyEditors {
+		m.ClearInternalPolicyEditors()
+	}
+	if v := i.AddInternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyEditorIDs; len(v) > 0 {
+		m.RemoveInternalPolicyEditorIDs(v...)
+	}
+	if i.ClearInternalPolicyBlockedGroups {
+		m.ClearInternalPolicyBlockedGroups()
+	}
+	if v := i.AddInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.RemoveInternalPolicyBlockedGroupIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()

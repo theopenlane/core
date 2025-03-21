@@ -99,14 +99,6 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
-			case "procedureEditors":
-				return ec.fieldContext_Group_procedureEditors(ctx, field)
-			case "procedureBlockedGroups":
-				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
-			case "internalPolicyEditors":
-				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
-			case "internalPolicyBlockedGroups":
-				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "programEditors":
 				return ec.fieldContext_Group_programEditors(ctx, field)
 			case "programBlockedGroups":
@@ -137,6 +129,14 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_narrativeBlockedGroups(ctx, field)
 			case "narrativeViewers":
 				return ec.fieldContext_Group_narrativeViewers(ctx, field)
+			case "procedureEditors":
+				return ec.fieldContext_Group_procedureEditors(ctx, field)
+			case "procedureBlockedGroups":
+				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
+			case "internalPolicyEditors":
+				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
+			case "internalPolicyBlockedGroups":
+				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "setting":
 				return ec.fieldContext_Group_setting(ctx, field)
 			case "users":
@@ -233,14 +233,6 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
-			case "procedureEditors":
-				return ec.fieldContext_Group_procedureEditors(ctx, field)
-			case "procedureBlockedGroups":
-				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
-			case "internalPolicyEditors":
-				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
-			case "internalPolicyBlockedGroups":
-				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "programEditors":
 				return ec.fieldContext_Group_programEditors(ctx, field)
 			case "programBlockedGroups":
@@ -271,6 +263,14 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_narrativeBlockedGroups(ctx, field)
 			case "narrativeViewers":
 				return ec.fieldContext_Group_narrativeViewers(ctx, field)
+			case "procedureEditors":
+				return ec.fieldContext_Group_procedureEditors(ctx, field)
+			case "procedureBlockedGroups":
+				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
+			case "internalPolicyEditors":
+				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
+			case "internalPolicyBlockedGroups":
+				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "setting":
 				return ec.fieldContext_Group_setting(ctx, field)
 			case "users":
@@ -411,14 +411,6 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
-			case "procedureEditors":
-				return ec.fieldContext_Group_procedureEditors(ctx, field)
-			case "procedureBlockedGroups":
-				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
-			case "internalPolicyEditors":
-				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
-			case "internalPolicyBlockedGroups":
-				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "programEditors":
 				return ec.fieldContext_Group_programEditors(ctx, field)
 			case "programBlockedGroups":
@@ -449,6 +441,14 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_narrativeBlockedGroups(ctx, field)
 			case "narrativeViewers":
 				return ec.fieldContext_Group_narrativeViewers(ctx, field)
+			case "procedureEditors":
+				return ec.fieldContext_Group_procedureEditors(ctx, field)
+			case "procedureBlockedGroups":
+				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
+			case "internalPolicyEditors":
+				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
+			case "internalPolicyBlockedGroups":
+				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "setting":
 				return ec.fieldContext_Group_setting(ctx, field)
 			case "users":

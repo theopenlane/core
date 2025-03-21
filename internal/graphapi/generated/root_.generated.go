@@ -31294,10 +31294,6 @@ input CreateGroupInput {
   """
   displayName: String
   ownerID: ID
-  procedureEditorIDs: [ID!]
-  procedureBlockedGroupIDs: [ID!]
-  internalPolicyEditorIDs: [ID!]
-  internalPolicyBlockedGroupIDs: [ID!]
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
   programViewerIDs: [ID!]
@@ -31313,6 +31309,10 @@ input CreateGroupInput {
   narrativeEditorIDs: [ID!]
   narrativeBlockedGroupIDs: [ID!]
   narrativeViewerIDs: [ID!]
+  procedureEditorIDs: [ID!]
+  procedureBlockedGroupIDs: [ID!]
+  internalPolicyEditorIDs: [ID!]
+  internalPolicyBlockedGroupIDs: [ID!]
   settingID: ID
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -37266,10 +37266,6 @@ type Group implements Node {
   """
   displayName: String!
   owner: Organization
-  procedureEditors: [Procedure!]
-  procedureBlockedGroups: [Procedure!]
-  internalPolicyEditors: [InternalPolicy!]
-  internalPolicyBlockedGroups: [InternalPolicy!]
   programEditors: [Program!]
   programBlockedGroups: [Program!]
   programViewers: [Program!]
@@ -37285,6 +37281,10 @@ type Group implements Node {
   narrativeEditors: [Narrative!]
   narrativeBlockedGroups: [Narrative!]
   narrativeViewers: [Narrative!]
+  procedureEditors: [Procedure!]
+  procedureBlockedGroups: [Procedure!]
+  internalPolicyEditors: [InternalPolicy!]
+  internalPolicyBlockedGroups: [InternalPolicy!]
   setting: GroupSetting
   users: [User!]
   events(
@@ -39051,26 +39051,6 @@ input GroupWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  procedure_editors edge predicates
-  """
-  hasProcedureEditors: Boolean
-  hasProcedureEditorsWith: [ProcedureWhereInput!]
-  """
-  procedure_blocked_groups edge predicates
-  """
-  hasProcedureBlockedGroups: Boolean
-  hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
-  """
-  internal_policy_editors edge predicates
-  """
-  hasInternalPolicyEditors: Boolean
-  hasInternalPolicyEditorsWith: [InternalPolicyWhereInput!]
-  """
-  internal_policy_blocked_groups edge predicates
-  """
-  hasInternalPolicyBlockedGroups: Boolean
-  hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
-  """
   program_editors edge predicates
   """
   hasProgramEditors: Boolean
@@ -39145,6 +39125,26 @@ input GroupWhereInput {
   """
   hasNarrativeViewers: Boolean
   hasNarrativeViewersWith: [NarrativeWhereInput!]
+  """
+  procedure_editors edge predicates
+  """
+  hasProcedureEditors: Boolean
+  hasProcedureEditorsWith: [ProcedureWhereInput!]
+  """
+  procedure_blocked_groups edge predicates
+  """
+  hasProcedureBlockedGroups: Boolean
+  hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
+  """
+  internal_policy_editors edge predicates
+  """
+  hasInternalPolicyEditors: Boolean
+  hasInternalPolicyEditorsWith: [InternalPolicyWhereInput!]
+  """
+  internal_policy_blocked_groups edge predicates
+  """
+  hasInternalPolicyBlockedGroups: Boolean
+  hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
   """
   setting edge predicates
   """
@@ -59895,18 +59895,6 @@ input UpdateGroupInput {
   displayName: String
   ownerID: ID
   clearOwner: Boolean
-  addProcedureEditorIDs: [ID!]
-  removeProcedureEditorIDs: [ID!]
-  clearProcedureEditors: Boolean
-  addProcedureBlockedGroupIDs: [ID!]
-  removeProcedureBlockedGroupIDs: [ID!]
-  clearProcedureBlockedGroups: Boolean
-  addInternalPolicyEditorIDs: [ID!]
-  removeInternalPolicyEditorIDs: [ID!]
-  clearInternalPolicyEditors: Boolean
-  addInternalPolicyBlockedGroupIDs: [ID!]
-  removeInternalPolicyBlockedGroupIDs: [ID!]
-  clearInternalPolicyBlockedGroups: Boolean
   addProgramEditorIDs: [ID!]
   removeProgramEditorIDs: [ID!]
   clearProgramEditors: Boolean
@@ -59952,6 +59940,18 @@ input UpdateGroupInput {
   addNarrativeViewerIDs: [ID!]
   removeNarrativeViewerIDs: [ID!]
   clearNarrativeViewers: Boolean
+  addProcedureEditorIDs: [ID!]
+  removeProcedureEditorIDs: [ID!]
+  clearProcedureEditors: Boolean
+  addProcedureBlockedGroupIDs: [ID!]
+  removeProcedureBlockedGroupIDs: [ID!]
+  clearProcedureBlockedGroups: Boolean
+  addInternalPolicyEditorIDs: [ID!]
+  removeInternalPolicyEditorIDs: [ID!]
+  clearInternalPolicyEditors: Boolean
+  addInternalPolicyBlockedGroupIDs: [ID!]
+  removeInternalPolicyBlockedGroupIDs: [ID!]
+  clearInternalPolicyBlockedGroups: Boolean
   settingID: ID
   clearSetting: Boolean
   addEventIDs: [ID!]

@@ -5,13 +5,10 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -137,10 +134,9 @@ func (s Standard) Mixin() []ent.Mixin {
 	return mixinConfig{
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnedMixin(ObjectOwnedMixin{
-				Ref:                      s.PluralName(),
-				AllowEmptyForSystemAdmin: true, // allow empty owner_id
-			}),
+			newOrgOwnedMixin(s,
+				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
+			),
 		},
 	}.getMixins()
 }
@@ -159,13 +155,6 @@ func (Standard) Interceptors() []ent.Interceptor {
 	}
 }
 
-// Annotations of the Standard
-func (Standard) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
-	}
-}
-
 // Policy of the Standard
 func (Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -175,7 +164,7 @@ func (Standard) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
 			policy.CheckCreateAccess(),
-			entfga.CheckEditAccess[*generated.StandardMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

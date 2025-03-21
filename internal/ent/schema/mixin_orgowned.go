@@ -27,27 +27,28 @@ const (
 	ownerFieldName = "owner_id"
 )
 
-// NewOrgOwnMixinWithRef creates a new OrgOwnedMixin with the given ref
-// and sets the defaults
-func NewOrgOwnMixinWithRef(ref string) ObjectOwnedMixin {
-	return NewOrgOwnedMixin(
-		ObjectOwnedMixin{
-			Ref: ref,
-		})
-}
+type objectOwnedOption func(*ObjectOwnedMixin)
 
-// NewOrgOwnedMixin creates a new OrgOwnedMixin with the given ObjectOwnedMixin
-// and sets the Kind to ownerFieldName and the HookFunc to defaultOrgHookFunc
-func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
-	o.FieldNames = []string{ownerFieldName}
-	o.Kind = Organization.Type
+// newOrgOwnedMixin creates a new OrgOwnedMixin using the plural name of the schema
+// and all defaults. The schema must implement the SchemaFuncs interface to be used.
+// options can be passed to customize the mixin
+func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
+	sch := toSchemaFuncs(schema)
 
-	if o.HookFuncs == nil {
-		o.HookFuncs = []HookFunc{defaultOrgHookFunc}
+	// defaults settings
+	o := ObjectOwnedMixin{
+		// owner_id field
+		FieldNames: []string{ownerFieldName},
+		Kind:       Organization.Type,
+		// plural name of the schema because the organization will usually have many of these objects
+		Ref:              sch.PluralName(),
+		HookFuncs:        []HookFunc{defaultOrgHookFunc},
+		InterceptorFuncs: []InterceptorFunc{defaultOrgInterceptorFunc},
 	}
 
-	if o.InterceptorFuncs == nil {
-		o.InterceptorFuncs = []InterceptorFunc{defaultOrgInterceptorFunc}
+	// apply options
+	for _, opt := range opts {
+		opt(&o)
 	}
 
 	return o
@@ -56,6 +57,8 @@ func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			stuff := m.Type()
+			log.Debug().Msgf("mutation type: %s", stuff)
 			skip, err := o.orgHookSkipper(ctx, m)
 			if err != nil {
 				return nil, err
@@ -79,6 +82,8 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			if err != nil {
 				return nil, fmt.Errorf("failed to get organization id from context: %w", err)
 			}
+
+			log.Error().Strs("org_ids", orgIDs).Msg("organization ids in context")
 
 			// filter by owner on update and delete mutations
 			mx, ok := m.(interface {

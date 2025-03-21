@@ -75,10 +75,7 @@ func (w Webauthn) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		UserOwnedMixin{
-			Ref:               w.PluralName(),
-			SkipOASGeneration: true,
-		},
+		newUserOwnedMixin(w),
 	}
 }
 

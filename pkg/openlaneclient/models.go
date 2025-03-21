@@ -4042,10 +4042,6 @@ type CreateGroupInput struct {
 	// The group's displayed 'friendly' name
 	DisplayName                     *string                  `json:"displayName,omitempty"`
 	OwnerID                         *string                  `json:"ownerID,omitempty"`
-	ProcedureEditorIDs              []string                 `json:"procedureEditorIDs,omitempty"`
-	ProcedureBlockedGroupIDs        []string                 `json:"procedureBlockedGroupIDs,omitempty"`
-	InternalPolicyEditorIDs         []string                 `json:"internalPolicyEditorIDs,omitempty"`
-	InternalPolicyBlockedGroupIDs   []string                 `json:"internalPolicyBlockedGroupIDs,omitempty"`
 	ProgramEditorIDs                []string                 `json:"programEditorIDs,omitempty"`
 	ProgramBlockedGroupIDs          []string                 `json:"programBlockedGroupIDs,omitempty"`
 	ProgramViewerIDs                []string                 `json:"programViewerIDs,omitempty"`
@@ -4061,6 +4057,10 @@ type CreateGroupInput struct {
 	NarrativeEditorIDs              []string                 `json:"narrativeEditorIDs,omitempty"`
 	NarrativeBlockedGroupIDs        []string                 `json:"narrativeBlockedGroupIDs,omitempty"`
 	NarrativeViewerIDs              []string                 `json:"narrativeViewerIDs,omitempty"`
+	ProcedureEditorIDs              []string                 `json:"procedureEditorIDs,omitempty"`
+	ProcedureBlockedGroupIDs        []string                 `json:"procedureBlockedGroupIDs,omitempty"`
+	InternalPolicyEditorIDs         []string                 `json:"internalPolicyEditorIDs,omitempty"`
+	InternalPolicyBlockedGroupIDs   []string                 `json:"internalPolicyBlockedGroupIDs,omitempty"`
 	SettingID                       *string                  `json:"settingID,omitempty"`
 	EventIDs                        []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs                  []string                 `json:"integrationIDs,omitempty"`
@@ -8077,10 +8077,6 @@ type Group struct {
 	// The group's displayed 'friendly' name
 	DisplayName                   string                 `json:"displayName"`
 	Owner                         *Organization          `json:"owner,omitempty"`
-	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty"`
-	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty"`
-	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty"`
-	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty"`
 	ProgramEditors                []*Program             `json:"programEditors,omitempty"`
 	ProgramBlockedGroups          []*Program             `json:"programBlockedGroups,omitempty"`
 	ProgramViewers                []*Program             `json:"programViewers,omitempty"`
@@ -8096,6 +8092,10 @@ type Group struct {
 	NarrativeEditors              []*Narrative           `json:"narrativeEditors,omitempty"`
 	NarrativeBlockedGroups        []*Narrative           `json:"narrativeBlockedGroups,omitempty"`
 	NarrativeViewers              []*Narrative           `json:"narrativeViewers,omitempty"`
+	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty"`
+	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty"`
+	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty"`
 	Setting                       *GroupSetting          `json:"setting,omitempty"`
 	Users                         []*User                `json:"users,omitempty"`
 	Events                        *EventConnection       `json:"events"`
@@ -9410,18 +9410,6 @@ type GroupWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// procedure_editors edge predicates
-	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
-	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
-	// procedure_blocked_groups edge predicates
-	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
-	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
-	// internal_policy_editors edge predicates
-	HasInternalPolicyEditors     *bool                       `json:"hasInternalPolicyEditors,omitempty"`
-	HasInternalPolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyEditorsWith,omitempty"`
-	// internal_policy_blocked_groups edge predicates
-	HasInternalPolicyBlockedGroups     *bool                       `json:"hasInternalPolicyBlockedGroups,omitempty"`
-	HasInternalPolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyBlockedGroupsWith,omitempty"`
 	// program_editors edge predicates
 	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
 	HasProgramEditorsWith []*ProgramWhereInput `json:"hasProgramEditorsWith,omitempty"`
@@ -9467,6 +9455,18 @@ type GroupWhereInput struct {
 	// narrative_viewers edge predicates
 	HasNarrativeViewers     *bool                  `json:"hasNarrativeViewers,omitempty"`
 	HasNarrativeViewersWith []*NarrativeWhereInput `json:"hasNarrativeViewersWith,omitempty"`
+	// procedure_editors edge predicates
+	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
+	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
+	// procedure_blocked_groups edge predicates
+	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
+	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
+	// internal_policy_editors edge predicates
+	HasInternalPolicyEditors     *bool                       `json:"hasInternalPolicyEditors,omitempty"`
+	HasInternalPolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyEditorsWith,omitempty"`
+	// internal_policy_blocked_groups edge predicates
+	HasInternalPolicyBlockedGroups     *bool                       `json:"hasInternalPolicyBlockedGroups,omitempty"`
+	HasInternalPolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyBlockedGroupsWith,omitempty"`
 	// setting edge predicates
 	HasSetting     *bool                     `json:"hasSetting,omitempty"`
 	HasSettingWith []*GroupSettingWhereInput `json:"hasSettingWith,omitempty"`
@@ -21758,18 +21758,6 @@ type UpdateGroupInput struct {
 	DisplayName                           *string                       `json:"displayName,omitempty"`
 	OwnerID                               *string                       `json:"ownerID,omitempty"`
 	ClearOwner                            *bool                         `json:"clearOwner,omitempty"`
-	AddProcedureEditorIDs                 []string                      `json:"addProcedureEditorIDs,omitempty"`
-	RemoveProcedureEditorIDs              []string                      `json:"removeProcedureEditorIDs,omitempty"`
-	ClearProcedureEditors                 *bool                         `json:"clearProcedureEditors,omitempty"`
-	AddProcedureBlockedGroupIDs           []string                      `json:"addProcedureBlockedGroupIDs,omitempty"`
-	RemoveProcedureBlockedGroupIDs        []string                      `json:"removeProcedureBlockedGroupIDs,omitempty"`
-	ClearProcedureBlockedGroups           *bool                         `json:"clearProcedureBlockedGroups,omitempty"`
-	AddInternalPolicyEditorIDs            []string                      `json:"addInternalPolicyEditorIDs,omitempty"`
-	RemoveInternalPolicyEditorIDs         []string                      `json:"removeInternalPolicyEditorIDs,omitempty"`
-	ClearInternalPolicyEditors            *bool                         `json:"clearInternalPolicyEditors,omitempty"`
-	AddInternalPolicyBlockedGroupIDs      []string                      `json:"addInternalPolicyBlockedGroupIDs,omitempty"`
-	RemoveInternalPolicyBlockedGroupIDs   []string                      `json:"removeInternalPolicyBlockedGroupIDs,omitempty"`
-	ClearInternalPolicyBlockedGroups      *bool                         `json:"clearInternalPolicyBlockedGroups,omitempty"`
 	AddProgramEditorIDs                   []string                      `json:"addProgramEditorIDs,omitempty"`
 	RemoveProgramEditorIDs                []string                      `json:"removeProgramEditorIDs,omitempty"`
 	ClearProgramEditors                   *bool                         `json:"clearProgramEditors,omitempty"`
@@ -21815,6 +21803,18 @@ type UpdateGroupInput struct {
 	AddNarrativeViewerIDs                 []string                      `json:"addNarrativeViewerIDs,omitempty"`
 	RemoveNarrativeViewerIDs              []string                      `json:"removeNarrativeViewerIDs,omitempty"`
 	ClearNarrativeViewers                 *bool                         `json:"clearNarrativeViewers,omitempty"`
+	AddProcedureEditorIDs                 []string                      `json:"addProcedureEditorIDs,omitempty"`
+	RemoveProcedureEditorIDs              []string                      `json:"removeProcedureEditorIDs,omitempty"`
+	ClearProcedureEditors                 *bool                         `json:"clearProcedureEditors,omitempty"`
+	AddProcedureBlockedGroupIDs           []string                      `json:"addProcedureBlockedGroupIDs,omitempty"`
+	RemoveProcedureBlockedGroupIDs        []string                      `json:"removeProcedureBlockedGroupIDs,omitempty"`
+	ClearProcedureBlockedGroups           *bool                         `json:"clearProcedureBlockedGroups,omitempty"`
+	AddInternalPolicyEditorIDs            []string                      `json:"addInternalPolicyEditorIDs,omitempty"`
+	RemoveInternalPolicyEditorIDs         []string                      `json:"removeInternalPolicyEditorIDs,omitempty"`
+	ClearInternalPolicyEditors            *bool                         `json:"clearInternalPolicyEditors,omitempty"`
+	AddInternalPolicyBlockedGroupIDs      []string                      `json:"addInternalPolicyBlockedGroupIDs,omitempty"`
+	RemoveInternalPolicyBlockedGroupIDs   []string                      `json:"removeInternalPolicyBlockedGroupIDs,omitempty"`
+	ClearInternalPolicyBlockedGroups      *bool                         `json:"clearInternalPolicyBlockedGroups,omitempty"`
 	SettingID                             *string                       `json:"settingID,omitempty"`
 	ClearSetting                          *bool                         `json:"clearSetting,omitempty"`
 	AddEventIDs                           []string                      `json:"addEventIDs,omitempty"`

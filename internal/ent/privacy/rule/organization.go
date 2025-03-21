@@ -15,17 +15,43 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
+// genericMutation is an interface for getting a mutation ID and type
+type genericMutation interface {
+	ID() (id string, exists bool)
+	IDs(ctx context.Context) ([]string, error)
+	OwnerID() (id string, exists bool)
+	Type() string
+	Op() ent.Op
+	Client() *generated.Client
+}
+
 // CheckCurrentOrgAccess checks if the authenticated user has access to the organization
 // based on the relation provided
 // This rule assumes that the organization id and user id are set in the context
 // and only checks for access to the single organization
-func CheckCurrentOrgAccess(ctx context.Context, relation string) error {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return err
+func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
+	// skip if permission is already set to allow
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return privacy.Allow
 	}
 
-	return checkOrgAccess(ctx, relation, orgID)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
+		return checkOrgAccess(ctx, relation, orgID)
+	}
+
+	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
+	mut, ok := m.(genericMutation)
+	if ok {
+		orgID, ok = mut.OwnerID()
+		if ok && orgID != "" {
+			return checkOrgAccess(ctx, relation, orgID)
+		}
+	}
+
+	// allow it to continue, there is a hook that will filter on the user's authorized org ids
+	// see mixin_orgowned.go:defaultOrgHookFunc() for more details
+	return privacy.Allow
 }
 
 // CheckOrgAccessBasedOnRequest checks if the authenticated user has access to the organizations that are requested
@@ -62,7 +88,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		return nil
 	}
 
-	log.Debug().Str("relation", relation).Msg("checking access to organization")
+	log.Error().Str("relation", relation).Msg("checking access to organization")
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
@@ -88,9 +114,10 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 
 		return privacy.Allow
 	}
+	log.Error().Interface("ac", ac).Msg("access denied to organization")
 
 	// deny if it was a mutation is not allowed
-	return privacy.Deny
+	return generated.ErrPermissionDenied
 }
 
 // HasOrgMutationAccess is a rule that returns allow decision if user has edit or delete access

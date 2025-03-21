@@ -38,14 +38,14 @@ func CheckOrgReadAccess() privacy.QueryRule {
 		}
 
 		// otherwise check against the current context
-		return rule.CheckCurrentOrgAccess(ctx, fgax.CanView)
+		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView)
 	})
 }
 
 // CheckOrgWriteAccess checks if the requestor has access to edit the organization
 func CheckOrgWriteAccess() privacy.MutationRule {
-	return privacy.MutationRuleFunc(func(ctx context.Context, q ent.Mutation) error {
-		return rule.CheckCurrentOrgAccess(ctx, fgax.CanEdit)
+	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanEdit)
 	})
 }
 

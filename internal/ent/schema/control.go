@@ -133,14 +133,12 @@ func (c Control) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			// controls must be associated with an organization but do not inherit permissions from the organization
 			// controls can inherit permissions from the associated programs
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames:               []string{"program_id", "standard_id"},
-				WithOrganizationOwner:    true,
-				AllowEmptyForSystemAdmin: true, // allow organization owner to be empty
-				Ref:                      c.PluralName(),
-			}),
+			newObjectOwnedMixin(c,
+				withParents(Program{}, Standard{}),
+				withOrganizationOwner(true),
+			),
 			// add groups permissions with viewer, editor, and blocked groups
-			NewGroupPermissionsMixin(true),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
 }

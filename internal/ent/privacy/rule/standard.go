@@ -2,13 +2,17 @@ package rule
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
+
+var ErrAdminOnlyField = errors.New("attempted to set admin only field")
 
 // SystemOwnedStandards is a privacy rule that checks if the standard is system owned
 // and if the user is a system admin
@@ -63,7 +67,9 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 		}
 
 		if hasAdminField && !allowAdmin {
-			return privacy.Denyf("user is not a system admin")
+			log.Debug().Msg("user attempted to set system owned field without being a system admin")
+
+			return ErrAdminOnlyField
 		}
 
 		return privacy.Skip

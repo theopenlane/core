@@ -54,17 +54,17 @@ func (i InternalPolicy) Edges() []ent.Edge {
 }
 
 // Mixin of the InternalPolicy
-func (InternalPolicy) Mixin() []ent.Mixin {
+func (i InternalPolicy) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix:          "PLC",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			// all policies must be associated to an organization
-			NewOrgOwnMixinWithRef("internal_policies"),
+			newOrgOwnedMixin(i),
 			// add group edit permissions to the procedure
-			NewGroupPermissionsMixin(false),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 			// policies are documents
-			DocumentMixin{DocumentType: "policy"},
+			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
 		},
 	}.getMixins()
 }
