@@ -31731,7 +31731,6 @@ input CreatePersonalAccessTokenInput {
   whether the token is active
   """
   isActive: Boolean
-  ownerID: ID!
   organizationIDs: [ID!]
   eventIDs: [ID!]
 }
@@ -31965,11 +31964,11 @@ input CreateStandardInput {
   """
   status: StandardStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
   """
@@ -32095,7 +32094,6 @@ input CreateTFASettingInput {
   specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
   """
   totpAllowed: Boolean
-  ownerID: ID
 }
 """
 CreateTaskInput is used for create Task object.
@@ -54388,11 +54386,11 @@ type Standard implements Node {
   """
   status: StandardStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
   """
@@ -54530,11 +54528,11 @@ type StandardHistory implements Node {
   """
   status: StandardHistoryStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
   """
@@ -60827,12 +60825,12 @@ input UpdateStandardInput {
   status: StandardStandardStatus
   clearStatus: Boolean
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   clearIsPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
   clearFreeToUse: Boolean

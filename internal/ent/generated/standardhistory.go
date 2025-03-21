@@ -64,9 +64,9 @@ type StandardHistory struct {
 	Link string `json:"link,omitempty"`
 	// status of the standard - active, draft, and archived
 	Status enums.StandardStatus `json:"status,omitempty"`
-	// indicates if the standard should be made available to all users, only for public standards
+	// indicates if the standard should be made available to all users, only for system owned standards
 	IsPublic bool `json:"is_public,omitempty"`
-	// indicates if the standard is freely distributable under a trial license, only for public standards
+	// indicates if the standard is freely distributable under a trial license, only for system owned standards
 	FreeToUse bool `json:"free_to_use,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`

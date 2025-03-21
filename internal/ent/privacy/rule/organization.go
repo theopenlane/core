@@ -88,7 +88,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		return nil
 	}
 
-	log.Error().Str("relation", relation).Msg("checking access to organization")
+	log.Debug().Str("relation", relation).Msg("checking access to organization")
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
@@ -114,8 +114,6 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 
 		return privacy.Allow
 	}
-
-	log.Error().Interface("ac", ac).Msg("access denied to organization")
 
 	// deny if it was a mutation is not allowed
 	return generated.ErrPermissionDenied

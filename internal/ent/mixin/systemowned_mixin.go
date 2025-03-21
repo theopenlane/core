@@ -55,6 +55,8 @@ func HookSystemOwned() ent.Hook {
 			admin, err := rule.CheckIsSystemAdmin(ctx, m)
 			if err != nil {
 				log.Error().Err(err).Msg("unable to check if user is system admin, skipping setting system owned")
+
+				return next.Mutate(ctx, m)
 			}
 
 			if admin {

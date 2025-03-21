@@ -213,6 +213,7 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 	publicCleared = m.IsPublicCleared()
 
 	var oldPublic *bool
+
 	if m.Op() == ent.OpUpdateOne {
 		oldValue, err := m.OldIsPublic(ctx)
 		if err != nil {

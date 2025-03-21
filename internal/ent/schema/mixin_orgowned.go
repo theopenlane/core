@@ -57,8 +57,6 @@ func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			stuff := m.Type()
-			log.Debug().Msgf("mutation type: %s", stuff)
 			skip, err := o.orgHookSkipper(ctx, m)
 			if err != nil {
 				return nil, err
@@ -82,8 +80,6 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			if err != nil {
 				return nil, fmt.Errorf("failed to get organization id from context: %w", err)
 			}
-
-			log.Error().Strs("org_ids", orgIDs).Msg("organization ids in context")
 
 			// filter by owner on update and delete mutations
 			mx, ok := m.(interface {

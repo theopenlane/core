@@ -117,7 +117,7 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 		Field(ownerFieldName).
 		Ref(userOwned.Ref).
 		Annotations(
-			entgql.Skip(entgql.SkipMutationUpdateInput),
+			entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
 		).
 		Unique()
 

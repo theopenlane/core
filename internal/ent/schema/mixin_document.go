@@ -20,6 +20,8 @@ type DocumentMixin struct {
 	DocumentType string
 }
 
+// NewDocumentMixin creates a new DocumentMixin with the given schema
+// the schema must implement the SchemaFuncs interface
 func NewDocumentMixin(schema any) DocumentMixin {
 	sch := toSchemaFuncs(schema)
 

@@ -5504,7 +5504,6 @@ type CreatePersonalAccessTokenInput struct {
 	Scopes          []string
 	LastUsedAt      *time.Time
 	IsActive        *bool
-	OwnerID         string
 	OrganizationIDs []string
 	EventIDs        []string
 }
@@ -5530,7 +5529,6 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	if v := i.IsActive; v != nil {
 		m.SetIsActive(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -7444,16 +7442,12 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 // CreateTFASettingInput represents a mutation input for creating tfasettings.
 type CreateTFASettingInput struct {
 	TotpAllowed *bool
-	OwnerID     *string
 }
 
 // Mutate applies the CreateTFASettingInput on the TFASettingMutation builder.
 func (i *CreateTFASettingInput) Mutate(m *TFASettingMutation) {
 	if v := i.TotpAllowed; v != nil {
 		m.SetTotpAllowed(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 }
 
