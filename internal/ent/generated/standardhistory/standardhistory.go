@@ -42,6 +42,8 @@ const (
 	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldShortName holds the string denoting the short_name field in the database.
@@ -64,8 +66,6 @@ const (
 	FieldIsPublic = "is_public"
 	// FieldFreeToUse holds the string denoting the free_to_use field in the database.
 	FieldFreeToUse = "free_to_use"
-	// FieldSystemOwned holds the string denoting the system_owned field in the database.
-	FieldSystemOwned = "system_owned"
 	// FieldStandardType holds the string denoting the standard_type field in the database.
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
@@ -89,6 +89,7 @@ var Columns = []string{
 	FieldTags,
 	FieldRevision,
 	FieldOwnerID,
+	FieldSystemOwned,
 	FieldName,
 	FieldShortName,
 	FieldFramework,
@@ -100,7 +101,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldIsPublic,
 	FieldFreeToUse,
-	FieldSystemOwned,
 	FieldStandardType,
 	FieldVersion,
 }
@@ -134,12 +134,12 @@ var (
 	DefaultTags []string
 	// DefaultRevision holds the default value on creation for the "revision" field.
 	DefaultRevision string
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultIsPublic holds the default value on creation for the "is_public" field.
 	DefaultIsPublic bool
 	// DefaultFreeToUse holds the default value on creation for the "free_to_use" field.
 	DefaultFreeToUse bool
-	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
-	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -229,6 +229,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -277,11 +282,6 @@ func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
 // ByFreeToUse orders the results by the free_to_use field.
 func ByFreeToUse(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFreeToUse, opts...).ToFunc()
-}
-
-// BySystemOwned orders the results by the system_owned field.
-func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
 }
 
 // ByStandardType orders the results by the standard_type field.

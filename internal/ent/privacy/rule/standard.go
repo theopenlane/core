@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"

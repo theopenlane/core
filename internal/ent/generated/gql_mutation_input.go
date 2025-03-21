@@ -2878,7 +2878,6 @@ type CreateGroupInput struct {
 	Tags                            []string
 	Name                            string
 	Description                     *string
-	GravatarLogoURL                 *string
 	LogoURL                         *string
 	DisplayName                     *string
 	OwnerID                         *string
@@ -2916,9 +2915,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.GravatarLogoURL; v != nil {
-		m.SetGravatarLogoURL(*v)
 	}
 	if v := i.LogoURL; v != nil {
 		m.SetLogoURL(*v)
@@ -3017,8 +3013,6 @@ type UpdateGroupInput struct {
 	Name                                  *string
 	ClearDescription                      bool
 	Description                           *string
-	ClearGravatarLogoURL                  bool
-	GravatarLogoURL                       *string
 	ClearLogoURL                          bool
 	LogoURL                               *string
 	DisplayName                           *string
@@ -3116,12 +3110,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if i.ClearGravatarLogoURL {
-		m.ClearGravatarLogoURL()
-	}
-	if v := i.GravatarLogoURL; v != nil {
-		m.SetGravatarLogoURL(*v)
 	}
 	if i.ClearLogoURL {
 		m.ClearLogoURL()
@@ -6698,7 +6686,6 @@ type CreateStandardInput struct {
 	Status               *enums.StandardStatus
 	IsPublic             *bool
 	FreeToUse            *bool
-	SystemOwned          *bool
 	StandardType         *string
 	Version              *string
 	OwnerID              *string
@@ -6743,9 +6730,6 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.FreeToUse; v != nil {
 		m.SetFreeToUse(*v)
-	}
-	if v := i.SystemOwned; v != nil {
-		m.SetSystemOwned(*v)
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
@@ -6796,8 +6780,6 @@ type UpdateStandardInput struct {
 	IsPublic                  *bool
 	ClearFreeToUse            bool
 	FreeToUse                 *bool
-	ClearSystemOwned          bool
-	SystemOwned               *bool
 	ClearStandardType         bool
 	StandardType              *string
 	ClearVersion              bool
@@ -6891,12 +6873,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.FreeToUse; v != nil {
 		m.SetFreeToUse(*v)
-	}
-	if i.ClearSystemOwned {
-		m.ClearSystemOwned()
-	}
-	if v := i.SystemOwned; v != nil {
-		m.SetSystemOwned(*v)
 	}
 	if i.ClearStandardType {
 		m.ClearStandardType()

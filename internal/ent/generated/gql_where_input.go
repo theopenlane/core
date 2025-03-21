@@ -54338,6 +54338,12 @@ type StandardWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -54474,12 +54480,6 @@ type StandardWhereInput struct {
 	FreeToUseNEQ    *bool `json:"freeToUseNEQ,omitempty"`
 	FreeToUseIsNil  bool  `json:"freeToUseIsNil,omitempty"`
 	FreeToUseNotNil bool  `json:"freeToUseNotNil,omitempty"`
-
-	// "system_owned" field predicates.
-	SystemOwned       *bool `json:"systemOwned,omitempty"`
-	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
-	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
-	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
 	// "standard_type" field predicates.
 	StandardType             *string  `json:"standardType,omitempty"`
@@ -54940,6 +54940,18 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, standard.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, standard.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, standard.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, standard.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, standard.SystemOwnedNotNil())
+	}
 	if i.Name != nil {
 		predicates = append(predicates, standard.NameEQ(*i.Name))
 	}
@@ -55291,18 +55303,6 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	if i.FreeToUseNotNil {
 		predicates = append(predicates, standard.FreeToUseNotNil())
 	}
-	if i.SystemOwned != nil {
-		predicates = append(predicates, standard.SystemOwnedEQ(*i.SystemOwned))
-	}
-	if i.SystemOwnedNEQ != nil {
-		predicates = append(predicates, standard.SystemOwnedNEQ(*i.SystemOwnedNEQ))
-	}
-	if i.SystemOwnedIsNil {
-		predicates = append(predicates, standard.SystemOwnedIsNil())
-	}
-	if i.SystemOwnedNotNil {
-		predicates = append(predicates, standard.SystemOwnedNotNil())
-	}
 	if i.StandardType != nil {
 		predicates = append(predicates, standard.StandardTypeEQ(*i.StandardType))
 	}
@@ -55613,6 +55613,12 @@ type StandardHistoryWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -55749,12 +55755,6 @@ type StandardHistoryWhereInput struct {
 	FreeToUseNEQ    *bool `json:"freeToUseNEQ,omitempty"`
 	FreeToUseIsNil  bool  `json:"freeToUseIsNil,omitempty"`
 	FreeToUseNotNil bool  `json:"freeToUseNotNil,omitempty"`
-
-	// "system_owned" field predicates.
-	SystemOwned       *bool `json:"systemOwned,omitempty"`
-	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
-	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
-	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
 	// "standard_type" field predicates.
 	StandardType             *string  `json:"standardType,omitempty"`
@@ -56288,6 +56288,18 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, standardhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, standardhistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, standardhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, standardhistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, standardhistory.SystemOwnedNotNil())
+	}
 	if i.Name != nil {
 		predicates = append(predicates, standardhistory.NameEQ(*i.Name))
 	}
@@ -56638,18 +56650,6 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	}
 	if i.FreeToUseNotNil {
 		predicates = append(predicates, standardhistory.FreeToUseNotNil())
-	}
-	if i.SystemOwned != nil {
-		predicates = append(predicates, standardhistory.SystemOwnedEQ(*i.SystemOwned))
-	}
-	if i.SystemOwnedNEQ != nil {
-		predicates = append(predicates, standardhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
-	}
-	if i.SystemOwnedIsNil {
-		predicates = append(predicates, standardhistory.SystemOwnedIsNil())
-	}
-	if i.SystemOwnedNotNil {
-		predicates = append(predicates, standardhistory.SystemOwnedNotNil())
 	}
 	if i.StandardType != nil {
 		predicates = append(predicates, standardhistory.StandardTypeEQ(*i.StandardType))

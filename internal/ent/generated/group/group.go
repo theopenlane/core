@@ -392,6 +392,10 @@ var (
 	NameValidator func(string) error
 	// DefaultIsManaged holds the default value on creation for the "is_managed" field.
 	DefaultIsManaged bool
+	// GravatarLogoURLValidator is a validator for the "gravatar_logo_url" field. It is called by the builders before save.
+	GravatarLogoURLValidator func(string) error
+	// LogoURLValidator is a validator for the "logo_url" field. It is called by the builders before save.
+	LogoURLValidator func(string) error
 	// DefaultDisplayName holds the default value on creation for the "display_name" field.
 	DefaultDisplayName string
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.

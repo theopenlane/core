@@ -12,14 +12,15 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryStandard() {
 	t := suite.T()
 
 	// create standards to be queried
-	publicStandard := (&StandardBuilder{client: suite.client, SystemOwned: true, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
-	notPublicStandard := (&StandardBuilder{client: suite.client, SystemOwned: true, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	notPublicStandard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
 
 	orgStandardName := "org-owned-standard"
 	orgOwnedStandard := (&StandardBuilder{client: suite.client, Name: orgStandardName}).MustNew(testUser1.UserCtx, t)
@@ -161,14 +162,14 @@ func (suite *GraphTestSuite) TestQueryStandards() {
 	countPublic := 4
 	publicStandardIDs := []string{}
 	for range countPublic {
-		standard := (&StandardBuilder{client: suite.client, SystemOwned: true, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+		standard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
 		publicStandardIDs = append(publicStandardIDs, standard.ID)
 	}
 
 	countNotPublic := 1
 	notPublicStandardIDs := []string{}
 	for range countNotPublic {
-		standard := (&StandardBuilder{client: suite.client, SystemOwned: true, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
+		standard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
 		notPublicStandardIDs = append(notPublicStandardIDs, standard.ID)
 	}
 
@@ -271,9 +272,8 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 		{
 			name: "happy path, system admin - system owned with controls",
 			request: openlaneclient.CreateStandardInput{
-				Name:        "Super Awesome Standard",
-				SystemOwned: lo.ToPtr(true),
-				ControlIDs:  adminControlIDs,
+				Name:       "Super Awesome Standard",
+				ControlIDs: adminControlIDs,
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -281,9 +281,8 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 		{
 			name: "happy path, system admin - system owned and public",
 			request: openlaneclient.CreateStandardInput{
-				Name:        "Super Awesome Standard",
-				SystemOwned: lo.ToPtr(true),
-				IsPublic:    lo.ToPtr(true),
+				Name:     "Super Awesome Standard",
+				IsPublic: lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -330,10 +329,10 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 			ctx:    context.Background(),
 		},
 		{
-			name: "user not authorized to make system owned standard",
+			name: "user not authorized to make a public standard",
 			request: openlaneclient.CreateStandardInput{
-				Name:        "Super Awesome Standard",
-				SystemOwned: lo.ToPtr(true),
+				Name:     "Super Awesome Standard",
+				IsPublic: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -407,8 +406,8 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 			assert.Equal(t, expectedStatus, *resp.CreateStandard.Standard.Status)
 
 			expectedSystemOwned := false
-			if tc.request.SystemOwned != nil {
-				expectedSystemOwned = *tc.request.SystemOwned
+			if tc.ctx == systemAdminUser.UserCtx {
+				expectedSystemOwned = true
 			}
 			assert.Equal(t, expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned)
 
@@ -438,7 +437,8 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 			}
 			assert.Equal(t, expectedFramework, *resp.CreateStandard.Standard.Framework)
 
-			expectedShortName := ""
+			// short name defaults to the name
+			expectedShortName := tc.request.Name
 			if tc.request.ShortName != nil {
 				expectedShortName = *tc.request.ShortName
 			}
@@ -515,14 +515,14 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	additionalControls := 4
+	numAdditionalControls := 4
 	additionalControlIDs := []string{}
-	for range additionalControls {
+	for range numAdditionalControls {
 		control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 		additionalControlIDs = append(additionalControlIDs, control.ID)
 	}
 
-	// standardOrgOwned := (&StandardBuilder{client: suite.client, ControlIDs: controlIDs}).MustNew(testUser1.UserCtx, t)
+	standardOrgOwned := (&StandardBuilder{client: suite.client, ControlIDs: controlIDs}).MustNew(testUser1.UserCtx, t)
 
 	numAdminControls := 32
 	adminControlIDs := []string{}
@@ -533,61 +533,88 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
+	// users should not be able to get the system owned standard because its not public
+	std, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
+	require.Error(t, err)
+	require.Nil(t, std)
+
 	testCases := []struct {
-		name        string
-		id          string
-		request     openlaneclient.UpdateStandardInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name                  string
+		id                    string
+		request               openlaneclient.UpdateStandardInput
+		client                *openlaneclient.OpenlaneClient
+		ctx                   context.Context
+		expectedChildControls int
+		expectedErr           string
 	}{
-		// {
-		// 	name: "happy path, update field, org owned standard",
-		// 	id:   standardOrgOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		AddControlIDs: additionalControlIDs,
-		// 	},
-		// 	client: suite.client.api,
-		// 	ctx:    adminUser.UserCtx,
-		// },
-		// {
-		// 	name: "happy path, update multiple fields, org owned standard",
-		// 	id:   standardOrgOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		AppendTags:           []string{"new-tag"},
-		// 		GoverningBodyLogoURL: lo.ToPtr("https://example.com/new-logo.png"),
-		// 		GoverningBody:        lo.ToPtr("Cat Association"),
-		// 		ShortName:            lo.ToPtr("super-great"),
-		// 		Description:          lo.ToPtr("This is a super awesome standard with everything!"),
-		// 		Link:                 lo.ToPtr("https://example.com/super-awesome-standard"),
-		// 		Status:               lo.ToPtr(enums.StandardArchived),
-		// 		StandardType:         lo.ToPtr("cats"),
-		// 		AppendDomains:        []string{"availability", "meows"},
-		// 		RevisionBump:         &models.Major,
-		// 	},
-		// 	client: suite.client.apiWithPAT,
-		// 	ctx:    context.Background(),
-		// },
-		// {
-		// 	name: "update not allowed, not enough permissions",
-		// 	id:   standardOrgOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		ClearTags: lo.ToPtr(true),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         viewOnlyUser.UserCtx,
-		// 	expectedErr: notAuthorizedErrorMsg,
-		// },
-		// {
-		// 	name: "update not allowed, no permissions",
-		// 	id:   standardOrgOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		ClearTags: lo.ToPtr(true),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser2.UserCtx,
-		// 	expectedErr: notFoundErrorMsg,
-		// },
+		{
+			name: "happy path, update field, org owned standard",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				AddControlIDs: additionalControlIDs,
+			},
+			expectedChildControls: numControls + numAdditionalControls,
+			client:                suite.client.api,
+			ctx:                   adminUser.UserCtx,
+		},
+		{
+			name: "happy path, update multiple fields, org owned standard",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				AppendTags:           []string{"new-tag"},
+				GoverningBodyLogoURL: lo.ToPtr("https://example.com/new-logo.png"),
+				GoverningBody:        lo.ToPtr("Cat Association"),
+				ShortName:            lo.ToPtr("super-great"),
+				Description:          lo.ToPtr("This is a super awesome standard with everything!"),
+				Link:                 lo.ToPtr("https://example.com/super-awesome-standard"),
+				Status:               lo.ToPtr(enums.StandardArchived),
+				StandardType:         lo.ToPtr("cats"),
+				AppendDomains:        []string{"availability", "meows"},
+				RevisionBump:         &models.Major,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "update not allowed, not enough permissions",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				ClearTags: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update not allowed, cannot update public field",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				IsPublic: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "bad request, invalid link",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				Link: lo.ToPtr("not a link"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "invalid or unparsable field: url",
+		},
+		{
+			name: "update not allowed, no permissions",
+			id:   standardOrgOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				ClearTags: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
 		{
 			name: "happy path, update field, system owned standard",
 			id:   standardSystemOwned.ID,
@@ -597,38 +624,41 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
 		},
-		// {
-		// 	name: "happy path, update multiple fields, org owned standard",
-		// 	id:   standardSystemOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		ClearTags:     lo.ToPtr(true),
-		// 		AppendDomains: []string{"mice", "meows"},
-		// 		Status:        lo.ToPtr(enums.StandardDraft),
-		// 		RevisionBump:  &models.Minor,
-		// 	},
-		// 	client: suite.client.api,
-		// 	ctx:    systemAdminUser.UserCtx,
-		// },
-		// {
-		// 	name: "update not allowed, no permissions",
-		// 	id:   standardSystemOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		ClearTags: lo.ToPtr(true),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser1.UserCtx,
-		// 	expectedErr: notAuthorizedErrorMsg,
-		// },
-		// {
-		// 	name: "update not allowed, no permissions",
-		// 	id:   standardSystemOwned.ID,
-		// 	request: openlaneclient.UpdateStandardInput{
-		// 		ClearTags: lo.ToPtr(true),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser2.UserCtx,
-		// 	expectedErr: notFoundErrorMsg,
-		// },
+		{
+			name: "happy path, update multiple fields, org owned standard",
+			id:   standardSystemOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				ClearTags:     lo.ToPtr(true),
+				AppendDomains: []string{"mice", "meows"},
+				Status:        lo.ToPtr(enums.StandardDraft),
+				RevisionBump:  &models.Minor,
+				FreeToUse:     lo.ToPtr(true),
+				AddControlIDs: adminControlIDs,
+			},
+			client:                suite.client.api,
+			ctx:                   systemAdminUser.UserCtx,
+			expectedChildControls: numAdminControls,
+		},
+		{
+			name: "update not allowed, no permissions",
+			id:   standardSystemOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				ClearTags: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update not allowed, no permissions",
+			id:   standardSystemOwned.ID,
+			request: openlaneclient.UpdateStandardInput{
+				ClearTags: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -649,12 +679,10 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 				assert.Equal(t, *tc.request.GoverningBodyLogoURL, *resp.UpdateStandard.Standard.GoverningBodyLogoURL)
 			}
 
-			if len(tc.request.AddControlIDs) > 0 {
-				assert.Equal(t, len(controlIDs)+len(additionalControlIDs), int(resp.UpdateStandard.Standard.Controls.TotalCount))
-			}
-
 			if tc.request.AppendTags != nil {
-				assert.Contains(t, resp.UpdateStandard.Standard.Tags, "new-tag")
+				for _, tag := range tc.request.AppendTags {
+					assert.Contains(t, resp.UpdateStandard.Standard.Tags, tag)
+				}
 			}
 
 			if tc.request.GoverningBody != nil {
@@ -684,77 +712,124 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 			if tc.request.RevisionBump == &models.Major {
 				assert.Equal(t, "v1.0.0", *resp.UpdateStandard.Standard.Revision)
 			}
+
+			if tc.request.RevisionBump == &models.Minor {
+				assert.Equal(t, "v0.1.0", *resp.UpdateStandard.Standard.Revision)
+			}
+
+			if tc.request.IsPublic != nil && *tc.request.IsPublic {
+				assert.True(t, *resp.UpdateStandard.Standard.IsPublic)
+
+				// users should now be be able to get the system owned standard because its not public
+				std, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
+				require.NoError(t, err)
+				require.NotNil(t, std)
+				require.Equal(t, standardSystemOwned.ID, std.Standard.ID)
+			}
+
+			if tc.request.AddControlIDs != nil {
+				assert.Equal(t, tc.expectedChildControls, int(resp.UpdateStandard.Standard.Controls.TotalCount))
+			}
 		})
 	}
 
-	// (&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, suite)
-	// (&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
-	// (&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
 }
 
-// func (suite *GraphTestSuite) TestMutationDeleteStandard() {
-// 	t := suite.T()
+func (suite *GraphTestSuite) TestMutationDeleteStandard() {
+	t := suite.T()
 
-// 	// create Standards to be deleted
-// 	Standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	Standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-// 	testCases := []struct {
-// 		name        string
-// 		idToDelete  string
-// 		client      *openlaneclient.OpenlaneClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:        "not authorized, delete",
-// 			idToDelete:  Standard1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 		{
-// 			name:       "happy path, delete",
-// 			idToDelete: Standard1.ID,
-// 			client:     suite.client.api,
-// 			ctx:        testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:        "already deleted, not found",
-// 			idToDelete:  Standard1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "not found",
-// 		},
-// 		{
-// 			name:       "happy path, delete using personal access token",
-// 			idToDelete: Standard2.ID,
-// 			client:     suite.client.apiWithPAT,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:        "unknown id, not found",
-// 			idToDelete:  ulids.New().String(),
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
-// 	for _, tc := range testCases {
-// 		t.Run("Delete "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.DeleteStandard(tc.ctx, tc.idToDelete)
-// 			if tc.expectedErr != "" {
-// 				require.Error(t, err)
-// 				assert.ErrorContains(t, err, tc.expectedErr)
-// 				assert.Nil(t, resp)
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not authorized, delete",
+			idToDelete:  standardOrgOwned1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:        "not authorized, delete system owned",
+			idToDelete:  standardSystemOwned.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:       "happy path, delete",
+			idToDelete: standardOrgOwned1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:       "happy path, delete system owned",
+			idToDelete: standardSystemOwned.ID,
+			client:     suite.client.api,
+			ctx:        systemAdminUser.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  standardOrgOwned1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:        "already deleted system owned, not found",
+			idToDelete:  standardSystemOwned.ID,
+			client:      suite.client.api,
+			ctx:         systemAdminUser.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: standardOrgOwned2.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete using api token",
+			idToDelete: standardOrgOwned3.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
+		},
+		{
+			name:        "unknown id, not found",
+			idToDelete:  ulids.New().String(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
 
-// 				return
-// 			}
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteStandard(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Nil(t, resp)
 
-// 			require.NoError(t, err)
-// 			require.NotNil(t, resp)
-// 			assert.Equal(t, tc.idToDelete, resp.DeleteStandard.DeletedID)
-// 		})
-// 	}
-// }
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			assert.Equal(t, tc.idToDelete, resp.DeleteStandard.DeletedID)
+		})
+	}
+}

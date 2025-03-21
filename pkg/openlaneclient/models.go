@@ -4035,8 +4035,6 @@ type CreateGroupInput struct {
 	Name string `json:"name"`
 	// the groups description
 	Description *string `json:"description,omitempty"`
-	// the URL to an auto generated gravatar image for the group
-	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
@@ -4509,8 +4507,6 @@ type CreateStandardInput struct {
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
-	// indicates if the standard is owned by the the openlane system
-	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
@@ -17946,6 +17942,8 @@ type Standard struct {
 	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -17968,8 +17966,6 @@ type Standard struct {
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
-	// indicates if the standard is owned by the the openlane system
-	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
@@ -18033,6 +18029,8 @@ type StandardHistory struct {
 	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -18055,8 +18053,6 @@ type StandardHistory struct {
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse *bool `json:"freeToUse,omitempty"`
-	// indicates if the standard is owned by the the openlane system
-	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
@@ -18251,6 +18247,11 @@ type StandardHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -18378,11 +18379,6 @@ type StandardHistoryWhereInput struct {
 	FreeToUseNeq    *bool `json:"freeToUseNEQ,omitempty"`
 	FreeToUseIsNil  *bool `json:"freeToUseIsNil,omitempty"`
 	FreeToUseNotNil *bool `json:"freeToUseNotNil,omitempty"`
-	// system_owned field predicates
-	SystemOwned       *bool `json:"systemOwned,omitempty"`
-	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
-	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
-	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// standard_type field predicates
 	StandardType             *string  `json:"standardType,omitempty"`
 	StandardTypeNeq          *string  `json:"standardTypeNEQ,omitempty"`
@@ -18567,6 +18563,11 @@ type StandardWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -18694,11 +18695,6 @@ type StandardWhereInput struct {
 	FreeToUseNeq    *bool `json:"freeToUseNEQ,omitempty"`
 	FreeToUseIsNil  *bool `json:"freeToUseIsNil,omitempty"`
 	FreeToUseNotNil *bool `json:"freeToUseNotNil,omitempty"`
-	// system_owned field predicates
-	SystemOwned       *bool `json:"systemOwned,omitempty"`
-	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
-	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
-	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// standard_type field predicates
 	StandardType             *string  `json:"standardType,omitempty"`
 	StandardTypeNeq          *string  `json:"standardTypeNEQ,omitempty"`
@@ -21748,9 +21744,6 @@ type UpdateGroupInput struct {
 	// the groups description
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the URL to an auto generated gravatar image for the group
-	GravatarLogoURL      *string `json:"gravatarLogoURL,omitempty"`
-	ClearGravatarLogoURL *bool   `json:"clearGravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL      *string `json:"logoURL,omitempty"`
 	ClearLogoURL *bool   `json:"clearLogoURL,omitempty"`
@@ -22523,9 +22516,6 @@ type UpdateStandardInput struct {
 	// indicates if the standard is freely distributable under a trial license, only for public standards
 	FreeToUse      *bool `json:"freeToUse,omitempty"`
 	ClearFreeToUse *bool `json:"clearFreeToUse,omitempty"`
-	// indicates if the standard is owned by the the openlane system
-	SystemOwned      *bool `json:"systemOwned,omitempty"`
-	ClearSystemOwned *bool `json:"clearSystemOwned,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`

@@ -74,12 +74,14 @@ func (Group) Fields() []ent.Field {
 		field.String("gravatar_logo_url").
 			Comment("the URL to an auto generated gravatar image for the group").
 			Optional().
+			Validate(validator.ValidateURL()).
 			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
+				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			),
 		field.String("logo_url").
 			Comment("the URL to an image uploaded by the customer for the groups avatar image").
 			Optional().
+			Validate(validator.ValidateURL()).
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),

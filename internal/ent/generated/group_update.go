@@ -1240,6 +1240,16 @@ func (gu *GroupUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
 		}
 	}
+	if v, ok := gu.mutation.GravatarLogoURL(); ok {
+		if err := group.GravatarLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := gu.mutation.LogoURL(); ok {
+		if err := group.LogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
+		}
+	}
 	if v, ok := gu.mutation.DisplayName(); ok {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
@@ -3845,6 +3855,16 @@ func (guo *GroupUpdateOne) check() error {
 	if v, ok := guo.mutation.Name(); ok {
 		if err := group.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
+		}
+	}
+	if v, ok := guo.mutation.GravatarLogoURL(); ok {
+		if err := group.GravatarLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := guo.mutation.LogoURL(); ok {
+		if err := group.LogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
 		}
 	}
 	if v, ok := guo.mutation.DisplayName(); ok {

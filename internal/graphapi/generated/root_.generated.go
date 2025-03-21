@@ -31282,10 +31282,6 @@ input CreateGroupInput {
   """
   description: String
   """
-  the URL to an auto generated gravatar image for the group
-  """
-  gravatarLogoURL: String
-  """
   the URL to an image uploaded by the customer for the groups avatar image
   """
   logoURL: String
@@ -31976,10 +31972,6 @@ input CreateStandardInput {
   indicates if the standard is freely distributable under a trial license, only for public standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -54356,6 +54348,10 @@ type Standard implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
   the long name of the standard body
   """
   name: String!
@@ -54399,10 +54395,6 @@ type Standard implements Node {
   indicates if the standard is freely distributable under a trial license, only for public standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -54498,6 +54490,10 @@ type StandardHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
   the long name of the standard body
   """
   name: String!
@@ -54541,10 +54537,6 @@ type StandardHistory implements Node {
   indicates if the standard is freely distributable under a trial license, only for public standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -54813,6 +54805,13 @@ input StandardHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -54959,13 +54958,6 @@ input StandardHistoryWhereInput {
   freeToUseNEQ: Boolean
   freeToUseIsNil: Boolean
   freeToUseNotNil: Boolean
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -55188,6 +55180,13 @@ input StandardWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -55334,13 +55333,6 @@ input StandardWhereInput {
   freeToUseNEQ: Boolean
   freeToUseIsNil: Boolean
   freeToUseNotNil: Boolean
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -59880,11 +59872,6 @@ input UpdateGroupInput {
   description: String
   clearDescription: Boolean
   """
-  the URL to an auto generated gravatar image for the group
-  """
-  gravatarLogoURL: String
-  clearGravatarLogoURL: Boolean
-  """
   the URL to an image uploaded by the customer for the groups avatar image
   """
   logoURL: String
@@ -60849,11 +60836,6 @@ input UpdateStandardInput {
   """
   freeToUse: Boolean
   clearFreeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
-  clearSystemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """

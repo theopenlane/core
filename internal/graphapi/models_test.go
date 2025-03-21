@@ -249,11 +249,10 @@ type StandardBuilder struct {
 	client *client
 
 	// Fields
-	Name        string
-	Framework   string
-	SystemOwned bool
-	IsPublic    bool
-	ControlIDs  []string
+	Name       string
+	Framework  string
+	IsPublic   bool
+	ControlIDs []string
 }
 
 // Faker structs with random injected data
@@ -981,7 +980,6 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 	Standard := s.client.db.Standard.Create().
 		SetName(s.Name).
 		SetFramework(s.Framework).
-		SetSystemOwned(s.SystemOwned).
 		SetIsPublic(s.IsPublic).
 		AddControlIDs(s.ControlIDs...).
 		SaveX(ctx)

@@ -2515,6 +2515,8 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
 			case "shortName":
@@ -2537,8 +2539,6 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_isPublic(ctx, field)
 			case "freeToUse":
 				return ec.fieldContext_Standard_freeToUse(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":

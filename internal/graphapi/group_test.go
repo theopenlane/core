@@ -909,7 +909,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			assert.Equal(t, tc.expectedRes.DisplayName, updatedGroup.DisplayName)
 			assert.Equal(t, tc.expectedRes.Description, updatedGroup.Description)
 
-			if tc.updateInput.GravatarLogoURL != nil {
+			if tc.updateInput.LogoURL != nil {
 				assert.Equal(t, *tc.expectedRes.LogoURL, *updatedGroup.LogoURL)
 			}
 

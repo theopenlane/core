@@ -730,6 +730,16 @@ func (gc *GroupCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
 		}
 	}
+	if v, ok := gc.mutation.GravatarLogoURL(); ok {
+		if err := group.GravatarLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := gc.mutation.LogoURL(); ok {
+		if err := group.LogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
+		}
+	}
 	if _, ok := gc.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "Group.display_name"`)}
 	}

@@ -141,6 +141,20 @@ func (sc *StandardCreate) SetNillableOwnerID(s *string) *StandardCreate {
 	return sc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (sc *StandardCreate) SetSystemOwned(b bool) *StandardCreate {
+	sc.mutation.SetSystemOwned(b)
+	return sc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableSystemOwned(b *bool) *StandardCreate {
+	if b != nil {
+		sc.SetSystemOwned(*b)
+	}
+	return sc
+}
+
 // SetName sets the "name" field.
 func (sc *StandardCreate) SetName(s string) *StandardCreate {
 	sc.mutation.SetName(s)
@@ -279,20 +293,6 @@ func (sc *StandardCreate) SetNillableFreeToUse(b *bool) *StandardCreate {
 	return sc
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (sc *StandardCreate) SetSystemOwned(b bool) *StandardCreate {
-	sc.mutation.SetSystemOwned(b)
-	return sc
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableSystemOwned(b *bool) *StandardCreate {
-	if b != nil {
-		sc.SetSystemOwned(*b)
-	}
-	return sc
-}
-
 // SetStandardType sets the "standard_type" field.
 func (sc *StandardCreate) SetStandardType(s string) *StandardCreate {
 	sc.mutation.SetStandardType(s)
@@ -414,6 +414,10 @@ func (sc *StandardCreate) defaults() error {
 		v := standard.DefaultRevision
 		sc.mutation.SetRevision(v)
 	}
+	if _, ok := sc.mutation.SystemOwned(); !ok {
+		v := standard.DefaultSystemOwned
+		sc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := sc.mutation.Status(); !ok {
 		v := standard.DefaultStatus
 		sc.mutation.SetStatus(v)
@@ -425,10 +429,6 @@ func (sc *StandardCreate) defaults() error {
 	if _, ok := sc.mutation.FreeToUse(); !ok {
 		v := standard.DefaultFreeToUse
 		sc.mutation.SetFreeToUse(v)
-	}
-	if _, ok := sc.mutation.SystemOwned(); !ok {
-		v := standard.DefaultSystemOwned
-		sc.mutation.SetSystemOwned(v)
 	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if standard.DefaultID == nil {
@@ -458,6 +458,11 @@ func (sc *StandardCreate) check() error {
 	if v, ok := sc.mutation.GoverningBodyLogoURL(); ok {
 		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := sc.mutation.Link(); ok {
+		if err := standard.LinkValidator(v); err != nil {
+			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
 		}
 	}
 	if v, ok := sc.mutation.Status(); ok {
@@ -533,6 +538,10 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
+	if value, ok := sc.mutation.SystemOwned(); ok {
+		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
 	if value, ok := sc.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -576,10 +585,6 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.FreeToUse(); ok {
 		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
 		_node.FreeToUse = value
-	}
-	if value, ok := sc.mutation.SystemOwned(); ok {
-		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
 	}
 	if value, ok := sc.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)

@@ -12,6 +12,26 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
+// HookStandardCreate sets default values on creation, such as setting the short name to the name if it's not provided
+func HookStandardCreate() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
+			shortName, ok := m.ShortName()
+			if !ok || shortName == "" {
+				// name is required on creation
+				name, _ := m.Name()
+
+				// if the short name is not set, set it to the name
+				m.SetShortName(name)
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	},
+		hook.HasOp(ent.OpCreate),
+	)
+}
+
 // HookStandardPublicAccessTuples adds tuples for publicly available standards
 // based on the system owned and isPublic fields; and deletes them when the fields are cleared.
 // see AddOrDeleteStandardTuple for details on how the fields are checked and it's called functions
@@ -24,7 +44,7 @@ func HookStandardPublicAccessTuples() ent.Hook {
 				return retVal, err
 			}
 
-			addTuple, deleteTuple, err := AddOrDeleteStandardTuple(ctx, m)
+			addTuple, deleteTuple, err := AddOrDeletePublicStandardTuple(ctx, m)
 			if err != nil {
 				return retVal, err
 			}
@@ -66,7 +86,7 @@ func HookStandardPublicAccessTuples() ent.Hook {
 	)
 }
 
-// AddOrDeleteStandardTuple determines whether to add or delete a standard tuple based on the mutation operation and field values.
+// AddOrDeletePublicStandardTuple determines whether to add or delete a standard tuple based on the mutation operation and field values.
 //
 // Parameters:
 // - ctx: The context for the operation.
@@ -80,9 +100,9 @@ func HookStandardPublicAccessTuples() ent.Hook {
 // The function handles the following mutation operations:
 // - OpCreate: Adds the tuple if both systemOwned and isPublic are true.
 // - OpDelete, OpDeleteOne: Deletes the tuple.
-// - OpUpdateOne: Deletes the tuple if it's a soft delete or if systemOwned or isPublic fields have changed. Adds the tuple if both fields are true.
-// - OpUpdate: Deletes the tuple if systemOwned or isPublic fields have been cleared. Adds the tuple if both fields are true.
-func AddOrDeleteStandardTuple(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
+// - OpUpdateOne: Deletes the tuple if it's a soft delete or if isPublic fields has changed. Adds the tuple if both fields are true.
+// - OpUpdate: Deletes the tuple if isPublic field has been cleared. Adds the tuple if both fields are true.
+func AddOrDeletePublicStandardTuple(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
 	switch m.Op() {
 	case ent.OpCreate:
 		return standardTupleOnCreate(m)
@@ -182,24 +202,25 @@ func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation
 // standardTupleOneUpdate deletes the tuple if systemOwned or isPublic fields have been cleared. Adds the tuple if both fields are true
 func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
 	var (
-		publicCleared      bool
-		systemOwnedCleared bool
+		publicCleared bool
 	)
 
 	shouldDelete := false
 	// check if the systemOwned or isPublic fields have changed
 	systemOwned, systemOwnedOK := m.SystemOwned()
 
-	systemOwnedCleared = m.SystemOwnedCleared()
-	if systemOwnedCleared {
-		systemOwned = false
-
-		// if we took an action to clear the systemOwned field, we should delete the tuples
-		shouldDelete = true
-	}
-
 	public, publicOK := m.IsPublic()
 	publicCleared = m.IsPublicCleared()
+
+	var oldPublic *bool
+	if m.Op() == ent.OpUpdateOne {
+		oldValue, err := m.OldIsPublic(ctx)
+		if err != nil {
+			return false, false, err
+		}
+
+		oldPublic = &oldValue
+	}
 
 	if publicCleared {
 		public = false
@@ -209,7 +230,7 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 	}
 
 	// if these are both true, add the tuple, and conditionally delete the tuple
-	if systemOwned && public {
+	if systemOwned && public && (oldPublic == nil || public != *oldPublic) {
 		return true, shouldDelete, nil
 	}
 

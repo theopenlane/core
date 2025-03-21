@@ -23700,6 +23700,11 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, standard.FieldOwnerID)
 				fieldSeen[standard.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[standard.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, standard.FieldSystemOwned)
+				fieldSeen[standard.FieldSystemOwned] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standard.FieldName]; !ok {
 				selectedFields = append(selectedFields, standard.FieldName)
@@ -23754,11 +23759,6 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[standard.FieldFreeToUse]; !ok {
 				selectedFields = append(selectedFields, standard.FieldFreeToUse)
 				fieldSeen[standard.FieldFreeToUse] = struct{}{}
-			}
-		case "systemOwned":
-			if _, ok := fieldSeen[standard.FieldSystemOwned]; !ok {
-				selectedFields = append(selectedFields, standard.FieldSystemOwned)
-				fieldSeen[standard.FieldSystemOwned] = struct{}{}
 			}
 		case "standardType":
 			if _, ok := fieldSeen[standard.FieldStandardType]; !ok {
@@ -23920,6 +23920,11 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldOwnerID)
 				fieldSeen[standardhistory.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[standardhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldSystemOwned)
+				fieldSeen[standardhistory.FieldSystemOwned] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standardhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldName)
@@ -23974,11 +23979,6 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[standardhistory.FieldFreeToUse]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldFreeToUse)
 				fieldSeen[standardhistory.FieldFreeToUse] = struct{}{}
-			}
-		case "systemOwned":
-			if _, ok := fieldSeen[standardhistory.FieldSystemOwned]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldSystemOwned)
-				fieldSeen[standardhistory.FieldSystemOwned] = struct{}{}
 			}
 		case "standardType":
 			if _, ok := fieldSeen[standardhistory.FieldStandardType]; !ok {

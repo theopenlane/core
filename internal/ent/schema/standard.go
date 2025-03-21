@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"net/url"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
@@ -12,8 +10,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -69,10 +69,7 @@ func (Standard) Fields() []ent.Field {
 		field.String("governing_body_logo_url").
 			Comment("URL to the logo of the governing body").
 			MaxLen(urlMaxLen).
-			Validate(func(s string) error {
-				_, err := url.Parse(s)
-				return err
-			}).
+			Validate(validator.ValidateURL()).
 			Optional(),
 		field.String("governing_body").
 			Optional().
@@ -89,6 +86,8 @@ func (Standard) Fields() []ent.Field {
 			Comment("domains the standard covers, e.g. availability, confidentiality, etc."),
 		field.String("link").
 			Optional().
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
 			Comment("link to the official standard documentation"),
 		field.Enum("status").
 			GoType(enums.StandardStatus("")).
@@ -101,15 +100,11 @@ func (Standard) Fields() []ent.Field {
 		field.Bool("is_public").
 			Optional().
 			Default(false).
-			Comment("indicates if the standard should be made available to all users, only for public standards"),
+			Comment("indicates if the standard should be made available to all users, only for system owned standards"),
 		field.Bool("free_to_use").
 			Optional().
 			Default(false).
-			Comment("indicates if the standard is freely distributable under a trial license, only for public standards"),
-		field.Bool("system_owned").
-			Optional().
-			Default(false).
-			Comment("indicates if the standard is owned by the the openlane system"),
+			Comment("indicates if the standard is freely distributable under a trial license, only for system owned standards"),
 		field.String("standard_type").
 			Annotations(
 				entgql.OrderField("standard_type"),
@@ -125,7 +120,11 @@ func (Standard) Fields() []ent.Field {
 // Edges of the Standard
 func (s Standard) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(s, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    s,
+			edgeSchema:    Control{},
+			cascadeDelete: "Standard",
+		}),
 	}
 }
 
@@ -137,6 +136,7 @@ func (s Standard) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(s,
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
 			),
+			mixin.SystemOwnedMixin{},
 		},
 	}.getMixins()
 }
@@ -145,6 +145,7 @@ func (s Standard) Mixin() []ent.Mixin {
 func (Standard) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookStandardPublicAccessTuples(),
+		hooks.HookStandardCreate(),
 	}
 }
 

@@ -377,26 +377,6 @@ func (su *StandardUpdate) ClearFreeToUse() *StandardUpdate {
 	return su
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (su *StandardUpdate) SetSystemOwned(b bool) *StandardUpdate {
-	su.mutation.SetSystemOwned(b)
-	return su
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableSystemOwned(b *bool) *StandardUpdate {
-	if b != nil {
-		su.SetSystemOwned(*b)
-	}
-	return su
-}
-
-// ClearSystemOwned clears the value of the "system_owned" field.
-func (su *StandardUpdate) ClearSystemOwned() *StandardUpdate {
-	su.mutation.ClearSystemOwned()
-	return su
-}
-
 // SetStandardType sets the "standard_type" field.
 func (su *StandardUpdate) SetStandardType(s string) *StandardUpdate {
 	su.mutation.SetStandardType(s)
@@ -548,6 +528,11 @@ func (su *StandardUpdate) check() error {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
 		}
 	}
+	if v, ok := su.mutation.Link(); ok {
+		if err := standard.LinkValidator(v); err != nil {
+			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
+		}
+	}
 	if v, ok := su.mutation.Status(); ok {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
@@ -621,6 +606,9 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.RevisionCleared() {
 		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
+	if su.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := su.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
@@ -688,12 +676,6 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.FreeToUseCleared() {
 		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
-	}
-	if value, ok := su.mutation.SystemOwned(); ok {
-		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
-	}
-	if su.mutation.SystemOwnedCleared() {
-		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := su.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
@@ -1152,26 +1134,6 @@ func (suo *StandardUpdateOne) ClearFreeToUse() *StandardUpdateOne {
 	return suo
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (suo *StandardUpdateOne) SetSystemOwned(b bool) *StandardUpdateOne {
-	suo.mutation.SetSystemOwned(b)
-	return suo
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableSystemOwned(b *bool) *StandardUpdateOne {
-	if b != nil {
-		suo.SetSystemOwned(*b)
-	}
-	return suo
-}
-
-// ClearSystemOwned clears the value of the "system_owned" field.
-func (suo *StandardUpdateOne) ClearSystemOwned() *StandardUpdateOne {
-	suo.mutation.ClearSystemOwned()
-	return suo
-}
-
 // SetStandardType sets the "standard_type" field.
 func (suo *StandardUpdateOne) SetStandardType(s string) *StandardUpdateOne {
 	suo.mutation.SetStandardType(s)
@@ -1336,6 +1298,11 @@ func (suo *StandardUpdateOne) check() error {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
 		}
 	}
+	if v, ok := suo.mutation.Link(); ok {
+		if err := standard.LinkValidator(v); err != nil {
+			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
+		}
+	}
 	if v, ok := suo.mutation.Status(); ok {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
@@ -1426,6 +1393,9 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.RevisionCleared() {
 		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
+	if suo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := suo.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
@@ -1493,12 +1463,6 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	}
 	if suo.mutation.FreeToUseCleared() {
 		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
-	}
-	if value, ok := suo.mutation.SystemOwned(); ok {
-		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
-	}
-	if suo.mutation.SystemOwnedCleared() {
-		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := suo.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
