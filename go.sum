@@ -466,8 +466,8 @@ github.com/gofrs/flock v0.12.1/go.mod h1:9zxTsyu5xtJ9DK+1tFZyibEV7y3uwDxPPfbxeeH
 github.com/gofrs/uuid v3.3.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
 github.com/gogo/protobuf v1.3.2 h1:Ov1cvc58UF3b5XjBnZv7+opcTcQFZebYjWzi34vdm4Q=
 github.com/gogo/protobuf v1.3.2/go.mod h1:P1XiOD3dCwIKUDQYPy72D8LYyHL2YPYrpS2s69NZV8Q=
-github.com/golang-jwt/jwt/v5 v5.2.1 h1:OuVbFODueb089Lh128TAcimifWaLhJwVflnrgM17wHk=
-github.com/golang-jwt/jwt/v5 v5.2.1/go.mod h1:pqrtFR0X4osieyHYxtmOUWsAWrfe1Q5UVIyoH402zdk=
+github.com/golang-jwt/jwt/v5 v5.2.2 h1:Rl4B7itRWVtYIHFrSNd7vhTiz9UpLdi6gZhZ3wEeDy8=
+github.com/golang-jwt/jwt/v5 v5.2.2/go.mod h1:pqrtFR0X4osieyHYxtmOUWsAWrfe1Q5UVIyoH402zdk=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
 github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 h1:f+oWsMOmNPc8JmEHVZIycC7hBoQxHH9pNKQORJNozsQ=
@@ -1145,8 +1145,8 @@ github.com/theopenlane/dbx v0.1.3 h1:6zncXgqnvRyz5OuCDPM07xmOiBXS7q7U9GSMOWu3vNc
 github.com/theopenlane/dbx v0.1.3/go.mod h1:/bcz8oKFK3qrakLw0yHCAFY6fGnTOC3CntM0jMj3GDk=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
-github.com/theopenlane/echox v0.2.2 h1:aXoHxfzGJ0jE/dHL3W0sNL1YRq9xJATlcwwwZ2R0cgY=
-github.com/theopenlane/echox v0.2.2/go.mod h1:UeKYy1gwhANyOVl/D0wkLtYXORHPR/uh6bsflbVTdew=
+github.com/theopenlane/echox v0.2.3 h1:RlaEIFj03q9SR0YFmv7atlXtOe/5a3bRu4sF26pYSk0=
+github.com/theopenlane/echox v0.2.3/go.mod h1:xM2ECZW3/KEXZPetd1QAmN4mR8RetSwhDaySEQj+CHk=
 github.com/theopenlane/emailtemplates v0.1.2 h1:0l/PlokMjH8mARToQXWFvhBwvs9mtcaZqBlDicPYNHg=
 github.com/theopenlane/emailtemplates v0.1.2/go.mod h1:ZVTSMr+jKZZDH1IDTYBzR5nF/FPGt+IAPOJmet/WPi8=
 github.com/theopenlane/entx v0.5.1 h1:XU0QddW9VrK2K9Ak+0Q1g7kbzroBzAS9ODaF+eRymhE=

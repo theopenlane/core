@@ -28,13 +28,16 @@ var DefaultConfig = Config{
 	Prefixes: nil,
 }
 
-// New creates a new middleware function with the default config
-func New(allowedOrigins []string) echo.MiddlewareFunc {
+// MustNew creates a new middleware function with the default config or panics if it fails
+func MustNew(allowedOrigins []string) echo.MiddlewareFunc {
 	DefaultConfig.Prefixes = map[string][]string{
 		"/": allowedOrigins,
 	}
 
-	mw, _ := NewWithConfig(DefaultConfig)
+	mw, err := NewWithConfig(DefaultConfig)
+	if err != nil {
+		panic("failed to create CORS middleware")
+	}
 
 	return mw
 }
