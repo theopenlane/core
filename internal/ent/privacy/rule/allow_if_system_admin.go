@@ -35,6 +35,23 @@ func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 	})
 }
 
+// AllowMutationIfSystemAdmin determines whether a query operation should be allowed based on whether the user is a system admin
+func AllowQueryIfSystemAdmin() privacy.QueryRule {
+	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
+		allow, err := CheckIsSystemAdminWithContext(ctx)
+		if err != nil {
+			return err
+		}
+
+		if allow {
+			return privacy.Allow
+		}
+
+		// if not a system admin, skip to the next rule
+		return privacy.Skip
+	})
+}
+
 // CheckIsSystemAdmin checks if the user is a system admin based on the authz service
 func CheckIsSystemAdmin(ctx context.Context, m ent.Mutation) (bool, error) {
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)

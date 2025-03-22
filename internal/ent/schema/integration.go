@@ -3,13 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -70,18 +67,11 @@ func (i Integration) Edges() []ent.Edge {
 	}
 }
 
-// Annotations of the Integration
-func (Integration) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
-	}
-}
-
 // Mixin of the Integration
-func (Integration) Mixin() []ent.Mixin {
+func (i Integration) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef("integrations"),
+			newOrgOwnedMixin(i),
 		},
 	}.getMixins()
 }
@@ -93,7 +83,7 @@ func (Integration) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			entfga.CheckEditAccess[*generated.IntegrationMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

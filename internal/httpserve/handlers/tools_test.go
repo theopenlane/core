@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
+	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -188,6 +189,9 @@ func setupEcho(dbClient *ent.Client) *echo.Echo {
 	}
 
 	e.Use(transactionConfig.Middleware)
+
+	coreMW := cors.MustNew([]string{"*"})
+	e.Use(coreMW)
 
 	return e
 }

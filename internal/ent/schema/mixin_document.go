@@ -20,6 +20,16 @@ type DocumentMixin struct {
 	DocumentType string
 }
 
+// NewDocumentMixin creates a new DocumentMixin with the given schema
+// the schema must implement the SchemaFuncs interface
+func NewDocumentMixin(schema any) DocumentMixin {
+	sch := toSchemaFuncs(schema)
+
+	return DocumentMixin{
+		DocumentType: sch.Name(),
+	}
+}
+
 // Fields of the DocumentMixin.
 func (d DocumentMixin) Fields() []ent.Field {
 	return getDocumentFields(d.DocumentType)

@@ -133,13 +133,9 @@ func (PersonalAccessToken) Indexes() []ent.Index {
 func (p PersonalAccessToken) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			UserOwnedMixin{
-				Ref:         p.PluralName(),
-				AllowUpdate: false,
-				// skip the interceptor for Only queries when the token is being checked
-				// and we do not yet know the organization
-				SkipInterceptor: interceptors.SkipOnlyQuery,
-			},
+			newUserOwnedMixin(p,
+				withSkipInterceptor(interceptors.SkipOnlyQuery),
+			),
 		},
 	}.getMixins()
 }

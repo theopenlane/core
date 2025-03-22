@@ -20,7 +20,6 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	t := suite.T()
 
 	user := suite.seedSystemAdmin()
-
 	if len(user.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -92,63 +91,9 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			expectedErr:    nil,
 		},
 		{
-			name: "UpdateOne with systemOwned cleared",
+			name: "UpdateOne with isPublic cleared",
 			mutation: func() *generated.StandardMutation {
 				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned()
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    false,
-			expectedDelete: true,
-			expectedErr:    nil,
-		},
-		{
-			name: "UpdateOne with systemOwned cleared, will try to re-delete",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned()
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    false,
-			expectedDelete: true,
-			expectedErr:    nil,
-		},
-		{
-			name: "UpdateOne with systemOwned and isPublic both cleared",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.UpdateOne(std).ClearSystemOwned().ClearIsPublic()
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    false,
-			expectedDelete: true,
-			expectedErr:    nil,
-		},
-		{
-			name: "UpdateOne with clear is public, should delete",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).SetIsPublic(true).Save(ctx)
 				require.NoError(t, err)
 
 				update := suite.client.Standard.UpdateOne(std).ClearIsPublic()
@@ -164,12 +109,12 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			expectedErr:    nil,
 		},
 		{
-			name: "UpdateOne with systemOwned true, no-op because not public",
+			name: "UpdateOne with isPublic cleared, will try to re-delete",
 			mutation: func() *generated.StandardMutation {
 				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
 				require.NoError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).SetSystemOwned(true)
+				update := suite.client.Standard.UpdateOne(std).ClearIsPublic()
 
 				err = update.Exec(ctx)
 				require.NoError(t, err)
@@ -178,25 +123,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			}(),
 			ctx:            ctx,
 			expectedAdd:    false,
-			expectedDelete: false,
-			expectedErr:    nil,
-		},
-		{
-			name: "UpdateOne with is public true, no-op because not system owned",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.UpdateOne(std).SetIsPublic(true)
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    false,
-			expectedDelete: false,
+			expectedDelete: true,
 			expectedErr:    nil,
 		},
 		{
@@ -218,12 +145,12 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			expectedErr:    nil,
 		},
 		{
-			name: "UpdateOne with systemOwned true, public true",
+			name: "Update with public true",
 			mutation: func() *generated.StandardMutation {
 				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
 				require.NoError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).SetSystemOwned(true).SetIsPublic(true)
+				update := suite.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
 
 				err = update.Exec(ctx)
 				require.NoError(t, err)
@@ -233,42 +160,6 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			ctx:            ctx,
 			expectedAdd:    true,
 			expectedDelete: false,
-			expectedErr:    nil,
-		},
-		{
-			name: "Update with systemOwned true, public true",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.Update().SetSystemOwned(true).SetIsPublic(true).Where(standard.ID(std.ID))
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    true,
-			expectedDelete: false,
-			expectedErr:    nil,
-		},
-		{
-			name: "Update with systemOwned false",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetIsPublic(true).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.Update().SetSystemOwned(false).Where(standard.ID(std.ID))
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    false,
-			expectedDelete: true,
 			expectedErr:    nil,
 		},
 		{
@@ -308,24 +199,6 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			expectedErr:    nil,
 		},
 		{
-			name: "Update with system owned true, already public",
-			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetIsPublic(true).Save(ctx)
-				require.NoError(t, err)
-
-				update := suite.client.Standard.Update().SetSystemOwned(true).Where(standard.ID(std.ID))
-
-				err = update.Exec(ctx)
-				require.NoError(t, err)
-
-				return update.Mutation()
-			}(),
-			ctx:            ctx,
-			expectedAdd:    true,
-			expectedDelete: false,
-			expectedErr:    nil,
-		},
-		{
 			name: "UpdateOne with soft delete",
 			mutation: func() *generated.StandardMutation {
 				m := generated.StandardMutation{}
@@ -342,7 +215,7 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			add, delete, err := hooks.AddOrDeleteStandardTuple(tt.ctx, tt.mutation)
+			add, delete, err := hooks.AddOrDeletePublicStandardTuple(tt.ctx, tt.mutation)
 			assert.Equal(t, tt.expectedAdd, add)
 			assert.Equal(t, tt.expectedDelete, delete)
 			assert.Equal(t, tt.expectedErr, err)

@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"net/url"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -95,10 +94,7 @@ func (Organization) Fields() []ent.Field {
 		field.String("avatar_remote_url").
 			Comment("URL of the user's remote avatar").
 			MaxLen(urlMaxLen).
-			Validate(func(s string) error {
-				_, err := url.Parse(s)
-				return err
-			}).
+			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
 		field.String("avatar_local_file_id").

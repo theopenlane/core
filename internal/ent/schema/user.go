@@ -2,7 +2,6 @@ package schema
 
 import (
 	"net/mail"
-	"net/url"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -98,10 +98,7 @@ func (User) Fields() []ent.Field {
 		field.String("avatar_remote_url").
 			Comment("URL of the user's remote avatar").
 			MaxLen(urlMaxLen).
-			Validate(func(s string) error {
-				_, err := url.Parse(s)
-				return err
-			}).
+			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
 		field.String("avatar_local_file_id").

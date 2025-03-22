@@ -26,6 +26,7 @@ services:
       - OPENFGA_DATASTORE_MAX_OPEN_CONNS=100 #see postgres container
       - OPENFGA_PLAYGROUND_ENABLED=true
       - OPENFGA_LIST_USERS_MAX_RESULTS=10000
+      - OPENFGA_LIST_OBJECTS_MAX_RESULTS=10000
     command:
       - run
       - --check-query-cache-enabled

@@ -662,6 +662,13 @@ func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
 func StandardEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).Control.Query().Where((control.HasStandardWith(standard.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlCount, err := FromContext(ctx).Control.Delete().Where(control.HasStandardWith(standard.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlCount).Msg("deleting control")
+			return err
+		}
+	}
+
 	return nil
 }
 

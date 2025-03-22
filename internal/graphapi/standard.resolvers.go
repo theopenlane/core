@@ -10,8 +10,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
@@ -32,7 +32,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		// special case for standards which are system owned
-		if errors.Is(err, privacy.Deny) {
+		if errors.Is(err, rule.ErrAdminOnlyField) {
 			return nil, rout.ErrPermissionDenied
 		}
 
@@ -67,7 +67,7 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 	res, err = req.Save(ctx)
 	if err != nil {
 		// special case for standards which are system owned
-		if errors.Is(err, privacy.Deny) {
+		if errors.Is(err, rule.ErrAdminOnlyField) {
 			return nil, rout.ErrPermissionDenied
 		}
 

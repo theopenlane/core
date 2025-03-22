@@ -375,26 +375,6 @@ func (shu *StandardHistoryUpdate) ClearFreeToUse() *StandardHistoryUpdate {
 	return shu
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (shu *StandardHistoryUpdate) SetSystemOwned(b bool) *StandardHistoryUpdate {
-	shu.mutation.SetSystemOwned(b)
-	return shu
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableSystemOwned(b *bool) *StandardHistoryUpdate {
-	if b != nil {
-		shu.SetSystemOwned(*b)
-	}
-	return shu
-}
-
-// ClearSystemOwned clears the value of the "system_owned" field.
-func (shu *StandardHistoryUpdate) ClearSystemOwned() *StandardHistoryUpdate {
-	shu.mutation.ClearSystemOwned()
-	return shu
-}
-
 // SetStandardType sets the "standard_type" field.
 func (shu *StandardHistoryUpdate) SetStandardType(s string) *StandardHistoryUpdate {
 	shu.mutation.SetStandardType(s)
@@ -560,6 +540,9 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if shu.mutation.OwnerIDCleared() {
 		_spec.ClearField(standardhistory.FieldOwnerID, field.TypeString)
 	}
+	if shu.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := shu.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 	}
@@ -627,12 +610,6 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if shu.mutation.FreeToUseCleared() {
 		_spec.ClearField(standardhistory.FieldFreeToUse, field.TypeBool)
-	}
-	if value, ok := shu.mutation.SystemOwned(); ok {
-		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
-	}
-	if shu.mutation.SystemOwnedCleared() {
-		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := shu.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
@@ -1012,26 +989,6 @@ func (shuo *StandardHistoryUpdateOne) ClearFreeToUse() *StandardHistoryUpdateOne
 	return shuo
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (shuo *StandardHistoryUpdateOne) SetSystemOwned(b bool) *StandardHistoryUpdateOne {
-	shuo.mutation.SetSystemOwned(b)
-	return shuo
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableSystemOwned(b *bool) *StandardHistoryUpdateOne {
-	if b != nil {
-		shuo.SetSystemOwned(*b)
-	}
-	return shuo
-}
-
-// ClearSystemOwned clears the value of the "system_owned" field.
-func (shuo *StandardHistoryUpdateOne) ClearSystemOwned() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearSystemOwned()
-	return shuo
-}
-
 // SetStandardType sets the "standard_type" field.
 func (shuo *StandardHistoryUpdateOne) SetStandardType(s string) *StandardHistoryUpdateOne {
 	shuo.mutation.SetStandardType(s)
@@ -1227,6 +1184,9 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	if shuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(standardhistory.FieldOwnerID, field.TypeString)
 	}
+	if shuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := shuo.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 	}
@@ -1294,12 +1254,6 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	}
 	if shuo.mutation.FreeToUseCleared() {
 		_spec.ClearField(standardhistory.FieldFreeToUse, field.TypeBool)
-	}
-	if value, ok := shuo.mutation.SystemOwned(); ok {
-		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
-	}
-	if shuo.mutation.SystemOwnedCleared() {
-		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := shuo.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)

@@ -95,11 +95,10 @@ func (t Task) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id"},
-				WithOrganizationOwner: true,
-				Ref:                   t.PluralName(),
-			}),
+			newObjectOwnedMixin(t,
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}),
+				withOrganizationOwner(false),
+			),
 		},
 	}.getMixins()
 }

@@ -250,66 +250,6 @@ func (gu *GroupUpdate) SetOwner(o *Organization) *GroupUpdate {
 	return gu.SetOwnerID(o.ID)
 }
 
-// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
-func (gu *GroupUpdate) AddProcedureEditorIDs(ids ...string) *GroupUpdate {
-	gu.mutation.AddProcedureEditorIDs(ids...)
-	return gu
-}
-
-// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
-func (gu *GroupUpdate) AddProcedureEditors(p ...*Procedure) *GroupUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gu.AddProcedureEditorIDs(ids...)
-}
-
-// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
-func (gu *GroupUpdate) AddProcedureBlockedGroupIDs(ids ...string) *GroupUpdate {
-	gu.mutation.AddProcedureBlockedGroupIDs(ids...)
-	return gu
-}
-
-// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
-func (gu *GroupUpdate) AddProcedureBlockedGroups(p ...*Procedure) *GroupUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gu.AddProcedureBlockedGroupIDs(ids...)
-}
-
-// AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
-func (gu *GroupUpdate) AddInternalPolicyEditorIDs(ids ...string) *GroupUpdate {
-	gu.mutation.AddInternalPolicyEditorIDs(ids...)
-	return gu
-}
-
-// AddInternalPolicyEditors adds the "internal_policy_editors" edges to the InternalPolicy entity.
-func (gu *GroupUpdate) AddInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gu.AddInternalPolicyEditorIDs(ids...)
-}
-
-// AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
-func (gu *GroupUpdate) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdate {
-	gu.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
-	return gu
-}
-
-// AddInternalPolicyBlockedGroups adds the "internal_policy_blocked_groups" edges to the InternalPolicy entity.
-func (gu *GroupUpdate) AddInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gu.AddInternalPolicyBlockedGroupIDs(ids...)
-}
-
 // AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
 func (gu *GroupUpdate) AddProgramEditorIDs(ids ...string) *GroupUpdate {
 	gu.mutation.AddProgramEditorIDs(ids...)
@@ -535,6 +475,66 @@ func (gu *GroupUpdate) AddNarrativeViewers(n ...*Narrative) *GroupUpdate {
 	return gu.AddNarrativeViewerIDs(ids...)
 }
 
+// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
+func (gu *GroupUpdate) AddProcedureEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddProcedureEditorIDs(ids...)
+	return gu
+}
+
+// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
+func (gu *GroupUpdate) AddProcedureEditors(p ...*Procedure) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.AddProcedureEditorIDs(ids...)
+}
+
+// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
+func (gu *GroupUpdate) AddProcedureBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddProcedureBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
+func (gu *GroupUpdate) AddProcedureBlockedGroups(p ...*Procedure) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.AddProcedureBlockedGroupIDs(ids...)
+}
+
+// AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
+func (gu *GroupUpdate) AddInternalPolicyEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddInternalPolicyEditorIDs(ids...)
+	return gu
+}
+
+// AddInternalPolicyEditors adds the "internal_policy_editors" edges to the InternalPolicy entity.
+func (gu *GroupUpdate) AddInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.AddInternalPolicyEditorIDs(ids...)
+}
+
+// AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
+func (gu *GroupUpdate) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddInternalPolicyBlockedGroups adds the "internal_policy_blocked_groups" edges to the InternalPolicy entity.
+func (gu *GroupUpdate) AddInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.AddInternalPolicyBlockedGroupIDs(ids...)
+}
+
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
 func (gu *GroupUpdate) SetSettingID(id string) *GroupUpdate {
 	gu.mutation.SetSettingID(id)
@@ -653,90 +653,6 @@ func (gu *GroupUpdate) Mutation() *GroupMutation {
 func (gu *GroupUpdate) ClearOwner() *GroupUpdate {
 	gu.mutation.ClearOwner()
 	return gu
-}
-
-// ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
-func (gu *GroupUpdate) ClearProcedureEditors() *GroupUpdate {
-	gu.mutation.ClearProcedureEditors()
-	return gu
-}
-
-// RemoveProcedureEditorIDs removes the "procedure_editors" edge to Procedure entities by IDs.
-func (gu *GroupUpdate) RemoveProcedureEditorIDs(ids ...string) *GroupUpdate {
-	gu.mutation.RemoveProcedureEditorIDs(ids...)
-	return gu
-}
-
-// RemoveProcedureEditors removes "procedure_editors" edges to Procedure entities.
-func (gu *GroupUpdate) RemoveProcedureEditors(p ...*Procedure) *GroupUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gu.RemoveProcedureEditorIDs(ids...)
-}
-
-// ClearProcedureBlockedGroups clears all "procedure_blocked_groups" edges to the Procedure entity.
-func (gu *GroupUpdate) ClearProcedureBlockedGroups() *GroupUpdate {
-	gu.mutation.ClearProcedureBlockedGroups()
-	return gu
-}
-
-// RemoveProcedureBlockedGroupIDs removes the "procedure_blocked_groups" edge to Procedure entities by IDs.
-func (gu *GroupUpdate) RemoveProcedureBlockedGroupIDs(ids ...string) *GroupUpdate {
-	gu.mutation.RemoveProcedureBlockedGroupIDs(ids...)
-	return gu
-}
-
-// RemoveProcedureBlockedGroups removes "procedure_blocked_groups" edges to Procedure entities.
-func (gu *GroupUpdate) RemoveProcedureBlockedGroups(p ...*Procedure) *GroupUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gu.RemoveProcedureBlockedGroupIDs(ids...)
-}
-
-// ClearInternalPolicyEditors clears all "internal_policy_editors" edges to the InternalPolicy entity.
-func (gu *GroupUpdate) ClearInternalPolicyEditors() *GroupUpdate {
-	gu.mutation.ClearInternalPolicyEditors()
-	return gu
-}
-
-// RemoveInternalPolicyEditorIDs removes the "internal_policy_editors" edge to InternalPolicy entities by IDs.
-func (gu *GroupUpdate) RemoveInternalPolicyEditorIDs(ids ...string) *GroupUpdate {
-	gu.mutation.RemoveInternalPolicyEditorIDs(ids...)
-	return gu
-}
-
-// RemoveInternalPolicyEditors removes "internal_policy_editors" edges to InternalPolicy entities.
-func (gu *GroupUpdate) RemoveInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gu.RemoveInternalPolicyEditorIDs(ids...)
-}
-
-// ClearInternalPolicyBlockedGroups clears all "internal_policy_blocked_groups" edges to the InternalPolicy entity.
-func (gu *GroupUpdate) ClearInternalPolicyBlockedGroups() *GroupUpdate {
-	gu.mutation.ClearInternalPolicyBlockedGroups()
-	return gu
-}
-
-// RemoveInternalPolicyBlockedGroupIDs removes the "internal_policy_blocked_groups" edge to InternalPolicy entities by IDs.
-func (gu *GroupUpdate) RemoveInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdate {
-	gu.mutation.RemoveInternalPolicyBlockedGroupIDs(ids...)
-	return gu
-}
-
-// RemoveInternalPolicyBlockedGroups removes "internal_policy_blocked_groups" edges to InternalPolicy entities.
-func (gu *GroupUpdate) RemoveInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gu.RemoveInternalPolicyBlockedGroupIDs(ids...)
 }
 
 // ClearProgramEditors clears all "program_editors" edges to the Program entity.
@@ -1054,6 +970,90 @@ func (gu *GroupUpdate) RemoveNarrativeViewers(n ...*Narrative) *GroupUpdate {
 	return gu.RemoveNarrativeViewerIDs(ids...)
 }
 
+// ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
+func (gu *GroupUpdate) ClearProcedureEditors() *GroupUpdate {
+	gu.mutation.ClearProcedureEditors()
+	return gu
+}
+
+// RemoveProcedureEditorIDs removes the "procedure_editors" edge to Procedure entities by IDs.
+func (gu *GroupUpdate) RemoveProcedureEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveProcedureEditorIDs(ids...)
+	return gu
+}
+
+// RemoveProcedureEditors removes "procedure_editors" edges to Procedure entities.
+func (gu *GroupUpdate) RemoveProcedureEditors(p ...*Procedure) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.RemoveProcedureEditorIDs(ids...)
+}
+
+// ClearProcedureBlockedGroups clears all "procedure_blocked_groups" edges to the Procedure entity.
+func (gu *GroupUpdate) ClearProcedureBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearProcedureBlockedGroups()
+	return gu
+}
+
+// RemoveProcedureBlockedGroupIDs removes the "procedure_blocked_groups" edge to Procedure entities by IDs.
+func (gu *GroupUpdate) RemoveProcedureBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveProcedureBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveProcedureBlockedGroups removes "procedure_blocked_groups" edges to Procedure entities.
+func (gu *GroupUpdate) RemoveProcedureBlockedGroups(p ...*Procedure) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.RemoveProcedureBlockedGroupIDs(ids...)
+}
+
+// ClearInternalPolicyEditors clears all "internal_policy_editors" edges to the InternalPolicy entity.
+func (gu *GroupUpdate) ClearInternalPolicyEditors() *GroupUpdate {
+	gu.mutation.ClearInternalPolicyEditors()
+	return gu
+}
+
+// RemoveInternalPolicyEditorIDs removes the "internal_policy_editors" edge to InternalPolicy entities by IDs.
+func (gu *GroupUpdate) RemoveInternalPolicyEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveInternalPolicyEditorIDs(ids...)
+	return gu
+}
+
+// RemoveInternalPolicyEditors removes "internal_policy_editors" edges to InternalPolicy entities.
+func (gu *GroupUpdate) RemoveInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.RemoveInternalPolicyEditorIDs(ids...)
+}
+
+// ClearInternalPolicyBlockedGroups clears all "internal_policy_blocked_groups" edges to the InternalPolicy entity.
+func (gu *GroupUpdate) ClearInternalPolicyBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearInternalPolicyBlockedGroups()
+	return gu
+}
+
+// RemoveInternalPolicyBlockedGroupIDs removes the "internal_policy_blocked_groups" edge to InternalPolicy entities by IDs.
+func (gu *GroupUpdate) RemoveInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveInternalPolicyBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveInternalPolicyBlockedGroups removes "internal_policy_blocked_groups" edges to InternalPolicy entities.
+func (gu *GroupUpdate) RemoveInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.RemoveInternalPolicyBlockedGroupIDs(ids...)
+}
+
 // ClearSetting clears the "setting" edge to the GroupSetting entity.
 func (gu *GroupUpdate) ClearSetting() *GroupUpdate {
 	gu.mutation.ClearSetting()
@@ -1240,6 +1240,16 @@ func (gu *GroupUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
 		}
 	}
+	if v, ok := gu.mutation.GravatarLogoURL(); ok {
+		if err := group.GravatarLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := gu.mutation.LogoURL(); ok {
+		if err := group.LogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
+		}
+	}
 	if v, ok := gu.mutation.DisplayName(); ok {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
@@ -1360,198 +1370,6 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = gu.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if gu.mutation.ProcedureEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.RemovedProcedureEditorsIDs(); len(nodes) > 0 && !gu.mutation.ProcedureEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if gu.mutation.ProcedureBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.RemovedProcedureBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.ProcedureBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if gu.mutation.InternalPolicyEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.RemovedInternalPolicyEditorsIDs(); len(nodes) > 0 && !gu.mutation.InternalPolicyEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if gu.mutation.InternalPolicyBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.RemovedInternalPolicyBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.InternalPolicyBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := gu.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2277,6 +2095,198 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.ProcedureEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedProcedureEditorsIDs(); len(nodes) > 0 && !gu.mutation.ProcedureEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.ProcedureBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedProcedureBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.ProcedureBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.InternalPolicyEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedInternalPolicyEditorsIDs(); len(nodes) > 0 && !gu.mutation.InternalPolicyEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.InternalPolicyBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedInternalPolicyBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.InternalPolicyBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -2844,66 +2854,6 @@ func (guo *GroupUpdateOne) SetOwner(o *Organization) *GroupUpdateOne {
 	return guo.SetOwnerID(o.ID)
 }
 
-// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
-func (guo *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.AddProcedureEditorIDs(ids...)
-	return guo
-}
-
-// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
-func (guo *GroupUpdateOne) AddProcedureEditors(p ...*Procedure) *GroupUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return guo.AddProcedureEditorIDs(ids...)
-}
-
-// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
-func (guo *GroupUpdateOne) AddProcedureBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.AddProcedureBlockedGroupIDs(ids...)
-	return guo
-}
-
-// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
-func (guo *GroupUpdateOne) AddProcedureBlockedGroups(p ...*Procedure) *GroupUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return guo.AddProcedureBlockedGroupIDs(ids...)
-}
-
-// AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
-func (guo *GroupUpdateOne) AddInternalPolicyEditorIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.AddInternalPolicyEditorIDs(ids...)
-	return guo
-}
-
-// AddInternalPolicyEditors adds the "internal_policy_editors" edges to the InternalPolicy entity.
-func (guo *GroupUpdateOne) AddInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return guo.AddInternalPolicyEditorIDs(ids...)
-}
-
-// AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
-func (guo *GroupUpdateOne) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
-	return guo
-}
-
-// AddInternalPolicyBlockedGroups adds the "internal_policy_blocked_groups" edges to the InternalPolicy entity.
-func (guo *GroupUpdateOne) AddInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return guo.AddInternalPolicyBlockedGroupIDs(ids...)
-}
-
 // AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
 func (guo *GroupUpdateOne) AddProgramEditorIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddProgramEditorIDs(ids...)
@@ -3129,6 +3079,66 @@ func (guo *GroupUpdateOne) AddNarrativeViewers(n ...*Narrative) *GroupUpdateOne 
 	return guo.AddNarrativeViewerIDs(ids...)
 }
 
+// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
+func (guo *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddProcedureEditorIDs(ids...)
+	return guo
+}
+
+// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
+func (guo *GroupUpdateOne) AddProcedureEditors(p ...*Procedure) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.AddProcedureEditorIDs(ids...)
+}
+
+// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
+func (guo *GroupUpdateOne) AddProcedureBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddProcedureBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
+func (guo *GroupUpdateOne) AddProcedureBlockedGroups(p ...*Procedure) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.AddProcedureBlockedGroupIDs(ids...)
+}
+
+// AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
+func (guo *GroupUpdateOne) AddInternalPolicyEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddInternalPolicyEditorIDs(ids...)
+	return guo
+}
+
+// AddInternalPolicyEditors adds the "internal_policy_editors" edges to the InternalPolicy entity.
+func (guo *GroupUpdateOne) AddInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.AddInternalPolicyEditorIDs(ids...)
+}
+
+// AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
+func (guo *GroupUpdateOne) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddInternalPolicyBlockedGroups adds the "internal_policy_blocked_groups" edges to the InternalPolicy entity.
+func (guo *GroupUpdateOne) AddInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.AddInternalPolicyBlockedGroupIDs(ids...)
+}
+
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
 func (guo *GroupUpdateOne) SetSettingID(id string) *GroupUpdateOne {
 	guo.mutation.SetSettingID(id)
@@ -3247,90 +3257,6 @@ func (guo *GroupUpdateOne) Mutation() *GroupMutation {
 func (guo *GroupUpdateOne) ClearOwner() *GroupUpdateOne {
 	guo.mutation.ClearOwner()
 	return guo
-}
-
-// ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
-func (guo *GroupUpdateOne) ClearProcedureEditors() *GroupUpdateOne {
-	guo.mutation.ClearProcedureEditors()
-	return guo
-}
-
-// RemoveProcedureEditorIDs removes the "procedure_editors" edge to Procedure entities by IDs.
-func (guo *GroupUpdateOne) RemoveProcedureEditorIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.RemoveProcedureEditorIDs(ids...)
-	return guo
-}
-
-// RemoveProcedureEditors removes "procedure_editors" edges to Procedure entities.
-func (guo *GroupUpdateOne) RemoveProcedureEditors(p ...*Procedure) *GroupUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return guo.RemoveProcedureEditorIDs(ids...)
-}
-
-// ClearProcedureBlockedGroups clears all "procedure_blocked_groups" edges to the Procedure entity.
-func (guo *GroupUpdateOne) ClearProcedureBlockedGroups() *GroupUpdateOne {
-	guo.mutation.ClearProcedureBlockedGroups()
-	return guo
-}
-
-// RemoveProcedureBlockedGroupIDs removes the "procedure_blocked_groups" edge to Procedure entities by IDs.
-func (guo *GroupUpdateOne) RemoveProcedureBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.RemoveProcedureBlockedGroupIDs(ids...)
-	return guo
-}
-
-// RemoveProcedureBlockedGroups removes "procedure_blocked_groups" edges to Procedure entities.
-func (guo *GroupUpdateOne) RemoveProcedureBlockedGroups(p ...*Procedure) *GroupUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return guo.RemoveProcedureBlockedGroupIDs(ids...)
-}
-
-// ClearInternalPolicyEditors clears all "internal_policy_editors" edges to the InternalPolicy entity.
-func (guo *GroupUpdateOne) ClearInternalPolicyEditors() *GroupUpdateOne {
-	guo.mutation.ClearInternalPolicyEditors()
-	return guo
-}
-
-// RemoveInternalPolicyEditorIDs removes the "internal_policy_editors" edge to InternalPolicy entities by IDs.
-func (guo *GroupUpdateOne) RemoveInternalPolicyEditorIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.RemoveInternalPolicyEditorIDs(ids...)
-	return guo
-}
-
-// RemoveInternalPolicyEditors removes "internal_policy_editors" edges to InternalPolicy entities.
-func (guo *GroupUpdateOne) RemoveInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return guo.RemoveInternalPolicyEditorIDs(ids...)
-}
-
-// ClearInternalPolicyBlockedGroups clears all "internal_policy_blocked_groups" edges to the InternalPolicy entity.
-func (guo *GroupUpdateOne) ClearInternalPolicyBlockedGroups() *GroupUpdateOne {
-	guo.mutation.ClearInternalPolicyBlockedGroups()
-	return guo
-}
-
-// RemoveInternalPolicyBlockedGroupIDs removes the "internal_policy_blocked_groups" edge to InternalPolicy entities by IDs.
-func (guo *GroupUpdateOne) RemoveInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	guo.mutation.RemoveInternalPolicyBlockedGroupIDs(ids...)
-	return guo
-}
-
-// RemoveInternalPolicyBlockedGroups removes "internal_policy_blocked_groups" edges to InternalPolicy entities.
-func (guo *GroupUpdateOne) RemoveInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return guo.RemoveInternalPolicyBlockedGroupIDs(ids...)
 }
 
 // ClearProgramEditors clears all "program_editors" edges to the Program entity.
@@ -3648,6 +3574,90 @@ func (guo *GroupUpdateOne) RemoveNarrativeViewers(n ...*Narrative) *GroupUpdateO
 	return guo.RemoveNarrativeViewerIDs(ids...)
 }
 
+// ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
+func (guo *GroupUpdateOne) ClearProcedureEditors() *GroupUpdateOne {
+	guo.mutation.ClearProcedureEditors()
+	return guo
+}
+
+// RemoveProcedureEditorIDs removes the "procedure_editors" edge to Procedure entities by IDs.
+func (guo *GroupUpdateOne) RemoveProcedureEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveProcedureEditorIDs(ids...)
+	return guo
+}
+
+// RemoveProcedureEditors removes "procedure_editors" edges to Procedure entities.
+func (guo *GroupUpdateOne) RemoveProcedureEditors(p ...*Procedure) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.RemoveProcedureEditorIDs(ids...)
+}
+
+// ClearProcedureBlockedGroups clears all "procedure_blocked_groups" edges to the Procedure entity.
+func (guo *GroupUpdateOne) ClearProcedureBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearProcedureBlockedGroups()
+	return guo
+}
+
+// RemoveProcedureBlockedGroupIDs removes the "procedure_blocked_groups" edge to Procedure entities by IDs.
+func (guo *GroupUpdateOne) RemoveProcedureBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveProcedureBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveProcedureBlockedGroups removes "procedure_blocked_groups" edges to Procedure entities.
+func (guo *GroupUpdateOne) RemoveProcedureBlockedGroups(p ...*Procedure) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.RemoveProcedureBlockedGroupIDs(ids...)
+}
+
+// ClearInternalPolicyEditors clears all "internal_policy_editors" edges to the InternalPolicy entity.
+func (guo *GroupUpdateOne) ClearInternalPolicyEditors() *GroupUpdateOne {
+	guo.mutation.ClearInternalPolicyEditors()
+	return guo
+}
+
+// RemoveInternalPolicyEditorIDs removes the "internal_policy_editors" edge to InternalPolicy entities by IDs.
+func (guo *GroupUpdateOne) RemoveInternalPolicyEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveInternalPolicyEditorIDs(ids...)
+	return guo
+}
+
+// RemoveInternalPolicyEditors removes "internal_policy_editors" edges to InternalPolicy entities.
+func (guo *GroupUpdateOne) RemoveInternalPolicyEditors(i ...*InternalPolicy) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.RemoveInternalPolicyEditorIDs(ids...)
+}
+
+// ClearInternalPolicyBlockedGroups clears all "internal_policy_blocked_groups" edges to the InternalPolicy entity.
+func (guo *GroupUpdateOne) ClearInternalPolicyBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearInternalPolicyBlockedGroups()
+	return guo
+}
+
+// RemoveInternalPolicyBlockedGroupIDs removes the "internal_policy_blocked_groups" edge to InternalPolicy entities by IDs.
+func (guo *GroupUpdateOne) RemoveInternalPolicyBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveInternalPolicyBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveInternalPolicyBlockedGroups removes "internal_policy_blocked_groups" edges to InternalPolicy entities.
+func (guo *GroupUpdateOne) RemoveInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.RemoveInternalPolicyBlockedGroupIDs(ids...)
+}
+
 // ClearSetting clears the "setting" edge to the GroupSetting entity.
 func (guo *GroupUpdateOne) ClearSetting() *GroupUpdateOne {
 	guo.mutation.ClearSetting()
@@ -3847,6 +3857,16 @@ func (guo *GroupUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
 		}
 	}
+	if v, ok := guo.mutation.GravatarLogoURL(); ok {
+		if err := group.GravatarLogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
+		}
+	}
+	if v, ok := guo.mutation.LogoURL(); ok {
+		if err := group.LogoURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
+		}
+	}
 	if v, ok := guo.mutation.DisplayName(); ok {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
@@ -3984,198 +4004,6 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if guo.mutation.ProcedureEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.RemovedProcedureEditorsIDs(); len(nodes) > 0 && !guo.mutation.ProcedureEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if guo.mutation.ProcedureBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.RemovedProcedureBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.ProcedureBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if guo.mutation.InternalPolicyEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.RemovedInternalPolicyEditorsIDs(); len(nodes) > 0 && !guo.mutation.InternalPolicyEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if guo.mutation.InternalPolicyBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.RemovedInternalPolicyBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.InternalPolicyBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := guo.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4896,6 +4724,198 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ProcedureEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedProcedureEditorsIDs(); len(nodes) > 0 && !guo.mutation.ProcedureEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ProcedureBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedProcedureBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.ProcedureBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.InternalPolicyEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedInternalPolicyEditorsIDs(); len(nodes) > 0 && !guo.mutation.InternalPolicyEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.InternalPolicyBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedInternalPolicyBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.InternalPolicyBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -15,6 +15,7 @@ import (
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 )
@@ -63,17 +64,18 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	require.NoError(t, err)
 
 	// create api token and personal access token to ensure they are revoked when subscription is paused
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	apiToken := suite.db.APIToken.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName(
 			"test_token",
-		).SaveX(testUser1.UserCtx)
+		).SaveX(allowCtx)
 
 	pat := suite.db.PersonalAccessToken.Create().
 		SetOwnerID(testUser1.ID).AddOrganizationIDs(testUser1.OrganizationID).
 		SetName(
 			"test_token",
-		).SaveX(testUser1.UserCtx)
+		).SaveX(allowCtx)
 
 	testCases := []struct {
 		name           string

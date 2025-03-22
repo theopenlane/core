@@ -31282,10 +31282,6 @@ input CreateGroupInput {
   """
   description: String
   """
-  the URL to an auto generated gravatar image for the group
-  """
-  gravatarLogoURL: String
-  """
   the URL to an image uploaded by the customer for the groups avatar image
   """
   logoURL: String
@@ -31294,10 +31290,6 @@ input CreateGroupInput {
   """
   displayName: String
   ownerID: ID
-  procedureEditorIDs: [ID!]
-  procedureBlockedGroupIDs: [ID!]
-  internalPolicyEditorIDs: [ID!]
-  internalPolicyBlockedGroupIDs: [ID!]
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
   programViewerIDs: [ID!]
@@ -31313,6 +31305,10 @@ input CreateGroupInput {
   narrativeEditorIDs: [ID!]
   narrativeBlockedGroupIDs: [ID!]
   narrativeViewerIDs: [ID!]
+  procedureEditorIDs: [ID!]
+  procedureBlockedGroupIDs: [ID!]
+  internalPolicyEditorIDs: [ID!]
+  internalPolicyBlockedGroupIDs: [ID!]
   settingID: ID
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -31735,7 +31731,6 @@ input CreatePersonalAccessTokenInput {
   whether the token is active
   """
   isActive: Boolean
-  ownerID: ID!
   organizationIDs: [ID!]
   eventIDs: [ID!]
 }
@@ -31969,17 +31964,13 @@ input CreateStandardInput {
   """
   status: StandardStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -32103,7 +32094,6 @@ input CreateTFASettingInput {
   specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
   """
   totpAllowed: Boolean
-  ownerID: ID
 }
 """
 CreateTaskInput is used for create Task object.
@@ -37266,10 +37256,6 @@ type Group implements Node {
   """
   displayName: String!
   owner: Organization
-  procedureEditors: [Procedure!]
-  procedureBlockedGroups: [Procedure!]
-  internalPolicyEditors: [InternalPolicy!]
-  internalPolicyBlockedGroups: [InternalPolicy!]
   programEditors: [Program!]
   programBlockedGroups: [Program!]
   programViewers: [Program!]
@@ -37285,6 +37271,10 @@ type Group implements Node {
   narrativeEditors: [Narrative!]
   narrativeBlockedGroups: [Narrative!]
   narrativeViewers: [Narrative!]
+  procedureEditors: [Procedure!]
+  procedureBlockedGroups: [Procedure!]
+  internalPolicyEditors: [InternalPolicy!]
+  internalPolicyBlockedGroups: [InternalPolicy!]
   setting: GroupSetting
   users: [User!]
   events(
@@ -39051,26 +39041,6 @@ input GroupWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  procedure_editors edge predicates
-  """
-  hasProcedureEditors: Boolean
-  hasProcedureEditorsWith: [ProcedureWhereInput!]
-  """
-  procedure_blocked_groups edge predicates
-  """
-  hasProcedureBlockedGroups: Boolean
-  hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
-  """
-  internal_policy_editors edge predicates
-  """
-  hasInternalPolicyEditors: Boolean
-  hasInternalPolicyEditorsWith: [InternalPolicyWhereInput!]
-  """
-  internal_policy_blocked_groups edge predicates
-  """
-  hasInternalPolicyBlockedGroups: Boolean
-  hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
-  """
   program_editors edge predicates
   """
   hasProgramEditors: Boolean
@@ -39145,6 +39115,26 @@ input GroupWhereInput {
   """
   hasNarrativeViewers: Boolean
   hasNarrativeViewersWith: [NarrativeWhereInput!]
+  """
+  procedure_editors edge predicates
+  """
+  hasProcedureEditors: Boolean
+  hasProcedureEditorsWith: [ProcedureWhereInput!]
+  """
+  procedure_blocked_groups edge predicates
+  """
+  hasProcedureBlockedGroups: Boolean
+  hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
+  """
+  internal_policy_editors edge predicates
+  """
+  hasInternalPolicyEditors: Boolean
+  hasInternalPolicyEditorsWith: [InternalPolicyWhereInput!]
+  """
+  internal_policy_blocked_groups edge predicates
+  """
+  hasInternalPolicyBlockedGroups: Boolean
+  hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
   """
   setting edge predicates
   """
@@ -54356,6 +54346,10 @@ type Standard implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
   the long name of the standard body
   """
   name: String!
@@ -54392,17 +54386,13 @@ type Standard implements Node {
   """
   status: StandardStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -54498,6 +54488,10 @@ type StandardHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
   the long name of the standard body
   """
   name: String!
@@ -54534,17 +54528,13 @@ type StandardHistory implements Node {
   """
   status: StandardHistoryStandardStatus
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -54813,6 +54803,13 @@ input StandardHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -54959,13 +54956,6 @@ input StandardHistoryWhereInput {
   freeToUseNEQ: Boolean
   freeToUseIsNil: Boolean
   freeToUseNotNil: Boolean
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -55188,6 +55178,13 @@ input StandardWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -55334,13 +55331,6 @@ input StandardWhereInput {
   freeToUseNEQ: Boolean
   freeToUseIsNil: Boolean
   freeToUseNotNil: Boolean
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
   """
   standard_type field predicates
   """
@@ -59880,11 +59870,6 @@ input UpdateGroupInput {
   description: String
   clearDescription: Boolean
   """
-  the URL to an auto generated gravatar image for the group
-  """
-  gravatarLogoURL: String
-  clearGravatarLogoURL: Boolean
-  """
   the URL to an image uploaded by the customer for the groups avatar image
   """
   logoURL: String
@@ -59895,18 +59880,6 @@ input UpdateGroupInput {
   displayName: String
   ownerID: ID
   clearOwner: Boolean
-  addProcedureEditorIDs: [ID!]
-  removeProcedureEditorIDs: [ID!]
-  clearProcedureEditors: Boolean
-  addProcedureBlockedGroupIDs: [ID!]
-  removeProcedureBlockedGroupIDs: [ID!]
-  clearProcedureBlockedGroups: Boolean
-  addInternalPolicyEditorIDs: [ID!]
-  removeInternalPolicyEditorIDs: [ID!]
-  clearInternalPolicyEditors: Boolean
-  addInternalPolicyBlockedGroupIDs: [ID!]
-  removeInternalPolicyBlockedGroupIDs: [ID!]
-  clearInternalPolicyBlockedGroups: Boolean
   addProgramEditorIDs: [ID!]
   removeProgramEditorIDs: [ID!]
   clearProgramEditors: Boolean
@@ -59952,6 +59925,18 @@ input UpdateGroupInput {
   addNarrativeViewerIDs: [ID!]
   removeNarrativeViewerIDs: [ID!]
   clearNarrativeViewers: Boolean
+  addProcedureEditorIDs: [ID!]
+  removeProcedureEditorIDs: [ID!]
+  clearProcedureEditors: Boolean
+  addProcedureBlockedGroupIDs: [ID!]
+  removeProcedureBlockedGroupIDs: [ID!]
+  clearProcedureBlockedGroups: Boolean
+  addInternalPolicyEditorIDs: [ID!]
+  removeInternalPolicyEditorIDs: [ID!]
+  clearInternalPolicyEditors: Boolean
+  addInternalPolicyBlockedGroupIDs: [ID!]
+  removeInternalPolicyBlockedGroupIDs: [ID!]
+  clearInternalPolicyBlockedGroups: Boolean
   settingID: ID
   clearSetting: Boolean
   addEventIDs: [ID!]
@@ -60840,20 +60825,15 @@ input UpdateStandardInput {
   status: StandardStandardStatus
   clearStatus: Boolean
   """
-  indicates if the standard should be made available to all users, only for public standards
+  indicates if the standard should be made available to all users, only for system owned standards
   """
   isPublic: Boolean
   clearIsPublic: Boolean
   """
-  indicates if the standard is freely distributable under a trial license, only for public standards
+  indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
   freeToUse: Boolean
   clearFreeToUse: Boolean
-  """
-  indicates if the standard is owned by the the openlane system
-  """
-  systemOwned: Boolean
-  clearSystemOwned: Boolean
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """

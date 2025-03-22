@@ -1433,6 +1433,14 @@ func init() {
 	groupDescIsManaged := groupFields[2].Descriptor()
 	// group.DefaultIsManaged holds the default value on creation for the is_managed field.
 	group.DefaultIsManaged = groupDescIsManaged.Default.(bool)
+	// groupDescGravatarLogoURL is the schema descriptor for gravatar_logo_url field.
+	groupDescGravatarLogoURL := groupFields[3].Descriptor()
+	// group.GravatarLogoURLValidator is a validator for the "gravatar_logo_url" field. It is called by the builders before save.
+	group.GravatarLogoURLValidator = groupDescGravatarLogoURL.Validators[0].(func(string) error)
+	// groupDescLogoURL is the schema descriptor for logo_url field.
+	groupDescLogoURL := groupFields[4].Descriptor()
+	// group.LogoURLValidator is a validator for the "logo_url" field. It is called by the builders before save.
+	group.LogoURLValidator = groupDescLogoURL.Validators[0].(func(string) error)
 	// groupDescDisplayName is the schema descriptor for display_name field.
 	groupDescDisplayName := groupFields[5].Descriptor()
 	// group.DefaultDisplayName holds the default value on creation for the display_name field.
@@ -3292,6 +3300,7 @@ func init() {
 	standardMixinHooks1 := standardMixin[1].Hooks()
 	standardMixinHooks4 := standardMixin[4].Hooks()
 	standardMixinHooks6 := standardMixin[6].Hooks()
+	standardMixinHooks7 := standardMixin[7].Hooks()
 	standardHooks := schema.Standard{}.Hooks()
 
 	standard.Hooks[1] = standardMixinHooks0[0]
@@ -3302,7 +3311,11 @@ func init() {
 
 	standard.Hooks[4] = standardMixinHooks6[0]
 
-	standard.Hooks[5] = standardHooks[0]
+	standard.Hooks[5] = standardMixinHooks7[0]
+
+	standard.Hooks[6] = standardHooks[0]
+
+	standard.Hooks[7] = standardHooks[1]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters6 := standardMixin[6].Interceptors()
 	standardInters := schema.Standard{}.Interceptors()
@@ -3317,6 +3330,8 @@ func init() {
 	_ = standardMixinFields3
 	standardMixinFields4 := standardMixin[4].Fields()
 	_ = standardMixinFields4
+	standardMixinFields7 := standardMixin[7].Fields()
+	_ = standardMixinFields7
 	standardFields := schema.Standard{}.Fields()
 	_ = standardFields
 	// standardDescCreatedAt is the schema descriptor for created_at field.
@@ -3339,6 +3354,10 @@ func init() {
 	standard.DefaultRevision = standardDescRevision.Default.(string)
 	// standard.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
 	standard.RevisionValidator = standardDescRevision.Validators[0].(func(string) error)
+	// standardDescSystemOwned is the schema descriptor for system_owned field.
+	standardDescSystemOwned := standardMixinFields7[0].Descriptor()
+	// standard.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	standard.DefaultSystemOwned = standardDescSystemOwned.Default.(bool)
 	// standardDescName is the schema descriptor for name field.
 	standardDescName := standardFields[0].Descriptor()
 	// standard.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -3361,6 +3380,24 @@ func init() {
 			return nil
 		}
 	}()
+	// standardDescLink is the schema descriptor for link field.
+	standardDescLink := standardFields[7].Descriptor()
+	// standard.LinkValidator is a validator for the "link" field. It is called by the builders before save.
+	standard.LinkValidator = func() func(string) error {
+		validators := standardDescLink.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(link string) error {
+			for _, fn := range fns {
+				if err := fn(link); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// standardDescIsPublic is the schema descriptor for is_public field.
 	standardDescIsPublic := standardFields[9].Descriptor()
 	// standard.DefaultIsPublic holds the default value on creation for the is_public field.
@@ -3369,10 +3406,6 @@ func init() {
 	standardDescFreeToUse := standardFields[10].Descriptor()
 	// standard.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standard.DefaultFreeToUse = standardDescFreeToUse.Default.(bool)
-	// standardDescSystemOwned is the schema descriptor for system_owned field.
-	standardDescSystemOwned := standardFields[11].Descriptor()
-	// standard.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	standard.DefaultSystemOwned = standardDescSystemOwned.Default.(bool)
 	// standardDescID is the schema descriptor for id field.
 	standardDescID := standardMixinFields2[0].Descriptor()
 	// standard.DefaultID holds the default value on creation for the id field.
@@ -3403,18 +3436,18 @@ func init() {
 	standardhistoryDescRevision := standardhistoryFields[11].Descriptor()
 	// standardhistory.DefaultRevision holds the default value on creation for the revision field.
 	standardhistory.DefaultRevision = standardhistoryDescRevision.Default.(string)
+	// standardhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	standardhistoryDescSystemOwned := standardhistoryFields[13].Descriptor()
+	// standardhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	standardhistory.DefaultSystemOwned = standardhistoryDescSystemOwned.Default.(bool)
 	// standardhistoryDescIsPublic is the schema descriptor for is_public field.
-	standardhistoryDescIsPublic := standardhistoryFields[22].Descriptor()
+	standardhistoryDescIsPublic := standardhistoryFields[23].Descriptor()
 	// standardhistory.DefaultIsPublic holds the default value on creation for the is_public field.
 	standardhistory.DefaultIsPublic = standardhistoryDescIsPublic.Default.(bool)
 	// standardhistoryDescFreeToUse is the schema descriptor for free_to_use field.
-	standardhistoryDescFreeToUse := standardhistoryFields[23].Descriptor()
+	standardhistoryDescFreeToUse := standardhistoryFields[24].Descriptor()
 	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
-	// standardhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	standardhistoryDescSystemOwned := standardhistoryFields[24].Descriptor()
-	// standardhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	standardhistory.DefaultSystemOwned = standardhistoryDescSystemOwned.Default.(bool)
 	// standardhistoryDescID is the schema descriptor for id field.
 	standardhistoryDescID := standardhistoryFields[9].Descriptor()
 	// standardhistory.DefaultID holds the default value on creation for the id field.

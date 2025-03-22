@@ -9,11 +9,9 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/utils/keygen"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -108,10 +106,7 @@ func (APIToken) Indexes() []ent.Index {
 func (a APIToken) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnedMixin(
-				ObjectOwnedMixin{
-					Ref: a.PluralName(),
-				}),
+			newOrgOwnedMixin(a),
 		},
 	}.getMixins()
 }
@@ -122,7 +117,6 @@ func (APIToken) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
-		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -149,7 +143,7 @@ func (APIToken) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			entfga.CheckEditAccess[*generated.APITokenMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

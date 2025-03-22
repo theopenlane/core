@@ -14,9 +14,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -99,13 +97,8 @@ func (Subscriber) Fields() []ent.Field {
 func (s Subscriber) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnedMixin(ObjectOwnedMixin{
-				Ref: s.PluralName(),
-				SkipTokenType: []token.PrivacyToken{
-					&token.VerifyToken{},
-					&token.SignUpToken{},
-				},
-			}),
+			newOrgOwnedMixin(s,
+				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{})),
 		},
 	}.getMixins()
 }
@@ -137,7 +130,6 @@ func (Subscriber) Indexes() []ent.Index {
 // Annotations of the Subscriber
 func (Subscriber) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -155,7 +147,7 @@ func (Subscriber) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
-			entfga.CheckEditAccess[*generated.SubscriberMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

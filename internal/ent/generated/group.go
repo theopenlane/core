@@ -69,14 +69,6 @@ type Group struct {
 type GroupEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// ProcedureEditors holds the value of the procedure_editors edge.
-	ProcedureEditors []*Procedure `json:"procedure_editors,omitempty"`
-	// ProcedureBlockedGroups holds the value of the procedure_blocked_groups edge.
-	ProcedureBlockedGroups []*Procedure `json:"procedure_blocked_groups,omitempty"`
-	// InternalPolicyEditors holds the value of the internal_policy_editors edge.
-	InternalPolicyEditors []*InternalPolicy `json:"internal_policy_editors,omitempty"`
-	// InternalPolicyBlockedGroups holds the value of the internal_policy_blocked_groups edge.
-	InternalPolicyBlockedGroups []*InternalPolicy `json:"internal_policy_blocked_groups,omitempty"`
 	// ProgramEditors holds the value of the program_editors edge.
 	ProgramEditors []*Program `json:"program_editors,omitempty"`
 	// ProgramBlockedGroups holds the value of the program_blocked_groups edge.
@@ -107,6 +99,14 @@ type GroupEdges struct {
 	NarrativeBlockedGroups []*Narrative `json:"narrative_blocked_groups,omitempty"`
 	// NarrativeViewers holds the value of the narrative_viewers edge.
 	NarrativeViewers []*Narrative `json:"narrative_viewers,omitempty"`
+	// ProcedureEditors holds the value of the procedure_editors edge.
+	ProcedureEditors []*Procedure `json:"procedure_editors,omitempty"`
+	// ProcedureBlockedGroups holds the value of the procedure_blocked_groups edge.
+	ProcedureBlockedGroups []*Procedure `json:"procedure_blocked_groups,omitempty"`
+	// InternalPolicyEditors holds the value of the internal_policy_editors edge.
+	InternalPolicyEditors []*InternalPolicy `json:"internal_policy_editors,omitempty"`
+	// InternalPolicyBlockedGroups holds the value of the internal_policy_blocked_groups edge.
+	InternalPolicyBlockedGroups []*InternalPolicy `json:"internal_policy_blocked_groups,omitempty"`
 	// Setting holds the value of the setting edge.
 	Setting *GroupSetting `json:"setting,omitempty"`
 	// Users holds the value of the users edge.
@@ -127,10 +127,6 @@ type GroupEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [27]map[string]int
 
-	namedProcedureEditors              map[string][]*Procedure
-	namedProcedureBlockedGroups        map[string][]*Procedure
-	namedInternalPolicyEditors         map[string][]*InternalPolicy
-	namedInternalPolicyBlockedGroups   map[string][]*InternalPolicy
 	namedProgramEditors                map[string][]*Program
 	namedProgramBlockedGroups          map[string][]*Program
 	namedProgramViewers                map[string][]*Program
@@ -146,6 +142,10 @@ type GroupEdges struct {
 	namedNarrativeEditors              map[string][]*Narrative
 	namedNarrativeBlockedGroups        map[string][]*Narrative
 	namedNarrativeViewers              map[string][]*Narrative
+	namedProcedureEditors              map[string][]*Procedure
+	namedProcedureBlockedGroups        map[string][]*Procedure
+	namedInternalPolicyEditors         map[string][]*InternalPolicy
+	namedInternalPolicyBlockedGroups   map[string][]*InternalPolicy
 	namedUsers                         map[string][]*User
 	namedEvents                        map[string][]*Event
 	namedIntegrations                  map[string][]*Integration
@@ -165,46 +165,10 @@ func (e GroupEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// ProcedureEditorsOrErr returns the ProcedureEditors value or an error if the edge
-// was not loaded in eager-loading.
-func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[1] {
-		return e.ProcedureEditors, nil
-	}
-	return nil, &NotLoadedError{edge: "procedure_editors"}
-}
-
-// ProcedureBlockedGroupsOrErr returns the ProcedureBlockedGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[2] {
-		return e.ProcedureBlockedGroups, nil
-	}
-	return nil, &NotLoadedError{edge: "procedure_blocked_groups"}
-}
-
-// InternalPolicyEditorsOrErr returns the InternalPolicyEditors value or an error if the edge
-// was not loaded in eager-loading.
-func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[3] {
-		return e.InternalPolicyEditors, nil
-	}
-	return nil, &NotLoadedError{edge: "internal_policy_editors"}
-}
-
-// InternalPolicyBlockedGroupsOrErr returns the InternalPolicyBlockedGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
-		return e.InternalPolicyBlockedGroups, nil
-	}
-	return nil, &NotLoadedError{edge: "internal_policy_blocked_groups"}
-}
-
 // ProgramEditorsOrErr returns the ProgramEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[1] {
 		return e.ProgramEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "program_editors"}
@@ -213,7 +177,7 @@ func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
 // ProgramBlockedGroupsOrErr returns the ProgramBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[2] {
 		return e.ProgramBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "program_blocked_groups"}
@@ -222,7 +186,7 @@ func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
 // ProgramViewersOrErr returns the ProgramViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[3] {
 		return e.ProgramViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "program_viewers"}
@@ -231,7 +195,7 @@ func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
 // RiskEditorsOrErr returns the RiskEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[4] {
 		return e.RiskEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_editors"}
@@ -240,7 +204,7 @@ func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
 // RiskBlockedGroupsOrErr returns the RiskBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[5] {
 		return e.RiskBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_blocked_groups"}
@@ -249,7 +213,7 @@ func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
 // RiskViewersOrErr returns the RiskViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[6] {
 		return e.RiskViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_viewers"}
@@ -258,7 +222,7 @@ func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
 // ControlObjectiveEditorsOrErr returns the ControlObjectiveEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[7] {
 		return e.ControlObjectiveEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_editors"}
@@ -267,7 +231,7 @@ func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) 
 // ControlObjectiveBlockedGroupsOrErr returns the ControlObjectiveBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[8] {
 		return e.ControlObjectiveBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_blocked_groups"}
@@ -276,7 +240,7 @@ func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, e
 // ControlObjectiveViewersOrErr returns the ControlObjectiveViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[9] {
 		return e.ControlObjectiveViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_viewers"}
@@ -285,7 +249,7 @@ func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) 
 // ControlEditorsOrErr returns the ControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[10] {
 		return e.ControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_editors"}
@@ -294,7 +258,7 @@ func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
 // ControlBlockedGroupsOrErr returns the ControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[11] {
 		return e.ControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_blocked_groups"}
@@ -303,7 +267,7 @@ func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
 // ControlViewersOrErr returns the ControlViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlViewersOrErr() ([]*Control, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[12] {
 		return e.ControlViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_viewers"}
@@ -312,7 +276,7 @@ func (e GroupEdges) ControlViewersOrErr() ([]*Control, error) {
 // NarrativeEditorsOrErr returns the NarrativeEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[13] {
 		return e.NarrativeEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_editors"}
@@ -321,7 +285,7 @@ func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
 // NarrativeBlockedGroupsOrErr returns the NarrativeBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[14] {
 		return e.NarrativeBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_blocked_groups"}
@@ -330,10 +294,46 @@ func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
 // NarrativeViewersOrErr returns the NarrativeViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeViewersOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[15] {
 		return e.NarrativeViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_viewers"}
+}
+
+// ProcedureEditorsOrErr returns the ProcedureEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[16] {
+		return e.ProcedureEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "procedure_editors"}
+}
+
+// ProcedureBlockedGroupsOrErr returns the ProcedureBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[17] {
+		return e.ProcedureBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "procedure_blocked_groups"}
+}
+
+// InternalPolicyEditorsOrErr returns the InternalPolicyEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[18] {
+		return e.InternalPolicyEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policy_editors"}
+}
+
+// InternalPolicyBlockedGroupsOrErr returns the InternalPolicyBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[19] {
+		return e.InternalPolicyBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policy_blocked_groups"}
 }
 
 // SettingOrErr returns the Setting value or an error if the edge
@@ -626,26 +626,6 @@ func (gr *Group) QueryOwner() *OrganizationQuery {
 	return NewGroupClient(gr.config).QueryOwner(gr)
 }
 
-// QueryProcedureEditors queries the "procedure_editors" edge of the Group entity.
-func (gr *Group) QueryProcedureEditors() *ProcedureQuery {
-	return NewGroupClient(gr.config).QueryProcedureEditors(gr)
-}
-
-// QueryProcedureBlockedGroups queries the "procedure_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryProcedureBlockedGroups() *ProcedureQuery {
-	return NewGroupClient(gr.config).QueryProcedureBlockedGroups(gr)
-}
-
-// QueryInternalPolicyEditors queries the "internal_policy_editors" edge of the Group entity.
-func (gr *Group) QueryInternalPolicyEditors() *InternalPolicyQuery {
-	return NewGroupClient(gr.config).QueryInternalPolicyEditors(gr)
-}
-
-// QueryInternalPolicyBlockedGroups queries the "internal_policy_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
-	return NewGroupClient(gr.config).QueryInternalPolicyBlockedGroups(gr)
-}
-
 // QueryProgramEditors queries the "program_editors" edge of the Group entity.
 func (gr *Group) QueryProgramEditors() *ProgramQuery {
 	return NewGroupClient(gr.config).QueryProgramEditors(gr)
@@ -719,6 +699,26 @@ func (gr *Group) QueryNarrativeBlockedGroups() *NarrativeQuery {
 // QueryNarrativeViewers queries the "narrative_viewers" edge of the Group entity.
 func (gr *Group) QueryNarrativeViewers() *NarrativeQuery {
 	return NewGroupClient(gr.config).QueryNarrativeViewers(gr)
+}
+
+// QueryProcedureEditors queries the "procedure_editors" edge of the Group entity.
+func (gr *Group) QueryProcedureEditors() *ProcedureQuery {
+	return NewGroupClient(gr.config).QueryProcedureEditors(gr)
+}
+
+// QueryProcedureBlockedGroups queries the "procedure_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryProcedureBlockedGroups() *ProcedureQuery {
+	return NewGroupClient(gr.config).QueryProcedureBlockedGroups(gr)
+}
+
+// QueryInternalPolicyEditors queries the "internal_policy_editors" edge of the Group entity.
+func (gr *Group) QueryInternalPolicyEditors() *InternalPolicyQuery {
+	return NewGroupClient(gr.config).QueryInternalPolicyEditors(gr)
+}
+
+// QueryInternalPolicyBlockedGroups queries the "internal_policy_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
+	return NewGroupClient(gr.config).QueryInternalPolicyBlockedGroups(gr)
 }
 
 // QuerySetting queries the "setting" edge of the Group entity.
@@ -825,102 +825,6 @@ func (gr *Group) String() string {
 	builder.WriteString(gr.DisplayName)
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedProcedureEditors returns the ProcedureEditors named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (gr *Group) NamedProcedureEditors(name string) ([]*Procedure, error) {
-	if gr.Edges.namedProcedureEditors == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := gr.Edges.namedProcedureEditors[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (gr *Group) appendNamedProcedureEditors(name string, edges ...*Procedure) {
-	if gr.Edges.namedProcedureEditors == nil {
-		gr.Edges.namedProcedureEditors = make(map[string][]*Procedure)
-	}
-	if len(edges) == 0 {
-		gr.Edges.namedProcedureEditors[name] = []*Procedure{}
-	} else {
-		gr.Edges.namedProcedureEditors[name] = append(gr.Edges.namedProcedureEditors[name], edges...)
-	}
-}
-
-// NamedProcedureBlockedGroups returns the ProcedureBlockedGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (gr *Group) NamedProcedureBlockedGroups(name string) ([]*Procedure, error) {
-	if gr.Edges.namedProcedureBlockedGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := gr.Edges.namedProcedureBlockedGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (gr *Group) appendNamedProcedureBlockedGroups(name string, edges ...*Procedure) {
-	if gr.Edges.namedProcedureBlockedGroups == nil {
-		gr.Edges.namedProcedureBlockedGroups = make(map[string][]*Procedure)
-	}
-	if len(edges) == 0 {
-		gr.Edges.namedProcedureBlockedGroups[name] = []*Procedure{}
-	} else {
-		gr.Edges.namedProcedureBlockedGroups[name] = append(gr.Edges.namedProcedureBlockedGroups[name], edges...)
-	}
-}
-
-// NamedInternalPolicyEditors returns the InternalPolicyEditors named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (gr *Group) NamedInternalPolicyEditors(name string) ([]*InternalPolicy, error) {
-	if gr.Edges.namedInternalPolicyEditors == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := gr.Edges.namedInternalPolicyEditors[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (gr *Group) appendNamedInternalPolicyEditors(name string, edges ...*InternalPolicy) {
-	if gr.Edges.namedInternalPolicyEditors == nil {
-		gr.Edges.namedInternalPolicyEditors = make(map[string][]*InternalPolicy)
-	}
-	if len(edges) == 0 {
-		gr.Edges.namedInternalPolicyEditors[name] = []*InternalPolicy{}
-	} else {
-		gr.Edges.namedInternalPolicyEditors[name] = append(gr.Edges.namedInternalPolicyEditors[name], edges...)
-	}
-}
-
-// NamedInternalPolicyBlockedGroups returns the InternalPolicyBlockedGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (gr *Group) NamedInternalPolicyBlockedGroups(name string) ([]*InternalPolicy, error) {
-	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := gr.Edges.namedInternalPolicyBlockedGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (gr *Group) appendNamedInternalPolicyBlockedGroups(name string, edges ...*InternalPolicy) {
-	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
-		gr.Edges.namedInternalPolicyBlockedGroups = make(map[string][]*InternalPolicy)
-	}
-	if len(edges) == 0 {
-		gr.Edges.namedInternalPolicyBlockedGroups[name] = []*InternalPolicy{}
-	} else {
-		gr.Edges.namedInternalPolicyBlockedGroups[name] = append(gr.Edges.namedInternalPolicyBlockedGroups[name], edges...)
-	}
 }
 
 // NamedProgramEditors returns the ProgramEditors named value or an error if the edge was not
@@ -1280,6 +1184,102 @@ func (gr *Group) appendNamedNarrativeViewers(name string, edges ...*Narrative) {
 		gr.Edges.namedNarrativeViewers[name] = []*Narrative{}
 	} else {
 		gr.Edges.namedNarrativeViewers[name] = append(gr.Edges.namedNarrativeViewers[name], edges...)
+	}
+}
+
+// NamedProcedureEditors returns the ProcedureEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedProcedureEditors(name string) ([]*Procedure, error) {
+	if gr.Edges.namedProcedureEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedProcedureEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedProcedureEditors(name string, edges ...*Procedure) {
+	if gr.Edges.namedProcedureEditors == nil {
+		gr.Edges.namedProcedureEditors = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedProcedureEditors[name] = []*Procedure{}
+	} else {
+		gr.Edges.namedProcedureEditors[name] = append(gr.Edges.namedProcedureEditors[name], edges...)
+	}
+}
+
+// NamedProcedureBlockedGroups returns the ProcedureBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedProcedureBlockedGroups(name string) ([]*Procedure, error) {
+	if gr.Edges.namedProcedureBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedProcedureBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedProcedureBlockedGroups(name string, edges ...*Procedure) {
+	if gr.Edges.namedProcedureBlockedGroups == nil {
+		gr.Edges.namedProcedureBlockedGroups = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedProcedureBlockedGroups[name] = []*Procedure{}
+	} else {
+		gr.Edges.namedProcedureBlockedGroups[name] = append(gr.Edges.namedProcedureBlockedGroups[name], edges...)
+	}
+}
+
+// NamedInternalPolicyEditors returns the InternalPolicyEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedInternalPolicyEditors(name string) ([]*InternalPolicy, error) {
+	if gr.Edges.namedInternalPolicyEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedInternalPolicyEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedInternalPolicyEditors(name string, edges ...*InternalPolicy) {
+	if gr.Edges.namedInternalPolicyEditors == nil {
+		gr.Edges.namedInternalPolicyEditors = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedInternalPolicyEditors[name] = []*InternalPolicy{}
+	} else {
+		gr.Edges.namedInternalPolicyEditors[name] = append(gr.Edges.namedInternalPolicyEditors[name], edges...)
+	}
+}
+
+// NamedInternalPolicyBlockedGroups returns the InternalPolicyBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedInternalPolicyBlockedGroups(name string) ([]*InternalPolicy, error) {
+	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedInternalPolicyBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedInternalPolicyBlockedGroups(name string, edges ...*InternalPolicy) {
+	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
+		gr.Edges.namedInternalPolicyBlockedGroups = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedInternalPolicyBlockedGroups[name] = []*InternalPolicy{}
+	} else {
+		gr.Edges.namedInternalPolicyBlockedGroups[name] = append(gr.Edges.namedInternalPolicyBlockedGroups[name], edges...)
 	}
 }
 

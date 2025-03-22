@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/utils/contextx"
@@ -72,6 +73,22 @@ func (VersionBump) Values() (kinds []string) {
 	}
 
 	return
+}
+
+// ToVersionBump returns the version bump enum based on string input
+func ToVersionBump(r string) *VersionBump {
+	switch r := strings.ToUpper(r); r {
+	case Major.String():
+		return &Major
+	case Minor.String():
+		return &Minor
+	case Patch.String():
+		return &Patch
+	case PreRelease.String():
+		return &PreRelease
+	default:
+		return nil
+	}
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen

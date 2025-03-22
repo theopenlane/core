@@ -51,12 +51,11 @@ func (n Note) Mixin() []ent.Mixin {
 		prefix:      "NTE",
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames:            []string{"internal_policy_id", "procedure_id", "control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id"},
-				WithOrganizationOwner: true,
-				OwnerRelation:         fgax.OwnerRelation,
-				Ref:                   n.PluralName(),
-			}),
+			newObjectOwnedMixin(n,
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}),
+				withOrganizationOwner(false),
+				withOwnerRelation(fgax.OwnerRelation),
+			),
 		},
 	}.getMixins()
 }

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // EntityTypeHistory holds the schema definition for the EntityTypeHistory entity.
@@ -35,11 +34,6 @@ func (EntityTypeHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entfga.Annotations{
-			ObjectType:   "organization",
-			IDField:      "OwnerID",
-			IncludeHooks: false,
-		},
 	}
 }
 
@@ -99,6 +93,6 @@ func (EntityTypeHistory) Indexes() []ent.Index {
 // Interceptors of the EntityTypeHistory
 func (EntityTypeHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false, ""),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }

@@ -13,9 +13,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -112,13 +110,7 @@ func (i Invite) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnedMixin(
-				ObjectOwnedMixin{
-					Ref: i.PluralName(),
-					SkipTokenType: []token.PrivacyToken{
-						&token.OrgInviteToken{},
-					},
-				}),
+			newOrgOwnedMixin(i, withSkipTokenTypesObjects(&token.OrgInviteToken{})),
 		},
 	}.getMixins()
 }
@@ -141,7 +133,6 @@ func (i Invite) Edges() []ent.Edge {
 // Annotations of the Invite
 func (Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -166,7 +157,7 @@ func (Invite) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			rule.CanInviteUsers(),
-			entfga.CheckEditAccess[*generated.InviteMutation](),
+			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 	)
