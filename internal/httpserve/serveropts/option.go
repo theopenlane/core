@@ -392,7 +392,7 @@ func WithCacheHeaders() ServerOption {
 func WithCORS() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.CORS.Enabled {
-			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, cors.New(s.Config.Settings.Server.CORS.AllowOrigins))
+			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, cors.MustNew(s.Config.Settings.Server.CORS.AllowOrigins))
 		}
 	})
 }
