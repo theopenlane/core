@@ -96,11 +96,12 @@ func (e Evidence) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "EVD",
 		additionalMixins: []ent.Mixin{
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames:            []string{"control_id", "subcontrol_id", "control_objective_id", "program_id", "task_id", "procedure_id", "internal_policy_id"}, // used to create parent tuples for the evidence
-				WithOrganizationOwner: true,
-				Ref:                   e.PluralName(),
-			}),
+			newObjectOwnedMixin(e,
+				withParents(
+					Control{}, Subcontrol{}, ControlObjective{}, Program{},
+					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence
+				withOrganizationOwner(false),
+			),
 		},
 	}.getMixins()
 }

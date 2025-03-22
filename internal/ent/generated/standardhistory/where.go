@@ -116,6 +116,11 @@ func OwnerID(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldName, v))
@@ -159,11 +164,6 @@ func IsPublic(v bool) predicate.StandardHistory {
 // FreeToUse applies equality check predicate on the "free_to_use" field. It's identical to FreeToUseEQ.
 func FreeToUse(v bool) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldFreeToUse, v))
-}
-
-// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
-func SystemOwned(v bool) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
 }
 
 // StandardType applies equality check predicate on the "standard_type" field. It's identical to StandardTypeEQ.
@@ -846,6 +846,26 @@ func OwnerIDContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotNull(FieldSystemOwned))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldName, v))
@@ -1449,26 +1469,6 @@ func FreeToUseIsNil() predicate.StandardHistory {
 // FreeToUseNotNil applies the NotNil predicate on the "free_to_use" field.
 func FreeToUseNotNil() predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldNotNull(FieldFreeToUse))
-}
-
-// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
-func SystemOwnedEQ(v bool) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldEQ(FieldSystemOwned, v))
-}
-
-// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
-func SystemOwnedNEQ(v bool) predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNEQ(FieldSystemOwned, v))
-}
-
-// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
-func SystemOwnedIsNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldIsNull(FieldSystemOwned))
-}
-
-// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
-func SystemOwnedNotNil() predicate.StandardHistory {
-	return predicate.StandardHistory(sql.FieldNotNull(FieldSystemOwned))
 }
 
 // StandardTypeEQ applies the EQ predicate on the "standard_type" field.

@@ -2050,6 +2050,9 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(standardhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
+	}
 	if !reflect.DeepEqual(sh.Name, new.Name) {
 		changes = append(changes, NewChange(standardhistory.FieldName, sh.Name, new.Name))
 	}
@@ -2082,9 +2085,6 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.FreeToUse, new.FreeToUse) {
 		changes = append(changes, NewChange(standardhistory.FieldFreeToUse, sh.FreeToUse, new.FreeToUse))
-	}
-	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
 	}
 	if !reflect.DeepEqual(sh.StandardType, new.StandardType) {
 		changes = append(changes, NewChange(standardhistory.FieldStandardType, sh.StandardType, new.StandardType))

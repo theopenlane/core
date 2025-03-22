@@ -6867,6 +6867,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -6909,10 +6913,6 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if freeToUse, exists := m.FreeToUse(); exists {
 		create = create.SetFreeToUse(freeToUse)
-	}
-
-	if systemOwned, exists := m.SystemOwned(); exists {
-		create = create.SetSystemOwned(systemOwned)
 	}
 
 	if standardType, exists := m.StandardType(); exists {
@@ -7007,6 +7007,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(standard.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(standard.SystemOwned)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -7073,12 +7079,6 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetFreeToUse(standard.FreeToUse)
 		}
 
-		if systemOwned, exists := m.SystemOwned(); exists {
-			create = create.SetSystemOwned(systemOwned)
-		} else {
-			create = create.SetSystemOwned(standard.SystemOwned)
-		}
-
 		if standardType, exists := m.StandardType(); exists {
 			create = create.SetStandardType(standardType)
 		} else {
@@ -7132,6 +7132,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(standard.Tags).
 			SetRevision(standard.Revision).
 			SetOwnerID(standard.OwnerID).
+			SetSystemOwned(standard.SystemOwned).
 			SetName(standard.Name).
 			SetShortName(standard.ShortName).
 			SetFramework(standard.Framework).
@@ -7143,7 +7144,6 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(standard.Status).
 			SetIsPublic(standard.IsPublic).
 			SetFreeToUse(standard.FreeToUse).
-			SetSystemOwned(standard.SystemOwned).
 			SetStandardType(standard.StandardType).
 			SetVersion(standard.Version).
 			Save(ctx)

@@ -174,6 +174,20 @@ func (shc *StandardHistoryCreate) SetNillableOwnerID(s *string) *StandardHistory
 	return shc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (shc *StandardHistoryCreate) SetSystemOwned(b bool) *StandardHistoryCreate {
+	shc.mutation.SetSystemOwned(b)
+	return shc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableSystemOwned(b *bool) *StandardHistoryCreate {
+	if b != nil {
+		shc.SetSystemOwned(*b)
+	}
+	return shc
+}
+
 // SetName sets the "name" field.
 func (shc *StandardHistoryCreate) SetName(s string) *StandardHistoryCreate {
 	shc.mutation.SetName(s)
@@ -312,20 +326,6 @@ func (shc *StandardHistoryCreate) SetNillableFreeToUse(b *bool) *StandardHistory
 	return shc
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (shc *StandardHistoryCreate) SetSystemOwned(b bool) *StandardHistoryCreate {
-	shc.mutation.SetSystemOwned(b)
-	return shc
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableSystemOwned(b *bool) *StandardHistoryCreate {
-	if b != nil {
-		shc.SetSystemOwned(*b)
-	}
-	return shc
-}
-
 // SetStandardType sets the "standard_type" field.
 func (shc *StandardHistoryCreate) SetStandardType(s string) *StandardHistoryCreate {
 	shc.mutation.SetStandardType(s)
@@ -423,6 +423,10 @@ func (shc *StandardHistoryCreate) defaults() {
 		v := standardhistory.DefaultRevision
 		shc.mutation.SetRevision(v)
 	}
+	if _, ok := shc.mutation.SystemOwned(); !ok {
+		v := standardhistory.DefaultSystemOwned
+		shc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := shc.mutation.Status(); !ok {
 		v := standardhistory.DefaultStatus
 		shc.mutation.SetStatus(v)
@@ -434,10 +438,6 @@ func (shc *StandardHistoryCreate) defaults() {
 	if _, ok := shc.mutation.FreeToUse(); !ok {
 		v := standardhistory.DefaultFreeToUse
 		shc.mutation.SetFreeToUse(v)
-	}
-	if _, ok := shc.mutation.SystemOwned(); !ok {
-		v := standardhistory.DefaultSystemOwned
-		shc.mutation.SetSystemOwned(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
 		v := standardhistory.DefaultID()
@@ -550,6 +550,10 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := shc.mutation.SystemOwned(); ok {
+		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
 	if value, ok := shc.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -593,10 +597,6 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 	if value, ok := shc.mutation.FreeToUse(); ok {
 		_spec.SetField(standardhistory.FieldFreeToUse, field.TypeBool, value)
 		_node.FreeToUse = value
-	}
-	if value, ok := shc.mutation.SystemOwned(); ok {
-		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
 	}
 	if value, ok := shc.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)

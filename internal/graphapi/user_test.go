@@ -389,6 +389,9 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 			require.NotNil(t, resp.DeleteUser.DeletedID)
 
 			// make sure the personal org is deleted
+			// add allow context to bypass auth since the tuple will be deleted
+			reqCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
+
 			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
 			require.Nil(t, org)
 			require.Error(t, err)

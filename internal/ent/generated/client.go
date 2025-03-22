@@ -6051,82 +6051,6 @@ func (c *GroupClient) QueryOwner(gr *Group) *OrganizationQuery {
 	return query
 }
 
-// QueryProcedureEditors queries the procedure_editors edge of a Group.
-func (c *GroupClient) QueryProcedureEditors(gr *Group) *ProcedureQuery {
-	query := (&ProcedureClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureEditorsTable, group.ProcedureEditorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureEditors
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryProcedureBlockedGroups queries the procedure_blocked_groups edge of a Group.
-func (c *GroupClient) QueryProcedureBlockedGroups(gr *Group) *ProcedureQuery {
-	query := (&ProcedureClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureBlockedGroupsTable, group.ProcedureBlockedGroupsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryInternalPolicyEditors queries the internal_policy_editors edge of a Group.
-func (c *GroupClient) QueryInternalPolicyEditors(gr *Group) *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyEditorsTable, group.InternalPolicyEditorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyEditors
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryInternalPolicyBlockedGroups queries the internal_policy_blocked_groups edge of a Group.
-func (c *GroupClient) QueryInternalPolicyBlockedGroups(gr *Group) *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyBlockedGroupsTable, group.InternalPolicyBlockedGroupsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryProgramEditors queries the program_editors edge of a Group.
 func (c *GroupClient) QueryProgramEditors(gr *Group) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
@@ -6406,6 +6330,82 @@ func (c *GroupClient) QueryNarrativeViewers(gr *Group) *NarrativeQuery {
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
 		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedureEditors queries the procedure_editors edge of a Group.
+func (c *GroupClient) QueryProcedureEditors(gr *Group) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureEditorsTable, group.ProcedureEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedureBlockedGroups queries the procedure_blocked_groups edge of a Group.
+func (c *GroupClient) QueryProcedureBlockedGroups(gr *Group) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureBlockedGroupsTable, group.ProcedureBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicyEditors queries the internal_policy_editors edge of a Group.
+func (c *GroupClient) QueryInternalPolicyEditors(gr *Group) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyEditorsTable, group.InternalPolicyEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicyBlockedGroups queries the internal_policy_blocked_groups edge of a Group.
+func (c *GroupClient) QueryInternalPolicyBlockedGroups(gr *Group) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyBlockedGroupsTable, group.InternalPolicyBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}

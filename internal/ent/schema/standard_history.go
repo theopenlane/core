@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // StandardHistory holds the schema definition for the StandardHistory entity.
@@ -35,11 +34,6 @@ func (StandardHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entfga.Annotations{
-			ObjectType:   "standard",
-			IDField:      "Ref",
-			IncludeHooks: false,
-		},
 	}
 }
 
@@ -99,6 +93,6 @@ func (StandardHistory) Indexes() []ent.Index {
 // Interceptors of the StandardHistory
 func (StandardHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }

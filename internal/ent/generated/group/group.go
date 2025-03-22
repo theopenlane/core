@@ -47,14 +47,6 @@ const (
 	FieldDisplayName = "display_name"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
-	EdgeProcedureEditors = "procedure_editors"
-	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
-	EdgeProcedureBlockedGroups = "procedure_blocked_groups"
-	// EdgeInternalPolicyEditors holds the string denoting the internal_policy_editors edge name in mutations.
-	EdgeInternalPolicyEditors = "internal_policy_editors"
-	// EdgeInternalPolicyBlockedGroups holds the string denoting the internal_policy_blocked_groups edge name in mutations.
-	EdgeInternalPolicyBlockedGroups = "internal_policy_blocked_groups"
 	// EdgeProgramEditors holds the string denoting the program_editors edge name in mutations.
 	EdgeProgramEditors = "program_editors"
 	// EdgeProgramBlockedGroups holds the string denoting the program_blocked_groups edge name in mutations.
@@ -85,6 +77,14 @@ const (
 	EdgeNarrativeBlockedGroups = "narrative_blocked_groups"
 	// EdgeNarrativeViewers holds the string denoting the narrative_viewers edge name in mutations.
 	EdgeNarrativeViewers = "narrative_viewers"
+	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
+	EdgeProcedureEditors = "procedure_editors"
+	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
+	EdgeProcedureBlockedGroups = "procedure_blocked_groups"
+	// EdgeInternalPolicyEditors holds the string denoting the internal_policy_editors edge name in mutations.
+	EdgeInternalPolicyEditors = "internal_policy_editors"
+	// EdgeInternalPolicyBlockedGroups holds the string denoting the internal_policy_blocked_groups edge name in mutations.
+	EdgeInternalPolicyBlockedGroups = "internal_policy_blocked_groups"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
@@ -108,26 +108,6 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
-	ProcedureEditorsTable = "procedure_editors"
-	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
-	// It exists in this package in order to avoid circular dependency with the "procedure" package.
-	ProcedureEditorsInverseTable = "procedures"
-	// ProcedureBlockedGroupsTable is the table that holds the procedure_blocked_groups relation/edge. The primary key declared below.
-	ProcedureBlockedGroupsTable = "procedure_blocked_groups"
-	// ProcedureBlockedGroupsInverseTable is the table name for the Procedure entity.
-	// It exists in this package in order to avoid circular dependency with the "procedure" package.
-	ProcedureBlockedGroupsInverseTable = "procedures"
-	// InternalPolicyEditorsTable is the table that holds the internal_policy_editors relation/edge. The primary key declared below.
-	InternalPolicyEditorsTable = "internal_policy_editors"
-	// InternalPolicyEditorsInverseTable is the table name for the InternalPolicy entity.
-	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalPolicyEditorsInverseTable = "internal_policies"
-	// InternalPolicyBlockedGroupsTable is the table that holds the internal_policy_blocked_groups relation/edge. The primary key declared below.
-	InternalPolicyBlockedGroupsTable = "internal_policy_blocked_groups"
-	// InternalPolicyBlockedGroupsInverseTable is the table name for the InternalPolicy entity.
-	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalPolicyBlockedGroupsInverseTable = "internal_policies"
 	// ProgramEditorsTable is the table that holds the program_editors relation/edge. The primary key declared below.
 	ProgramEditorsTable = "program_editors"
 	// ProgramEditorsInverseTable is the table name for the Program entity.
@@ -203,6 +183,26 @@ const (
 	// NarrativeViewersInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativeViewersInverseTable = "narratives"
+	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
+	ProcedureEditorsTable = "procedure_editors"
+	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureEditorsInverseTable = "procedures"
+	// ProcedureBlockedGroupsTable is the table that holds the procedure_blocked_groups relation/edge. The primary key declared below.
+	ProcedureBlockedGroupsTable = "procedure_blocked_groups"
+	// ProcedureBlockedGroupsInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureBlockedGroupsInverseTable = "procedures"
+	// InternalPolicyEditorsTable is the table that holds the internal_policy_editors relation/edge. The primary key declared below.
+	InternalPolicyEditorsTable = "internal_policy_editors"
+	// InternalPolicyEditorsInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPolicyEditorsInverseTable = "internal_policies"
+	// InternalPolicyBlockedGroupsTable is the table that holds the internal_policy_blocked_groups relation/edge. The primary key declared below.
+	InternalPolicyBlockedGroupsTable = "internal_policy_blocked_groups"
+	// InternalPolicyBlockedGroupsInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPolicyBlockedGroupsInverseTable = "internal_policies"
 	// SettingTable is the table that holds the setting relation/edge.
 	SettingTable = "group_settings"
 	// SettingInverseTable is the table name for the GroupSetting entity.
@@ -281,18 +281,6 @@ var ForeignKeys = []string{
 }
 
 var (
-	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
-	// primary key for the procedure_editors relation (M2M).
-	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
-	// ProcedureBlockedGroupsPrimaryKey and ProcedureBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the procedure_blocked_groups relation (M2M).
-	ProcedureBlockedGroupsPrimaryKey = []string{"procedure_id", "group_id"}
-	// InternalPolicyEditorsPrimaryKey and InternalPolicyEditorsColumn2 are the table columns denoting the
-	// primary key for the internal_policy_editors relation (M2M).
-	InternalPolicyEditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
-	// InternalPolicyBlockedGroupsPrimaryKey and InternalPolicyBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the internal_policy_blocked_groups relation (M2M).
-	InternalPolicyBlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
 	// ProgramEditorsPrimaryKey and ProgramEditorsColumn2 are the table columns denoting the
 	// primary key for the program_editors relation (M2M).
 	ProgramEditorsPrimaryKey = []string{"program_id", "group_id"}
@@ -338,6 +326,18 @@ var (
 	// NarrativeViewersPrimaryKey and NarrativeViewersColumn2 are the table columns denoting the
 	// primary key for the narrative_viewers relation (M2M).
 	NarrativeViewersPrimaryKey = []string{"narrative_id", "group_id"}
+	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
+	// primary key for the procedure_editors relation (M2M).
+	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
+	// ProcedureBlockedGroupsPrimaryKey and ProcedureBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the procedure_blocked_groups relation (M2M).
+	ProcedureBlockedGroupsPrimaryKey = []string{"procedure_id", "group_id"}
+	// InternalPolicyEditorsPrimaryKey and InternalPolicyEditorsColumn2 are the table columns denoting the
+	// primary key for the internal_policy_editors relation (M2M).
+	InternalPolicyEditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// InternalPolicyBlockedGroupsPrimaryKey and InternalPolicyBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the internal_policy_blocked_groups relation (M2M).
+	InternalPolicyBlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "group_id"}
@@ -392,6 +392,10 @@ var (
 	NameValidator func(string) error
 	// DefaultIsManaged holds the default value on creation for the "is_managed" field.
 	DefaultIsManaged bool
+	// GravatarLogoURLValidator is a validator for the "gravatar_logo_url" field. It is called by the builders before save.
+	GravatarLogoURLValidator func(string) error
+	// LogoURLValidator is a validator for the "logo_url" field. It is called by the builders before save.
+	LogoURLValidator func(string) error
 	// DefaultDisplayName holds the default value on creation for the "display_name" field.
 	DefaultDisplayName string
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
@@ -482,62 +486,6 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByProcedureEditorsCount orders the results by procedure_editors count.
-func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProcedureEditorsStep(), opts...)
-	}
-}
-
-// ByProcedureEditors orders the results by procedure_editors terms.
-func ByProcedureEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProcedureEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByProcedureBlockedGroupsCount orders the results by procedure_blocked_groups count.
-func ByProcedureBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProcedureBlockedGroupsStep(), opts...)
-	}
-}
-
-// ByProcedureBlockedGroups orders the results by procedure_blocked_groups terms.
-func ByProcedureBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProcedureBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByInternalPolicyEditorsCount orders the results by internal_policy_editors count.
-func ByInternalPolicyEditorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyEditorsStep(), opts...)
-	}
-}
-
-// ByInternalPolicyEditors orders the results by internal_policy_editors terms.
-func ByInternalPolicyEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByInternalPolicyBlockedGroupsCount orders the results by internal_policy_blocked_groups count.
-func ByInternalPolicyBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyBlockedGroupsStep(), opts...)
-	}
-}
-
-// ByInternalPolicyBlockedGroups orders the results by internal_policy_blocked_groups terms.
-func ByInternalPolicyBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -751,6 +699,62 @@ func ByNarrativeViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByProcedureEditorsCount orders the results by procedure_editors count.
+func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProcedureEditorsStep(), opts...)
+	}
+}
+
+// ByProcedureEditors orders the results by procedure_editors terms.
+func ByProcedureEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProcedureBlockedGroupsCount orders the results by procedure_blocked_groups count.
+func ByProcedureBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProcedureBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByProcedureBlockedGroups orders the results by procedure_blocked_groups terms.
+func ByProcedureBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPolicyEditorsCount orders the results by internal_policy_editors count.
+func ByInternalPolicyEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyEditorsStep(), opts...)
+	}
+}
+
+// ByInternalPolicyEditors orders the results by internal_policy_editors terms.
+func ByInternalPolicyEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPolicyBlockedGroupsCount orders the results by internal_policy_blocked_groups count.
+func ByInternalPolicyBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByInternalPolicyBlockedGroups orders the results by internal_policy_blocked_groups terms.
+func ByInternalPolicyBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySettingField orders the results by setting field.
 func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -846,34 +850,6 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
-	)
-}
-func newProcedureEditorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProcedureEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureEditorsTable, ProcedureEditorsPrimaryKey...),
-	)
-}
-func newProcedureBlockedGroupsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProcedureBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureBlockedGroupsTable, ProcedureBlockedGroupsPrimaryKey...),
-	)
-}
-func newInternalPolicyEditorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalPolicyEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyEditorsTable, InternalPolicyEditorsPrimaryKey...),
-	)
-}
-func newInternalPolicyBlockedGroupsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalPolicyBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyBlockedGroupsTable, InternalPolicyBlockedGroupsPrimaryKey...),
 	)
 }
 func newProgramEditorsStep() *sqlgraph.Step {
@@ -979,6 +955,34 @@ func newNarrativeViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativeViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeViewersTable, NarrativeViewersPrimaryKey...),
+	)
+}
+func newProcedureEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureEditorsTable, ProcedureEditorsPrimaryKey...),
+	)
+}
+func newProcedureBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureBlockedGroupsTable, ProcedureBlockedGroupsPrimaryKey...),
+	)
+}
+func newInternalPolicyEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyEditorsTable, InternalPolicyEditorsPrimaryKey...),
+	)
+}
+func newInternalPolicyBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyBlockedGroupsTable, InternalPolicyBlockedGroupsPrimaryKey...),
 	)
 }
 func newSettingStep() *sqlgraph.Step {

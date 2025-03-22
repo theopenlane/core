@@ -1878,6 +1878,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldTags:                 {Type: field.TypeJSON, Column: standard.FieldTags},
 			standard.FieldRevision:             {Type: field.TypeString, Column: standard.FieldRevision},
 			standard.FieldOwnerID:              {Type: field.TypeString, Column: standard.FieldOwnerID},
+			standard.FieldSystemOwned:          {Type: field.TypeBool, Column: standard.FieldSystemOwned},
 			standard.FieldName:                 {Type: field.TypeString, Column: standard.FieldName},
 			standard.FieldShortName:            {Type: field.TypeString, Column: standard.FieldShortName},
 			standard.FieldFramework:            {Type: field.TypeString, Column: standard.FieldFramework},
@@ -1889,7 +1890,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldStatus:               {Type: field.TypeEnum, Column: standard.FieldStatus},
 			standard.FieldIsPublic:             {Type: field.TypeBool, Column: standard.FieldIsPublic},
 			standard.FieldFreeToUse:            {Type: field.TypeBool, Column: standard.FieldFreeToUse},
-			standard.FieldSystemOwned:          {Type: field.TypeBool, Column: standard.FieldSystemOwned},
 			standard.FieldStandardType:         {Type: field.TypeString, Column: standard.FieldStandardType},
 			standard.FieldVersion:              {Type: field.TypeString, Column: standard.FieldVersion},
 		},
@@ -1917,6 +1917,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldTags:                 {Type: field.TypeJSON, Column: standardhistory.FieldTags},
 			standardhistory.FieldRevision:             {Type: field.TypeString, Column: standardhistory.FieldRevision},
 			standardhistory.FieldOwnerID:              {Type: field.TypeString, Column: standardhistory.FieldOwnerID},
+			standardhistory.FieldSystemOwned:          {Type: field.TypeBool, Column: standardhistory.FieldSystemOwned},
 			standardhistory.FieldName:                 {Type: field.TypeString, Column: standardhistory.FieldName},
 			standardhistory.FieldShortName:            {Type: field.TypeString, Column: standardhistory.FieldShortName},
 			standardhistory.FieldFramework:            {Type: field.TypeString, Column: standardhistory.FieldFramework},
@@ -1928,7 +1929,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldStatus:               {Type: field.TypeEnum, Column: standardhistory.FieldStatus},
 			standardhistory.FieldIsPublic:             {Type: field.TypeBool, Column: standardhistory.FieldIsPublic},
 			standardhistory.FieldFreeToUse:            {Type: field.TypeBool, Column: standardhistory.FieldFreeToUse},
-			standardhistory.FieldSystemOwned:          {Type: field.TypeBool, Column: standardhistory.FieldSystemOwned},
 			standardhistory.FieldStandardType:         {Type: field.TypeString, Column: standardhistory.FieldStandardType},
 			standardhistory.FieldVersion:              {Type: field.TypeString, Column: standardhistory.FieldVersion},
 		},
@@ -3415,54 +3415,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"procedure_editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"Procedure",
-	)
-	graph.MustAddE(
-		"procedure_blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"Procedure",
-	)
-	graph.MustAddE(
-		"internal_policy_editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyEditorsTable,
-			Columns: group.InternalPolicyEditorsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"InternalPolicy",
-	)
-	graph.MustAddE(
-		"internal_policy_blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalPolicyBlockedGroupsTable,
-			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-		},
-		"Group",
-		"InternalPolicy",
-	)
-	graph.MustAddE(
 		"program_editors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3641,6 +3593,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Group",
 		"Narrative",
+	)
+	graph.MustAddE(
+		"procedure_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"procedure_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"internal_policy_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
+		"internal_policy_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
 	)
 	graph.MustAddE(
 		"setting",
@@ -10300,62 +10300,6 @@ func (f *GroupFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
-// WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
-func (f *GroupFilter) WhereHasProcedureEditors() {
-	f.Where(entql.HasEdge("procedure_editors"))
-}
-
-// WhereHasProcedureEditorsWith applies a predicate to check if query has an edge procedure_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasProcedureEditorsWith(preds ...predicate.Procedure) {
-	f.Where(entql.HasEdgeWith("procedure_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasProcedureBlockedGroups applies a predicate to check if query has an edge procedure_blocked_groups.
-func (f *GroupFilter) WhereHasProcedureBlockedGroups() {
-	f.Where(entql.HasEdge("procedure_blocked_groups"))
-}
-
-// WhereHasProcedureBlockedGroupsWith applies a predicate to check if query has an edge procedure_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Procedure) {
-	f.Where(entql.HasEdgeWith("procedure_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasInternalPolicyEditors applies a predicate to check if query has an edge internal_policy_editors.
-func (f *GroupFilter) WhereHasInternalPolicyEditors() {
-	f.Where(entql.HasEdge("internal_policy_editors"))
-}
-
-// WhereHasInternalPolicyEditorsWith applies a predicate to check if query has an edge internal_policy_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internal_policy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasInternalPolicyBlockedGroups applies a predicate to check if query has an edge internal_policy_blocked_groups.
-func (f *GroupFilter) WhereHasInternalPolicyBlockedGroups() {
-	f.Where(entql.HasEdge("internal_policy_blocked_groups"))
-}
-
-// WhereHasInternalPolicyBlockedGroupsWith applies a predicate to check if query has an edge internal_policy_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internal_policy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasProgramEditors applies a predicate to check if query has an edge program_editors.
 func (f *GroupFilter) WhereHasProgramEditors() {
 	f.Where(entql.HasEdge("program_editors"))
@@ -10560,6 +10504,62 @@ func (f *GroupFilter) WhereHasNarrativeViewers() {
 // WhereHasNarrativeViewersWith applies a predicate to check if query has an edge narrative_viewers with a given conditions (other predicates).
 func (f *GroupFilter) WhereHasNarrativeViewersWith(preds ...predicate.Narrative) {
 	f.Where(entql.HasEdgeWith("narrative_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
+func (f *GroupFilter) WhereHasProcedureEditors() {
+	f.Where(entql.HasEdge("procedure_editors"))
+}
+
+// WhereHasProcedureEditorsWith applies a predicate to check if query has an edge procedure_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureEditorsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedureBlockedGroups applies a predicate to check if query has an edge procedure_blocked_groups.
+func (f *GroupFilter) WhereHasProcedureBlockedGroups() {
+	f.Where(entql.HasEdge("procedure_blocked_groups"))
+}
+
+// WhereHasProcedureBlockedGroupsWith applies a predicate to check if query has an edge procedure_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicyEditors applies a predicate to check if query has an edge internal_policy_editors.
+func (f *GroupFilter) WhereHasInternalPolicyEditors() {
+	f.Where(entql.HasEdge("internal_policy_editors"))
+}
+
+// WhereHasInternalPolicyEditorsWith applies a predicate to check if query has an edge internal_policy_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicyBlockedGroups applies a predicate to check if query has an edge internal_policy_blocked_groups.
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroups() {
+	f.Where(entql.HasEdge("internal_policy_blocked_groups"))
+}
+
+// WhereHasInternalPolicyBlockedGroupsWith applies a predicate to check if query has an edge internal_policy_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16793,6 +16793,11 @@ func (f *StandardFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(standard.FieldOwnerID))
 }
 
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *StandardFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(standard.FieldSystemOwned))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *StandardFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(standard.FieldName))
@@ -16846,11 +16851,6 @@ func (f *StandardFilter) WhereIsPublic(p entql.BoolP) {
 // WhereFreeToUse applies the entql bool predicate on the free_to_use field.
 func (f *StandardFilter) WhereFreeToUse(p entql.BoolP) {
 	f.Where(p.Field(standard.FieldFreeToUse))
-}
-
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *StandardFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(standard.FieldSystemOwned))
 }
 
 // WhereStandardType applies the entql string predicate on the standard_type field.
@@ -16991,6 +16991,11 @@ func (f *StandardHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldOwnerID))
 }
 
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *StandardHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(standardhistory.FieldSystemOwned))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *StandardHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldName))
@@ -17044,11 +17049,6 @@ func (f *StandardHistoryFilter) WhereIsPublic(p entql.BoolP) {
 // WhereFreeToUse applies the entql bool predicate on the free_to_use field.
 func (f *StandardHistoryFilter) WhereFreeToUse(p entql.BoolP) {
 	f.Where(p.Field(standardhistory.FieldFreeToUse))
-}
-
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *StandardHistoryFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(standardhistory.FieldSystemOwned))
 }
 
 // WhereStandardType applies the entql string predicate on the standard_type field.

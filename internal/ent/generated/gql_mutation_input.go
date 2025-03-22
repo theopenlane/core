@@ -2878,14 +2878,9 @@ type CreateGroupInput struct {
 	Tags                            []string
 	Name                            string
 	Description                     *string
-	GravatarLogoURL                 *string
 	LogoURL                         *string
 	DisplayName                     *string
 	OwnerID                         *string
-	ProcedureEditorIDs              []string
-	ProcedureBlockedGroupIDs        []string
-	InternalPolicyEditorIDs         []string
-	InternalPolicyBlockedGroupIDs   []string
 	ProgramEditorIDs                []string
 	ProgramBlockedGroupIDs          []string
 	ProgramViewerIDs                []string
@@ -2901,6 +2896,10 @@ type CreateGroupInput struct {
 	NarrativeEditorIDs              []string
 	NarrativeBlockedGroupIDs        []string
 	NarrativeViewerIDs              []string
+	ProcedureEditorIDs              []string
+	ProcedureBlockedGroupIDs        []string
+	InternalPolicyEditorIDs         []string
+	InternalPolicyBlockedGroupIDs   []string
 	SettingID                       *string
 	EventIDs                        []string
 	IntegrationIDs                  []string
@@ -2917,9 +2916,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.GravatarLogoURL; v != nil {
-		m.SetGravatarLogoURL(*v)
-	}
 	if v := i.LogoURL; v != nil {
 		m.SetLogoURL(*v)
 	}
@@ -2928,18 +2924,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.ProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.InternalPolicyEditorIDs; len(v) > 0 {
-		m.AddInternalPolicyEditorIDs(v...)
-	}
-	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalPolicyBlockedGroupIDs(v...)
 	}
 	if v := i.ProgramEditorIDs; len(v) > 0 {
 		m.AddProgramEditorIDs(v...)
@@ -2986,6 +2970,18 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.NarrativeViewerIDs; len(v) > 0 {
 		m.AddNarrativeViewerIDs(v...)
 	}
+	if v := i.ProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.InternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
+	}
+	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
+	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
@@ -3017,25 +3013,11 @@ type UpdateGroupInput struct {
 	Name                                  *string
 	ClearDescription                      bool
 	Description                           *string
-	ClearGravatarLogoURL                  bool
-	GravatarLogoURL                       *string
 	ClearLogoURL                          bool
 	LogoURL                               *string
 	DisplayName                           *string
 	ClearOwner                            bool
 	OwnerID                               *string
-	ClearProcedureEditors                 bool
-	AddProcedureEditorIDs                 []string
-	RemoveProcedureEditorIDs              []string
-	ClearProcedureBlockedGroups           bool
-	AddProcedureBlockedGroupIDs           []string
-	RemoveProcedureBlockedGroupIDs        []string
-	ClearInternalPolicyEditors            bool
-	AddInternalPolicyEditorIDs            []string
-	RemoveInternalPolicyEditorIDs         []string
-	ClearInternalPolicyBlockedGroups      bool
-	AddInternalPolicyBlockedGroupIDs      []string
-	RemoveInternalPolicyBlockedGroupIDs   []string
 	ClearProgramEditors                   bool
 	AddProgramEditorIDs                   []string
 	RemoveProgramEditorIDs                []string
@@ -3081,6 +3063,18 @@ type UpdateGroupInput struct {
 	ClearNarrativeViewers                 bool
 	AddNarrativeViewerIDs                 []string
 	RemoveNarrativeViewerIDs              []string
+	ClearProcedureEditors                 bool
+	AddProcedureEditorIDs                 []string
+	RemoveProcedureEditorIDs              []string
+	ClearProcedureBlockedGroups           bool
+	AddProcedureBlockedGroupIDs           []string
+	RemoveProcedureBlockedGroupIDs        []string
+	ClearInternalPolicyEditors            bool
+	AddInternalPolicyEditorIDs            []string
+	RemoveInternalPolicyEditorIDs         []string
+	ClearInternalPolicyBlockedGroups      bool
+	AddInternalPolicyBlockedGroupIDs      []string
+	RemoveInternalPolicyBlockedGroupIDs   []string
 	ClearSetting                          bool
 	SettingID                             *string
 	ClearEvents                           bool
@@ -3117,12 +3111,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearGravatarLogoURL {
-		m.ClearGravatarLogoURL()
-	}
-	if v := i.GravatarLogoURL; v != nil {
-		m.SetGravatarLogoURL(*v)
-	}
 	if i.ClearLogoURL {
 		m.ClearLogoURL()
 	}
@@ -3137,42 +3125,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearProcedureEditors {
-		m.ClearProcedureEditors()
-	}
-	if v := i.AddProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
-		m.RemoveProcedureEditorIDs(v...)
-	}
-	if i.ClearProcedureBlockedGroups {
-		m.ClearProcedureBlockedGroups()
-	}
-	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
-		m.RemoveProcedureBlockedGroupIDs(v...)
-	}
-	if i.ClearInternalPolicyEditors {
-		m.ClearInternalPolicyEditors()
-	}
-	if v := i.AddInternalPolicyEditorIDs; len(v) > 0 {
-		m.AddInternalPolicyEditorIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyEditorIDs; len(v) > 0 {
-		m.RemoveInternalPolicyEditorIDs(v...)
-	}
-	if i.ClearInternalPolicyBlockedGroups {
-		m.ClearInternalPolicyBlockedGroups()
-	}
-	if v := i.AddInternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalPolicyBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
-		m.RemoveInternalPolicyBlockedGroupIDs(v...)
 	}
 	if i.ClearProgramEditors {
 		m.ClearProgramEditors()
@@ -3308,6 +3260,42 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
 		m.RemoveNarrativeViewerIDs(v...)
+	}
+	if i.ClearProcedureEditors {
+		m.ClearProcedureEditors()
+	}
+	if v := i.AddProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
+		m.RemoveProcedureEditorIDs(v...)
+	}
+	if i.ClearProcedureBlockedGroups {
+		m.ClearProcedureBlockedGroups()
+	}
+	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
+		m.RemoveProcedureBlockedGroupIDs(v...)
+	}
+	if i.ClearInternalPolicyEditors {
+		m.ClearInternalPolicyEditors()
+	}
+	if v := i.AddInternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyEditorIDs; len(v) > 0 {
+		m.RemoveInternalPolicyEditorIDs(v...)
+	}
+	if i.ClearInternalPolicyBlockedGroups {
+		m.ClearInternalPolicyBlockedGroups()
+	}
+	if v := i.AddInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.RemoveInternalPolicyBlockedGroupIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -5516,7 +5504,6 @@ type CreatePersonalAccessTokenInput struct {
 	Scopes          []string
 	LastUsedAt      *time.Time
 	IsActive        *bool
-	OwnerID         string
 	OrganizationIDs []string
 	EventIDs        []string
 }
@@ -5542,7 +5529,6 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	if v := i.IsActive; v != nil {
 		m.SetIsActive(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -6698,7 +6684,6 @@ type CreateStandardInput struct {
 	Status               *enums.StandardStatus
 	IsPublic             *bool
 	FreeToUse            *bool
-	SystemOwned          *bool
 	StandardType         *string
 	Version              *string
 	OwnerID              *string
@@ -6743,9 +6728,6 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.FreeToUse; v != nil {
 		m.SetFreeToUse(*v)
-	}
-	if v := i.SystemOwned; v != nil {
-		m.SetSystemOwned(*v)
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
@@ -6796,8 +6778,6 @@ type UpdateStandardInput struct {
 	IsPublic                  *bool
 	ClearFreeToUse            bool
 	FreeToUse                 *bool
-	ClearSystemOwned          bool
-	SystemOwned               *bool
 	ClearStandardType         bool
 	StandardType              *string
 	ClearVersion              bool
@@ -6891,12 +6871,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.FreeToUse; v != nil {
 		m.SetFreeToUse(*v)
-	}
-	if i.ClearSystemOwned {
-		m.ClearSystemOwned()
-	}
-	if v := i.SystemOwned; v != nil {
-		m.SetSystemOwned(*v)
 	}
 	if i.ClearStandardType {
 		m.ClearStandardType()
@@ -7468,16 +7442,12 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 // CreateTFASettingInput represents a mutation input for creating tfasettings.
 type CreateTFASettingInput struct {
 	TotpAllowed *bool
-	OwnerID     *string
 }
 
 // Mutate applies the CreateTFASettingInput on the TFASettingMutation builder.
 func (i *CreateTFASettingInput) Mutate(m *TFASettingMutation) {
 	if v := i.TotpAllowed; v != nil {
 		m.SetTotpAllowed(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 }
 

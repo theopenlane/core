@@ -24,25 +24,69 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
 
+// UserOwnedMixin defines a mixin for user-owned entities.
 type UserOwnedMixin struct {
 	mixin.Schema
 	// Ref table for the id
 	Ref string
 	// Optional makes the owner id field not required
 	Optional bool
-	// AllowUpdate allows the owner id field to be updated
-	AllowUpdate bool
-	// SkipOASGeneration skips open api spec generation for the field
-	SkipOASGeneration bool
 	// SoftDeleteIndex creates a unique index on the owner id field where deleted_at is null
 	SoftDeleteIndex bool
-	// AllowWhere includes the owner_id field in gql generated fields
-	AllowWhere bool
 	// SkipInterceptor skips the interceptor for that schema for all queries, or specific types,
 	// this is useful for tokens, etc
 	SkipInterceptor interceptors.SkipMode
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
+}
+
+// userOwnedOption is a functional option for the UserOwnedMixin
+type userOwnedOption func(*UserOwnedMixin)
+
+// newUserOwnedMixin creates a new UserOwnedMixin using the plural name of the schema
+// and defined options provided
+func newUserOwnedMixin(schema any, opts ...userOwnedOption) UserOwnedMixin {
+	sch := toSchemaFuncs(schema)
+
+	// defaults settings
+	u := UserOwnedMixin{
+		Ref: sch.PluralName(),
+	}
+
+	// apply options
+	for _, opt := range opts {
+		opt(&u)
+	}
+
+	return u
+}
+
+// withSkipInterceptor allows to set the skip mode for the interceptor
+func withSkipInterceptor(skip interceptors.SkipMode) userOwnedOption {
+	return func(u *UserOwnedMixin) {
+		u.SkipInterceptor = skip
+	}
+}
+
+// withSkipTokenTypesObjects allows to set custom token types to skip the traverser or hook
+func withSkipTokenTypesUsers(tokens ...token.PrivacyToken) userOwnedOption {
+	return func(u *UserOwnedMixin) {
+		u.SkipTokenType = tokens
+	}
+}
+
+// withOptionalUser makes the owner id field optional
+func withOptionalUser() userOwnedOption {
+	return func(u *UserOwnedMixin) {
+		u.Optional = true
+	}
+}
+
+// withSoftDeleteIndex creates a unique index on the owner id field where deleted_at is null
+func withSoftDeleteIndex() userOwnedOption {
+	return func(u *UserOwnedMixin) {
+		u.SoftDeleteIndex = true
+	}
 }
 
 // Fields of the UserOwnedMixin
@@ -72,16 +116,13 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 		From("owner", User.Type).
 		Field(ownerFieldName).
 		Ref(userOwned.Ref).
+		Annotations(
+			entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+		).
 		Unique()
 
 	if !userOwned.Optional {
 		ownerEdge.Required()
-	}
-
-	if !userOwned.AllowUpdate {
-		ownerEdge.Annotations(
-			entgql.Skip(entgql.SkipMutationUpdateInput),
-		)
 	}
 
 	return []ent.Edge{
@@ -148,6 +189,7 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the UserOwnedMixin
 func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 	if userOwned.Optional {
 		// do not add interceptors if the field is optional

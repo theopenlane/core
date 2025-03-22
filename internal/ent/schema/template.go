@@ -4,14 +4,11 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -70,10 +67,10 @@ func (Template) Fields() []ent.Field {
 }
 
 // Mixin of the Template
-func (Template) Mixin() []ent.Mixin {
+func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef("templates"),
+			newOrgOwnedMixin(t),
 		},
 	}.getMixins()
 }
@@ -99,13 +96,6 @@ func (Template) Indexes() []ent.Index {
 	}
 }
 
-// Annotations of the Template
-func (Template) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
-	}
-}
-
 // Policy of the Template
 func (Template) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -114,7 +104,6 @@ func (Template) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			entfga.CheckEditAccess[*generated.TemplateMutation](),
-		),
+			policy.CheckOrgWriteAccess()),
 	)
 }

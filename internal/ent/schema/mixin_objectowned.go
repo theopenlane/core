@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
+	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -29,7 +30,8 @@ type ObjectOwnedMixin struct {
 	mixin.Schema
 	// Ref table for the id
 	Ref string
-	// Kind of the object
+	// Kind of the object, only used for Organization owned flavors, its set by default either
+	// with the OrgOwnedMixin or using the withOrganizationOwner option
 	Kind any
 	// FieldNames are the name of the field in the schema that can own / controls permissions of the object, e.g. "owner_id" or "program_id"
 	FieldNames []string
@@ -37,19 +39,15 @@ type ObjectOwnedMixin struct {
 	OwnerRelation string
 	// SkipUserTuple skips the user tuple creation for the object owned mixin
 	SkipUserTuple bool
-	// Required makes the owner id field required as input
-	Required bool
 	// AllowEmptyForSystemAdmin allows the owner id field to be empty for system admins
 	AllowEmptyForSystemAdmin bool
-	// SkipOASGeneration skips open api spec generation for the field
-	SkipOASGeneration bool
 	// SkipInterceptor skips the interceptor for that schema for all queries, or specific types,
 	// this is useful for tokens, etc
 	SkipInterceptor interceptors.SkipMode
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
-	// WithOrganizationOwner adds the organization owner_id field and hooks to the schema
-	WithOrganizationOwner bool
+	// IncludeOrganizationOwner adds the organization owner_id field and hooks to the schema
+	IncludeOrganizationOwner bool
 	// HookFuncs is the hook functions for the object owned mixin
 	// that will be called on all mutations
 	HookFuncs []HookFunc
@@ -62,32 +60,120 @@ type HookFunc func(o ObjectOwnedMixin) ent.Hook
 
 type InterceptorFunc func(o ObjectOwnedMixin) ent.Interceptor
 
-// NewObjectOwnMixinWithRef creates a new ObjectOwnedMixin with the given ref
-// and sets the defaults
-func NewObjectOwnMixinWithRef(ref string) ObjectOwnedMixin {
-	return NewObjectOwnedMixin(
-		ObjectOwnedMixin{
-			Ref: ref,
-		})
-}
+// newOrgOwnedMixin creates a new OrgOwnedMixin using the plural name of the schema
+// and all defaults. The schema must implement the SchemaFuncs interface to be used.
+// options can be passed to customize the mixin
+func newObjectOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
+	sch := toSchemaFuncs(schema)
 
-// NewObjectOwnedMixin creates a new ObjectOwnedMixin with the given ObjectOwnedMixin
-// and sets the HookFunc to defaultOrgHookFunc
-func NewObjectOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
-	if o.HookFuncs == nil {
-		o.HookFuncs = []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc}
+	// defaults settings
+	o := ObjectOwnedMixin{
+		Ref:              sch.PluralName(),
+		HookFuncs:        []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
+		InterceptorFuncs: []InterceptorFunc{defaultObjectInterceptorFunc},
+		OwnerRelation:    fgax.ParentRelation,
 	}
 
-	if o.InterceptorFuncs == nil {
-		o.InterceptorFuncs = []InterceptorFunc{defaultObjectInterceptorFunc}
+	// apply options
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	if o.WithOrganizationOwner {
-		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
-		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+	if (!o.IncludeOrganizationOwner) && o.AllowEmptyForSystemAdmin {
+		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if WithOrganizationOwner is false")
 	}
 
 	return o
+}
+
+// withRef allows to set custom ref for the object, by default its set to the plural name of the schema
+func withRef(ref string) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.Ref = ref
+	}
+}
+
+// withSkipTokenTypesObjects allows to set custom token types to skip the traverser or hook
+func withSkipTokenTypesObjects(tokens ...token.PrivacyToken) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.SkipTokenType = tokens
+	}
+}
+
+// withHookFuncs allows to set custom hook functions
+func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		if hookFuncs == nil {
+			o.HookFuncs = []HookFunc{}
+
+			return
+		}
+
+		o.HookFuncs = hookFuncs
+	}
+}
+
+// withInterceptorFuncs allows to set custom interceptor functions
+func withInterceptorFuncs(interceptorFuncs ...InterceptorFunc) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.InterceptorFuncs = interceptorFuncs
+	}
+}
+
+// withSkipForSystemAdmin allows the owner id field to be empty for system admins
+func withSkipForSystemAdmin(allow bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.AllowEmptyForSystemAdmin = allow
+	}
+}
+
+// withOwnerRelation allows to set custom owner relation for the object, the default is "parent"
+func withOwnerRelation(relation string) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.OwnerRelation = relation
+	}
+}
+
+// withParents allows to set custom parents for the object and it will automatically
+// set the field name to be <parent>_id
+func withParents(schemas ...any) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		for _, schema := range schemas {
+			sch := toSchemaFuncs(schema)
+
+			o.FieldNames = append(o.FieldNames, fmt.Sprintf("%s_id", sch.Name()))
+		}
+	}
+}
+
+// withFieldNames allows to set custom field names for the objects parents
+// withParents should generally be used instead as it will automatically set the field name to be <parent>_id
+func withFieldNames(fieldNames ...string) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.FieldNames = append(o.FieldNames, fieldNames...)
+	}
+}
+
+// withOrganizationOwner adds the organization owner_id field and hooks to the schema
+// and optionally allows system admins to have empty owner_id
+func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.IncludeOrganizationOwner = true
+
+		if skipSystemAdmin {
+			o.AllowEmptyForSystemAdmin = skipSystemAdmin
+		}
+
+		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+	}
+}
+
+// withSkipUserTuple allows to skip the user tuple creation for the object owned mixin
+func withSkipUserTuple(skip bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.SkipUserTuple = skip
+	}
 }
 
 // Fields of the ObjectOwnedMixin
@@ -95,7 +181,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	var fields []ent.Field
 
 	// add the organization owner field if the flag is set
-	if o.WithOrganizationOwner {
+	if o.IncludeOrganizationOwner {
 		fields = append(fields,
 			field.String(ownerFieldName).
 				Comment("the ID of the organization owner of the object").
@@ -105,6 +191,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	}
 
 	// if the field name is not defined, skip adding fields
+	// this only happens for the org owned objects
 	if len(o.FieldNames) == 0 || o.Kind == nil {
 		return fields
 	}
@@ -113,15 +200,12 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 		objectType := o.Kind
 		objectIDField := field.
 			String(fieldName).
+			Optional().
 			Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
 
-		if !o.Required {
-			objectIDField.Optional()
-
-			// if explicitly set to allow empty values, otherwise ensure it is not empty
-			if !o.AllowEmptyForSystemAdmin {
-				objectIDField.NotEmpty()
-			}
+		// if explicitly set to allow empty values, otherwise ensure it is not empty
+		if !o.AllowEmptyForSystemAdmin {
+			objectIDField.NotEmpty()
 		}
 
 		fields = append(fields, objectIDField)
@@ -134,13 +218,8 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 func (o ObjectOwnedMixin) Edges() []ent.Edge {
 	var edges []ent.Edge
 
-	// if there is no ref, don't add any edges
-	if o.Ref == "" {
-		return edges
-	}
-
 	// add the organization owner edge if the flag is set
-	if o.WithOrganizationOwner {
+	if o.IncludeOrganizationOwner {
 		edges = append(edges,
 			edge.From("owner", Organization.Type).
 				Field(ownerFieldName).
@@ -159,10 +238,6 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 			Field(fieldName).
 			Ref(o.Ref).
 			Unique()
-
-		if o.Required {
-			ownerEdge.Required()
-		}
 
 		edges = append(edges, ownerEdge)
 	}

@@ -1189,14 +1189,6 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
-			case "procedureEditors":
-				return ec.fieldContext_Group_procedureEditors(ctx, field)
-			case "procedureBlockedGroups":
-				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
-			case "internalPolicyEditors":
-				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
-			case "internalPolicyBlockedGroups":
-				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "programEditors":
 				return ec.fieldContext_Group_programEditors(ctx, field)
 			case "programBlockedGroups":
@@ -1227,6 +1219,14 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_narrativeBlockedGroups(ctx, field)
 			case "narrativeViewers":
 				return ec.fieldContext_Group_narrativeViewers(ctx, field)
+			case "procedureEditors":
+				return ec.fieldContext_Group_procedureEditors(ctx, field)
+			case "procedureBlockedGroups":
+				return ec.fieldContext_Group_procedureBlockedGroups(ctx, field)
+			case "internalPolicyEditors":
+				return ec.fieldContext_Group_internalPolicyEditors(ctx, field)
+			case "internalPolicyBlockedGroups":
+				return ec.fieldContext_Group_internalPolicyBlockedGroups(ctx, field)
 			case "setting":
 				return ec.fieldContext_Group_setting(ctx, field)
 			case "users":
@@ -2515,6 +2515,8 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Standard_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
 			case "shortName":
@@ -2537,8 +2539,6 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_isPublic(ctx, field)
 			case "freeToUse":
 				return ec.fieldContext_Standard_freeToUse(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Standard_systemOwned(ctx, field)
 			case "standardType":
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":

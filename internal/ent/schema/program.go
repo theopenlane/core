@@ -87,14 +87,14 @@ func (Program) Fields() []ent.Field {
 }
 
 // Mixin of the Program
-func (Program) Mixin() []ent.Mixin {
+func (p Program) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "PRG",
 		additionalMixins: []ent.Mixin{
 			// all programs must be associated to an organization
-			NewOrgOwnMixinWithRef("programs"),
+			newOrgOwnedMixin(p),
 			// add group permissions to the program
-			NewGroupPermissionsMixin(true),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
 }

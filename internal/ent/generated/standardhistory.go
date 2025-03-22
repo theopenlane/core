@@ -44,6 +44,8 @@ type StandardHistory struct {
 	Revision string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name,omitempty"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -62,12 +64,10 @@ type StandardHistory struct {
 	Link string `json:"link,omitempty"`
 	// status of the standard - active, draft, and archived
 	Status enums.StandardStatus `json:"status,omitempty"`
-	// indicates if the standard should be made available to all users, only for public standards
+	// indicates if the standard should be made available to all users, only for system owned standards
 	IsPublic bool `json:"is_public,omitempty"`
-	// indicates if the standard is freely distributable under a trial license, only for public standards
+	// indicates if the standard is freely distributable under a trial license, only for system owned standards
 	FreeToUse bool `json:"free_to_use,omitempty"`
-	// indicates if the standard is owned by the the openlane system
-	SystemOwned bool `json:"system_owned,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
@@ -84,7 +84,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standardhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse, standardhistory.FieldSystemOwned:
+		case standardhistory.FieldSystemOwned, standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
 		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion:
 			values[i] = new(sql.NullString)
@@ -185,6 +185,12 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.OwnerID = value.String
 			}
+		case standardhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				sh.SystemOwned = value.Bool
+			}
 		case standardhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -252,12 +258,6 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field free_to_use", values[i])
 			} else if value.Valid {
 				sh.FreeToUse = value.Bool
-			}
-		case standardhistory.FieldSystemOwned:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
-			} else if value.Valid {
-				sh.SystemOwned = value.Bool
 			}
 		case standardhistory.FieldStandardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -343,6 +343,9 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(sh.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", sh.SystemOwned))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(sh.Name)
 	builder.WriteString(", ")
@@ -375,9 +378,6 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("free_to_use=")
 	builder.WriteString(fmt.Sprintf("%v", sh.FreeToUse))
-	builder.WriteString(", ")
-	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", sh.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
 	builder.WriteString(sh.StandardType)

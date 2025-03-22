@@ -75,11 +75,9 @@ func (p PasswordResetToken) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
-		UserOwnedMixin{
-			Ref:               p.PluralName(),
-			SkipOASGeneration: true,
-			SkipInterceptor:   interceptors.SkipAll,
-		},
+		newUserOwnedMixin(p,
+			withSkipInterceptor(interceptors.SkipAll),
+		),
 	}
 }
 

@@ -5,15 +5,12 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -104,7 +101,7 @@ func (Contact) Fields() []ent.Field {
 func (c Contact) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef(c.PluralName()),
+			newOrgOwnedMixin(c),
 		},
 	}.getMixins()
 }
@@ -114,13 +111,6 @@ func (c Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(c, Entity{}),
 		defaultEdgeToWithPagination(c, File{}),
-	}
-}
-
-// Annotations of the Contact
-func (Contact) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -138,7 +128,7 @@ func (Contact) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			entfga.CheckEditAccess[*generated.ContactMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

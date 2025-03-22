@@ -27,27 +27,28 @@ const (
 	ownerFieldName = "owner_id"
 )
 
-// NewOrgOwnMixinWithRef creates a new OrgOwnedMixin with the given ref
-// and sets the defaults
-func NewOrgOwnMixinWithRef(ref string) ObjectOwnedMixin {
-	return NewOrgOwnedMixin(
-		ObjectOwnedMixin{
-			Ref: ref,
-		})
-}
+type objectOwnedOption func(*ObjectOwnedMixin)
 
-// NewOrgOwnedMixin creates a new OrgOwnedMixin with the given ObjectOwnedMixin
-// and sets the Kind to ownerFieldName and the HookFunc to defaultOrgHookFunc
-func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
-	o.FieldNames = []string{ownerFieldName}
-	o.Kind = Organization.Type
+// newOrgOwnedMixin creates a new OrgOwnedMixin using the plural name of the schema
+// and all defaults. The schema must implement the SchemaFuncs interface to be used.
+// options can be passed to customize the mixin
+func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
+	sch := toSchemaFuncs(schema)
 
-	if o.HookFuncs == nil {
-		o.HookFuncs = []HookFunc{defaultOrgHookFunc}
+	// defaults settings
+	o := ObjectOwnedMixin{
+		// owner_id field
+		FieldNames: []string{ownerFieldName},
+		Kind:       Organization.Type,
+		// plural name of the schema because the organization will usually have many of these objects
+		Ref:              sch.PluralName(),
+		HookFuncs:        []HookFunc{defaultOrgHookFunc},
+		InterceptorFuncs: []InterceptorFunc{defaultOrgInterceptorFunc},
 	}
 
-	if o.InterceptorFuncs == nil {
-		o.InterceptorFuncs = []InterceptorFunc{defaultOrgInterceptorFunc}
+	// apply options
+	for _, opt := range opts {
+		opt(&o)
 	}
 
 	return o

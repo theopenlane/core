@@ -79,13 +79,12 @@ func (n Narrative) Mixin() []ent.Mixin {
 			// narratives inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the narrative when a program is associated to the narrative
-			NewObjectOwnedMixin(ObjectOwnedMixin{
-				FieldNames:            []string{"program_id"},
-				WithOrganizationOwner: true,
-				Ref:                   n.PluralName(),
-			}),
+			newObjectOwnedMixin(n,
+				withParents(Program{}),
+				withOrganizationOwner(false),
+			),
 			// add groups permissions with viewer, editor, and blocked groups
-			NewGroupPermissionsMixin(true),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
 }

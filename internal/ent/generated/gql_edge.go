@@ -1491,54 +1491,6 @@ func (gr *Group) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (gr *Group) ProcedureEditors(ctx context.Context) (result []*Procedure, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedProcedureEditors(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.ProcedureEditorsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryProcedureEditors().All(ctx)
-	}
-	return result, err
-}
-
-func (gr *Group) ProcedureBlockedGroups(ctx context.Context) (result []*Procedure, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedProcedureBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.ProcedureBlockedGroupsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryProcedureBlockedGroups().All(ctx)
-	}
-	return result, err
-}
-
-func (gr *Group) InternalPolicyEditors(ctx context.Context) (result []*InternalPolicy, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedInternalPolicyEditors(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.InternalPolicyEditorsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryInternalPolicyEditors().All(ctx)
-	}
-	return result, err
-}
-
-func (gr *Group) InternalPolicyBlockedGroups(ctx context.Context) (result []*InternalPolicy, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedInternalPolicyBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.InternalPolicyBlockedGroupsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryInternalPolicyBlockedGroups().All(ctx)
-	}
-	return result, err
-}
-
 func (gr *Group) ProgramEditors(ctx context.Context) (result []*Program, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = gr.NamedProgramEditors(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1715,6 +1667,54 @@ func (gr *Group) NarrativeViewers(ctx context.Context) (result []*Narrative, err
 	}
 	if IsNotLoaded(err) {
 		result, err = gr.QueryNarrativeViewers().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) ProcedureEditors(ctx context.Context) (result []*Procedure, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedProcedureEditors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.ProcedureEditorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryProcedureEditors().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) ProcedureBlockedGroups(ctx context.Context) (result []*Procedure, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedProcedureBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.ProcedureBlockedGroupsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryProcedureBlockedGroups().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) InternalPolicyEditors(ctx context.Context) (result []*InternalPolicy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedInternalPolicyEditors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.InternalPolicyEditorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryInternalPolicyEditors().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) InternalPolicyBlockedGroups(ctx context.Context) (result []*InternalPolicy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedInternalPolicyBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.InternalPolicyBlockedGroupsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryInternalPolicyBlockedGroups().All(ctx)
 	}
 	return result, err
 }

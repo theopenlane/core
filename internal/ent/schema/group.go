@@ -74,12 +74,14 @@ func (Group) Fields() []ent.Field {
 		field.String("gravatar_logo_url").
 			Comment("the URL to an auto generated gravatar image for the group").
 			Optional().
+			Validate(validator.ValidateURL()).
 			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
+				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			),
 		field.String("logo_url").
 			Comment("the URL to an image uploaded by the customer for the groups avatar image").
 			Optional().
+			Validate(validator.ValidateURL()).
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
@@ -120,51 +122,16 @@ func (g Group) Edges() []ent.Edge {
 }
 
 // Mixin of the Group
-func (Group) Mixin() []ent.Mixin {
+func (g Group) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "GRP",
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef("groups"),
+			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
-			GroupPermissionsEdgesMixin{
-				EdgeInfo: []EdgeInfo{
-					{
-						Name:            Procedure{}.Name(),
-						Type:            Procedure.Type,
-						ViewPermissions: false,
-					},
-					{
-						Name:            InternalPolicy{}.Name(),
-						Type:            InternalPolicy.Type,
-						ViewPermissions: false,
-					},
-					{
-						Name:            Program{}.Name(),
-						Type:            Program.Type,
-						ViewPermissions: true,
-					},
-					{
-						Name:            Risk{}.Name(),
-						Type:            Risk.Type,
-						ViewPermissions: true,
-					},
-					{
-						Name:            ControlObjective{}.Name(),
-						Type:            ControlObjective.Type,
-						ViewPermissions: true,
-					},
-					{
-						Name:            Control{}.Name(),
-						Type:            Control.Type,
-						ViewPermissions: true,
-					},
-					{
-						Name:            Narrative{}.Name(),
-						Type:            Narrative.Type,
-						ViewPermissions: true,
-					},
-				},
-			},
+			newGroupPermissionsEdgesMixin(
+				withEdges(Program{}, Risk{}, ControlObjective{}, Control{}, Narrative{}),
+				withEdgesNoView(Procedure{}, InternalPolicy{}),
+			),
 		},
 	}.getMixins()
 }

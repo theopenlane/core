@@ -54,16 +54,16 @@ func (p Procedure) Edges() []ent.Edge {
 }
 
 // Mixin of the Procedure
-func (Procedure) Mixin() []ent.Mixin {
+func (p Procedure) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix:          "PRD",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef("procedures"),
+			newOrgOwnedMixin(p),
 			// add group edit permissions to the procedure
-			NewGroupPermissionsMixin(false),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 			// all procedures are documents
-			DocumentMixin{DocumentType: "procedure"},
+			NewDocumentMixin(p),
 		},
 	}.getMixins()
 }

@@ -107,13 +107,10 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnedMixin(ObjectOwnedMixin{
-				Ref: o.PluralName(),
-				SkipTokenType: []token.PrivacyToken{
-					&token.SignUpToken{},
-				},
-				HookFuncs: []HookFunc{}, // empty to skip the default hooks
-			}),
+			newOrgOwnedMixin(o,
+				withSkipTokenTypesObjects(&token.SignUpToken{}),
+				withHookFuncs(), // empty to skip the default hooks
+			),
 		},
 	}.getMixins()
 }

@@ -5,14 +5,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -61,10 +58,10 @@ func (EntityType) Fields() []ent.Field {
 }
 
 // Mixin of the EntityType
-func (EntityType) Mixin() []ent.Mixin {
+func (e EntityType) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			NewOrgOwnMixinWithRef("entity_types"),
+			newOrgOwnedMixin(e),
 		},
 	}.getMixins()
 }
@@ -85,13 +82,6 @@ func (EntityType) Indexes() []ent.Index {
 	}
 }
 
-// Annotations of the EntityType
-func (EntityType) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.OrganizationInheritedChecks(),
-	}
-}
-
 // Policy of the EntityType
 func (EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -99,7 +89,7 @@ func (EntityType) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			entfga.CheckEditAccess[*generated.EntityTypeMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

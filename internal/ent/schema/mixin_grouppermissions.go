@@ -34,15 +34,71 @@ type GroupPermissionsEdgesMixin struct {
 
 // EdgeInfo is used to define the edge information for the reverse edges (group schema)
 type EdgeInfo struct {
-	Name            string
+	Schema          any
 	ViewPermissions bool
-	Type            any
 }
 
-// NewGroupPermissionsMixin creates a new GroupPermissionsMixin with optional viewer permissions
-func NewGroupPermissionsMixin(viewPermissions bool) GroupPermissionsMixin {
-	return GroupPermissionsMixin{
-		ViewPermissions: viewPermissions,
+// NewGroupPermissionsEdgesMixin creates a new GroupPermissionsEdgesMixin with options applied
+func newGroupPermissionsEdgesMixin(opts ...groupEdgesOptions) GroupPermissionsEdgesMixin {
+	g := GroupPermissionsEdgesMixin{
+		EdgeInfo: []EdgeInfo{},
+	}
+
+	for _, opt := range opts {
+		opt(&g)
+	}
+
+	return g
+}
+
+// groupEdgesOptions is a function that can be used to modify the GroupPermissionsEdgesMixin
+type groupEdgesOptions func(*GroupPermissionsEdgesMixin)
+
+// withEdges sets the group edges to the schemas provided with view permissions enabled
+func withEdges(schemas ...any) groupEdgesOptions {
+	return func(g *GroupPermissionsEdgesMixin) {
+		for _, schema := range schemas {
+			g.EdgeInfo = append(g.EdgeInfo, EdgeInfo{
+				Schema:          schema,
+				ViewPermissions: true,
+			})
+		}
+	}
+}
+
+// withEdgesNoView sets the group edges to the schemas provided with view permissions not included
+func withEdgesNoView(schemas ...any) groupEdgesOptions {
+	return func(g *GroupPermissionsEdgesMixin) {
+		for _, schema := range schemas {
+			g.EdgeInfo = append(g.EdgeInfo, EdgeInfo{
+				Schema:          schema,
+				ViewPermissions: false,
+			})
+		}
+	}
+}
+
+// newGroupPermissionsMixin creates a new GroupPermissionsMixin with options applied
+// by default view permissions are enabled
+func newGroupPermissionsMixin(opts ...groupPermissionsOption) GroupPermissionsMixin {
+	g := GroupPermissionsMixin{
+		ViewPermissions: true,
+	}
+
+	for _, opt := range opts {
+		opt(&g)
+	}
+
+	return g
+}
+
+// groupPermissionsOption is a function that can be used to modify the GroupPermissionsMixin
+type groupPermissionsOption func(*GroupPermissionsMixin)
+
+// withSkipViewPermissions disables view permissions for the group setup
+func withSkipViewPermissions() groupPermissionsOption {
+	return func(g *GroupPermissionsMixin) {
+		g.ViewPermissions = false
 	}
 }
 
@@ -115,10 +171,11 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 	var edges []ent.Edge
 
 	for _, schema := range g.EdgeInfo {
+		sch := toSchemaFuncs(schema.Schema)
 		var defaultReverseEdges = []ent.Edge{
-			edge.From(fmt.Sprintf("%s_editors", schema.Name), schema.Type).
+			edge.From(fmt.Sprintf("%s_editors", sch.Name()), sch.GetType()).
 				Ref("editors"),
-			edge.From(fmt.Sprintf("%s_blocked_groups", schema.Name), schema.Type).
+			edge.From(fmt.Sprintf("%s_blocked_groups", sch.Name()), sch.GetType()).
 				Ref("blocked_groups"),
 		}
 
@@ -126,7 +183,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 
 		// add the view edge if the view permissions are enabled
 		if schema.ViewPermissions {
-			viewerEdge := edge.From(fmt.Sprintf("%s_viewers", schema.Name), schema.Type).
+			viewerEdge := edge.From(fmt.Sprintf("%s_viewers", sch.Name()), sch.GetType()).
 				Ref("viewers")
 
 			edges = append(edges, viewerEdge)

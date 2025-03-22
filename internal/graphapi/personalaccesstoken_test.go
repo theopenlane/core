@@ -154,7 +154,6 @@ func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
 		{
 			name: "setting other user id",
 			input: openlaneclient.CreatePersonalAccessTokenInput{
-				OwnerID:     testUser2.ID, // this should get ignored
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 			},
