@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 	"time"
+
+	"slices"
 
 	"github.com/fatih/color"
 	"github.com/rs/zerolog"
@@ -20,14 +21,15 @@ const (
 )
 
 var (
-	bold   = color.New(color.Bold).SprintFunc()
-	red    = color.New(color.FgRed).SprintFunc()
-	green  = color.New(color.FgGreen).SprintFunc()
-	yellow = color.New(color.FgYellow).SprintFunc()
-	faint  = color.New(color.Faint).SprintFunc()
-	blue   = color.New(color.FgCyan).SprintFunc()
+	bold    = color.New(color.Bold).SprintFunc()
+	red     = color.New(color.FgRed).SprintFunc()
+	green   = color.New(color.FgGreen).SprintFunc()
+	yellow  = color.New(color.FgYellow).SprintFunc()
+	faint   = color.New(color.Faint).SprintFunc()
+	blue    = color.New(color.FgCyan).SprintFunc()
+	magenta = color.New(color.FgMagenta).SprintFunc()
 
-	defaultFormatter  = func(i interface{}) string { return fmt.Sprintf("%s", i) }
+	defaultFormatter  = func(i any) string { return fmt.Sprintf("%v", i) }
 	defaultPartsOrder = []string{
 		zerolog.TimestampFieldName,
 		zerolog.LevelFieldName,
@@ -46,14 +48,18 @@ type ConsoleWriter struct {
 }
 
 // Formatter transforms the input into a string
-type Formatter func(interface{}) string
+type Formatter func(any) string
 
-type event map[string]interface{}
+type event map[string]any
 
 // NewConsoleWriter creates and initializes a new ConsoleWriter
 func NewConsoleWriter(options ...func(w *ConsoleWriter)) ConsoleWriter {
-	w := ConsoleWriter{Out: os.Stdout, TimeFormat: defaultTimeFormat, PartsOrder: defaultPartsOrder}
-	w.formatters = make(map[string]Formatter)
+	w := ConsoleWriter{
+		Out:        os.Stdout,
+		TimeFormat: defaultTimeFormat,
+		PartsOrder: defaultPartsOrder,
+		formatters: make(map[string]Formatter),
+	}
 
 	w.setDefaultFormatters()
 
@@ -65,7 +71,7 @@ func NewConsoleWriter(options ...func(w *ConsoleWriter)) ConsoleWriter {
 }
 
 // Formatter returns a formatter by id or the default formatter if none is found
-func (w ConsoleWriter) Formatter(id string) Formatter {
+func (w *ConsoleWriter) Formatter(id string) Formatter {
 	if f, ok := w.formatters[id]; ok {
 		return f
 	}
@@ -74,12 +80,12 @@ func (w ConsoleWriter) Formatter(id string) Formatter {
 }
 
 // SetFormatter registers a formatter function by id
-func (w ConsoleWriter) SetFormatter(id string, f Formatter) {
+func (w *ConsoleWriter) SetFormatter(id string, f Formatter) {
 	w.formatters[id] = f
 }
 
 // Write appends the output to Out.
-func (w ConsoleWriter) Write(p []byte) (n int, err error) {
+func (w *ConsoleWriter) Write(p []byte) (n int, err error) {
 	var buf bytes.Buffer
 
 	var evt event
@@ -107,7 +113,7 @@ func (w ConsoleWriter) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-func (w ConsoleWriter) writePart(buf *bytes.Buffer, evt event, p string) {
+func (w *ConsoleWriter) writePart(buf *bytes.Buffer, evt event, p string) {
 	var s = w.Formatter(p)(evt[p])
 	if len(s) > 0 {
 		buf.WriteString(s)
@@ -118,7 +124,7 @@ func (w ConsoleWriter) writePart(buf *bytes.Buffer, evt event, p string) {
 	}
 }
 
-func (w ConsoleWriter) writeFields(evt event, buf *bytes.Buffer) {
+func (w *ConsoleWriter) writeFields(evt event, buf *bytes.Buffer) {
 	var fields = make([]string, 0, len(evt))
 
 	for field := range evt {
@@ -136,23 +142,19 @@ func (w ConsoleWriter) writeFields(evt event, buf *bytes.Buffer) {
 		buf.WriteByte(' ')
 	}
 
-	// Move the "error" field to front
-	ei := sort.Search(len(fields), func(i int) bool { return fields[i] >= zerolog.ErrorFieldName })
-	if ei < len(fields) && fields[ei] == zerolog.ErrorFieldName {
-		fields[ei] = ""
+	fieldMap := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		fieldMap[field] = struct{}{}
+	}
+
+	if _, ok := fieldMap[zerolog.ErrorFieldName]; ok {
 		fields = append([]string{zerolog.ErrorFieldName}, fields...)
-
-		var xfields = make([]string, 0, len(fields))
-
-		for _, field := range fields {
-			if field == "" { // Skip empty fields
-				continue
+		for i := 1; i < len(fields); i++ {
+			if fields[i] == zerolog.ErrorFieldName {
+				fields = slices.Delete(fields, i, i+1)
+				break
 			}
-
-			xfields = append(xfields, field)
 		}
-
-		fields = xfields
 	}
 
 	for i, field := range fields {
@@ -180,7 +182,7 @@ func (w ConsoleWriter) writeFields(evt event, buf *bytes.Buffer) {
 func (w *ConsoleWriter) setDefaultFormatters() {
 	w.SetFormatter(
 		zerolog.TimestampFieldName,
-		func(i interface{}) string {
+		func(i any) string {
 			var t string
 
 			if tt, ok := i.(string); ok {
@@ -197,7 +199,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 	w.SetFormatter(
 		zerolog.LevelFieldName,
 
-		func(i interface{}) string {
+		func(i any) string {
 			var l string
 
 			if ll, ok := i.(string); ok {
@@ -218,42 +220,52 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 					l = bold("N/A")
 				}
 			} else {
-				l = strings.ToUpper(fmt.Sprintf("%s", i))[0:3]
+				l = strings.ToUpper(fmt.Sprintf("%v", i))[0:3]
 			}
 
 			return l
 		})
 	w.SetFormatter(
 		zerolog.CallerFieldName,
-		func(i interface{}) string {
+		func(i any) string {
 			var c string
+
 			if cc, ok := i.(string); ok {
 				c = cc
 			}
 
 			if len(c) > 0 {
-				c = filepath.Base(filepath.Base(fmt.Sprintf("%s", i)))
+				cwd, err := os.Getwd()
+				if err == nil {
+					c = strings.TrimPrefix(c, cwd)
+					c = strings.TrimPrefix(c, "/")
+				}
+				c = faint(magenta(c)) + faint(" >")
 			}
 
-			return faint(c)
+			return c
 		})
+	// message
 	w.SetFormatter(
 		zerolog.MessageFieldName,
-		func(i interface{}) string { return fmt.Sprintf("%s", i) })
+		func(i any) string { return fmt.Sprintf("%s", i) })
+	// field name
 	w.SetFormatter(
-		"field_name", func(i interface{}) string {
+		"field_name", func(i any) string {
 			return blue(fmt.Sprintf("%s=", i))
 		})
+	// field value
 	w.SetFormatter(
-		"field_value", func(i interface{}) string {
+		"field_value", func(i any) string {
 			return fmt.Sprintf("%s", i)
 		})
+	// errors
 	w.SetFormatter(
-		"error_field_name", func(i interface{}) string {
+		"error_field_name", func(i any) string {
 			return faint(red(fmt.Sprintf("%s=", i)))
 		})
 	w.SetFormatter(
-		"error_field_value", func(i interface{}) string {
+		"error_field_value", func(i any) string {
 			return bold(red(fmt.Sprintf("%s", i)))
 		})
 }

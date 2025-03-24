@@ -1,8 +1,8 @@
 # Console writer for Zerolog
 
-This is a wrapper around zerolog's console writer to provide better readability when printing logs to the console. The package doesn't come with many colorize options or field formatting but it does provide interfaces to modify them, which is what this package does.
+This is a wrapper around zerolog's console writer to provide better readability when printing logs to the console. The zerolog package doesn't come with many colorize options or field formatting but it does provide interfaces to modify them, which is what this package does for you.
 
-At some point in any application there's going to be various preferences and needs in terms of log output and debugging, so the hope is that this package allows for easier extension of the underlying logger.
+## Usage
 
 You can consume it similar to below:
 

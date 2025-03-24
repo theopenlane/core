@@ -23,5 +23,5 @@ func SetupLogging() {
 		Caller().Logger()
 
 	// pretty logging
-	log.Logger = log.Output(output)
+	log.Logger = log.Output(&output)
 }

@@ -77,6 +77,6 @@ func setupLogging() {
 
 	// pretty logging for development
 	if k.Bool("pretty") {
-		log.Logger = log.Output(output)
+		log.Logger = log.Output(&output)
 	}
 }

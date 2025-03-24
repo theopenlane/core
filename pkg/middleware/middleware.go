@@ -1,7 +1,11 @@
 // Package middleware provides middleware for http Handlers.
 package middleware
 
-import "net/http"
+import (
+	"net/http"
+
+	echo "github.com/theopenlane/echox"
+)
 
 // A Chain is a middleware chain use for http request processing.
 type Chain struct {
@@ -40,5 +44,27 @@ func Conditional(middleware MiddlewareFunc, condition func(r *http.Request) bool
 
 			handler.ServeHTTP(w, r)
 		})
+	}
+}
+
+// Conditional applies the middleware if the condition is true
+func EchoConditional(condition bool, middleware echo.MiddlewareFunc) echo.MiddlewareFunc {
+	if condition {
+		return middleware
+	}
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			return next(c)
+		}
+	}
+}
+
+// Chain chains multiple middleware functions together
+func EchoChain(middlewares ...echo.MiddlewareFunc) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		for i := len(middlewares) - 1; i >= 0; i-- {
+			next = middlewares[i](next)
+		}
+		return next
 	}
 }
