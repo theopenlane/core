@@ -206,6 +206,20 @@ func (sc *SubscriberCreate) SetSecret(b []byte) *SubscriberCreate {
 	return sc
 }
 
+// SetUnsubscribed sets the "unsubscribed" field.
+func (sc *SubscriberCreate) SetUnsubscribed(b bool) *SubscriberCreate {
+	sc.mutation.SetUnsubscribed(b)
+	return sc
+}
+
+// SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
+func (sc *SubscriberCreate) SetNillableUnsubscribed(b *bool) *SubscriberCreate {
+	if b != nil {
+		sc.SetUnsubscribed(*b)
+	}
+	return sc
+}
+
 // SetID sets the "id" field.
 func (sc *SubscriberCreate) SetID(s string) *SubscriberCreate {
 	sc.mutation.SetID(s)
@@ -307,6 +321,10 @@ func (sc *SubscriberCreate) defaults() error {
 		v := subscriber.DefaultActive
 		sc.mutation.SetActive(v)
 	}
+	if _, ok := sc.mutation.Unsubscribed(); !ok {
+		v := subscriber.DefaultUnsubscribed
+		sc.mutation.SetUnsubscribed(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if subscriber.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.DefaultID (forgotten import generated/runtime?)")
@@ -364,6 +382,9 @@ func (sc *SubscriberCreate) check() error {
 		if err := subscriber.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Subscriber.secret": %w`, err)}
 		}
+	}
+	if _, ok := sc.mutation.Unsubscribed(); !ok {
+		return &ValidationError{Name: "unsubscribed", err: errors.New(`generated: missing required field "Subscriber.unsubscribed"`)}
 	}
 	return nil
 }
@@ -460,6 +481,10 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
+	}
+	if value, ok := sc.mutation.Unsubscribed(); ok {
+		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
+		_node.Unsubscribed = value
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

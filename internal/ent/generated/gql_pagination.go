@@ -24427,6 +24427,20 @@ var (
 			}
 		},
 	}
+	// SubscriberOrderFieldUnsubscribed orders Subscriber by unsubscribed.
+	SubscriberOrderFieldUnsubscribed = &SubscriberOrderField{
+		Value: func(s *Subscriber) (ent.Value, error) {
+			return s.Unsubscribed, nil
+		},
+		column: subscriber.FieldUnsubscribed,
+		toTerm: subscriber.ByUnsubscribed,
+		toCursor: func(s *Subscriber) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Unsubscribed,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -24441,6 +24455,8 @@ func (f SubscriberOrderField) String() string {
 		str = "email"
 	case SubscriberOrderFieldActive.column:
 		str = "active"
+	case SubscriberOrderFieldUnsubscribed.column:
+		str = "unsubscribed"
 	}
 	return str
 }
@@ -24465,6 +24481,8 @@ func (f *SubscriberOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubscriberOrderFieldEmail
 	case "active":
 		*f = *SubscriberOrderFieldActive
+	case "unsubscribed":
+		*f = *SubscriberOrderFieldUnsubscribed
 	default:
 		return fmt.Errorf("%s is not a valid SubscriberOrderField", str)
 	}

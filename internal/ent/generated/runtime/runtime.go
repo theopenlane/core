@@ -3578,6 +3578,8 @@ func init() {
 	subscriber.Hooks[3] = subscriberMixinHooks5[0]
 
 	subscriber.Hooks[4] = subscriberHooks[0]
+
+	subscriber.Hooks[5] = subscriberHooks[1]
 	subscriberMixinInters1 := subscriberMixin[1].Interceptors()
 	subscriberMixinInters5 := subscriberMixin[5].Interceptors()
 	subscriber.Interceptors[0] = subscriberMixinInters1[0]
@@ -3638,6 +3640,10 @@ func init() {
 	subscriberDescSecret := subscriberFields[7].Descriptor()
 	// subscriber.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	subscriber.SecretValidator = subscriberDescSecret.Validators[0].(func([]byte) error)
+	// subscriberDescUnsubscribed is the schema descriptor for unsubscribed field.
+	subscriberDescUnsubscribed := subscriberFields[8].Descriptor()
+	// subscriber.DefaultUnsubscribed holds the default value on creation for the unsubscribed field.
+	subscriber.DefaultUnsubscribed = subscriberDescUnsubscribed.Default.(bool)
 	// subscriberDescID is the schema descriptor for id field.
 	subscriberDescID := subscriberMixinFields2[0].Descriptor()
 	// subscriber.DefaultID holds the default value on creation for the id field.

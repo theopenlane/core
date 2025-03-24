@@ -142,6 +142,11 @@ func Secret(v []byte) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldSecret, v))
 }
 
+// Unsubscribed applies equality check predicate on the "unsubscribed" field. It's identical to UnsubscribedEQ.
+func Unsubscribed(v bool) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldUnsubscribed, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldCreatedAt, v))
@@ -915,6 +920,16 @@ func SecretLT(v []byte) predicate.Subscriber {
 // SecretLTE applies the LTE predicate on the "secret" field.
 func SecretLTE(v []byte) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldLTE(FieldSecret, v))
+}
+
+// UnsubscribedEQ applies the EQ predicate on the "unsubscribed" field.
+func UnsubscribedEQ(v bool) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldUnsubscribed, v))
+}
+
+// UnsubscribedNEQ applies the NEQ predicate on the "unsubscribed" field.
+func UnsubscribedNEQ(v bool) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNEQ(FieldUnsubscribed, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

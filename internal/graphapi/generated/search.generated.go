@@ -2739,6 +2739,8 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
 			case "active":
 				return ec.fieldContext_Subscriber_active(ctx, field)
+			case "unsubscribed":
+				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":

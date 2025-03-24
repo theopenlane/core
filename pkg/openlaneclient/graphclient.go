@@ -52172,6 +52172,7 @@ type CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers struct {
 	Active        bool   "json:\"active\" graphql:\"active\""
 	Email         string "json:\"email\" graphql:\"email\""
 	ID            string "json:\"id\" graphql:\"id\""
+	Unsubscribed  bool   "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool   "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -52192,6 +52193,12 @@ func (t *CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers) GetID() st
 		t = &CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers{}
 	}
 	return t.ID
+}
+func (t *CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers) GetUnsubscribed() bool {
+	if t == nil {
+		t = &CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers{}
+	}
+	return t.Unsubscribed
 }
 func (t *CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers) GetVerifiedEmail() bool {
 	if t == nil {
@@ -52215,6 +52222,7 @@ type CreateBulkSubscriber_CreateBulkSubscriber_Subscribers struct {
 	Active        bool   "json:\"active\" graphql:\"active\""
 	Email         string "json:\"email\" graphql:\"email\""
 	ID            string "json:\"id\" graphql:\"id\""
+	Unsubscribed  bool   "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool   "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -52235,6 +52243,12 @@ func (t *CreateBulkSubscriber_CreateBulkSubscriber_Subscribers) GetID() string {
 		t = &CreateBulkSubscriber_CreateBulkSubscriber_Subscribers{}
 	}
 	return t.ID
+}
+func (t *CreateBulkSubscriber_CreateBulkSubscriber_Subscribers) GetUnsubscribed() bool {
+	if t == nil {
+		t = &CreateBulkSubscriber_CreateBulkSubscriber_Subscribers{}
+	}
+	return t.Unsubscribed
 }
 func (t *CreateBulkSubscriber_CreateBulkSubscriber_Subscribers) GetVerifiedEmail() bool {
 	if t == nil {
@@ -52260,6 +52274,7 @@ type CreateSubscriber_CreateSubscriber_Subscriber struct {
 	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email         string     "json:\"email\" graphql:\"email\""
 	ID            string     "json:\"id\" graphql:\"id\""
+	Unsubscribed  bool       "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	VerifiedEmail bool       "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
@@ -52294,6 +52309,12 @@ func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetID() string {
 		t = &CreateSubscriber_CreateSubscriber_Subscriber{}
 	}
 	return t.ID
+}
+func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetUnsubscribed() bool {
+	if t == nil {
+		t = &CreateSubscriber_CreateSubscriber_Subscriber{}
+	}
+	return t.Unsubscribed
 }
 func (t *CreateSubscriber_CreateSubscriber_Subscriber) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -52341,6 +52362,7 @@ type GetAllSubscribers_Subscribers_Edges_Node struct {
 	Email         string  "json:\"email\" graphql:\"email\""
 	ID            string  "json:\"id\" graphql:\"id\""
 	OwnerID       *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Unsubscribed  bool    "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool    "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -52367,6 +52389,12 @@ func (t *GetAllSubscribers_Subscribers_Edges_Node) GetOwnerID() *string {
 		t = &GetAllSubscribers_Subscribers_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetAllSubscribers_Subscribers_Edges_Node) GetUnsubscribed() bool {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_Edges_Node{}
+	}
+	return t.Unsubscribed
 }
 func (t *GetAllSubscribers_Subscribers_Edges_Node) GetVerifiedEmail() bool {
 	if t == nil {
@@ -52402,6 +52430,7 @@ type GetSubscriberByEmail_Subscriber struct {
 	Email         string  "json:\"email\" graphql:\"email\""
 	ID            string  "json:\"id\" graphql:\"id\""
 	OwnerID       *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Unsubscribed  bool    "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool    "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -52429,6 +52458,12 @@ func (t *GetSubscriberByEmail_Subscriber) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
+func (t *GetSubscriberByEmail_Subscriber) GetUnsubscribed() bool {
+	if t == nil {
+		t = &GetSubscriberByEmail_Subscriber{}
+	}
+	return t.Unsubscribed
+}
 func (t *GetSubscriberByEmail_Subscriber) GetVerifiedEmail() bool {
 	if t == nil {
 		t = &GetSubscriberByEmail_Subscriber{}
@@ -52441,6 +52476,7 @@ type GetSubscribers_Subscribers_Edges_Node struct {
 	Email         string  "json:\"email\" graphql:\"email\""
 	ID            string  "json:\"id\" graphql:\"id\""
 	OwnerID       *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Unsubscribed  bool    "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool    "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
 
@@ -52467,6 +52503,12 @@ func (t *GetSubscribers_Subscribers_Edges_Node) GetOwnerID() *string {
 		t = &GetSubscribers_Subscribers_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetSubscribers_Subscribers_Edges_Node) GetUnsubscribed() bool {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_Edges_Node{}
+	}
+	return t.Unsubscribed
 }
 func (t *GetSubscribers_Subscribers_Edges_Node) GetVerifiedEmail() bool {
 	if t == nil {
@@ -52504,6 +52546,7 @@ type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
 	Email         string     "json:\"email\" graphql:\"email\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	PhoneNumber   *string    "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Unsubscribed  bool       "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	VerifiedEmail bool       "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
@@ -52545,6 +52588,12 @@ func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetPhoneNumber() *string 
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
 	}
 	return t.PhoneNumber
+}
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUnsubscribed() bool {
+	if t == nil {
+		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
+	}
+	return t.Unsubscribed
 }
 func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -77139,6 +77188,7 @@ const CreateBulkCSVSubscriberDocument = `mutation CreateBulkCSVSubscriber ($inpu
 			email
 			id
 			verifiedEmail
+			unsubscribed
 		}
 	}
 }
@@ -77168,6 +77218,7 @@ const CreateBulkSubscriberDocument = `mutation CreateBulkSubscriber ($input: [Cr
 			email
 			id
 			verifiedEmail
+			unsubscribed
 		}
 	}
 }
@@ -77201,6 +77252,7 @@ const CreateSubscriberDocument = `mutation CreateSubscriber ($input: CreateSubsc
 			updatedAt
 			updatedBy
 			verifiedEmail
+			unsubscribed
 		}
 	}
 }
@@ -77257,6 +77309,7 @@ const GetAllSubscribersDocument = `query GetAllSubscribers {
 				id
 				ownerID
 				verifiedEmail
+				unsubscribed
 			}
 		}
 	}
@@ -77285,6 +77338,7 @@ const GetSubscriberByEmailDocument = `query GetSubscriberByEmail ($email: String
 		id
 		ownerID
 		verifiedEmail
+		unsubscribed
 	}
 }
 `
@@ -77315,6 +77369,7 @@ const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInp
 				id
 				ownerID
 				verifiedEmail
+				unsubscribed
 			}
 		}
 	}
@@ -77351,6 +77406,7 @@ const UpdateSubscriberDocument = `mutation UpdateSubscriber ($email: String!, $i
 			updatedBy
 			verifiedEmail
 			verifiedPhone
+			unsubscribed
 		}
 	}
 }

@@ -90,6 +90,10 @@ func (Subscriber) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(entgql.Skip()).
 			Nillable(),
+		field.Bool("unsubscribed").
+			Comment("indicates if the subscriber has unsubscribed from communications").
+			Default(false).
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput), entgql.OrderField("unsubscribed")),
 	}
 }
 
@@ -112,7 +116,8 @@ func (s Subscriber) Edges() []ent.Edge {
 
 func (Subscriber) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookSubscriber(),
+		hooks.HookSubscriberCreate(),
+		hooks.HookSubscriberUpdated(),
 	}
 }
 
@@ -122,7 +127,7 @@ func (Subscriber) Indexes() []ent.Index {
 		index.Fields("email", ownerFieldName).
 			Unique().
 			Annotations(
-				entsql.IndexWhere("deleted_at is NULL"),
+				entsql.IndexWhere("deleted_at is NULL and unsubscribed = false"),
 			),
 	}
 }

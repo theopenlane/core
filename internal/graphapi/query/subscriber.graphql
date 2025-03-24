@@ -5,6 +5,7 @@ mutation CreateBulkCSVSubscriber($input: Upload!) {
       email
       id
       verifiedEmail
+      unsubscribed
     }
   }
 }
@@ -16,6 +17,7 @@ mutation CreateBulkSubscriber($input: [CreateSubscriberInput!]) {
       email
       id
       verifiedEmail
+      unsubscribed
     }
   }
 }
@@ -31,6 +33,7 @@ mutation CreateSubscriber($input: CreateSubscriberInput!) {
       updatedAt
       updatedBy
       verifiedEmail
+      unsubscribed
     }
   }
 }
@@ -53,6 +56,7 @@ query GetAllSubscribers {
         id
         ownerID
         verifiedEmail
+        unsubscribed
       }
     }
   }
@@ -65,6 +69,7 @@ query GetSubscriberByEmail($email: String!) {
     id
     ownerID
     verifiedEmail
+    unsubscribed
   }
 }
 
@@ -77,6 +82,7 @@ query GetSubscribers($where: SubscriberWhereInput) {
         id
         ownerID
         verifiedEmail
+        unsubscribed
       }
     }
   }
@@ -95,6 +101,7 @@ mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
       updatedBy
       verifiedEmail
       verifiedPhone
+      unsubscribed
     }
   }
 }

@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookSubscriber runs on subscriber create mutations
-func HookSubscriber() ent.Hook {
+// HookSubscriberCreate runs on subscriber create mutations
+func HookSubscriberCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubscriberFunc(func(ctx context.Context, m *generated.SubscriberMutation) (generated.Value, error) {
 			email, ok := m.Email()
@@ -43,6 +43,25 @@ func HookSubscriber() ent.Hook {
 			return retValue, err
 		})
 	}, ent.OpCreate)
+}
+
+// HookSubscriberUpdated runs on subscriber update mutations to set the active status to false if the user is unsubscribed
+func HookSubscriberUpdated() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.SubscriberFunc(func(ctx context.Context, m *generated.SubscriberMutation) (generated.Value, error) {
+			unsubscribed, ok := m.Unsubscribed()
+			if ok && unsubscribed {
+				m.SetActive(false)
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	},
+		hook.And(
+			hook.HasOp(ent.OpUpdateOne),
+			hook.HasFields("unsubscribed"),
+		),
+	)
 }
 
 // queueSubscriberEmail queues the email to be sent to the subscriber

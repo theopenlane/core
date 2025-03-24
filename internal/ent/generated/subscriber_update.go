@@ -254,6 +254,20 @@ func (su *SubscriberUpdate) SetSecret(b []byte) *SubscriberUpdate {
 	return su
 }
 
+// SetUnsubscribed sets the "unsubscribed" field.
+func (su *SubscriberUpdate) SetUnsubscribed(b bool) *SubscriberUpdate {
+	su.mutation.SetUnsubscribed(b)
+	return su
+}
+
+// SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
+func (su *SubscriberUpdate) SetNillableUnsubscribed(b *bool) *SubscriberUpdate {
+	if b != nil {
+		su.SetUnsubscribed(*b)
+	}
+	return su
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (su *SubscriberUpdate) SetOwner(o *Organization) *SubscriberUpdate {
 	return su.SetOwnerID(o.ID)
@@ -463,6 +477,9 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
+	}
+	if value, ok := su.mutation.Unsubscribed(); ok {
+		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 	}
 	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -787,6 +804,20 @@ func (suo *SubscriberUpdateOne) SetSecret(b []byte) *SubscriberUpdateOne {
 	return suo
 }
 
+// SetUnsubscribed sets the "unsubscribed" field.
+func (suo *SubscriberUpdateOne) SetUnsubscribed(b bool) *SubscriberUpdateOne {
+	suo.mutation.SetUnsubscribed(b)
+	return suo
+}
+
+// SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
+func (suo *SubscriberUpdateOne) SetNillableUnsubscribed(b *bool) *SubscriberUpdateOne {
+	if b != nil {
+		suo.SetUnsubscribed(*b)
+	}
+	return suo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (suo *SubscriberUpdateOne) SetOwner(o *Organization) *SubscriberUpdateOne {
 	return suo.SetOwnerID(o.ID)
@@ -1026,6 +1057,9 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	}
 	if value, ok := suo.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
+	}
+	if value, ok := suo.mutation.Unsubscribed(); ok {
+		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 	}
 	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
