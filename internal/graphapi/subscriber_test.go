@@ -149,15 +149,24 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 	t := suite.T()
 
 	testCases := []struct {
-		name    string
-		email   string
-		ownerID string
-		client  *openlaneclient.OpenlaneClient
-		ctx     context.Context
-		wantErr bool
+		name            string
+		email           string
+		ownerID         string
+		setUnsubscribed bool
+		client          *openlaneclient.OpenlaneClient
+		ctx             context.Context
+		wantErr         bool
 	}{
 		{
-			name:    "happy path, new subscriber",
+			name:            "happy path, new subscriber",
+			email:           "c.stark@example.com",
+			setUnsubscribed: true, //unsubscribe the subscriber to test for re-creation
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			wantErr:         false,
+		},
+		{
+			name:    "happy path, duplicate subscriber but original was unsubscribed",
 			email:   "c.stark@example.com",
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
@@ -217,6 +226,18 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 			// Assert matching fields
 			assert.Equal(t, tc.email, resp.CreateSubscriber.Subscriber.Email)
+
+			if tc.setUnsubscribed {
+				// Set the subscriber as unsubscribed to test for duplicate email
+				resp, err := tc.client.UpdateSubscriber(tc.ctx, resp.CreateSubscriber.Subscriber.Email, openlaneclient.UpdateSubscriberInput{
+					Unsubscribed: lo.ToPtr(true),
+				})
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				require.True(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
+				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
+			}
 		})
 	}
 }
@@ -266,6 +287,16 @@ func (suite *GraphTestSuite) TestUpdateSubscriber() {
 			wantErr: false,
 		},
 		{
+			name:  "happy path, using api token, set unsubscribed = false",
+			email: subscriber.Email,
+			updateInput: openlaneclient.UpdateSubscriberInput{
+				Unsubscribed: lo.ToPtr(true),
+			},
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
+		},
+		{
 			name:  "invalid email",
 			email: "beep@boop.com",
 			updateInput: openlaneclient.UpdateSubscriberInput{
@@ -304,6 +335,19 @@ func (suite *GraphTestSuite) TestUpdateSubscriber() {
 
 			if tc.updateInput.PhoneNumber != nil {
 				require.Equal(t, tc.updateInput.PhoneNumber, resp.UpdateSubscriber.Subscriber.PhoneNumber)
+			}
+
+			if tc.updateInput.Unsubscribed != nil {
+				require.Equal(t, *tc.updateInput.Unsubscribed, resp.UpdateSubscriber.Subscriber.Unsubscribed)
+
+				if *tc.updateInput.Unsubscribed {
+					// ensure I can create another subscriber with the same email
+					resp, err := tc.client.CreateSubscriber(tc.ctx, openlaneclient.CreateSubscriberInput{
+						Email: tc.email,
+					})
+					require.NoError(t, err)
+					require.NotNil(t, resp)
+				}
 			}
 		})
 	}

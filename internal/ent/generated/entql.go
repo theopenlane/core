@@ -2039,6 +2039,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldToken:         {Type: field.TypeString, Column: subscriber.FieldToken},
 			subscriber.FieldTTL:           {Type: field.TypeTime, Column: subscriber.FieldTTL},
 			subscriber.FieldSecret:        {Type: field.TypeBytes, Column: subscriber.FieldSecret},
+			subscriber.FieldUnsubscribed:  {Type: field.TypeBool, Column: subscriber.FieldUnsubscribed},
 		},
 	}
 	graph.Nodes[67] = &sqlgraph.Node{
@@ -17706,6 +17707,11 @@ func (f *SubscriberFilter) WhereTTL(p entql.TimeP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *SubscriberFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(subscriber.FieldSecret))
+}
+
+// WhereUnsubscribed applies the entql bool predicate on the unsubscribed field.
+func (f *SubscriberFilter) WhereUnsubscribed(p entql.BoolP) {
+	f.Where(p.Field(subscriber.FieldUnsubscribed))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

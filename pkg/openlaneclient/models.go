@@ -19527,9 +19527,11 @@ type Subscriber struct {
 	// indicates if the phone number has been verified
 	VerifiedPhone bool `json:"verifiedPhone"`
 	// indicates if the subscriber is active or not, active users will have at least one verified contact method
-	Active bool             `json:"active"`
-	Owner  *Organization    `json:"owner,omitempty"`
-	Events *EventConnection `json:"events"`
+	Active bool `json:"active"`
+	// indicates if the subscriber has unsubscribed from communications
+	Unsubscribed bool             `json:"unsubscribed"`
+	Owner        *Organization    `json:"owner,omitempty"`
+	Events       *EventConnection `json:"events"`
 }
 
 func (Subscriber) IsNode() {}
@@ -19743,6 +19745,9 @@ type SubscriberWhereInput struct {
 	// active field predicates
 	Active    *bool `json:"active,omitempty"`
 	ActiveNeq *bool `json:"activeNEQ,omitempty"`
+	// unsubscribed field predicates
+	Unsubscribed    *bool `json:"unsubscribed,omitempty"`
+	UnsubscribedNeq *bool `json:"unsubscribedNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -22630,13 +22635,15 @@ type UpdateSubscriberInput struct {
 	// email address of the subscriber
 	Email *string `json:"email,omitempty"`
 	// phone number of the subscriber
-	PhoneNumber      *string  `json:"phoneNumber,omitempty"`
-	ClearPhoneNumber *bool    `json:"clearPhoneNumber,omitempty"`
-	OwnerID          *string  `json:"ownerID,omitempty"`
-	ClearOwner       *bool    `json:"clearOwner,omitempty"`
-	AddEventIDs      []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs   []string `json:"removeEventIDs,omitempty"`
-	ClearEvents      *bool    `json:"clearEvents,omitempty"`
+	PhoneNumber      *string `json:"phoneNumber,omitempty"`
+	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
+	// indicates if the subscriber has unsubscribed from communications
+	Unsubscribed   *bool    `json:"unsubscribed,omitempty"`
+	OwnerID        *string  `json:"ownerID,omitempty"`
+	ClearOwner     *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs    []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
+	ClearEvents    *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateTFASettingInput is used for update TFASetting object.
@@ -27117,10 +27124,11 @@ func (e SubcontrolOrderField) MarshalGQL(w io.Writer) {
 type SubscriberOrderField string
 
 const (
-	SubscriberOrderFieldCreatedAt SubscriberOrderField = "created_at"
-	SubscriberOrderFieldUpdatedAt SubscriberOrderField = "updated_at"
-	SubscriberOrderFieldEmail     SubscriberOrderField = "email"
-	SubscriberOrderFieldActive    SubscriberOrderField = "active"
+	SubscriberOrderFieldCreatedAt    SubscriberOrderField = "created_at"
+	SubscriberOrderFieldUpdatedAt    SubscriberOrderField = "updated_at"
+	SubscriberOrderFieldEmail        SubscriberOrderField = "email"
+	SubscriberOrderFieldActive       SubscriberOrderField = "active"
+	SubscriberOrderFieldUnsubscribed SubscriberOrderField = "unsubscribed"
 )
 
 var AllSubscriberOrderField = []SubscriberOrderField{
@@ -27128,11 +27136,12 @@ var AllSubscriberOrderField = []SubscriberOrderField{
 	SubscriberOrderFieldUpdatedAt,
 	SubscriberOrderFieldEmail,
 	SubscriberOrderFieldActive,
+	SubscriberOrderFieldUnsubscribed,
 }
 
 func (e SubscriberOrderField) IsValid() bool {
 	switch e {
-	case SubscriberOrderFieldCreatedAt, SubscriberOrderFieldUpdatedAt, SubscriberOrderFieldEmail, SubscriberOrderFieldActive:
+	case SubscriberOrderFieldCreatedAt, SubscriberOrderFieldUpdatedAt, SubscriberOrderFieldEmail, SubscriberOrderFieldActive, SubscriberOrderFieldUnsubscribed:
 		return true
 	}
 	return false

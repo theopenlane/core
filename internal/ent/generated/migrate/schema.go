@@ -2755,6 +2755,7 @@ var (
 		{Name: "token", Type: field.TypeString, Unique: true},
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "secret", Type: field.TypeBytes},
+		{Name: "unsubscribed", Type: field.TypeBool, Default: false},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubscribersTable holds the schema information for the "subscribers" table.
@@ -2765,7 +2766,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subscribers_organizations_subscribers",
-				Columns:    []*schema.Column{SubscribersColumns[16]},
+				Columns:    []*schema.Column{SubscribersColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2774,9 +2775,9 @@ var (
 			{
 				Name:    "subscriber_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[8], SubscribersColumns[16]},
+				Columns: []*schema.Column{SubscribersColumns[8], SubscribersColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
+					Where: "deleted_at is NULL and unsubscribed = false",
 				},
 			},
 		},

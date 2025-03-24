@@ -59379,6 +59379,10 @@ type SubscriberWhereInput struct {
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
+	// "unsubscribed" field predicates.
+	Unsubscribed    *bool `json:"unsubscribed,omitempty"`
+	UnsubscribedNEQ *bool `json:"unsubscribedNEQ,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -59860,6 +59864,12 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 	}
 	if i.ActiveNEQ != nil {
 		predicates = append(predicates, subscriber.ActiveNEQ(*i.ActiveNEQ))
+	}
+	if i.Unsubscribed != nil {
+		predicates = append(predicates, subscriber.UnsubscribedEQ(*i.Unsubscribed))
+	}
+	if i.UnsubscribedNEQ != nil {
+		predicates = append(predicates, subscriber.UnsubscribedNEQ(*i.UnsubscribedNEQ))
 	}
 
 	if i.HasOwner != nil {

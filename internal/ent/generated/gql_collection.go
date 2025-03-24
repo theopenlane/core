@@ -25555,6 +25555,11 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subscriber.FieldActive)
 				fieldSeen[subscriber.FieldActive] = struct{}{}
 			}
+		case "unsubscribed":
+			if _, ok := fieldSeen[subscriber.FieldUnsubscribed]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldUnsubscribed)
+				fieldSeen[subscriber.FieldUnsubscribed] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

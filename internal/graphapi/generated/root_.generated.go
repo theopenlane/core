@@ -3309,6 +3309,7 @@ type ComplexityRoot struct {
 		OwnerID       func(childComplexity int) int
 		PhoneNumber   func(childComplexity int) int
 		Tags          func(childComplexity int) int
+		Unsubscribed  func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
 		VerifiedEmail func(childComplexity int) int
@@ -21736,6 +21737,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subscriber.Tags(childComplexity), true
+
+	case "Subscriber.unsubscribed":
+		if e.complexity.Subscriber.Unsubscribed == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.Unsubscribed(childComplexity), true
 
 	case "Subscriber.updatedAt":
 		if e.complexity.Subscriber.UpdatedAt == nil {
@@ -56711,6 +56719,10 @@ type Subscriber implements Node {
   indicates if the subscriber is active or not, active users will have at least one verified contact method
   """
   active: Boolean!
+  """
+  indicates if the subscriber has unsubscribed from communications
+  """
+  unsubscribed: Boolean!
   owner: Organization
   events(
     """
@@ -56795,6 +56807,7 @@ enum SubscriberOrderField {
   updated_at
   email
   active
+  unsubscribed
 }
 """
 SubscriberWhereInput is used for filtering Subscriber objects.
@@ -56977,6 +56990,11 @@ input SubscriberWhereInput {
   """
   active: Boolean
   activeNEQ: Boolean
+  """
+  unsubscribed field predicates
+  """
+  unsubscribed: Boolean
+  unsubscribedNEQ: Boolean
   """
   owner edge predicates
   """
@@ -60995,6 +61013,10 @@ input UpdateSubscriberInput {
   """
   phoneNumber: String
   clearPhoneNumber: Boolean
+  """
+  indicates if the subscriber has unsubscribed from communications
+  """
+  unsubscribed: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

@@ -47,6 +47,8 @@ const (
 	FieldTTL = "ttl"
 	// FieldSecret holds the string denoting the secret field in the database.
 	FieldSecret = "secret"
+	// FieldUnsubscribed holds the string denoting the unsubscribed field in the database.
+	FieldUnsubscribed = "unsubscribed"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -86,6 +88,7 @@ var Columns = []string{
 	FieldToken,
 	FieldTTL,
 	FieldSecret,
+	FieldUnsubscribed,
 }
 
 var (
@@ -110,7 +113,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [6]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -137,6 +140,8 @@ var (
 	TokenValidator func(string) error
 	// SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	SecretValidator func([]byte) error
+	// DefaultUnsubscribed holds the default value on creation for the "unsubscribed" field.
+	DefaultUnsubscribed bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -217,6 +222,11 @@ func ByToken(opts ...sql.OrderTermOption) OrderOption {
 // ByTTL orders the results by the ttl field.
 func ByTTL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTTL, opts...).ToFunc()
+}
+
+// ByUnsubscribed orders the results by the unsubscribed field.
+func ByUnsubscribed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUnsubscribed, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

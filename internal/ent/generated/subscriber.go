@@ -51,6 +51,8 @@ type Subscriber struct {
 	TTL *time.Time `json:"ttl,omitempty"`
 	// the comparison secret to verify the token's signature
 	Secret *[]byte `json:"secret,omitempty"`
+	// indicates if the subscriber has unsubscribed from communications
+	Unsubscribed bool `json:"unsubscribed,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubscriberQuery when eager-loading is set.
 	Edges        SubscriberEdges `json:"edges"`
@@ -99,7 +101,7 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subscriber.FieldTags, subscriber.FieldSecret:
 			values[i] = new([]byte)
-		case subscriber.FieldVerifiedEmail, subscriber.FieldVerifiedPhone, subscriber.FieldActive:
+		case subscriber.FieldVerifiedEmail, subscriber.FieldVerifiedPhone, subscriber.FieldActive, subscriber.FieldUnsubscribed:
 			values[i] = new(sql.NullBool)
 		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
 			values[i] = new(sql.NullString)
@@ -225,6 +227,12 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				s.Secret = value
 			}
+		case subscriber.FieldUnsubscribed:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field unsubscribed", values[i])
+			} else if value.Valid {
+				s.Unsubscribed = value.Bool
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -322,6 +330,9 @@ func (s *Subscriber) String() string {
 		builder.WriteString("secret=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("unsubscribed=")
+	builder.WriteString(fmt.Sprintf("%v", s.Unsubscribed))
 	builder.WriteByte(')')
 	return builder.String()
 }

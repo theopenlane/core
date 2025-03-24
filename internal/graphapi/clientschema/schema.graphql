@@ -35574,6 +35574,10 @@ type Subscriber implements Node {
 	indicates if the subscriber is active or not, active users will have at least one verified contact method
 	"""
 	active: Boolean!
+	"""
+	indicates if the subscriber has unsubscribed from communications
+	"""
+	unsubscribed: Boolean!
 	owner: Organization
 	events(
 		"""
@@ -35685,6 +35689,7 @@ enum SubscriberOrderField {
 	updated_at
 	email
 	active
+	unsubscribed
 }
 type SubscriberSearchResult {
 	subscribers: [Subscriber!]
@@ -35879,6 +35884,11 @@ input SubscriberWhereInput {
 	"""
 	active: Boolean
 	activeNEQ: Boolean
+	"""
+	unsubscribed field predicates
+	"""
+	unsubscribed: Boolean
+	unsubscribedNEQ: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -40017,6 +40027,10 @@ input UpdateSubscriberInput {
 	"""
 	phoneNumber: String
 	clearPhoneNumber: Boolean
+	"""
+	indicates if the subscriber has unsubscribed from communications
+	"""
+	unsubscribed: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEventIDs: [ID!]
