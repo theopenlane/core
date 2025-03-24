@@ -4490,7 +4490,7 @@ type CreateStandardInput struct {
 	ShortName *string `json:"shortName,omitempty"`
 	// unique identifier of the standard with version
 	Framework *string `json:"framework,omitempty"`
-	// description of the standard
+	// long description of the standard with details of what is covered
 	Description *string `json:"description,omitempty"`
 	// URL to the logo of the governing body
 	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
@@ -17948,7 +17948,7 @@ type Standard struct {
 	ShortName *string `json:"shortName,omitempty"`
 	// unique identifier of the standard with version
 	Framework *string `json:"framework,omitempty"`
-	// description of the standard
+	// long description of the standard with details of what is covered
 	Description *string `json:"description,omitempty"`
 	// URL to the logo of the governing body
 	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
@@ -18035,7 +18035,7 @@ type StandardHistory struct {
 	ShortName *string `json:"shortName,omitempty"`
 	// unique identifier of the standard with version
 	Framework *string `json:"framework,omitempty"`
-	// description of the standard
+	// long description of the standard with details of what is covered
 	Description *string `json:"description,omitempty"`
 	// URL to the logo of the governing body
 	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
@@ -22489,7 +22489,7 @@ type UpdateStandardInput struct {
 	// unique identifier of the standard with version
 	Framework      *string `json:"framework,omitempty"`
 	ClearFramework *bool   `json:"clearFramework,omitempty"`
-	// description of the standard
+	// long description of the standard with details of what is covered
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// URL to the logo of the governing body

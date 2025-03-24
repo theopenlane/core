@@ -52,7 +52,7 @@ type StandardHistory struct {
 	ShortName string `json:"short_name,omitempty"`
 	// unique identifier of the standard with version
 	Framework string `json:"framework,omitempty"`
-	// description of the standard
+	// long description of the standard with details of what is covered
 	Description string `json:"description,omitempty"`
 	// URL to the logo of the governing body
 	GoverningBodyLogoURL string `json:"governing_body_logo_url,omitempty"`

@@ -63,9 +63,9 @@ func (Standard) Fields() []ent.Field {
 				entgql.OrderField("framework"),
 			).
 			Comment("unique identifier of the standard with version"),
-		field.String("description").
+		field.Text("description").
 			Optional().
-			Comment("description of the standard"),
+			Comment("long description of the standard with details of what is covered"),
 		field.String("governing_body_logo_url").
 			Comment("URL to the logo of the governing body").
 			MaxLen(urlMaxLen).

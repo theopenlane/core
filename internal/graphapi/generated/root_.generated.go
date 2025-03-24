@@ -31940,7 +31940,7 @@ input CreateStandardInput {
   """
   framework: String
   """
-  description of the standard
+  long description of the standard with details of what is covered
   """
   description: String
   """
@@ -54362,7 +54362,7 @@ type Standard implements Node {
   """
   framework: String
   """
-  description of the standard
+  long description of the standard with details of what is covered
   """
   description: String
   """
@@ -54504,7 +54504,7 @@ type StandardHistory implements Node {
   """
   framework: String
   """
-  description of the standard
+  long description of the standard with details of what is covered
   """
   description: String
   """
@@ -60794,7 +60794,7 @@ input UpdateStandardInput {
   framework: String
   clearFramework: Boolean
   """
-  description of the standard
+  long description of the standard with details of what is covered
   """
   description: String
   clearDescription: Boolean
