@@ -1,11 +1,12 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 {{- /* schemas should always be the singular this will ensure they are created with singular even if the file name is plural */}}
@@ -20,7 +21,7 @@ import (
 
 // {{ $name }} holds the schema definition for the {{ $name }} entity
 type {{ $name }} struct {
-  	CustomSchema
+  	SchemaFuncs
 
 	ent.Schema
 }
@@ -91,7 +92,8 @@ func ({{ $name }}) Annotations() []schema.Annotation {
 		// the below annotation adds the entfga policy that will check access to the entity
 		// remove this annotation (or replace with another policy) if you want checks to be defined
 		// by another object
-		entfga.SelfAccessChecks(),
+		// uncomment after the first run
+		// entfga.SelfAccessChecks(),
 	}
 }
 
@@ -117,8 +119,8 @@ func ({{ $name }}) Policy() ent.Policy {
 		policy.WithMutationRules(
 			// add mutation rules here, the below is the recommended default
 			policy.CheckCreateAccess(),
-			// this needs to be commented out for the first run, the first run will generate the
-			// functions required based on the entfa annotation
+			// this needs to be commented out for the first run that had the entfga annotation
+			// the first run will generate the functions required based on the entfa annotation
 			// entfga.CheckEditAccess[*generated.{{ $name }}Mutation](),
 		),
 	)
