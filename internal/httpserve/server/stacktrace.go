@@ -14,7 +14,7 @@ type stackTracer interface {
 }
 
 // CustomHTTPErrorHandler is a custom error handler that logs the error and returns a JSON response
-func CustomHTTPErrorHandler(err error, c echo.Context) {
+func CustomHTTPErrorHandler(c echo.Context, err error) {
 	code := http.StatusInternalServerError
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code

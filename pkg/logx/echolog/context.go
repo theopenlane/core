@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 // WithContext returns a new context with the provided logger
@@ -19,17 +18,14 @@ func Ctx(ctx context.Context) *zerolog.Logger {
 	return zerolog.Ctx(ctx)
 }
 
-func WithNewContext(ctx context.Context, update func(c zerolog.Context) zerolog.Context) context.Context {
-	l := log.Ctx(ctx).With().Logger()
-	l.UpdateContext(update)
+//func meow() {
 
-	return l.WithContext(ctx)
-}
-
-func WithChildLogger() zerolog.Context {
-	return ReturnLogger().With()
-}
-
-func ReturnLogger() *zerolog.Logger {
-	return &log.Logger
-}
+//logger := zerolog.New(writer).With().Timestamp().Logger().Hook(
+//	zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
+//		e.Str("context", logContext)
+//	}))
+//
+//contextHookFunc := zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, msg string) {
+//	e.Str("user_id", userID)
+//})
+//}

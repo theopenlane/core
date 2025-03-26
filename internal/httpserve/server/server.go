@@ -5,10 +5,13 @@ import (
 
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/echox/middleware"
 
+	echo_log "github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
-	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
+	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/logx/echolog"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
@@ -19,6 +22,37 @@ type Server struct {
 	handlers []handler
 	// Router makes the router directly accessible on the Server struct
 	Router *route.Router
+}
+
+type errorHandler func(echo.Context, error)
+
+func ConfigureEcho() *echo.Echo {
+	e := echo.New()
+	e.HTTPErrorHandler = CustomHTTPErrorHandler
+	e.Use(middleware.Recover())
+	output := consolelog.NewConsoleWriter()
+	logger := echolog.New(
+		&output,
+		echolog.WithLevel(echo_log.INFO),
+		echolog.WithTimestamp(),
+		echolog.WithCaller(),
+	)
+
+	e.Logger = logger
+
+	e.Use(middleware.RequestIDWithConfig(middleware.RequestIDConfig{
+		TargetHeader: "X-Request-ID",
+	}))
+
+	e.Use(echolog.LoggingMiddleware(echolog.Config{
+		Logger:          logger,
+		RequestIDHeader: "X-Request-ID",
+		RequestIDKey:    "request_id",
+		NestKey:         "REQUEST",
+		HandleError:     true,
+	}))
+
+	return e
 }
 
 type handler interface {
@@ -33,7 +67,7 @@ func NewRouter() (*route.Router, error) {
 	}
 
 	return &route.Router{
-		Echo: echo.New(),
+		Echo: ConfigureEcho(),
 		OAS:  oas,
 	}, nil
 }
@@ -68,9 +102,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		GracefulContext: ctx,
 	}
 
-	if s.config.Settings.Server.Debug {
-		s.Router.Echo.Use(echodebug.BodyDump())
-	}
+	//	if s.config.Settings.Server.Debug {
+	//		s.Router.Echo.Use(echodebug.BodyDump())
+	//	}
 
 	for _, m := range s.config.DefaultMiddleware {
 		s.Router.Echo.Use(m)

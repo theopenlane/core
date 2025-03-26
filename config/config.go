@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/mime"
@@ -68,6 +69,8 @@ type Config struct {
 	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
 	// Entitlements contains the configuration for the entitlements service
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
+	// Logger contains configuration for the toggles to be used for logging
+	Logger logx.Config
 }
 
 // Server settings for the echo server

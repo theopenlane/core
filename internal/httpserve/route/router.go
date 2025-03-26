@@ -27,9 +27,16 @@ type Router struct {
 	Handler       *handlers.Handler
 	StartConfig   *echo.StartConfig
 	LocalFilePath string
+	Logger        *echo.Logger
 }
 
 type RouterOption func(*Router)
+
+func WithLogger(logger *echo.Logger) RouterOption {
+	return func(r *Router) {
+		r.Logger = logger
+	}
+}
 
 // WithHandler is a RouterOption that allows the handler to be set on the router
 func WithHandler(h *handlers.Handler) RouterOption {
@@ -75,20 +82,6 @@ func WithHideBanner() RouterOption {
 			HideBanner: true,
 		}
 	}
-}
-
-// NewRouter creates a new router with the echo router and OpenAPI schema
-func NewRouter(opts ...RouterOption) *Router {
-	r := &Router{
-		Echo: echo.New(),
-		OAS:  &openapi3.T{},
-	}
-
-	for _, opt := range opts {
-		opt(r)
-	}
-
-	return r
 }
 
 // AddRoute is used to add a route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server

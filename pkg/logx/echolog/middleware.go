@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/echox/middleware"
 )
 
+// MKA move these into config at root of logx?
+
 // Config defines the config for the echolog middleware
 type Config struct {
 	// Logger is a custom instance of the logger to use
@@ -71,11 +73,11 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 	}
 
 	if config.RequestIDKey == "" {
-		config.RequestIDKey = "id"
+		config.RequestIDKey = "request_id"
 	}
 
 	if config.RequestIDHeader == "" {
-		config.RequestIDHeader = echo.HeaderXRequestID
+		config.RequestIDHeader = "X-Request-ID"
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
