@@ -52,10 +52,22 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// don't use the bulk endpoint, it won't work correctly on resend
+	results := make([]*generated.Invite, 0, len(input))
+	for _, i := range input {
+		res, err := r.CreateInvite(ctx, *i)
+		if err != nil {
+			return nil, err
+		}
 
-	return r.bulkCreateInvite(ctx, input)
+		results = append(results, res.Invite)
+	}
+
+	// return the correct payload
+	return &model.InviteBulkCreatePayload{
+		Invites: results,
+	}, nil
+
 }
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
@@ -70,19 +82,7 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 		return nil, err
 	}
 
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateInvite(ctx, data)
+	return r.CreateBulkInvite(ctx, data)
 }
 
 // UpdateInvite is the resolver for the updateInvite field.

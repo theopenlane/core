@@ -18,6 +18,7 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 	t := suite.T()
 
 	invite := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name    string
@@ -38,6 +39,13 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 			client:  suite.client.apiWithToken,
 			ctx:     context.Background(),
 			wantErr: false,
+		},
+		{
+			name:    "api token, no access",
+			queryID: invite2.ID,
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: true,
 		},
 		{
 			name:    "invalid id",
@@ -252,6 +260,84 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			assert.Equal(t, tc.expectedStatus, resp.CreateInvite.Invite.Status)
 			assert.Equal(t, tc.expectedAttempts, resp.CreateInvite.Invite.SendAttempts)
 			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 14), *resp.CreateInvite.Invite.Expires, 2*time.Minute)
+		})
+	}
+}
+
+func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
+	t := suite.T()
+
+	testCases := []struct {
+		name             string
+		recipients       []string
+		client           *openlaneclient.OpenlaneClient
+		ctx              context.Context
+		requestorID      string
+		expectedStatus   enums.InviteStatus
+		expectedAttempts int64
+		wantErr          bool
+	}{
+		{
+			name:             "happy path, new user with defaults",
+			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 0,
+			wantErr:          false,
+		},
+		{
+			name:             "happy path, resend with defaults",
+			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 1,
+			wantErr:          false,
+		},
+		{
+			name:             "happy path, resend again with defaults",
+			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 2,
+			wantErr:          false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			input := []*openlaneclient.CreateInviteInput{}
+
+			for _, recipient := range tc.recipients {
+				input = append(input, &openlaneclient.CreateInviteInput{
+					Recipient: recipient,
+				})
+			}
+
+			resp, err := tc.client.CreateBulkInvite(tc.ctx, input)
+
+			if tc.wantErr {
+				require.Error(t, err)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			assert.Len(t, resp.CreateBulkInvite.Invites, len(tc.recipients))
+
+			for _, invite := range resp.CreateBulkInvite.Invites {
+				assert.Equal(t, enums.RoleMember, invite.Role)
+				assert.Equal(t, testUser1.ID, *invite.RequestorID)
+				assert.Equal(t, tc.expectedStatus, invite.Status)
+				assert.Equal(t, tc.expectedAttempts, invite.SendAttempts)
+			}
 		})
 	}
 }
