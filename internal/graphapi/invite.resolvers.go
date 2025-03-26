@@ -67,7 +67,6 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 	return &model.InviteBulkCreatePayload{
 		Invites: results,
 	}, nil
-
 }
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
