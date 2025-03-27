@@ -91,7 +91,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-// Common entgql types
+// Common entgql types.
 type (
 	Cursor         = entgql.Cursor[string]
 	PageInfo       = entgql.PageInfo[string]
@@ -384,7 +384,7 @@ func (at *APITokenQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := at.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -734,7 +734,7 @@ func (ap *ActionPlanQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ap.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -1192,7 +1192,7 @@ func (aph *ActionPlanHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := aph.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -1686,7 +1686,7 @@ func (c *ContactQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -2090,7 +2090,7 @@ func (ch *ContactHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ch.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -2530,7 +2530,7 @@ func (c *ControlQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -2952,7 +2952,7 @@ func (ch *ControlHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ch.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -3410,7 +3410,7 @@ func (ci *ControlImplementationQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ci.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -3796,7 +3796,7 @@ func (cih *ControlImplementationHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := cih.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -4218,7 +4218,7 @@ func (co *ControlObjectiveQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := co.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -4658,7 +4658,7 @@ func (coh *ControlObjectiveHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := coh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -5134,7 +5134,7 @@ func (dd *DocumentDataQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := dd.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -5448,7 +5448,7 @@ func (ddh *DocumentDataHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ddh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -5798,7 +5798,7 @@ func (e *EntityQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := e.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -6166,7 +6166,7 @@ func (eh *EntityHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := eh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -6570,7 +6570,7 @@ func (et *EntityTypeQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := et.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -6902,7 +6902,7 @@ func (eth *EntityTypeHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := eth.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -7270,7 +7270,7 @@ func (e *EventQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := e.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -7584,7 +7584,7 @@ func (eh *EventHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := eh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -7934,7 +7934,7 @@ func (e *EvidenceQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := e.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -8320,7 +8320,7 @@ func (eh *EvidenceHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := eh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -8742,7 +8742,7 @@ func (f *FileQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := f.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -9056,7 +9056,7 @@ func (fh *FileHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := fh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -9406,7 +9406,7 @@ func (gr *GroupQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gr.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -9756,7 +9756,7 @@ func (gh *GroupHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -10142,7 +10142,7 @@ func (gm *GroupMembershipQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gm.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -10474,7 +10474,7 @@ func (gmh *GroupMembershipHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gmh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -10842,7 +10842,7 @@ func (gs *GroupSettingQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gs.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -11156,7 +11156,7 @@ func (gsh *GroupSettingHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := gsh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -11506,7 +11506,7 @@ func (h *HushQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := h.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -11856,7 +11856,7 @@ func (hh *HushHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := hh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -12242,7 +12242,7 @@ func (i *IntegrationQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := i.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -12592,7 +12592,7 @@ func (ih *IntegrationHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ih.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -12978,7 +12978,7 @@ func (ip *InternalPolicyQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ip.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -13382,7 +13382,7 @@ func (iph *InternalPolicyHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := iph.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -13822,7 +13822,7 @@ func (i *InviteQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := i.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -14226,7 +14226,7 @@ func (mc *MappedControlQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := mc.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -14558,7 +14558,7 @@ func (mch *MappedControlHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := mch.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -14926,7 +14926,7 @@ func (n *NarrativeQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := n.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -15258,7 +15258,7 @@ func (nh *NarrativeHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := nh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -15626,7 +15626,7 @@ func (n *NoteQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := n.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -15940,7 +15940,7 @@ func (nh *NoteHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := nh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -16254,7 +16254,7 @@ func (o *OnboardingQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := o.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -16539,7 +16539,7 @@ func (om *OrgMembershipQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := om.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -16871,7 +16871,7 @@ func (omh *OrgMembershipHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := omh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -17203,7 +17203,7 @@ func (os *OrgSubscriptionQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := os.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -17625,7 +17625,7 @@ func (osh *OrgSubscriptionHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := osh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -18083,7 +18083,7 @@ func (o *OrganizationQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := o.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -18433,7 +18433,7 @@ func (oh *OrganizationHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := oh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -18819,7 +18819,7 @@ func (os *OrganizationSettingQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := os.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -19133,7 +19133,7 @@ func (osh *OrganizationSettingHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := osh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -19483,7 +19483,7 @@ func (pat *PersonalAccessTokenQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := pat.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -19887,7 +19887,7 @@ func (pr *ProcedureQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := pr.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -20291,7 +20291,7 @@ func (ph *ProcedureHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ph.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -20731,7 +20731,7 @@ func (pr *ProgramQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := pr.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -21117,7 +21117,7 @@ func (ph *ProgramHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ph.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -21539,7 +21539,7 @@ func (pm *ProgramMembershipQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := pm.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -21871,7 +21871,7 @@ func (pmh *ProgramMembershipHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := pmh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -22239,7 +22239,7 @@ func (r *RiskQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := r.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -22697,7 +22697,7 @@ func (rh *RiskHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := rh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -23191,7 +23191,7 @@ func (s *StandardQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := s.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -23631,7 +23631,7 @@ func (sh *StandardHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := sh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -24107,7 +24107,7 @@ func (s *SubcontrolQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := s.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -24529,7 +24529,7 @@ func (sh *SubcontrolHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := sh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -24987,7 +24987,7 @@ func (s *SubscriberQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := s.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -25391,7 +25391,7 @@ func (ts *TFASettingQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ts.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -25741,7 +25741,7 @@ func (t *TaskQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := t.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -26145,7 +26145,7 @@ func (th *TaskHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := th.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -26585,7 +26585,7 @@ func (t *TemplateQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := t.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -26935,7 +26935,7 @@ func (th *TemplateHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := th.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -27321,7 +27321,7 @@ func (u *UserQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := u.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -27689,7 +27689,7 @@ func (uh *UserHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := uh.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -28093,7 +28093,7 @@ func (us *UserSettingQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := us.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
@@ -28407,7 +28407,7 @@ func (ush *UserSettingHistoryQuery) Paginate(
 		if hasPagination || ignoredEdges {
 			c := ush.Clone()
 			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
 			}
 			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
