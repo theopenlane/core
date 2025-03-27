@@ -775,7 +775,7 @@ func (usq *UserSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery
 	return usq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (usq *UserSettingQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryIDs)
 	if err := usq.prepareQuery(ctx); err != nil {

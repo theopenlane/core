@@ -468,7 +468,7 @@ func (fhq *FileHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *FileHis
 	return fhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (fhq *FileHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
 	if err := fhq.prepareQuery(ctx); err != nil {

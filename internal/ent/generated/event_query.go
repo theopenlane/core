@@ -2047,7 +2047,7 @@ func (eq *EventQuery) WithNamedOrgSubscriptions(name string, opts ...func(*OrgSu
 	return eq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (eq *EventQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
 	if err := eq.prepareQuery(ctx); err != nil {

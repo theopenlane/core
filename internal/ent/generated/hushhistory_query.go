@@ -468,7 +468,7 @@ func (hhq *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHis
 	return hhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (hhq *HushHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryIDs)
 	if err := hhq.prepareQuery(ctx); err != nil {

@@ -1825,7 +1825,7 @@ func (sq *SubcontrolQuery) WithNamedInternalPolicies(name string, opts ...func(*
 	return sq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (sq *SubcontrolQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
 	if err := sq.prepareQuery(ctx); err != nil {

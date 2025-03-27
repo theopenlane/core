@@ -820,7 +820,7 @@ func (cq *ContactQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *C
 	return cq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (cq *ContactQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
 	if err := cq.prepareQuery(ctx); err != nil {

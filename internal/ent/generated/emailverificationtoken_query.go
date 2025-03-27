@@ -557,7 +557,7 @@ func (evtq *EmailVerificationTokenQuery) Modify(modifiers ...func(s *sql.Selecto
 	return evtq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (evtq *EmailVerificationTokenQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, evtq.ctx, ent.OpQueryIDs)
 	if err := evtq.prepareQuery(ctx); err != nil {

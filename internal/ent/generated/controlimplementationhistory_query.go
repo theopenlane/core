@@ -468,7 +468,7 @@ func (cihq *ControlImplementationHistoryQuery) Modify(modifiers ...func(s *sql.S
 	return cihq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (cihq *ControlImplementationHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryIDs)
 	if err := cihq.prepareQuery(ctx); err != nil {

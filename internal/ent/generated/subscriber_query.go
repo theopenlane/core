@@ -689,7 +689,7 @@ func (sq *SubscriberQuery) WithNamedEvents(name string, opts ...func(*EventQuery
 	return sq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (sq *SubscriberQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
 	if err := sq.prepareQuery(ctx); err != nil {

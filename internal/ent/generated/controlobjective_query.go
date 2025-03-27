@@ -2037,7 +2037,7 @@ func (coq *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*Task
 	return coq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (coq *ControlObjectiveQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryIDs)
 	if err := coq.prepareQuery(ctx); err != nil {

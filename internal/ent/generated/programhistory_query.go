@@ -468,7 +468,7 @@ func (phq *ProgramHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Prog
 	return phq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (phq *ProgramHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryIDs)
 	if err := phq.prepareQuery(ctx); err != nil {

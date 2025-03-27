@@ -682,7 +682,7 @@ func (osq *OrgSubscriptionQuery) WithNamedEvents(name string, opts ...func(*Even
 	return osq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (osq *OrgSubscriptionQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
 	if err := osq.prepareQuery(ctx); err != nil {

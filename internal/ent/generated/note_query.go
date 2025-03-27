@@ -643,7 +643,7 @@ func (nq *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
 	return nq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (nq *NoteQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryIDs)
 	if err := nq.prepareQuery(ctx); err != nil {

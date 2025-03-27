@@ -557,7 +557,7 @@ func (atq *APITokenQuery) Modify(modifiers ...func(s *sql.Selector)) *APITokenSe
 	return atq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (atq *APITokenQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, atq.ctx, ent.OpQueryIDs)
 	if err := atq.prepareQuery(ctx); err != nil {

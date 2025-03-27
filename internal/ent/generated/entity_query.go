@@ -1134,7 +1134,7 @@ func (eq *EntityQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *En
 	return eq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (eq *EntityQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
 	if err := eq.prepareQuery(ctx); err != nil {

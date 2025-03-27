@@ -468,7 +468,7 @@ func (aphq *ActionPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *
 	return aphq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (aphq *ActionPlanHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryIDs)
 	if err := aphq.prepareQuery(ctx); err != nil {

@@ -468,7 +468,7 @@ func (gmhq *GroupMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 	return gmhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (gmhq *GroupMembershipHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryIDs)
 	if err := gmhq.prepareQuery(ctx); err != nil {

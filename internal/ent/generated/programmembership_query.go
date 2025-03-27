@@ -721,7 +721,7 @@ func (pmq *ProgramMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *P
 	return pmq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (pmq *ProgramMembershipQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryIDs)
 	if err := pmq.prepareQuery(ctx); err != nil {

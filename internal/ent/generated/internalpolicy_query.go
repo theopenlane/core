@@ -1707,7 +1707,7 @@ func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*Pro
 	return ipq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (ipq *InternalPolicyQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ipq.ctx, ent.OpQueryIDs)
 	if err := ipq.prepareQuery(ctx); err != nil {

@@ -468,7 +468,7 @@ func (shq *StandardHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Sta
 	return shq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (shq *StandardHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
 	if err := shq.prepareQuery(ctx); err != nil {

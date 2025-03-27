@@ -767,7 +767,7 @@ func (omq *OrgMembershipQuery) WithNamedEvents(name string, opts ...func(*EventQ
 	return omq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (omq *OrgMembershipQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryIDs)
 	if err := omq.prepareQuery(ctx); err != nil {

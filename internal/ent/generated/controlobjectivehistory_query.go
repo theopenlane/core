@@ -468,7 +468,7 @@ func (cohq *ControlObjectiveHistoryQuery) Modify(modifiers ...func(s *sql.Select
 	return cohq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (cohq *ControlObjectiveHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, cohq.ctx, ent.OpQueryIDs)
 	if err := cohq.prepareQuery(ctx); err != nil {

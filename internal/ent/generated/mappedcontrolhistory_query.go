@@ -468,7 +468,7 @@ func (mchq *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)
 	return mchq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (mchq *MappedControlHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryIDs)
 	if err := mchq.prepareQuery(ctx); err != nil {

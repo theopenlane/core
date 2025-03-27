@@ -468,7 +468,7 @@ func (ddhq *DocumentDataHistoryQuery) Modify(modifiers ...func(s *sql.Selector))
 	return ddhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (ddhq *DocumentDataHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryIDs)
 	if err := ddhq.prepareQuery(ctx); err != nil {

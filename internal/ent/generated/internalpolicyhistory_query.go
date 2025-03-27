@@ -468,7 +468,7 @@ func (iphq *InternalPolicyHistoryQuery) Modify(modifiers ...func(s *sql.Selector
 	return iphq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (iphq *InternalPolicyHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryIDs)
 	if err := iphq.prepareQuery(ctx); err != nil {

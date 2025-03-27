@@ -866,7 +866,7 @@ func (hq *HushQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Hu
 	return hq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (hq *HushQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryIDs)
 	if err := hq.prepareQuery(ctx); err != nil {

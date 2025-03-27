@@ -468,7 +468,7 @@ func (oshq *OrganizationSettingHistoryQuery) Modify(modifiers ...func(s *sql.Sel
 	return oshq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (oshq *OrganizationSettingHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryIDs)
 	if err := oshq.prepareQuery(ctx); err != nil {

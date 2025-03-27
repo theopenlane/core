@@ -27,7 +27,7 @@ type SchemaFuncs interface {
 func toSchemaFuncs(schema any) SchemaFuncs {
 	sch, ok := schema.(SchemaFuncs)
 	if !ok {
-		log.Fatal().Msgf("schema must implement SchemaFuncs %v", schema)
+		log.Fatal().Msg("schema must implement SchemaFuncs")
 	}
 
 	return sch

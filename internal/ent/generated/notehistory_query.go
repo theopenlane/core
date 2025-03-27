@@ -468,7 +468,7 @@ func (nhq *NoteHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteHis
 	return nhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (nhq *NoteHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
 	if err := nhq.prepareQuery(ctx); err != nil {

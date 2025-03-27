@@ -194,11 +194,10 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	}
 
 	for _, fieldName := range o.FieldNames {
-		objectType := o.Kind
 		objectIDField := field.
 			String(fieldName).
 			Optional().
-			Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
+			Comment(fmt.Sprintf("the %v id that owns the object", getName(o.Kind)))
 
 		// if explicitly set to allow empty values, otherwise ensure it is not empty
 		if !o.AllowEmptyForSystemAdmin {
@@ -231,7 +230,7 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 
 	for _, fieldName := range o.FieldNames {
 		ownerEdge := edge.
-			From("owner", o.Kind).
+			From("owner", getType(o.Kind)).
 			Field(fieldName).
 			Ref(o.Ref).
 			Unique()
@@ -344,13 +343,6 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne)
-}
-
-// getObjectType takes the `kind` and returns the object type in upper camel case
-func getObjectType(kind any) string {
-	sch := toSchemaFuncs(kind)
-
-	return strcase.UpperCamelCase(sch.Name())
 }
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins

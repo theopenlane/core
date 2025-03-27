@@ -4852,7 +4852,7 @@ func (oq *OrganizationQuery) WithNamedMembers(name string, opts ...func(*OrgMemb
 	return oq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (oq *OrganizationQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
 	if err := oq.prepareQuery(ctx); err != nil {

@@ -468,7 +468,7 @@ func (rhq *RiskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskHis
 	return rhq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (rhq *RiskHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryIDs)
 	if err := rhq.prepareQuery(ctx); err != nil {

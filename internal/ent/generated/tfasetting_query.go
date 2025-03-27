@@ -557,7 +557,7 @@ func (tsq *TFASettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TFASetti
 	return tsq.Select()
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (tsq *TFASettingQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryIDs)
 	if err := tsq.prepareQuery(ctx); err != nil {

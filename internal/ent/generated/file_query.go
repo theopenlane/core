@@ -2054,7 +2054,7 @@ func (fq *FileQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Fi
 	return fq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (fq *FileQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryIDs)
 	if err := fq.prepareQuery(ctx); err != nil {

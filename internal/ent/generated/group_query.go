@@ -3851,7 +3851,7 @@ func (gq *GroupQuery) WithNamedMembers(name string, opts ...func(*GroupMembershi
 	return gq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (gq *GroupQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryIDs)
 	if err := gq.prepareQuery(ctx); err != nil {

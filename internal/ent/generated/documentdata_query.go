@@ -898,7 +898,7 @@ func (ddq *DocumentDataQuery) WithNamedFiles(name string, opts ...func(*FileQuer
 	return ddq
 }
 
-// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
 func (ddq *DocumentDataQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryIDs)
 	if err := ddq.prepareQuery(ctx); err != nil {
