@@ -294,14 +294,11 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 	}
 
 	expiresAt := time.Unix(0, 0)
-	if customer.Subscription.EndDate != 0 {
-		expiresAt = time.Unix(customer.Subscription.EndDate, 0)
+	if customer.EndDate != 0 {
+		expiresAt = time.Unix(customer.EndDate, 0)
 	}
 
-	active := false
-	if customer.Subscription.Status == string(stripe.SubscriptionStatusActive) || customer.Subscription.Status == string(stripe.SubscriptionStatusTrialing) {
-		active = true
-	}
+	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
 
 	return client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
 		SetStripeSubscriptionID(customer.StripeSubscriptionID).
@@ -341,7 +338,7 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 	o.OrganizationName = org.Name
 	o.OrganizationSettingsID = org.Edges.Setting.ID
 	o.PersonalOrg = org.PersonalOrg
-	o.ContactInfo.Email = org.Edges.Setting.BillingEmail
+	o.Email = org.Edges.Setting.BillingEmail
 
 	return nil
 }
