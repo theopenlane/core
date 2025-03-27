@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -48,6 +49,7 @@ func (Control) Fields() []ent.Field {
 		field.String("ref_code").
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("ref_code"),
 			).
 			NotEmpty().
 			Comment("the unique reference code for the control"),
