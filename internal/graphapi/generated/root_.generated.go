@@ -25956,6 +25956,11 @@ Properties by which ActionPlanHistory connections can be ordered.
 enum ActionPlanHistoryOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
   due_date
   PRIORITY
   source
@@ -26305,6 +26310,11 @@ Properties by which ActionPlan connections can be ordered.
 enum ActionPlanOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
   due_date
   PRIORITY
   source
@@ -28166,6 +28176,7 @@ enum ControlHistoryOrderField {
   CONTROL_TYPE
   category
   subcategory
+  ref_code
 }
 """
 ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -29627,6 +29638,7 @@ Properties by which ControlObjectiveHistory connections can be ordered.
 enum ControlObjectiveHistoryOrderField {
   created_at
   updated_at
+  revision
   name
   status
   SOURCE
@@ -29971,6 +29983,7 @@ Properties by which ControlObjective connections can be ordered.
 enum ControlObjectiveOrderField {
   created_at
   updated_at
+  revision
   name
   status
   SOURCE
@@ -30349,6 +30362,7 @@ enum ControlOrderField {
   CONTROL_TYPE
   category
   subcategory
+  ref_code
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -40844,6 +40858,11 @@ Properties by which InternalPolicyHistory connections can be ordered.
 enum InternalPolicyHistoryOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
 }
 """
 InternalPolicyHistoryWhereInput is used for filtering InternalPolicyHistory objects.
@@ -41157,6 +41176,11 @@ Properties by which InternalPolicy connections can be ordered.
 enum InternalPolicyOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
 }
 """
 InternalPolicyWhereInput is used for filtering InternalPolicy objects.
@@ -48555,6 +48579,11 @@ Properties by which ProcedureHistory connections can be ordered.
 enum ProcedureHistoryOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
 }
 """
 ProcedureHistoryWhereInput is used for filtering ProcedureHistory objects.
@@ -48868,6 +48897,11 @@ Properties by which Procedure connections can be ordered.
 enum ProcedureOrderField {
   created_at
   updated_at
+  revision
+  name
+  STATUS
+  review_due
+  REVIEW_FREQUENCY
 }
 """
 ProcedureWhereInput is used for filtering Procedure objects.
@@ -54609,6 +54643,7 @@ Properties by which StandardHistory connections can be ordered.
 enum StandardHistoryOrderField {
   created_at
   updated_at
+  revision
   name
   short_name
   framework
@@ -55020,6 +55055,7 @@ Properties by which Standard connections can be ordered.
 enum StandardOrderField {
   created_at
   updated_at
+  revision
   name
   short_name
   framework
