@@ -1636,7 +1636,7 @@ func (rq *RiskQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQ
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (rq *RiskQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (rq *RiskQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
 	if err := rq.prepareQuery(ctx); err != nil {
 		return 0, err

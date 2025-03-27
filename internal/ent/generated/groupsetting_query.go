@@ -558,7 +558,7 @@ func (gsq *GroupSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupS
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (gsq *GroupSettingQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (gsq *GroupSettingQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryIDs)
 	if err := gsq.prepareQuery(ctx); err != nil {
 		return 0, err

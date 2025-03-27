@@ -469,7 +469,7 @@ func (nhq *NarrativeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Na
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (nhq *NarrativeHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (nhq *NarrativeHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
 	if err := nhq.prepareQuery(ctx); err != nil {
 		return 0, err

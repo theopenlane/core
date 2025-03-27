@@ -659,7 +659,7 @@ func (etq *EntityTypeQuery) WithNamedEntities(name string, opts ...func(*EntityQ
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (etq *EntityTypeQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (etq *EntityTypeQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryIDs)
 	if err := etq.prepareQuery(ctx); err != nil {
 		return 0, err

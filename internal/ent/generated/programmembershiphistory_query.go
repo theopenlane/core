@@ -469,7 +469,7 @@ func (pmhq *ProgramMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selec
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (pmhq *ProgramMembershipHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (pmhq *ProgramMembershipHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, pmhq.ctx, ent.OpQueryIDs)
 	if err := pmhq.prepareQuery(ctx); err != nil {
 		return 0, err

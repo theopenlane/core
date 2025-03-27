@@ -469,7 +469,7 @@ func (shq *SubcontrolHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *S
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (shq *SubcontrolHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (shq *SubcontrolHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
 	if err := shq.prepareQuery(ctx); err != nil {
 		return 0, err

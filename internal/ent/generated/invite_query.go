@@ -690,7 +690,7 @@ func (iq *InviteQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (iq *InviteQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (iq *InviteQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryIDs)
 	if err := iq.prepareQuery(ctx); err != nil {
 		return 0, err

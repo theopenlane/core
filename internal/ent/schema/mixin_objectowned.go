@@ -3,8 +3,6 @@ package schema
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -65,13 +63,11 @@ type InterceptorFunc func(o ObjectOwnedMixin) ent.Interceptor
 func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 	sch := toSchemaFuncs(schema)
 
-	defaultInterceptor := interceptors.FilterQueryResults[V]()
-
 	// defaults settings
 	o := ObjectOwnedMixin{
 		Ref:              sch.PluralName(),
 		HookFuncs:        []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
-		InterceptorFuncs: []InterceptorFunc{func(o ObjectOwnedMixin) ent.Interceptor { return defaultInterceptor }},
+		InterceptorFuncs: []InterceptorFunc{func(o ObjectOwnedMixin) ent.Interceptor { return interceptors.FilterQueryResults[V]() }},
 		OwnerRelation:    fgax.ParentRelation,
 	}
 
@@ -350,13 +346,11 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne)
 }
 
-// getObjectType takes the `kind` and returns the object type
-// this should be type of the schema, e.g. `func(schema.Organization)` which will return `organization`
-// TODO: update this to use new func
+// getObjectType takes the `kind` and returns the object type in upper camel case
 func getObjectType(kind any) string {
-	objectType := reflect.TypeOf(kind).String()
+	sch := toSchemaFuncs(kind)
 
-	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(objectType, "func(schema.", ""), ")", ""))
+	return strcase.UpperCamelCase(sch.Name())
 }
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins

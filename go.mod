@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
-	github.com/99designs/gqlgen v0.17.68
+	github.com/99designs/gqlgen v0.17.70
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.31.0
 	github.com/alicebob/miniredis/v2 v2.34.0
@@ -72,7 +72,7 @@ require (
 	github.com/theopenlane/entx v0.5.1
 	github.com/theopenlane/gqlgen-plugins v0.4.10
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.9.4-0.20250326053412-099310291d02
+	github.com/theopenlane/iam v0.9.4
 	github.com/theopenlane/newman v0.1.3
 	github.com/theopenlane/riverboat v0.0.9
 	github.com/theopenlane/utils v0.4.4
@@ -177,7 +177,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
-	github.com/docker/docker v28.0.3+incompatible // indirect
+	github.com/docker/docker v28.0.4+incompatible // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect

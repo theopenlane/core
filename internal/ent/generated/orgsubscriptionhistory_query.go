@@ -469,7 +469,7 @@ func (oshq *OrgSubscriptionHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (oshq *OrgSubscriptionHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (oshq *OrgSubscriptionHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryIDs)
 	if err := oshq.prepareQuery(ctx); err != nil {
 		return 0, err

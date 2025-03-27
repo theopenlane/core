@@ -2704,7 +2704,7 @@ func (cq *ControlQuery) WithNamedInternalPolicies(name string, opts ...func(*Int
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (cq *ControlQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (cq *ControlQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
 	if err := cq.prepareQuery(ctx); err != nil {
 		return 0, err

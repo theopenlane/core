@@ -469,7 +469,7 @@ func (uhq *UserHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserHis
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (uhq *UserHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (uhq *UserHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, uhq.ctx, ent.OpQueryIDs)
 	if err := uhq.prepareQuery(ctx); err != nil {
 		return 0, err

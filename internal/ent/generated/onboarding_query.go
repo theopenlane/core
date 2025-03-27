@@ -558,7 +558,7 @@ func (oq *OnboardingQuery) Modify(modifiers ...func(s *sql.Selector)) *Onboardin
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (oq *OnboardingQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (oq *OnboardingQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
 	if err := oq.prepareQuery(ctx); err != nil {
 		return 0, err

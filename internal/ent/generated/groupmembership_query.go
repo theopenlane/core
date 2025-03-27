@@ -854,7 +854,7 @@ func (gmq *GroupMembershipQuery) WithNamedEvents(name string, opts ...func(*Even
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (gmq *GroupMembershipQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (gmq *GroupMembershipQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, gmq.ctx, ent.OpQueryIDs)
 	if err := gmq.prepareQuery(ctx); err != nil {
 		return 0, err

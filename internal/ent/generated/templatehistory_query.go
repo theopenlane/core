@@ -469,7 +469,7 @@ func (thq *TemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Tem
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (thq *TemplateHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (thq *TemplateHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
 	if err := thq.prepareQuery(ctx); err != nil {
 		return 0, err

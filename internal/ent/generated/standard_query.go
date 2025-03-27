@@ -659,7 +659,7 @@ func (sq *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQue
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (sq *StandardQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (sq *StandardQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
 	if err := sq.prepareQuery(ctx); err != nil {
 		return 0, err

@@ -551,7 +551,7 @@ func (wq *WebauthnQuery) Modify(modifiers ...func(s *sql.Selector)) *WebauthnSel
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (wq *WebauthnQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (wq *WebauthnQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, wq.ctx, ent.OpQueryIDs)
 	if err := wq.prepareQuery(ctx); err != nil {
 		return 0, err

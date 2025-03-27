@@ -469,7 +469,7 @@ func (ihq *IntegrationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (ihq *IntegrationHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (ihq *IntegrationHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ihq.ctx, ent.OpQueryIDs)
 	if err := ihq.prepareQuery(ctx); err != nil {
 		return 0, err

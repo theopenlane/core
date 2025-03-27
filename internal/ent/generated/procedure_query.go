@@ -1737,7 +1737,7 @@ func (pq *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) 
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (pq *ProcedureQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (pq *ProcedureQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryIDs)
 	if err := pq.prepareQuery(ctx); err != nil {
 		return 0, err

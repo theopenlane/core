@@ -823,7 +823,7 @@ func (patq *PersonalAccessTokenQuery) WithNamedEvents(name string, opts ...func(
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (patq *PersonalAccessTokenQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (patq *PersonalAccessTokenQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryIDs)
 	if err := patq.prepareQuery(ctx); err != nil {
 		return 0, err

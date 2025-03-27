@@ -469,7 +469,7 @@ func (ehq *EntityHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Entit
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (ehq *EntityHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (ehq *EntityHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryIDs)
 	if err := ehq.prepareQuery(ctx); err != nil {
 		return 0, err

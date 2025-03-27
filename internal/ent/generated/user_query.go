@@ -2520,7 +2520,7 @@ func (uq *UserQuery) WithNamedProgramMemberships(name string, opts ...func(*Prog
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (uq *UserQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (uq *UserQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, uq.ctx, ent.OpQueryIDs)
 	if err := uq.prepareQuery(ctx); err != nil {
 		return 0, err

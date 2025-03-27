@@ -469,7 +469,7 @@ func (chq *ContactHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Cont
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (chq *ContactHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (chq *ContactHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryIDs)
 	if err := chq.prepareQuery(ctx); err != nil {
 		return 0, err

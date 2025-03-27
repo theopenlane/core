@@ -469,7 +469,7 @@ func (gshq *GroupSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector))
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (gshq *GroupSettingHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (gshq *GroupSettingHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, gshq.ctx, ent.OpQueryIDs)
 	if err := gshq.prepareQuery(ctx); err != nil {
 		return 0, err

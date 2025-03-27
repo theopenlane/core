@@ -789,7 +789,7 @@ func (tq *TemplateQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (tq *TemplateQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (tq *TemplateQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
 	if err := tq.prepareQuery(ctx); err != nil {
 		return 0, err

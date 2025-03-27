@@ -1347,7 +1347,7 @@ func (eq *EvidenceQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (eq *EvidenceQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (eq *EvidenceQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
 	if err := eq.prepareQuery(ctx); err != nil {
 		return 0, err

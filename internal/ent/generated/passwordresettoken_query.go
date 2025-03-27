@@ -558,7 +558,7 @@ func (prtq *PasswordResetTokenQuery) Modify(modifiers ...func(s *sql.Selector)) 
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (prtq *PasswordResetTokenQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (prtq *PasswordResetTokenQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryIDs)
 	if err := prtq.prepareQuery(ctx); err != nil {
 		return 0, err

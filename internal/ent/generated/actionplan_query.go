@@ -1246,7 +1246,7 @@ func (apq *ActionPlanQuery) WithNamedPrograms(name string, opts ...func(*Program
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (apq *ActionPlanQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (apq *ActionPlanQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, apq.ctx, ent.OpQueryIDs)
 	if err := apq.prepareQuery(ctx); err != nil {
 		return 0, err

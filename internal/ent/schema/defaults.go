@@ -27,7 +27,7 @@ type SchemaFuncs interface {
 func toSchemaFuncs(schema any) SchemaFuncs {
 	sch, ok := schema.(SchemaFuncs)
 	if !ok {
-		log.Fatal().Msg("schema must implement SchemaFuncs")
+		log.Fatal().Msgf("schema must implement SchemaFuncs %v", schema)
 	}
 
 	return sch
@@ -156,7 +156,7 @@ func graphqlName(name string) string {
 // edgeToWithPagination uses the provided edge definition to create an edge with pagination
 // for the given edge schema, this should be used when there will be a 1:M relationship or M:M relationship
 // to the edge schema
-func edgeToWithPagination(e *edgeDefinition) (edge ent.Edge) {
+func edgeToWithPagination(e *edgeDefinition) ent.Edge {
 	defaultAnnotations := []schema.Annotation{entgql.RelayConnection()}
 	if e.annotations != nil {
 		e.annotations = append(defaultAnnotations, e.annotations...)
@@ -165,10 +165,6 @@ func edgeToWithPagination(e *edgeDefinition) (edge ent.Edge) {
 	}
 
 	e.getEdgeDetails(true)
-
-	e.annotations = append(e.annotations,
-		entgql.MapsTo(graphqlName(e.name)), // ensure the edge maps to the graphql name, this is usually a no-op
-	)
 
 	return basicEdgeTo(e, false)
 }
@@ -186,8 +182,6 @@ func edgeFromWithPagination(e *edgeDefinition) ent.Edge {
 	}
 
 	e.getEdgeDetails(true)
-
-	e.annotations = append(e.annotations, entgql.MapsTo(graphqlName(e.name)))
 
 	return basicEdgeFrom(e, false)
 }

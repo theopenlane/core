@@ -469,7 +469,7 @@ func (thq *TaskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskHis
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (thq *TaskHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (thq *TaskHistoryQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
 	if err := thq.prepareQuery(ctx); err != nil {
 		return 0, err

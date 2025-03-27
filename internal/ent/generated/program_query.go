@@ -2693,7 +2693,7 @@ func (pq *ProgramQuery) WithNamedMembers(name string, opts ...func(*ProgramMembe
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (pq *ProgramQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (pq *ProgramQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryIDs)
 	if err := pq.prepareQuery(ctx); err != nil {
 		return 0, err

@@ -134,7 +134,7 @@ func main() {
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Objects{}),
 		),
-		entc.TemplateDir("./internal/ent/templates"),
+		entc.TemplateDir("./internal/ent/generate/templates/ent"),
 		entc.Extensions(
 			gqlExt,
 			historyExt,

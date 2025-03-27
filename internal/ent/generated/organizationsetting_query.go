@@ -690,7 +690,7 @@ func (osq *OrganizationSettingQuery) WithNamedFiles(name string, opts ...func(*F
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (osq *OrganizationSettingQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (osq *OrganizationSettingQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
 	if err := osq.prepareQuery(ctx); err != nil {
 		return 0, err

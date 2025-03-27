@@ -612,7 +612,7 @@ func (ciq *ControlImplementationQuery) WithNamedControls(name string, opts ...fu
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (ciq *ControlImplementationQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (ciq *ControlImplementationQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, ciq.ctx, ent.OpQueryIDs)
 	if err := ciq.prepareQuery(ctx); err != nil {
 		return 0, err

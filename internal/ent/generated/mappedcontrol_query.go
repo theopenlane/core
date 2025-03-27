@@ -743,7 +743,7 @@ func (mcq *MappedControlQuery) WithNamedSubcontrols(name string, opts ...func(*S
 }
 
 // CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
-func (mcq *MappedControlQuery) CountWithFilter(ctx context.Context) (int, error) {
+func (mcq *MappedControlQuery) CountIDs(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryIDs)
 	if err := mcq.prepareQuery(ctx); err != nil {
 		return 0, err
