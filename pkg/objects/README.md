@@ -1,3 +1,6 @@
+> This project was originally inspired by, and parts taken from: https://github.com/adelowo/gulter
+> Material additions / changes are in the form of support for use within GraphQL and REST APIs, functional options, and additional AWS S3 support features
+
 # Objects
 
 `Objects` is a package designed to simplify the process of managing receipt of
