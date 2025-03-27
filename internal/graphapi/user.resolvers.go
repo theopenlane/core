@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -25,9 +24,6 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input generated.Creat
 
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).User.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
@@ -63,10 +59,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}
@@ -86,10 +79,7 @@ func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}
 
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(userID)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(userID)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
 	}

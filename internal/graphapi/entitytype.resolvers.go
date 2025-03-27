@@ -18,7 +18,7 @@ import (
 
 // CreateEntityType is the resolver for the createEntityType field.
 func (r *mutationResolver) CreateEntityType(ctx context.Context, input generated.CreateEntityTypeInput) (*model.EntityTypeCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkEntityType(ctx context.Context, input []*ge
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateEntityType(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkEntityType(ctx context.Context, input []*ge
 
 // CreateBulkCSVEntityType is the resolver for the createBulkCSVEntityType field.
 func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input graphql.Upload) (*model.EntityTypeBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateEntityTypeInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input gr
 
 // UpdateEntityType is the resolver for the updateEntityType field.
 func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, input generated.UpdateEntityTypeInput) (*model.EntityTypeUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).EntityType.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*mo
 
 // EntityType is the resolver for the entityType field.
 func (r *queryResolver) EntityType(ctx context.Context, id string) (*generated.EntityType, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
 	}

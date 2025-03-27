@@ -30,10 +30,10 @@ func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.Fi
 
 // File is the resolver for the file field.
 func (r *queryResolver) File(ctx context.Context, id string) (*generated.File, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).File.Query().Where(file.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).File.Query().Where(file.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
 	}

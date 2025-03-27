@@ -18,9 +18,6 @@ import (
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
@@ -44,7 +41,7 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 		Query().
 		WithMembers().
 		Where(entorg.IDEQ(res.Organization.ID)).
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -61,9 +58,6 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 
 // CreateOrgSettings is the resolver for the createOrgSettings field.
 func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context, obj *generated.CreateOrganizationInput, data *generated.CreateOrganizationSettingInput) error {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	c := withTransactionalMutation(ctx)
 
 	orgSettings, err := c.OrganizationSetting.Create().SetInput(*data).Save(ctx)
@@ -78,9 +72,6 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 // AddOrgMembers is the resolver for the addOrgMembers field.
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if orgID == nil {
 		log.Error().Msg("unable to get org from context")

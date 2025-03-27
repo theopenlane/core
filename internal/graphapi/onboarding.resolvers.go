@@ -10,7 +10,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -21,9 +20,6 @@ func (r *mutationResolver) CreateOnboarding(ctx context.Context, input generated
 
 		return nil, ErrResourceNotAccessibleWithToken
 	}
-
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Onboarding.Create().SetInput(input).Save(ctx)
 	if err != nil {

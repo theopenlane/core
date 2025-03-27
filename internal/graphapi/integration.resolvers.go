@@ -18,7 +18,7 @@ import (
 
 // CreateIntegration is the resolver for the createIntegration field.
 func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*model.IntegrationCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*g
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateIntegration(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*g
 
 // CreateBulkCSVIntegration is the resolver for the createBulkCSVIntegration field.
 func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*model.IntegrationBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateIntegrationInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input g
 
 // UpdateIntegration is the resolver for the updateIntegration field.
 func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*model.IntegrationUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*m
 
 // Integration is the resolver for the integration field.
 func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.Integration, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Integration.Query().Where(integration.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Integration.Query().Where(integration.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
 	}

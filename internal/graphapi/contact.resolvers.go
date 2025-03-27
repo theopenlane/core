@@ -18,7 +18,7 @@ import (
 
 // CreateContact is the resolver for the createContact field.
 func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput) (*model.ContactCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkContact(ctx context.Context, input []*gener
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateContact(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkContact(ctx context.Context, input []*gener
 
 // CreateBulkCSVContact is the resolver for the createBulkCSVContact field.
 func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*model.ContactBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateContactInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 
 // UpdateContact is the resolver for the updateContact field.
 func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*model
 
 // Contact is the resolver for the contact field.
 func (r *queryResolver) Contact(ctx context.Context, id string) (*generated.Contact, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Contact.Query().Where(contact.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Contact.Query().Where(contact.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
 	}

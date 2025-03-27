@@ -18,7 +18,7 @@ import (
 
 // CreateInternalPolicy is the resolver for the createInternalPolicy field.
 func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateInternalPolicy(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 
 // CreateBulkCSVInternalPolicy is the resolver for the createBulkCSVInternalPolicy field.
 func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateInternalPolicyInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.
 func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) 
 
 // InternalPolicy is the resolver for the internalPolicy field.
 func (r *queryResolver) InternalPolicy(ctx context.Context, id string) (*generated.InternalPolicy, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicy"})
 	}

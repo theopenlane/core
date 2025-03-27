@@ -18,7 +18,7 @@ import (
 
 // CreateControlImplementation is the resolver for the createControlImplementation field.
 func (r *mutationResolver) CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Create().SetInput(input).Save(ctx)
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateControlImplementation(ctx, input)
@@ -45,7 +45,7 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 
 // CreateBulkCSVControlImplementation is the resolver for the createBulkCSVControlImplementation field.
 func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateControlImplementationInput](input)
@@ -64,7 +64,7 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 
 // UpdateControlImplementation is the resolver for the updateControlImplementation field.
 func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Get(ctx, id)
@@ -102,10 +102,10 @@ func (r *mutationResolver) DeleteControlImplementation(ctx context.Context, id s
 
 // ControlImplementation is the resolver for the controlImplementation field.
 func (r *queryResolver) ControlImplementation(ctx context.Context, id string) (*generated.ControlImplementation, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
 	}

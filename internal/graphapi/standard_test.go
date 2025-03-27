@@ -237,7 +237,7 @@ func (suite *GraphTestSuite) TestQueryStandards() {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, suite)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateStandard() {
+func (suite *GraphTestSuite) v() {
 	t := suite.T()
 
 	numControls := 20

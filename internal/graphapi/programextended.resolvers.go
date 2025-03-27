@@ -19,9 +19,6 @@ import (
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
 func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,7 +49,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 	query, err := withTransactionalMutation(ctx).Program.
 		Query().
 		Where(program.ID(res.ID)).
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
@@ -69,9 +66,6 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 
 // CreateFullProgram is the resolver for the createFullProgram field.
 func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -160,7 +154,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	query, err := withTransactionalMutation(ctx).Program.
 		Query().
 		Where(program.ID(res.ID)).
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
@@ -177,8 +171,8 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 
 // CreateControlWithSubcontrols is the resolver for the createControlWithSubcontrols field.
 func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// grab preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(*input.Control).Save(ctx)
 	if err != nil {
@@ -203,7 +197,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 	query, err := withTransactionalMutation(ctx).Control.
 		Query().
 		Where(control.ID(res.ID)).
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 

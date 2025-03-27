@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTemplate is the resolver for the createTemplate field.
 func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput) (*model.TemplateCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,17 +48,11 @@ func (r *mutationResolver) CreateBulkTemplate(ctx context.Context, input []*gene
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateTemplate(ctx, input)
 }
 
 // CreateBulkCSVTemplate is the resolver for the createBulkCSVTemplate field.
 func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*model.TemplateBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateTemplateInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -87,9 +77,6 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 
 // UpdateTemplate is the resolver for the updateTemplate field.
 func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput) (*model.TemplateUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Template.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "template"})
@@ -132,10 +119,7 @@ func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*mode
 
 // Template is the resolver for the template field.
 func (r *queryResolver) Template(ctx context.Context, id string) (*generated.Template, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Template.Query().Where(template.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Template.Query().Where(template.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
 	}

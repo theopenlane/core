@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubcontrol is the resolver for the createSubcontrol field.
 func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,17 +48,11 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateSubcontrol(ctx, input)
 }
 
 // CreateBulkCSVSubcontrol is the resolver for the createBulkCSVSubcontrol field.
 func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateSubcontrolInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -87,9 +77,6 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 
 // UpdateSubcontrol is the resolver for the updateSubcontrol field.
 func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Subcontrol.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
@@ -132,10 +119,7 @@ func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*mo
 
 // Subcontrol is the resolver for the subcontrol field.
 func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.Subcontrol, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrol"})
 	}

@@ -92,8 +92,8 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) (
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// grab preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
@@ -125,7 +125,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		Query().
 		WithMembers().
 		Where(group.IDEQ(res.Group.ID)).
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -142,8 +142,8 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 
 // CreateGroupByClone is the resolver for the createGroupByClone field.
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
-	// grab preloads and set max result limits
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// grab preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
@@ -254,7 +254,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 	query, err := withTransactionalMutation(ctx).Group.Query().
 		Where(group.IDEQ(res.ID)).
 		WithMembers().
-		CollectFields(ctx, preloads...)
+		CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 	}
@@ -271,7 +271,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -348,7 +348,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 // UpdateGroupSettings is the resolver for the updateGroupSettings field.
 func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj *generated.UpdateGroupInput, data *generated.UpdateGroupSettingInput) error {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")

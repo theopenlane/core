@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrganizationSetting is the resolver for the createOrganizationSetting field.
 func (r *mutationResolver) CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organizationsetting"})
@@ -37,17 +33,11 @@ func (r *mutationResolver) CreateBulkOrganizationSetting(ctx context.Context, in
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateOrganizationSetting(ctx, input)
 }
 
 // CreateBulkCSVOrganizationSetting is the resolver for the createBulkCSVOrganizationSetting field.
 func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateOrganizationSettingInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -64,9 +54,6 @@ func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context,
 
 // UpdateOrganizationSetting is the resolver for the updateOrganizationSetting field.
 func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organizationsetting"})
@@ -102,10 +89,7 @@ func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id str
 
 // OrganizationSetting is the resolver for the organizationSetting field.
 func (r *queryResolver) OrganizationSetting(ctx context.Context, id string) (*generated.OrganizationSetting, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().Where(organizationsetting.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().Where(organizationsetting.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsetting"})
 	}

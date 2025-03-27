@@ -18,7 +18,7 @@ import (
 
 // CreateGroupMembership is the resolver for the createGroupMembership field.
 func (r *mutationResolver) CreateGroupMembership(ctx context.Context, input generated.CreateGroupMembershipInput) (*model.GroupMembershipCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).GroupMembership.Create().SetInput(input).Save(ctx)
@@ -44,7 +44,7 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateGroupMembership(ctx, input)
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 
 // CreateBulkCSVGroupMembership is the resolver for the createBulkCSVGroupMembership field.
 func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateGroupMembershipInput](input)
@@ -71,7 +71,7 @@ func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, inp
 
 // UpdateGroupMembership is the resolver for the updateGroupMembership field.
 func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).GroupMembership.Get(ctx, id)
@@ -109,10 +109,10 @@ func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string)
 
 // GroupMembership is the resolver for the groupMembership field.
 func (r *queryResolver) GroupMembership(ctx context.Context, id string) (*generated.GroupMembership, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).GroupMembership.Query().Where(groupmembership.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).GroupMembership.Query().Where(groupmembership.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
 	}

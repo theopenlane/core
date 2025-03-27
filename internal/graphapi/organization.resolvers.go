@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -33,9 +32,6 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 		}
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Organization.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
@@ -48,9 +44,6 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 
 // UpdateOrganization is the resolver for the updateOrganization field.
 func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})
@@ -98,10 +91,7 @@ func (r *queryResolver) Organization(ctx context.Context, id string) (*generated
 		return nil, newNotFoundError("id")
 	}
 
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Organization.Query().Where(organization.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Organization.Query().Where(organization.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
 	}

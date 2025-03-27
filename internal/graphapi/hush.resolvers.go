@@ -18,7 +18,7 @@ import (
 
 // CreateHush is the resolver for the createHush field.
 func (r *mutationResolver) CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Hush.Create().SetInput(input).Save(ctx)
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generate
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateHush(ctx, input)
@@ -45,7 +45,7 @@ func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generate
 
 // CreateBulkCSVHush is the resolver for the createBulkCSVHush field.
 func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateHushInput](input)
@@ -64,7 +64,7 @@ func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.
 
 // UpdateHush is the resolver for the updateHush field.
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)
@@ -102,10 +102,10 @@ func (r *mutationResolver) DeleteHush(ctx context.Context, id string) (*model.Hu
 
 // Hush is the resolver for the hush field.
 func (r *queryResolver) Hush(ctx context.Context, id string) (*generated.Hush, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Hush.Query().Where(hush.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Hush.Query().Where(hush.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
 	}

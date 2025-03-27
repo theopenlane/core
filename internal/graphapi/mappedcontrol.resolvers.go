@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateMappedControl is the resolver for the createMappedControl field.
 func (r *mutationResolver) CreateMappedControl(ctx context.Context, input generated.CreateMappedControlInput) (*model.MappedControlCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).MappedControl.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
@@ -37,17 +33,11 @@ func (r *mutationResolver) CreateBulkMappedControl(ctx context.Context, input []
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateMappedControl(ctx, input)
 }
 
 // CreateBulkCSVMappedControl is the resolver for the createBulkCSVMappedControl field.
 func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateMappedControlInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -64,9 +54,6 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 
 // UpdateMappedControl is the resolver for the updateMappedControl field.
 func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, input generated.UpdateMappedControlInput) (*model.MappedControlUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).MappedControl.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "mappedcontrol"})
@@ -102,10 +89,7 @@ func (r *mutationResolver) DeleteMappedControl(ctx context.Context, id string) (
 
 // MappedControl is the resolver for the mappedControl field.
 func (r *queryResolver) MappedControl(ctx context.Context, id string) (*generated.MappedControl, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(mappedcontrol.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(mappedcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
 	}
