@@ -468,6 +468,25 @@ func (ehq *EventHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EventH
 	return ehq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ehq *EventHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryIDs)
+	if err := ehq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ehq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ehq, qr, ehq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EventHistoryGroupBy is the group-by builder for EventHistory entities.
 type EventHistoryGroupBy struct {
 	selector

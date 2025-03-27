@@ -468,6 +468,25 @@ func (oshq *OrgSubscriptionHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 	return oshq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (oshq *OrgSubscriptionHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryIDs)
+	if err := oshq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return oshq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, oshq, qr, oshq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // OrgSubscriptionHistoryGroupBy is the group-by builder for OrgSubscriptionHistory entities.
 type OrgSubscriptionHistoryGroupBy struct {
 	selector

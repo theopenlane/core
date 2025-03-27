@@ -611,6 +611,25 @@ func (ciq *ControlImplementationQuery) WithNamedControls(name string, opts ...fu
 	return ciq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ciq *ControlImplementationQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ciq.ctx, ent.OpQueryIDs)
+	if err := ciq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ciq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ciq, qr, ciq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ControlImplementationGroupBy is the group-by builder for ControlImplementation entities.
 type ControlImplementationGroupBy struct {
 	selector

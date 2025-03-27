@@ -468,6 +468,25 @@ func (pmhq *ProgramMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selec
 	return pmhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (pmhq *ProgramMembershipHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, pmhq.ctx, ent.OpQueryIDs)
+	if err := pmhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return pmhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, pmhq, qr, pmhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ProgramMembershipHistoryGroupBy is the group-by builder for ProgramMembershipHistory entities.
 type ProgramMembershipHistoryGroupBy struct {
 	selector

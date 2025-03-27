@@ -775,6 +775,25 @@ func (usq *UserSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery
 	return usq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (usq *UserSettingQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryIDs)
+	if err := usq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return usq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, usq, qr, usq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // UserSettingGroupBy is the group-by builder for UserSetting entities.
 type UserSettingGroupBy struct {
 	selector

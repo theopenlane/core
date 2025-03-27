@@ -557,6 +557,25 @@ func (atq *APITokenQuery) Modify(modifiers ...func(s *sql.Selector)) *APITokenSe
 	return atq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (atq *APITokenQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, atq.ctx, ent.OpQueryIDs)
+	if err := atq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return atq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, atq, qr, atq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // APITokenGroupBy is the group-by builder for APIToken entities.
 type APITokenGroupBy struct {
 	selector

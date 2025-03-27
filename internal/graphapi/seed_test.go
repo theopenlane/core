@@ -72,7 +72,7 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
 	// create a group under the organization
-	testGroup := (&GroupBuilder{client: suite.client, Owner: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
+	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	testUser.GroupID = testGroup.ID
 
 	return testUser
@@ -106,7 +106,6 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{
 		client:          suite.client,
-		OwnerID:         testUser1.ID,
 		OrganizationIDs: []string{testUser1.OrganizationID, testUser1.PersonalOrgID}}).
 		MustNew(testUser1.UserCtx, t)
 
@@ -123,7 +122,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	require.NoError(t, err)
 
 	// setup client with an API token
-	apiToken := (&APITokenBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
@@ -139,7 +138,7 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDeta
 	t := suite.T()
 
 	// update organization to be the read-only member of the first test organization
-	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, OrgID: organizationID, Role: role.String()}).MustNew(ctx, t)
+	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, Role: role.String()}).MustNew(ctx, t)
 
 	userDetails.OrganizationID = organizationID
 

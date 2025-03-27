@@ -22,7 +22,6 @@ type OrganizationBuilder struct {
 	Name           string
 	DisplayName    string
 	Description    *string
-	OrgID          string
 	ParentOrgID    string
 	PersonalOrg    bool
 	AllowedDomains []string
@@ -33,7 +32,6 @@ type GroupBuilder struct {
 
 	// Fields
 	Name              string
-	Owner             string
 	ControlEditorsIDs []string
 	ProgramEditorsIDs []string
 }
@@ -59,7 +57,6 @@ type OrgMemberBuilder struct {
 
 	// Fields
 	UserID string
-	OrgID  string
 	Role   string
 }
 
@@ -89,7 +86,6 @@ type PersonalAccessTokenBuilder struct {
 	Abilities       []string
 	Description     string
 	ExpiresAt       *time.Time
-	OwnerID         string
 	OrganizationIDs []string
 }
 
@@ -102,7 +98,6 @@ type APITokenBuilder struct {
 	Scopes      []string
 	Description string
 	ExpiresAt   *time.Time
-	OwnerID     string
 }
 
 type SubscriberBuilder struct {
@@ -110,7 +105,6 @@ type SubscriberBuilder struct {
 
 	// Fields
 	Email string
-	OrgID string
 }
 
 type EntityBuilder struct {
@@ -121,7 +115,6 @@ type EntityBuilder struct {
 	DisplayName string
 	TypeID      string
 	Description string
-	Owner       string
 }
 
 type EntityTypeBuilder struct {
@@ -148,13 +141,12 @@ type TaskBuilder struct {
 	client *client
 
 	// Fields
-	Title          string
-	Description    string
-	Status         enums.TaskStatus
-	AssigneeID     string
-	Due            time.Time
-	OrganizationID string
-	GroupID        string
+	Title       string
+	Description string
+	Status      enums.TaskStatus
+	AssigneeID  string
+	Due         time.Time
+	GroupID     string
 }
 
 type ProgramBuilder struct {
@@ -401,25 +393,19 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 }
 
 // MustNew tfa settings builder is used to create, without authz checks, tfa settings in the database
-func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T, userID string) *ent.TFASetting {
+func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFASetting {
 	if tf.totpAllowed == nil {
 		tf.totpAllowed = lo.ToPtr(true)
 	}
 
 	return tf.client.db.TFASetting.Create().
 		SetTotpAllowed(*tf.totpAllowed).
-		SetOwnerID(userID).
 		SaveX(ctx)
 }
 
 // MustNew org members builder is used to create, without authz checks, org members in the database
 func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgMembership {
 	ctx = setContext(ctx, om.client.db)
-
-	if om.OrgID == "" {
-		org := (&OrganizationBuilder{client: om.client}).MustNew(ctx, t)
-		om.OrgID = org.ID
-	}
 
 	if om.UserID == "" {
 		user := (&UserBuilder{client: om.client}).MustNew(ctx, t)
@@ -433,7 +419,6 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 
 	orgMembers := om.client.db.OrgMembership.Create().
 		SetUserID(om.UserID).
-		SetOrganizationID(om.OrgID).
 		SetRole(*role).
 		SaveX(ctx)
 
@@ -448,14 +433,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 		g.Name = randomName(t)
 	}
 
-	owner := g.Owner
-
-	// default to test user 1's organization
-	if owner == "" {
-		owner = testUser1.OrganizationID
-	}
-
-	mutation := g.client.db.Group.Create().SetName(g.Name).SetOwnerID(owner)
+	mutation := g.client.db.Group.Create().SetName(g.Name)
 
 	if len(g.ControlEditorsIDs) > 0 {
 		mutation.AddControlEditorIDs(g.ControlEditorsIDs...)
@@ -465,7 +443,8 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 		mutation.AddProgramEditorIDs(g.ProgramEditorsIDs...)
 	}
 
-	group := mutation.SaveX(ctx)
+	group, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return group
 }
@@ -523,11 +502,6 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 		pat.Description = gofakeit.HipsterSentence(5)
 	}
 
-	if pat.OwnerID == "" {
-		owner := (&UserBuilder{client: pat.client}).MustNew(ctx, t)
-		pat.OwnerID = owner.ID
-	}
-
 	if pat.OrganizationIDs == nil {
 		org := (&OrganizationBuilder{client: pat.client}).MustNew(ctx, t)
 		pat.OrganizationIDs = []string{org.ID}
@@ -535,7 +509,6 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 	request := pat.client.db.PersonalAccessToken.Create().
 		SetName(pat.Name).
-		SetOwnerID(pat.OwnerID).
 		SetDescription(pat.Description).
 		AddOrganizationIDs(pat.OrganizationIDs...)
 
@@ -569,10 +542,6 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 		SetDescription(at.Description).
 		SetScopes(at.Scopes)
 
-	if at.OwnerID != "" {
-		request.SetOwnerID(at.OwnerID)
-	}
-
 	if at.ExpiresAt != nil {
 		request.SetExpiresAt(*at.ExpiresAt)
 	}
@@ -592,14 +561,15 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 	}
 
 	if gm.UserID == "" {
-		orgMember := (&OrgMemberBuilder{client: gm.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+		orgMember := (&OrgMemberBuilder{client: gm.client}).MustNew(testUser1.UserCtx, t)
 		gm.UserID = orgMember.UserID
 	}
 
-	groupMember := gm.client.db.GroupMembership.Create().
+	groupMember, err := gm.client.db.GroupMembership.Create().
 		SetUserID(gm.UserID).
 		SetGroupID(gm.GroupID).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return groupMember
 }
@@ -719,10 +689,6 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		taskCreate.SetDue(c.Due)
 	}
 
-	if c.OrganizationID != "" {
-		taskCreate.SetOwnerID(c.OrganizationID)
-	}
-
 	if c.GroupID != "" {
 		taskCreate.AddGroupIDs(c.GroupID)
 	}
@@ -778,7 +744,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	if pm.UserID == "" {
 		// first create an org member
-		orgMember := (&OrgMemberBuilder{client: pm.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+		orgMember := (&OrgMemberBuilder{client: pm.client}).MustNew(testUser1.UserCtx, t)
 		pm.UserID = orgMember.UserID
 	}
 

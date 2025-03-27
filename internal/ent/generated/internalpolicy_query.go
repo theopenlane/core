@@ -1707,6 +1707,25 @@ func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*Pro
 	return ipq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ipq *InternalPolicyQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ipq.ctx, ent.OpQueryIDs)
+	if err := ipq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ipq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ipq, qr, ipq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // InternalPolicyGroupBy is the group-by builder for InternalPolicy entities.
 type InternalPolicyGroupBy struct {
 	selector

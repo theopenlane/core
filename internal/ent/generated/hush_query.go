@@ -866,6 +866,25 @@ func (hq *HushQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Hu
 	return hq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (hq *HushQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryIDs)
+	if err := hq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return hq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, hq, qr, hq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // HushGroupBy is the group-by builder for Hush entities.
 type HushGroupBy struct {
 	selector

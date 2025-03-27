@@ -689,6 +689,25 @@ func (iq *InviteQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *
 	return iq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (iq *InviteQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryIDs)
+	if err := iq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return iq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, iq, qr, iq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // InviteGroupBy is the group-by builder for Invite entities.
 type InviteGroupBy struct {
 	selector

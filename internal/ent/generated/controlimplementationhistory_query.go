@@ -468,6 +468,25 @@ func (cihq *ControlImplementationHistoryQuery) Modify(modifiers ...func(s *sql.S
 	return cihq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (cihq *ControlImplementationHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryIDs)
+	if err := cihq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return cihq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, cihq, qr, cihq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ControlImplementationHistoryGroupBy is the group-by builder for ControlImplementationHistory entities.
 type ControlImplementationHistoryGroupBy struct {
 	selector

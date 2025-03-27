@@ -416,7 +416,7 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 
 	reqCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 
-	token := (&PersonalAccessTokenBuilder{client: suite.client, OwnerID: user.ID}).MustNew(reqCtx, t)
+	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	resp, err := suite.client.api.DeleteUser(reqCtx, user.ID)
 

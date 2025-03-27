@@ -557,6 +557,25 @@ func (evtq *EmailVerificationTokenQuery) Modify(modifiers ...func(s *sql.Selecto
 	return evtq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (evtq *EmailVerificationTokenQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, evtq.ctx, ent.OpQueryIDs)
+	if err := evtq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return evtq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, evtq, qr, evtq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EmailVerificationTokenGroupBy is the group-by builder for EmailVerificationToken entities.
 type EmailVerificationTokenGroupBy struct {
 	selector

@@ -1245,6 +1245,25 @@ func (apq *ActionPlanQuery) WithNamedPrograms(name string, opts ...func(*Program
 	return apq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (apq *ActionPlanQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, apq.ctx, ent.OpQueryIDs)
+	if err := apq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return apq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, apq, qr, apq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ActionPlanGroupBy is the group-by builder for ActionPlan entities.
 type ActionPlanGroupBy struct {
 	selector

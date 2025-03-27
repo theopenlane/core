@@ -5,6 +5,7 @@
 package main
 
 import (
+	"embed"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -30,6 +31,11 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 
 	"github.com/theopenlane/core/internal/genhelpers"
+)
+
+var (
+	//go:embed templates/entgql/*.tmpl
+	_entqlTemplates embed.FS
 )
 
 const (
@@ -64,6 +70,7 @@ func main() {
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen.yml"),
 		entgql.WithWhereInputs(true),
 		entgql.WithSchemaHook(xExt.GQLSchemaHooks()...),
+		WithGqlWithTemplates(),
 	)
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating entgql extension")
@@ -72,8 +79,7 @@ func main() {
 	log.Info().Msg("running ent codegen with extensions")
 
 	if err := entc.Generate(schemaPath, &gen.Config{
-		Target:    "./internal/ent/generated",
-		Templates: entgql.AllTemplates,
+		Target: "./internal/ent/generated",
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
@@ -186,4 +192,11 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	}
 
 	return historyExt, entfgaExt
+}
+
+// WithGqlWithTemplates is a schema hook for replace entgql default template.
+func WithGqlWithTemplates() entgql.ExtensionOption {
+	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
+		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
+	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }

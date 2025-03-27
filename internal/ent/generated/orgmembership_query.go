@@ -767,6 +767,25 @@ func (omq *OrgMembershipQuery) WithNamedEvents(name string, opts ...func(*EventQ
 	return omq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (omq *OrgMembershipQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryIDs)
+	if err := omq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return omq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, omq, qr, omq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // OrgMembershipGroupBy is the group-by builder for OrgMembership entities.
 type OrgMembershipGroupBy struct {
 	selector

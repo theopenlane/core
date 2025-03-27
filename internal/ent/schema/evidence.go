@@ -96,7 +96,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "EVD",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin(e,
+			newObjectOwnedMixin[generated.Evidence](e,
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
 					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence

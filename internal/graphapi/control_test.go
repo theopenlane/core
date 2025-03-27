@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -113,8 +114,6 @@ func (suite *GraphTestSuite) TestQueryControls() {
 	t := suite.T()
 
 	// create multiple objects to be queried using testUser1
-	// maxResults is set in test utils config for the echo server
-	maxResults := 10
 	controlsToCreate := int64(11)
 	for range controlsToCreate { // set to 11 to ensure pagination is tested
 		(&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -139,7 +138,7 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: maxResults,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, with first set",
@@ -160,14 +159,14 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			client:          suite.client.api,
 			first:           lo.ToPtr(int64(11)),
 			ctx:             testUser1.UserCtx,
-			expectedResults: maxResults,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "last set over max (10 in test)",
 			client:          suite.client.api,
 			last:            lo.ToPtr(int64(11)),
 			ctx:             testUser1.UserCtx,
-			expectedResults: maxResults,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, using read only user of the same org, no programs or groups associated",
@@ -185,7 +184,7 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: maxResults,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "another user, no controls should be returned",
@@ -225,6 +224,7 @@ func (suite *GraphTestSuite) TestQueryControls() {
 				assert.Equal(t, int64(controlsToCreate), resp.Controls.TotalCount)
 				assert.True(t, resp.Controls.PageInfo.HasNextPage)
 			} else {
+				assert.Equal(t, 0, len(resp.Controls.Edges))
 				assert.Equal(t, int64(0), resp.Controls.TotalCount)
 				assert.False(t, resp.Controls.PageInfo.HasNextPage)
 			}

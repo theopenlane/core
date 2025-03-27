@@ -1346,6 +1346,25 @@ func (eq *EvidenceQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *
 	return eq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (eq *EvidenceQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
+	if err := eq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return eq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, eq, qr, eq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EvidenceGroupBy is the group-by builder for Evidence entities.
 type EvidenceGroupBy struct {
 	selector

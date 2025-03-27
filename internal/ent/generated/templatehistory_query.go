@@ -468,6 +468,25 @@ func (thq *TemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Tem
 	return thq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (thq *TemplateHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
+	if err := thq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return thq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, thq, qr, thq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // TemplateHistoryGroupBy is the group-by builder for TemplateHistory entities.
 type TemplateHistoryGroupBy struct {
 	selector

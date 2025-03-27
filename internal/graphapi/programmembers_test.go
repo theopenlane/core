@@ -15,9 +15,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgramMembers() {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	orgMember1 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	orgMember2 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	orgMember3 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	orgMember1 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	orgMember2 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	orgMember3 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name      string

@@ -822,6 +822,25 @@ func (patq *PersonalAccessTokenQuery) WithNamedEvents(name string, opts ...func(
 	return patq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (patq *PersonalAccessTokenQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryIDs)
+	if err := patq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return patq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, patq, qr, patq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // PersonalAccessTokenGroupBy is the group-by builder for PersonalAccessToken entities.
 type PersonalAccessTokenGroupBy struct {
 	selector

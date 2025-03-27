@@ -111,7 +111,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 		prefix: "SCL",
 		additionalMixins: []ent.Mixin{
 			// subcontrols can inherit permissions from the parent control
-			newObjectOwnedMixin(s,
+			newObjectOwnedMixin[generated.Subcontrol](s,
 				withParents(Control{}),
 				withOrganizationOwner(true),
 			),

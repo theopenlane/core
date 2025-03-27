@@ -788,6 +788,25 @@ func (tq *TemplateQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *
 	return tq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (tq *TemplateQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
+	if err := tq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return tq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, tq, qr, tq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // TemplateGroupBy is the group-by builder for Template entities.
 type TemplateGroupBy struct {
 	selector

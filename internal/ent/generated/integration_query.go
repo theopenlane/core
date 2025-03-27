@@ -825,6 +825,25 @@ func (iq *IntegrationQuery) WithNamedEvents(name string, opts ...func(*EventQuer
 	return iq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (iq *IntegrationQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryIDs)
+	if err := iq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return iq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, iq, qr, iq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // IntegrationGroupBy is the group-by builder for Integration entities.
 type IntegrationGroupBy struct {
 	selector

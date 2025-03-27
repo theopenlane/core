@@ -2519,6 +2519,25 @@ func (uq *UserQuery) WithNamedProgramMemberships(name string, opts ...func(*Prog
 	return uq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (uq *UserQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, uq.ctx, ent.OpQueryIDs)
+	if err := uq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return uq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, uq, qr, uq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // UserGroupBy is the group-by builder for User entities.
 type UserGroupBy struct {
 	selector

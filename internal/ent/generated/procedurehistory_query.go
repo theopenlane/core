@@ -468,6 +468,25 @@ func (phq *ProcedureHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Pr
 	return phq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (phq *ProcedureHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryIDs)
+	if err := phq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return phq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, phq, qr, phq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ProcedureHistoryGroupBy is the group-by builder for ProcedureHistory entities.
 type ProcedureHistoryGroupBy struct {
 	selector

@@ -658,6 +658,25 @@ func (etq *EntityTypeQuery) WithNamedEntities(name string, opts ...func(*EntityQ
 	return etq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (etq *EntityTypeQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryIDs)
+	if err := etq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return etq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, etq, qr, etq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EntityTypeGroupBy is the group-by builder for EntityType entities.
 type EntityTypeGroupBy struct {
 	selector

@@ -16,7 +16,7 @@ import (
 func (suite *GraphTestSuite) TestQueryTFASetting() {
 	t := suite.T()
 
-	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
+	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -165,10 +165,10 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	t := suite.T()
 
 	// create tfa settings for users
-	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
+	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create one with not enabled by default
-	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t, testUser2.ID)
+	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t)
 
 	recoveryCodes := []string{}
 

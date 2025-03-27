@@ -22,6 +22,10 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 )
 
+const (
+	MaxResultLimit = 10
+)
+
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
 // by using handler directly, instead of going over an HTTP connection.
 type localRoundTripper struct {
@@ -111,7 +115,7 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
 			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u).
-				WithMaxResultLimit(10), // set to 10 for testing
+				WithMaxResultLimit(MaxResultLimit),
 			},
 		))
 

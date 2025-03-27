@@ -468,6 +468,25 @@ func (ghq *GroupHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupH
 	return ghq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ghq *GroupHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ghq.ctx, ent.OpQueryIDs)
+	if err := ghq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ghq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ghq, qr, ghq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // GroupHistoryGroupBy is the group-by builder for GroupHistory entities.
 type GroupHistoryGroupBy struct {
 	selector

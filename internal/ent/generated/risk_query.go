@@ -1635,6 +1635,25 @@ func (rq *RiskQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQ
 	return rq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (rq *RiskQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
+	if err := rq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return rq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, rq, qr, rq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // RiskGroupBy is the group-by builder for Risk entities.
 type RiskGroupBy struct {
 	selector

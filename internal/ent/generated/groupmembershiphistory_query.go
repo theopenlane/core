@@ -468,6 +468,25 @@ func (gmhq *GroupMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 	return gmhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (gmhq *GroupMembershipHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryIDs)
+	if err := gmhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return gmhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, gmhq, qr, gmhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // GroupMembershipHistoryGroupBy is the group-by builder for GroupMembershipHistory entities.
 type GroupMembershipHistoryGroupBy struct {
 	selector

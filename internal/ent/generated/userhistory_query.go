@@ -468,6 +468,25 @@ func (uhq *UserHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserHis
 	return uhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (uhq *UserHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, uhq.ctx, ent.OpQueryIDs)
+	if err := uhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return uhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, uhq, qr, uhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // UserHistoryGroupBy is the group-by builder for UserHistory entities.
 type UserHistoryGroupBy struct {
 	selector

@@ -689,6 +689,25 @@ func (osq *OrganizationSettingQuery) WithNamedFiles(name string, opts ...func(*F
 	return osq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (osq *OrganizationSettingQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
+	if err := osq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return osq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, osq, qr, osq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // OrganizationSettingGroupBy is the group-by builder for OrganizationSetting entities.
 type OrganizationSettingGroupBy struct {
 	selector

@@ -135,7 +135,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			// risks inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the risk when a program is associated to the risk
-			newObjectOwnedMixin(r,
+			newObjectOwnedMixin[generated.Risk](r,
 				withParents(
 					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}),
 				withOrganizationOwner(false),

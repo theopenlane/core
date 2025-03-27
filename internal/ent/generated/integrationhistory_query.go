@@ -468,6 +468,25 @@ func (ihq *IntegrationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *
 	return ihq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ihq *IntegrationHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ihq.ctx, ent.OpQueryIDs)
+	if err := ihq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ihq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ihq, qr, ihq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // IntegrationHistoryGroupBy is the group-by builder for IntegrationHistory entities.
 type IntegrationHistoryGroupBy struct {
 	selector

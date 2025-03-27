@@ -48,7 +48,7 @@ func (DocumentData) Fields() []ent.Field {
 func (d DocumentData) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin(d,
+			newObjectOwnedMixin[generated.DocumentData](d,
 				withOrganizationOwner(false),
 				withParents(Template{})),
 		},

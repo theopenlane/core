@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"github.com/rs/zerolog/log"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
@@ -147,10 +148,15 @@ func getType(schema any) any {
 	return sch.GetType()
 }
 
+// graphqlName returns the graphql name of the schema using LowerCamelCase of the name provided
+func graphqlName(name string) string {
+	return strcase.LowerCamelCase(name)
+}
+
 // edgeToWithPagination uses the provided edge definition to create an edge with pagination
 // for the given edge schema, this should be used when there will be a 1:M relationship or M:M relationship
 // to the edge schema
-func edgeToWithPagination(e *edgeDefinition) ent.Edge {
+func edgeToWithPagination(e *edgeDefinition) (edge ent.Edge) {
 	defaultAnnotations := []schema.Annotation{entgql.RelayConnection()}
 	if e.annotations != nil {
 		e.annotations = append(defaultAnnotations, e.annotations...)
@@ -159,6 +165,10 @@ func edgeToWithPagination(e *edgeDefinition) ent.Edge {
 	}
 
 	e.getEdgeDetails(true)
+
+	e.annotations = append(e.annotations,
+		entgql.MapsTo(graphqlName(e.name)), // ensure the edge maps to the graphql name, this is usually a no-op
+	)
 
 	return basicEdgeTo(e, false)
 }
@@ -168,6 +178,7 @@ func edgeToWithPagination(e *edgeDefinition) ent.Edge {
 // for a single edge
 func edgeFromWithPagination(e *edgeDefinition) ent.Edge {
 	defaultAnnotations := []schema.Annotation{entgql.RelayConnection()}
+
 	if e.annotations != nil {
 		e.annotations = append(defaultAnnotations, e.annotations...)
 	} else {
@@ -175,6 +186,8 @@ func edgeFromWithPagination(e *edgeDefinition) ent.Edge {
 	}
 
 	e.getEdgeDetails(true)
+
+	e.annotations = append(e.annotations, entgql.MapsTo(graphqlName(e.name)))
 
 	return basicEdgeFrom(e, false)
 }

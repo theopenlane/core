@@ -468,6 +468,25 @@ func (shq *StandardHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Sta
 	return shq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (shq *StandardHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
+	if err := shq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return shq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, shq, qr, shq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // StandardHistoryGroupBy is the group-by builder for StandardHistory entities.
 type StandardHistoryGroupBy struct {
 	selector

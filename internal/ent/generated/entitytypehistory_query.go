@@ -468,6 +468,25 @@ func (ethq *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *
 	return ethq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ethq *EntityTypeHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryIDs)
+	if err := ethq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ethq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ethq, qr, ethq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EntityTypeHistoryGroupBy is the group-by builder for EntityTypeHistory entities.
 type EntityTypeHistoryGroupBy struct {
 	selector

@@ -2037,6 +2037,25 @@ func (coq *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*Task
 	return coq
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (coq *ControlObjectiveQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryIDs)
+	if err := coq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return coq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, coq, qr, coq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ControlObjectiveGroupBy is the group-by builder for ControlObjective entities.
 type ControlObjectiveGroupBy struct {
 	selector

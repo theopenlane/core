@@ -114,9 +114,6 @@ entConfig:
   entityTypes:
     - vendor
     - account
-  flags:
-    useListObjectServices: false
-    useListUserService: true
 
 objectStorage:
   # when using local storage, we serve the files up on a static handler

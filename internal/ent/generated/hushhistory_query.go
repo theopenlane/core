@@ -468,6 +468,25 @@ func (hhq *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHis
 	return hhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (hhq *HushHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryIDs)
+	if err := hhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return hhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, hhq, qr, hhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // HushHistoryGroupBy is the group-by builder for HushHistory entities.
 type HushHistoryGroupBy struct {
 	selector

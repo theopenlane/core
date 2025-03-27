@@ -95,7 +95,7 @@ func (t Task) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin(t,
+			newObjectOwnedMixin[generated.Task](t,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}),
 				withOrganizationOwner(false),
 			),

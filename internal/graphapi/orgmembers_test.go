@@ -19,14 +19,14 @@ import (
 func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	t := suite.T()
 
-	org1Member := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
 	childReqCtx := auth.NewTestContextWithOrgID(testUser1.ID, childOrg.ID)
 
-	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
-	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
+	(&OrgMemberBuilder{client: suite.client}).MustNew(childReqCtx, t)
+	(&OrgMemberBuilder{client: suite.client, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -257,7 +257,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 	t := suite.T()
 
-	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
 		OrganizationID: &testUser1.OrganizationID,
@@ -338,7 +338,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 	t := suite.T()
 
-	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	resp, err := suite.client.api.RemoveUserFromOrg(testUser1.UserCtx, om.ID)
 

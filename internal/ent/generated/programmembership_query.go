@@ -721,6 +721,25 @@ func (pmq *ProgramMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *P
 	return pmq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (pmq *ProgramMembershipQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryIDs)
+	if err := pmq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return pmq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, pmq, qr, pmq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ProgramMembershipGroupBy is the group-by builder for ProgramMembership entities.
 type ProgramMembershipGroupBy struct {
 	selector

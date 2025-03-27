@@ -468,6 +468,25 @@ func (fhq *FileHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *FileHis
 	return fhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (fhq *FileHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
+	if err := fhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return fhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, fhq, qr, fhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // FileHistoryGroupBy is the group-by builder for FileHistory entities.
 type FileHistoryGroupBy struct {
 	selector

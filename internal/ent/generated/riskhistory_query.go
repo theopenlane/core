@@ -468,6 +468,25 @@ func (rhq *RiskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskHis
 	return rhq.Select()
 }
 
+// CountWithFilter returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (rhq *RiskHistoryQuery) CountWithFilter(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryIDs)
+	if err := rhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return rhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, rhq, qr, rhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // RiskHistoryGroupBy is the group-by builder for RiskHistory entities.
 type RiskHistoryGroupBy struct {
 	selector
