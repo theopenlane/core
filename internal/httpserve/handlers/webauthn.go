@@ -286,7 +286,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle
 func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHandler {
-	return func(rawID, userHandle []byte) (user webauthn.User, err error) {
+	return func(_, userHandle []byte) (user webauthn.User, err error) {
 		u, err := h.getUserByID(ctx, string(userHandle), enums.AuthProvider(webauthnProvider))
 		if err != nil {
 			return nil, err

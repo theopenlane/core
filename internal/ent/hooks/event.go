@@ -170,7 +170,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 // emitEventOn is a function that returns a function that checks if an event should be emitted
 // based on the mutation type and operation and fields that were updated
 func emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(ctx context.Context, m entgen.Mutation) bool {
+	return func(_ context.Context, m entgen.Mutation) bool {
 		switch m.Type() {
 		case entgen.TypeOrgSubscription:
 			if m.Op().Is(ent.OpCreate) {

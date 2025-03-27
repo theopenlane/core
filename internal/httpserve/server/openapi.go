@@ -165,7 +165,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 // customizer is a customizer function that allows for the modification of the generated schemas
 // this is used to ignore fields that are not required in the OAS specification
 // and to add additional metadata to the schema such as descriptions and examples
-var customizer = openapi3gen.SchemaCustomizer(func(name string, ft reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
+var customizer = openapi3gen.SchemaCustomizer(func(_ string, _ reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
 	if tag.Get("exclude") != "" && tag.Get("exclude") == "true" {
 		return &openapi3gen.ExcludeSchemaSentinel{}
 	}

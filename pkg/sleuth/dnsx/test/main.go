@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/pkg/sleuth/dnsx"
 )
 
@@ -12,7 +10,7 @@ func main() {
 		panic(err)
 	}
 
-	report, err := client.GetDomainDNSRecords(context.TODO(), "theopenlane.io")
+	report, err := client.GetDomainDNSRecords("theopenlane.io")
 	if err != nil {
 		panic(err)
 	}

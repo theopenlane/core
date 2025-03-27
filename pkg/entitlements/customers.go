@@ -280,10 +280,7 @@ func MapStripeCustomer(c *stripe.Customer) *OrganizationCustomer {
 		return nil
 	}
 
-	paymentAdded := false
-	if c.Sources != nil && c.Sources.Data != nil {
-		paymentAdded = true
-	}
+	paymentAdded := c.Sources != nil && c.Sources.Data != nil
 
 	return &OrganizationCustomer{
 		StripeCustomerID:           c.ID,

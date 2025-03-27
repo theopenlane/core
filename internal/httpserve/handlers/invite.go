@@ -214,8 +214,8 @@ func (i *Invite) GetInviteToken() string {
 
 // GetInviteExpires returns the expiration time of the invite token
 func (i *Invite) GetInviteExpires() (time.Time, error) {
-	if i.InviteToken.Expires.Valid {
-		return time.Parse(time.RFC3339Nano, i.InviteToken.Expires.String)
+	if i.Expires.Valid {
+		return time.Parse(time.RFC3339Nano, i.Expires.String)
 	}
 
 	return time.Time{}, nil
@@ -229,8 +229,8 @@ func (i *Invite) GetInviteExpires() (time.Time, error) {
 func (i *Invite) setOrgInviteTokens(inv *generated.Invite, invToken string) error {
 	if inv.Token == invToken {
 		i.InviteToken.Token = sql.NullString{String: inv.Token, Valid: true}
-		i.InviteToken.Secret = *inv.Secret
-		i.InviteToken.Expires = sql.NullString{String: inv.Expires.Format(time.RFC3339Nano), Valid: true}
+		i.Secret = *inv.Secret
+		i.Expires = sql.NullString{String: inv.Expires.Format(time.RFC3339Nano), Valid: true}
 
 		return nil
 	}

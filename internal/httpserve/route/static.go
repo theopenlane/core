@@ -47,7 +47,7 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		}),
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -71,7 +71,7 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		Handler:     echo.StaticFileHandler("security.txt", securityTxt),
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -95,7 +95,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		Handler:     echo.StaticFileHandler("robots.txt", robotsTxt),
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -119,7 +119,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		Handler:     echo.StaticFileHandler("assets/favicon.ico", assets),
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -143,7 +143,7 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 		Handler:     echo.StaticFileHandler("applemerchant", applemerchant),
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -168,7 +168,7 @@ func registerExampleCSVHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 

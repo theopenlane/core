@@ -1,7 +1,6 @@
 package dnsx
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"slices"
@@ -74,7 +73,7 @@ func (d *DNSX) Lookup(host string) ([]net.IP, error) {
 }
 
 // GetDomainDNSRecords queries DNS for all records for a given domain
-func (d *DNSX) GetDomainDNSRecords(ctx context.Context, domain string) (DNSRecordsReport, error) {
+func (d *DNSX) GetDomainDNSRecords(domain string) (DNSRecordsReport, error) {
 	errors := []string{}
 
 	dnsRecords, err := d.getDNSRecords(domain, questionTypes)

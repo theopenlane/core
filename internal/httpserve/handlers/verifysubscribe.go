@@ -156,7 +156,7 @@ func (h *Handler) BindVerifySubscriberHandler() *openapi3.Operation {
 	verify.OperationID = "VerifySubscriberEmail"
 	verify.Security = &openapi3.SecurityRequirements{}
 
-	h.AddQueryParameter("VerifySubscriptionRequest", "token", models.ExampleVerifySubscriptionSuccessRequest, verify)
+	h.AddQueryParameter("VerifySubscriptionRequest", "token", verify)
 	h.AddResponse("VerifySubscriptionReply", "success", models.ExampleVerifySubscriptionResponse, verify, http.StatusOK)
 	verify.AddResponse(http.StatusInternalServerError, internalServerError())
 	verify.AddResponse(http.StatusBadRequest, badRequest())

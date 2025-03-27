@@ -43,7 +43,7 @@ var (
 var RootCmd = &cobra.Command{
 	Use:   appName,
 	Short: "the openlane cli",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
 		initConfiguration(cmd)
 	},
 }

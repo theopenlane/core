@@ -18,7 +18,7 @@ type Storage interface {
 	// Download is used to download a file from the storage backend
 	Download(context.Context, *DownloadFileOptions) (*DownloadFileMetadata, error)
 	// GetPresignedURL is used to get a presigned URL for a file in the storage backend
-	GetPresignedURL(context.Context, string, time.Duration) (string, error)
+	GetPresignedURL(string, time.Duration) (string, error)
 	// GetScheme returns the scheme of the storage backend
 	GetScheme() *string
 	// ListBuckets is used to list the buckets in the storage backend

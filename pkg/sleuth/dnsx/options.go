@@ -65,9 +65,9 @@ func WithTrace(trace bool) Option {
 }
 
 // WithTraceMaxRecursion sets the max recursion for the trace option
-func WithTraceMaxRecursion(max int) Option {
+func WithTraceMaxRecursion(m int) Option {
 	return func(o *Options) {
-		o.TraceMaxRecursion = max
+		o.TraceMaxRecursion = m
 	}
 }
 

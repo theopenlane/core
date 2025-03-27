@@ -93,9 +93,9 @@ func testEchoServer(c *ent.Client, u *objects.Objects, includeMiddleware bool) *
 
 // createAuthConfig creates a new auth config for testing with the provided client
 // and local validator
-func createAuthConfig(c *ent.Client) *auth.AuthOptions {
+func createAuthConfig(c *ent.Client) *auth.Options {
 	// setup auth middleware
-	opts := []auth.AuthOption{
+	opts := []auth.Option{
 		auth.WithDBClient(c),
 	}
 

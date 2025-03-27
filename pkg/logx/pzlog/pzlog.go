@@ -129,8 +129,8 @@ func NewPtermWriter(options ...func(*PtermWriter)) *PtermWriter {
 		return pt.LevelStyles[lvl]
 	}
 
-	pt.DefaultValFormatter = func(key string, lvl zerolog.Level) Formatter {
-		return func(v interface{}) string {
+	pt.DefaultValFormatter = func(_ string, _ zerolog.Level) Formatter {
+		return func(v any) string {
 			return pterm.Sprint(v)
 		}
 	}

@@ -1,7 +1,7 @@
 package config
 
-// ConfigProvider serves as a common interface to read echo server configuration
-type ConfigProvider interface {
-	// GetConfig returns the server configuration
-	GetConfig() (*Config, error)
+// Provider serves as a common interface to read echo server configuration
+type Provider interface {
+	// Get returns the server configuration
+	Get() (*Config, error)
 }

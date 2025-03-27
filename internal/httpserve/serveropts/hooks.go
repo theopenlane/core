@@ -8,7 +8,7 @@ import (
 type LevelNameHook struct{}
 
 // Run satisfies the zerolog.Hook interface.
-func (h LevelNameHook) Run(e *zerolog.Event, l zerolog.Level, msg string) {
+func (h LevelNameHook) Run(e *zerolog.Event, l zerolog.Level, _ string) {
 	if l == zerolog.NoLevel {
 		e.Str(zerolog.LevelFieldName, zerolog.InfoLevel.String())
 	}

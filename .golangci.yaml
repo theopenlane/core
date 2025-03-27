@@ -1,69 +1,96 @@
+version: "2"
 run:
-  timeout: 15m
-  allow-parallel-runners: true
-  concurrency: 0
-  tests: false
   modules-download-mode: readonly
-linters-settings:
-  goimports:
-    local-prefixes: github.com/theopenlane/core
-  gofumpt:
-    extra-rules: true
-  gosec:
-    exclude-generated: true
-  revive:
-    ignore-generated-header: true
+  tests: false
+  allow-parallel-runners: true
 linters:
   enable:
-    # default linters
-    - errcheck
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - unused
-    # additional linters
     - bodyclose
+    - err113
     - gocritic
     - gocyclo
-    - err113
-    - gofmt
-    - goimports
-    - mnd
     - gosec
     - misspell
+    - mnd
     - noctx
     - revive
-    - stylecheck
-    - typecheck
+    - staticcheck
     - whitespace
     - wsl
-issues:
-  exclude-dirs:
-    - pkg/testutils/*
-    - .buildkite/*
-    - .github/*
-    - docker/*
-    - internal/ent/generated/*
-    - internal/ent/templates/*
-    - jsonschema/templates/*
-    - pkg/objects/mocks/*
-    - schema/*
-    - query/*
-    - fga/model/*
-    - fga/tests/*
-    - docs/*
-    - internal/graphapi/generate/*
-    - internal/graphapi/generated/*
-    - db/migrations/*
-    - db/migrations-goose-postgres/*
-    - pkg/entitlements/test/*
-    - cmd/cli/cmd/*
-    - pkg/sleuth/static/*
-    - pkg/entitlements/mocks/*
-  exclude-files:
-    - internal/graphapi/model/gen_models.go
-    - pkg/openlaneclient/graphclient.go
-    - schema.graphql
-output:
-  show-stats: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - internal/graphapi/model/gen_models.go
+      - pkg/openlaneclient/graphclient.go
+      - schema.graphql
+      - pkg/testutils/*
+      - .buildkite/*
+      - .github/*
+      - docker/*
+      - internal/ent/generated/*
+      - internal/ent/templates/*
+      - jsonschema/templates/*
+      - pkg/objects/mocks/*
+      - schema/*
+      - query/*
+      - fga/model/*
+      - fga/tests/*
+      - docs/*
+      - internal/graphapi/generate/*
+      - internal/graphapi/generated/*
+      - db/migrations/*
+      - db/migrations-goose-postgres/*
+      - pkg/entitlements/test/*
+      - cmd/cli/cmd/*
+      - pkg/sleuth/static/*
+      - pkg/entitlements/mocks/*
+      - third_party$
+      - builtin$
+      - examples$
+      - pkg/events/soiree/examples/*
+      - pkg/middleware/ratelimiter/examples/*
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
+    goimports:
+      local-prefixes:
+        - github.com/theopenlane/core
+  exclusions:
+    generated: lax
+    paths:
+      - internal/graphapi/model/gen_models.go
+      - pkg/openlaneclient/graphclient.go
+      - schema.graphql
+      - pkg/testutils/*
+      - .buildkite/*
+      - .github/*
+      - docker/*
+      - internal/ent/generated/*
+      - internal/ent/templates/*
+      - jsonschema/templates/*
+      - pkg/objects/mocks/*
+      - schema/*
+      - query/*
+      - fga/model/*
+      - fga/tests/*
+      - docs/*
+      - internal/graphapi/generate/*
+      - internal/graphapi/generated/*
+      - db/migrations/*
+      - db/migrations-goose-postgres/*
+      - pkg/entitlements/test/*
+      - cmd/cli/cmd/*
+      - pkg/sleuth/static/*
+      - pkg/entitlements/mocks/*
+      - third_party$
+      - builtin$
+      - examples$
