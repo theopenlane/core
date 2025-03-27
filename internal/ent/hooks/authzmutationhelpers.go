@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent"
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -416,7 +416,7 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 	// get auth info from context
 	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
 		return err
 	}
@@ -429,11 +429,11 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 		ObjectType:  objectType,
 	}
 
-	log.Debug().Interface("request", req).
+	zerolog.Ctx(ctx).Debug().Interface("request", req).
 		Msg("creating edit tuples for api token")
 
 	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-		log.Error().Err(err).Msg("failed to create relationship tuple")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 		return ErrInternalServerError
 	}
@@ -449,7 +449,7 @@ func getOrgMemberID(ctx context.Context, m GenericMutation, userID string, orgID
 		Where(orgmembership.OrganizationID(orgID)).
 		OnlyID(ctx)
 	if err != nil || orgMemberID == "" {
-		log.Error().Err(err).Msg("failed to get org membership, cannot add user to group")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get org membership, cannot add user to group")
 
 		return "", ErrUserNotInOrg
 	}

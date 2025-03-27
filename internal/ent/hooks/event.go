@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v81"
@@ -116,7 +117,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			}
 
 			if reflect.TypeOf(retVal).Kind() == reflect.Int {
-				log.Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
+				zerolog.Ctx(ctx).Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
 				// TODO: determine if we need to emit events for mutations that return an int
 				return retVal, err
 			}
@@ -225,7 +226,7 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
-		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
@@ -270,13 +271,13 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) error {
 	// validate the customer data before updating the organization subscription
 	if len(customer.Prices) > 1 {
-		log.Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
+		zerolog.Ctx(ctx).Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
 
 		return ErrTooManyPrices
 	}
 
 	if customer.OrganizationSubscriptionID == "" {
-		log.Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
+		zerolog.Ctx(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
 
 		return ErrNoSubscriptions
 	}
@@ -334,7 +335,7 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 	if org.Edges.Setting != nil {
 		o.OrganizationSettingsID = org.Edges.Setting.ID
 	} else {
-		log.Warn().Msgf("Organization setting is nil for organization ID %s", orgSubs.OwnerID)
+		zerolog.Ctx(ctx).Warn().Msgf("Organization setting is nil for organization ID %s", orgSubs.OwnerID)
 	}
 
 	o.OrganizationID = org.ID
@@ -354,7 +355,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
-		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
@@ -396,7 +397,7 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 	personalOrg := org.PersonalOrg
 
 	if len(org.Edges.OrgSubscriptions) > 1 {
-		log.Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
+		zerolog.Ctx(ctx).Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
 
 		return nil, ErrTooManySubscriptions
 	}

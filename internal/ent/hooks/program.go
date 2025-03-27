@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -63,7 +63,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			ObjectType:  GetObjectTypeFromEntMutation(m),
 		}
 
-		log.Debug().Interface("request", req).
+		zerolog.Ctx(ctx).Debug().Interface("request", req).
 			Msg("creating parent relationship tuples")
 
 		orgTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
@@ -72,7 +72,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 		}
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
-			log.Error().Err(err).Msg("failed to create relationship tuple")
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 			return ErrInternalServerError
 		}
@@ -85,7 +85,7 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
 
 		return err
 	}
@@ -98,7 +98,7 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 	}
 
 	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error creating program membership for admin")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating program membership for admin")
 
 		return err
 	}
@@ -117,15 +117,15 @@ func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error 
 	objType := GetObjectTypeFromEntMutation(m)
 	object := fmt.Sprintf("%s:%s", objType, objID)
 
-	log.Debug().Str("object", object).Msg("deleting relationship tuples")
+	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		log.Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}
 
-	log.Debug().Str("object", object).Msg("deleted relationship tuples")
+	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
 
 	return nil
 }

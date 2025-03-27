@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -74,11 +75,11 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool
 				}
 
 				if len(addTuples) != 0 {
-					log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
+					zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added object permissions")
 				}
 
 				if len(removeTuples) != 0 {
-					log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+					zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
 				}
 			}
 
@@ -125,8 +126,8 @@ func HookGroupPermissionsTuples() ent.Hook {
 					return nil, err
 				}
 
-				log.Debug().Interface("tuples", addTuples).Msg("added tuples")
-				log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+				zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
+				zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
 			}
 
 			return retVal, err
@@ -183,8 +184,8 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 					return nil, err
 				}
 
-				log.Debug().Interface("tuples", addTuples).Msg("added tuples")
-				log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+				zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
+				zerolog.Ctx(ctx).Debug().Interface("tuples", removeTuples).Msg("removed tuples")
 			}
 
 			return retVal, err
@@ -221,7 +222,7 @@ func checkAccessForEdges(ctx context.Context, m ent.Mutation) error {
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) error {
 	actor, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user id from context")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context")
 
 		return err
 	}
@@ -237,7 +238,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 		for _, id := range ids {
 			idStr, ok := id.(string)
 			if !ok {
-				log.Warn().Interface("id", id).Msg("id is not a string, unable to check access")
+				zerolog.Ctx(ctx).Warn().Interface("id", id).Msg("id is not a string, unable to check access")
 
 				continue
 			}

@@ -1,7 +1,6 @@
 package echolog
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -87,24 +86,24 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 			}
 
 			var err error
+
 			req := c.Request()
 			start := time.Now()
 
-			id := getRequestID(c, config)
-
 			logger := config.Logger
-
-			if id != "" {
-				logger = From(logger.log, WithField(config.RequestIDKey, id))
-			}
 
 			logger = enrichLogger(c, logger, config)
 
-			ctx := req.Context()
+			id := getRequestID(c, config)
+			if id != "" {
+				logger.log.UpdateContext(func(c zerolog.Context) zerolog.Context {
+					return c.Str(config.RequestIDKey, id)
+				})
+			}
 
 			// The request context is retrieved and set to the logger's context
 			// the context is then set to the request, and a new context is created with the logger
-			c.SetRequest(req.WithContext(logger.WithContext(ctx)))
+			c.SetRequest(req.WithContext(logger.WithContext(req.Context())))
 			c = NewContext(c, logger)
 
 			if config.BeforeNext != nil {
@@ -121,7 +120,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 				return err
 			}
 
-			logEvent(c, logger, config, start, err)
+			logEvent(c, config, start, err)
 
 			return err
 		}
@@ -151,20 +150,24 @@ func enrichLogger(c echo.Context, logger *Logger, config Config) *Logger {
 }
 
 // logEvent logs the event with all the necessary details; it handles errors and latency limits to determine the log level
-func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, err error) {
+func logEvent(c echo.Context, config Config, start time.Time, err error) {
 	req := c.Request()
 	res := c.Response()
 	stop := time.Now()
 	latency := stop.Sub(start)
 
+	// get the logger from the context
+	logger := Ctx(c.Request().Context())
+
 	var mainEvt *zerolog.Event
 	// this is the error that's passed in as input from the middleware func
+
 	if err != nil {
-		mainEvt = logger.log.WithLevel(zerolog.ErrorLevel).Str("error", err.Error())
+		mainEvt = logger.WithLevel(zerolog.ErrorLevel).Str("error", err.Error())
 	} else if config.RequestLatencyLimit != 0 && latency > config.RequestLatencyLimit {
-		mainEvt = logger.log.WithLevel(config.RequestLatencyLevel)
+		mainEvt = logger.WithLevel(config.RequestLatencyLevel)
 	} else {
-		mainEvt = logger.log.WithLevel(logger.log.GetLevel())
+		mainEvt = logger.WithLevel(logger.GetLevel())
 	}
 
 	var evt *zerolog.Event
@@ -175,12 +178,7 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 		evt = mainEvt
 	}
 
-	fmt.Printf("res %v", res)
-	fmt.Printf("req.Body %v", req.Body)
-
 	evt.Str("remote_ip", c.RealIP())
-	evt.Interface("request", req.Body)
-	evt.Interface("response", res)
 	evt.Str("host", req.Host)
 	evt.Str("method", req.Method)
 	evt.Str("uri", req.RequestURI)
@@ -189,6 +187,12 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("referer", req.Referer())
 	evt.Dur("latency", latency)
 	evt.Str("latency_human", latency.String())
+	evt.Str("client_ip", c.RealIP())
+	evt.Str("request_protocol", req.Proto)
+
+	// this don't work yet
+	evt.Interface("request", req.Body)
+	evt.Interface("response", res)
 
 	cl := req.Header.Get(echo.HeaderContentLength)
 	if cl == "" {
@@ -199,8 +203,8 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("bytes_out", strconv.FormatInt(res.Size, 10))
 
 	if config.NestKey != "" {
-		mainEvt.Dict(config.NestKey, evt).Send()
+		mainEvt.Dict(config.NestKey, evt).Msg("logging request")
 	} else {
-		mainEvt.Send()
+		mainEvt.Msg("logging request")
 	}
 }

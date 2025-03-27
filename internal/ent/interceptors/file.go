@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -24,7 +24,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			}
 
 			if q.ObjectManager == nil {
-				log.Warn().Msg("object manager is nil, skipping presignedURL")
+				zerolog.Ctx(ctx).Warn().Msg("object manager is nil, skipping presignedURL")
 
 				return v, nil
 			}
@@ -42,7 +42,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			if ok {
 				for _, f := range res {
 					if err := setPresignedURL(ctx, f, q); err != nil {
-						log.Warn().Err(err).Msg("failed to set presignedURL")
+						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURL")
 					}
 				}
 
@@ -53,7 +53,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			f, ok := v.(*generated.File)
 			if ok {
 				if err := setPresignedURL(ctx, f, q); err != nil {
-					log.Warn().Err(err).Msg("failed to set presignedURLs")
+					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
 				}
 
 				return v, nil
@@ -76,7 +76,7 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 
 	url, err := q.ObjectManager.Storage.GetPresignedURL(ctx, file.StoragePath, presignedURLDuration)
 	if err != nil {
-		log.Err(err).Msg("failed to get presigned URL")
+		zerolog.Ctx(ctx).Err(err).Msg("failed to get presigned URL")
 
 		return err
 	}

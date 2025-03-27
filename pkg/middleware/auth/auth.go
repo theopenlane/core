@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -94,6 +95,12 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 			}
 
 			auth.SetAuthenticatedUserContext(c, au)
+
+			// add the user and org ID to the logger context
+			zerolog.Ctx(reqCtx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+				return c.Str("user_id", au.SubjectID).
+					Str("org_id", au.OrganizationID)
+			})
 
 			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
 				return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)

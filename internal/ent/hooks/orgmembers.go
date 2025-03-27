@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -43,7 +43,7 @@ func HookOrgMembers() ent.Hook {
 			// get the organization
 			org, err := m.Client().Organization.Query().WithSetting().Where(organization.ID(orgID)).Only(ctx)
 			if err != nil {
-				log.Error().Err(err).Msg("failed to get organization")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get organization")
 
 				return nil, err
 			}
@@ -61,7 +61,7 @@ func HookOrgMembers() ent.Hook {
 
 			user, err := m.Client().User.Get(allowCtx, userID)
 			if err != nil {
-				log.Error().Err(err).Msg("failed to get user")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get user")
 
 				if generated.IsNotFound(err) {
 					// use a different error message for user not found
@@ -122,7 +122,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
-				log.Warn().Msg("skipping org membership delete hook")
+				zerolog.Ctx(ctx).Warn().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
 			}

@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -90,12 +90,12 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, er
 	}
 
 	if strings.Contains(queryType, "History") {
-		log.Debug().Msg("adding history relation to list request")
+		zerolog.Ctx(ctx).Debug().Msg("adding history relation to list request")
 
 		req.Relation = fgax.CanViewAuditLog
 	}
 
-	log.Info().Interface("req", req).Msg("getting authorized object ids")
+	zerolog.Ctx(ctx).Info().Interface("req", req).Msg("getting authorized object ids")
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {

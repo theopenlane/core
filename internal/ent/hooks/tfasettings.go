@@ -5,8 +5,8 @@ import (
 	"database/sql"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
@@ -48,7 +48,7 @@ func HookEnableTFA() ent.Hook {
 
 			u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
 			if err != nil {
-				log.Error().Err(err).Msg("unable to generate TOTP secret")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to generate TOTP secret")
 
 				return nil, err
 			}

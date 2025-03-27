@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -70,7 +70,7 @@ func HookManagedGroups() ent.Hook {
 
 			group, err := m.Client().Group.Get(ctx, groupID)
 			if err != nil {
-				log.Error().Err(err).Msg("failed to get group")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group")
 
 				return nil, err
 			}
@@ -146,7 +146,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 
 		groupSetting, err := m.Client().GroupSetting.Get(allowCtx, setting)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to get group setting")
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group setting")
 
 			return err
 		}
@@ -156,6 +156,8 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 
 	groupTuple, err := createGroupParentTuple(org, objID, publicGroup)
 	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get tuple key")
+
 		return err
 	}
 
@@ -164,7 +166,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	}
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{*groupTuple}, nil); err != nil {
-		log.Error().Err(err).Msg("failed to create relationship tuple")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 		return ErrInternalServerError
 	}
@@ -192,7 +194,6 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) (*fgax.TupleKe
 
 	groupTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get tuple key from role")
 		return nil, err
 	}
 
@@ -219,7 +220,7 @@ func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutati
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to group")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to group")
 
 		return err
 	}
@@ -232,7 +233,7 @@ func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutati
 	}
 
 	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error creating group membership for admin")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating group membership for admin")
 
 		return err
 	}
@@ -254,16 +255,16 @@ func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 	objType := GetObjectTypeFromEntMutation(m)
 	object := fmt.Sprintf("%s:%s", objType, objID)
 
-	log.Debug().Str("object", object).Msg("deleting relationship tuples")
+	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	// delete all relationship tuples except for the user, those are handled by the cascade delete of the group membership
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		log.Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}
 
-	log.Debug().Str("object", object).Msg("deleted relationship tuples")
+	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
 
 	return nil
 }

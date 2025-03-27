@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -82,7 +82,7 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 		Email: e,
 	}, org.Name, tok)
 	if err != nil {
-		log.Error().Err(err).Msg("error rendering email")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error rendering email")
 
 		return err
 	}
@@ -91,7 +91,7 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
-		log.Error().Err(err).Msg("error queueing email verification")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}
