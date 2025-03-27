@@ -794,6 +794,76 @@ var (
 			}
 		},
 	}
+	// ActionPlanOrderFieldRevision orders ActionPlan by revision.
+	ActionPlanOrderFieldRevision = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.Revision, nil
+		},
+		column: actionplan.FieldRevision,
+		toTerm: actionplan.ByRevision,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.Revision,
+			}
+		},
+	}
+	// ActionPlanOrderFieldName orders ActionPlan by name.
+	ActionPlanOrderFieldName = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.Name, nil
+		},
+		column: actionplan.FieldName,
+		toTerm: actionplan.ByName,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.Name,
+			}
+		},
+	}
+	// ActionPlanOrderFieldStatus orders ActionPlan by status.
+	ActionPlanOrderFieldStatus = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.Status, nil
+		},
+		column: actionplan.FieldStatus,
+		toTerm: actionplan.ByStatus,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.Status,
+			}
+		},
+	}
+	// ActionPlanOrderFieldReviewDue orders ActionPlan by review_due.
+	ActionPlanOrderFieldReviewDue = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.ReviewDue, nil
+		},
+		column: actionplan.FieldReviewDue,
+		toTerm: actionplan.ByReviewDue,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.ReviewDue,
+			}
+		},
+	}
+	// ActionPlanOrderFieldReviewFrequency orders ActionPlan by review_frequency.
+	ActionPlanOrderFieldReviewFrequency = &ActionPlanOrderField{
+		Value: func(ap *ActionPlan) (ent.Value, error) {
+			return ap.ReviewFrequency, nil
+		},
+		column: actionplan.FieldReviewFrequency,
+		toTerm: actionplan.ByReviewFrequency,
+		toCursor: func(ap *ActionPlan) Cursor {
+			return Cursor{
+				ID:    ap.ID,
+				Value: ap.ReviewFrequency,
+			}
+		},
+	}
 	// ActionPlanOrderFieldDueDate orders ActionPlan by due_date.
 	ActionPlanOrderFieldDueDate = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
@@ -846,6 +916,16 @@ func (f ActionPlanOrderField) String() string {
 		str = "created_at"
 	case ActionPlanOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ActionPlanOrderFieldRevision.column:
+		str = "revision"
+	case ActionPlanOrderFieldName.column:
+		str = "name"
+	case ActionPlanOrderFieldStatus.column:
+		str = "STATUS"
+	case ActionPlanOrderFieldReviewDue.column:
+		str = "review_due"
+	case ActionPlanOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	case ActionPlanOrderFieldDueDate.column:
 		str = "due_date"
 	case ActionPlanOrderFieldPriority.column:
@@ -872,6 +952,16 @@ func (f *ActionPlanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ActionPlanOrderFieldUpdatedAt
+	case "revision":
+		*f = *ActionPlanOrderFieldRevision
+	case "name":
+		*f = *ActionPlanOrderFieldName
+	case "STATUS":
+		*f = *ActionPlanOrderFieldStatus
+	case "review_due":
+		*f = *ActionPlanOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *ActionPlanOrderFieldReviewFrequency
 	case "due_date":
 		*f = *ActionPlanOrderFieldDueDate
 	case "PRIORITY":
@@ -1162,6 +1252,76 @@ var (
 			}
 		},
 	}
+	// ActionPlanHistoryOrderFieldRevision orders ActionPlanHistory by revision.
+	ActionPlanHistoryOrderFieldRevision = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.Revision, nil
+		},
+		column: actionplanhistory.FieldRevision,
+		toTerm: actionplanhistory.ByRevision,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.Revision,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldName orders ActionPlanHistory by name.
+	ActionPlanHistoryOrderFieldName = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.Name, nil
+		},
+		column: actionplanhistory.FieldName,
+		toTerm: actionplanhistory.ByName,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.Name,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldStatus orders ActionPlanHistory by status.
+	ActionPlanHistoryOrderFieldStatus = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.Status, nil
+		},
+		column: actionplanhistory.FieldStatus,
+		toTerm: actionplanhistory.ByStatus,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.Status,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldReviewDue orders ActionPlanHistory by review_due.
+	ActionPlanHistoryOrderFieldReviewDue = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.ReviewDue, nil
+		},
+		column: actionplanhistory.FieldReviewDue,
+		toTerm: actionplanhistory.ByReviewDue,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.ReviewDue,
+			}
+		},
+	}
+	// ActionPlanHistoryOrderFieldReviewFrequency orders ActionPlanHistory by review_frequency.
+	ActionPlanHistoryOrderFieldReviewFrequency = &ActionPlanHistoryOrderField{
+		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
+			return aph.ReviewFrequency, nil
+		},
+		column: actionplanhistory.FieldReviewFrequency,
+		toTerm: actionplanhistory.ByReviewFrequency,
+		toCursor: func(aph *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    aph.ID,
+				Value: aph.ReviewFrequency,
+			}
+		},
+	}
 	// ActionPlanHistoryOrderFieldDueDate orders ActionPlanHistory by due_date.
 	ActionPlanHistoryOrderFieldDueDate = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
@@ -1214,6 +1374,16 @@ func (f ActionPlanHistoryOrderField) String() string {
 		str = "created_at"
 	case ActionPlanHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ActionPlanHistoryOrderFieldRevision.column:
+		str = "revision"
+	case ActionPlanHistoryOrderFieldName.column:
+		str = "name"
+	case ActionPlanHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case ActionPlanHistoryOrderFieldReviewDue.column:
+		str = "review_due"
+	case ActionPlanHistoryOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	case ActionPlanHistoryOrderFieldDueDate.column:
 		str = "due_date"
 	case ActionPlanHistoryOrderFieldPriority.column:
@@ -1240,6 +1410,16 @@ func (f *ActionPlanHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ActionPlanHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *ActionPlanHistoryOrderFieldRevision
+	case "name":
+		*f = *ActionPlanHistoryOrderFieldName
+	case "STATUS":
+		*f = *ActionPlanHistoryOrderFieldStatus
+	case "review_due":
+		*f = *ActionPlanHistoryOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *ActionPlanHistoryOrderFieldReviewFrequency
 	case "due_date":
 		*f = *ActionPlanHistoryOrderFieldDueDate
 	case "PRIORITY":
@@ -2480,6 +2660,20 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldRefCode orders Control by ref_code.
+	ControlOrderFieldRefCode = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.RefCode, nil
+		},
+		column: control.FieldRefCode,
+		toTerm: control.ByRefCode,
+		toCursor: func(c *Control) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.RefCode,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2500,6 +2694,8 @@ func (f ControlOrderField) String() string {
 		str = "category"
 	case ControlOrderFieldSubcategory.column:
 		str = "subcategory"
+	case ControlOrderFieldRefCode.column:
+		str = "ref_code"
 	}
 	return str
 }
@@ -2530,6 +2726,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldCategory
 	case "subcategory":
 		*f = *ControlOrderFieldSubcategory
+	case "ref_code":
+		*f = *ControlOrderFieldRefCode
 	default:
 		return fmt.Errorf("%s is not a valid ControlOrderField", str)
 	}
@@ -2884,6 +3082,20 @@ var (
 			}
 		},
 	}
+	// ControlHistoryOrderFieldRefCode orders ControlHistory by ref_code.
+	ControlHistoryOrderFieldRefCode = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			return ch.RefCode, nil
+		},
+		column: controlhistory.FieldRefCode,
+		toTerm: controlhistory.ByRefCode,
+		toCursor: func(ch *ControlHistory) Cursor {
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.RefCode,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2904,6 +3116,8 @@ func (f ControlHistoryOrderField) String() string {
 		str = "category"
 	case ControlHistoryOrderFieldSubcategory.column:
 		str = "subcategory"
+	case ControlHistoryOrderFieldRefCode.column:
+		str = "ref_code"
 	}
 	return str
 }
@@ -2934,6 +3148,8 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldCategory
 	case "subcategory":
 		*f = *ControlHistoryOrderFieldSubcategory
+	case "ref_code":
+		*f = *ControlHistoryOrderFieldRefCode
 	default:
 		return fmt.Errorf("%s is not a valid ControlHistoryOrderField", str)
 	}
@@ -4062,6 +4278,20 @@ var (
 			}
 		},
 	}
+	// ControlObjectiveOrderFieldRevision orders ControlObjective by revision.
+	ControlObjectiveOrderFieldRevision = &ControlObjectiveOrderField{
+		Value: func(co *ControlObjective) (ent.Value, error) {
+			return co.Revision, nil
+		},
+		column: controlobjective.FieldRevision,
+		toTerm: controlobjective.ByRevision,
+		toCursor: func(co *ControlObjective) Cursor {
+			return Cursor{
+				ID:    co.ID,
+				Value: co.Revision,
+			}
+		},
+	}
 	// ControlObjectiveOrderFieldName orders ControlObjective by name.
 	ControlObjectiveOrderFieldName = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
@@ -4156,6 +4386,8 @@ func (f ControlObjectiveOrderField) String() string {
 		str = "created_at"
 	case ControlObjectiveOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlObjectiveOrderFieldRevision.column:
+		str = "revision"
 	case ControlObjectiveOrderFieldName.column:
 		str = "name"
 	case ControlObjectiveOrderFieldStatus.column:
@@ -4188,6 +4420,8 @@ func (f *ControlObjectiveOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlObjectiveOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlObjectiveOrderFieldUpdatedAt
+	case "revision":
+		*f = *ControlObjectiveOrderFieldRevision
 	case "name":
 		*f = *ControlObjectiveOrderFieldName
 	case "status":
@@ -4484,6 +4718,20 @@ var (
 			}
 		},
 	}
+	// ControlObjectiveHistoryOrderFieldRevision orders ControlObjectiveHistory by revision.
+	ControlObjectiveHistoryOrderFieldRevision = &ControlObjectiveHistoryOrderField{
+		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
+			return coh.Revision, nil
+		},
+		column: controlobjectivehistory.FieldRevision,
+		toTerm: controlobjectivehistory.ByRevision,
+		toCursor: func(coh *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    coh.ID,
+				Value: coh.Revision,
+			}
+		},
+	}
 	// ControlObjectiveHistoryOrderFieldName orders ControlObjectiveHistory by name.
 	ControlObjectiveHistoryOrderFieldName = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
@@ -4578,6 +4826,8 @@ func (f ControlObjectiveHistoryOrderField) String() string {
 		str = "created_at"
 	case ControlObjectiveHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlObjectiveHistoryOrderFieldRevision.column:
+		str = "revision"
 	case ControlObjectiveHistoryOrderFieldName.column:
 		str = "name"
 	case ControlObjectiveHistoryOrderFieldStatus.column:
@@ -4610,6 +4860,8 @@ func (f *ControlObjectiveHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlObjectiveHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlObjectiveHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *ControlObjectiveHistoryOrderFieldRevision
 	case "name":
 		*f = *ControlObjectiveHistoryOrderFieldName
 	case "status":
@@ -12786,6 +13038,76 @@ var (
 			}
 		},
 	}
+	// InternalPolicyOrderFieldRevision orders InternalPolicy by revision.
+	InternalPolicyOrderFieldRevision = &InternalPolicyOrderField{
+		Value: func(ip *InternalPolicy) (ent.Value, error) {
+			return ip.Revision, nil
+		},
+		column: internalpolicy.FieldRevision,
+		toTerm: internalpolicy.ByRevision,
+		toCursor: func(ip *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    ip.ID,
+				Value: ip.Revision,
+			}
+		},
+	}
+	// InternalPolicyOrderFieldName orders InternalPolicy by name.
+	InternalPolicyOrderFieldName = &InternalPolicyOrderField{
+		Value: func(ip *InternalPolicy) (ent.Value, error) {
+			return ip.Name, nil
+		},
+		column: internalpolicy.FieldName,
+		toTerm: internalpolicy.ByName,
+		toCursor: func(ip *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    ip.ID,
+				Value: ip.Name,
+			}
+		},
+	}
+	// InternalPolicyOrderFieldStatus orders InternalPolicy by status.
+	InternalPolicyOrderFieldStatus = &InternalPolicyOrderField{
+		Value: func(ip *InternalPolicy) (ent.Value, error) {
+			return ip.Status, nil
+		},
+		column: internalpolicy.FieldStatus,
+		toTerm: internalpolicy.ByStatus,
+		toCursor: func(ip *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    ip.ID,
+				Value: ip.Status,
+			}
+		},
+	}
+	// InternalPolicyOrderFieldReviewDue orders InternalPolicy by review_due.
+	InternalPolicyOrderFieldReviewDue = &InternalPolicyOrderField{
+		Value: func(ip *InternalPolicy) (ent.Value, error) {
+			return ip.ReviewDue, nil
+		},
+		column: internalpolicy.FieldReviewDue,
+		toTerm: internalpolicy.ByReviewDue,
+		toCursor: func(ip *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    ip.ID,
+				Value: ip.ReviewDue,
+			}
+		},
+	}
+	// InternalPolicyOrderFieldReviewFrequency orders InternalPolicy by review_frequency.
+	InternalPolicyOrderFieldReviewFrequency = &InternalPolicyOrderField{
+		Value: func(ip *InternalPolicy) (ent.Value, error) {
+			return ip.ReviewFrequency, nil
+		},
+		column: internalpolicy.FieldReviewFrequency,
+		toTerm: internalpolicy.ByReviewFrequency,
+		toCursor: func(ip *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    ip.ID,
+				Value: ip.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12796,6 +13118,16 @@ func (f InternalPolicyOrderField) String() string {
 		str = "created_at"
 	case InternalPolicyOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case InternalPolicyOrderFieldRevision.column:
+		str = "revision"
+	case InternalPolicyOrderFieldName.column:
+		str = "name"
+	case InternalPolicyOrderFieldStatus.column:
+		str = "STATUS"
+	case InternalPolicyOrderFieldReviewDue.column:
+		str = "review_due"
+	case InternalPolicyOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -12816,6 +13148,16 @@ func (f *InternalPolicyOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyOrderFieldCreatedAt
 	case "updated_at":
 		*f = *InternalPolicyOrderFieldUpdatedAt
+	case "revision":
+		*f = *InternalPolicyOrderFieldRevision
+	case "name":
+		*f = *InternalPolicyOrderFieldName
+	case "STATUS":
+		*f = *InternalPolicyOrderFieldStatus
+	case "review_due":
+		*f = *InternalPolicyOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *InternalPolicyOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid InternalPolicyOrderField", str)
 	}
@@ -13100,6 +13442,76 @@ var (
 			}
 		},
 	}
+	// InternalPolicyHistoryOrderFieldRevision orders InternalPolicyHistory by revision.
+	InternalPolicyHistoryOrderFieldRevision = &InternalPolicyHistoryOrderField{
+		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
+			return iph.Revision, nil
+		},
+		column: internalpolicyhistory.FieldRevision,
+		toTerm: internalpolicyhistory.ByRevision,
+		toCursor: func(iph *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    iph.ID,
+				Value: iph.Revision,
+			}
+		},
+	}
+	// InternalPolicyHistoryOrderFieldName orders InternalPolicyHistory by name.
+	InternalPolicyHistoryOrderFieldName = &InternalPolicyHistoryOrderField{
+		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
+			return iph.Name, nil
+		},
+		column: internalpolicyhistory.FieldName,
+		toTerm: internalpolicyhistory.ByName,
+		toCursor: func(iph *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    iph.ID,
+				Value: iph.Name,
+			}
+		},
+	}
+	// InternalPolicyHistoryOrderFieldStatus orders InternalPolicyHistory by status.
+	InternalPolicyHistoryOrderFieldStatus = &InternalPolicyHistoryOrderField{
+		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
+			return iph.Status, nil
+		},
+		column: internalpolicyhistory.FieldStatus,
+		toTerm: internalpolicyhistory.ByStatus,
+		toCursor: func(iph *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    iph.ID,
+				Value: iph.Status,
+			}
+		},
+	}
+	// InternalPolicyHistoryOrderFieldReviewDue orders InternalPolicyHistory by review_due.
+	InternalPolicyHistoryOrderFieldReviewDue = &InternalPolicyHistoryOrderField{
+		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
+			return iph.ReviewDue, nil
+		},
+		column: internalpolicyhistory.FieldReviewDue,
+		toTerm: internalpolicyhistory.ByReviewDue,
+		toCursor: func(iph *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    iph.ID,
+				Value: iph.ReviewDue,
+			}
+		},
+	}
+	// InternalPolicyHistoryOrderFieldReviewFrequency orders InternalPolicyHistory by review_frequency.
+	InternalPolicyHistoryOrderFieldReviewFrequency = &InternalPolicyHistoryOrderField{
+		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
+			return iph.ReviewFrequency, nil
+		},
+		column: internalpolicyhistory.FieldReviewFrequency,
+		toTerm: internalpolicyhistory.ByReviewFrequency,
+		toCursor: func(iph *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    iph.ID,
+				Value: iph.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -13110,6 +13522,16 @@ func (f InternalPolicyHistoryOrderField) String() string {
 		str = "created_at"
 	case InternalPolicyHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case InternalPolicyHistoryOrderFieldRevision.column:
+		str = "revision"
+	case InternalPolicyHistoryOrderFieldName.column:
+		str = "name"
+	case InternalPolicyHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case InternalPolicyHistoryOrderFieldReviewDue.column:
+		str = "review_due"
+	case InternalPolicyHistoryOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -13130,6 +13552,16 @@ func (f *InternalPolicyHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *InternalPolicyHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *InternalPolicyHistoryOrderFieldRevision
+	case "name":
+		*f = *InternalPolicyHistoryOrderFieldName
+	case "STATUS":
+		*f = *InternalPolicyHistoryOrderFieldStatus
+	case "review_due":
+		*f = *InternalPolicyHistoryOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *InternalPolicyHistoryOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid InternalPolicyHistoryOrderField", str)
 	}
@@ -19515,6 +19947,76 @@ var (
 			}
 		},
 	}
+	// ProcedureOrderFieldRevision orders Procedure by revision.
+	ProcedureOrderFieldRevision = &ProcedureOrderField{
+		Value: func(pr *Procedure) (ent.Value, error) {
+			return pr.Revision, nil
+		},
+		column: procedure.FieldRevision,
+		toTerm: procedure.ByRevision,
+		toCursor: func(pr *Procedure) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.Revision,
+			}
+		},
+	}
+	// ProcedureOrderFieldName orders Procedure by name.
+	ProcedureOrderFieldName = &ProcedureOrderField{
+		Value: func(pr *Procedure) (ent.Value, error) {
+			return pr.Name, nil
+		},
+		column: procedure.FieldName,
+		toTerm: procedure.ByName,
+		toCursor: func(pr *Procedure) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.Name,
+			}
+		},
+	}
+	// ProcedureOrderFieldStatus orders Procedure by status.
+	ProcedureOrderFieldStatus = &ProcedureOrderField{
+		Value: func(pr *Procedure) (ent.Value, error) {
+			return pr.Status, nil
+		},
+		column: procedure.FieldStatus,
+		toTerm: procedure.ByStatus,
+		toCursor: func(pr *Procedure) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.Status,
+			}
+		},
+	}
+	// ProcedureOrderFieldReviewDue orders Procedure by review_due.
+	ProcedureOrderFieldReviewDue = &ProcedureOrderField{
+		Value: func(pr *Procedure) (ent.Value, error) {
+			return pr.ReviewDue, nil
+		},
+		column: procedure.FieldReviewDue,
+		toTerm: procedure.ByReviewDue,
+		toCursor: func(pr *Procedure) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.ReviewDue,
+			}
+		},
+	}
+	// ProcedureOrderFieldReviewFrequency orders Procedure by review_frequency.
+	ProcedureOrderFieldReviewFrequency = &ProcedureOrderField{
+		Value: func(pr *Procedure) (ent.Value, error) {
+			return pr.ReviewFrequency, nil
+		},
+		column: procedure.FieldReviewFrequency,
+		toTerm: procedure.ByReviewFrequency,
+		toCursor: func(pr *Procedure) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -19525,6 +20027,16 @@ func (f ProcedureOrderField) String() string {
 		str = "created_at"
 	case ProcedureOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ProcedureOrderFieldRevision.column:
+		str = "revision"
+	case ProcedureOrderFieldName.column:
+		str = "name"
+	case ProcedureOrderFieldStatus.column:
+		str = "STATUS"
+	case ProcedureOrderFieldReviewDue.column:
+		str = "review_due"
+	case ProcedureOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -19545,6 +20057,16 @@ func (f *ProcedureOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ProcedureOrderFieldUpdatedAt
+	case "revision":
+		*f = *ProcedureOrderFieldRevision
+	case "name":
+		*f = *ProcedureOrderFieldName
+	case "STATUS":
+		*f = *ProcedureOrderFieldStatus
+	case "review_due":
+		*f = *ProcedureOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *ProcedureOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid ProcedureOrderField", str)
 	}
@@ -19829,6 +20351,76 @@ var (
 			}
 		},
 	}
+	// ProcedureHistoryOrderFieldRevision orders ProcedureHistory by revision.
+	ProcedureHistoryOrderFieldRevision = &ProcedureHistoryOrderField{
+		Value: func(ph *ProcedureHistory) (ent.Value, error) {
+			return ph.Revision, nil
+		},
+		column: procedurehistory.FieldRevision,
+		toTerm: procedurehistory.ByRevision,
+		toCursor: func(ph *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.Revision,
+			}
+		},
+	}
+	// ProcedureHistoryOrderFieldName orders ProcedureHistory by name.
+	ProcedureHistoryOrderFieldName = &ProcedureHistoryOrderField{
+		Value: func(ph *ProcedureHistory) (ent.Value, error) {
+			return ph.Name, nil
+		},
+		column: procedurehistory.FieldName,
+		toTerm: procedurehistory.ByName,
+		toCursor: func(ph *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.Name,
+			}
+		},
+	}
+	// ProcedureHistoryOrderFieldStatus orders ProcedureHistory by status.
+	ProcedureHistoryOrderFieldStatus = &ProcedureHistoryOrderField{
+		Value: func(ph *ProcedureHistory) (ent.Value, error) {
+			return ph.Status, nil
+		},
+		column: procedurehistory.FieldStatus,
+		toTerm: procedurehistory.ByStatus,
+		toCursor: func(ph *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.Status,
+			}
+		},
+	}
+	// ProcedureHistoryOrderFieldReviewDue orders ProcedureHistory by review_due.
+	ProcedureHistoryOrderFieldReviewDue = &ProcedureHistoryOrderField{
+		Value: func(ph *ProcedureHistory) (ent.Value, error) {
+			return ph.ReviewDue, nil
+		},
+		column: procedurehistory.FieldReviewDue,
+		toTerm: procedurehistory.ByReviewDue,
+		toCursor: func(ph *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.ReviewDue,
+			}
+		},
+	}
+	// ProcedureHistoryOrderFieldReviewFrequency orders ProcedureHistory by review_frequency.
+	ProcedureHistoryOrderFieldReviewFrequency = &ProcedureHistoryOrderField{
+		Value: func(ph *ProcedureHistory) (ent.Value, error) {
+			return ph.ReviewFrequency, nil
+		},
+		column: procedurehistory.FieldReviewFrequency,
+		toTerm: procedurehistory.ByReviewFrequency,
+		toCursor: func(ph *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -19839,6 +20431,16 @@ func (f ProcedureHistoryOrderField) String() string {
 		str = "created_at"
 	case ProcedureHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ProcedureHistoryOrderFieldRevision.column:
+		str = "revision"
+	case ProcedureHistoryOrderFieldName.column:
+		str = "name"
+	case ProcedureHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case ProcedureHistoryOrderFieldReviewDue.column:
+		str = "review_due"
+	case ProcedureHistoryOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -19859,6 +20461,16 @@ func (f *ProcedureHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ProcedureHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *ProcedureHistoryOrderFieldRevision
+	case "name":
+		*f = *ProcedureHistoryOrderFieldName
+	case "STATUS":
+		*f = *ProcedureHistoryOrderFieldStatus
+	case "review_due":
+		*f = *ProcedureHistoryOrderFieldReviewDue
+	case "REVIEW_FREQUENCY":
+		*f = *ProcedureHistoryOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid ProcedureHistoryOrderField", str)
 	}
@@ -22639,6 +23251,20 @@ var (
 			}
 		},
 	}
+	// StandardOrderFieldRevision orders Standard by revision.
+	StandardOrderFieldRevision = &StandardOrderField{
+		Value: func(s *Standard) (ent.Value, error) {
+			return s.Revision, nil
+		},
+		column: standard.FieldRevision,
+		toTerm: standard.ByRevision,
+		toCursor: func(s *Standard) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Revision,
+			}
+		},
+	}
 	// StandardOrderFieldName orders Standard by name.
 	StandardOrderFieldName = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
@@ -22733,6 +23359,8 @@ func (f StandardOrderField) String() string {
 		str = "created_at"
 	case StandardOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case StandardOrderFieldRevision.column:
+		str = "revision"
 	case StandardOrderFieldName.column:
 		str = "name"
 	case StandardOrderFieldShortName.column:
@@ -22765,6 +23393,8 @@ func (f *StandardOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardOrderFieldCreatedAt
 	case "updated_at":
 		*f = *StandardOrderFieldUpdatedAt
+	case "revision":
+		*f = *StandardOrderFieldRevision
 	case "name":
 		*f = *StandardOrderFieldName
 	case "short_name":
@@ -23061,6 +23691,20 @@ var (
 			}
 		},
 	}
+	// StandardHistoryOrderFieldRevision orders StandardHistory by revision.
+	StandardHistoryOrderFieldRevision = &StandardHistoryOrderField{
+		Value: func(sh *StandardHistory) (ent.Value, error) {
+			return sh.Revision, nil
+		},
+		column: standardhistory.FieldRevision,
+		toTerm: standardhistory.ByRevision,
+		toCursor: func(sh *StandardHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Revision,
+			}
+		},
+	}
 	// StandardHistoryOrderFieldName orders StandardHistory by name.
 	StandardHistoryOrderFieldName = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
@@ -23155,6 +23799,8 @@ func (f StandardHistoryOrderField) String() string {
 		str = "created_at"
 	case StandardHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case StandardHistoryOrderFieldRevision.column:
+		str = "revision"
 	case StandardHistoryOrderFieldName.column:
 		str = "name"
 	case StandardHistoryOrderFieldShortName.column:
@@ -23187,6 +23833,8 @@ func (f *StandardHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *StandardHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *StandardHistoryOrderFieldRevision
 	case "name":
 		*f = *StandardHistoryOrderFieldName
 	case "short_name":

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -53,11 +54,15 @@ func getDocumentFields(documentType string) []ent.Field {
 		Comment(fmt.Sprintf("the name of the %s", documentType)).
 		Annotations(
 			entx.FieldSearchable(),
+			entgql.OrderField("name"),
 		).
 		NotEmpty(),
 		field.Enum("status").
 			GoType(enums.DocumentStatus("")).
 			Default(enums.DocumentDraft.String()).
+			Annotations(
+				entgql.OrderField("STATUS"),
+			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
 		field.String(fmt.Sprintf("%s_type", documentType)).
@@ -75,11 +80,17 @@ func getDocumentFields(documentType string) []ent.Field {
 			Comment(fmt.Sprintf("whether approval is required for edits to the %s", documentType)),
 		field.Time("review_due").
 			Default(time.Now().AddDate(1, 0, 0)).
+			Annotations(
+				entgql.OrderField("review_due"),
+			).
 			Optional().
 			Comment(fmt.Sprintf("the date the %s should be reviewed, calculated based on the review_frequency if not directly set", documentType)),
 		field.Enum("review_frequency").
 			Optional().
 			GoType(enums.Frequency("")).
+			Annotations(
+				entgql.OrderField("REVIEW_FREQUENCY"),
+			).
 			Default(enums.FrequencyYearly.String()).
 			Comment(fmt.Sprintf("the frequency at which the %s should be reviewed, used to calculate the review_due date", documentType)),
 	}

@@ -3,6 +3,7 @@ package mixin
 import (
 	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
@@ -33,6 +34,9 @@ func (RevisionMixin) Fields() []ent.Field {
 				return nil
 			}).
 			Optional().
+			Annotations(
+				entgql.OrderField("revision"),
+			).
 			Comment("revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set"),
 	}
 }
