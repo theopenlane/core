@@ -199,7 +199,7 @@ type CustomSchema struct {
 	Loadschema *loadjs.Schema
 }
 
-func (c CustomSchema) Schema(r huma.Registry) *huma.Schema {
+func (c CustomSchema) Schema(_ huma.Registry) *huma.Schema {
 	return &huma.Schema{
 		Type: "string",
 	}

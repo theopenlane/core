@@ -40,7 +40,7 @@ type Config struct {
 
 var (
 	// allows all file pass through
-	defaultValidationFunc ValidationFunc = func(f File) error {
+	defaultValidationFunc ValidationFunc = func(_ File) error {
 		return nil
 	}
 

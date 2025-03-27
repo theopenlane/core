@@ -61,12 +61,12 @@ func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 // Validate checks if the OrganizationCustomer contains necessary fields
 func (o *OrganizationCustomer) Validate() error {
 	o.OrganizationID = strings.TrimSpace(o.OrganizationID)
-	o.ContactInfo.Email = strings.TrimSpace(o.ContactInfo.Email)
+	o.Email = strings.TrimSpace(o.Email)
 
 	switch {
 	case o.OrganizationID == "":
 		return rout.NewMissingRequiredFieldError("organization_id")
-	case o.ContactInfo.Email == "":
+	case o.Email == "":
 		return rout.NewMissingRequiredFieldError("billing_email")
 	}
 

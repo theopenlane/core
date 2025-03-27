@@ -85,7 +85,7 @@ func (s *Server) Close() {
 	s.srv.Close()
 }
 
-func (s *Server) JWKS(w http.ResponseWriter, r *http.Request) {
+func (s *Server) JWKS(w http.ResponseWriter, _ *http.Request) {
 	keys, err := s.tokens.Keys()
 	if err != nil {
 		w.Header().Add("Content-Type", "text/plain")

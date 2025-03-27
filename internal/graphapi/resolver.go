@@ -113,7 +113,7 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
 		Upgrader: websocket.Upgrader{
-			CheckOrigin: func(r *http.Request) bool {
+			CheckOrigin: func(_ *http.Request) bool {
 				return true
 			},
 		},
@@ -177,7 +177,7 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query
 	h.Use(&extension.ComplexityLimit{
-		Func: func(ctx context.Context, rc *graphql.OperationContext) int {
+		Func: func(_ context.Context, rc *graphql.OperationContext) int {
 			if rc != nil && rc.OperationName == "IntrospectionQuery" {
 				return introspectionComplexity
 			}

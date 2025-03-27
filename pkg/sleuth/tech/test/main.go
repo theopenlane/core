@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/pkg/sleuth/spider"
@@ -10,7 +8,7 @@ import (
 )
 
 func main() {
-	links := spider.PerformWebSpider(context.TODO(), []string{"https://wwww.theopenlane.io"})
+	links := spider.PerformWebSpider([]string{"https://wwww.theopenlane.io"})
 	combinedAppInfo := make(map[string]tech.AppInfo)
 
 	for _, link := range links.Links {

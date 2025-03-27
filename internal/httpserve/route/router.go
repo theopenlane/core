@@ -132,7 +132,7 @@ func (r *Router) AddUnversionedRoute(pattern, method string, op *openapi3.Operat
 }
 
 // AddEchoOnlyRoute is used to add a route to the echo router without adding it to the OpenAPI schema
-func (r *Router) AddEchoOnlyRoute(pattern, method string, route echo.Routable) error {
+func (r *Router) AddEchoOnlyRoute(route echo.Routable) error {
 	grp := r.Base()
 
 	_, err := grp.AddRoute(route)

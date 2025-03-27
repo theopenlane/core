@@ -70,17 +70,17 @@ func HookMembershipSelf(table string) ent.Hook {
 
 // createMembershipCheck is a helper function to check if a user is trying to add themselves to a membership
 func createMembershipCheck(m MutationMember, actorID string) error {
-	userIds := m.UserIDs()
-	if len(userIds) == 0 {
+	userIDs := m.UserIDs()
+	if len(userIDs) == 0 {
 		userID, ok := m.UserID()
 		if !ok {
 			return nil
 		}
 
-		userIds = append(userIds, userID)
+		userIDs = append(userIDs, userID)
 	}
 
-	for _, userID := range userIds {
+	for _, userID := range userIDs {
 		if userID == actorID {
 			log.Error().Msg("user cannot add themselves to a membership")
 

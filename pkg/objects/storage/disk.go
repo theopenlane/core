@@ -52,7 +52,7 @@ func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
 
 func (d *Disk) Close() error { return nil }
 
-func (d *Disk) Upload(ctx context.Context, r io.Reader, opts *objects.UploadFileOptions) (*objects.UploadedFileMetadata, error) {
+func (d *Disk) Upload(_ context.Context, r io.Reader, opts *objects.UploadFileOptions) (*objects.UploadedFileMetadata, error) {
 	f, err := os.Create(filepath.Join(d.Opts.Bucket, opts.FileName))
 	if err != nil {
 		return nil, err
@@ -76,12 +76,12 @@ func (d *Disk) GetScheme() *string {
 
 // ManagerUpload uploads multiple files to disk
 // TODO: Implement this method
-func (d *Disk) ManagerUpload(ctx context.Context, files [][]byte) error {
+func (d *Disk) ManagerUpload(_ context.Context, _ [][]byte) error {
 	return nil
 }
 
 // Download is used to download a file from the storage backend
-func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
+func (d *Disk) Download(_ context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
 	file, err := os.ReadFile(filepath.Join(opts.Bucket, opts.FileName))
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) 
 
 // GetPresignedURL is used to get a presigned URL for a file in the storage backend
 // TODO: Implement this method
-func (d *Disk) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
+func (d *Disk) GetPresignedURL(key string, _ time.Duration) (string, error) {
 	return d.Opts.LocalURL + key, nil
 }
 

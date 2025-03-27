@@ -23,6 +23,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		if limitStatus.IsLimited {
 			fmt.Printf("too high rate for key: %s: rate: %f, limit: %d\nsleep: %s", limitedKey, limitStatus.CurrentRate, maxLimit, *limitStatus.LimitDuration)
 			time.Sleep(*limitStatus.LimitDuration)

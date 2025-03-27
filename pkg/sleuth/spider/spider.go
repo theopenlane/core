@@ -1,7 +1,6 @@
 package spider
 
 import (
-	"context"
 	"math"
 
 	"github.com/projectdiscovery/katana/pkg/engine/hybrid"
@@ -91,7 +90,7 @@ func performWebSpider(targets []string, opts ...Option) ([]LinkDetails, []string
 
 // PerformWebSpider performs a web spider operation against the provided targets, returning a WebSpiderReport with the
 // results of the spider
-func PerformWebSpider(ctx context.Context, targets []string) WebSpiderReport {
+func PerformWebSpider(targets []string) WebSpiderReport {
 	links, errors, err := performWebSpider(targets)
 	if err != nil {
 		errors = append(errors, err.Error())

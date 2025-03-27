@@ -14,7 +14,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "",
 	Short: "generate the stub files for a given cli cmd",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
 		initConfiguration(cmd)
 	},
 }

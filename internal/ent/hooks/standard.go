@@ -102,7 +102,7 @@ func HookStandardPublicAccessTuples() ent.Hook {
 // - OpDelete, OpDeleteOne: Deletes the tuple.
 // - OpUpdateOne: Deletes the tuple if it's a soft delete or if isPublic fields has changed. Adds the tuple if both fields are true.
 // - OpUpdate: Deletes the tuple if isPublic field has been cleared. Adds the tuple if both fields are true.
-func AddOrDeletePublicStandardTuple(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
+func AddOrDeletePublicStandardTuple(ctx context.Context, m *generated.StandardMutation) (bool, bool, error) {
 	switch m.Op() {
 	case ent.OpCreate:
 		return standardTupleOnCreate(m)
@@ -114,30 +114,30 @@ func AddOrDeletePublicStandardTuple(ctx context.Context, m *generated.StandardMu
 		return standardTupleOneUpdate(ctx, m)
 	}
 
-	return
+	return false, false, nil
 }
 
 // standardTupleOnCreate adds the tuple if both systemOwned and isPublic are true
-func standardTupleOnCreate(m *generated.StandardMutation) (add, delete bool, err error) {
+func standardTupleOnCreate(m *generated.StandardMutation) (bool, bool, error) {
 	systemOwned, ok := m.SystemOwned()
 	if !ok {
-		return
+		return false, false, nil
 	}
 
 	isPublic, ok := m.IsPublic()
 	if !ok {
-		return
+		return false, false, nil
 	}
 
 	if systemOwned && isPublic {
 		return true, false, nil
 	}
 
-	return
+	return false, false, nil
 }
 
 // standardTupleOnUpdateOne deletes the tuple if it's a soft delete or if systemOwned or isPublic fields have changed. Adds the tuple if both fields are true
-func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
+func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation) (add, remove bool, err error) {
 	var (
 		oldPublic          bool
 		oldSystemOwned     bool
@@ -172,12 +172,12 @@ func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation
 
 	// if either were cleared, delete the tuples
 	if systemOwnedCleared || publicCleared {
-		delete = true
+		remove = true
 	}
 
 	// delete logic if the systemOwned or isPublic fields have changed from true to false
 	if !systemOwned && systemOwnedOK && oldSystemOwned || !public && publicOK && oldPublic {
-		delete = true
+		remove = true
 	}
 
 	// add logic when both are set
@@ -200,7 +200,7 @@ func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation
 }
 
 // standardTupleOneUpdate deletes the tuple if systemOwned or isPublic fields have been cleared. Adds the tuple if both fields are true
-func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) (add, delete bool, err error) {
+func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) (bool, bool, error) {
 	var (
 		publicCleared bool
 	)
@@ -244,9 +244,9 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 	if systemOwned || public {
 		var updatedIDs []string
 
-		updatedIDs, err = m.IDs(ctx)
+		updatedIDs, err := m.IDs(ctx)
 		if err != nil || len(updatedIDs) == 0 {
-			return
+			return false, false, err
 		}
 
 		// check if the systemOwned or isPublic fields have changed
@@ -255,7 +255,7 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 
 			standard, err = m.Client().Standard.Get(ctx, id)
 			if err != nil {
-				return
+				return false, false, err
 			}
 
 			if standard.SystemOwned && standard.IsPublic {
@@ -264,5 +264,5 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 		}
 	}
 
-	return
+	return false, false, nil
 }

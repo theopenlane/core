@@ -31,6 +31,7 @@ func main() {
 			fmt.Println("Payment processing skipped due to previous validation failure")
 			return nil
 		}
+
 		orderID := evt.Payload().(string)
 		// Process payment logic...
 		fmt.Printf("Processing payment for order: %s\n", orderID)
@@ -44,6 +45,7 @@ func main() {
 			fmt.Println("Confirmation email not sent due to event abort")
 			return nil
 		}
+
 		orderID := evt.Payload().(string)
 		// Send email logic...
 		fmt.Printf("Sending confirmation email for order: %s\n", orderID)

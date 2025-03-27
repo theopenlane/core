@@ -152,7 +152,7 @@ func (u *Objects) getFileHeaders(r *http.Request, key string) ([]*multipart.File
 			return nil, nil
 		}
 
-		return nil, errors.New("file key not found") // nolint:goerr113
+		return nil, errors.New("file key not found") // nolint:err113
 	}
 
 	return fileHeaders, nil

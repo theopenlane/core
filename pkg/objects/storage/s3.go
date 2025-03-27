@@ -193,7 +193,7 @@ func (s *S3Store) Download(ctx context.Context, opts *objects.DownloadFileOption
 
 // GetPresignedURL returns a URL that provides access to a file for the set duration
 // if no duration is provided, it will default to 15 minutes
-func (s *S3Store) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
+func (s *S3Store) GetPresignedURL(key string, expires time.Duration) (string, error) {
 	presignURL, err := s.PresignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
 		Bucket:                     aws.String(s.Opts.Bucket),
 		Key:                        aws.String(key),
