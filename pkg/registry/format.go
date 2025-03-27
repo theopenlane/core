@@ -50,7 +50,7 @@ func getFormatFunc(format string) (FormatFunc, bool) {
 	return nil, false
 }
 
-func standardFormat(v interface{}) error {
+func standardFormat(_ any) error {
 	// errors will be reported by standard json schema validation
 	return nil
 }

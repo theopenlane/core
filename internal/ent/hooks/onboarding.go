@@ -73,7 +73,7 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 
 	if exists {
 		input.Name = uniqueOrganizationName(input.Name)
-		attempt += 1
+		attempt++
 
 		return createOrgUniqueName(ctx, m, input, attempt)
 	}

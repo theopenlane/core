@@ -170,10 +170,7 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 	u.IsTOTPAllowed, _ = m.TotpAllowed()
 
 	// setup account name fields
-	isValid := true
-	if user.Email == "" {
-		isValid = false
-	}
+	isValid := user.Email != ""
 
 	u.Email = sql.NullString{
 		String: user.Email,

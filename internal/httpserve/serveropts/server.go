@@ -6,7 +6,7 @@ import (
 )
 
 type ServerOptions struct {
-	ConfigProvider serverconfig.ConfigProvider
+	ConfigProvider serverconfig.Provider
 	Config         serverconfig.Config
 }
 

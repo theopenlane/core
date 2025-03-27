@@ -41,7 +41,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			res, ok := v.([]*generated.File)
 			if ok {
 				for _, f := range res {
-					if err := setPresignedURL(ctx, f, q); err != nil {
+					if err := setPresignedURL(f, q); err != nil {
 						log.Warn().Err(err).Msg("failed to set presignedURL")
 					}
 				}
@@ -52,7 +52,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			// if its not a list, check the single entry
 			f, ok := v.(*generated.File)
 			if ok {
-				if err := setPresignedURL(ctx, f, q); err != nil {
+				if err := setPresignedURL(f, q); err != nil {
 					log.Warn().Err(err).Msg("failed to set presignedURLs")
 				}
 
@@ -68,13 +68,13 @@ func InterceptorPresignedURL() ent.Interceptor {
 const presignedURLDuration = 60 * time.Minute * 24 // 24 hours
 
 // setPresignedURL sets the presigned URL for the file response that is valid for 24 hours
-func setPresignedURL(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
+func setPresignedURL(file *generated.File, q *generated.FileQuery) error {
 	// if the storage path or file is empty, skip
 	if file == nil || file.StoragePath == "" {
 		return nil
 	}
 
-	url, err := q.ObjectManager.Storage.GetPresignedURL(ctx, file.StoragePath, presignedURLDuration)
+	url, err := q.ObjectManager.Storage.GetPresignedURL(file.StoragePath, presignedURLDuration)
 	if err != nil {
 		log.Err(err).Msg("failed to get presigned URL")
 

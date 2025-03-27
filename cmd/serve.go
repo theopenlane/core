@@ -23,7 +23,7 @@ import (
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		err := serve(cmd.Context())
 		cobra.CheckErr(err)
 	},
@@ -47,7 +47,7 @@ func serve(ctx context.Context) error {
 
 	serverOpts := []serveropts.ServerOption{}
 	serverOpts = append(serverOpts,
-		serveropts.WithConfigProvider(&config.ConfigProviderWithRefresh{}),
+		serveropts.WithConfigProvider(&config.ProviderWithRefresh{}),
 		serveropts.WithHTTPS(),
 		serveropts.WithEmailConfig(),
 		serveropts.WithMiddleware(),

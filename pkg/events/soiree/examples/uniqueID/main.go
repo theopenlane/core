@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 

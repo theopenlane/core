@@ -314,9 +314,10 @@ func checkForEdge(parentField, edgeField string) string {
 	foundEdge := ""
 
 	// determine if the edge is the parent field or the parent field pluralized
-	if edgeField == parentEdge {
+	switch edgeField {
+	case parentEdge:
 		foundEdge = parentEdge
-	} else if edgeField == pluralEdge {
+	case pluralEdge:
 		foundEdge = pluralEdge
 	}
 
@@ -390,10 +391,10 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		out, ok = v[parentField] // check for singular
 		if !ok {
 			return nil, nil
-		} else {
-			if strOut, ok := out.(string); ok {
-				return []string{strOut}, nil
-			}
+		}
+
+		if strOut, ok := out.(string); ok {
+			return []string{strOut}, nil
 		}
 	}
 

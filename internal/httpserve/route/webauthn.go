@@ -22,7 +22,7 @@ func registerWebauthnRegistrationHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -45,7 +45,7 @@ func registerWebauthnVerificationsHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -68,7 +68,7 @@ func registerWebauthnAuthenticationHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 
@@ -91,7 +91,7 @@ func registerWebauthnAuthVerificationHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	if err := router.AddEchoOnlyRoute(route); err != nil {
 		return err
 	}
 

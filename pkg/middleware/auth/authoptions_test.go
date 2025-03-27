@@ -45,7 +45,7 @@ func TestAuthOptions(t *testing.T) {
 
 func TestAuthOptionsOverride(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
-	opts := auth.AuthOptions{
+	opts := auth.Options{
 		KeysURL:            "http://localhost:8088/.well-known/jwks.json",
 		Audience:           "http://localhost:3000",
 		Issuer:             "http://localhost:8088",

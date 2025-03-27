@@ -130,9 +130,9 @@ func (_c *MockStorage_Download_Call) RunAndReturn(run func(context.Context, *obj
 	return _c
 }
 
-// GetPresignedURL provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockStorage) GetPresignedURL(_a0 context.Context, _a1 string, _a2 time.Duration) (string, error) {
-	ret := _m.Called(_a0, _a1, _a2)
+// GetPresignedURL provides a mock function with given fields: _a0, _a1
+func (_m *MockStorage) GetPresignedURL(_a0 string, _a1 time.Duration) (string, error) {
+	ret := _m.Called(_a0, _a1)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetPresignedURL")
@@ -140,17 +140,17 @@ func (_m *MockStorage) GetPresignedURL(_a0 context.Context, _a1 string, _a2 time
 
 	var r0 string
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string, time.Duration) (string, error)); ok {
-		return rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(string, time.Duration) (string, error)); ok {
+		return rf(_a0, _a1)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string, time.Duration) string); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(string, time.Duration) string); ok {
+		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, string, time.Duration) error); ok {
-		r1 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(1).(func(string, time.Duration) error); ok {
+		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -164,16 +164,15 @@ type MockStorage_GetPresignedURL_Call struct {
 }
 
 // GetPresignedURL is a helper method to define mock.On call
-//   - _a0 context.Context
-//   - _a1 string
-//   - _a2 time.Duration
-func (_e *MockStorage_Expecter) GetPresignedURL(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockStorage_GetPresignedURL_Call {
-	return &MockStorage_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", _a0, _a1, _a2)}
+//   - _a0 string
+//   - _a1 time.Duration
+func (_e *MockStorage_Expecter) GetPresignedURL(_a0 interface{}, _a1 interface{}) *MockStorage_GetPresignedURL_Call {
+	return &MockStorage_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", _a0, _a1)}
 }
 
-func (_c *MockStorage_GetPresignedURL_Call) Run(run func(_a0 context.Context, _a1 string, _a2 time.Duration)) *MockStorage_GetPresignedURL_Call {
+func (_c *MockStorage_GetPresignedURL_Call) Run(run func(_a0 string, _a1 time.Duration)) *MockStorage_GetPresignedURL_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(string), args[2].(time.Duration))
+		run(args[0].(string), args[1].(time.Duration))
 	})
 	return _c
 }
@@ -183,7 +182,7 @@ func (_c *MockStorage_GetPresignedURL_Call) Return(_a0 string, _a1 error) *MockS
 	return _c
 }
 
-func (_c *MockStorage_GetPresignedURL_Call) RunAndReturn(run func(context.Context, string, time.Duration) (string, error)) *MockStorage_GetPresignedURL_Call {
+func (_c *MockStorage_GetPresignedURL_Call) RunAndReturn(run func(string, time.Duration) (string, error)) *MockStorage_GetPresignedURL_Call {
 	_c.Call.Return(run)
 	return _c
 }

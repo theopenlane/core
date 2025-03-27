@@ -106,10 +106,7 @@ func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, fo
 		return nil
 	}
 
-	isHistory := false
-	if strings.Contains(cmdName, "History") {
-		isHistory = true
-	}
+	isHistory := strings.Contains(cmdName, "History")
 
 	// setup the data required for the template
 	c := cmd{

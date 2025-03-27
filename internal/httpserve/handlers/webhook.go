@@ -410,10 +410,7 @@ func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 		}
 	}
 
-	active := false
-	if subscription.Status == stripe.SubscriptionStatusActive || subscription.Status == stripe.SubscriptionStatusTrialing {
-		active = true
-	}
+	active := subscription.Status == stripe.SubscriptionStatusActive || subscription.Status == stripe.SubscriptionStatusTrialing
 
 	return &ent.OrgSubscription{
 		StripeSubscriptionID:     subscription.ID,

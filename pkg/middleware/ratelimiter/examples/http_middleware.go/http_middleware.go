@@ -25,8 +25,10 @@ func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Re
 				// 2. Upon error, just return the remote addr.
 				return r.RemoteAddr
 			}
+
 			return ip
 		}
+
 		if lookup == "X-Forwarded-For" && forwardedFor != "" {
 			// X-Forwarded-For is potentially a list of addresses separated with ","
 			parts := strings.Split(forwardedFor, ",")
@@ -41,6 +43,7 @@ func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Re
 
 			return parts[partIndex]
 		}
+
 		if lookup == "X-Real-IP" && realIP != "" {
 			return realIP
 		}
@@ -61,6 +64,7 @@ func rateLimitMiddleware(rateLimiter *ratelimiter.RateLimiter) func(http.Handler
 				// if rate limit error then pass the request
 				next.ServeHTTP(w, r)
 			}
+
 			if limitStatus.IsLimited {
 				w.WriteHeader(http.StatusTooManyRequests)
 				return

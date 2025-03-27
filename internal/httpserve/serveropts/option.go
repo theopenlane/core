@@ -65,7 +65,7 @@ func newApplyFunc(apply func(option *ServerOptions)) *applyFunc {
 }
 
 // WithConfigProvider supplies the config for the server
-func WithConfigProvider(cfgProvider config.ConfigProvider) ServerOption {
+func WithConfigProvider(cfgProvider config.Provider) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.ConfigProvider = cfgProvider
 	})

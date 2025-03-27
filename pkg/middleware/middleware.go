@@ -5,16 +5,16 @@ import "net/http"
 
 // A Chain is a middleware chain use for http request processing.
 type Chain struct {
-	mw []MiddlewareFunc
+	mw []Func
 }
 
-// MiddlewareFunc is a function that acts as middleware for http Handlers.
-type MiddlewareFunc func(next http.Handler) http.Handler
+// Func is a function that acts as middleware for http Handlers.
+type Func func(next http.Handler) http.Handler
 
 // NewChain creates a new Middleware chain
-func NewChain(middlewares ...MiddlewareFunc) Chain {
+func NewChain(middlewares ...Func) Chain {
 	return Chain{
-		mw: append([]MiddlewareFunc{}, middlewares...),
+		mw: append([]Func{}, middlewares...),
 	}
 }
 
@@ -30,7 +30,7 @@ func (c Chain) Chain(handler http.Handler) http.Handler {
 // Conditional is a middleware that only executes middleware if the condition
 // returns true for the request. If the condition returns false, the middleware
 // is skipped, and request handling moves on to the next handler in the chain.
-func Conditional(middleware MiddlewareFunc, condition func(r *http.Request) bool) MiddlewareFunc {
+func Conditional(middleware Func, condition func(r *http.Request) bool) Func {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			handler := next

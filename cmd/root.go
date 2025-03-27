@@ -20,7 +20,7 @@ var k *koanf.Koanf
 var rootCmd = &cobra.Command{
 	Use:   appName,
 	Short: "A cli for interacting with the openlane core server",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
 		err := initCmdFlags(cmd)
 		cobra.CheckErr(err)
 	},

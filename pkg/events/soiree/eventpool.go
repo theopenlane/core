@@ -225,7 +225,7 @@ func (m *EventPool) Close() error {
 	m.closed.Store(true)
 
 	// tidy it up
-	m.topics.Range(func(key, value interface{}) bool {
+	m.topics.Range(func(key, _ interface{}) bool {
 		m.topics.Delete(key)
 		return true
 	})

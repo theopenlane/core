@@ -14,11 +14,11 @@ import (
 	api "github.com/theopenlane/core/pkg/models"
 )
 
-// AuthOption allows users to optionally supply configuration to the Authorization middleware.
-type AuthOption func(opts *AuthOptions)
+// Option allows users to optionally supply configuration to the Authorization middleware.
+type Option func(opts *Options)
 
-// AuthOptions is constructed from variadic AuthOption arguments with reasonable defaults.
-type AuthOptions struct {
+// Options is constructed from variadic AuthOption arguments with reasonable defaults.
+type Options struct {
 	// KeysURL endpoint to the JWKS public keys on the server
 	KeysURL string `default:"http://localhost:17608/.well-known/jwks.json"`
 	// Audience to verify on tokens
@@ -52,7 +52,7 @@ type Reauthenticator interface {
 	Refresh(context.Context, *api.RefreshRequest) (*api.LoginReply, error)
 }
 
-var DefaultAuthOptions = AuthOptions{
+var DefaultAuthOptions = Options{
 	KeysURL:            "http://localhost:17608/.well-known/jwks.json",
 	Audience:           "http://localhost:17608",
 	Issuer:             "http://localhost:17608",
@@ -63,7 +63,7 @@ var DefaultAuthOptions = AuthOptions{
 
 // NewAuthOptions creates an AuthOptions object with reasonable defaults and any user
 // supplied input from the AuthOption variadic arguments.
-func NewAuthOptions(opts ...AuthOption) (conf AuthOptions) {
+func NewAuthOptions(opts ...Option) (conf Options) {
 	conf = DefaultAuthOptions
 
 	for _, opt := range opts {
@@ -81,7 +81,7 @@ func NewAuthOptions(opts ...AuthOption) (conf AuthOptions) {
 // Validator returns the user supplied validator or constructs a new JWKS Cache
 // Validator from the supplied options. If the options are invalid or the validator
 // cannot be created an error is returned
-func (conf *AuthOptions) Validator() (tokens.Validator, error) {
+func (conf *Options) Validator() (tokens.Validator, error) {
 	if conf.validator != nil {
 		return conf.validator, nil
 	}
@@ -103,7 +103,7 @@ func (conf *AuthOptions) Validator() (tokens.Validator, error) {
 
 // WithLocalValidator returns a new JWKS Validator constructed from the supplied options using
 // the local keys instead of fetching them from the server
-func (conf *AuthOptions) WithLocalValidator() error {
+func (conf *Options) WithLocalValidator() error {
 	if conf.validator != nil {
 		return nil
 	}
@@ -127,8 +127,8 @@ func (conf *AuthOptions) WithLocalValidator() error {
 // WithAuthOptions allows the user to update the default auth options with an auth
 // options struct to set many options values at once. Zero values are ignored, so if
 // using this option, the defaults will still be preserved if not set on the input.
-func WithAuthOptions(opts AuthOptions) AuthOption {
-	return func(conf *AuthOptions) {
+func WithAuthOptions(opts Options) Option {
+	return func(conf *Options) {
 		if opts.KeysURL != "" {
 			conf.KeysURL = opts.KeysURL
 		}
@@ -153,84 +153,84 @@ func WithAuthOptions(opts AuthOptions) AuthOption {
 
 // WithJWKSEndpoint allows the user to specify an alternative endpoint to fetch the JWKS
 // public keys from. This is useful for testing or for different environments.
-func WithJWKSEndpoint(url string) AuthOption {
-	return func(opts *AuthOptions) {
+func WithJWKSEndpoint(url string) Option {
+	return func(opts *Options) {
 		opts.KeysURL = url
 	}
 }
 
 // WithAudience allows the user to specify an alternative audience.
-func WithAudience(audience string) AuthOption {
-	return func(opts *AuthOptions) {
+func WithAudience(audience string) Option {
+	return func(opts *Options) {
 		opts.Audience = audience
 	}
 }
 
 // WithIssuer allows the user to specify an alternative issuer.
-func WithIssuer(issuer string) AuthOption {
-	return func(opts *AuthOptions) {
+func WithIssuer(issuer string) Option {
+	return func(opts *Options) {
 		opts.Issuer = issuer
 	}
 }
 
 // WithMinRefreshInterval allows the user to specify an alternative minimum duration
 // between cache refreshes to control refresh behavior for the JWKS public keys.
-func WithMinRefreshInterval(interval time.Duration) AuthOption {
-	return func(opts *AuthOptions) {
+func WithMinRefreshInterval(interval time.Duration) Option {
+	return func(opts *Options) {
 		opts.MinRefreshInterval = interval
 	}
 }
 
 // WithContext allows the user to specify an external, cancelable context to control
 // the background refresh behavior of the JWKS cache.
-func WithContext(ctx context.Context) AuthOption {
-	return func(opts *AuthOptions) {
+func WithContext(ctx context.Context) Option {
+	return func(opts *Options) {
 		opts.Context = ctx
 	}
 }
 
 // WithValidator allows the user to specify an alternative validator to the auth
 // middleware. This is particularly useful for testing authentication.
-func WithValidator(validator tokens.Validator) AuthOption {
-	return func(opts *AuthOptions) {
+func WithValidator(validator tokens.Validator) Option {
+	return func(opts *Options) {
 		opts.validator = validator
 	}
 }
 
 // WithReauthenticator allows the user to specify a reauthenticator to the auth
 // middleware.
-func WithReauthenticator(reauth Reauthenticator) AuthOption {
-	return func(opts *AuthOptions) {
+func WithReauthenticator(reauth Reauthenticator) Option {
+	return func(opts *Options) {
 		opts.reauth = reauth
 	}
 }
 
 // WithSkipperFunc allows the user to specify a skipper function for the middleware
-func WithSkipperFunc(skipper middleware.Skipper) AuthOption {
-	return func(opts *AuthOptions) {
+func WithSkipperFunc(skipper middleware.Skipper) Option {
+	return func(opts *Options) {
 		opts.Skipper = skipper
 	}
 }
 
 // WithBeforeFunc allows the user to specify a function to happen before the auth middleware
-func WithBeforeFunc(before middleware.BeforeFunc) AuthOption {
-	return func(opts *AuthOptions) {
+func WithBeforeFunc(before middleware.BeforeFunc) Option {
+	return func(opts *Options) {
 		opts.BeforeFunc = before
 	}
 }
 
 // WithDBClient is a function that returns an AuthOption function which sets the DBClient field of AuthOptions.
 // The DBClient field is used to specify the database client to be to check authentication with personal access tokens.
-func WithDBClient(client *ent.Client) AuthOption {
-	return func(opts *AuthOptions) {
+func WithDBClient(client *ent.Client) Option {
+	return func(opts *Options) {
 		opts.DBClient = client
 	}
 }
 
 // WithCookieConfig allows the user to specify a cookie configuration for the auth middleware
 // in order to override the default cookie configuration.
-func WithCookieConfig(cookieConfig *sessions.CookieConfig) AuthOption {
-	return func(opts *AuthOptions) {
+func WithCookieConfig(cookieConfig *sessions.CookieConfig) Option {
+	return func(opts *Options) {
 		opts.CookieConfig = cookieConfig
 	}
 }

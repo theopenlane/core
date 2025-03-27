@@ -77,11 +77,11 @@ tasks:
   go:lint:
     desc: runs golangci-lint, the most annoying opinionated linter ever
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --fast --fix --show-stats
+      - golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
-    ## do not use --fast or --fix in CI
+    ## do not use --fix in CI
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose
 

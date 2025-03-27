@@ -23,8 +23,8 @@ var postPolicy = privacy.Policy{
 	},
 }
 
-// PolicyOption configures policy creation.
-type PolicyOption func(*policies)
+// Option configures policy creation.
+type Option func(*policies)
 
 // policies aggregate policy options.
 type policies struct {
@@ -34,21 +34,21 @@ type policies struct {
 }
 
 // WithQueryRules adds query rules to policy.
-func WithQueryRules(rules ...privacy.QueryRule) PolicyOption {
+func WithQueryRules(rules ...privacy.QueryRule) Option {
 	return func(policies *policies) {
 		policies.query = append(policies.query, rules...)
 	}
 }
 
 // WithMutationRules adds mutation rules to policy.
-func WithMutationRules(rules ...privacy.MutationRule) PolicyOption {
+func WithMutationRules(rules ...privacy.MutationRule) Option {
 	return func(policies *policies) {
 		policies.mutation = append(policies.mutation, rules...)
 	}
 }
 
 // WithOnQueryRules adds query rules to policy for specific operations.
-func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) PolicyOption {
+func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) Option {
 	opRules := []privacy.MutationRule{}
 
 	for _, rule := range rules {
@@ -66,21 +66,21 @@ func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) PolicyOption 
 }
 
 // WithPrePolicy overrides the pre-policy to be executed.
-func WithPrePolicy(policy privacy.Policy) PolicyOption {
+func WithPrePolicy(policy privacy.Policy) Option {
 	return func(policies *policies) {
 		policies.pre = policy
 	}
 }
 
 // WithPostPolicy overrides the post-policy to be executed.
-func WithPostPolicy(policy privacy.Policy) PolicyOption {
+func WithPostPolicy(policy privacy.Policy) Option {
 	return func(policies *policies) {
 		policies.post = policy
 	}
 }
 
 // NewPolicy creates a privacy policy.
-func NewPolicy(opts ...PolicyOption) ent.Policy {
+func NewPolicy(opts ...Option) ent.Policy {
 	policies := policies{
 		pre:  prePolicy,
 		post: postPolicy,

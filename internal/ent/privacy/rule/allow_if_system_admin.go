@@ -37,7 +37,7 @@ func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 
 // AllowMutationIfSystemAdmin determines whether a query operation should be allowed based on whether the user is a system admin
 func AllowQueryIfSystemAdmin() privacy.QueryRule {
-	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
+	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 		allow, err := CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return err

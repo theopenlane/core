@@ -7,14 +7,14 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// ConfigProviderWithRefresh shows a config provider with automatic refresh; it contains fields and methods to manage the configuration,
+// ProviderWithRefresh shows a config provider with automatic refresh; it contains fields and methods to manage the configuration,
 // and refresh it periodically based on a specified interval
-type ConfigProviderWithRefresh struct {
+type ProviderWithRefresh struct {
 	sync.RWMutex
 
 	config *Config
 
-	configProvider ConfigProvider
+	configProvider Provider
 
 	refreshInterval time.Duration
 
@@ -22,14 +22,14 @@ type ConfigProviderWithRefresh struct {
 	stop   chan bool
 }
 
-// NewConfigProviderWithRefresh function is a constructor function that creates a new instance of ConfigProviderWithRefresh
-func NewConfigProviderWithRefresh(cfgProvider ConfigProvider) (*ConfigProviderWithRefresh, error) {
-	cfg, err := cfgProvider.GetConfig()
+// NewProviderWithRefresh function is a constructor function that creates a new instance of ProviderWithRefresh
+func NewProviderWithRefresh(cfgProvider Provider) (*ProviderWithRefresh, error) {
+	cfg, err := cfgProvider.Get()
 	if err != nil {
 		return nil, err
 	}
 
-	cfgRefresh := &ConfigProviderWithRefresh{
+	cfgRefresh := &ProviderWithRefresh{
 		config:          cfg,
 		configProvider:  cfgProvider,
 		refreshInterval: cfg.Settings.RefreshInterval,
@@ -40,7 +40,7 @@ func NewConfigProviderWithRefresh(cfgProvider ConfigProvider) (*ConfigProviderWi
 }
 
 // GetConfig retrieves the current echo server configuration; it acquires a read lock to ensure thread safety and returns the `config` field
-func (s *ConfigProviderWithRefresh) GetConfig() (*Config, error) {
+func (s *ProviderWithRefresh) Get() (*Config, error) {
 	s.RLock()
 	defer s.RUnlock()
 
@@ -48,7 +48,7 @@ func (s *ConfigProviderWithRefresh) GetConfig() (*Config, error) {
 }
 
 // initialize the config provider with refresh
-func (s *ConfigProviderWithRefresh) initialize() {
+func (s *ProviderWithRefresh) initialize() {
 	if s.refreshInterval != 0 {
 		s.stop = make(chan bool)
 		s.ticker = time.NewTicker(s.refreshInterval)
@@ -57,7 +57,7 @@ func (s *ConfigProviderWithRefresh) initialize() {
 	}
 }
 
-func (s *ConfigProviderWithRefresh) refreshConfig() {
+func (s *ProviderWithRefresh) refreshConfig() {
 	for {
 		select {
 		case <-s.stop:
@@ -65,7 +65,7 @@ func (s *ConfigProviderWithRefresh) refreshConfig() {
 		case <-s.ticker.C:
 		}
 
-		newConfig, err := s.configProvider.GetConfig()
+		newConfig, err := s.configProvider.Get()
 		if err != nil {
 			log.Error().Msg("failed to load new server configuration")
 			continue
@@ -82,7 +82,7 @@ func (s *ConfigProviderWithRefresh) refreshConfig() {
 // Close function is used to stop the automatic refresh of the configuration.
 // It stops the ticker that triggers the refresh and closes the stop channel,
 // which signals the goroutine to stop refreshing the configuration
-func (s *ConfigProviderWithRefresh) Close() {
+func (s *ProviderWithRefresh) Close() {
 	if s.ticker != nil {
 		s.ticker.Stop()
 	}
