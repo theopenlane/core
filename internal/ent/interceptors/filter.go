@@ -332,8 +332,8 @@ func getObjectIDsFromEntValues(m ent.Value) ([]string, error) {
 	return ids, nil
 }
 
-// getObjectIDFromEntValues extracts the object id from a generic ent value (used for list queries)
-// this function should be called after the query has been successful to get the returned object ids
+// getObjectIDFromEntValue extracts the object id from a generic ent value (used for single object
+// queries) this function should be called after the query has been successful to get the returned object ids from the object
 func getObjectIDFromEntValue(m ent.Value) (string, error) {
 	type objectIDer struct {
 		ID string `json:"id"`
