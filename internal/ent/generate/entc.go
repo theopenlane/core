@@ -43,6 +43,7 @@ const (
 	graphSchemaDir = graphDir + "schema/"
 	graphQueryDir  = graphDir + "query/"
 	schemaPath     = "./internal/ent/schema"
+	templateDir    = "./internal/ent/generate/templates/ent"
 )
 
 func main() {
@@ -134,7 +135,7 @@ func main() {
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Objects{}),
 		),
-		entc.TemplateDir("./internal/ent/generate/templates/ent"),
+		entc.TemplateDir(templateDir),
 		entc.Extensions(
 			gqlExt,
 			historyExt,
@@ -194,7 +195,10 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	return historyExt, entfgaExt
 }
 
-// WithGqlWithTemplates is a schema hook for replace entgql default template.
+// WithGqlWithTemplates is a schema hook to replace entgql default template used for pagination
+// The only change to the template is the function used to get the totalCount field uses
+// CountIDs(ctx) instead of `Count(ctx)`. The rest is a direct copy of the default template from:
+// https://github.com/ent/contrib/tree/master/entgql/template
 func WithGqlWithTemplates() entgql.ExtensionOption {
 	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
 		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
