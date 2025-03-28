@@ -18,7 +18,7 @@ import (
 
 // CreateSubscriber is the resolver for the createSubscriber field.
 func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
@@ -39,17 +39,11 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 // CreateBulkSubscriber is the resolver for the createBulkSubscriber field.
 func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateSubscriber(ctx, input)
 }
 
 // CreateBulkCSVSubscriber is the resolver for the createBulkCSVSubscriber field.
 func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateSubscriberInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -62,9 +56,6 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 
 // UpdateSubscriber is the resolver for the updateSubscriber field.
 func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*model.SubscriberUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
 			subscriber.EmailEQ(email),
@@ -124,10 +115,7 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 
 // Subscriber is the resolver for the subscriber field.
 func (r *queryResolver) Subscriber(ctx context.Context, email string) (*generated.Subscriber, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Subscriber.Query().Where(subscriber.EmailEQ(email)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Subscriber.Query().Where(subscriber.EmailEQ(email)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
 	}

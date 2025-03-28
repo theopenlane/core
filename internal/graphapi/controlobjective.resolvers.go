@@ -18,7 +18,7 @@ import (
 
 // CreateControlObjective is the resolver for the createControlObjective field.
 func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateControlObjective(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 
 // CreateBulkCSVControlObjective is the resolver for the createBulkCSVControlObjective field.
 func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateControlObjectiveInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 
 // UpdateControlObjective is the resolver for the updateControlObjective field.
 func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string
 
 // ControlObjective is the resolver for the controlObjective field.
 func (r *queryResolver) ControlObjective(ctx context.Context, id string) (*generated.ControlObjective, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
 	}

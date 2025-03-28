@@ -18,7 +18,7 @@ import (
 
 // CreateAPIToken is the resolver for the createAPIToken field.
 func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateAPIToken(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 
 // CreateBulkCSVAPIToken is the resolver for the createBulkCSVAPIToken field.
 func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateAPITokenInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 
 // UpdateAPIToken is the resolver for the updateAPIToken field.
 func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*mode
 
 // APIToken is the resolver for the apiToken field.
 func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.APIToken, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).APIToken.Query().Where(apitoken.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).APIToken.Query().Where(apitoken.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
 	}

@@ -13,15 +13,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateStandard is the resolver for the createStandard field.
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -46,9 +42,6 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 
 // UpdateStandard is the resolver for the updateStandard field.
 func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
@@ -96,10 +89,7 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*mode
 
 // Standard is the resolver for the standard field.
 func (r *queryResolver) Standard(ctx context.Context, id string) (*generated.Standard, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
 	}

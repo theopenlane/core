@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgramMembership is the resolver for the createProgramMembership field.
 func (r *mutationResolver) CreateProgramMembership(ctx context.Context, input generated.CreateProgramMembershipInput) (*model.ProgramMembershipCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "programmembership"})
@@ -37,17 +33,11 @@ func (r *mutationResolver) CreateBulkProgramMembership(ctx context.Context, inpu
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateProgramMembership(ctx, input)
 }
 
 // CreateBulkCSVProgramMembership is the resolver for the createBulkCSVProgramMembership field.
 func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateProgramMembershipInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -64,9 +54,6 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 
 // UpdateProgramMembership is the resolver for the updateProgramMembership field.
 func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "programmembership"})
@@ -102,10 +89,7 @@ func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id strin
 
 // ProgramMembership is the resolver for the programMembership field.
 func (r *queryResolver) ProgramMembership(ctx context.Context, id string) (*generated.ProgramMembership, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
 	}

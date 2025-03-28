@@ -18,7 +18,7 @@ import (
 
 // CreateEvidence is the resolver for the createEvidence field.
 func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.C
 
 // UpdateEvidence is the resolver for the updateEvidence field.
 func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Evidence.Get(ctx, id)
@@ -85,10 +85,10 @@ func (r *mutationResolver) DeleteEvidence(ctx context.Context, id string) (*mode
 
 // Evidence is the resolver for the evidence field.
 func (r *queryResolver) Evidence(ctx context.Context, id string) (*generated.Evidence, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
 	}

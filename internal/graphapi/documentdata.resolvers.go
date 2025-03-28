@@ -18,7 +18,7 @@ import (
 
 // CreateDocumentData is the resolver for the createDocumentData field.
 func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateDocumentData(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 
 // CreateBulkCSVDocumentData is the resolver for the createBulkCSVDocumentData field.
 func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateDocumentDataInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 
 // UpdateDocumentData is the resolver for the updateDocumentData field.
 func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*
 
 // DocumentData is the resolver for the documentData field.
 func (r *queryResolver) DocumentData(ctx context.Context, id string) (*generated.DocumentData, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).DocumentData.Query().Where(documentdata.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).DocumentData.Query().Where(documentdata.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
 	}

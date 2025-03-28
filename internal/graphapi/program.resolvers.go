@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgram is the resolver for the createProgram field.
 func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,17 +48,11 @@ func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*gener
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateProgram(ctx, input)
 }
 
 // CreateBulkCSVProgram is the resolver for the createBulkCSVProgram field.
 func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateProgramInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -87,9 +77,6 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 
 // UpdateProgram is the resolver for the updateProgram field.
 func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
@@ -132,10 +119,7 @@ func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model
 
 // Program is the resolver for the program field.
 func (r *queryResolver) Program(ctx context.Context, id string) (*generated.Program, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
 	}

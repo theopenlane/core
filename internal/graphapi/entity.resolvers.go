@@ -18,7 +18,7 @@ import (
 
 // CreateEntity is the resolver for the createEntity field.
 func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateEntity(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 
 // CreateBulkCSVEntity is the resolver for the createBulkCSVEntity field.
 func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateEntityInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 
 // UpdateEntity is the resolver for the updateEntity field.
 func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteEntity(ctx context.Context, id string) (*model.
 
 // Entity is the resolver for the entity field.
 func (r *queryResolver) Entity(ctx context.Context, id string) (*generated.Entity, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Entity.Query().Where(entity.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Entity.Query().Where(entity.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
 	}

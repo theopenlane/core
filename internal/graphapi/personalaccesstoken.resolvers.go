@@ -10,14 +10,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // CreatePersonalAccessToken is the resolver for the createPersonalAccessToken field.
 func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "personalaccesstoken"})
@@ -30,9 +26,6 @@ func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input 
 
 // UpdatePersonalAccessToken is the resolver for the updatePersonalAccessToken field.
 func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error) {
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "personalaccesstoken"})
@@ -68,10 +61,7 @@ func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id str
 
 // PersonalAccessToken is the resolver for the personalAccessToken field.
 func (r *queryResolver) PersonalAccessToken(ctx context.Context, id string) (*generated.PersonalAccessToken, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().Where(personalaccesstoken.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().Where(personalaccesstoken.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
 	}

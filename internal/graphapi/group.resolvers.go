@@ -18,7 +18,7 @@ import (
 
 // CreateGroup is the resolver for the createGroup field.
 func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkGroup(ctx context.Context, input []*generat
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateGroup(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkGroup(ctx context.Context, input []*generat
 
 // CreateBulkCSVGroup is the resolver for the createBulkCSVGroup field.
 func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateGroupInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 
 // UpdateGroup is the resolver for the updateGroup field.
 func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Group.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteGroup(ctx context.Context, id string) (*model.G
 
 // Group is the resolver for the group field.
 func (r *queryResolver) Group(ctx context.Context, id string) (*generated.Group, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
 	}

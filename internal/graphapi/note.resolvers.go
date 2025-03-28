@@ -30,9 +30,6 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
-	// grab preloads and set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	objectRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
@@ -45,10 +42,7 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 
 // Note is the resolver for the note field.
 func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
-
-	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
 	}

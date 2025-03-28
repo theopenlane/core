@@ -18,7 +18,7 @@ import (
 
 // CreateControl is the resolver for the createControl field.
 func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*gener
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	return r.bulkCreateControl(ctx, input)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*gener
 
 // CreateBulkCSVControl is the resolver for the createBulkCSVControl field.
 func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	data, err := unmarshalBulkData[generated.CreateControlInput](input)
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 
 // UpdateControl is the resolver for the updateControl field.
 func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error) {
-	// grab preloads and set max result limits
+	// grab preloads to set max result limits
 	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
@@ -132,10 +132,10 @@ func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model
 
 // Control is the resolver for the control field.
 func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Control, error) {
-	// determine all fields that were requested
-	preloads := graphutils.GetPreloads(ctx, r.maxResultLimit)
+	// get preloads to set max result limits
+	graphutils.GetPreloads(ctx, r.maxResultLimit)
 
-	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id)).CollectFields(ctx, preloads...)
+	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
 	}
