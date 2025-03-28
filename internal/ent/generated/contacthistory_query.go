@@ -468,6 +468,25 @@ func (chq *ContactHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Cont
 	return chq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (chq *ContactHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryIDs)
+	if err := chq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return chq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, chq, qr, chq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ContactHistoryGroupBy is the group-by builder for ContactHistory entities.
 type ContactHistoryGroupBy struct {
 	selector

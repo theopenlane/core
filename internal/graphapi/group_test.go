@@ -101,8 +101,8 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
 	reqCtx2 := auth.NewTestContextWithOrgID(testUser1.ID, org2.ID)
 
-	group1 := (&GroupBuilder{client: suite.client, Owner: org1.ID}).MustNew(reqCtx, t)
-	group2 := (&GroupBuilder{client: suite.client, Owner: org2.ID}).MustNew(reqCtx2, t)
+	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+	group2 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx2, t)
 
 	t.Run("Get Groups By Owner", func(t *testing.T) {
 		whereInput := &openlaneclient.GroupWhereInput{
@@ -645,10 +645,10 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 	descriptionUpdate := gofakeit.HipsterSentence(10)
 	gravatarURLUpdate := gofakeit.URL()
 
-	group := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	gm := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
-	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

@@ -494,22 +494,20 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// create groups for creator permissions tests and add a member
-	// group created by org owner
-	groupProgramCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupProgramCreators.ID}).MustNew(testUser1.UserCtx, t)
-
-	anotherGroupProgramCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: anotherGroupProgramCreators.ID}).MustNew(testUser1.UserCtx, t)
-
-	// group created by admin
-	groupProcedureCreators := (&GroupBuilder{client: suite.client, Owner: testUser1.OrganizationID}).MustNew(adminUser.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(adminUser.UserCtx, t)
-
 	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
 
+	// create groups for creator permissions tests and add a member
+	// group created by org owner
+	groupProgramCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+	anotherGroupProgramCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+	groupProcedureCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupProgramCreators.ID}).MustNew(reqCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: anotherGroupProgramCreators.ID}).MustNew(reqCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(reqCtx, t)
+
 	// add a member to the org, to test permissions
-	om := (&OrgMemberBuilder{client: suite.client, OrgID: org.ID, Role: string(enums.RoleMember)}).MustNew(testUser1.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client, Role: string(enums.RoleMember)}).MustNew(reqCtx, t)
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
@@ -772,10 +770,11 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 
 			if tc.updateInput.AddOrgMembers != nil {
 				// Adding a member to an org will make it 3 users, there is an owner
-				// assigned to the org automatically and an another member added in the test
-				assert.Len(t, updatedOrg.Members, 3)
-				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedOrg.Members[2].Role)
-				assert.Equal(t, tc.expectedRes.Members[0].UserID, updatedOrg.Members[2].UserID)
+				// assigned to the org automatically and an another member added in the test and
+				// 3 created as part of the group member logic
+				assert.Len(t, updatedOrg.Members, 6)
+				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedOrg.Members[5].Role)
+				assert.Equal(t, tc.expectedRes.Members[0].UserID, updatedOrg.Members[5].UserID)
 			}
 
 			if tc.updateInput.UpdateOrgSettings != nil {
@@ -898,11 +897,10 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	// add child org
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: org.ID}).MustNew(reqCtx, t)
-
-	group1 := (&GroupBuilder{client: suite.client, Owner: org.ID}).MustNew(reqCtx, t)
 
 	// delete org
 	resp, err := suite.client.api.DeleteOrganization(reqCtx, org.ID)

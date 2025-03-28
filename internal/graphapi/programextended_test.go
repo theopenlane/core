@@ -42,6 +42,27 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		{
+			name: "happy path, minimal input, no member should work",
+			request: openlaneclient.CreateProgramWithMembersInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "MITB Assessment - 2025",
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, minimal input, nil members should work",
+			request: openlaneclient.CreateProgramWithMembersInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "MITB Assessment - 2025",
+				},
+				Members: nil,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {

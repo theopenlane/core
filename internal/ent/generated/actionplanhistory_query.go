@@ -468,6 +468,25 @@ func (aphq *ActionPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *
 	return aphq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (aphq *ActionPlanHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryIDs)
+	if err := aphq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return aphq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, aphq, qr, aphq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ActionPlanHistoryGroupBy is the group-by builder for ActionPlanHistory entities.
 type ActionPlanHistoryGroupBy struct {
 	selector

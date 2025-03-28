@@ -468,6 +468,25 @@ func (ohq *OrganizationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) 
 	return ohq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ohq *OrganizationHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ohq.ctx, ent.OpQueryIDs)
+	if err := ohq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ohq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ohq, qr, ohq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // OrganizationHistoryGroupBy is the group-by builder for OrganizationHistory entities.
 type OrganizationHistoryGroupBy struct {
 	selector

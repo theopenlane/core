@@ -468,6 +468,25 @@ func (thq *TaskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskHis
 	return thq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (thq *TaskHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
+	if err := thq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return thq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, thq, qr, thq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // TaskHistoryGroupBy is the group-by builder for TaskHistory entities.
 type TaskHistoryGroupBy struct {
 	selector

@@ -658,6 +658,25 @@ func (sq *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQue
 	return sq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (sq *StandardQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
+	if err := sq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return sq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, sq, qr, sq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // StandardGroupBy is the group-by builder for Standard entities.
 type StandardGroupBy struct {
 	selector

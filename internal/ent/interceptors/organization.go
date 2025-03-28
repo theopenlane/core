@@ -40,6 +40,8 @@ func InterceptorOrganization() ent.Interceptor {
 			return nil
 		}
 
+		// use the id predicate; there will never be a large list of orgs
+		// so its safe to use list objects ahead of time
 		return AddIDPredicate(ctx, q)
 	})
 }

@@ -30,20 +30,24 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
 
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
-	for i := range input.Members {
-		input := generated.CreateProgramMembershipInput{
-			ProgramID: res.ID,
-			UserID:    input.Members[i].UserID,
-			Role:      input.Members[i].Role,
+	// add the members to the program
+	if len(input.Members) > 0 {
+		c := withTransactionalMutation(ctx)
+
+		builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
+		for i := range input.Members {
+			input := generated.CreateProgramMembershipInput{
+				ProgramID: res.ID,
+				UserID:    input.Members[i].UserID,
+				Role:      input.Members[i].Role,
+			}
+
+			builders[i] = c.ProgramMembership.Create().SetInput(input)
 		}
 
-		builders[i] = c.ProgramMembership.Create().SetInput(input)
-	}
-
-	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return nil, err
+		if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
+			return nil, err
+		}
 	}
 
 	query, err := withTransactionalMutation(ctx).Program.
@@ -78,21 +82,23 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
 
-	// create the program memberships
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
-	for i := range input.Members {
-		input := generated.CreateProgramMembershipInput{
-			ProgramID: res.ID,
-			UserID:    input.Members[i].UserID,
-			Role:      input.Members[i].Role,
+	if len(input.Members) > 0 {
+		// create the program memberships
+		c := withTransactionalMutation(ctx)
+		builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
+		for i := range input.Members {
+			input := generated.CreateProgramMembershipInput{
+				ProgramID: res.ID,
+				UserID:    input.Members[i].UserID,
+				Role:      input.Members[i].Role,
+			}
+
+			builders[i] = c.ProgramMembership.Create().SetInput(input)
 		}
 
-		builders[i] = c.ProgramMembership.Create().SetInput(input)
-	}
-
-	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return nil, err
+		if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
+			return nil, err
+		}
 	}
 
 	// create the risks
@@ -220,6 +226,11 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 		log.Error().Msg("unable to get program from context")
 
 		return ErrInternalServerError
+	}
+
+	// return early if no members to add
+	if len(data) == 0 {
+		return nil
 	}
 
 	c := withTransactionalMutation(ctx)

@@ -468,6 +468,25 @@ func (cohq *ControlObjectiveHistoryQuery) Modify(modifiers ...func(s *sql.Select
 	return cohq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (cohq *ControlObjectiveHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, cohq.ctx, ent.OpQueryIDs)
+	if err := cohq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return cohq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, cohq, qr, cohq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ControlObjectiveHistoryGroupBy is the group-by builder for ControlObjectiveHistory entities.
 type ControlObjectiveHistoryGroupBy struct {
 	selector

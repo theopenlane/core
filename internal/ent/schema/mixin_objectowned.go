@@ -3,8 +3,6 @@ package schema
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -17,7 +15,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -63,14 +60,14 @@ type InterceptorFunc func(o ObjectOwnedMixin) ent.Interceptor
 // newOrgOwnedMixin creates a new OrgOwnedMixin using the plural name of the schema
 // and all defaults. The schema must implement the SchemaFuncs interface to be used.
 // options can be passed to customize the mixin
-func newObjectOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
+func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 	sch := toSchemaFuncs(schema)
 
 	// defaults settings
 	o := ObjectOwnedMixin{
 		Ref:              sch.PluralName(),
 		HookFuncs:        []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
-		InterceptorFuncs: []InterceptorFunc{defaultObjectInterceptorFunc},
+		InterceptorFuncs: []InterceptorFunc{func(o ObjectOwnedMixin) ent.Interceptor { return interceptors.FilterQueryResults[V]() }},
 		OwnerRelation:    fgax.ParentRelation,
 	}
 
@@ -197,11 +194,10 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	}
 
 	for _, fieldName := range o.FieldNames {
-		objectType := o.Kind
 		objectIDField := field.
 			String(fieldName).
 			Optional().
-			Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
+			Comment(fmt.Sprintf("the %v id that owns the object", getName(o.Kind)))
 
 		// if explicitly set to allow empty values, otherwise ensure it is not empty
 		if !o.AllowEmptyForSystemAdmin {
@@ -234,7 +230,7 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 
 	for _, fieldName := range o.FieldNames {
 		ownerEdge := edge.
-			From("owner", o.Kind).
+			From("owner", getType(o.Kind)).
 			Field(fieldName).
 			Ref(o.Ref).
 			Unique()
@@ -347,23 +343,6 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne)
-}
-
-// defaultObjectInterceptorFunc is the default interceptor function for the object owned mixin
-// it will filter the query to only include the objects that the user has access to based on the FGA list objects
-// setting
-var defaultObjectInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor { // nolint:unused
-	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		return interceptors.AddIDPredicate(ctx, q)
-	})
-}
-
-// getObjectType takes the `kind` and returns the object type
-// this should be type of the schema, e.g. `func(schema.Organization)` which will return `organization`
-func getObjectType(kind any) string {
-	objectType := reflect.TypeOf(kind).String()
-
-	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(objectType, "func(schema.", ""), ")", ""))
 }
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins

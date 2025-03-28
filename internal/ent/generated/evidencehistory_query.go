@@ -468,6 +468,25 @@ func (ehq *EvidenceHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Evi
 	return ehq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ehq *EvidenceHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryIDs)
+	if err := ehq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ehq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ehq, qr, ehq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EvidenceHistoryGroupBy is the group-by builder for EvidenceHistory entities.
 type EvidenceHistoryGroupBy struct {
 	selector

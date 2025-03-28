@@ -89,7 +89,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 
 	// existing user already a member of org
 	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
+	_ = (&OrgMemberBuilder{client: suite.client, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
 
 	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUser1.UserCtx, t)
 

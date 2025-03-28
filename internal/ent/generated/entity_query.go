@@ -1134,6 +1134,25 @@ func (eq *EntityQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *En
 	return eq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (eq *EntityQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
+	if err := eq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return eq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, eq, qr, eq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // EntityGroupBy is the group-by builder for Entity entities.
 type EntityGroupBy struct {
 	selector

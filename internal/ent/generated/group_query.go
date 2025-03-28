@@ -3851,6 +3851,25 @@ func (gq *GroupQuery) WithNamedMembers(name string, opts ...func(*GroupMembershi
 	return gq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (gq *GroupQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryIDs)
+	if err := gq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return gq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, gq, qr, gq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // GroupGroupBy is the group-by builder for Group entities.
 type GroupGroupBy struct {
 	selector

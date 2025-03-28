@@ -468,6 +468,25 @@ func (shq *SubcontrolHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *S
 	return shq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (shq *SubcontrolHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
+	if err := shq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return shq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, shq, qr, shq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // SubcontrolHistoryGroupBy is the group-by builder for SubcontrolHistory entities.
 type SubcontrolHistoryGroupBy struct {
 	selector

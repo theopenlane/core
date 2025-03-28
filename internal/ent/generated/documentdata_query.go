@@ -898,6 +898,25 @@ func (ddq *DocumentDataQuery) WithNamedFiles(name string, opts ...func(*FileQuer
 	return ddq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ddq *DocumentDataQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryIDs)
+	if err := ddq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ddq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ddq, qr, ddq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // DocumentDataGroupBy is the group-by builder for DocumentData entities.
 type DocumentDataGroupBy struct {
 	selector

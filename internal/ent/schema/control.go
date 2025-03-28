@@ -135,7 +135,7 @@ func (c Control) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			// controls must be associated with an organization but do not inherit permissions from the organization
 			// controls can inherit permissions from the associated programs
-			newObjectOwnedMixin(c,
+			newObjectOwnedMixin[generated.Control](c,
 				withParents(Program{}, Standard{}),
 				withOrganizationOwner(true),
 			),

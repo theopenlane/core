@@ -1736,6 +1736,25 @@ func (pq *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) 
 	return pq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (pq *ProcedureQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryIDs)
+	if err := pq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return pq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, pq, qr, pq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ProcedureGroupBy is the group-by builder for Procedure entities.
 type ProcedureGroupBy struct {
 	selector

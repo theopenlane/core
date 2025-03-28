@@ -10,7 +10,7 @@ import (
 func mockListener(id string, shouldError bool) Listener {
 	return func(e Event) error {
 		if shouldError {
-			return errors.New("listener error " + id) // nolint: goerr113
+			return errors.New("listener error " + id) // nolint: err113
 		}
 
 		return nil

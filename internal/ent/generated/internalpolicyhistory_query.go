@@ -468,6 +468,25 @@ func (iphq *InternalPolicyHistoryQuery) Modify(modifiers ...func(s *sql.Selector
 	return iphq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (iphq *InternalPolicyHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryIDs)
+	if err := iphq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return iphq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, iphq, qr, iphq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // InternalPolicyHistoryGroupBy is the group-by builder for InternalPolicyHistory entities.
 type InternalPolicyHistoryGroupBy struct {
 	selector

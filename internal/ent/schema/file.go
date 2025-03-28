@@ -106,7 +106,7 @@ func (f File) Edges() []ent.Edge {
 func (f File) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin(f,
+			newObjectOwnedMixin[generated.File](f,
 				withParents(
 					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}), // used to create parent tuples for the file

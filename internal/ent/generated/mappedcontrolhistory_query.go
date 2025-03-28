@@ -468,6 +468,25 @@ func (mchq *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)
 	return mchq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (mchq *MappedControlHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryIDs)
+	if err := mchq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return mchq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, mchq, qr, mchq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // MappedControlHistoryGroupBy is the group-by builder for MappedControlHistory entities.
 type MappedControlHistoryGroupBy struct {
 	selector

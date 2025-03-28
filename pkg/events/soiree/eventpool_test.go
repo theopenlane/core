@@ -94,7 +94,7 @@ func TestEmitAsyncFailure(t *testing.T) {
 		// Simulate some work
 		time.Sleep(10 * time.Millisecond)
 
-		return errors.New("listener error") // nolint: goerr113
+		return errors.New("listener error") // nolint: err113
 	}
 
 	// Subscribe the listener to the "testTopic"
@@ -156,7 +156,7 @@ func TestEmitSyncFailure(t *testing.T) {
 
 	// Create a listener that returns an error
 	listener := func(e Event) error {
-		return errors.New("listener error") // nolint: goerr113
+		return errors.New("listener error") // nolint: err113
 	}
 
 	_, err := soiree.On("testTopic", listener)

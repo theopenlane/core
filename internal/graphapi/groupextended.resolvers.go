@@ -107,18 +107,20 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		return nil, err
 	}
 
-	memberInput := make([]*generated.CreateGroupMembershipInput, len(members))
+	if len(members) > 0 {
+		memberInput := make([]*generated.CreateGroupMembershipInput, len(members))
 
-	for i, member := range members {
-		memberInput[i] = &generated.CreateGroupMembershipInput{
-			GroupID: res.Group.ID,
-			UserID:  member.UserID,
-			Role:    member.Role,
+		for i, member := range members {
+			memberInput[i] = &generated.CreateGroupMembershipInput{
+				GroupID: res.Group.ID,
+				UserID:  member.UserID,
+				Role:    member.Role,
+			}
 		}
-	}
 
-	if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
-		return nil, err
+		if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
+			return nil, err
+		}
 	}
 
 	query, err := withTransactionalMutation(ctx).Group.

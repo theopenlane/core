@@ -689,6 +689,25 @@ func (sq *SubscriberQuery) WithNamedEvents(name string, opts ...func(*EventQuery
 	return sq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (sq *SubscriberQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
+	if err := sq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return sq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, sq, qr, sq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // SubscriberGroupBy is the group-by builder for Subscriber entities.
 type SubscriberGroupBy struct {
 	selector

@@ -742,6 +742,25 @@ func (mcq *MappedControlQuery) WithNamedSubcontrols(name string, opts ...func(*S
 	return mcq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (mcq *MappedControlQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, mcq.ctx, ent.OpQueryIDs)
+	if err := mcq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return mcq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, mcq, qr, mcq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // MappedControlGroupBy is the group-by builder for MappedControl entities.
 type MappedControlGroupBy struct {
 	selector

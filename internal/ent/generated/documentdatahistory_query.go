@@ -468,6 +468,25 @@ func (ddhq *DocumentDataHistoryQuery) Modify(modifiers ...func(s *sql.Selector))
 	return ddhq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (ddhq *DocumentDataHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryIDs)
+	if err := ddhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return ddhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, ddhq, qr, ddhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // DocumentDataHistoryGroupBy is the group-by builder for DocumentDataHistory entities.
 type DocumentDataHistoryGroupBy struct {
 	selector

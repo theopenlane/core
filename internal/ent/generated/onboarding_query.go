@@ -557,6 +557,25 @@ func (oq *OnboardingQuery) Modify(modifiers ...func(s *sql.Selector)) *Onboardin
 	return oq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (oq *OnboardingQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
+	if err := oq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return oq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, oq, qr, oq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // OnboardingGroupBy is the group-by builder for Onboarding entities.
 type OnboardingGroupBy struct {
 	selector

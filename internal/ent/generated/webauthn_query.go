@@ -550,6 +550,25 @@ func (wq *WebauthnQuery) Modify(modifiers ...func(s *sql.Selector)) *WebauthnSel
 	return wq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (wq *WebauthnQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, wq.ctx, ent.OpQueryIDs)
+	if err := wq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return wq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, wq, qr, wq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // WebauthnGroupBy is the group-by builder for Webauthn entities.
 type WebauthnGroupBy struct {
 	selector

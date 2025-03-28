@@ -557,6 +557,25 @@ func (prtq *PasswordResetTokenQuery) Modify(modifiers ...func(s *sql.Selector)) 
 	return prtq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (prtq *PasswordResetTokenQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryIDs)
+	if err := prtq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return prtq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, prtq, qr, prtq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // PasswordResetTokenGroupBy is the group-by builder for PasswordResetToken entities.
 type PasswordResetTokenGroupBy struct {
 	selector

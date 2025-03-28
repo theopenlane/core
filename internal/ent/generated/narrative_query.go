@@ -1216,6 +1216,25 @@ func (nq *NarrativeQuery) WithNamedPrograms(name string, opts ...func(*ProgramQu
 	return nq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (nq *NarrativeQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryIDs)
+	if err := nq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return nq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, nq, qr, nq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // NarrativeGroupBy is the group-by builder for Narrative entities.
 type NarrativeGroupBy struct {
 	selector

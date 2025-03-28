@@ -2703,6 +2703,25 @@ func (cq *ControlQuery) WithNamedInternalPolicies(name string, opts ...func(*Int
 	return cq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (cq *ControlQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
+	if err := cq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return cq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, cq, qr, cq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // ControlGroupBy is the group-by builder for Control entities.
 type ControlGroupBy struct {
 	selector

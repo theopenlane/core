@@ -853,6 +853,25 @@ func (gmq *GroupMembershipQuery) WithNamedEvents(name string, opts ...func(*Even
 	return gmq
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (gmq *GroupMembershipQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, gmq.ctx, ent.OpQueryIDs)
+	if err := gmq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return gmq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, gmq, qr, gmq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // GroupMembershipGroupBy is the group-by builder for GroupMembership entities.
 type GroupMembershipGroupBy struct {
 	selector

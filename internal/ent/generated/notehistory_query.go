@@ -468,6 +468,25 @@ func (nhq *NoteHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteHis
 	return nhq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (nhq *NoteHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
+	if err := nhq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return nhq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, nhq, qr, nhq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // NoteHistoryGroupBy is the group-by builder for NoteHistory entities.
 type NoteHistoryGroupBy struct {
 	selector

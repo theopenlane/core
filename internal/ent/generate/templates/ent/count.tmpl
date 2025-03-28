@@ -1,0 +1,22 @@
+{{ define "query/additional/count" }}
+	{{ $receiver := receiver $.QueryName }}
+
+	// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+	func ({{ $receiver }} *{{ $.QueryName }}) CountIDs(ctx context.Context) (int, error) {
+		ctx = setContextOp(ctx, {{ $receiver }} .ctx, ent.OpQueryIDs)
+		if err := {{ $receiver }} .prepareQuery(ctx); err != nil {
+			return 0, err
+		}
+
+		qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+			return {{ $receiver }}.IDs(ctx)
+		})
+
+		ids, err := withInterceptors[[]string](ctx, {{ $receiver }} , qr, {{ $receiver }} .inters)
+		if err != nil {
+			return 0, err
+		}
+
+		return len(ids), nil
+	}
+{{ end }}

@@ -5,6 +5,7 @@
 package main
 
 import (
+	"embed"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -32,11 +33,17 @@ import (
 	"github.com/theopenlane/core/internal/genhelpers"
 )
 
+var (
+	//go:embed templates/entgql/*.tmpl
+	_entqlTemplates embed.FS
+)
+
 const (
 	graphDir       = "./internal/graphapi/"
 	graphSchemaDir = graphDir + "schema/"
 	graphQueryDir  = graphDir + "query/"
 	schemaPath     = "./internal/ent/schema"
+	templateDir    = "./internal/ent/generate/templates/ent"
 )
 
 func main() {
@@ -64,6 +71,7 @@ func main() {
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen.yml"),
 		entgql.WithWhereInputs(true),
 		entgql.WithSchemaHook(xExt.GQLSchemaHooks()...),
+		WithGqlWithTemplates(),
 	)
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating entgql extension")
@@ -72,8 +80,7 @@ func main() {
 	log.Info().Msg("running ent codegen with extensions")
 
 	if err := entc.Generate(schemaPath, &gen.Config{
-		Target:    "./internal/ent/generated",
-		Templates: entgql.AllTemplates,
+		Target: "./internal/ent/generated",
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
@@ -128,7 +135,7 @@ func main() {
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Objects{}),
 		),
-		entc.TemplateDir("./internal/ent/templates"),
+		entc.TemplateDir(templateDir),
 		entc.Extensions(
 			gqlExt,
 			historyExt,
@@ -186,4 +193,14 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	}
 
 	return historyExt, entfgaExt
+}
+
+// WithGqlWithTemplates is a schema hook to replace entgql default template used for pagination
+// The only change to the template is the function used to get the totalCount field uses
+// CountIDs(ctx) instead of `Count(ctx)`. The rest is a direct copy of the default template from:
+// https://github.com/ent/contrib/tree/master/entgql/template
+func WithGqlWithTemplates() entgql.ExtensionOption {
+	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
+		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
+	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }

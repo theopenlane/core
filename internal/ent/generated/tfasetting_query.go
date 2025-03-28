@@ -557,6 +557,25 @@ func (tsq *TFASettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TFASetti
 	return tsq.Select()
 }
 
+// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+func (tsq *TFASettingQuery) CountIDs(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryIDs)
+	if err := tsq.prepareQuery(ctx); err != nil {
+		return 0, err
+	}
+
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return tsq.IDs(ctx)
+	})
+
+	ids, err := withInterceptors[[]string](ctx, tsq, qr, tsq.inters)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
+}
+
 // TFASettingGroupBy is the group-by builder for TFASetting entities.
 type TFASettingGroupBy struct {
 	selector
