@@ -1146,8 +1146,8 @@ github.com/theopenlane/emailtemplates v0.1.2 h1:0l/PlokMjH8mARToQXWFvhBwvs9mtcaZ
 github.com/theopenlane/emailtemplates v0.1.2/go.mod h1:ZVTSMr+jKZZDH1IDTYBzR5nF/FPGt+IAPOJmet/WPi8=
 github.com/theopenlane/entx v0.5.1 h1:XU0QddW9VrK2K9Ak+0Q1g7kbzroBzAS9ODaF+eRymhE=
 github.com/theopenlane/entx v0.5.1/go.mod h1:VmDpPxVx0bZlCom1zpdYEWN8091zQGp+MOG+cdYVw+c=
-github.com/theopenlane/gqlgen-plugins v0.4.10 h1:mAZoP3s/cV1xcVGasftqbc+Sj1vfffjwib/1ux8hUfU=
-github.com/theopenlane/gqlgen-plugins v0.4.10/go.mod h1:FZgKHFSP4ntM6Ly5rBgpTz9lLFgwNJu2TfbuvDL7J/o=
+github.com/theopenlane/gqlgen-plugins v0.5.0 h1:MrjmyFlzN4tLErd54KE/XGqwq6kdi0++H6/A8ybb55E=
+github.com/theopenlane/gqlgen-plugins v0.5.0/go.mod h1:uTNixjmCFIWJisaXkU3D6O0hjZNXS4+MNvMtMlKWFTs=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.9.4 h1:VRCGsslginr++dxwqAV50gRhTg7Xt7Rs6bP8BvKKDgc=
