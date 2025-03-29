@@ -1,4 +1,4 @@
-package echolog_test
+package logx_test
 
 import (
 	"bytes"
@@ -7,14 +7,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/logx/echolog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func TestCtx(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := echolog.New(b)
+	l := logx.New(b)
 	zerologger := l.Unwrap()
 	ctx := l.WithContext(context.Background())
 
-	assert.Equal(t, echolog.Ctx(ctx), &zerologger)
+	assert.Equal(t, logx.Ctx(ctx), &zerologger)
 }

@@ -1,4 +1,4 @@
-package echolog
+package logx
 
 import (
 	"fmt"

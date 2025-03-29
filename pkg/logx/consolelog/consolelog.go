@@ -21,13 +21,16 @@ const (
 )
 
 var (
-	bold    = color.New(color.Bold).SprintFunc()
-	red     = color.New(color.FgRed).SprintFunc()
-	green   = color.New(color.FgGreen).SprintFunc()
-	yellow  = color.New(color.FgYellow).SprintFunc()
-	faint   = color.New(color.Faint).SprintFunc()
-	blue    = color.New(color.FgCyan).SprintFunc()
-	magenta = color.New(color.FgMagenta).SprintFunc()
+	bold      = color.New(color.Bold).SprintFunc()
+	red       = color.New(color.FgRed).SprintFunc()
+	green     = color.New(color.FgGreen).SprintFunc()
+	yellow    = color.New(color.FgYellow).SprintFunc()
+	faint     = color.New(color.Faint).SprintFunc()
+	cyan      = color.New(color.FgCyan).SprintFunc()
+	magenta   = color.New(color.FgMagenta).SprintFunc()
+	blue      = color.New(color.FgBlue).SprintFunc()
+	orange    = color.New(color.FgHiYellow).SprintFunc()
+	underline = color.New(color.Underline).SprintFunc()
 
 	defaultFormatter  = func(i any) string { return fmt.Sprintf("%v", i) }
 	defaultPartsOrder = []string{
@@ -211,7 +214,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 				case "warn":
 					l = red("WRN")
 				case "error":
-					l = bold(red("ERR"))
+					l = red("ERR")
 				case "fatal":
 					l = bold(red("FTL"))
 				case "panic":
@@ -240,7 +243,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 					c = strings.TrimPrefix(c, cwd)
 					c = strings.TrimPrefix(c, "/")
 				}
-				c = faint(magenta(c)) + faint(" >")
+				c = faint(orange(c)) + faint(" |")
 			}
 
 			return c
@@ -252,7 +255,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 	// field name
 	w.SetFormatter(
 		"field_name", func(i any) string {
-			return blue(fmt.Sprintf("%s=", i))
+			return cyan(fmt.Sprintf("%s=", i))
 		})
 	// field value
 	w.SetFormatter(

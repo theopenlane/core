@@ -10,8 +10,9 @@ import (
 	echo_log "github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/logx/consolelog"
-	"github.com/theopenlane/core/pkg/logx/echolog"
+	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
@@ -24,18 +25,16 @@ type Server struct {
 	Router *route.Router
 }
 
-type errorHandler func(echo.Context, error)
-
 func ConfigureEcho() *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
 	e.Use(middleware.Recover())
 	output := consolelog.NewConsoleWriter()
-	logger := echolog.New(
+	logger := logx.New(
 		&output,
-		echolog.WithLevel(echo_log.INFO),
-		echolog.WithTimestamp(),
-		echolog.WithCaller(),
+		logx.WithLevel(echo_log.INFO),
+		logx.WithTimestamp(),
+		logx.WithCaller(),
 	)
 
 	e.Logger = logger
@@ -44,12 +43,12 @@ func ConfigureEcho() *echo.Echo {
 		TargetHeader: "X-Request-ID",
 	}))
 
-	e.Use(echolog.LoggingMiddleware(echolog.Config{
+	e.Use(logx.LoggingMiddleware(logx.Config{
 		Logger:          logger,
 		RequestIDHeader: "X-Request-ID",
 		RequestIDKey:    "request_id",
-		NestKey:         "REQUEST",
-		HandleError:     true,
+		//		NestKey:         "REQUEST",
+		HandleError: true,
 	}))
 
 	return e
@@ -102,9 +101,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		GracefulContext: ctx,
 	}
 
-	//	if s.config.Settings.Server.Debug {
-	//		s.Router.Echo.Use(echodebug.BodyDump())
-	//	}
+	if s.config.Settings.Server.Debug {
+		s.Router.Echo.Use(echodebug.BodyDump())
+	}
 
 	for _, m := range s.config.DefaultMiddleware {
 		s.Router.Echo.Use(m)

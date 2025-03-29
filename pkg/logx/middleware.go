@@ -1,4 +1,4 @@
-package echolog
+package logx
 
 import (
 	"os"
@@ -10,8 +10,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 )
-
-// MKA move these into config at root of logx?
 
 // Config defines the config for the echolog middleware
 type Config struct {
@@ -96,9 +94,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 
 			id := getRequestID(c, config)
 			if id != "" {
-				logger.log.UpdateContext(func(c zerolog.Context) zerolog.Context {
-					return c.Str(config.RequestIDKey, id)
-				})
+				logger = From(logger.log, WithField(config.RequestIDKey, id))
 			}
 
 			// The request context is retrieved and set to the logger's context
@@ -120,7 +116,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 				return err
 			}
 
-			logEvent(c, config, start, err)
+			logEvent(c, logger, config, start, err)
 
 			return err
 		}
@@ -150,24 +146,21 @@ func enrichLogger(c echo.Context, logger *Logger, config Config) *Logger {
 }
 
 // logEvent logs the event with all the necessary details; it handles errors and latency limits to determine the log level
-func logEvent(c echo.Context, config Config, start time.Time, err error) {
+func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, err error) {
 	req := c.Request()
 	res := c.Response()
 	stop := time.Now()
 	latency := stop.Sub(start)
 
-	// get the logger from the context
-	logger := Ctx(c.Request().Context())
-
 	var mainEvt *zerolog.Event
 	// this is the error that's passed in as input from the middleware func
 
 	if err != nil {
-		mainEvt = logger.WithLevel(zerolog.ErrorLevel).Str("error", err.Error())
+		mainEvt = logger.log.WithLevel(zerolog.ErrorLevel).Str("error", err.Error())
 	} else if config.RequestLatencyLimit != 0 && latency > config.RequestLatencyLimit {
-		mainEvt = logger.WithLevel(config.RequestLatencyLevel)
+		mainEvt = logger.log.WithLevel(config.RequestLatencyLevel)
 	} else {
-		mainEvt = logger.WithLevel(logger.GetLevel())
+		mainEvt = logger.log.WithLevel(logger.log.GetLevel())
 	}
 
 	var evt *zerolog.Event
@@ -190,10 +183,6 @@ func logEvent(c echo.Context, config Config, start time.Time, err error) {
 	evt.Str("client_ip", c.RealIP())
 	evt.Str("request_protocol", req.Proto)
 
-	// this don't work yet
-	evt.Interface("request", req.Body)
-	evt.Interface("response", res)
-
 	cl := req.Header.Get(echo.HeaderContentLength)
 	if cl == "" {
 		cl = "0"
@@ -203,8 +192,8 @@ func logEvent(c echo.Context, config Config, start time.Time, err error) {
 	evt.Str("bytes_out", strconv.FormatInt(res.Size, 10))
 
 	if config.NestKey != "" {
-		mainEvt.Dict(config.NestKey, evt).Msg("logging request")
+		mainEvt.Dict(config.NestKey, evt).Send()
 	} else {
-		mainEvt.Msg("logging request")
+		mainEvt.Send()
 	}
 }

@@ -141,6 +141,10 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					}
 				}
 
+				zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+					return c.Str("mutation_id", eventID.ID)
+				})
+
 				event.SetContext(context.WithoutCancel(ctx))
 				event.SetClient(e.Emitter.GetClient())
 				e.Emitter.Emit(event.Topic(), event)
@@ -179,7 +183,6 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 			}
 		case entgen.TypeOrganizationSetting:
 			if m.Op().Is(ent.OpUpdateOne) || m.Op().Is(ent.OpUpdate) {
-				// TODO(MKA): ensure all the fields which can be updated in stripe by the customer override what we store, and vice versa
 				_, billingSetOK := m.Field("billing_email")
 				_, phoneSetOK := m.Field("billing_phone")
 				_, addressSetOK := m.Field("billing_address")
@@ -367,12 +370,15 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 		return err
 	}
 
-	// TODO(MKA): ensure all the fields which can be updated in stripe by the customer override what we store, and vice versa
-	params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
-	if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
-		log.Err(err).Msg("Failed to update customer")
+	if orgCust.StripeCustomerID != "" {
+		params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
+		if params != nil {
+			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+				log.Err(err).Msg("Failed to update customer")
 
-		return err
+				return err
+			}
+		}
 	}
 
 	return nil

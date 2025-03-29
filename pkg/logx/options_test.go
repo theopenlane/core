@@ -1,4 +1,4 @@
-package echolog_test
+package logx_test
 
 import (
 	"bytes"
@@ -11,13 +11,14 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
-	"github.com/theopenlane/core/pkg/logx/echolog"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func TestWithCaller(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b, echolog.WithCaller())
+	l := logx.New(b, logx.WithCaller())
 
 	l.Print("foobar")
 
@@ -42,7 +43,7 @@ func TestWithCaller(t *testing.T) {
 func TestWithCallerWithSkipFrameCount(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b, echolog.WithCallerWithSkipFrameCount(3))
+	l := logx.New(b, logx.WithCallerWithSkipFrameCount(3))
 
 	l.Print("foobar")
 
@@ -67,7 +68,7 @@ func TestWithCallerWithSkipFrameCount(t *testing.T) {
 func TestWithField(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b, echolog.WithField("service", "logging"))
+	l := logx.New(b, logx.WithField("service", "logging"))
 
 	l.Print("foobar")
 
@@ -88,7 +89,7 @@ func TestWithField(t *testing.T) {
 func TestWithFields(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b, echolog.WithFields(map[string]interface{}{
+	l := logx.New(b, logx.WithFields(map[string]interface{}{
 		"host": "localhost",
 		"port": 8080,
 	}))
@@ -132,7 +133,7 @@ func (h *Hook) Run(e *zerolog.Event, level zerolog.Level, message string) {
 func TestWithHook(t *testing.T) {
 	b := &bytes.Buffer{}
 	h := &Hook{}
-	l := echolog.New(b, echolog.WithHook(h))
+	l := logx.New(b, logx.WithHook(h))
 
 	l.Info("Foo")
 	l.Warn("Bar")
@@ -147,7 +148,7 @@ func TestWithHook(t *testing.T) {
 func TestWithHookFunc(t *testing.T) {
 	b := &bytes.Buffer{}
 	logs := make([]HookLog, 0, 2)
-	l := echolog.New(b, echolog.WithHookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
+	l := logx.New(b, logx.WithHookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
 		logs = append(logs, HookLog{
 			level:   level,
 			message: message,
@@ -166,7 +167,7 @@ func TestWithHookFunc(t *testing.T) {
 
 func TestWithLevel(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := echolog.New(b, echolog.WithLevel(log.WARN))
+	l := logx.New(b, logx.WithLevel(log.WARN))
 
 	l.Debug("Test")
 
@@ -180,7 +181,7 @@ func TestWithLevel(t *testing.T) {
 
 func TestWithPrefix(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := echolog.New(b, echolog.WithPrefix("Test"))
+	l := logx.New(b, logx.WithPrefix("Test"))
 
 	l.Warn("Foobar")
 
@@ -191,7 +192,7 @@ func TestWithPrefix(t *testing.T) {
 func TestWithTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b, echolog.WithTimestamp())
+	l := logx.New(b, logx.WithTimestamp())
 
 	l.Print("foobar")
 

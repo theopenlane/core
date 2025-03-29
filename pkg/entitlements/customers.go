@@ -102,7 +102,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("personal org subscription created")
 		} else {
-			subscription, err = sc.CreateTrialSubscription(customer)
+			subscription, err = sc.CreateTrialSubscription(ctx, customer)
 			if err != nil {
 				return nil
 			}
@@ -215,7 +215,16 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 
 // UpdateCustomer updates a customer in stripe with the provided params and ID
 func (sc *StripeClient) UpdateCustomer(id string, params *stripe.CustomerParams) (*stripe.Customer, error) {
-	return sc.Client.Customers.Update(id, params)
+	if id == "" || params == nil {
+		return nil, ErrCustomerIDRequired
+	}
+
+	cust, err := sc.Client.Customers.Update(id, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return cust, nil
 }
 
 // DeleteCustomer deletes a customer by ID from stripe

@@ -1,4 +1,4 @@
-package echolog_test
+package logx_test
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/logx/echolog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func TestMiddleware(t *testing.T) {
@@ -29,7 +29,7 @@ func TestMiddleware(t *testing.T) {
 	//		rec := httptest.NewRecorder()
 	//		c := e.NewContext(req, rec)
 	//
-	//		m := echolog.Middleware(echolog.Config{})
+	//		m := logx.Middleware(logx.Config{})
 	//
 	//		next := func(c echo.Context) error {
 	//			return errors.New("error")
@@ -55,7 +55,7 @@ func TestMiddleware(t *testing.T) {
 	//		rec := httptest.NewRecorder()
 	//		c := e.NewContext(req, rec)
 	//
-	//		m := echolog.Middleware(echolog.Config{
+	//		m := logx.Middleware(logx.Config{
 	//			HandleError: true,
 	//		})
 	//
@@ -79,8 +79,8 @@ func TestMiddleware(t *testing.T) {
 
 		b := &bytes.Buffer{}
 
-		l := echolog.New(b)
-		m := echolog.LoggingMiddleware(echolog.Config{
+		l := logx.New(b)
+		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 			Enricher: func(c echo.Context, logger zerolog.Context) zerolog.Context {
 				return logger.Str("test", "test")
@@ -108,9 +108,9 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := echolog.New(b)
+		l := logx.New(b)
 		l.SetLevel(log.INFO)
-		m := echolog.LoggingMiddleware(echolog.Config{
+		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
 			RequestLatencyLimit: 5 * time.Millisecond,
 			RequestLatencyLevel: zerolog.WarnLevel,
@@ -138,9 +138,9 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := echolog.New(b)
+		l := logx.New(b)
 		l.SetLevel(log.INFO)
-		m := echolog.LoggingMiddleware(echolog.Config{
+		m := logx.LoggingMiddleware(logx.Config{
 			Logger:              l,
 			RequestLatencyLimit: 5 * time.Millisecond,
 			RequestLatencyLevel: zerolog.WarnLevel,
@@ -170,9 +170,9 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := echolog.New(b)
+		l := logx.New(b)
 		l.SetLevel(log.INFO)
-		m := echolog.LoggingMiddleware(echolog.Config{
+		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 			Skipper: func(c echo.Context) bool {
 				return c.Request().URL.Path == "/skip"
@@ -200,9 +200,9 @@ func TestMiddleware(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		b := &bytes.Buffer{}
-		l := echolog.New(b)
+		l := logx.New(b)
 		l.SetLevel(log.INFO)
-		m := echolog.LoggingMiddleware(echolog.Config{
+		m := logx.LoggingMiddleware(logx.Config{
 			Logger: l,
 			AfterNextSkipper: func(c echo.Context) bool {
 				return c.Response().Status == http.StatusMovedPermanently

@@ -1,4 +1,4 @@
-package echolog
+package logx
 
 import (
 	"github.com/labstack/gommon/log"

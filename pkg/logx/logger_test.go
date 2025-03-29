@@ -1,4 +1,4 @@
-package echolog_test
+package logx_test
 
 import (
 	"bytes"
@@ -9,13 +9,13 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/logx/echolog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 func TestNew(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b)
+	l := logx.New(b)
 
 	l.Print("foo")
 
@@ -31,7 +31,7 @@ func TestNewWithZerolog(t *testing.T) {
 	b := &bytes.Buffer{}
 	zl := zerolog.New(b)
 
-	l := echolog.New(zl.With().Str("key", "test").Logger())
+	l := logx.New(zl.With().Str("key", "test").Logger())
 
 	l.Print("foo")
 
@@ -47,7 +47,7 @@ func TestFrom(t *testing.T) {
 	b := &bytes.Buffer{}
 
 	zl := zerolog.New(b)
-	l := echolog.From(zl.With().Str("key", "test").Logger())
+	l := logx.From(zl.With().Str("key", "test").Logger())
 
 	l.Print("foo")
 
@@ -62,7 +62,7 @@ func TestFrom(t *testing.T) {
 func TestLogger_SetPrefix(t *testing.T) {
 	//	b := &bytes.Buffer{}
 	//
-	//	l := echolog.New(b)
+	//	l := logx.New(b)
 	//
 	//	l.Print("t-e-s-t")
 	//
@@ -101,7 +101,7 @@ func TestLogger_SetPrefix(t *testing.T) {
 func TestLogger_Output(t *testing.T) {
 	out1 := &bytes.Buffer{}
 
-	l := echolog.New(out1)
+	l := logx.New(out1)
 
 	l.Print("foo")
 	l.Print("bar")
@@ -130,7 +130,7 @@ func TestLogger_Output(t *testing.T) {
 func TestLogger_SetLevel(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	l := echolog.New(b)
+	l := logx.New(b)
 
 	l.Debug("foo")
 

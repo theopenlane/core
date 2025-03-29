@@ -3,6 +3,8 @@ package soiree
 import (
 	"context"
 	"sync"
+
+	"github.com/rs/zerolog"
 )
 
 // Event is an interface representing the structure of an instance of an event
@@ -151,6 +153,9 @@ func (e *BaseEvent) Context() context.Context {
 func (e *BaseEvent) SetContext(ctx context.Context) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
+	zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+		return c.Str("event-topic", e.Topic())
+	})
 	e.ctx = ctx
 }
 
