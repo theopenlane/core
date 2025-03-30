@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx/consolelog"
 )
 
+// SetupLogging sets up the logging for the code generation process
 func SetupLogging() {
-	// if you want to try the other console writer, swap this out for pzlog.NewPtermWriter()
 	output := consolelog.NewConsoleWriter()
 	log.Logger = zerolog.New(os.Stderr).
 		With().Timestamp().
@@ -23,5 +23,5 @@ func SetupLogging() {
 		Caller().Logger()
 
 	// pretty logging
-	log.Logger = log.Output(output)
+	log.Logger = log.Output(&output)
 }

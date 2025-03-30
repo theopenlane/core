@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
@@ -33,7 +33,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			if ok {
 				for _, orgSub := range orgSubResult {
 					if err := setSubscriptionURL(orgSub, q); err != nil {
-						log.Warn().Err(err).Msg("failed to set subscription URL")
+						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 					}
 				}
 
@@ -44,7 +44,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			orgSub, ok := v.(*generated.OrgSubscription)
 			if ok {
 				if err := setSubscriptionURL(orgSub, q); err != nil {
-					log.Warn().Err(err).Msg("failed to set subscription URL")
+					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 				}
 
 				return v, nil
@@ -69,8 +69,6 @@ func setSubscriptionURL(orgSub *generated.OrgSubscription, q *generated.OrgSubsc
 	// create a billing portal session
 	portalSession, err := q.EntitlementManager.CreateBillingPortalUpdateSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
-		log.Err(err).Msg("failed to create billing portal session")
-
 		return err
 	}
 

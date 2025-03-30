@@ -15,7 +15,6 @@ import (
 	echoprometheus "github.com/theopenlane/echo-prometheus"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/echox/middleware"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/fgax"
@@ -238,12 +237,12 @@ func WithMiddleware() ServerOption {
 
 		// default middleware
 		s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware,
-			middleware.RequestID(), // add request id
-			middleware.Recover(),   // recover server from any panic/fatal error gracefully
-			middleware.LoggerWithConfig(middleware.LoggerConfig{
-				Output: log.Logger.Hook(LevelNameHook{}),
-				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}",
-			}),
+			//			middleware.RequestID(), // add request id
+			//			middleware.Recover(),   // recover server from any panic/fatal error gracefully
+			//			middleware.LoggerWithConfig(middleware.LoggerConfig{
+			//				Output: log.Logger.Hook(LevelNameHook{}),
+			//				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}",
+			//			}),
 			echoprometheus.MetricsMiddleware(),                                                 // add prometheus metrics
 			echocontext.EchoContextToContextMiddleware(),                                       // adds echo context to parent
 			mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8}), // add mime middleware

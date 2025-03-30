@@ -152,7 +152,10 @@ func serve(ctx context.Context) error {
 		serveropts.WithSessionMiddleware(),
 	)
 
-	srv := server.NewServer(so.Config)
+	srv, err := server.NewServer(so.Config)
+	if err != nil {
+		return err
+	}
 
 	// Setup Graph API Handlers
 	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))

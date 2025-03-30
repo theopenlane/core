@@ -58,7 +58,6 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
-	// if you want to try the other console writer, swap this out for pzlog.NewPtermWriter()
 	output := consolelog.NewConsoleWriter()
 	log.Logger = zerolog.New(os.Stderr).
 		With().Timestamp().
@@ -77,6 +76,6 @@ func setupLogging() {
 
 	// pretty logging for development
 	if k.Bool("pretty") {
-		log.Logger = log.Output(output)
+		log.Logger = log.Output(&output)
 	}
 }

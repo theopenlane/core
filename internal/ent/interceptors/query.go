@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )
@@ -21,7 +21,7 @@ func QueryLogger() ent.InterceptFunc {
 
 			start := time.Now()
 			defer func() {
-				log.Info().
+				zerolog.Ctx(ctx).Info().
 					Str("duration", time.Since(start).String()).
 					Str("schema", q.Type()).
 					Msg("query duration")

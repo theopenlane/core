@@ -5,7 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -43,7 +43,7 @@ func HookProgramMembers() ent.Hook {
 				Where(orgmembership.OrganizationID(program.OwnerID)).
 				OnlyID(ctx)
 			if err != nil || orgMemberID == "" {
-				log.Error().Err(err).Msg("failed to get org membership, cannot add user to program")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get org membership, cannot add user to program")
 
 				return nil, ErrUserNotInOrg
 			}
