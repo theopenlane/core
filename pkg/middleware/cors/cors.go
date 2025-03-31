@@ -73,10 +73,6 @@ func NewWithConfig(config Config) (echo.MiddlewareFunc, error) {
 				return next(c)
 			}
 
-			if origin := c.Request().Header.Get("Origin"); len(origin) == 0 {
-				c.Request().Header.Set("Origin", "*")
-			}
-
 			path := c.Request().URL.Path
 
 			var (
