@@ -389,7 +389,7 @@ type (
 		TokenManager       *tokens.TokenManager
 		SessionConfig      *sessions.SessionConfig
 		Emailer            *emailtemplates.Config
-		TOTP               *totp.Manager
+		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
 		// Job is the job client to insert jobs into the queue.
@@ -483,7 +483,7 @@ func Emailer(v *emailtemplates.Config) Option {
 }
 
 // TOTP configures the TOTP.
-func TOTP(v *totp.Manager) Option {
+func TOTP(v *totp.Client) Option {
 	return func(c *config) {
 		c.TOTP = v
 	}

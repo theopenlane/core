@@ -24126,18 +24126,22 @@ type UserWhereInput struct {
 type APITokenOrderField string
 
 const (
-	APITokenOrderFieldCreatedAt APITokenOrderField = "created_at"
-	APITokenOrderFieldUpdatedAt APITokenOrderField = "updated_at"
+	APITokenOrderFieldCreatedAt  APITokenOrderField = "created_at"
+	APITokenOrderFieldUpdatedAt  APITokenOrderField = "updated_at"
+	APITokenOrderFieldExpiresAt  APITokenOrderField = "expires_at"
+	APITokenOrderFieldLastUsedAt APITokenOrderField = "last_used_at"
 )
 
 var AllAPITokenOrderField = []APITokenOrderField{
 	APITokenOrderFieldCreatedAt,
 	APITokenOrderFieldUpdatedAt,
+	APITokenOrderFieldExpiresAt,
+	APITokenOrderFieldLastUsedAt,
 }
 
 func (e APITokenOrderField) IsValid() bool {
 	switch e {
-	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt:
+	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt, APITokenOrderFieldExpiresAt, APITokenOrderFieldLastUsedAt:
 		return true
 	}
 	return false
@@ -26520,11 +26524,12 @@ func (e OrganizationSettingOrderField) MarshalGQL(w io.Writer) {
 type PersonalAccessTokenOrderField string
 
 const (
-	PersonalAccessTokenOrderFieldCreatedAt PersonalAccessTokenOrderField = "created_at"
-	PersonalAccessTokenOrderFieldUpdatedAt PersonalAccessTokenOrderField = "updated_at"
-	PersonalAccessTokenOrderFieldName      PersonalAccessTokenOrderField = "name"
-	PersonalAccessTokenOrderFieldExpiresAt PersonalAccessTokenOrderField = "expires_at"
-	PersonalAccessTokenOrderFieldIsActive  PersonalAccessTokenOrderField = "is_active"
+	PersonalAccessTokenOrderFieldCreatedAt  PersonalAccessTokenOrderField = "created_at"
+	PersonalAccessTokenOrderFieldUpdatedAt  PersonalAccessTokenOrderField = "updated_at"
+	PersonalAccessTokenOrderFieldName       PersonalAccessTokenOrderField = "name"
+	PersonalAccessTokenOrderFieldExpiresAt  PersonalAccessTokenOrderField = "expires_at"
+	PersonalAccessTokenOrderFieldLastUsedAt PersonalAccessTokenOrderField = "last_used_at"
+	PersonalAccessTokenOrderFieldIsActive   PersonalAccessTokenOrderField = "is_active"
 )
 
 var AllPersonalAccessTokenOrderField = []PersonalAccessTokenOrderField{
@@ -26532,12 +26537,13 @@ var AllPersonalAccessTokenOrderField = []PersonalAccessTokenOrderField{
 	PersonalAccessTokenOrderFieldUpdatedAt,
 	PersonalAccessTokenOrderFieldName,
 	PersonalAccessTokenOrderFieldExpiresAt,
+	PersonalAccessTokenOrderFieldLastUsedAt,
 	PersonalAccessTokenOrderFieldIsActive,
 }
 
 func (e PersonalAccessTokenOrderField) IsValid() bool {
 	switch e {
-	case PersonalAccessTokenOrderFieldCreatedAt, PersonalAccessTokenOrderFieldUpdatedAt, PersonalAccessTokenOrderFieldName, PersonalAccessTokenOrderFieldExpiresAt, PersonalAccessTokenOrderFieldIsActive:
+	case PersonalAccessTokenOrderFieldCreatedAt, PersonalAccessTokenOrderFieldUpdatedAt, PersonalAccessTokenOrderFieldName, PersonalAccessTokenOrderFieldExpiresAt, PersonalAccessTokenOrderFieldLastUsedAt, PersonalAccessTokenOrderFieldIsActive:
 		return true
 	}
 	return false

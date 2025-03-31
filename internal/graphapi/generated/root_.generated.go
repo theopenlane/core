@@ -25336,6 +25336,8 @@ Properties by which APIToken connections can be ordered.
 enum APITokenOrderField {
   created_at
   updated_at
+  expires_at
+  last_used_at
 }
 """
 APITokenWhereInput is used for filtering APIToken objects.
@@ -47912,6 +47914,7 @@ enum PersonalAccessTokenOrderField {
   updated_at
   name
   expires_at
+  last_used_at
   is_active
 }
 """

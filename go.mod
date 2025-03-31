@@ -16,7 +16,7 @@ require (
 	github.com/alitto/pond/v2 v2.3.0
 	github.com/aws/aws-sdk-go-v2/config v1.29.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.65
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.78.2
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/danielgtaylor/huma/v2 v2.32.0
@@ -48,11 +48,11 @@ require (
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
-	github.com/pressly/goose/v3 v3.24.1
-	github.com/projectdiscovery/cdncheck v1.1.11
+	github.com/pressly/goose/v3 v3.24.2
+	github.com/projectdiscovery/cdncheck v1.1.12
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.15
+	github.com/projectdiscovery/utils v0.4.16
 	github.com/prometheus/client_golang v1.21.1
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.3
@@ -67,15 +67,15 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/theopenlane/beacon v0.1.1
 	github.com/theopenlane/echo-prometheus v0.1.0
-	github.com/theopenlane/echox v0.2.1
-	github.com/theopenlane/emailtemplates v0.1.2
-	github.com/theopenlane/entx v0.5.1
+	github.com/theopenlane/echox v0.2.3
+	github.com/theopenlane/emailtemplates v0.1.3
+	github.com/theopenlane/entx v0.6.1
 	github.com/theopenlane/gqlgen-plugins v0.5.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.9.4
-	github.com/theopenlane/newman v0.1.3
+	github.com/theopenlane/iam v0.10.0
+	github.com/theopenlane/newman v0.1.4
 	github.com/theopenlane/riverboat v0.0.9
-	github.com/theopenlane/utils v0.4.4
+	github.com/theopenlane/utils v0.4.5
 	github.com/vektah/gqlparser/v2 v2.5.23
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
@@ -407,14 +407,14 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.37.0 // indirect
+	github.com/XSAM/otelsql v0.38.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.36.3
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.69
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.70
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -510,12 +510,12 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.21
+	github.com/projectdiscovery/wappalyzergo v0.2.22
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
-	github.com/prometheus/procfs v0.15.1 // indirect
+	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
-	github.com/resend/resend-go/v2 v2.15.0 // indirect
+	github.com/resend/resend-go/v2 v2.17.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.19.0 // indirect
 	github.com/riverqueue/river/rivershared v0.19.0 // indirect
 	github.com/riverqueue/river/rivertype v0.19.0 // indirect

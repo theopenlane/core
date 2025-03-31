@@ -121,8 +121,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{}),
-		ent.TOTP(&totp.Manager{
-			TOTPManager: otpMan,
+		ent.TOTP(&totp.Client{
+			Manager: otpMan,
 		}),
 	}
 
@@ -150,8 +150,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.h = handlerSetup(suite.db)
 
 	// setup totp manager
-	suite.h.OTPManager = &totp.Manager{
-		TOTPManager: otpMan,
+	suite.h.OTPManager = &totp.Client{
+		Manager: otpMan,
 	}
 
 	// setup echo router
