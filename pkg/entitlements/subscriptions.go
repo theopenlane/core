@@ -117,8 +117,8 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 	zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 		return c.Str("customer_id", cust.ID).Str("subscription_id", subs.ID)
 	})
-	log.Debug().Str("customer_id", cust.ID).Str("subscription_id", subs.ID).Msg("Created trial subscription")
-	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
+	zerolog.Ctx(ctx).Debug().Str("customer_id", cust.ID).Str("subscription_id", subs.ID).Msg("Created trial subscription")
+	zerolog.Ctx(ctx).Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
 	mappedsubscription := sc.MapStripeSubscription(subs)
 
