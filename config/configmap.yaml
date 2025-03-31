@@ -147,6 +147,7 @@ data:
   CORE_SESSIONS_SIGNINGKEY: {{ .Values.core.sessions.signingKey | default "my-signing-secret" }}
   CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
   CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}
+  CORE_SESSIONS_MAXAGE: {{ .Values.core.sessions.maxAge | default 3600 }}
   CORE_TOTP_ENABLED: {{ .Values.core.totp.enabled | default true }}
   CORE_TOTP_CODELENGTH: {{ .Values.core.totp.codeLength | default 6 }}
   CORE_TOTP_ISSUER: {{ .Values.core.totp.issuer }}

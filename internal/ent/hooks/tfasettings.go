@@ -46,7 +46,7 @@ func HookEnableTFA() ent.Hook {
 				return nil, err
 			}
 
-			u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
+			u.TFASecret, err = m.TOTP.Manager.TOTPSecret(u)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to generate TOTP secret")
 
@@ -84,7 +84,7 @@ func HookVerifyTFA() ent.Hook {
 			}
 
 			if (ok && verified) || regenBackupCodes {
-				codes := m.TOTP.TOTPManager.GenerateRecoveryCodes()
+				codes := m.TOTP.Manager.GenerateRecoveryCodes()
 				m.SetRecoveryCodes(codes)
 
 				if verified {
