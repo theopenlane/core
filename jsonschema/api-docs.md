@@ -613,6 +613,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**signingKey**|`string`|||
 |**encryptionKey**|`string`|||
 |**domain**|`string`|||
+|**maxAge**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="totp"></a>

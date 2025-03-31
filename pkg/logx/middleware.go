@@ -193,8 +193,8 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	evt.Str("bytes_out", strconv.FormatInt(res.Size, 10))
 
 	if config.NestKey != "" {
-		mainEvt.Dict(config.NestKey, evt).Send()
+		mainEvt.Dict(config.NestKey, evt).Msg("request details")
 	} else {
-		mainEvt.Send()
+		mainEvt.Msg("request details")
 	}
 }

@@ -195,6 +195,7 @@ server:
 sessions:
     domain: ""
     encryptionKey: encryptionsecret
+    maxAge: 3600
     signingKey: my-signing-secret
 subscription:
     enabled: false

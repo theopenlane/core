@@ -121,8 +121,8 @@ func (suite *GraphTestSuite) SetupSuite() {
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}), // add noop email config
-		ent.TOTP(&totp.Manager{
-			TOTPManager: otpMan,
+		ent.TOTP(&totp.Client{
+			Manager: otpMan,
 		}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),

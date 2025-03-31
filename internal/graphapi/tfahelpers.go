@@ -22,7 +22,7 @@ func (r *mutationResolver) generateTFAQRCode(ctx context.Context, settings *gene
 	}
 
 	// generate a new QR code if it was requested
-	qrCode, err := r.db.TOTP.TOTPManager.TOTPQRString(&totp.User{
+	qrCode, err := r.db.TOTP.Manager.TOTPQRString(&totp.User{
 		ID:            userID,
 		TFASecret:     *settings.TfaSecret,
 		Email:         sql.NullString{String: email, Valid: true},
@@ -46,7 +46,7 @@ func (r *mutationResolver) getDecryptedTFASecret(ctx context.Context, settings *
 	}
 
 	// generate a new QR code if it was requested
-	secret, err := r.db.TOTP.TOTPManager.TOTPDecryptedSecret(*settings.TfaSecret)
+	secret, err := r.db.TOTP.Manager.TOTPDecryptedSecret(*settings.TfaSecret)
 	if err != nil {
 		return "", err
 	}
