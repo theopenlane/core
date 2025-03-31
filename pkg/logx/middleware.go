@@ -113,7 +113,7 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 			}
 
 			if config.AfterNextSkipper(c) {
-				return err
+				return nil
 			}
 
 			logEvent(c, logger, config, start, err)

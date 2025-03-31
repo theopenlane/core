@@ -49,8 +49,7 @@ func ConfigureEcho() *echo.Echo {
 		Logger:          logger,
 		RequestIDHeader: "X-Request-ID",
 		RequestIDKey:    "request_id",
-		//		NestKey:         "REQUEST",
-		HandleError: true,
+		HandleError:     true,
 	}))
 
 	return e

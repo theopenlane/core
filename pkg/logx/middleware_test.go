@@ -2,6 +2,7 @@ package logx_test
 
 import (
 	"bytes"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,59 +17,59 @@ import (
 )
 
 func TestMiddleware(t *testing.T) {
-	//	t.Run("should not trigger error handler when HandleError is false", func(t *testing.T) {
-	//		var called bool
-	//		e := echo.New()
-	//
-	//        e.HTTPErrorHandler = func(err error, c echo.Context) {
-	//            called = true
-	//            c.JSON(http.StatusInternalServerError, err.Error())
-	//        }
-	//		req := httptest.NewRequest(http.MethodGet, "/", nil)
-	//		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	//		rec := httptest.NewRecorder()
-	//		c := e.NewContext(req, rec)
-	//
-	//		m := logx.Middleware(logx.Config{})
-	//
-	//		next := func(c echo.Context) error {
-	//			return errors.New("error")
-	//		}
-	//
-	//		handler := m(next)
-	//		err := handler(c)
-	//
-	//		assert.Error(t, err, "should return error")
-	//		assert.False(t, called, "should not call error handler")
-	//	})
-	//
-	//	t.Run("should trigger error handler when HandleError is true", func(t *testing.T) {
-	//		var called bool
-	//		e := echo.New()
-	//		e.HTTPErrorHandler = func(err error, c echo.Context) {
-	//			called = true
-	//
-	//			c.JSON(http.StatusInternalServerError, err.Error())
-	//		}
-	//		req := httptest.NewRequest(http.MethodGet, "/", nil)
-	//		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	//		rec := httptest.NewRecorder()
-	//		c := e.NewContext(req, rec)
-	//
-	//		m := logx.Middleware(logx.Config{
-	//			HandleError: true,
-	//		})
-	//
-	//		next := func(c echo.Context) error {
-	//			return errors.New("error")
-	//		}
-	//
-	//		handler := m(next)
-	//		err := handler(c)
-	//
-	//		assert.Error(t, err, "should return error")
-	//		assert.Truef(t, called, "should call error handler")
-	//	})
+	t.Run("should not trigger error handler when HandleError is false", func(t *testing.T) {
+		var called bool
+		e := echo.New()
+
+		e.HTTPErrorHandler = func(c echo.Context, err error) {
+			called = true
+			c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		m := logx.LoggingMiddleware(logx.Config{})
+
+		next := func(c echo.Context) error {
+			return errors.New("error")
+		}
+
+		handler := m(next)
+		err := handler(c)
+
+		assert.Error(t, err, "should return error")
+		assert.False(t, called, "should not call error handler")
+	})
+
+	t.Run("should trigger error handler when HandleError is true", func(t *testing.T) {
+		var called bool
+		e := echo.New()
+		e.HTTPErrorHandler = func(c echo.Context, err error) {
+			called = true
+
+			c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		m := logx.LoggingMiddleware(logx.Config{
+			HandleError: true,
+		})
+
+		next := func(c echo.Context) error {
+			return errors.New("error")
+		}
+
+		handler := m(next)
+		err := handler(c)
+
+		assert.Error(t, err, "should return error")
+		assert.Truef(t, called, "should call error handler")
+	})
 
 	t.Run("should use enricher", func(t *testing.T) {
 		e := echo.New()

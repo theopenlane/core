@@ -23,7 +23,6 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 	// Create a custom error response
 	errorResponse := map[string]interface{}{
 		"error": err.Error(),
-		// "stackTrace": getStackTrace(),
 		"query": c.QueryParams(),
 		"url":   c.Request().URL.String(),
 	}
@@ -40,7 +39,7 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 
 	// Send response
 	if !c.Response().Committed {
-		if c.Request().Method == "HEAD" { // Issue #608
+		if c.Request().Method == http.MethodHead {
 			err = c.NoContent(code)
 		} else {
 			err = c.JSON(code, errorResponse)

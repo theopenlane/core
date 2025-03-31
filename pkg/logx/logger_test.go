@@ -60,42 +60,30 @@ func TestFrom(t *testing.T) {
 }
 
 func TestLogger_SetPrefix(t *testing.T) {
-	//	b := &bytes.Buffer{}
-	//
-	//	l := logx.New(b)
-	//
-	//	l.Print("t-e-s-t")
-	//
-	//	assert.Equal(
-	//		t,
-	//		`{"level":"-","message":"t-e-s-t"}
-	//`,
-	//		b.String(),
-	//	)
-	//
-	//	b.Reset()
-	//
-	//	l.SetPrefix("foo")
-	//	l.Print("test")
-	//
-	//	assert.Equal(
-	//		t,
-	//		`{"prefix":"foo","level":"-","message":"test"}
-	//`,
-	//		b.String(),
-	//	)
-	//
-	//	b.Reset()
-	//
-	//	l.SetPrefix("bar")
-	//	l.Print("test-test")
-	//
-	//	assert.Equal(
-	//		t,
-	//		`{"prefix":"bar","level":"-","message":"test-test"}
-	//`,
-	//		b.String(),
-	//	)
+	b := &bytes.Buffer{}
+
+	l := logx.New(b)
+
+	l.Print("t-e-s-t")
+
+	assert.Equal(
+		t,
+		`{"level":"-","message":"t-e-s-t"}
+`,
+		b.String(),
+	)
+
+	b.Reset()
+
+	l.SetPrefix("foo")
+	l.Print("test")
+
+	assert.Equal(
+		t,
+		`{"prefix":"foo","level":"-","message":"test"}
+`,
+		b.String(),
+	)
 }
 
 func TestLogger_Output(t *testing.T) {
