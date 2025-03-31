@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 	"time"
 
@@ -45,7 +46,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			validator, err := conf.Validator()
 			if err != nil {
-				return err
+				return unauthorized(c, err)
 			}
 
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
@@ -58,10 +59,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
 					if bearerToken, err = reauthenticate(c); err != nil {
-						return rout.HTTPErrorResponse(err)
+						return unauthorized(c, err)
 					}
 				default:
-					return rout.HTTPErrorResponse(err)
+					return unauthorized(c, err)
 				}
 			}
 
@@ -76,19 +77,19 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
 				au, id, err = checkToken(reqCtx, conf, bearerToken)
 				if err != nil {
-					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
+					return unauthorized(c, err)
 				}
 
 			default:
 				claims, err := validator.Verify(bearerToken)
 				if err != nil {
-					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
+					return unauthorized(c, err)
 				}
 
 				// Add claims to context for use in downstream processing and continue handlers
 				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 				if err != nil {
-					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
+					return unauthorized(c, err)
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
@@ -103,7 +104,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			})
 
 			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
-				return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
+				return unauthorized(c, err)
 			}
 
 			return next(c)
@@ -313,4 +314,13 @@ func getSubjectName(user *ent.User) string {
 	}
 
 	return subjectName
+}
+
+// unauthorized returns a 401 Unauthorized response with the error message.
+func unauthorized(c echo.Context, err error) error {
+	if err := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); err != nil {
+		return err
+	}
+
+	return err
 }
