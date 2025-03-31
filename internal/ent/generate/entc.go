@@ -147,7 +147,7 @@ func main() {
 
 // preRun runs before the ent codegen to generate the history schemas and authz checks
 // and returns the history and fga extensions to be used in the ent codegen
-func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
+func preRun() (*history.Extension, *entfga.AuthzExtension) {
 	// generate the history schemas
 	log.Info().Msg("pre-run: generating the history schemas")
 

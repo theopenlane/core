@@ -101,8 +101,8 @@ github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkH
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
 github.com/VividCortex/ewma v1.2.0 h1:f58SaIzcDXrSy3kWaHNvuJgJ3Nmz59Zji6XoJR/q1ow=
 github.com/VividCortex/ewma v1.2.0/go.mod h1:nz4BbCtbLyFDeC9SUHbtcT5644juEuWfUAUnGx7j5l4=
-github.com/XSAM/otelsql v0.37.0 h1:ya5RNw028JW0eJW8Ma4AmoKxAYsJSGuNVbC7F1J457A=
-github.com/XSAM/otelsql v0.37.0/go.mod h1:LHbCu49iU8p255nCn1oi04oX2UjSoRcUMiKEHo2a5qM=
+github.com/XSAM/otelsql v0.38.0 h1:zWU0/YM9cJhPE71zJcQ2EBHwQDp+G4AX2tPpljslaB8=
+github.com/XSAM/otelsql v0.38.0/go.mod h1:5ePOgcLEkWvZtN9H3GV4BUlPeM3p3pzLDCnRG73X8h8=
 github.com/Yamashou/gqlgenc v0.31.0 h1:t54Gi6Zx9Ub1oa/RvJ+DkOC1c2wdK1R4n7wyRBuQkyc=
 github.com/Yamashou/gqlgenc v0.31.0/go.mod h1:0VNZtzXhyDofkNNZXXPw8LSLvi3vyG6LXo7XvcWv2X4=
 github.com/Yiling-J/theine-go v0.6.1 h1:njE/rBBviU/Sq2G7PJKdLdwXg8j1azvZQulIjmshD+o=
@@ -1146,8 +1146,8 @@ github.com/theopenlane/echox v0.2.3 h1:RlaEIFj03q9SR0YFmv7atlXtOe/5a3bRu4sF26pYS
 github.com/theopenlane/echox v0.2.3/go.mod h1:xM2ECZW3/KEXZPetd1QAmN4mR8RetSwhDaySEQj+CHk=
 github.com/theopenlane/emailtemplates v0.1.3 h1:XNdc6eznG8Tddhtv6nLhU9dZ4KarKv+quc0Awv870xI=
 github.com/theopenlane/emailtemplates v0.1.3/go.mod h1:YSLdL4yOXK5PN0oGM4a4oX0v0Lro4neyb2c55ofVO1s=
-github.com/theopenlane/entx v0.5.1 h1:XU0QddW9VrK2K9Ak+0Q1g7kbzroBzAS9ODaF+eRymhE=
-github.com/theopenlane/entx v0.5.1/go.mod h1:VmDpPxVx0bZlCom1zpdYEWN8091zQGp+MOG+cdYVw+c=
+github.com/theopenlane/entx v0.6.1 h1:/Wm1J0Ul7Bbk5oFfDaVvjLrIVXx1AK1FJMm/sXxHLCA=
+github.com/theopenlane/entx v0.6.1/go.mod h1:/h6DkZw+lltQhH2HiQ61WEWwrqo7dh2Qsz648RjouGA=
 github.com/theopenlane/gqlgen-plugins v0.5.0 h1:MrjmyFlzN4tLErd54KE/XGqwq6kdi0++H6/A8ybb55E=
 github.com/theopenlane/gqlgen-plugins v0.5.0/go.mod h1:uTNixjmCFIWJisaXkU3D6O0hjZNXS4+MNvMtMlKWFTs=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
