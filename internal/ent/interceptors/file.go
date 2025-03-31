@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
@@ -24,7 +24,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 			}
 
 			if q.ObjectManager == nil {
-				log.Warn().Msg("object manager is nil, skipping presignedURL")
+				zerolog.Ctx(ctx).Warn().Msg("object manager is nil, skipping presignedURL")
 
 				return v, nil
 			}
@@ -41,8 +41,8 @@ func InterceptorPresignedURL() ent.Interceptor {
 			res, ok := v.([]*generated.File)
 			if ok {
 				for _, f := range res {
-					if err := setPresignedURL(f, q); err != nil {
-						log.Warn().Err(err).Msg("failed to set presignedURL")
+					if err := setPresignedURL(ctx, f, q); err != nil {
+						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURL")
 					}
 				}
 
@@ -52,8 +52,8 @@ func InterceptorPresignedURL() ent.Interceptor {
 			// if its not a list, check the single entry
 			f, ok := v.(*generated.File)
 			if ok {
-				if err := setPresignedURL(f, q); err != nil {
-					log.Warn().Err(err).Msg("failed to set presignedURLs")
+				if err := setPresignedURL(ctx, f, q); err != nil {
+					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
 				}
 
 				return v, nil
@@ -68,7 +68,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 const presignedURLDuration = 60 * time.Minute * 24 // 24 hours
 
 // setPresignedURL sets the presigned URL for the file response that is valid for 24 hours
-func setPresignedURL(file *generated.File, q *generated.FileQuery) error {
+func setPresignedURL(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
 	// if the storage path or file is empty, skip
 	if file == nil || file.StoragePath == "" {
 		return nil
@@ -76,7 +76,7 @@ func setPresignedURL(file *generated.File, q *generated.FileQuery) error {
 
 	url, err := q.ObjectManager.Storage.GetPresignedURL(file.StoragePath, presignedURLDuration)
 	if err != nil {
-		log.Err(err).Msg("failed to get presigned URL")
+		zerolog.Ctx(ctx).Err(err).Msg("failed to get presigned URL")
 
 		return err
 	}

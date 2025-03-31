@@ -5,9 +5,14 @@ import (
 
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/echox/middleware"
+
+	echo_log "github.com/labstack/gommon/log"
 
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/logx/consolelog"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -17,6 +22,37 @@ type Server struct {
 	config config.Config
 	// handlers contains additional handlers to register with the echo server
 	handlers []handler
+	// Router makes the router directly accessible on the Server struct
+	Router *route.Router
+}
+
+func ConfigureEcho() *echo.Echo {
+	e := echo.New()
+	e.HTTPErrorHandler = CustomHTTPErrorHandler
+	e.Use(middleware.Recover())
+
+	output := consolelog.NewConsoleWriter()
+	logger := logx.New(
+		&output,
+		logx.WithLevel(echo_log.DEBUG),
+		logx.WithTimestamp(),
+		logx.WithCaller(),
+	)
+
+	e.Logger = logger
+
+	e.Use(middleware.RequestIDWithConfig(middleware.RequestIDConfig{
+		TargetHeader: "X-Request-ID",
+	}))
+
+	e.Use(logx.LoggingMiddleware(logx.Config{
+		Logger:          logger,
+		RequestIDHeader: "X-Request-ID",
+		RequestIDKey:    "request_id",
+		HandleError:     true,
+	}))
+
+	return e
 }
 
 type handler interface {
@@ -31,7 +67,7 @@ func NewRouter() (*route.Router, error) {
 	}
 
 	return &route.Router{
-		Echo: echo.New(),
+		Echo: ConfigureEcho(),
 		OAS:  oas,
 	}, nil
 }
@@ -44,19 +80,20 @@ func (s *Server) AddHandler(r handler) {
 }
 
 // NewServer returns a new Server configuration
-func NewServer(c config.Config) *Server {
+func NewServer(c config.Config) (*Server, error) {
+	srv, err := NewRouter()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Server{
 		config: c,
-	}
+		Router: srv,
+	}, nil
 }
 
 // StartEchoServer creates and starts the echo server with configured middleware and handlers
 func (s *Server) StartEchoServer(ctx context.Context) error {
-	srv, err := NewRouter()
-	if err != nil {
-		return err
-	}
-
 	sc := echo.StartConfig{
 		HideBanner:      true,
 		HidePort:        true,
@@ -65,36 +102,34 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		GracefulContext: ctx,
 	}
 
-	srv.Echo.Debug = s.config.Settings.Server.Debug
-
-	if srv.Echo.Debug {
-		srv.Echo.Use(echodebug.BodyDump())
+	if s.config.Settings.Server.Debug {
+		s.Router.Echo.Use(echodebug.BodyDump())
 	}
 
 	for _, m := range s.config.DefaultMiddleware {
-		srv.Echo.Use(m)
+		s.Router.Echo.Use(m)
 	}
 
-	srv.Handler = &s.config.Handler
+	s.Router.Handler = &s.config.Handler
 
 	// Set the local file path if the object storage provider is disk
 	// this allows us to serve up the files during testing
 	if s.config.Settings.ObjectStorage.Provider == storage.ProviderDisk {
-		srv.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
+		s.Router.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
 	}
 
 	// Add base routes to the server
-	if err := route.RegisterRoutes(srv); err != nil {
+	if err := route.RegisterRoutes(s.Router); err != nil {
 		return err
 	}
 
 	// Registers additional routes for the graph endpoints with middleware defined
 	for _, handler := range s.handlers {
-		handler.Routes(srv.Echo.Group("", s.config.GraphMiddleware...))
+		handler.Routes(s.Router.Echo.Group("", s.config.GraphMiddleware...))
 	}
 
 	// Print routes on startup
-	routes := srv.Echo.Router().Routes()
+	routes := s.Router.Echo.Router().Routes()
 	for _, r := range routes {
 		log.Info().
 			Str("route", r.Path()).
@@ -108,11 +143,10 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	if s.config.Settings.Server.TLS.Enabled {
 		log.Info().Msg("starting in https mode")
 
-		return sc.StartTLS(srv.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
+		return sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
 	}
-
 	// otherwise, start without TLS
-	return sc.Start(srv.Echo)
+	return sc.Start(s.Router.Echo)
 }
 
 var startBlock = `

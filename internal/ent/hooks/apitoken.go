@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/iam/auth"
@@ -56,7 +56,7 @@ func HookCreateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					log.Error().Err(err).Msg("failed to create relationship tuple")
+					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}
@@ -98,7 +98,7 @@ func HookUpdateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					log.Error().Err(err).Msg("failed to create relationship tuple")
+					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}

@@ -25,12 +25,7 @@ func BodyDump() echo.MiddlewareFunc {
 
 		// Add context fields for the request
 		logger.UpdateContext(func(l zerolog.Context) zerolog.Context {
-			return l.Str("user-agent", r.Header.Get("User-Agent")).
-				Str("request-id", w.Header().Get(echo.HeaderXRequestID)).
-				Str("request-uri", r.RequestURI).
-				Str("request-method", r.Method).
-				Str("request-protocol", r.Proto).
-				Str("client-ip", c.RealIP())
+			return l.Str("request-id", w.Header().Get(echo.HeaderXRequestID))
 		})
 
 		// Log the request body if it is not empty and the content type is not multipart/form-data
@@ -46,7 +41,7 @@ func BodyDump() echo.MiddlewareFunc {
 				resBody, _ = json.Marshal(bodymap)
 			}
 
-			logger.Info().Bytes("response body", resBody).Msg("response body")
+			logger.Info().Bytes("RESPONSE_BODY", resBody).Msg("response_body")
 		}
 	})
 }
@@ -86,7 +81,7 @@ func logRequestBody(logger zerolog.Logger, reqBody []byte) {
 		reqBody, _ = json.Marshal(bodymap)
 	}
 
-	logger.Info().Bytes("request body", reqBody).Msg("request body")
+	logger.Info().Bytes("REQUEST_BODY", reqBody).Msg("request_body")
 }
 
 // redactSecretFields redacts sensitive fields from the request body

@@ -5,7 +5,7 @@ import (
 	"slices"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -168,7 +168,7 @@ func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID strin
 	}
 
 	if _, err := utils.AuthzClient(ctx, m).UpdateConditionalTupleKey(ctx, fgax.GetTupleKey(tk)); err != nil {
-		log.Error().Err(err).Msg("failed to create org access restriction tuple")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create org access restriction tuple")
 
 		return err
 	}

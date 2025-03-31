@@ -11,7 +11,7 @@ import (
 
 func ExampleNewConsoleWriter() {
 	output := consolelog.NewConsoleWriter()
-	logger := zerolog.New(output)
+	logger := zerolog.New(&output)
 
 	logger.Info().Str("foo", "bar").Msg("hello world")
 	// Output: INF hello world foo=bar
@@ -29,11 +29,11 @@ func ExampleNewConsoleWriter_custom() {
 		func(w *consolelog.ConsoleWriter) {
 			w.SetFormatter(
 				zerolog.LevelFieldName,
-				func(i interface{}) string { return strings.ToUpper(fmt.Sprintf("%-5s", i)) })
+				func(i any) string { return strings.ToUpper(fmt.Sprintf("%-5s", i)) })
 		},
 	)
 
-	logger := zerolog.New(output).With().Timestamp().Logger()
+	logger := zerolog.New(&output).With().Timestamp().Logger()
 
 	logger.Info().Str("foo", "bar").Msg("hello world")
 	// => 19 Jul 18 15:50 CEST INFO  hello world foo=bar

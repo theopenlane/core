@@ -7,7 +7,7 @@ import (
 
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/entx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -274,7 +274,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 			return createPersonalOrg(ctx, dbClient, user)
 		}
 
-		log.Error().Err(err).Msg("unable to create personal org")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to create personal org")
 
 		return nil, nil, err
 	}
@@ -289,7 +289,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	if err := dbClient.OrgMembership.Create().
 		SetInput(input).
 		Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("unable to add user as owner to organization")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user as owner to organization")
 
 		return nil, nil, err
 	}
@@ -307,13 +307,13 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 
 	setting, err := org.Setting(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get org settings")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get org settings")
 
 		return err
 	}
 
 	if err := dbClient.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail(user.Email).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("unable to update org settings")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update org settings")
 
 		return err
 	}
@@ -325,14 +325,14 @@ func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, u
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
 	setting, err := user.Setting(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user settings")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user settings")
 
 		return nil, err
 	}
 
 	setting, err = dbClient.UserSetting.UpdateOneID(setting.ID).SetDefaultOrg(org).Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to set default org")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to set default org")
 
 		return nil, err
 	}

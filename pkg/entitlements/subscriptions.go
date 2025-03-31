@@ -1,6 +1,9 @@
 package entitlements
 
 import (
+	"context"
+
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 )
@@ -16,13 +19,13 @@ func (sc *StripeClient) CreateSubscription(params *stripe.SubscriptionParams) (*
 }
 
 // ListStripeSubscriptions lists stripe subscriptions by customer
-func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscription, error) {
+func (sc *StripeClient) ListOrCreateSubscriptions(ctx context.Context, customerID string) (*Subscription, error) {
 	i := sc.Client.Subscriptions.List(&stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
 	})
 
 	if !i.Next() {
-		sub, err := sc.CreateTrialSubscription(&stripe.Customer{ID: customerID})
+		sub, err := sc.CreateTrialSubscription(ctx, &stripe.Customer{ID: customerID})
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to create trial subscription")
 			return nil, err
@@ -84,7 +87,7 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
+func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *stripe.Customer) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
@@ -111,7 +114,11 @@ func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscri
 		return nil, err
 	}
 
-	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
+	zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+		return c.Str("customer_id", cust.ID).Str("subscription_id", subs.ID)
+	})
+	zerolog.Ctx(ctx).Debug().Str("customer_id", cust.ID).Str("subscription_id", subs.ID).Msg("Created trial subscription")
+	zerolog.Ctx(ctx).Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
 	mappedsubscription := sc.MapStripeSubscription(subs)
 
@@ -241,9 +248,9 @@ type Subs struct {
 }
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CreateBillingPortalPaymentMethods(customerID string) (*BillingPortalSession, error) {
+func (sc *StripeClient) CreateBillingPortalPaymentMethods(custID string) (*BillingPortalSession, error) {
 	params := &stripe.BillingPortalSessionParams{
-		Customer:  &customerID,
+		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
 		FlowData: &stripe.BillingPortalSessionFlowDataParams{
 			Type: stripe.String("payment_method_update"),

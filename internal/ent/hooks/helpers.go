@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -60,7 +60,7 @@ func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 			if ok {
 				err2 := hook(ctx, entvalue)
 				if err2 != nil {
-					log.Debug().Ctx(ctx).Err(err2).Msg("post mutation hook error")
+					zerolog.Ctx(ctx).Debug().Ctx(ctx).Err(err2).Msg("post mutation hook error")
 				}
 			}
 

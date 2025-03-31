@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -63,7 +63,7 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 				}
 			}
 
-			log.Debug().Interface("tuples", addTuples).Msg("added organization permissions")
+			zerolog.Ctx(ctx).Debug().Interface("tuples", addTuples).Msg("added organization permissions")
 
 			return retVal, err
 		},
