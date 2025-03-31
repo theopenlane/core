@@ -76,6 +76,9 @@ func (PersonalAccessToken) Fields() []ent.Field {
 		field.JSON("scopes", []string{}).
 			Optional(),
 		field.Time("last_used_at").
+			Annotations(
+				entgql.OrderField("last_used_at"),
+			).
 			Optional().
 			Nillable(),
 		field.Bool("is_active").
