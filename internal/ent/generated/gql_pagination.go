@@ -444,6 +444,34 @@ var (
 			}
 		},
 	}
+	// APITokenOrderFieldExpiresAt orders APIToken by expires_at.
+	APITokenOrderFieldExpiresAt = &APITokenOrderField{
+		Value: func(at *APIToken) (ent.Value, error) {
+			return at.ExpiresAt, nil
+		},
+		column: apitoken.FieldExpiresAt,
+		toTerm: apitoken.ByExpiresAt,
+		toCursor: func(at *APIToken) Cursor {
+			return Cursor{
+				ID:    at.ID,
+				Value: at.ExpiresAt,
+			}
+		},
+	}
+	// APITokenOrderFieldLastUsedAt orders APIToken by last_used_at.
+	APITokenOrderFieldLastUsedAt = &APITokenOrderField{
+		Value: func(at *APIToken) (ent.Value, error) {
+			return at.LastUsedAt, nil
+		},
+		column: apitoken.FieldLastUsedAt,
+		toTerm: apitoken.ByLastUsedAt,
+		toCursor: func(at *APIToken) Cursor {
+			return Cursor{
+				ID:    at.ID,
+				Value: at.LastUsedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -454,6 +482,10 @@ func (f APITokenOrderField) String() string {
 		str = "created_at"
 	case APITokenOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case APITokenOrderFieldExpiresAt.column:
+		str = "expires_at"
+	case APITokenOrderFieldLastUsedAt.column:
+		str = "last_used_at"
 	}
 	return str
 }
@@ -474,6 +506,10 @@ func (f *APITokenOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *APITokenOrderFieldCreatedAt
 	case "updated_at":
 		*f = *APITokenOrderFieldUpdatedAt
+	case "expires_at":
+		*f = *APITokenOrderFieldExpiresAt
+	case "last_used_at":
+		*f = *APITokenOrderFieldLastUsedAt
 	default:
 		return fmt.Errorf("%s is not a valid APITokenOrderField", str)
 	}
@@ -19571,6 +19607,20 @@ var (
 			}
 		},
 	}
+	// PersonalAccessTokenOrderFieldLastUsedAt orders PersonalAccessToken by last_used_at.
+	PersonalAccessTokenOrderFieldLastUsedAt = &PersonalAccessTokenOrderField{
+		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
+			return pat.LastUsedAt, nil
+		},
+		column: personalaccesstoken.FieldLastUsedAt,
+		toTerm: personalaccesstoken.ByLastUsedAt,
+		toCursor: func(pat *PersonalAccessToken) Cursor {
+			return Cursor{
+				ID:    pat.ID,
+				Value: pat.LastUsedAt,
+			}
+		},
+	}
 	// PersonalAccessTokenOrderFieldIsActive orders PersonalAccessToken by is_active.
 	PersonalAccessTokenOrderFieldIsActive = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
@@ -19599,6 +19649,8 @@ func (f PersonalAccessTokenOrderField) String() string {
 		str = "name"
 	case PersonalAccessTokenOrderFieldExpiresAt.column:
 		str = "expires_at"
+	case PersonalAccessTokenOrderFieldLastUsedAt.column:
+		str = "last_used_at"
 	case PersonalAccessTokenOrderFieldIsActive.column:
 		str = "is_active"
 	}
@@ -19625,6 +19677,8 @@ func (f *PersonalAccessTokenOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PersonalAccessTokenOrderFieldName
 	case "expires_at":
 		*f = *PersonalAccessTokenOrderFieldExpiresAt
+	case "last_used_at":
+		*f = *PersonalAccessTokenOrderFieldLastUsedAt
 	case "is_active":
 		*f = *PersonalAccessTokenOrderFieldIsActive
 	default:

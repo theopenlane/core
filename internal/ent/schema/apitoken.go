@@ -59,6 +59,7 @@ func (APIToken) Fields() []ent.Field {
 		field.Time("expires_at").
 			Comment("when the token expires").
 			Annotations(
+				entgql.OrderField("expires_at"),
 				entgql.Skip(entgql.SkipMutationUpdateInput),
 			).
 			Optional().
@@ -74,6 +75,9 @@ func (APIToken) Fields() []ent.Field {
 			Optional(),
 		field.Time("last_used_at").
 			Optional().
+			Annotations(
+				entgql.OrderField("last_used_at"),
+			).
 			Nillable(),
 		field.Bool("is_active").
 			Default(true).
