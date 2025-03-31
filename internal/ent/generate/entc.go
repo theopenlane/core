@@ -125,7 +125,7 @@ func main() {
 		),
 		entc.Dependency(
 			entc.DependencyName("TOTP"),
-			entc.DependencyType(&totp.Manager{}),
+			entc.DependencyType(&totp.Client{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("EntitlementManager"),

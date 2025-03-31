@@ -80,7 +80,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 		Email:         sql.NullString{String: user.Email, Valid: true},
 	}
 
-	if err := h.OTPManager.TOTPManager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
+	if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
 		log.Error().Err(err).Msg("unable to validate TOTP code")
 
 		return h.BadRequest(ctx, err)

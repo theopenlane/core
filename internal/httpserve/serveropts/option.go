@@ -266,6 +266,10 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 			cc.Name = sessions.DefaultCookieName
 		}
 
+		if s.Config.Settings.Sessions.MaxAge > 0 {
+			cc.MaxAge = s.Config.Settings.Sessions.MaxAge
+		}
+
 		if s.Config.Settings.Sessions.Domain != "" {
 			cc.Domain = s.Config.Settings.Sessions.Domain
 		}
@@ -336,8 +340,8 @@ func WithOTP() ServerOption {
 				opts...,
 			)
 
-			s.Config.Handler.OTPManager = &totp.Manager{
-				TOTPManager: otpMan,
+			s.Config.Handler.OTPManager = &totp.Client{
+				Manager: otpMan,
 			}
 		}
 	})
