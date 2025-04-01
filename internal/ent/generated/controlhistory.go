@@ -52,7 +52,7 @@ type ControlHistory struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
-	Status string `json:"status,omitempty"`
+	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -214,7 +214,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ch.Status = value.String
+				ch.Status = enums.ControlStatus(value.String)
 			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -396,7 +396,7 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString(ch.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(ch.Status)
+	builder.WriteString(fmt.Sprintf("%v", ch.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Source))

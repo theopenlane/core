@@ -5326,21 +5326,12 @@ type ControlWhereInput struct {
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                  `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -6075,38 +6066,11 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, control.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, control.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, control.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, control.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, control.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, control.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, control.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, control.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, control.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, control.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, control.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, control.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, control.SourceEQ(*i.Source))
@@ -6939,21 +6903,12 @@ type ControlHistoryWhereInput struct {
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                  `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -7693,38 +7648,11 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, controlhistory.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, controlhistory.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, controlhistory.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, controlhistory.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, controlhistory.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, controlhistory.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, controlhistory.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, controlhistory.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, controlhistory.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, controlhistory.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, controlhistory.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, controlhistory.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, controlhistory.SourceEQ(*i.Source))
@@ -57190,21 +57118,12 @@ type SubcontrolWhereInput struct {
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                  `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -57913,38 +57832,11 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, subcontrol.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, subcontrol.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, subcontrol.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, subcontrol.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, subcontrol.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, subcontrol.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, subcontrol.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, subcontrol.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, subcontrol.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, subcontrol.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, subcontrol.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, subcontrol.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, subcontrol.SourceEQ(*i.Source))
@@ -58663,21 +58555,12 @@ type SubcontrolHistoryWhereInput struct {
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                  `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                  `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -59415,38 +59298,11 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, subcontrolhistory.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, subcontrolhistory.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, subcontrolhistory.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, subcontrolhistory.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, subcontrolhistory.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, subcontrolhistory.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, subcontrolhistory.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, subcontrolhistory.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, subcontrolhistory.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, subcontrolhistory.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, subcontrolhistory.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, subcontrolhistory.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, subcontrolhistory.SourceEQ(*i.Source))

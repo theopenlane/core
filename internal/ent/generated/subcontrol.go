@@ -48,7 +48,7 @@ type Subcontrol struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
-	Status string `json:"status,omitempty"`
+	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -375,7 +375,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				s.Status = value.String
+				s.Status = enums.ControlStatus(value.String)
 			}
 		case subcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -641,7 +641,7 @@ func (s *Subcontrol) String() string {
 	builder.WriteString(s.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(s.Status)
+	builder.WriteString(fmt.Sprintf("%v", s.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", s.Source))

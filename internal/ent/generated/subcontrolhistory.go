@@ -52,7 +52,7 @@ type SubcontrolHistory struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
-	Status string `json:"status,omitempty"`
+	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -214,7 +214,7 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				sh.Status = value.String
+				sh.Status = enums.ControlStatus(value.String)
 			}
 		case subcontrolhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -396,7 +396,7 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString(sh.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(sh.Status)
+	builder.WriteString(fmt.Sprintf("%v", sh.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Source))

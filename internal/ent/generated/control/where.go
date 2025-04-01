@@ -123,11 +123,6 @@ func AuditorReferenceID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldAuditorReferenceID, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Control {
-	return predicate.Control(sql.FieldEQ(FieldStatus, v))
-}
-
 // Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
 func Category(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldCategory, v))
@@ -904,58 +899,33 @@ func AuditorReferenceIDContainsFold(v string) predicate.Control {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Control {
-	return predicate.Control(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.ControlStatus) predicate.Control {
+	vc := v
+	return predicate.Control(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Control {
-	return predicate.Control(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.ControlStatus) predicate.Control {
+	vc := v
+	return predicate.Control(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Control {
-	return predicate.Control(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.ControlStatus) predicate.Control {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Control(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Control {
-	return predicate.Control(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Control {
-	return predicate.Control(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Control {
-	return predicate.Control(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Control {
-	return predicate.Control(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Control {
-	return predicate.Control(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Control {
-	return predicate.Control(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Control {
-	return predicate.Control(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Control {
-	return predicate.Control(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.ControlStatus) predicate.Control {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Control(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -966,16 +936,6 @@ func StatusIsNil() predicate.Control {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Control {
 	return predicate.Control(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Control {
-	return predicate.Control(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Control {
-	return predicate.Control(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // SourceEQ applies the EQ predicate on the "source" field.

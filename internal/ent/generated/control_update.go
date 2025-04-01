@@ -199,15 +199,15 @@ func (cu *ControlUpdate) ClearAuditorReferenceID() *ControlUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (cu *ControlUpdate) SetStatus(s string) *ControlUpdate {
-	cu.mutation.SetStatus(s)
+func (cu *ControlUpdate) SetStatus(es enums.ControlStatus) *ControlUpdate {
+	cu.mutation.SetStatus(es)
 	return cu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableStatus(s *string) *ControlUpdate {
-	if s != nil {
-		cu.SetStatus(*s)
+func (cu *ControlUpdate) SetNillableStatus(es *enums.ControlStatus) *ControlUpdate {
+	if es != nil {
+		cu.SetStatus(*es)
 	}
 	return cu
 }
@@ -1128,6 +1128,11 @@ func (cu *ControlUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cu *ControlUpdate) check() error {
+	if v, ok := cu.mutation.Status(); ok {
+		if err := control.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
+		}
+	}
 	if v, ok := cu.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
@@ -1224,10 +1229,10 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(control.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := cu.mutation.Status(); ok {
-		_spec.SetField(control.FieldStatus, field.TypeString, value)
+		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 	}
 	if cu.mutation.StatusCleared() {
-		_spec.ClearField(control.FieldStatus, field.TypeString)
+		_spec.ClearField(control.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cu.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)
@@ -2327,15 +2332,15 @@ func (cuo *ControlUpdateOne) ClearAuditorReferenceID() *ControlUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (cuo *ControlUpdateOne) SetStatus(s string) *ControlUpdateOne {
-	cuo.mutation.SetStatus(s)
+func (cuo *ControlUpdateOne) SetStatus(es enums.ControlStatus) *ControlUpdateOne {
+	cuo.mutation.SetStatus(es)
 	return cuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableStatus(s *string) *ControlUpdateOne {
-	if s != nil {
-		cuo.SetStatus(*s)
+func (cuo *ControlUpdateOne) SetNillableStatus(es *enums.ControlStatus) *ControlUpdateOne {
+	if es != nil {
+		cuo.SetStatus(*es)
 	}
 	return cuo
 }
@@ -3269,6 +3274,11 @@ func (cuo *ControlUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cuo *ControlUpdateOne) check() error {
+	if v, ok := cuo.mutation.Status(); ok {
+		if err := control.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
+		}
+	}
 	if v, ok := cuo.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
@@ -3382,10 +3392,10 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 		_spec.ClearField(control.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Status(); ok {
-		_spec.SetField(control.FieldStatus, field.TypeString, value)
+		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 	}
 	if cuo.mutation.StatusCleared() {
-		_spec.ClearField(control.FieldStatus, field.TypeString)
+		_spec.ClearField(control.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cuo.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)

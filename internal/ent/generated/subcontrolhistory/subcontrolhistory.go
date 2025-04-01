@@ -158,6 +158,18 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultStatus enums.ControlStatus = "NULL"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.ControlStatus) error {
+	switch s.String() {
+	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NULL":
+		return nil
+	default:
+		return fmt.Errorf("subcontrolhistory: invalid enum value for status field: %q", s)
+	}
+}
+
 const DefaultSource enums.ControlSource = "USER_DEFINED"
 
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
@@ -305,6 +317,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.ControlStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlStatus)(nil)
+	// enums.ControlStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlStatus)(nil)
 )
 
 var (

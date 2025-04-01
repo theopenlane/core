@@ -1699,7 +1699,7 @@ type Control struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -1816,7 +1816,7 @@ type ControlHistory struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -2082,21 +2082,12 @@ type ControlHistoryWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                 `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                 `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -3587,21 +3578,12 @@ type ControlWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                 `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                 `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -3867,7 +3849,7 @@ type CreateControlInput struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -4609,7 +4591,7 @@ type CreateSubcontrolInput struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -18841,7 +18823,7 @@ type Subcontrol struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -18949,7 +18931,7 @@ type SubcontrolHistory struct {
 	// external auditor id of the control, can be used to map to external audit partner mappings
 	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *string `json:"status,omitempty"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -19215,21 +19197,12 @@ type SubcontrolHistoryWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                 `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                 `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -19519,21 +19492,12 @@ type SubcontrolWhereInput struct {
 	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
 	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ControlStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ControlStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ControlStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ControlStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                 `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                 `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -21477,8 +21441,8 @@ type UpdateControlInput struct {
 	AuditorReferenceID      *string `json:"auditorReferenceID,omitempty"`
 	ClearAuditorReferenceID *bool   `json:"clearAuditorReferenceID,omitempty"`
 	// status of the control
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	Status      *enums.ControlStatus `json:"status,omitempty"`
+	ClearStatus *bool                `json:"clearStatus,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
@@ -22712,8 +22676,8 @@ type UpdateSubcontrolInput struct {
 	AuditorReferenceID      *string `json:"auditorReferenceID,omitempty"`
 	ClearAuditorReferenceID *bool   `json:"clearAuditorReferenceID,omitempty"`
 	// status of the control
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	Status      *enums.ControlStatus `json:"status,omitempty"`
+	ClearStatus *bool                `json:"clearStatus,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
@@ -24566,7 +24530,7 @@ type ControlHistoryOrderField string
 const (
 	ControlHistoryOrderFieldCreatedAt   ControlHistoryOrderField = "created_at"
 	ControlHistoryOrderFieldUpdatedAt   ControlHistoryOrderField = "updated_at"
-	ControlHistoryOrderFieldStatus      ControlHistoryOrderField = "status"
+	ControlHistoryOrderFieldStatus      ControlHistoryOrderField = "STATUS"
 	ControlHistoryOrderFieldSource      ControlHistoryOrderField = "SOURCE"
 	ControlHistoryOrderFieldControlType ControlHistoryOrderField = "CONTROL_TYPE"
 	ControlHistoryOrderFieldCategory    ControlHistoryOrderField = "category"
@@ -24832,7 +24796,7 @@ type ControlOrderField string
 const (
 	ControlOrderFieldCreatedAt   ControlOrderField = "created_at"
 	ControlOrderFieldUpdatedAt   ControlOrderField = "updated_at"
-	ControlOrderFieldStatus      ControlOrderField = "status"
+	ControlOrderFieldStatus      ControlOrderField = "STATUS"
 	ControlOrderFieldSource      ControlOrderField = "SOURCE"
 	ControlOrderFieldControlType ControlOrderField = "CONTROL_TYPE"
 	ControlOrderFieldCategory    ControlOrderField = "category"
@@ -27268,7 +27232,7 @@ type SubcontrolHistoryOrderField string
 const (
 	SubcontrolHistoryOrderFieldCreatedAt   SubcontrolHistoryOrderField = "created_at"
 	SubcontrolHistoryOrderFieldUpdatedAt   SubcontrolHistoryOrderField = "updated_at"
-	SubcontrolHistoryOrderFieldStatus      SubcontrolHistoryOrderField = "status"
+	SubcontrolHistoryOrderFieldStatus      SubcontrolHistoryOrderField = "STATUS"
 	SubcontrolHistoryOrderFieldSource      SubcontrolHistoryOrderField = "SOURCE"
 	SubcontrolHistoryOrderFieldControlType SubcontrolHistoryOrderField = "CONTROL_TYPE"
 	SubcontrolHistoryOrderFieldCategory    SubcontrolHistoryOrderField = "category"
@@ -27322,7 +27286,7 @@ type SubcontrolOrderField string
 const (
 	SubcontrolOrderFieldCreatedAt   SubcontrolOrderField = "created_at"
 	SubcontrolOrderFieldUpdatedAt   SubcontrolOrderField = "updated_at"
-	SubcontrolOrderFieldStatus      SubcontrolOrderField = "status"
+	SubcontrolOrderFieldStatus      SubcontrolOrderField = "STATUS"
 	SubcontrolOrderFieldSource      SubcontrolOrderField = "SOURCE"
 	SubcontrolOrderFieldControlType SubcontrolOrderField = "CONTROL_TYPE"
 	SubcontrolOrderFieldCategory    SubcontrolOrderField = "category"

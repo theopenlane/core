@@ -50,7 +50,6 @@ query AdminSearch($query: String!) {
           description
           referenceID
           auditorReferenceID
-          status
           category
           categoryID
           subcategory
@@ -341,7 +340,6 @@ query AdminSearch($query: String!) {
           description
           referenceID
           auditorReferenceID
-          status
           category
           categoryID
           subcategory
