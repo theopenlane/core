@@ -28099,10 +28099,11 @@ ControlControlStatus is enum for the field status
 """
 enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
   PREPARING
-  NEEDS APPROVAL
-  CHANGES REQUESTED
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
   APPROVED
   ARCHIVED
+  NULL
 }
 """
 ControlControlType is enum for the field control_type
@@ -28253,10 +28254,11 @@ ControlHistoryControlStatus is enum for the field status
 """
 enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
   PREPARING
-  NEEDS APPROVAL
-  CHANGES REQUESTED
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
   APPROVED
   ARCHIVED
+  NULL
 }
 """
 ControlHistoryControlType is enum for the field control_type
@@ -56041,10 +56043,11 @@ SubcontrolControlStatus is enum for the field status
 """
 enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
   PREPARING
-  NEEDS APPROVAL
-  CHANGES REQUESTED
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
   APPROVED
   ARCHIVED
+  NULL
 }
 """
 SubcontrolControlType is enum for the field control_type
@@ -56195,10 +56198,11 @@ SubcontrolHistoryControlStatus is enum for the field status
 """
 enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
   PREPARING
-  NEEDS APPROVAL
-  CHANGES REQUESTED
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
   APPROVED
   ARCHIVED
+  NULL
 }
 """
 SubcontrolHistoryControlType is enum for the field control_type

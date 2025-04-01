@@ -158,12 +158,12 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultStatus enums.ControlStatus = "PREPARING"
+const DefaultStatus enums.ControlStatus = "NULL"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ControlStatus) error {
 	switch s.String() {
-	case "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED", "APPROVED", "ARCHIVED":
+	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NULL":
 		return nil
 	default:
 		return fmt.Errorf("subcontrolhistory: invalid enum value for status field: %q", s)

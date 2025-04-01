@@ -12,13 +12,15 @@ var (
 	// ControlStatusPreparing indicates the control is being prepared
 	ControlStatusPreparing ControlStatus = "PREPARING"
 	// ControlStatusNeedsApproval indicates the control needs to be approved before it is available
-	ControlStatusNeedsApproval ControlStatus = "NEEDS APPROVAL"
+	ControlStatusNeedsApproval ControlStatus = "NEEDS_APPROVAL"
 	// ControlStatusChangesRequested indicates the control was rejected and needs some changes to be approved
-	ControlStatusChangesRequested ControlStatus = "CHANGES REQUESTED"
+	ControlStatusChangesRequested ControlStatus = "CHANGES_REQUESTED"
 	// ControlStatusApproved indicates the control is approved
 	ControlStatusApproved ControlStatus = "APPROVED"
 	// ControlStatusArchived indicates the control is now archived
 	ControlStatusArchived ControlStatus = "ARCHIVED"
+	// ControlStatusNull indicates that this control status does not exists and is also not invalid
+	ControlStatusNull ControlStatus = "NULL"
 	// ControlStatusInvalid indicates the control is invalid or unknown
 	ControlStatusInvalid ControlStatus = "CONTROL_STATUS_INVALID"
 )
@@ -28,7 +30,7 @@ var (
 // "APPROVED" and "ARCHIVED".
 func (ControlStatus) Values() (kinds []string) {
 	for _, s := range []ControlStatus{ControlStatusPreparing, ControlStatusNeedsApproval, ControlStatusChangesRequested,
-		ControlStatusApproved, ControlStatusArchived} {
+		ControlStatusApproved, ControlStatusArchived, ControlStatusNull} {
 		kinds = append(kinds, string(s))
 	}
 

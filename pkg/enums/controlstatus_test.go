@@ -20,12 +20,12 @@ func TestControlStatus(t *testing.T) {
 		},
 		{
 			name:     "needs approval",
-			role:     "needs approval",
+			role:     "needs_approval",
 			expected: enums.ControlStatusNeedsApproval,
 		},
 		{
 			name:     "request changes",
-			role:     "changes requested",
+			role:     "changes_requested",
 			expected: enums.ControlStatusChangesRequested,
 		},
 		{

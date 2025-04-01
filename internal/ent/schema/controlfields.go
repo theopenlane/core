@@ -28,7 +28,7 @@ var controlFields = []ent.Field{
 	field.Enum("status").
 		GoType(enums.ControlStatus("")).
 		Optional().
-		Default(enums.ControlStatusPreparing.String()).
+		Default(enums.ControlStatusNull.String()).
 		Annotations(
 			entgql.OrderField("STATUS"),
 		).

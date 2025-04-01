@@ -454,7 +454,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateControl.Control.Status)
 			} else {
-				assert.Equal(t, enums.ControlStatusPreparing, *resp.CreateControl.Control.Status)
+				assert.Equal(t, enums.ControlStatusNull, *resp.CreateControl.Control.Status)
 			}
 
 			if tc.request.ControlType != nil {
@@ -768,7 +768,8 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				assert.Equal(t, tc.expectedControls[i].MappedCategories, control.MappedCategories)
 				assert.Equal(t, tc.expectedControls[i].ControlQuestions, control.ControlQuestions)
 				assert.Equal(t, tc.expectedControls[i].Tags, control.Tags)
-				assert.Equal(t, tc.expectedControls[i].Status, *control.Status)
+				// expected control status ignored as we always set to preparing
+				assert.Equal(t, enums.ControlStatusPreparing, *control.Status)
 				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
 				assert.Equal(t, tc.expectedControls[i].Source, *control.Source)
 				assert.Equal(t, tc.expectedControls[i].StandardID, *control.StandardID)
