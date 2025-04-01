@@ -444,6 +444,20 @@ var (
 			}
 		},
 	}
+	// APITokenOrderFieldName orders APIToken by name.
+	APITokenOrderFieldName = &APITokenOrderField{
+		Value: func(at *APIToken) (ent.Value, error) {
+			return at.Name, nil
+		},
+		column: apitoken.FieldName,
+		toTerm: apitoken.ByName,
+		toCursor: func(at *APIToken) Cursor {
+			return Cursor{
+				ID:    at.ID,
+				Value: at.Name,
+			}
+		},
+	}
 	// APITokenOrderFieldExpiresAt orders APIToken by expires_at.
 	APITokenOrderFieldExpiresAt = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
@@ -472,6 +486,20 @@ var (
 			}
 		},
 	}
+	// APITokenOrderFieldIsActive orders APIToken by is_active.
+	APITokenOrderFieldIsActive = &APITokenOrderField{
+		Value: func(at *APIToken) (ent.Value, error) {
+			return at.IsActive, nil
+		},
+		column: apitoken.FieldIsActive,
+		toTerm: apitoken.ByIsActive,
+		toCursor: func(at *APIToken) Cursor {
+			return Cursor{
+				ID:    at.ID,
+				Value: at.IsActive,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -482,10 +510,14 @@ func (f APITokenOrderField) String() string {
 		str = "created_at"
 	case APITokenOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case APITokenOrderFieldName.column:
+		str = "name"
 	case APITokenOrderFieldExpiresAt.column:
 		str = "expires_at"
 	case APITokenOrderFieldLastUsedAt.column:
 		str = "last_used_at"
+	case APITokenOrderFieldIsActive.column:
+		str = "is_active"
 	}
 	return str
 }
@@ -506,10 +538,14 @@ func (f *APITokenOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *APITokenOrderFieldCreatedAt
 	case "updated_at":
 		*f = *APITokenOrderFieldUpdatedAt
+	case "name":
+		*f = *APITokenOrderFieldName
 	case "expires_at":
 		*f = *APITokenOrderFieldExpiresAt
 	case "last_used_at":
 		*f = *APITokenOrderFieldLastUsedAt
+	case "is_active":
+		*f = *APITokenOrderFieldIsActive
 	default:
 		return fmt.Errorf("%s is not a valid APITokenOrderField", str)
 	}

@@ -24128,20 +24128,24 @@ type APITokenOrderField string
 const (
 	APITokenOrderFieldCreatedAt  APITokenOrderField = "created_at"
 	APITokenOrderFieldUpdatedAt  APITokenOrderField = "updated_at"
+	APITokenOrderFieldName       APITokenOrderField = "name"
 	APITokenOrderFieldExpiresAt  APITokenOrderField = "expires_at"
 	APITokenOrderFieldLastUsedAt APITokenOrderField = "last_used_at"
+	APITokenOrderFieldIsActive   APITokenOrderField = "is_active"
 )
 
 var AllAPITokenOrderField = []APITokenOrderField{
 	APITokenOrderFieldCreatedAt,
 	APITokenOrderFieldUpdatedAt,
+	APITokenOrderFieldName,
 	APITokenOrderFieldExpiresAt,
 	APITokenOrderFieldLastUsedAt,
+	APITokenOrderFieldIsActive,
 }
 
 func (e APITokenOrderField) IsValid() bool {
 	switch e {
-	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt, APITokenOrderFieldExpiresAt, APITokenOrderFieldLastUsedAt:
+	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt, APITokenOrderFieldName, APITokenOrderFieldExpiresAt, APITokenOrderFieldLastUsedAt, APITokenOrderFieldIsActive:
 		return true
 	}
 	return false

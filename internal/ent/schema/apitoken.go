@@ -45,6 +45,9 @@ func (APIToken) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name associated with the token").
+			Annotations(
+				entgql.OrderField("name"),
+			).
 			NotEmpty(),
 		field.String("token").
 			Unique().
@@ -82,6 +85,9 @@ func (APIToken) Fields() []ent.Field {
 		field.Bool("is_active").
 			Default(true).
 			Comment("whether the token is active").
+			Annotations(
+				entgql.OrderField("is_active"),
+			).
 			Optional(),
 		field.String("revoked_reason").
 			Comment("the reason the token was revoked").
