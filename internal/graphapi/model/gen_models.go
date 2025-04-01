@@ -112,6 +112,14 @@ type AuditLogWhereInput struct {
 	After     *time.Time `json:"after,omitempty"`
 }
 
+// CloneControlInput is used to clone controls and their subcontrols
+// under an organization (ownerID)
+type CloneControlInput struct {
+	ControlIDs []string `json:"controlIDs,omitempty"`
+	OwnerID    *string  `json:"ownerID,omitempty"`
+	ProgramID  *string  `json:"programID,omitempty"`
+}
+
 // Return response for createBulkContact mutation
 type ContactBulkCreatePayload struct {
 	// Created contacts

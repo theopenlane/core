@@ -13,15 +13,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateActionPlan is the resolver for the createActionPlan field.
 func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*model.ActionPlanCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -53,17 +49,11 @@ func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*ge
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateActionPlan(ctx, input)
 }
 
 // CreateBulkCSVActionPlan is the resolver for the createBulkCSVActionPlan field.
 func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateActionPlanInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -88,9 +78,6 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 
 // UpdateActionPlan is the resolver for the updateActionPlan field.
 func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
@@ -133,9 +120,6 @@ func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*mo
 
 // ActionPlan is the resolver for the actionPlan field.
 func (r *queryResolver) ActionPlan(ctx context.Context, id string) (*generated.ActionPlan, error) {
-	// get preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	query, err := withTransactionalMutation(ctx).ActionPlan.Query().Where(actionplan.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})

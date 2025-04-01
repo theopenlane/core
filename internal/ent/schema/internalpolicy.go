@@ -80,7 +80,7 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.HookOrgOwnedTuples(false),
+			hooks.HookOrgOwnedTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 	}

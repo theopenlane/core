@@ -269,6 +269,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldTags:                   {Type: field.TypeJSON, Column: control.FieldTags},
 			control.FieldOwnerID:                {Type: field.TypeString, Column: control.FieldOwnerID},
 			control.FieldDescription:            {Type: field.TypeString, Column: control.FieldDescription},
+			control.FieldReferenceID:            {Type: field.TypeString, Column: control.FieldReferenceID},
+			control.FieldAuditorReferenceID:     {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
 			control.FieldStatus:                 {Type: field.TypeString, Column: control.FieldStatus},
 			control.FieldSource:                 {Type: field.TypeEnum, Column: control.FieldSource},
 			control.FieldControlType:            {Type: field.TypeEnum, Column: control.FieldControlType},
@@ -310,6 +312,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldTags:                   {Type: field.TypeJSON, Column: controlhistory.FieldTags},
 			controlhistory.FieldOwnerID:                {Type: field.TypeString, Column: controlhistory.FieldOwnerID},
 			controlhistory.FieldDescription:            {Type: field.TypeString, Column: controlhistory.FieldDescription},
+			controlhistory.FieldReferenceID:            {Type: field.TypeString, Column: controlhistory.FieldReferenceID},
+			controlhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
 			controlhistory.FieldStatus:                 {Type: field.TypeString, Column: controlhistory.FieldStatus},
 			controlhistory.FieldSource:                 {Type: field.TypeEnum, Column: controlhistory.FieldSource},
 			controlhistory.FieldControlType:            {Type: field.TypeEnum, Column: controlhistory.FieldControlType},
@@ -1954,6 +1958,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldTags:                   {Type: field.TypeJSON, Column: subcontrol.FieldTags},
 			subcontrol.FieldOwnerID:                {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
 			subcontrol.FieldDescription:            {Type: field.TypeString, Column: subcontrol.FieldDescription},
+			subcontrol.FieldReferenceID:            {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
+			subcontrol.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
 			subcontrol.FieldStatus:                 {Type: field.TypeString, Column: subcontrol.FieldStatus},
 			subcontrol.FieldSource:                 {Type: field.TypeEnum, Column: subcontrol.FieldSource},
 			subcontrol.FieldControlType:            {Type: field.TypeEnum, Column: subcontrol.FieldControlType},
@@ -1995,6 +2001,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldTags:                   {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
 			subcontrolhistory.FieldOwnerID:                {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
 			subcontrolhistory.FieldDescription:            {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
+			subcontrolhistory.FieldReferenceID:            {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceID},
+			subcontrolhistory.FieldAuditorReferenceID:     {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
 			subcontrolhistory.FieldStatus:                 {Type: field.TypeString, Column: subcontrolhistory.FieldStatus},
 			subcontrolhistory.FieldSource:                 {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
 			subcontrolhistory.FieldControlType:            {Type: field.TypeEnum, Column: subcontrolhistory.FieldControlType},
@@ -6884,6 +6892,16 @@ func (f *ControlFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldDescription))
 }
 
+// WhereReferenceID applies the entql string predicate on the reference_id field.
+func (f *ControlFilter) WhereReferenceID(p entql.StringP) {
+	f.Where(p.Field(control.FieldReferenceID))
+}
+
+// WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
+func (f *ControlFilter) WhereAuditorReferenceID(p entql.StringP) {
+	f.Where(p.Field(control.FieldAuditorReferenceID))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ControlFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(control.FieldStatus))
@@ -7328,6 +7346,16 @@ func (f *ControlHistoryFilter) WhereOwnerID(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *ControlHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldDescription))
+}
+
+// WhereReferenceID applies the entql string predicate on the reference_id field.
+func (f *ControlHistoryFilter) WhereReferenceID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldReferenceID))
+}
+
+// WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
+func (f *ControlHistoryFilter) WhereAuditorReferenceID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldAuditorReferenceID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -17152,6 +17180,16 @@ func (f *SubcontrolFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDescription))
 }
 
+// WhereReferenceID applies the entql string predicate on the reference_id field.
+func (f *SubcontrolFilter) WhereReferenceID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldReferenceID))
+}
+
+// WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
+func (f *SubcontrolFilter) WhereAuditorReferenceID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldAuditorReferenceID))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *SubcontrolFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldStatus))
@@ -17512,6 +17550,16 @@ func (f *SubcontrolHistoryFilter) WhereOwnerID(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *SubcontrolHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldDescription))
+}
+
+// WhereReferenceID applies the entql string predicate on the reference_id field.
+func (f *SubcontrolHistoryFilter) WhereReferenceID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldReferenceID))
+}
+
+// WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
+func (f *SubcontrolHistoryFilter) WhereAuditorReferenceID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldAuditorReferenceID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.

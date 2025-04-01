@@ -144,6 +144,46 @@ func (shu *SubcontrolHistoryUpdate) ClearDescription() *SubcontrolHistoryUpdate 
 	return shu
 }
 
+// SetReferenceID sets the "reference_id" field.
+func (shu *SubcontrolHistoryUpdate) SetReferenceID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetReferenceID(s)
+	return shu
+}
+
+// SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableReferenceID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetReferenceID(*s)
+	}
+	return shu
+}
+
+// ClearReferenceID clears the value of the "reference_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearReferenceID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearReferenceID()
+	return shu
+}
+
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (shu *SubcontrolHistoryUpdate) SetAuditorReferenceID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetAuditorReferenceID(s)
+	return shu
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableAuditorReferenceID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetAuditorReferenceID(*s)
+	}
+	return shu
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearAuditorReferenceID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearAuditorReferenceID()
+	return shu
+}
+
 // SetStatus sets the "status" field.
 func (shu *SubcontrolHistoryUpdate) SetStatus(s string) *SubcontrolHistoryUpdate {
 	shu.mutation.SetStatus(s)
@@ -545,6 +585,18 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := shu.mutation.ReferenceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldReferenceID, field.TypeString, value)
+	}
+	if shu.mutation.ReferenceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldReferenceID, field.TypeString)
+	}
+	if value, ok := shu.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if shu.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
+	}
 	if value, ok := shu.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeString, value)
 	}
@@ -795,6 +847,46 @@ func (shuo *SubcontrolHistoryUpdateOne) SetNillableDescription(s *string) *Subco
 // ClearDescription clears the value of the "description" field.
 func (shuo *SubcontrolHistoryUpdateOne) ClearDescription() *SubcontrolHistoryUpdateOne {
 	shuo.mutation.ClearDescription()
+	return shuo
+}
+
+// SetReferenceID sets the "reference_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetReferenceID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetReferenceID(s)
+	return shuo
+}
+
+// SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableReferenceID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetReferenceID(*s)
+	}
+	return shuo
+}
+
+// ClearReferenceID clears the value of the "reference_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearReferenceID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearReferenceID()
+	return shuo
+}
+
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetAuditorReferenceID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetAuditorReferenceID(s)
+	return shuo
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableAuditorReferenceID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetAuditorReferenceID(*s)
+	}
+	return shuo
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearAuditorReferenceID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearAuditorReferenceID()
 	return shuo
 }
 
@@ -1228,6 +1320,18 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := shuo.mutation.ReferenceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldReferenceID, field.TypeString, value)
+	}
+	if shuo.mutation.ReferenceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldReferenceID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if shuo.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := shuo.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeString, value)

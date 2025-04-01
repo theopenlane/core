@@ -12,14 +12,22 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryStandard() {
 	t := suite.T()
 
-	// create standards to be queried
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	numControls := 20
+	controlIDs := []string{}
+	for range numControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		controlIDs = append(controlIDs, control.ID)
+	}
+
 	notPublicStandard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
 
 	orgStandardName := "org-owned-standard"
@@ -27,11 +35,12 @@ func (suite *GraphTestSuite) TestQueryStandard() {
 
 	// add test cases for querying the Standard
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name                 string
+		queryID              string
+		expectedControlCount int64
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		errorMsg             string
 	}{
 		{
 			name:    "happy path, org owned standard",
@@ -58,10 +67,11 @@ func (suite *GraphTestSuite) TestQueryStandard() {
 			ctx:     context.Background(),
 		},
 		{
-			name:    "happy path using api token for public standard",
-			queryID: publicStandard.ID,
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
+			name:                 "happy path using api token for public standard",
+			queryID:              publicStandard.ID,
+			client:               suite.client.apiWithToken,
+			ctx:                  context.Background(),
+			expectedControlCount: int64(numControls),
 		},
 		{
 			name:     "standard not found, invalid ID",
@@ -78,16 +88,18 @@ func (suite *GraphTestSuite) TestQueryStandard() {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:    "org owned public standard",
-			queryID: publicStandard.ID,
-			client:  suite.client.api,
-			ctx:     testUser2.UserCtx,
+			name:                 "public standard, other org user",
+			queryID:              publicStandard.ID,
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedControlCount: int64(numControls),
 		},
 		{
-			name:    "org owned public standard",
-			queryID: publicStandard.ID,
-			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			name:                 "public standard, view only user",
+			queryID:              publicStandard.ID,
+			client:               suite.client.api,
+			ctx:                  viewOnlyUser.UserCtx,
+			expectedControlCount: int64(numControls),
 		},
 		{
 			name:     "org owned, but not public standard, not found",
@@ -141,6 +153,14 @@ func (suite *GraphTestSuite) TestQueryStandard() {
 			} else {
 				assert.False(t, *resp.Standard.SystemOwned)
 			}
+
+			assert.Equal(t, tc.expectedControlCount, resp.Standard.Controls.TotalCount)
+
+			// only check edges if we expect them
+			if tc.expectedControlCount > 0 {
+				assert.Equal(t, testutils.MaxResultLimit, len(resp.Standard.Controls.Edges))
+			}
+
 		})
 	}
 
@@ -237,7 +257,7 @@ func (suite *GraphTestSuite) TestQueryStandards() {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, suite)
 }
 
-func (suite *GraphTestSuite) v() {
+func (suite *GraphTestSuite) TestMutationCreateStandard() {
 	t := suite.T()
 
 	numControls := 20
@@ -272,8 +292,8 @@ func (suite *GraphTestSuite) v() {
 		{
 			name: "happy path, system admin - system owned with controls",
 			request: openlaneclient.CreateStandardInput{
-				Name:       "Super Awesome Standard",
-				ControlIDs: adminControlIDs,
+				Name:     "Super Awesome Standard",
+				IsPublic: lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -303,7 +323,6 @@ func (suite *GraphTestSuite) v() {
 				StandardType:         lo.ToPtr("cybersecurity"),
 				Version:              lo.ToPtr("2025 - ship latest"),
 				Revision:             lo.ToPtr("v1.0.0"),
-				ControlIDs:           controlIDs,
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -482,15 +501,6 @@ func (suite *GraphTestSuite) v() {
 			}
 			assert.Equal(t, expectedVersion, *resp.CreateStandard.Standard.Version)
 
-			if len(tc.request.ControlIDs) > 0 {
-				assert.NotEmpty(t, resp.CreateStandard.Standard.Controls.Edges)
-				assert.Equal(t, int64(len(tc.request.ControlIDs)), resp.CreateStandard.Standard.Controls.TotalCount)
-				// created more than the max limit for tests (10)
-				assert.True(t, resp.CreateStandard.Standard.Controls.PageInfo.HasNextPage)
-			} else {
-				assert.Empty(t, resp.CreateStandard.Standard.Controls.Edges)
-			}
-
 			// cleanup the created standard
 			ctx := tc.ctx
 			if tc.client != suite.client.api {
@@ -508,29 +518,7 @@ func (suite *GraphTestSuite) v() {
 func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 	t := suite.T()
 
-	numControls := 8
-	controlIDs := []string{}
-	for range numControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-		controlIDs = append(controlIDs, control.ID)
-	}
-
-	numAdditionalControls := 4
-	additionalControlIDs := []string{}
-	for range numAdditionalControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-		additionalControlIDs = append(additionalControlIDs, control.ID)
-	}
-
-	standardOrgOwned := (&StandardBuilder{client: suite.client, ControlIDs: controlIDs}).MustNew(testUser1.UserCtx, t)
-
-	numAdminControls := 32
-	adminControlIDs := []string{}
-	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-		adminControlIDs = append(adminControlIDs, control.ID)
-	}
-
+	standardOrgOwned := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	// users should not be able to get the system owned standard because its not public
@@ -539,23 +527,21 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 	require.Nil(t, std)
 
 	testCases := []struct {
-		name                  string
-		id                    string
-		request               openlaneclient.UpdateStandardInput
-		client                *openlaneclient.OpenlaneClient
-		ctx                   context.Context
-		expectedChildControls int
-		expectedErr           string
+		name        string
+		id          string
+		request     openlaneclient.UpdateStandardInput
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
 	}{
 		{
 			name: "happy path, update field, org owned standard",
 			id:   standardOrgOwned.ID,
 			request: openlaneclient.UpdateStandardInput{
-				AddControlIDs: additionalControlIDs,
+				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
-			expectedChildControls: numControls + numAdditionalControls,
-			client:                suite.client.api,
-			ctx:                   adminUser.UserCtx,
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields, org owned standard",
@@ -633,11 +619,9 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 				Status:        lo.ToPtr(enums.StandardDraft),
 				RevisionBump:  &models.Minor,
 				FreeToUse:     lo.ToPtr(true),
-				AddControlIDs: adminControlIDs,
 			},
-			client:                suite.client.api,
-			ctx:                   systemAdminUser.UserCtx,
-			expectedChildControls: numAdminControls,
+			client: suite.client.api,
+			ctx:    systemAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -727,16 +711,14 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 				require.Equal(t, standardSystemOwned.ID, std.Standard.ID)
 			}
 
-			if tc.request.AddControlIDs != nil {
-				assert.Equal(t, tc.expectedChildControls, int(resp.UpdateStandard.Standard.Controls.TotalCount))
+			if tc.request.Tags != nil {
+				assert.Equal(t, tc.request.Tags, resp.UpdateStandard.Standard.Tags)
 			}
 		})
 	}
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, suite)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteStandard() {

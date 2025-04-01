@@ -617,6 +617,8 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 type CreateControlInput struct {
 	Tags                     []string
 	Description              *string
+	ReferenceID              *string
+	AuditorReferenceID       *string
 	Status                   *string
 	Source                   *enums.ControlSource
 	ControlType              *enums.ControlType
@@ -659,6 +661,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.ReferenceID; v != nil {
+		m.SetReferenceID(*v)
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -772,6 +780,10 @@ type UpdateControlInput struct {
 	AppendTags                     []string
 	ClearDescription               bool
 	Description                    *string
+	ClearReferenceID               bool
+	ReferenceID                    *string
+	ClearAuditorReferenceID        bool
+	AuditorReferenceID             *string
 	ClearStatus                    bool
 	Status                         *string
 	ClearSource                    bool
@@ -875,6 +887,18 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearReferenceID {
+		m.ClearReferenceID()
+	}
+	if v := i.ReferenceID; v != nil {
+		m.SetReferenceID(*v)
+	}
+	if i.ClearAuditorReferenceID {
+		m.ClearAuditorReferenceID()
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
@@ -6687,7 +6711,6 @@ type CreateStandardInput struct {
 	StandardType         *string
 	Version              *string
 	OwnerID              *string
-	ControlIDs           []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -6738,9 +6761,6 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
@@ -6784,9 +6804,6 @@ type UpdateStandardInput struct {
 	Version                   *string
 	ClearOwner                bool
 	OwnerID                   *string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -6890,15 +6907,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if i.ClearControls {
-		m.ClearControls()
-	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateStandardInput on the StandardUpdate builder.
@@ -6917,6 +6925,8 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 type CreateSubcontrolInput struct {
 	Tags                   []string
 	Description            *string
+	ReferenceID            *string
+	AuditorReferenceID     *string
 	Status                 *string
 	Source                 *enums.ControlSource
 	ControlType            *enums.ControlType
@@ -6953,6 +6963,12 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.ReferenceID; v != nil {
+		m.SetReferenceID(*v)
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -7046,6 +7062,10 @@ type UpdateSubcontrolInput struct {
 	AppendTags                   []string
 	ClearDescription             bool
 	Description                  *string
+	ClearReferenceID             bool
+	ReferenceID                  *string
+	ClearAuditorReferenceID      bool
+	AuditorReferenceID           *string
 	ClearStatus                  bool
 	Status                       *string
 	ClearSource                  bool
@@ -7130,6 +7150,18 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearReferenceID {
+		m.ClearReferenceID()
+	}
+	if v := i.ReferenceID; v != nil {
+		m.SetReferenceID(*v)
+	}
+	if i.ClearAuditorReferenceID {
+		m.ClearAuditorReferenceID()
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()

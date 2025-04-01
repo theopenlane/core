@@ -321,6 +321,7 @@ type ComplexityRoot struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
+		AuditorReferenceID     func(childComplexity int) int
 		BlockedGroups          func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
@@ -350,6 +351,7 @@ type ComplexityRoot struct {
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RefCode                func(childComplexity int) int
+		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source                 func(childComplexity int) int
@@ -391,6 +393,7 @@ type ComplexityRoot struct {
 	ControlHistory struct {
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
+		AuditorReferenceID     func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
@@ -410,6 +413,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RefCode                func(childComplexity int) int
+		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		StandardID             func(childComplexity int) int
@@ -1823,6 +1827,7 @@ type ComplexityRoot struct {
 		CreateControlImplementation        func(childComplexity int, input generated.CreateControlImplementationInput) int
 		CreateControlObjective             func(childComplexity int, input generated.CreateControlObjectiveInput) int
 		CreateControlWithSubcontrols       func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
+		CreateControlsByClone              func(childComplexity int, input *model.CloneControlInput) int
 		CreateDocumentData                 func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEntity                       func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
@@ -3184,6 +3189,7 @@ type ComplexityRoot struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
+		AuditorReferenceID     func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		Control                func(childComplexity int) int
@@ -3211,6 +3217,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		RefCode                func(childComplexity int) int
+		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source                 func(childComplexity int) int
@@ -3248,6 +3255,7 @@ type ComplexityRoot struct {
 	SubcontrolHistory struct {
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
+		AuditorReferenceID     func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		ControlID              func(childComplexity int) int
@@ -3268,6 +3276,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RefCode                func(childComplexity int) int
+		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
@@ -4945,6 +4954,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.AssessmentObjectives(childComplexity), true
 
+	case "Control.auditorReferenceID":
+		if e.complexity.Control.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.complexity.Control.AuditorReferenceID(childComplexity), true
+
 	case "Control.blockedGroups":
 		if e.complexity.Control.BlockedGroups == nil {
 			break
@@ -5188,6 +5204,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.RefCode(childComplexity), true
 
+	case "Control.referenceID":
+		if e.complexity.Control.ReferenceID == nil {
+			break
+		}
+
+		return e.complexity.Control.ReferenceID(childComplexity), true
+
 	case "Control.references":
 		if e.complexity.Control.References == nil {
 			break
@@ -5364,6 +5387,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.AssessmentObjectives(childComplexity), true
 
+	case "ControlHistory.auditorReferenceID":
+		if e.complexity.ControlHistory.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.AuditorReferenceID(childComplexity), true
+
 	case "ControlHistory.category":
 		if e.complexity.ControlHistory.Category == nil {
 			break
@@ -5496,6 +5526,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlHistory.RefCode(childComplexity), true
+
+	case "ControlHistory.referenceID":
+		if e.complexity.ControlHistory.ReferenceID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ReferenceID(childComplexity), true
 
 	case "ControlHistory.references":
 		if e.complexity.ControlHistory.References == nil {
@@ -12385,6 +12422,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateControlWithSubcontrols(childComplexity, args["input"].(model.CreateControlWithSubcontrolsInput)), true
+
+	case "Mutation.createControlsByClone":
+		if e.complexity.Mutation.CreateControlsByClone == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createControlsByClone_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateControlsByClone(childComplexity, args["input"].(*model.CloneControlInput)), true
 
 	case "Mutation.createDocumentData":
 		if e.complexity.Mutation.CreateDocumentData == nil {
@@ -21049,6 +21098,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.AssessmentObjectives(childComplexity), true
 
+	case "Subcontrol.auditorReferenceID":
+		if e.complexity.Subcontrol.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.AuditorReferenceID(childComplexity), true
+
 	case "Subcontrol.category":
 		if e.complexity.Subcontrol.Category == nil {
 			break
@@ -21268,6 +21324,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.RefCode(childComplexity), true
 
+	case "Subcontrol.referenceID":
+		if e.complexity.Subcontrol.ReferenceID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ReferenceID(childComplexity), true
+
 	case "Subcontrol.references":
 		if e.complexity.Subcontrol.References == nil {
 			break
@@ -21411,6 +21474,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.AssessmentObjectives(childComplexity), true
 
+	case "SubcontrolHistory.auditorReferenceID":
+		if e.complexity.SubcontrolHistory.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.AuditorReferenceID(childComplexity), true
+
 	case "SubcontrolHistory.category":
 		if e.complexity.SubcontrolHistory.Category == nil {
 			break
@@ -21550,6 +21620,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.RefCode(childComplexity), true
+
+	case "SubcontrolHistory.referenceID":
+		if e.complexity.SubcontrolHistory.ReferenceID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ReferenceID(childComplexity), true
 
 	case "SubcontrolHistory.references":
 		if e.complexity.SubcontrolHistory.References == nil {
@@ -23833,6 +23910,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAuditLogWhereInput,
+		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputContactOrder,
@@ -24925,6 +25003,24 @@ type ControlBulkCreatePayload {
     """
     controls: [Control!]
 }`, BuiltIn: false},
+	{Name: "../schema/controlextended.graphql", Input: `"""
+CloneControlInput is used to clone controls and their subcontrols
+under an organization (ownerID)
+"""
+input CloneControlInput {
+    controlIDs: [ID!]
+    ownerID: ID
+    programID: ID
+}
+
+extend type Mutation{
+  """
+  Create a new controls based on existing control ID(s)
+  """
+  createControlsByClone(
+      input: CloneControlInput
+  ): ControlBulkCreatePayload!
+}`, BuiltIn: false},
 	{Name: "../schema/controlimplementation.graphql", Input: `extend type Query {
     """
     Look up controlImplementation by ID
@@ -25336,8 +25432,10 @@ Properties by which APIToken connections can be ordered.
 enum APITokenOrderField {
   created_at
   updated_at
+  name
   expires_at
   last_used_at
+  is_active
 }
 """
 APITokenWhereInput is used for filtering APIToken objects.
@@ -27508,6 +27606,14 @@ type Control implements Node {
   """
   description: String
   """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  """
   status of the control
   """
   status: String
@@ -28038,6 +28144,14 @@ type ControlHistory implements Node {
   """
   description: String
   """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  """
   status of the control
   """
   status: String
@@ -28382,6 +28496,42 @@ input ControlHistoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  reference_id field predicates
+  """
+  referenceID: String
+  referenceIDNEQ: String
+  referenceIDIn: [String!]
+  referenceIDNotIn: [String!]
+  referenceIDGT: String
+  referenceIDGTE: String
+  referenceIDLT: String
+  referenceIDLTE: String
+  referenceIDContains: String
+  referenceIDHasPrefix: String
+  referenceIDHasSuffix: String
+  referenceIDIsNil: Boolean
+  referenceIDNotNil: Boolean
+  referenceIDEqualFold: String
+  referenceIDContainsFold: String
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDGT: String
+  auditorReferenceIDGTE: String
+  auditorReferenceIDLT: String
+  auditorReferenceIDLTE: String
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
   """
   status field predicates
   """
@@ -30533,6 +30683,42 @@ input ControlWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
+  reference_id field predicates
+  """
+  referenceID: String
+  referenceIDNEQ: String
+  referenceIDIn: [String!]
+  referenceIDNotIn: [String!]
+  referenceIDGT: String
+  referenceIDGTE: String
+  referenceIDLT: String
+  referenceIDLTE: String
+  referenceIDContains: String
+  referenceIDHasPrefix: String
+  referenceIDHasSuffix: String
+  referenceIDIsNil: Boolean
+  referenceIDNotNil: Boolean
+  referenceIDEqualFold: String
+  referenceIDContainsFold: String
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDGT: String
+  auditorReferenceIDGTE: String
+  auditorReferenceIDLT: String
+  auditorReferenceIDLTE: String
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
+  """
   status field predicates
   """
   status: String
@@ -30939,6 +31125,14 @@ input CreateControlInput {
   description of what the control is supposed to accomplish
   """
   description: String
+  """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   """
   status of the control
   """
@@ -32004,7 +32198,6 @@ input CreateStandardInput {
   """
   version: String
   ownerID: ID
-  controlIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -32019,6 +32212,14 @@ input CreateSubcontrolInput {
   description of what the control is supposed to accomplish
   """
   description: String
+  """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   """
   status of the control
   """
@@ -55450,6 +55651,14 @@ type Subcontrol implements Node {
   """
   description: String
   """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  """
   status of the control
   """
   status: String
@@ -55875,6 +56084,14 @@ type SubcontrolHistory implements Node {
   """
   description: String
   """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  """
   status of the control
   """
   status: String
@@ -56220,6 +56437,42 @@ input SubcontrolHistoryWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
+  reference_id field predicates
+  """
+  referenceID: String
+  referenceIDNEQ: String
+  referenceIDIn: [String!]
+  referenceIDNotIn: [String!]
+  referenceIDGT: String
+  referenceIDGTE: String
+  referenceIDLT: String
+  referenceIDLTE: String
+  referenceIDContains: String
+  referenceIDHasPrefix: String
+  referenceIDHasSuffix: String
+  referenceIDIsNil: Boolean
+  referenceIDNotNil: Boolean
+  referenceIDEqualFold: String
+  referenceIDContainsFold: String
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDGT: String
+  auditorReferenceIDGTE: String
+  auditorReferenceIDLT: String
+  auditorReferenceIDLTE: String
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
+  """
   status field predicates
   """
   status: String
@@ -56534,6 +56787,42 @@ input SubcontrolWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  reference_id field predicates
+  """
+  referenceID: String
+  referenceIDNEQ: String
+  referenceIDIn: [String!]
+  referenceIDNotIn: [String!]
+  referenceIDGT: String
+  referenceIDGTE: String
+  referenceIDLT: String
+  referenceIDLTE: String
+  referenceIDContains: String
+  referenceIDHasPrefix: String
+  referenceIDHasSuffix: String
+  referenceIDIsNil: Boolean
+  referenceIDNotNil: Boolean
+  referenceIDEqualFold: String
+  referenceIDContainsFold: String
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDGT: String
+  auditorReferenceIDGTE: String
+  auditorReferenceIDLT: String
+  auditorReferenceIDLTE: String
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
   """
   status field predicates
   """
@@ -59365,6 +59654,16 @@ input UpdateControlInput {
   description: String
   clearDescription: Boolean
   """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  clearReferenceID: Boolean
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  clearAuditorReferenceID: Boolean
+  """
   status of the control
   """
   status: String
@@ -60903,9 +61202,6 @@ input UpdateStandardInput {
   clearVersion: Boolean
   ownerID: ID
   clearOwner: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -60923,6 +61219,16 @@ input UpdateSubcontrolInput {
   """
   description: String
   clearDescription: Boolean
+  """
+  internal reference id of the control, can be used for internal tracking
+  """
+  referenceID: String
+  clearReferenceID: Boolean
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  clearAuditorReferenceID: Boolean
   """
   status of the control
   """

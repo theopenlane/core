@@ -87,6 +87,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Control_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -223,6 +227,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Control_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -403,6 +411,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Control_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":

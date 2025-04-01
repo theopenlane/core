@@ -842,8 +842,20 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-member
+        object: control:control-system-owned-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
       - user: user:ulid-of-member-2
         object: standard:standard-system-owned-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member-2
+        object: control:control-system-owned-1
         assertions:
           can_view: true
           can_edit: false

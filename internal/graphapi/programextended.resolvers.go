@@ -177,9 +177,6 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 
 // CreateControlWithSubcontrols is the resolver for the createControlWithSubcontrols field.
 func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(*input.Control).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})

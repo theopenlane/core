@@ -22,7 +22,7 @@ import (
 // ownerRelation should normally be set to fgax.ParentRelation, but in some cases
 // this is set to owner to account for different inherited permissions from parent objects
 // vs. the user/service owner of the object (see notes as an example)
-func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool) ent.Hook {
+func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -38,7 +38,7 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipUser bool
 			var addTuples []fgax.TupleKey
 
 			// add user permissions to the object on creation
-			if !skipUser && m.Op() == ent.OpCreate {
+			if m.Op() == ent.OpCreate {
 				subjectID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, err

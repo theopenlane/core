@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateInternalPolicy is the resolver for the createInternalPolicy field.
 func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,17 +48,11 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateInternalPolicy(ctx, input)
 }
 
 // CreateBulkCSVInternalPolicy is the resolver for the createBulkCSVInternalPolicy field.
 func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateInternalPolicyInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -87,9 +77,6 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.
 func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
@@ -132,9 +119,6 @@ func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) 
 
 // InternalPolicy is the resolver for the internalPolicy field.
 func (r *queryResolver) InternalPolicy(ctx context.Context, id string) (*generated.InternalPolicy, error) {
-	// get preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicy"})

@@ -43,6 +43,10 @@ type Control struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID string `json:"reference_id,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
 	Status string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -331,7 +335,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldDescription, control.FieldStatus, control.FieldSource, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldOwnerID, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldStatus, control.FieldSource, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -423,6 +427,18 @@ func (c *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				c.Description = value.String
+			}
+		case control.FieldReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
+			} else if value.Valid {
+				c.ReferenceID = value.String
+			}
+		case control.FieldAuditorReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
+			} else if value.Valid {
+				c.AuditorReferenceID = value.String
 			}
 		case control.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -709,6 +725,12 @@ func (c *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
+	builder.WriteString(", ")
+	builder.WriteString("reference_id=")
+	builder.WriteString(c.ReferenceID)
+	builder.WriteString(", ")
+	builder.WriteString("auditor_reference_id=")
+	builder.WriteString(c.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(c.Status)

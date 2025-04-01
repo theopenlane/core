@@ -35,9 +35,6 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []string) ([]generated.No
 
 // APITokens is the resolver for the apiTokens field.
 func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -63,9 +60,6 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 
 // ActionPlans is the resolver for the actionPlans field.
 func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -91,9 +85,6 @@ func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[st
 
 // ActionPlanHistories is the resolver for the actionPlanHistories field.
 func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) (*generated.ActionPlanHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -119,9 +110,6 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 
 // Contacts is the resolver for the contacts field.
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -147,9 +135,6 @@ func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[strin
 
 // ContactHistories is the resolver for the contactHistories field.
 func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) (*generated.ContactHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -175,9 +160,6 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 
 // Controls is the resolver for the controls field.
 func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -203,9 +185,6 @@ func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[strin
 
 // ControlHistories is the resolver for the controlHistories field.
 func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) (*generated.ControlHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -231,9 +210,6 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 
 // ControlImplementations is the resolver for the controlImplementations field.
 func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -259,9 +235,6 @@ func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgq
 
 // ControlImplementationHistories is the resolver for the controlImplementationHistories field.
 func (r *queryResolver) ControlImplementationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) (*generated.ControlImplementationHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -287,9 +260,6 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 
 // ControlObjectives is the resolver for the controlObjectives field.
 func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -315,9 +285,6 @@ func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cur
 
 // ControlObjectiveHistories is the resolver for the controlObjectiveHistories field.
 func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) (*generated.ControlObjectiveHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -343,9 +310,6 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -371,9 +335,6 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 
 // DocumentDataHistories is the resolver for the documentDataHistories field.
 func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) (*generated.DocumentDataHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -399,9 +360,6 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 
 // Entities is the resolver for the entities field.
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -427,9 +385,6 @@ func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[strin
 
 // EntityHistories is the resolver for the entityHistories field.
 func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) (*generated.EntityHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -455,9 +410,6 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 
 // EntityTypes is the resolver for the entityTypes field.
 func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) (*generated.EntityTypeConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -483,9 +435,6 @@ func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[st
 
 // EntityTypeHistories is the resolver for the entityTypeHistories field.
 func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) (*generated.EntityTypeHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -511,9 +460,6 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 
 // Events is the resolver for the events field.
 func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) (*generated.EventConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -539,9 +485,6 @@ func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string]
 
 // EventHistories is the resolver for the eventHistories field.
 func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) (*generated.EventHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -567,9 +510,6 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 
 // Evidences is the resolver for the evidences field.
 func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -595,9 +535,6 @@ func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[stri
 
 // EvidenceHistories is the resolver for the evidenceHistories field.
 func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) (*generated.EvidenceHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -623,9 +560,6 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) (*generated.FileConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -651,9 +585,6 @@ func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string],
 
 // FileHistories is the resolver for the fileHistories field.
 func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) (*generated.FileHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -679,9 +610,6 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 
 // Groups is the resolver for the groups field.
 func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) (*generated.GroupConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -707,9 +635,6 @@ func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string]
 
 // GroupHistories is the resolver for the groupHistories field.
 func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) (*generated.GroupHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -735,9 +660,6 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 
 // GroupMemberships is the resolver for the groupMemberships field.
 func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -763,9 +685,6 @@ func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Curs
 
 // GroupMembershipHistories is the resolver for the groupMembershipHistories field.
 func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) (*generated.GroupMembershipHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -791,9 +710,6 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 
 // GroupSettings is the resolver for the groupSettings field.
 func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) (*generated.GroupSettingConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -819,9 +735,6 @@ func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[
 
 // GroupSettingHistories is the resolver for the groupSettingHistories field.
 func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) (*generated.GroupSettingHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -847,9 +760,6 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 
 // Hushes is the resolver for the hushes field.
 func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) (*generated.HushConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -875,9 +785,6 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 
 // HushHistories is the resolver for the hushHistories field.
 func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) (*generated.HushHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -903,9 +810,6 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 
 // Integrations is the resolver for the integrations field.
 func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -931,9 +835,6 @@ func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[s
 
 // IntegrationHistories is the resolver for the integrationHistories field.
 func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) (*generated.IntegrationHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -959,9 +860,6 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 
 // InternalPolicies is the resolver for the internalPolicies field.
 func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -987,9 +885,6 @@ func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Curs
 
 // InternalPolicyHistories is the resolver for the internalPolicyHistories field.
 func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) (*generated.InternalPolicyHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1015,9 +910,6 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 
 // Invites is the resolver for the invites field.
 func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1043,9 +935,6 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 
 // MappedControls is the resolver for the mappedControls field.
 func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) (*generated.MappedControlConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1071,9 +960,6 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 
 // MappedControlHistories is the resolver for the mappedControlHistories field.
 func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1099,9 +985,6 @@ func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgq
 
 // Narratives is the resolver for the narratives field.
 func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1127,9 +1010,6 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 
 // NarrativeHistories is the resolver for the narrativeHistories field.
 func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) (*generated.NarrativeHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1155,9 +1035,6 @@ func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cu
 
 // Notes is the resolver for the notes field.
 func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) (*generated.NoteConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1183,9 +1060,6 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 
 // NoteHistories is the resolver for the noteHistories field.
 func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) (*generated.NoteHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1211,9 +1085,6 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 
 // OrgMemberships is the resolver for the orgMemberships field.
 func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1239,9 +1110,6 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 
 // OrgMembershipHistories is the resolver for the orgMembershipHistories field.
 func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) (*generated.OrgMembershipHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1267,9 +1135,6 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 
 // OrgSubscriptions is the resolver for the orgSubscriptions field.
 func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) (*generated.OrgSubscriptionConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1295,9 +1160,6 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 
 // OrgSubscriptionHistories is the resolver for the orgSubscriptionHistories field.
 func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) (*generated.OrgSubscriptionHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1323,9 +1185,6 @@ func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *ent
 
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) (*generated.OrganizationConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1351,9 +1210,6 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 
 // OrganizationHistories is the resolver for the organizationHistories field.
 func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) (*generated.OrganizationHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1379,9 +1235,6 @@ func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql
 
 // OrganizationSettings is the resolver for the organizationSettings field.
 func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1407,9 +1260,6 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 
 // OrganizationSettingHistories is the resolver for the organizationSettingHistories field.
 func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) (*generated.OrganizationSettingHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1435,9 +1285,6 @@ func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after 
 
 // PersonalAccessTokens is the resolver for the personalAccessTokens field.
 func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) (*generated.PersonalAccessTokenConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1463,9 +1310,6 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 
 // Procedures is the resolver for the procedures field.
 func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) (*generated.ProcedureConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1491,9 +1335,6 @@ func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[str
 
 // ProcedureHistories is the resolver for the procedureHistories field.
 func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) (*generated.ProcedureHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1519,9 +1360,6 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 
 // Programs is the resolver for the programs field.
 func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1547,9 +1385,6 @@ func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[strin
 
 // ProgramHistories is the resolver for the programHistories field.
 func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) (*generated.ProgramHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1575,9 +1410,6 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 
 // ProgramMemberships is the resolver for the programMemberships field.
 func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1603,9 +1435,6 @@ func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cu
 
 // ProgramMembershipHistories is the resolver for the programMembershipHistories field.
 func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) (*generated.ProgramMembershipHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1631,9 +1460,6 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 
 // Risks is the resolver for the risks field.
 func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1659,9 +1485,6 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 
 // RiskHistories is the resolver for the riskHistories field.
 func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) (*generated.RiskHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1687,9 +1510,6 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 
 // Standards is the resolver for the standards field.
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1715,9 +1535,6 @@ func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[stri
 
 // StandardHistories is the resolver for the standardHistories field.
 func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) (*generated.StandardHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1743,9 +1560,6 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 
 // Subcontrols is the resolver for the subcontrols field.
 func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1771,9 +1585,6 @@ func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[st
 
 // SubcontrolHistories is the resolver for the subcontrolHistories field.
 func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) (*generated.SubcontrolHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1799,9 +1610,6 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 
 // Subscribers is the resolver for the subscribers field.
 func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1827,9 +1635,6 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 
 // TfaSettings is the resolver for the tfaSettings field.
 func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) (*generated.TFASettingConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1855,9 +1660,6 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 
 // Tasks is the resolver for the tasks field.
 func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1883,9 +1685,6 @@ func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string],
 
 // TaskHistories is the resolver for the taskHistories field.
 func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) (*generated.TaskHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1911,9 +1710,6 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 
 // Templates is the resolver for the templates field.
 func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1939,9 +1735,6 @@ func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[stri
 
 // TemplateHistories is the resolver for the templateHistories field.
 func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) (*generated.TemplateHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1967,9 +1760,6 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -1995,9 +1785,6 @@ func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string],
 
 // UserHistories is the resolver for the userHistories field.
 func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) (*generated.UserHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -2023,9 +1810,6 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 
 // UserSettings is the resolver for the userSettings field.
 func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) (*generated.UserSettingConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -2051,9 +1835,6 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 
 // UserSettingHistories is the resolver for the userSettingHistories field.
 func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) (*generated.UserSettingHistoryConnection, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 

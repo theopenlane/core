@@ -17,6 +17,14 @@ var controlFields = []ent.Field{
 			entx.FieldSearchable(),
 		).
 		Comment("description of what the control is supposed to accomplish"),
+	field.String("reference_id").
+		Optional().
+		Unique().
+		Comment("internal reference id of the control, can be used for internal tracking"),
+	field.String("auditor_reference_id").
+		Optional().
+		Unique().
+		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	field.String("status").
 		Optional().
 		Annotations(

@@ -1053,6 +1053,14 @@ type AuditLogWhereInput struct {
 	After     *time.Time `json:"after,omitempty"`
 }
 
+// CloneControlInput is used to clone controls and their subcontrols
+// under an organization (ownerID)
+type CloneControlInput struct {
+	ControlIDs []string `json:"controlIDs,omitempty"`
+	OwnerID    *string  `json:"ownerID,omitempty"`
+	ProgramID  *string  `json:"programID,omitempty"`
+}
+
 type Contact struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -1686,6 +1694,10 @@ type Control struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -1799,6 +1811,10 @@ type ControlHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -2033,6 +2049,38 @@ type ControlHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// reference_id field predicates
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIdneq          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIdgt           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIdgte          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIdlt           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIdlte          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+	// auditor_reference_id field predicates
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIdneq          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIdgt           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIdgte          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIdlt           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIdlte          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -3506,6 +3554,38 @@ type ControlWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// reference_id field predicates
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIdneq          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIdgt           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIdgte          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIdlt           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIdlte          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+	// auditor_reference_id field predicates
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIdneq          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIdgt           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIdgte          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIdlt           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIdlte          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -3782,6 +3862,10 @@ type CreateControlInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -4509,9 +4593,8 @@ type CreateStandardInput struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version    *string  `json:"version,omitempty"`
-	OwnerID    *string  `json:"ownerID,omitempty"`
-	ControlIDs []string `json:"controlIDs,omitempty"`
+	Version *string `json:"version,omitempty"`
+	OwnerID *string `json:"ownerID,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -4521,6 +4604,10 @@ type CreateSubcontrolInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -18749,6 +18836,10 @@ type Subcontrol struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -18853,6 +18944,10 @@ type SubcontrolHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID *string `json:"referenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
 	Status *string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -19087,6 +19182,38 @@ type SubcontrolHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// reference_id field predicates
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIdneq          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIdgt           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIdgte          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIdlt           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIdlte          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+	// auditor_reference_id field predicates
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIdneq          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIdgt           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIdgte          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIdlt           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIdlte          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -19359,6 +19486,38 @@ type SubcontrolWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// reference_id field predicates
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIdneq          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIdgt           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIdgte          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIdlt           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIdlte          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+	// auditor_reference_id field predicates
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIdneq          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIdgt           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIdgte          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIdlt           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIdlte          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// status field predicates
 	Status             *string  `json:"status,omitempty"`
 	StatusNeq          *string  `json:"statusNEQ,omitempty"`
@@ -21311,6 +21470,12 @@ type UpdateControlInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID      *string `json:"referenceID,omitempty"`
+	ClearReferenceID *bool   `json:"clearReferenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID      *string `json:"auditorReferenceID,omitempty"`
+	ClearAuditorReferenceID *bool   `json:"clearAuditorReferenceID,omitempty"`
 	// status of the control
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
@@ -22523,14 +22688,11 @@ type UpdateStandardInput struct {
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`
 	// version of the standard
-	Version          *string             `json:"version,omitempty"`
-	ClearVersion     *bool               `json:"clearVersion,omitempty"`
-	OwnerID          *string             `json:"ownerID,omitempty"`
-	ClearOwner       *bool               `json:"clearOwner,omitempty"`
-	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
-	ClearControls    *bool               `json:"clearControls,omitempty"`
-	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
+	Version      *string             `json:"version,omitempty"`
+	ClearVersion *bool               `json:"clearVersion,omitempty"`
+	OwnerID      *string             `json:"ownerID,omitempty"`
+	ClearOwner   *bool               `json:"clearOwner,omitempty"`
+	RevisionBump *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateSubcontrolInput is used for update Subcontrol object.
@@ -22543,6 +22705,12 @@ type UpdateSubcontrolInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID      *string `json:"referenceID,omitempty"`
+	ClearReferenceID *bool   `json:"clearReferenceID,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID      *string `json:"auditorReferenceID,omitempty"`
+	ClearAuditorReferenceID *bool   `json:"clearAuditorReferenceID,omitempty"`
 	// status of the control
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
@@ -24128,20 +24296,24 @@ type APITokenOrderField string
 const (
 	APITokenOrderFieldCreatedAt  APITokenOrderField = "created_at"
 	APITokenOrderFieldUpdatedAt  APITokenOrderField = "updated_at"
+	APITokenOrderFieldName       APITokenOrderField = "name"
 	APITokenOrderFieldExpiresAt  APITokenOrderField = "expires_at"
 	APITokenOrderFieldLastUsedAt APITokenOrderField = "last_used_at"
+	APITokenOrderFieldIsActive   APITokenOrderField = "is_active"
 )
 
 var AllAPITokenOrderField = []APITokenOrderField{
 	APITokenOrderFieldCreatedAt,
 	APITokenOrderFieldUpdatedAt,
+	APITokenOrderFieldName,
 	APITokenOrderFieldExpiresAt,
 	APITokenOrderFieldLastUsedAt,
+	APITokenOrderFieldIsActive,
 }
 
 func (e APITokenOrderField) IsValid() bool {
 	switch e {
-	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt, APITokenOrderFieldExpiresAt, APITokenOrderFieldLastUsedAt:
+	case APITokenOrderFieldCreatedAt, APITokenOrderFieldUpdatedAt, APITokenOrderFieldName, APITokenOrderFieldExpiresAt, APITokenOrderFieldLastUsedAt, APITokenOrderFieldIsActive:
 		return true
 	}
 	return false

@@ -47,6 +47,10 @@ type SubcontrolHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID string `json:"reference_id,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
 	Status string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -89,7 +93,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldDescription, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -193,6 +197,18 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				sh.Description = value.String
+			}
+		case subcontrolhistory.FieldReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
+			} else if value.Valid {
+				sh.ReferenceID = value.String
+			}
+		case subcontrolhistory.FieldAuditorReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
+			} else if value.Valid {
+				sh.AuditorReferenceID = value.String
 			}
 		case subcontrolhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -372,6 +388,12 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(sh.Description)
+	builder.WriteString(", ")
+	builder.WriteString("reference_id=")
+	builder.WriteString(sh.ReferenceID)
+	builder.WriteString(", ")
+	builder.WriteString("auditor_reference_id=")
+	builder.WriteString(sh.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(sh.Status)

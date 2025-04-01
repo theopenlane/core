@@ -466,7 +466,7 @@ func init() {
 	// control.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	control.OwnerIDValidator = controlDescOwnerID.Validators[0].(func(string) error)
 	// controlDescRefCode is the schema descriptor for ref_code field.
-	controlDescRefCode := controlFields[14].Descriptor()
+	controlDescRefCode := controlFields[16].Descriptor()
 	// control.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	control.RefCodeValidator = controlDescRefCode.Validators[0].(func(string) error)
 	// controlDescID is the schema descriptor for id field.
@@ -3519,11 +3519,11 @@ func init() {
 	// subcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	subcontrol.OwnerIDValidator = subcontrolDescOwnerID.Validators[0].(func(string) error)
 	// subcontrolDescRefCode is the schema descriptor for ref_code field.
-	subcontrolDescRefCode := subcontrolFields[14].Descriptor()
+	subcontrolDescRefCode := subcontrolFields[16].Descriptor()
 	// subcontrol.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	subcontrol.RefCodeValidator = subcontrolDescRefCode.Validators[0].(func(string) error)
 	// subcontrolDescControlID is the schema descriptor for control_id field.
-	subcontrolDescControlID := subcontrolFields[15].Descriptor()
+	subcontrolDescControlID := subcontrolFields[17].Descriptor()
 	// subcontrol.ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
 	subcontrol.ControlIDValidator = subcontrolDescControlID.Validators[0].(func(string) error)
 	// subcontrolDescID is the schema descriptor for id field.

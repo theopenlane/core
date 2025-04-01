@@ -79,7 +79,7 @@ func (Procedure) Annotations() []schema.Annotation {
 func (Procedure) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.HookOrgOwnedTuples(false),
+			hooks.HookOrgOwnedTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 	}

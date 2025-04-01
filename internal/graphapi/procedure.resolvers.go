@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProcedure is the resolver for the createProcedure field.
 func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -52,17 +48,11 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	return r.bulkCreateProcedure(ctx, input)
 }
 
 // CreateBulkCSVProcedure is the resolver for the createBulkCSVProcedure field.
 func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateProcedureInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -87,9 +77,6 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 
 // UpdateProcedure is the resolver for the updateProcedure field.
 func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
@@ -132,8 +119,6 @@ func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*mod
 
 // Procedure is the resolver for the procedure field.
 func (r *queryResolver) Procedure(ctx context.Context, id string) (*generated.Procedure, error) {
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	query, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
