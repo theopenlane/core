@@ -643,10 +643,21 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 			name: "happy path, clone single control using personal access token",
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: []string{controlIDs[0]},
+				OwnerID:    &testUser1.OrganizationID,
 			},
 			expectedControls: controls[:1],
 			client:           suite.client.apiWithPAT,
 			ctx:              context.Background(),
+		},
+		{
+			name: "clone single control using personal access token, missing owner id",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controlIDs[0]},
+			},
+			expectedControls: controls[:1],
+			client:           suite.client.apiWithPAT,
+			ctx:              context.Background(),
+			expectedErr:      "owner_id is required",
 		},
 		{
 			name: "happy path, clone single control using api token",
@@ -668,9 +679,8 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 			expectedErr:      notAuthorizedErrorMsg,
 		},
 		{
-			name: "clone control under org, empty request",
-			request: openlaneclient.CloneControlInput{
-			},
+			name:             "clone control under org, empty request",
+			request:          openlaneclient.CloneControlInput{},
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              testUser2.UserCtx,
