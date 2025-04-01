@@ -1058,6 +1058,7 @@ type AuditLogWhereInput struct {
 type CloneControlInput struct {
 	ControlIDs []string `json:"controlIDs,omitempty"`
 	OwnerID    *string  `json:"ownerID,omitempty"`
+	ProgramID  *string  `json:"programID,omitempty"`
 }
 
 type Contact struct {

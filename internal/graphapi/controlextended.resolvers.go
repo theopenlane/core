@@ -68,6 +68,10 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 			controlInput.StandardID = &control.StandardID
 		}
 
+		if input.ProgramID != nil {
+			controlInput.ProgramIDs = []string{*input.ProgramID}
+		}
+
 		res, err := withTransactionalMutation(ctx).Control.Create().SetInput(controlInput).Save(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
