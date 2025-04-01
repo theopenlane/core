@@ -22,7 +22,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 )
 
-const (
+var (
 	MaxResultLimit = 10
 )
 
@@ -144,6 +144,8 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 
 	// if you do not want sleeps (the writer prefers naps anyways), skip cache
 	graphapi.WithSkipCache(srv)
+
+	graphapi.WithResultLimit(srv, &MaxResultLimit)
 
 	return srv
 }

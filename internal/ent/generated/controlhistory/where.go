@@ -121,6 +121,16 @@ func Description(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// ReferenceID applies equality check predicate on the "reference_id" field. It's identical to ReferenceIDEQ.
+func ReferenceID(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldReferenceID, v))
+}
+
+// AuditorReferenceID applies equality check predicate on the "auditor_reference_id" field. It's identical to AuditorReferenceIDEQ.
+func AuditorReferenceID(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldStatus, v))
@@ -884,6 +894,156 @@ func DescriptionEqualFold(v string) predicate.ControlHistory {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ReferenceIDEQ applies the EQ predicate on the "reference_id" field.
+func ReferenceIDEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldReferenceID, v))
+}
+
+// ReferenceIDNEQ applies the NEQ predicate on the "reference_id" field.
+func ReferenceIDNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldReferenceID, v))
+}
+
+// ReferenceIDIn applies the In predicate on the "reference_id" field.
+func ReferenceIDIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldReferenceID, vs...))
+}
+
+// ReferenceIDNotIn applies the NotIn predicate on the "reference_id" field.
+func ReferenceIDNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldReferenceID, vs...))
+}
+
+// ReferenceIDGT applies the GT predicate on the "reference_id" field.
+func ReferenceIDGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldReferenceID, v))
+}
+
+// ReferenceIDGTE applies the GTE predicate on the "reference_id" field.
+func ReferenceIDGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldReferenceID, v))
+}
+
+// ReferenceIDLT applies the LT predicate on the "reference_id" field.
+func ReferenceIDLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldReferenceID, v))
+}
+
+// ReferenceIDLTE applies the LTE predicate on the "reference_id" field.
+func ReferenceIDLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldReferenceID, v))
+}
+
+// ReferenceIDContains applies the Contains predicate on the "reference_id" field.
+func ReferenceIDContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldReferenceID, v))
+}
+
+// ReferenceIDHasPrefix applies the HasPrefix predicate on the "reference_id" field.
+func ReferenceIDHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldReferenceID, v))
+}
+
+// ReferenceIDHasSuffix applies the HasSuffix predicate on the "reference_id" field.
+func ReferenceIDHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldReferenceID, v))
+}
+
+// ReferenceIDIsNil applies the IsNil predicate on the "reference_id" field.
+func ReferenceIDIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldReferenceID))
+}
+
+// ReferenceIDNotNil applies the NotNil predicate on the "reference_id" field.
+func ReferenceIDNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldReferenceID))
+}
+
+// ReferenceIDEqualFold applies the EqualFold predicate on the "reference_id" field.
+func ReferenceIDEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldReferenceID, v))
+}
+
+// ReferenceIDContainsFold applies the ContainsFold predicate on the "reference_id" field.
+func ReferenceIDContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldReferenceID, v))
+}
+
+// AuditorReferenceIDEQ applies the EQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDNEQ applies the NEQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIn applies the In predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDNotIn applies the NotIn predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDGT applies the GT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDGTE applies the GTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLT applies the LT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLTE applies the LTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContains applies the Contains predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasPrefix applies the HasPrefix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasSuffix applies the HasSuffix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIsNil applies the IsNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDNotNil applies the NotNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDEqualFold applies the EqualFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContainsFold applies the ContainsFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldAuditorReferenceID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

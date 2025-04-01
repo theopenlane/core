@@ -34,8 +34,6 @@ type ObjectOwnedMixin struct {
 	FieldNames []string
 	// OwnerRelation is the relation of the owner (user or service) that created the object, defaults to "parent"
 	OwnerRelation string
-	// SkipUserTuple skips the user tuple creation for the object owned mixin
-	SkipUserTuple bool
 	// AllowEmptyForSystemAdmin allows the owner id field to be empty for system admins
 	AllowEmptyForSystemAdmin bool
 	// SkipInterceptor skips the interceptor for that schema for all queries, or specific types,
@@ -166,13 +164,6 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 	}
 }
 
-// withSkipUserTuple allows to skip the user tuple creation for the object owned mixin
-func withSkipUserTuple(skip bool) objectOwnedOption {
-	return func(o *ObjectOwnedMixin) {
-		o.SkipUserTuple = skip
-	}
-}
-
 // Fields of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Fields() []ent.Field {
 	var fields []ent.Field
@@ -298,7 +289,7 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, o.SkipUserTuple),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }

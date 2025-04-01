@@ -12,15 +12,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateInvite is the resolver for the createInvite field.
 func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -71,9 +67,6 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
 func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	data, err := unmarshalBulkData[generated.CreateInviteInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -86,9 +79,6 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 
 // UpdateInvite is the resolver for the updateInvite field.
 func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
@@ -131,9 +121,6 @@ func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*model.
 
 // Invite is the resolver for the invite field.
 func (r *queryResolver) Invite(ctx context.Context, id string) (*generated.Invite, error) {
-	// get preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	query, err := withTransactionalMutation(ctx).Invite.Query().Where(invite.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})

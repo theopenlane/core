@@ -92,9 +92,6 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) (
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -144,9 +141,6 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 
 // CreateGroupByClone is the resolver for the createGroupByClone field.
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -273,9 +267,6 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -350,9 +341,6 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 // UpdateGroupSettings is the resolver for the updateGroupSettings field.
 func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj *generated.UpdateGroupInput, data *generated.UpdateGroupSettingInput) error {
-	// grab preloads to set max result limits
-	graphutils.GetPreloads(ctx, r.maxResultLimit)
-
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
 		log.Error().Msg("unable to get group from context")

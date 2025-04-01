@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -575,8 +576,191 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				require.NotEmpty(t, res)
 				assert.Equal(t, resp.CreateControl.Control.ID, res.Control.ID)
 			}
+
 		})
 	}
+}
+
+func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
+	t := suite.T()
+
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	// create standard with controls to clone
+	numControls := int64(20)
+	controls := []*generated.Control{}
+	controlIDs := make([]string, 0, numControls)
+	for range numControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		controls = append(controls, control)
+		controlIDs = append(controlIDs, control.ID)
+	}
+
+	// ensure the standard exists and has the correct number of controls for the non-system admin user
+	standard, err := suite.client.api.GetStandardByID(testUser2.UserCtx, publicStandard.ID)
+	require.NoError(t, err)
+	require.NotNil(t, standard)
+	assert.Equal(t, standard.Standard.Controls.TotalCount, numControls)
+
+	// create org owned control
+	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name             string
+		request          openlaneclient.CloneControlInput
+		expectedControls []*generated.Control
+		client           *openlaneclient.OpenlaneClient
+		ctx              context.Context
+		expectedErr      string
+	}{
+		{
+			name: "happy path, clone single control",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controlIDs[0]},
+			},
+			expectedControls: controls[:1],
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "happy path, all controls under standard",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: controlIDs,
+			},
+			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "happy path, clone control under org",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{orgOwnedControl.ID},
+			},
+			expectedControls: []*generated.Control{orgOwnedControl},
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "happy path, clone single control using personal access token",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controlIDs[0]},
+				OwnerID:    &testUser1.OrganizationID,
+			},
+			expectedControls: controls[:1],
+			client:           suite.client.apiWithPAT,
+			ctx:              context.Background(),
+		},
+		{
+			name: "clone single control using personal access token, missing owner id",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controlIDs[0]},
+			},
+			expectedControls: controls[:1],
+			client:           suite.client.apiWithPAT,
+			ctx:              context.Background(),
+			expectedErr:      "owner_id is required",
+		},
+		{
+			name: "happy path, clone single control using api token",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controlIDs[0]},
+			},
+			expectedControls: controls[:1],
+			client:           suite.client.apiWithToken,
+			ctx:              context.Background(),
+		},
+		{
+			name: "clone control under org, no access to control",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{orgOwnedControl.ID},
+			},
+			expectedControls: []*generated.Control{orgOwnedControl},
+			client:           suite.client.api,
+			ctx:              testUser2.UserCtx,
+			expectedErr:      notAuthorizedErrorMsg,
+		},
+		{
+			name:             "clone control under org, empty request",
+			request:          openlaneclient.CloneControlInput{},
+			expectedControls: []*generated.Control{orgOwnedControl},
+			client:           suite.client.api,
+			ctx:              testUser2.UserCtx,
+			expectedErr:      notAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateControlsByClone(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+
+			for i, control := range resp.CreateControlsByClone.Controls {
+				// check required fields
+				require.NotEmpty(t, control.ID)
+				require.NotEmpty(t, control.DisplayID)
+				require.NotEmpty(t, control.RefCode)
+
+				// all cloned controls should have an owner
+				assert.NotEmpty(t, control.OwnerID)
+
+				// check the cloned control fields are set and match the original control
+				assert.Equal(t, tc.expectedControls[i].RefCode, control.RefCode)
+				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
+				assert.Equal(t, tc.expectedControls[i].Category, *control.Category)
+				assert.Equal(t, tc.expectedControls[i].CategoryID, *control.CategoryID)
+				assert.Equal(t, tc.expectedControls[i].Subcategory, *control.Subcategory)
+				assert.Equal(t, tc.expectedControls[i].MappedCategories, control.MappedCategories)
+				assert.Equal(t, tc.expectedControls[i].ControlQuestions, control.ControlQuestions)
+				assert.Equal(t, tc.expectedControls[i].Tags, control.Tags)
+				assert.Equal(t, tc.expectedControls[i].Status, *control.Status)
+				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
+				assert.Equal(t, tc.expectedControls[i].Source, *control.Source)
+				assert.Equal(t, tc.expectedControls[i].StandardID, *control.StandardID)
+
+				for j, ao := range control.AssessmentObjectives {
+					assert.Equal(t, tc.expectedControls[i].AssessmentObjectives[j], *ao)
+				}
+
+				for j, am := range control.AssessmentMethods {
+					assert.Equal(t, tc.expectedControls[i].AssessmentMethods[j], *am)
+				}
+
+				for j, ig := range control.ImplementationGuidance {
+					assert.Equal(t, tc.expectedControls[i].ImplementationGuidance[j], *ig)
+				}
+
+				for j, ref := range control.References {
+					assert.Equal(t, tc.expectedControls[i].References[j], *ref)
+				}
+
+				for j, ee := range control.ExampleEvidence {
+					assert.Equal(t, tc.expectedControls[i].ExampleEvidence[j], *ee)
+				}
+
+				// ensure the org owner has access to the control that was created by an api token
+				if tc.client == suite.client.apiWithToken {
+					res, err := suite.client.api.GetControlByID(testUser1.UserCtx, control.ID)
+					require.NoError(t, err)
+					require.NotEmpty(t, res)
+					assert.Equal(t, control.ID, res.Control.ID)
+				}
+			}
+		})
+	}
+
+	// cleanup created controls and standards
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: orgOwnedControl.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationUpdateControl() {

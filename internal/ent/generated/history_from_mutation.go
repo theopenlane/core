@@ -631,6 +631,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDescription(description)
 	}
 
+	if referenceID, exists := m.ReferenceID(); exists {
+		create = create.SetReferenceID(referenceID)
+	}
+
+	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+		create = create.SetAuditorReferenceID(auditorReferenceID)
+	}
+
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -781,6 +789,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(control.Description)
 		}
 
+		if referenceID, exists := m.ReferenceID(); exists {
+			create = create.SetReferenceID(referenceID)
+		} else {
+			create = create.SetReferenceID(control.ReferenceID)
+		}
+
+		if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+			create = create.SetAuditorReferenceID(auditorReferenceID)
+		} else {
+			create = create.SetAuditorReferenceID(control.AuditorReferenceID)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -913,6 +933,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(control.Tags).
 			SetOwnerID(control.OwnerID).
 			SetDescription(control.Description).
+			SetReferenceID(control.ReferenceID).
+			SetAuditorReferenceID(control.AuditorReferenceID).
 			SetStatus(control.Status).
 			SetSource(control.Source).
 			SetControlType(control.ControlType).
@@ -7210,6 +7232,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDescription(description)
 	}
 
+	if referenceID, exists := m.ReferenceID(); exists {
+		create = create.SetReferenceID(referenceID)
+	}
+
+	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+		create = create.SetAuditorReferenceID(auditorReferenceID)
+	}
+
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -7360,6 +7390,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDescription(subcontrol.Description)
 		}
 
+		if referenceID, exists := m.ReferenceID(); exists {
+			create = create.SetReferenceID(referenceID)
+		} else {
+			create = create.SetReferenceID(subcontrol.ReferenceID)
+		}
+
+		if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+			create = create.SetAuditorReferenceID(auditorReferenceID)
+		} else {
+			create = create.SetAuditorReferenceID(subcontrol.AuditorReferenceID)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -7492,6 +7534,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetTags(subcontrol.Tags).
 			SetOwnerID(subcontrol.OwnerID).
 			SetDescription(subcontrol.Description).
+			SetReferenceID(subcontrol.ReferenceID).
+			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
 			SetStatus(subcontrol.Status).
 			SetSource(subcontrol.Source).
 			SetControlType(subcontrol.ControlType).

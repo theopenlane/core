@@ -259,6 +259,12 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, ch.Description, new.Description))
 	}
+	if !reflect.DeepEqual(ch.ReferenceID, new.ReferenceID) {
+		changes = append(changes, NewChange(controlhistory.FieldReferenceID, ch.ReferenceID, new.ReferenceID))
+	}
+	if !reflect.DeepEqual(ch.AuditorReferenceID, new.AuditorReferenceID) {
+		changes = append(changes, NewChange(controlhistory.FieldAuditorReferenceID, ch.AuditorReferenceID, new.AuditorReferenceID))
+	}
 	if !reflect.DeepEqual(ch.Status, new.Status) {
 		changes = append(changes, NewChange(controlhistory.FieldStatus, ch.Status, new.Status))
 	}
@@ -2148,6 +2154,12 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, sh.Description, new.Description))
+	}
+	if !reflect.DeepEqual(sh.ReferenceID, new.ReferenceID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceID, sh.ReferenceID, new.ReferenceID))
+	}
+	if !reflect.DeepEqual(sh.AuditorReferenceID, new.AuditorReferenceID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAuditorReferenceID, sh.AuditorReferenceID, new.AuditorReferenceID))
 	}
 	if !reflect.DeepEqual(sh.Status, new.Status) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldStatus, sh.Status, new.Status))

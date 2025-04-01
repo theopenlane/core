@@ -44,6 +44,10 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldReferenceID holds the string denoting the reference_id field in the database.
+	FieldReferenceID = "reference_id"
+	// FieldAuditorReferenceID holds the string denoting the auditor_reference_id field in the database.
+	FieldAuditorReferenceID = "auditor_reference_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -94,6 +98,8 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldDescription,
+	FieldReferenceID,
+	FieldAuditorReferenceID,
 	FieldStatus,
 	FieldSource,
 	FieldControlType,
@@ -242,6 +248,16 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByReferenceID orders the results by the reference_id field.
+func ByReferenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceID, opts...).ToFunc()
+}
+
+// ByAuditorReferenceID orders the results by the auditor_reference_id field.
+func ByAuditorReferenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditorReferenceID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

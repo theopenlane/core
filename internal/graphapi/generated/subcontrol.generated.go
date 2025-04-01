@@ -87,6 +87,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
@@ -211,6 +215,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
@@ -379,6 +387,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":

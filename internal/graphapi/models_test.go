@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 type OrganizationBuilder struct {
@@ -216,8 +217,11 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name      string
-	ProgramID string
+	Name       string
+	ProgramID  string
+	StandardID string
+	// AllFields will set all direct fields on the control with random data
+	AllFields bool
 }
 
 type SubcontrolBuilder struct {
@@ -241,10 +245,9 @@ type StandardBuilder struct {
 	client *client
 
 	// Fields
-	Name       string
-	Framework  string
-	IsPublic   bool
-	ControlIDs []string
+	Name      string
+	Framework string
+	IsPublic  bool
 }
 
 // Faker structs with random injected data
@@ -876,6 +879,42 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		mutation.AddProgramIDs(c.ProgramID)
 	}
 
+	if c.StandardID != "" {
+		mutation.SetStandardID(c.StandardID)
+	}
+
+	if c.AllFields {
+		mutation.SetDescription(gofakeit.HipsterSentence(5)).
+			SetCategory(gofakeit.Adjective()).
+			SetCategoryID("A").
+			SetSubcategory(gofakeit.Adjective()).
+			SetControlType(enums.ControlTypeDetective).
+			SetExampleEvidence([]models.ExampleEvidence{
+				{
+					DocumentationType: "Documentation",
+					Description:       gofakeit.HipsterSentence(5),
+				},
+			}).
+			SetImplementationGuidance([]models.ImplementationGuidance{
+				{
+					ReferenceID: "A",
+					Guidance: []string{
+						gofakeit.HipsterSentence(5),
+						gofakeit.HipsterSentence(5),
+					},
+				},
+			}).
+			SetMappedCategories([]string{"Governance", "Risk Management"}).
+			SetTags([]string{"tag1", "tag2"}).
+			SetSource(enums.ControlSourceFramework).
+			SetReferences([]models.Reference{
+				{
+					Name: gofakeit.HipsterSentence(5),
+					URL:  gofakeit.URL(),
+				},
+			})
+	}
+
 	control := mutation.
 		SaveX(ctx)
 
@@ -947,7 +986,6 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		SetName(s.Name).
 		SetFramework(s.Framework).
 		SetIsPublic(s.IsPublic).
-		AddControlIDs(s.ControlIDs...).
 		SaveX(ctx)
 
 	return Standard

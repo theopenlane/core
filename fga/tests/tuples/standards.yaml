@@ -18,3 +18,7 @@
 - user: organization:openlane
   relation: parent
   object: standard:standard-org-custom
+# control under standard
+- user: standard:standard-system-owned-1
+  relation: parent
+  object: control:control-system-owned-1

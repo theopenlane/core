@@ -158,6 +158,34 @@ func (sc *SubcontrolCreate) SetNillableDescription(s *string) *SubcontrolCreate 
 	return sc
 }
 
+// SetReferenceID sets the "reference_id" field.
+func (sc *SubcontrolCreate) SetReferenceID(s string) *SubcontrolCreate {
+	sc.mutation.SetReferenceID(s)
+	return sc
+}
+
+// SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableReferenceID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetReferenceID(*s)
+	}
+	return sc
+}
+
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (sc *SubcontrolCreate) SetAuditorReferenceID(s string) *SubcontrolCreate {
+	sc.mutation.SetAuditorReferenceID(s)
+	return sc
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableAuditorReferenceID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetAuditorReferenceID(*s)
+	}
+	return sc
+}
+
 // SetStatus sets the "status" field.
 func (sc *SubcontrolCreate) SetStatus(s string) *SubcontrolCreate {
 	sc.mutation.SetStatus(s)
@@ -681,6 +709,14 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Description(); ok {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := sc.mutation.ReferenceID(); ok {
+		_spec.SetField(subcontrol.FieldReferenceID, field.TypeString, value)
+		_node.ReferenceID = value
+	}
+	if value, ok := sc.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(subcontrol.FieldAuditorReferenceID, field.TypeString, value)
+		_node.AuditorReferenceID = value
 	}
 	if value, ok := sc.mutation.Status(); ok {
 		_spec.SetField(subcontrol.FieldStatus, field.TypeString, value)

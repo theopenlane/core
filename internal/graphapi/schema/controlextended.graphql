@@ -1,0 +1,17 @@
+"""
+CloneControlInput is used to clone controls and their subcontrols
+under an organization (ownerID)
+"""
+input CloneControlInput {
+    controlIDs: [ID!]
+    ownerID: ID
+}
+
+extend type Mutation{
+  """
+  Create a new controls based on existing control ID(s)
+  """
+  createControlsByClone(
+      input: CloneControlInput
+  ): ControlBulkCreatePayload!
+}

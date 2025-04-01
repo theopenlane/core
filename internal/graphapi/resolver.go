@@ -18,6 +18,7 @@ import (
 	"github.com/ravilushqa/otelgqlgen"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/wundergraph/graphql-go-tools/pkg/playground"
 
@@ -87,7 +88,7 @@ func (r Resolver) WithComplexityLimitConfig(limit int) *Resolver {
 	return &r
 }
 
-// WithMaxResultLimit sets the max result limit for the resolver
+// WithMaxResultLimit sets the max result limit in the config for the resolvers
 func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 	r.maxResultLimit = &limit
 
@@ -156,6 +157,9 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 		WithFileUploader(srv, r.uploader)
 	}
 
+	// add max result limits to fields in requests
+	WithResultLimit(srv, r.maxResultLimit)
+
 	srv.Use(otelgqlgen.Middleware())
 
 	h := &Handler{
@@ -217,6 +221,21 @@ func WithContextLevelCache(h *handler.Server) {
 		if op := graphql.GetOperationContext(ctx).Operation; op != nil && op.Operation == ast.Query {
 			ctx = entcache.NewContext(ctx)
 		}
+
+		return next(ctx)
+	})
+}
+
+// WithResultLimit adds a max result limit to the handler in order to set limits on
+// all nested edges in the graphql request
+func WithResultLimit(h *handler.Server, limit *int) {
+	h.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
+		if limit == nil {
+			return next(ctx)
+		}
+
+		// grab preloads to set max result limits
+		graphutils.GetPreloads(ctx, limit)
 
 		return next(ctx)
 	})

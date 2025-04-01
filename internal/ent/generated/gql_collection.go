@@ -2879,6 +2879,16 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldDescription)
 				fieldSeen[control.FieldDescription] = struct{}{}
 			}
+		case "referenceID":
+			if _, ok := fieldSeen[control.FieldReferenceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldReferenceID)
+				fieldSeen[control.FieldReferenceID] = struct{}{}
+			}
+		case "auditorReferenceID":
+			if _, ok := fieldSeen[control.FieldAuditorReferenceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldAuditorReferenceID)
+				fieldSeen[control.FieldAuditorReferenceID] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[control.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, control.FieldStatus)
@@ -3108,6 +3118,16 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldDescription)
 				fieldSeen[controlhistory.FieldDescription] = struct{}{}
+			}
+		case "referenceID":
+			if _, ok := fieldSeen[controlhistory.FieldReferenceID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldReferenceID)
+				fieldSeen[controlhistory.FieldReferenceID] = struct{}{}
+			}
+		case "auditorReferenceID":
+			if _, ok := fieldSeen[controlhistory.FieldAuditorReferenceID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldAuditorReferenceID)
+				fieldSeen[controlhistory.FieldAuditorReferenceID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlhistory.FieldStatus]; !ok {
@@ -24993,6 +25013,16 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldDescription)
 				fieldSeen[subcontrol.FieldDescription] = struct{}{}
 			}
+		case "referenceID":
+			if _, ok := fieldSeen[subcontrol.FieldReferenceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldReferenceID)
+				fieldSeen[subcontrol.FieldReferenceID] = struct{}{}
+			}
+		case "auditorReferenceID":
+			if _, ok := fieldSeen[subcontrol.FieldAuditorReferenceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldAuditorReferenceID)
+				fieldSeen[subcontrol.FieldAuditorReferenceID] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[subcontrol.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldStatus)
@@ -25222,6 +25252,16 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldDescription)
 				fieldSeen[subcontrolhistory.FieldDescription] = struct{}{}
+			}
+		case "referenceID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldReferenceID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldReferenceID)
+				fieldSeen[subcontrolhistory.FieldReferenceID] = struct{}{}
+			}
+		case "auditorReferenceID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldAuditorReferenceID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldAuditorReferenceID)
+				fieldSeen[subcontrolhistory.FieldAuditorReferenceID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[subcontrolhistory.FieldStatus]; !ok {

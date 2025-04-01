@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -124,6 +125,12 @@ func (s Standard) Edges() []ent.Edge {
 			fromSchema:    s,
 			edgeSchema:    Control{},
 			cascadeDelete: "Standard",
+			annotations: []schema.Annotation{
+				// skip the ability to create and update controls via the standard
+				// TODO: (sfunk) implement permissions on parent edge to allow children to be created
+				// and have the permissions added to fga
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			},
 		}),
 	}
 }

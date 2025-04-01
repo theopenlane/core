@@ -144,6 +144,46 @@ func (chu *ControlHistoryUpdate) ClearDescription() *ControlHistoryUpdate {
 	return chu
 }
 
+// SetReferenceID sets the "reference_id" field.
+func (chu *ControlHistoryUpdate) SetReferenceID(s string) *ControlHistoryUpdate {
+	chu.mutation.SetReferenceID(s)
+	return chu
+}
+
+// SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableReferenceID(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetReferenceID(*s)
+	}
+	return chu
+}
+
+// ClearReferenceID clears the value of the "reference_id" field.
+func (chu *ControlHistoryUpdate) ClearReferenceID() *ControlHistoryUpdate {
+	chu.mutation.ClearReferenceID()
+	return chu
+}
+
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (chu *ControlHistoryUpdate) SetAuditorReferenceID(s string) *ControlHistoryUpdate {
+	chu.mutation.SetAuditorReferenceID(s)
+	return chu
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableAuditorReferenceID(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetAuditorReferenceID(*s)
+	}
+	return chu
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (chu *ControlHistoryUpdate) ClearAuditorReferenceID() *ControlHistoryUpdate {
+	chu.mutation.ClearAuditorReferenceID()
+	return chu
+}
+
 // SetStatus sets the "status" field.
 func (chu *ControlHistoryUpdate) SetStatus(s string) *ControlHistoryUpdate {
 	chu.mutation.SetStatus(s)
@@ -551,6 +591,18 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if chu.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := chu.mutation.ReferenceID(); ok {
+		_spec.SetField(controlhistory.FieldReferenceID, field.TypeString, value)
+	}
+	if chu.mutation.ReferenceIDCleared() {
+		_spec.ClearField(controlhistory.FieldReferenceID, field.TypeString)
+	}
+	if value, ok := chu.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(controlhistory.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if chu.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
+	}
 	if value, ok := chu.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)
 	}
@@ -804,6 +856,46 @@ func (chuo *ControlHistoryUpdateOne) SetNillableDescription(s *string) *ControlH
 // ClearDescription clears the value of the "description" field.
 func (chuo *ControlHistoryUpdateOne) ClearDescription() *ControlHistoryUpdateOne {
 	chuo.mutation.ClearDescription()
+	return chuo
+}
+
+// SetReferenceID sets the "reference_id" field.
+func (chuo *ControlHistoryUpdateOne) SetReferenceID(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetReferenceID(s)
+	return chuo
+}
+
+// SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableReferenceID(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetReferenceID(*s)
+	}
+	return chuo
+}
+
+// ClearReferenceID clears the value of the "reference_id" field.
+func (chuo *ControlHistoryUpdateOne) ClearReferenceID() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearReferenceID()
+	return chuo
+}
+
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (chuo *ControlHistoryUpdateOne) SetAuditorReferenceID(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetAuditorReferenceID(s)
+	return chuo
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableAuditorReferenceID(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetAuditorReferenceID(*s)
+	}
+	return chuo
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (chuo *ControlHistoryUpdateOne) ClearAuditorReferenceID() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearAuditorReferenceID()
 	return chuo
 }
 
@@ -1243,6 +1335,18 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	}
 	if chuo.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := chuo.mutation.ReferenceID(); ok {
+		_spec.SetField(controlhistory.FieldReferenceID, field.TypeString, value)
+	}
+	if chuo.mutation.ReferenceIDCleared() {
+		_spec.ClearField(controlhistory.FieldReferenceID, field.TypeString)
+	}
+	if value, ok := chuo.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(controlhistory.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if chuo.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := chuo.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)

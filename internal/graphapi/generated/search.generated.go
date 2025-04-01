@@ -526,6 +526,10 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Control_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
@@ -2612,6 +2616,10 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "referenceID":
+				return ec.fieldContext_Subcontrol_referenceID(ctx, field)
+			case "auditorReferenceID":
+				return ec.fieldContext_Subcontrol_auditorReferenceID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
