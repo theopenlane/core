@@ -584,6 +584,11 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 	t := suite.T()
 
+	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
+	programAnotherOrg := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
 
 	// create standard with controls to clone
@@ -606,12 +611,13 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name             string
-		request          openlaneclient.CloneControlInput
-		expectedControls []*generated.Control
-		client           *openlaneclient.OpenlaneClient
-		ctx              context.Context
-		expectedErr      string
+		name                 string
+		request              openlaneclient.CloneControlInput
+		expectedControls     []*generated.Control
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectNoAccessViewer bool
+		expectedErr          string
 	}{
 		{
 			name: "happy path, clone single control",
@@ -632,9 +638,42 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 			ctx:              testUser1.UserCtx,
 		},
 		{
+			name: "happy path, all controls under standard with program",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: controlIDs,
+				ProgramID:  &program.ID,
+			},
+			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "all controls under standard with program no access",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: controlIDs,
+				ProgramID:  &programAnotherOrg.ID,
+			},
+			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			expectedErr:      notAuthorizedErrorMsg,
+		},
+		{
 			name: "happy path, clone control under org",
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
+			},
+			expectedControls: []*generated.Control{orgOwnedControl},
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			// created directly under organization with no program, view only user should not have access
+			expectNoAccessViewer: true,
+		},
+		{
+			name: "happy path, clone control under org with program",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{orgOwnedControl.ID},
+				ProgramID:  &program.ID,
 			},
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
@@ -712,6 +751,14 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				// all cloned controls should have an owner
 				assert.NotEmpty(t, control.OwnerID)
 
+				if tc.request.ProgramID != nil {
+					require.NotEmpty(t, control.Programs)
+					require.Len(t, control.Programs.Edges, 1)
+					assert.Equal(t, *tc.request.ProgramID, control.Programs.Edges[0].Node.ID)
+				} else {
+					assert.Empty(t, control.Programs.Edges)
+				}
+
 				// check the cloned control fields are set and match the original control
 				assert.Equal(t, tc.expectedControls[i].RefCode, control.RefCode)
 				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
@@ -753,6 +800,26 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 					require.NotEmpty(t, res)
 					assert.Equal(t, control.ID, res.Control.ID)
 				}
+
+				// ensure view only user can see the control created by the admin user
+				// TODO (sfunk): verify its okay users without access to the program can see a control
+				// from a public standard
+				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
+				if tc.expectNoAccessViewer {
+					require.Error(t, err)
+					assert.ErrorContains(t, err, notFoundErrorMsg)
+					assert.Nil(t, res)
+				} else {
+					require.NoError(t, err)
+					require.NotEmpty(t, res)
+					assert.Equal(t, control.ID, res.Control.ID)
+				}
+
+				// ensure a user outside my organization cannot get the control
+				res, err = suite.client.api.GetControlByID(testUser2.UserCtx, control.ID)
+				require.Nil(t, res)
+				require.Error(t, err)
+				assert.ErrorContains(t, err, notFoundErrorMsg)
 			}
 		})
 	}

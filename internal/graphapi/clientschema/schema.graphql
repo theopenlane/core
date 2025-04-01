@@ -1556,6 +1556,7 @@ under an organization (ownerID)
 input CloneControlInput {
 	controlIDs: [ID!]
 	ownerID: ID
+	programID: ID
 }
 type Contact implements Node {
 	id: ID!
