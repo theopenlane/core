@@ -375,11 +375,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Description)
 			}
 
-			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.CreateSubcontrol.Subcontrol.Status)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Status)
-			}
+			assert.Equal(t, enums.ControlStatusPreparing, *resp.CreateSubcontrol.Subcontrol.Status)
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source)

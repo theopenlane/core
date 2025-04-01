@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -23,6 +24,8 @@ func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
+
+	input.Status = &enums.ControlStatusPreparing
 
 	res, err := withTransactionalMutation(ctx).Subcontrol.Create().SetInput(input).Save(ctx)
 	if err != nil {
