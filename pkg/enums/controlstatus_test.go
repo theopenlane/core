@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -45,5 +46,11 @@ func TestControlStatus(t *testing.T) {
 			res := enums.ToControlStatus(tc.role)
 			assert.Equal(t, tc.expected, *res)
 		})
+	}
+}
+
+func TestControlStatus_Valid(t *testing.T) {
+	for _, v := range enums.ControlStatusApproved.Values() {
+		require.True(t, enums.ControlStatus(v).Valid())
 	}
 }
