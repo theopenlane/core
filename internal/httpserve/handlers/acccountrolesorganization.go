@@ -112,7 +112,6 @@ func (h *Handler) BindAccountRolesOrganizationByID() *openapi3.Operation {
 	orgRoles.OperationID = "AccountRolesOrganizationByID"
 	orgRoles.Security = AllSecurityRequirements()
 
-	h.AddPathParameter("AccountRolesOrganizationRequest", "id", orgRoles)
 	h.AddResponse("AccountRolesOrganizationReply", "success", models.ExampleAccountRolesOrganizationReply, orgRoles, http.StatusOK)
 	orgRoles.AddResponse(http.StatusInternalServerError, internalServerError())
 	orgRoles.AddResponse(http.StatusBadRequest, badRequest())

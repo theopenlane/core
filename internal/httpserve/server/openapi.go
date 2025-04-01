@@ -120,9 +120,9 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	}
 
 	return &openapi3.T{
-		OpenAPI: "3.1.1",
+		OpenAPI: "3.0.0",
 		Info: &openapi3.Info{
-			Title:       "Openlane OpenAPI 3.1.1 Specifications",
+			Title:       "Openlane OpenAPI 3.0.0 Specifications",
 			Description: "Openlane's API services are designed to provide a simple and easy to use interface for interacting with the Openlane platform. This API is designed to be used by both internal and external clients to interact with the Openlane platform.",
 			Version:     "v1.0.0",
 			Contact: &openapi3.Contact{
@@ -140,10 +140,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			&openapi3.Server{
 				Description: "Openlane API Server",
 				URL:         "https://api.theopenlane.io/v1",
-			},
-			&openapi3.Server{
-				Description: "Openlane API Server (local)",
-				URL:         "http://localhost:17608/v1",
 			},
 		},
 		ExternalDocs: &openapi3.ExternalDocs{
