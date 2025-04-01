@@ -454,7 +454,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateControl.Control.Status)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Status)
+				assert.Equal(t, enums.ControlStatusPreparing, *resp.CreateControl.Control.Status)
 			}
 
 			if tc.request.ControlType != nil {
