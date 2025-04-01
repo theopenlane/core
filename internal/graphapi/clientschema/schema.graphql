@@ -1547,6 +1547,14 @@ input AuditLogWhereInput {
 	before: Time
 	after: Time
 }
+"""
+CloneControlInput is used to clone controls and their subcontrols
+under an organization (ownerID)
+"""
+input CloneControlInput {
+	controlIDs: [ID!]
+	ownerID: ID
+}
 type Contact implements Node {
 	id: ID!
 	createdAt: Time
@@ -2448,6 +2456,14 @@ type Control implements Node {
 	"""
 	description: String
 	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	"""
 	status of the control
 	"""
 	status: String
@@ -3005,6 +3021,14 @@ type ControlHistory implements Node {
 	"""
 	description: String
 	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	"""
 	status of the control
 	"""
 	status: String
@@ -3349,6 +3373,42 @@ input ControlHistoryWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	reference_id field predicates
+	"""
+	referenceID: String
+	referenceIDNEQ: String
+	referenceIDIn: [String!]
+	referenceIDNotIn: [String!]
+	referenceIDGT: String
+	referenceIDGTE: String
+	referenceIDLT: String
+	referenceIDLTE: String
+	referenceIDContains: String
+	referenceIDHasPrefix: String
+	referenceIDHasSuffix: String
+	referenceIDIsNil: Boolean
+	referenceIDNotNil: Boolean
+	referenceIDEqualFold: String
+	referenceIDContainsFold: String
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDGT: String
+	auditorReferenceIDGTE: String
+	auditorReferenceIDLT: String
+	auditorReferenceIDLTE: String
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -5590,6 +5650,42 @@ input ControlWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
+	reference_id field predicates
+	"""
+	referenceID: String
+	referenceIDNEQ: String
+	referenceIDIn: [String!]
+	referenceIDNotIn: [String!]
+	referenceIDGT: String
+	referenceIDGTE: String
+	referenceIDLT: String
+	referenceIDLTE: String
+	referenceIDContains: String
+	referenceIDHasPrefix: String
+	referenceIDHasSuffix: String
+	referenceIDIsNil: Boolean
+	referenceIDNotNil: Boolean
+	referenceIDEqualFold: String
+	referenceIDContainsFold: String
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDGT: String
+	auditorReferenceIDGTE: String
+	auditorReferenceIDLT: String
+	auditorReferenceIDLTE: String
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: String
@@ -5996,6 +6092,14 @@ input CreateControlInput {
 	description of what the control is supposed to accomplish
 	"""
 	description: String
+	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
 	"""
 	status of the control
 	"""
@@ -7084,7 +7188,6 @@ input CreateStandardInput {
 	"""
 	version: String
 	ownerID: ID
-	controlIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -7099,6 +7202,14 @@ input CreateSubcontrolInput {
 	description of what the control is supposed to accomplish
 	"""
 	description: String
+	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
 	"""
 	status of the control
 	"""
@@ -18242,6 +18353,10 @@ type Mutation {
 		"""
 		id: ID!
 	): ControlDeletePayload!
+	"""
+	Create a new controls based on existing control ID(s)
+	"""
+	createControlsByClone(input: CloneControlInput): ControlBulkCreatePayload!
 	"""
 	Create a new controlImplementation
 	"""
@@ -34266,6 +34381,14 @@ type Subcontrol implements Node {
 	"""
 	description: String
 	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	"""
 	status of the control
 	"""
 	status: String
@@ -34718,6 +34841,14 @@ type SubcontrolHistory implements Node {
 	"""
 	description: String
 	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	"""
 	status of the control
 	"""
 	status: String
@@ -35063,6 +35194,42 @@ input SubcontrolHistoryWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 	"""
+	reference_id field predicates
+	"""
+	referenceID: String
+	referenceIDNEQ: String
+	referenceIDIn: [String!]
+	referenceIDNotIn: [String!]
+	referenceIDGT: String
+	referenceIDGTE: String
+	referenceIDLT: String
+	referenceIDLTE: String
+	referenceIDContains: String
+	referenceIDHasPrefix: String
+	referenceIDHasSuffix: String
+	referenceIDIsNil: Boolean
+	referenceIDNotNil: Boolean
+	referenceIDEqualFold: String
+	referenceIDContainsFold: String
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDGT: String
+	auditorReferenceIDGTE: String
+	auditorReferenceIDLT: String
+	auditorReferenceIDLTE: String
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: String
@@ -35389,6 +35556,42 @@ input SubcontrolWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	reference_id field predicates
+	"""
+	referenceID: String
+	referenceIDNEQ: String
+	referenceIDIn: [String!]
+	referenceIDNotIn: [String!]
+	referenceIDGT: String
+	referenceIDGTE: String
+	referenceIDLT: String
+	referenceIDLTE: String
+	referenceIDContains: String
+	referenceIDHasPrefix: String
+	referenceIDHasSuffix: String
+	referenceIDIsNil: Boolean
+	referenceIDNotNil: Boolean
+	referenceIDEqualFold: String
+	referenceIDContainsFold: String
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDGT: String
+	auditorReferenceIDGTE: String
+	auditorReferenceIDLT: String
+	auditorReferenceIDLTE: String
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -38361,6 +38564,16 @@ input UpdateControlInput {
 	description: String
 	clearDescription: Boolean
 	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	clearReferenceID: Boolean
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	clearAuditorReferenceID: Boolean
+	"""
 	status of the control
 	"""
 	status: String
@@ -39916,9 +40129,6 @@ input UpdateStandardInput {
 	clearVersion: Boolean
 	ownerID: ID
 	clearOwner: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -39937,6 +40147,16 @@ input UpdateSubcontrolInput {
 	"""
 	description: String
 	clearDescription: Boolean
+	"""
+	internal reference id of the control, can be used for internal tracking
+	"""
+	referenceID: String
+	clearReferenceID: Boolean
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	clearAuditorReferenceID: Boolean
 	"""
 	status of the control
 	"""

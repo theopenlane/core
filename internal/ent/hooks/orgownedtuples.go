@@ -15,7 +15,7 @@ import (
 // it will add the user and parent (organization owner_id) permissions to the object
 // on creation
 // by default, it will always add an admin user permission to the object
-func HookOrgOwnedTuples(skipUser bool) ent.Hook {
+func HookOrgOwnedTuples() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -31,7 +31,7 @@ func HookOrgOwnedTuples(skipUser bool) ent.Hook {
 			var addTuples []fgax.TupleKey
 
 			// add user permissions to the object on creation
-			if !skipUser && m.Op() == ent.OpCreate {
+			if m.Op() == ent.OpCreate {
 				a, err := auth.GetAuthenticatedUserFromContext(ctx)
 				if err != nil {
 					return nil, err

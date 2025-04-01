@@ -5291,6 +5291,40 @@ type ControlWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "reference_id" field predicates.
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIDNEQ          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIDGT           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIDGTE          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIDLT           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIDLTE          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        bool     `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       bool     `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+
+	// "auditor_reference_id" field predicates.
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIDNEQ          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDGT           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIDGTE          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIDLT           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIDLTE          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        bool     `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status             *string  `json:"status,omitempty"`
 	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
@@ -5938,6 +5972,96 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, control.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ReferenceID != nil {
+		predicates = append(predicates, control.ReferenceIDEQ(*i.ReferenceID))
+	}
+	if i.ReferenceIDNEQ != nil {
+		predicates = append(predicates, control.ReferenceIDNEQ(*i.ReferenceIDNEQ))
+	}
+	if len(i.ReferenceIDIn) > 0 {
+		predicates = append(predicates, control.ReferenceIDIn(i.ReferenceIDIn...))
+	}
+	if len(i.ReferenceIDNotIn) > 0 {
+		predicates = append(predicates, control.ReferenceIDNotIn(i.ReferenceIDNotIn...))
+	}
+	if i.ReferenceIDGT != nil {
+		predicates = append(predicates, control.ReferenceIDGT(*i.ReferenceIDGT))
+	}
+	if i.ReferenceIDGTE != nil {
+		predicates = append(predicates, control.ReferenceIDGTE(*i.ReferenceIDGTE))
+	}
+	if i.ReferenceIDLT != nil {
+		predicates = append(predicates, control.ReferenceIDLT(*i.ReferenceIDLT))
+	}
+	if i.ReferenceIDLTE != nil {
+		predicates = append(predicates, control.ReferenceIDLTE(*i.ReferenceIDLTE))
+	}
+	if i.ReferenceIDContains != nil {
+		predicates = append(predicates, control.ReferenceIDContains(*i.ReferenceIDContains))
+	}
+	if i.ReferenceIDHasPrefix != nil {
+		predicates = append(predicates, control.ReferenceIDHasPrefix(*i.ReferenceIDHasPrefix))
+	}
+	if i.ReferenceIDHasSuffix != nil {
+		predicates = append(predicates, control.ReferenceIDHasSuffix(*i.ReferenceIDHasSuffix))
+	}
+	if i.ReferenceIDIsNil {
+		predicates = append(predicates, control.ReferenceIDIsNil())
+	}
+	if i.ReferenceIDNotNil {
+		predicates = append(predicates, control.ReferenceIDNotNil())
+	}
+	if i.ReferenceIDEqualFold != nil {
+		predicates = append(predicates, control.ReferenceIDEqualFold(*i.ReferenceIDEqualFold))
+	}
+	if i.ReferenceIDContainsFold != nil {
+		predicates = append(predicates, control.ReferenceIDContainsFold(*i.ReferenceIDContainsFold))
+	}
+	if i.AuditorReferenceID != nil {
+		predicates = append(predicates, control.AuditorReferenceIDEQ(*i.AuditorReferenceID))
+	}
+	if i.AuditorReferenceIDNEQ != nil {
+		predicates = append(predicates, control.AuditorReferenceIDNEQ(*i.AuditorReferenceIDNEQ))
+	}
+	if len(i.AuditorReferenceIDIn) > 0 {
+		predicates = append(predicates, control.AuditorReferenceIDIn(i.AuditorReferenceIDIn...))
+	}
+	if len(i.AuditorReferenceIDNotIn) > 0 {
+		predicates = append(predicates, control.AuditorReferenceIDNotIn(i.AuditorReferenceIDNotIn...))
+	}
+	if i.AuditorReferenceIDGT != nil {
+		predicates = append(predicates, control.AuditorReferenceIDGT(*i.AuditorReferenceIDGT))
+	}
+	if i.AuditorReferenceIDGTE != nil {
+		predicates = append(predicates, control.AuditorReferenceIDGTE(*i.AuditorReferenceIDGTE))
+	}
+	if i.AuditorReferenceIDLT != nil {
+		predicates = append(predicates, control.AuditorReferenceIDLT(*i.AuditorReferenceIDLT))
+	}
+	if i.AuditorReferenceIDLTE != nil {
+		predicates = append(predicates, control.AuditorReferenceIDLTE(*i.AuditorReferenceIDLTE))
+	}
+	if i.AuditorReferenceIDContains != nil {
+		predicates = append(predicates, control.AuditorReferenceIDContains(*i.AuditorReferenceIDContains))
+	}
+	if i.AuditorReferenceIDHasPrefix != nil {
+		predicates = append(predicates, control.AuditorReferenceIDHasPrefix(*i.AuditorReferenceIDHasPrefix))
+	}
+	if i.AuditorReferenceIDHasSuffix != nil {
+		predicates = append(predicates, control.AuditorReferenceIDHasSuffix(*i.AuditorReferenceIDHasSuffix))
+	}
+	if i.AuditorReferenceIDIsNil {
+		predicates = append(predicates, control.AuditorReferenceIDIsNil())
+	}
+	if i.AuditorReferenceIDNotNil {
+		predicates = append(predicates, control.AuditorReferenceIDNotNil())
+	}
+	if i.AuditorReferenceIDEqualFold != nil {
+		predicates = append(predicates, control.AuditorReferenceIDEqualFold(*i.AuditorReferenceIDEqualFold))
+	}
+	if i.AuditorReferenceIDContainsFold != nil {
+		predicates = append(predicates, control.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, control.StatusEQ(*i.Status))
@@ -6780,6 +6904,40 @@ type ControlHistoryWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "reference_id" field predicates.
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIDNEQ          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIDGT           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIDGTE          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIDLT           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIDLTE          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        bool     `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       bool     `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+
+	// "auditor_reference_id" field predicates.
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIDNEQ          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDGT           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIDGTE          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIDLT           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIDLTE          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        bool     `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status             *string  `json:"status,omitempty"`
 	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
@@ -7432,6 +7590,96 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, controlhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ReferenceID != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDEQ(*i.ReferenceID))
+	}
+	if i.ReferenceIDNEQ != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDNEQ(*i.ReferenceIDNEQ))
+	}
+	if len(i.ReferenceIDIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceIDIn(i.ReferenceIDIn...))
+	}
+	if len(i.ReferenceIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceIDNotIn(i.ReferenceIDNotIn...))
+	}
+	if i.ReferenceIDGT != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDGT(*i.ReferenceIDGT))
+	}
+	if i.ReferenceIDGTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDGTE(*i.ReferenceIDGTE))
+	}
+	if i.ReferenceIDLT != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDLT(*i.ReferenceIDLT))
+	}
+	if i.ReferenceIDLTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDLTE(*i.ReferenceIDLTE))
+	}
+	if i.ReferenceIDContains != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDContains(*i.ReferenceIDContains))
+	}
+	if i.ReferenceIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDHasPrefix(*i.ReferenceIDHasPrefix))
+	}
+	if i.ReferenceIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDHasSuffix(*i.ReferenceIDHasSuffix))
+	}
+	if i.ReferenceIDIsNil {
+		predicates = append(predicates, controlhistory.ReferenceIDIsNil())
+	}
+	if i.ReferenceIDNotNil {
+		predicates = append(predicates, controlhistory.ReferenceIDNotNil())
+	}
+	if i.ReferenceIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDEqualFold(*i.ReferenceIDEqualFold))
+	}
+	if i.ReferenceIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceIDContainsFold(*i.ReferenceIDContainsFold))
+	}
+	if i.AuditorReferenceID != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDEQ(*i.AuditorReferenceID))
+	}
+	if i.AuditorReferenceIDNEQ != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDNEQ(*i.AuditorReferenceIDNEQ))
+	}
+	if len(i.AuditorReferenceIDIn) > 0 {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDIn(i.AuditorReferenceIDIn...))
+	}
+	if len(i.AuditorReferenceIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDNotIn(i.AuditorReferenceIDNotIn...))
+	}
+	if i.AuditorReferenceIDGT != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDGT(*i.AuditorReferenceIDGT))
+	}
+	if i.AuditorReferenceIDGTE != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDGTE(*i.AuditorReferenceIDGTE))
+	}
+	if i.AuditorReferenceIDLT != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDLT(*i.AuditorReferenceIDLT))
+	}
+	if i.AuditorReferenceIDLTE != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDLTE(*i.AuditorReferenceIDLTE))
+	}
+	if i.AuditorReferenceIDContains != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDContains(*i.AuditorReferenceIDContains))
+	}
+	if i.AuditorReferenceIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDHasPrefix(*i.AuditorReferenceIDHasPrefix))
+	}
+	if i.AuditorReferenceIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDHasSuffix(*i.AuditorReferenceIDHasSuffix))
+	}
+	if i.AuditorReferenceIDIsNil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDIsNil())
+	}
+	if i.AuditorReferenceIDNotNil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDNotNil())
+	}
+	if i.AuditorReferenceIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDEqualFold(*i.AuditorReferenceIDEqualFold))
+	}
+	if i.AuditorReferenceIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, controlhistory.StatusEQ(*i.Status))
@@ -56907,6 +57155,40 @@ type SubcontrolWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "reference_id" field predicates.
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIDNEQ          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIDGT           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIDGTE          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIDLT           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIDLTE          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        bool     `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       bool     `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+
+	// "auditor_reference_id" field predicates.
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIDNEQ          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDGT           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIDGTE          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIDLT           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIDLTE          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        bool     `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status             *string  `json:"status,omitempty"`
 	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
@@ -57528,6 +57810,96 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, subcontrol.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ReferenceID != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDEQ(*i.ReferenceID))
+	}
+	if i.ReferenceIDNEQ != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDNEQ(*i.ReferenceIDNEQ))
+	}
+	if len(i.ReferenceIDIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceIDIn(i.ReferenceIDIn...))
+	}
+	if len(i.ReferenceIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceIDNotIn(i.ReferenceIDNotIn...))
+	}
+	if i.ReferenceIDGT != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDGT(*i.ReferenceIDGT))
+	}
+	if i.ReferenceIDGTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDGTE(*i.ReferenceIDGTE))
+	}
+	if i.ReferenceIDLT != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDLT(*i.ReferenceIDLT))
+	}
+	if i.ReferenceIDLTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDLTE(*i.ReferenceIDLTE))
+	}
+	if i.ReferenceIDContains != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDContains(*i.ReferenceIDContains))
+	}
+	if i.ReferenceIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDHasPrefix(*i.ReferenceIDHasPrefix))
+	}
+	if i.ReferenceIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDHasSuffix(*i.ReferenceIDHasSuffix))
+	}
+	if i.ReferenceIDIsNil {
+		predicates = append(predicates, subcontrol.ReferenceIDIsNil())
+	}
+	if i.ReferenceIDNotNil {
+		predicates = append(predicates, subcontrol.ReferenceIDNotNil())
+	}
+	if i.ReferenceIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDEqualFold(*i.ReferenceIDEqualFold))
+	}
+	if i.ReferenceIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceIDContainsFold(*i.ReferenceIDContainsFold))
+	}
+	if i.AuditorReferenceID != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDEQ(*i.AuditorReferenceID))
+	}
+	if i.AuditorReferenceIDNEQ != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDNEQ(*i.AuditorReferenceIDNEQ))
+	}
+	if len(i.AuditorReferenceIDIn) > 0 {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDIn(i.AuditorReferenceIDIn...))
+	}
+	if len(i.AuditorReferenceIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDNotIn(i.AuditorReferenceIDNotIn...))
+	}
+	if i.AuditorReferenceIDGT != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDGT(*i.AuditorReferenceIDGT))
+	}
+	if i.AuditorReferenceIDGTE != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDGTE(*i.AuditorReferenceIDGTE))
+	}
+	if i.AuditorReferenceIDLT != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDLT(*i.AuditorReferenceIDLT))
+	}
+	if i.AuditorReferenceIDLTE != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDLTE(*i.AuditorReferenceIDLTE))
+	}
+	if i.AuditorReferenceIDContains != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDContains(*i.AuditorReferenceIDContains))
+	}
+	if i.AuditorReferenceIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDHasPrefix(*i.AuditorReferenceIDHasPrefix))
+	}
+	if i.AuditorReferenceIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDHasSuffix(*i.AuditorReferenceIDHasSuffix))
+	}
+	if i.AuditorReferenceIDIsNil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDIsNil())
+	}
+	if i.AuditorReferenceIDNotNil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDNotNil())
+	}
+	if i.AuditorReferenceIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDEqualFold(*i.AuditorReferenceIDEqualFold))
+	}
+	if i.AuditorReferenceIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, subcontrol.StatusEQ(*i.Status))
@@ -58256,6 +58628,40 @@ type SubcontrolHistoryWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "reference_id" field predicates.
+	ReferenceID             *string  `json:"referenceID,omitempty"`
+	ReferenceIDNEQ          *string  `json:"referenceIDNEQ,omitempty"`
+	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
+	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
+	ReferenceIDGT           *string  `json:"referenceIDGT,omitempty"`
+	ReferenceIDGTE          *string  `json:"referenceIDGTE,omitempty"`
+	ReferenceIDLT           *string  `json:"referenceIDLT,omitempty"`
+	ReferenceIDLTE          *string  `json:"referenceIDLTE,omitempty"`
+	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
+	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
+	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
+	ReferenceIDIsNil        bool     `json:"referenceIDIsNil,omitempty"`
+	ReferenceIDNotNil       bool     `json:"referenceIDNotNil,omitempty"`
+	ReferenceIDEqualFold    *string  `json:"referenceIDEqualFold,omitempty"`
+	ReferenceIDContainsFold *string  `json:"referenceIDContainsFold,omitempty"`
+
+	// "auditor_reference_id" field predicates.
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIDNEQ          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDGT           *string  `json:"auditorReferenceIDGT,omitempty"`
+	AuditorReferenceIDGTE          *string  `json:"auditorReferenceIDGTE,omitempty"`
+	AuditorReferenceIDLT           *string  `json:"auditorReferenceIDLT,omitempty"`
+	AuditorReferenceIDLTE          *string  `json:"auditorReferenceIDLTE,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        bool     `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status             *string  `json:"status,omitempty"`
 	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
@@ -58906,6 +59312,96 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ReferenceID != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDEQ(*i.ReferenceID))
+	}
+	if i.ReferenceIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDNEQ(*i.ReferenceIDNEQ))
+	}
+	if len(i.ReferenceIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDIn(i.ReferenceIDIn...))
+	}
+	if len(i.ReferenceIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDNotIn(i.ReferenceIDNotIn...))
+	}
+	if i.ReferenceIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDGT(*i.ReferenceIDGT))
+	}
+	if i.ReferenceIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDGTE(*i.ReferenceIDGTE))
+	}
+	if i.ReferenceIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDLT(*i.ReferenceIDLT))
+	}
+	if i.ReferenceIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDLTE(*i.ReferenceIDLTE))
+	}
+	if i.ReferenceIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDContains(*i.ReferenceIDContains))
+	}
+	if i.ReferenceIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDHasPrefix(*i.ReferenceIDHasPrefix))
+	}
+	if i.ReferenceIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDHasSuffix(*i.ReferenceIDHasSuffix))
+	}
+	if i.ReferenceIDIsNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDIsNil())
+	}
+	if i.ReferenceIDNotNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDNotNil())
+	}
+	if i.ReferenceIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDEqualFold(*i.ReferenceIDEqualFold))
+	}
+	if i.ReferenceIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceIDContainsFold(*i.ReferenceIDContainsFold))
+	}
+	if i.AuditorReferenceID != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDEQ(*i.AuditorReferenceID))
+	}
+	if i.AuditorReferenceIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDNEQ(*i.AuditorReferenceIDNEQ))
+	}
+	if len(i.AuditorReferenceIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDIn(i.AuditorReferenceIDIn...))
+	}
+	if len(i.AuditorReferenceIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDNotIn(i.AuditorReferenceIDNotIn...))
+	}
+	if i.AuditorReferenceIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDGT(*i.AuditorReferenceIDGT))
+	}
+	if i.AuditorReferenceIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDGTE(*i.AuditorReferenceIDGTE))
+	}
+	if i.AuditorReferenceIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDLT(*i.AuditorReferenceIDLT))
+	}
+	if i.AuditorReferenceIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDLTE(*i.AuditorReferenceIDLTE))
+	}
+	if i.AuditorReferenceIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDContains(*i.AuditorReferenceIDContains))
+	}
+	if i.AuditorReferenceIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDHasPrefix(*i.AuditorReferenceIDHasPrefix))
+	}
+	if i.AuditorReferenceIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDHasSuffix(*i.AuditorReferenceIDHasSuffix))
+	}
+	if i.AuditorReferenceIDIsNil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDIsNil())
+	}
+	if i.AuditorReferenceIDNotNil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDNotNil())
+	}
+	if i.AuditorReferenceIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDEqualFold(*i.AuditorReferenceIDEqualFold))
+	}
+	if i.AuditorReferenceIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, subcontrolhistory.StatusEQ(*i.Status))

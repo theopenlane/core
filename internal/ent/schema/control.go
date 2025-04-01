@@ -123,7 +123,7 @@ func (Control) Indexes() []ent.Index {
 		// ref_code should be unique within the standard
 		index.Fields("standard_id", "ref_code").
 			Unique().Annotations(
-			entsql.IndexWhere("deleted_at is NULL"),
+			entsql.IndexWhere("deleted_at is NULL AND owner_id is NULL"),
 		),
 	}
 }

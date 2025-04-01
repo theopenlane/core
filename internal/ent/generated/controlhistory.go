@@ -47,6 +47,10 @@ type ControlHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// internal reference id of the control, can be used for internal tracking
+	ReferenceID string `json:"reference_id,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// status of the control
 	Status string `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -89,7 +93,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldOwnerID, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -193,6 +197,18 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				ch.Description = value.String
+			}
+		case controlhistory.FieldReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
+			} else if value.Valid {
+				ch.ReferenceID = value.String
+			}
+		case controlhistory.FieldAuditorReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
+			} else if value.Valid {
+				ch.AuditorReferenceID = value.String
 			}
 		case controlhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -372,6 +388,12 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(ch.Description)
+	builder.WriteString(", ")
+	builder.WriteString("reference_id=")
+	builder.WriteString(ch.ReferenceID)
+	builder.WriteString(", ")
+	builder.WriteString("auditor_reference_id=")
+	builder.WriteString(ch.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(ch.Status)

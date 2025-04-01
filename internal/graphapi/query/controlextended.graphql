@@ -1,0 +1,32 @@
+mutation CreateControlsByClone($input: CloneControlInput!) {
+    createControlsByClone(
+        input: $input
+    ) {
+    controls {
+        assessmentMethods
+        assessmentObjectives
+        category
+        categoryID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        description
+        displayID
+        exampleEvidence
+        id
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        references
+        source
+        standardID
+        status
+        subcategory
+        tags
+        updatedAt
+        updatedBy
+        }
+    }
+}

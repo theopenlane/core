@@ -213,39 +213,41 @@ func adminSearchControls(ctx context.Context, query string) ([]*generated.Contro
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
-				control.OwnerIDContainsFold(query),     // search by OwnerID
-				control.DescriptionContainsFold(query), // search by Description
-				control.StatusContainsFold(query),      // search by Status
-				control.CategoryContainsFold(query),    // search by Category
-				control.CategoryIDContainsFold(query),  // search by CategoryID
-				control.SubcategoryContainsFold(query), // search by Subcategory
+				control.OwnerIDContainsFold(query),            // search by OwnerID
+				control.DescriptionContainsFold(query),        // search by Description
+				control.ReferenceIDContainsFold(query),        // search by ReferenceID
+				control.AuditorReferenceIDContainsFold(query), // search by AuditorReferenceID
+				control.StatusContainsFold(query),             // search by Status
+				control.CategoryContainsFold(query),           // search by Category
+				control.CategoryIDContainsFold(query),         // search by CategoryID
+				control.SubcategoryContainsFold(query),        // search by Subcategory
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mapped_categories)::text LIKE $11", likeQuery)) // search by MappedCategories
+					s.Where(sql.ExprP("(mapped_categories)::text LIKE $13", likeQuery)) // search by MappedCategories
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $12", likeQuery)) // search by AssessmentObjectives
+					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $14", likeQuery)) // search by AssessmentObjectives
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_methods)::text LIKE $13", likeQuery)) // search by AssessmentMethods
+					s.Where(sql.ExprP("(assessment_methods)::text LIKE $15", likeQuery)) // search by AssessmentMethods
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(control_questions)::text LIKE $14", likeQuery)) // search by ControlQuestions
+					s.Where(sql.ExprP("(control_questions)::text LIKE $16", likeQuery)) // search by ControlQuestions
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $15", likeQuery)) // search by ImplementationGuidance
+					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $17", likeQuery)) // search by ImplementationGuidance
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(example_evidence)::text LIKE $16", likeQuery)) // search by ExampleEvidence
+					s.Where(sql.ExprP("(example_evidence)::text LIKE $18", likeQuery)) // search by ExampleEvidence
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $17", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $19", likeQuery)) // search by References
 				},
 				control.RefCodeContainsFold(query),    // search by RefCode
 				control.StandardIDContainsFold(query), // search by StandardID
@@ -1173,39 +1175,41 @@ func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Sub
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
-				subcontrol.OwnerIDContainsFold(query),     // search by OwnerID
-				subcontrol.DescriptionContainsFold(query), // search by Description
-				subcontrol.StatusContainsFold(query),      // search by Status
-				subcontrol.CategoryContainsFold(query),    // search by Category
-				subcontrol.CategoryIDContainsFold(query),  // search by CategoryID
-				subcontrol.SubcategoryContainsFold(query), // search by Subcategory
+				subcontrol.OwnerIDContainsFold(query),            // search by OwnerID
+				subcontrol.DescriptionContainsFold(query),        // search by Description
+				subcontrol.ReferenceIDContainsFold(query),        // search by ReferenceID
+				subcontrol.AuditorReferenceIDContainsFold(query), // search by AuditorReferenceID
+				subcontrol.StatusContainsFold(query),             // search by Status
+				subcontrol.CategoryContainsFold(query),           // search by Category
+				subcontrol.CategoryIDContainsFold(query),         // search by CategoryID
+				subcontrol.SubcategoryContainsFold(query),        // search by Subcategory
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mapped_categories)::text LIKE $11", likeQuery)) // search by MappedCategories
+					s.Where(sql.ExprP("(mapped_categories)::text LIKE $13", likeQuery)) // search by MappedCategories
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $12", likeQuery)) // search by AssessmentObjectives
+					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $14", likeQuery)) // search by AssessmentObjectives
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_methods)::text LIKE $13", likeQuery)) // search by AssessmentMethods
+					s.Where(sql.ExprP("(assessment_methods)::text LIKE $15", likeQuery)) // search by AssessmentMethods
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(control_questions)::text LIKE $14", likeQuery)) // search by ControlQuestions
+					s.Where(sql.ExprP("(control_questions)::text LIKE $16", likeQuery)) // search by ControlQuestions
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $15", likeQuery)) // search by ImplementationGuidance
+					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $17", likeQuery)) // search by ImplementationGuidance
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(example_evidence)::text LIKE $16", likeQuery)) // search by ExampleEvidence
+					s.Where(sql.ExprP("(example_evidence)::text LIKE $18", likeQuery)) // search by ExampleEvidence
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $17", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $19", likeQuery)) // search by References
 				},
 				subcontrol.RefCodeContainsFold(query),   // search by RefCode
 				subcontrol.ControlIDContainsFold(query), // search by ControlID
