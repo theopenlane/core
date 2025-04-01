@@ -77,7 +77,7 @@ func createValidation() (input openlaneclient.CreateSubcontrolInput, err error) 
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToControlStatus(status)
 	}
 
 	controlType := cmd.Config.String("control-type")

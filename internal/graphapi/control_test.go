@@ -272,7 +272,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			request: openlaneclient.CreateControlInput{
 				RefCode:          "A-2",
 				Description:      lo.ToPtr("A description of the Control"),
-				Status:           lo.ToPtr("mitigated"),
+				Status:           &enums.ControlStatusPreparing,
 				Tags:             []string{"tag1", "tag2"},
 				ControlType:      &enums.ControlTypeDetective,
 				Category:         lo.ToPtr("Availability"),
@@ -808,7 +808,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlInput{
-				Status:      lo.ToPtr("mitigated"),
+				Status:      &enums.ControlStatusPreparing,
 				Tags:        []string{"tag1", "tag2"},
 				ControlType: &enums.ControlTypeDetective,
 				Category:    lo.ToPtr("Availability"),
@@ -879,7 +879,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "update not allowed, not permissions in same org",
 			request: openlaneclient.UpdateControlInput{
-				Status: lo.ToPtr("waiting"),
+				Status: &enums.ControlStatusPreparing,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -888,7 +888,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "update allowed, user added to one of the programs",
 			request: openlaneclient.UpdateControlInput{
-				Status: lo.ToPtr("waiting"),
+				Status: &enums.ControlStatusPreparing,
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -896,7 +896,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		{
 			name: "update not allowed, no permissions",
 			request: openlaneclient.UpdateControlInput{
-				Status: lo.ToPtr("waiting"),
+				Status: &enums.ControlStatusPreparing,
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
