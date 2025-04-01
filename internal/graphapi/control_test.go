@@ -596,6 +596,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
+	// ensure the standard exists and has the correct number of controls for the non-system admin user
 	standard, err := suite.client.api.GetStandardByID(testUser2.UserCtx, publicStandard.ID)
 	require.NoError(t, err)
 	require.NotNil(t, standard)
@@ -705,12 +706,14 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 			for i, control := range resp.CreateControlsByClone.Controls {
 				// check required fields
 				require.NotEmpty(t, control.ID)
+				require.NotEmpty(t, control.DisplayID)
+				require.NotEmpty(t, control.RefCode)
 
-				assert.NotEmpty(t, control.DisplayID)
+				// all cloned controls should have an owner
+				assert.NotEmpty(t, control.OwnerID)
 
-				assert.NotEmpty(t, control.RefCode)
+				// check the cloned control fields are set and match the original control
 				assert.Equal(t, tc.expectedControls[i].RefCode, control.RefCode)
-
 				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
 				assert.Equal(t, tc.expectedControls[i].Category, *control.Category)
 				assert.Equal(t, tc.expectedControls[i].CategoryID, *control.CategoryID)
@@ -742,9 +745,6 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				for j, ee := range control.ExampleEvidence {
 					assert.Equal(t, tc.expectedControls[i].ExampleEvidence[j], *ee)
 				}
-
-				// all cloned controls should have an owner
-				assert.NotEmpty(t, control.OwnerID)
 
 				// ensure the org owner has access to the control that was created by an api token
 				if tc.client == suite.client.apiWithToken {
