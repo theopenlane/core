@@ -196,15 +196,15 @@ func (su *SubcontrolUpdate) ClearAuditorReferenceID() *SubcontrolUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (su *SubcontrolUpdate) SetStatus(s string) *SubcontrolUpdate {
-	su.mutation.SetStatus(s)
+func (su *SubcontrolUpdate) SetStatus(es enums.ControlStatus) *SubcontrolUpdate {
+	su.mutation.SetStatus(es)
 	return su
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableStatus(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetStatus(*s)
+func (su *SubcontrolUpdate) SetNillableStatus(es *enums.ControlStatus) *SubcontrolUpdate {
+	if es != nil {
+		su.SetStatus(*es)
 	}
 	return su
 }
@@ -903,6 +903,11 @@ func (su *SubcontrolUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *SubcontrolUpdate) check() error {
+	if v, ok := su.mutation.Status(); ok {
+		if err := subcontrol.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
+		}
+	}
 	if v, ok := su.mutation.Source(); ok {
 		if err := subcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
@@ -1007,10 +1012,10 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(subcontrol.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := su.mutation.Status(); ok {
-		_spec.SetField(subcontrol.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldStatus, field.TypeEnum, value)
 	}
 	if su.mutation.StatusCleared() {
-		_spec.ClearField(subcontrol.FieldStatus, field.TypeString)
+		_spec.ClearField(subcontrol.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := su.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
@@ -1822,15 +1827,15 @@ func (suo *SubcontrolUpdateOne) ClearAuditorReferenceID() *SubcontrolUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (suo *SubcontrolUpdateOne) SetStatus(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetStatus(s)
+func (suo *SubcontrolUpdateOne) SetStatus(es enums.ControlStatus) *SubcontrolUpdateOne {
+	suo.mutation.SetStatus(es)
 	return suo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableStatus(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetStatus(*s)
+func (suo *SubcontrolUpdateOne) SetNillableStatus(es *enums.ControlStatus) *SubcontrolUpdateOne {
+	if es != nil {
+		suo.SetStatus(*es)
 	}
 	return suo
 }
@@ -2542,6 +2547,11 @@ func (suo *SubcontrolUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *SubcontrolUpdateOne) check() error {
+	if v, ok := suo.mutation.Status(); ok {
+		if err := subcontrol.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
+		}
+	}
 	if v, ok := suo.mutation.Source(); ok {
 		if err := subcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
@@ -2663,10 +2673,10 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 		_spec.ClearField(subcontrol.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Status(); ok {
-		_spec.SetField(subcontrol.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldStatus, field.TypeEnum, value)
 	}
 	if suo.mutation.StatusCleared() {
-		_spec.ClearField(subcontrol.FieldStatus, field.TypeString)
+		_spec.ClearField(subcontrol.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := suo.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)

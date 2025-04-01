@@ -2757,7 +2757,7 @@ func (f ControlOrderField) String() string {
 	case ControlOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case ControlOrderFieldStatus.column:
-		str = "status"
+		str = "STATUS"
 	case ControlOrderFieldSource.column:
 		str = "SOURCE"
 	case ControlOrderFieldControlType.column:
@@ -2788,7 +2788,7 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlOrderFieldUpdatedAt
-	case "status":
+	case "STATUS":
 		*f = *ControlOrderFieldStatus
 	case "SOURCE":
 		*f = *ControlOrderFieldSource
@@ -3179,7 +3179,7 @@ func (f ControlHistoryOrderField) String() string {
 	case ControlHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case ControlHistoryOrderFieldStatus.column:
-		str = "status"
+		str = "STATUS"
 	case ControlHistoryOrderFieldSource.column:
 		str = "SOURCE"
 	case ControlHistoryOrderFieldControlType.column:
@@ -3210,7 +3210,7 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlHistoryOrderFieldUpdatedAt
-	case "status":
+	case "STATUS":
 		*f = *ControlHistoryOrderFieldStatus
 	case "SOURCE":
 		*f = *ControlHistoryOrderFieldSource
@@ -24352,7 +24352,7 @@ func (f SubcontrolOrderField) String() string {
 	case SubcontrolOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case SubcontrolOrderFieldStatus.column:
-		str = "status"
+		str = "STATUS"
 	case SubcontrolOrderFieldSource.column:
 		str = "SOURCE"
 	case SubcontrolOrderFieldControlType.column:
@@ -24383,7 +24383,7 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolOrderFieldUpdatedAt
-	case "status":
+	case "STATUS":
 		*f = *SubcontrolOrderFieldStatus
 	case "SOURCE":
 		*f = *SubcontrolOrderFieldSource
@@ -24774,7 +24774,7 @@ func (f SubcontrolHistoryOrderField) String() string {
 	case SubcontrolHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case SubcontrolHistoryOrderFieldStatus.column:
-		str = "status"
+		str = "STATUS"
 	case SubcontrolHistoryOrderFieldSource.column:
 		str = "SOURCE"
 	case SubcontrolHistoryOrderFieldControlType.column:
@@ -24805,7 +24805,7 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolHistoryOrderFieldUpdatedAt
-	case "status":
+	case "STATUS":
 		*f = *SubcontrolHistoryOrderFieldStatus
 	case "SOURCE":
 		*f = *SubcontrolHistoryOrderFieldSource

@@ -210,15 +210,15 @@ func (shc *SubcontrolHistoryCreate) SetNillableAuditorReferenceID(s *string) *Su
 }
 
 // SetStatus sets the "status" field.
-func (shc *SubcontrolHistoryCreate) SetStatus(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetStatus(s)
+func (shc *SubcontrolHistoryCreate) SetStatus(es enums.ControlStatus) *SubcontrolHistoryCreate {
+	shc.mutation.SetStatus(es)
 	return shc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableStatus(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetStatus(*s)
+func (shc *SubcontrolHistoryCreate) SetNillableStatus(es *enums.ControlStatus) *SubcontrolHistoryCreate {
+	if es != nil {
+		shc.SetStatus(*es)
 	}
 	return shc
 }
@@ -412,6 +412,10 @@ func (shc *SubcontrolHistoryCreate) defaults() {
 		v := subcontrolhistory.DefaultTags
 		shc.mutation.SetTags(v)
 	}
+	if _, ok := shc.mutation.Status(); !ok {
+		v := subcontrolhistory.DefaultStatus
+		shc.mutation.SetStatus(v)
+	}
 	if _, ok := shc.mutation.Source(); !ok {
 		v := subcontrolhistory.DefaultSource
 		shc.mutation.SetSource(v)
@@ -441,6 +445,11 @@ func (shc *SubcontrolHistoryCreate) check() error {
 	}
 	if _, ok := shc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "SubcontrolHistory.display_id"`)}
+	}
+	if v, ok := shc.mutation.Status(); ok {
+		if err := subcontrolhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.status": %w`, err)}
+		}
 	}
 	if v, ok := shc.mutation.Source(); ok {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
@@ -555,7 +564,7 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 		_node.AuditorReferenceID = value
 	}
 	if value, ok := shc.mutation.Status(); ok {
-		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := shc.mutation.Source(); ok {

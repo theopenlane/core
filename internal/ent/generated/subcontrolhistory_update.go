@@ -185,15 +185,15 @@ func (shu *SubcontrolHistoryUpdate) ClearAuditorReferenceID() *SubcontrolHistory
 }
 
 // SetStatus sets the "status" field.
-func (shu *SubcontrolHistoryUpdate) SetStatus(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetStatus(s)
+func (shu *SubcontrolHistoryUpdate) SetStatus(es enums.ControlStatus) *SubcontrolHistoryUpdate {
+	shu.mutation.SetStatus(es)
 	return shu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableStatus(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetStatus(*s)
+func (shu *SubcontrolHistoryUpdate) SetNillableStatus(es *enums.ControlStatus) *SubcontrolHistoryUpdate {
+	if es != nil {
+		shu.SetStatus(*es)
 	}
 	return shu
 }
@@ -501,6 +501,11 @@ func (shu *SubcontrolHistoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (shu *SubcontrolHistoryUpdate) check() error {
+	if v, ok := shu.mutation.Status(); ok {
+		if err := subcontrolhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := shu.mutation.Source(); ok {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.source": %w`, err)}
@@ -598,10 +603,10 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := shu.mutation.Status(); ok {
-		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if shu.mutation.StatusCleared() {
-		_spec.ClearField(subcontrolhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := shu.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
@@ -891,15 +896,15 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearAuditorReferenceID() *SubcontrolHis
 }
 
 // SetStatus sets the "status" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetStatus(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetStatus(s)
+func (shuo *SubcontrolHistoryUpdateOne) SetStatus(es enums.ControlStatus) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetStatus(es)
 	return shuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableStatus(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetStatus(*s)
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableStatus(es *enums.ControlStatus) *SubcontrolHistoryUpdateOne {
+	if es != nil {
+		shuo.SetStatus(*es)
 	}
 	return shuo
 }
@@ -1220,6 +1225,11 @@ func (shuo *SubcontrolHistoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (shuo *SubcontrolHistoryUpdateOne) check() error {
+	if v, ok := shuo.mutation.Status(); ok {
+		if err := subcontrolhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := shuo.mutation.Source(); ok {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.source": %w`, err)}
@@ -1334,10 +1344,10 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 		_spec.ClearField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := shuo.mutation.Status(); ok {
-		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if shuo.mutation.StatusCleared() {
-		_spec.ClearField(subcontrolhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := shuo.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
