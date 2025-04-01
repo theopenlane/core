@@ -73,14 +73,14 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 }
 
 // AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
-func (h *Handler) AddQueryParameter(name string, paramName string, op *openapi3.Operation) {
+func (h *Handler) AddQueryParameter(paramName string, op *openapi3.Operation) {
 	param := openapi3.NewQueryParameter(paramName).WithSchema(openapi3.NewStringSchema())
 
 	op.AddParameter(param)
 }
 
 // AddPathParameter is used to add a path parameter definition to the OpenAPI schema (e.g. /users/{id})
-func (h *Handler) AddPathParameter(name string, paramName string, op *openapi3.Operation) {
+func (h *Handler) AddPathParameter(paramName string, op *openapi3.Operation) {
 	param := openapi3.NewPathParameter(paramName).WithSchema(openapi3.NewStringSchema())
 
 	op.AddParameter(param)
