@@ -25010,6 +25010,7 @@ under an organization (ownerID)
 input CloneControlInput {
     controlIDs: [ID!]
     ownerID: ID
+    programID: ID
 }
 
 extend type Mutation{
