@@ -28,6 +28,7 @@ func AllowIfInternalRequest() privacy.QueryMutationRule {
 		if IsInternalRequest(ctx) {
 			return privacy.Allow
 		}
+
 		return privacy.Skip
 	})
 }
