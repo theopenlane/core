@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -168,6 +169,21 @@ func (nc *NoteCreate) SetNillableTaskID(id *string) *NoteCreate {
 // SetTask sets the "task" edge to the Task entity.
 func (nc *NoteCreate) SetTask(t *Task) *NoteCreate {
 	return nc.SetTaskID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (nc *NoteCreate) AddFileIDs(ids ...string) *NoteCreate {
+	nc.mutation.AddFileIDs(ids...)
+	return nc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (nc *NoteCreate) AddFiles(f ...*File) *NoteCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return nc.AddFileIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -356,6 +372,23 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.task_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

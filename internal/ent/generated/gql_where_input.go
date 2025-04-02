@@ -36244,6 +36244,10 @@ type NoteWhereInput struct {
 	// "task" edge predicates.
 	HasTask     *bool             `json:"hasTask,omitempty"`
 	HasTaskWith []*TaskWhereInput `json:"hasTaskWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36731,6 +36735,24 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasTaskWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := note.HasFiles()
+		if !*i.HasFiles {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

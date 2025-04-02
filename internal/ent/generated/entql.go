@@ -4144,6 +4144,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"File",
+	)
+	graph.MustAddE(
 		"organization",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -12958,6 +12970,20 @@ func (f *NoteFilter) WhereHasTask() {
 // WhereHasTaskWith applies a predicate to check if query has an edge task with a given conditions (other predicates).
 func (f *NoteFilter) WhereHasTaskWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("task", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *NoteFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -52,11 +52,15 @@ type NoteEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Task holds the value of the task edge.
 	Task *Task `json:"task,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
+
+	namedFiles map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -79,6 +83,15 @@ func (e NoteEdges) TaskOrErr() (*Task, error) {
 		return nil, &NotFoundError{label: task.Label}
 	}
 	return nil, &NotLoadedError{edge: "task"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e NoteEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -215,6 +228,11 @@ func (n *Note) QueryTask() *TaskQuery {
 	return NewNoteClient(n.config).QueryTask(n)
 }
 
+// QueryFiles queries the "files" edge of the Note entity.
+func (n *Note) QueryFiles() *FileQuery {
+	return NewNoteClient(n.config).QueryFiles(n)
+}
+
 // Update returns a builder for updating this Note.
 // Note that you need to call Note.Unwrap() before calling this method if this Note
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -266,6 +284,30 @@ func (n *Note) String() string {
 	builder.WriteString(n.Text)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (n *Note) NamedFiles(name string) ([]*File, error) {
+	if n.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := n.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (n *Note) appendNamedFiles(name string, edges ...*File) {
+	if n.Edges.namedFiles == nil {
+		n.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		n.Edges.namedFiles[name] = []*File{}
+	} else {
+		n.Edges.namedFiles[name] = append(n.Edges.namedFiles[name], edges...)
+	}
 }
 
 // Notes is a parsable slice of Note.

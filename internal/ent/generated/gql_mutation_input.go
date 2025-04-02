@@ -4452,6 +4452,7 @@ type CreateNoteInput struct {
 	Text    string
 	OwnerID *string
 	TaskID  *string
+	FileIDs []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -4463,6 +4464,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateNoteInput on the NoteCreate builder.
@@ -4473,9 +4477,12 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	Text      *string
-	ClearTask bool
-	TaskID    *string
+	Text          *string
+	ClearTask     bool
+	TaskID        *string
+	ClearFiles    bool
+	AddFileIDs    []string
+	RemoveFileIDs []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -4488,6 +4495,15 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TaskID; v != nil {
 		m.SetTaskID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 

@@ -69,6 +69,7 @@ func (n Note) Edges() []ent.Edge {
 			edgeSchema: Task{},
 			ref:        "comments",
 		}),
+		defaultEdgeToWithPagination(n, File{}),
 	}
 }
 

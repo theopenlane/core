@@ -50,6 +50,7 @@ type FileQuery struct {
 	withProgram                  *ProgramQuery
 	withEvidence                 *EvidenceQuery
 	withEvents                   *EventQuery
+	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
@@ -826,6 +827,7 @@ func (fq *FileQuery) prepareQuery(ctx context.Context) error {
 func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, error) {
 	var (
 		nodes       = []*File{}
+		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
 		loadedTypes = [12]bool{
 			fq.withUser != nil,
@@ -842,6 +844,9 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withEvents != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, file.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*File).scanValues(nil, columns)
 	}
