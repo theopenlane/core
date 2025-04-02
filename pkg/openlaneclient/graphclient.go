@@ -1911,7 +1911,6 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	ReferenceID            *string                          "json:\"referenceID,omitempty\" graphql:\"referenceID\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	StandardID             *string                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 }
@@ -2023,12 +2022,6 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetStandard
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
 	return t.StandardID
-}
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetSubcategory() *string {
 	if t == nil {
@@ -3662,7 +3655,6 @@ type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	ReferenceID            *string                          "json:\"referenceID,omitempty\" graphql:\"referenceID\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 }
@@ -3774,12 +3766,6 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetRe
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.References
-}
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcategory() *string {
 	if t == nil {
@@ -6225,7 +6211,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -6346,7 +6332,7 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetStatus() *string {
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
@@ -6408,7 +6394,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -6529,7 +6515,7 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStandardID() *st
 	}
 	return t.StandardID
 }
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStatus() *string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
@@ -6733,7 +6719,7 @@ type CreateControl_CreateControl_Control struct {
 	References             []*models.Reference                                  "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                 "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                                              "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                              "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                 "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -6885,7 +6871,7 @@ func (t *CreateControl_CreateControl_Control) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *CreateControl_CreateControl_Control) GetStatus() *string {
+func (t *CreateControl_CreateControl_Control) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
 	}
@@ -7171,7 +7157,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	Source                 *enums.ControlSource                                "json:\"source,omitempty\" graphql:\"source\""
 	Standard               *GetAllControls_Controls_Edges_Node_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID             *string                                             "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                             "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -7329,7 +7315,7 @@ func (t *GetAllControls_Controls_Edges_Node) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *GetAllControls_Controls_Edges_Node) GetStatus() *string {
+func (t *GetAllControls_Controls_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
@@ -7597,7 +7583,7 @@ type GetControlByID_Control struct {
 	Source                 *enums.ControlSource                    "json:\"source,omitempty\" graphql:\"source\""
 	Standard               *GetControlByID_Control_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID             *string                                 "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                 "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                    "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                 "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -7755,7 +7741,7 @@ func (t *GetControlByID_Control) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *GetControlByID_Control) GetStatus() *string {
+func (t *GetControlByID_Control) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetControlByID_Control{}
 	}
@@ -8019,7 +8005,7 @@ type GetControls_Controls_Edges_Node struct {
 	Source                 *enums.ControlSource                             "json:\"source,omitempty\" graphql:\"source\""
 	Standard               *GetControls_Controls_Edges_Node_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID             *string                                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -8177,7 +8163,7 @@ func (t *GetControls_Controls_Edges_Node) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *GetControls_Controls_Edges_Node) GetStatus() *string {
+func (t *GetControls_Controls_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
 	}
@@ -8445,7 +8431,7 @@ type UpdateControl_UpdateControl_Control struct {
 	Source                 *enums.ControlSource                                 "json:\"source,omitempty\" graphql:\"source\""
 	Standard               *UpdateControl_UpdateControl_Control_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID             *string                                              "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                              "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                 "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -8603,7 +8589,7 @@ func (t *UpdateControl_UpdateControl_Control) GetStandardID() *string {
 	}
 	return t.StandardID
 }
-func (t *UpdateControl_UpdateControl_Control) GetStatus() *string {
+func (t *UpdateControl_UpdateControl_Control) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
@@ -8719,7 +8705,7 @@ type CreateControlsByClone_CreateControlsByClone_Controls struct {
 	References             []*models.Reference                                           "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                          "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                                                       "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                                                       "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                       "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -8846,7 +8832,7 @@ func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetStandardID() *
 	}
 	return t.StandardID
 }
-func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetStatus() *string {
+func (t *CreateControlsByClone_CreateControlsByClone_Controls) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateControlsByClone_CreateControlsByClone_Controls{}
 	}
@@ -8911,7 +8897,7 @@ type GetAllControlHistories_ControlHistories_Edges_Node struct {
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9050,7 +9036,7 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetStandardID() *st
 	}
 	return t.StandardID
 }
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
@@ -9126,7 +9112,7 @@ type GetControlHistories_ControlHistories_Edges_Node struct {
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
 	StandardID             *string                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9265,7 +9251,7 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetStandardID() *strin
 	}
 	return t.StandardID
 }
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetStatus() *string {
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
@@ -50426,7 +50412,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -50547,7 +50533,7 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSource(
 	}
 	return t.Source
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetStatus() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
@@ -50609,7 +50595,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -50730,7 +50716,7 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSource() *enu
 	}
 	return t.Source
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetStatus() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
@@ -50792,7 +50778,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -50913,7 +50899,7 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSource() *enums.Contro
 	}
 	return t.Source
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetStatus() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
@@ -51057,7 +51043,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	RefCode                string                                                 "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference                                    "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                   "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                                                "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                   "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51196,7 +51182,7 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetSource() *enums.ControlSou
 	}
 	return t.Source
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetStatus() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
@@ -51340,7 +51326,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	RefCode                string                                     "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference                        "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                       "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                                    "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51479,7 +51465,7 @@ func (t *GetSubcontrolByID_Subcontrol) GetSource() *enums.ControlSource {
 	}
 	return t.Source
 }
-func (t *GetSubcontrolByID_Subcontrol) GetStatus() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
@@ -51601,7 +51587,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	RefCode                string                                              "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference                                 "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                                             "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51740,7 +51726,7 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetSource() *enums.ControlSource
 	}
 	return t.Source
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetStatus() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
@@ -51884,7 +51870,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	RefCode                string                                                     "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference                                        "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                                                    "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -52023,7 +52009,7 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSource() *enums.Contro
 	}
 	return t.Source
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetStatus() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
@@ -52088,7 +52074,7 @@ type GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -52227,7 +52213,7 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSource() *
 	}
 	return t.Source
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
@@ -52303,7 +52289,7 @@ type GetSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	RefCode                string                           "json:\"refCode\" graphql:\"refCode\""
 	References             []*models.Reference              "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource             "json:\"source,omitempty\" graphql:\"source\""
-	Status                 *string                          "json:\"status,omitempty\" graphql:\"status\""
+	Status                 *enums.ControlStatus             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -52442,7 +52428,7 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSource() *enu
 	}
 	return t.Source
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *enums.ControlStatus {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
@@ -63663,7 +63649,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					description
 					referenceID
 					auditorReferenceID
-					status
 					category
 					categoryID
 					subcategory
@@ -63954,7 +63939,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					description
 					referenceID
 					auditorReferenceID
-					status
 					category
 					categoryID
 					subcategory

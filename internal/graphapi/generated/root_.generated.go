@@ -27629,7 +27629,7 @@ type Control implements Node {
   """
   status of the control
   """
-  status: String
+  status: ControlControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -28108,6 +28108,17 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums
   IMPORTED
 }
 """
+ControlControlStatus is enum for the field status
+"""
+enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+  PREPARING
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
+  APPROVED
+  ARCHIVED
+  NULL
+}
+"""
 ControlControlType is enum for the field control_type
 """
 enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
@@ -28167,7 +28178,7 @@ type ControlHistory implements Node {
   """
   status of the control
   """
-  status: String
+  status: ControlHistoryControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -28252,6 +28263,17 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pk
   IMPORTED
 }
 """
+ControlHistoryControlStatus is enum for the field status
+"""
+enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+  PREPARING
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
+  APPROVED
+  ARCHIVED
+  NULL
+}
+"""
 ControlHistoryControlType is enum for the field control_type
 """
 enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
@@ -28300,7 +28322,7 @@ Properties by which ControlHistory connections can be ordered.
 enum ControlHistoryOrderField {
   created_at
   updated_at
-  status
+  STATUS
   SOURCE
   CONTROL_TYPE
   category
@@ -28548,21 +28570,12 @@ input ControlHistoryWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: ControlHistoryControlStatus
+  statusNEQ: ControlHistoryControlStatus
+  statusIn: [ControlHistoryControlStatus!]
+  statusNotIn: [ControlHistoryControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -30522,7 +30535,7 @@ Properties by which Control connections can be ordered.
 enum ControlOrderField {
   created_at
   updated_at
-  status
+  STATUS
   SOURCE
   CONTROL_TYPE
   category
@@ -30734,21 +30747,12 @@ input ControlWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: ControlControlStatus
+  statusNEQ: ControlControlStatus
+  statusIn: [ControlControlStatus!]
+  statusNotIn: [ControlControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -31149,7 +31153,7 @@ input CreateControlInput {
   """
   status of the control
   """
-  status: String
+  status: ControlControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -32237,7 +32241,7 @@ input CreateSubcontrolInput {
   """
   status of the control
   """
-  status: String
+  status: SubcontrolControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -55711,7 +55715,7 @@ type Subcontrol implements Node {
   """
   status of the control
   """
-  status: String
+  status: SubcontrolControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -56085,6 +56089,17 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/en
   IMPORTED
 }
 """
+SubcontrolControlStatus is enum for the field status
+"""
+enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+  PREPARING
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
+  APPROVED
+  ARCHIVED
+  NULL
+}
+"""
 SubcontrolControlType is enum for the field control_type
 """
 enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
@@ -56144,7 +56159,7 @@ type SubcontrolHistory implements Node {
   """
   status of the control
   """
-  status: String
+  status: SubcontrolHistoryControlStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -56229,6 +56244,17 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
   IMPORTED
 }
 """
+SubcontrolHistoryControlStatus is enum for the field status
+"""
+enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+  PREPARING
+  NEEDS_APPROVAL
+  CHANGES_REQUESTED
+  APPROVED
+  ARCHIVED
+  NULL
+}
+"""
 SubcontrolHistoryControlType is enum for the field control_type
 """
 enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
@@ -56277,7 +56303,7 @@ Properties by which SubcontrolHistory connections can be ordered.
 enum SubcontrolHistoryOrderField {
   created_at
   updated_at
-  status
+  STATUS
   SOURCE
   CONTROL_TYPE
   category
@@ -56525,21 +56551,12 @@ input SubcontrolHistoryWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: SubcontrolHistoryControlStatus
+  statusNEQ: SubcontrolHistoryControlStatus
+  statusIn: [SubcontrolHistoryControlStatus!]
+  statusNotIn: [SubcontrolHistoryControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -56664,7 +56681,7 @@ Properties by which Subcontrol connections can be ordered.
 enum SubcontrolOrderField {
   created_at
   updated_at
-  status
+  STATUS
   SOURCE
   CONTROL_TYPE
   category
@@ -56876,21 +56893,12 @@ input SubcontrolWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: SubcontrolControlStatus
+  statusNEQ: SubcontrolControlStatus
+  statusIn: [SubcontrolControlStatus!]
+  statusNotIn: [SubcontrolControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -59716,7 +59724,7 @@ input UpdateControlInput {
   """
   status of the control
   """
-  status: String
+  status: ControlControlStatus
   clearStatus: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.
@@ -61285,7 +61293,7 @@ input UpdateSubcontrolInput {
   """
   status of the control
   """
-  status: String
+  status: SubcontrolControlStatus
   clearStatus: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.

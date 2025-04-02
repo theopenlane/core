@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -62,6 +63,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 			ExampleEvidence:        control.ExampleEvidence,
 			References:             control.References,
 			MappedControlIDs:       mappedControlIDs,
+			Status:                 &enums.ControlStatusPreparing,
 		}
 
 		if control.StandardID != "" {
@@ -106,6 +108,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 					ExampleEvidence:        subcontrol.ExampleEvidence,
 					References:             subcontrol.References,
 					MappedControlIDs:       mappedControlIDs,
+					Status:                 &enums.ControlStatusPreparing,
 				}
 			}
 

@@ -25,10 +25,12 @@ var controlFields = []ent.Field{
 		Optional().
 		Unique().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
-	field.String("status").
+	field.Enum("status").
+		GoType(enums.ControlStatus("")).
 		Optional().
+		Default(enums.ControlStatusNull.String()).
 		Annotations(
-			entgql.OrderField("status"),
+			entgql.OrderField("STATUS"),
 		).
 		Comment("status of the control"),
 	field.Enum("source").

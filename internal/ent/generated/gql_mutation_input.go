@@ -619,7 +619,7 @@ type CreateControlInput struct {
 	Description              *string
 	ReferenceID              *string
 	AuditorReferenceID       *string
-	Status                   *string
+	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
 	ControlType              *enums.ControlType
 	Category                 *string
@@ -785,7 +785,7 @@ type UpdateControlInput struct {
 	ClearAuditorReferenceID        bool
 	AuditorReferenceID             *string
 	ClearStatus                    bool
-	Status                         *string
+	Status                         *enums.ControlStatus
 	ClearSource                    bool
 	Source                         *enums.ControlSource
 	ClearControlType               bool
@@ -6943,7 +6943,7 @@ type CreateSubcontrolInput struct {
 	Description            *string
 	ReferenceID            *string
 	AuditorReferenceID     *string
-	Status                 *string
+	Status                 *enums.ControlStatus
 	Source                 *enums.ControlSource
 	ControlType            *enums.ControlType
 	Category               *string
@@ -7083,7 +7083,7 @@ type UpdateSubcontrolInput struct {
 	ClearAuditorReferenceID      bool
 	AuditorReferenceID           *string
 	ClearStatus                  bool
-	Status                       *string
+	Status                       *enums.ControlStatus
 	ClearSource                  bool
 	Source                       *enums.ControlSource
 	ClearControlType             bool

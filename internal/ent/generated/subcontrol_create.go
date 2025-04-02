@@ -187,15 +187,15 @@ func (sc *SubcontrolCreate) SetNillableAuditorReferenceID(s *string) *Subcontrol
 }
 
 // SetStatus sets the "status" field.
-func (sc *SubcontrolCreate) SetStatus(s string) *SubcontrolCreate {
-	sc.mutation.SetStatus(s)
+func (sc *SubcontrolCreate) SetStatus(es enums.ControlStatus) *SubcontrolCreate {
+	sc.mutation.SetStatus(es)
 	return sc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableStatus(s *string) *SubcontrolCreate {
-	if s != nil {
-		sc.SetStatus(*s)
+func (sc *SubcontrolCreate) SetNillableStatus(es *enums.ControlStatus) *SubcontrolCreate {
+	if es != nil {
+		sc.SetStatus(*es)
 	}
 	return sc
 }
@@ -576,6 +576,10 @@ func (sc *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultTags
 		sc.mutation.SetTags(v)
 	}
+	if _, ok := sc.mutation.Status(); !ok {
+		v := subcontrol.DefaultStatus
+		sc.mutation.SetStatus(v)
+	}
 	if _, ok := sc.mutation.Source(); !ok {
 		v := subcontrol.DefaultSource
 		sc.mutation.SetSource(v)
@@ -607,6 +611,11 @@ func (sc *SubcontrolCreate) check() error {
 	if v, ok := sc.mutation.OwnerID(); ok {
 		if err := subcontrol.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := sc.mutation.Status(); ok {
+		if err := subcontrol.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
 		}
 	}
 	if v, ok := sc.mutation.Source(); ok {
@@ -719,7 +728,7 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_node.AuditorReferenceID = value
 	}
 	if value, ok := sc.mutation.Status(); ok {
-		_spec.SetField(subcontrol.FieldStatus, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := sc.mutation.Source(); ok {

@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"errors"
 
 	"github.com/spf13/cobra"
 
@@ -75,7 +76,13 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToControlStatus(status)
+	} else {
+		input.Status = &enums.ControlStatusPreparing
+	}
+
+	if input.Status.Valid() {
+		return openlaneclient.CreateControlInput{}, errors.New("status is invalid")
 	}
 
 	controlType := cmd.Config.String("control-type")

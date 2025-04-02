@@ -185,15 +185,15 @@ func (chu *ControlHistoryUpdate) ClearAuditorReferenceID() *ControlHistoryUpdate
 }
 
 // SetStatus sets the "status" field.
-func (chu *ControlHistoryUpdate) SetStatus(s string) *ControlHistoryUpdate {
-	chu.mutation.SetStatus(s)
+func (chu *ControlHistoryUpdate) SetStatus(es enums.ControlStatus) *ControlHistoryUpdate {
+	chu.mutation.SetStatus(es)
 	return chu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableStatus(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetStatus(*s)
+func (chu *ControlHistoryUpdate) SetNillableStatus(es *enums.ControlStatus) *ControlHistoryUpdate {
+	if es != nil {
+		chu.SetStatus(*es)
 	}
 	return chu
 }
@@ -507,6 +507,11 @@ func (chu *ControlHistoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (chu *ControlHistoryUpdate) check() error {
+	if v, ok := chu.mutation.Status(); ok {
+		if err := controlhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := chu.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.source": %w`, err)}
@@ -604,10 +609,10 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := chu.mutation.Status(); ok {
-		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if chu.mutation.StatusCleared() {
-		_spec.ClearField(controlhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := chu.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
@@ -900,15 +905,15 @@ func (chuo *ControlHistoryUpdateOne) ClearAuditorReferenceID() *ControlHistoryUp
 }
 
 // SetStatus sets the "status" field.
-func (chuo *ControlHistoryUpdateOne) SetStatus(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetStatus(s)
+func (chuo *ControlHistoryUpdateOne) SetStatus(es enums.ControlStatus) *ControlHistoryUpdateOne {
+	chuo.mutation.SetStatus(es)
 	return chuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableStatus(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetStatus(*s)
+func (chuo *ControlHistoryUpdateOne) SetNillableStatus(es *enums.ControlStatus) *ControlHistoryUpdateOne {
+	if es != nil {
+		chuo.SetStatus(*es)
 	}
 	return chuo
 }
@@ -1235,6 +1240,11 @@ func (chuo *ControlHistoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (chuo *ControlHistoryUpdateOne) check() error {
+	if v, ok := chuo.mutation.Status(); ok {
+		if err := controlhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := chuo.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.source": %w`, err)}
@@ -1349,10 +1359,10 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	if value, ok := chuo.mutation.Status(); ok {
-		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if chuo.mutation.StatusCleared() {
-		_spec.ClearField(controlhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := chuo.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)

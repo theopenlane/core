@@ -210,15 +210,15 @@ func (chc *ControlHistoryCreate) SetNillableAuditorReferenceID(s *string) *Contr
 }
 
 // SetStatus sets the "status" field.
-func (chc *ControlHistoryCreate) SetStatus(s string) *ControlHistoryCreate {
-	chc.mutation.SetStatus(s)
+func (chc *ControlHistoryCreate) SetStatus(es enums.ControlStatus) *ControlHistoryCreate {
+	chc.mutation.SetStatus(es)
 	return chc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableStatus(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetStatus(*s)
+func (chc *ControlHistoryCreate) SetNillableStatus(es *enums.ControlStatus) *ControlHistoryCreate {
+	if es != nil {
+		chc.SetStatus(*es)
 	}
 	return chc
 }
@@ -420,6 +420,10 @@ func (chc *ControlHistoryCreate) defaults() {
 		v := controlhistory.DefaultTags
 		chc.mutation.SetTags(v)
 	}
+	if _, ok := chc.mutation.Status(); !ok {
+		v := controlhistory.DefaultStatus
+		chc.mutation.SetStatus(v)
+	}
 	if _, ok := chc.mutation.Source(); !ok {
 		v := controlhistory.DefaultSource
 		chc.mutation.SetSource(v)
@@ -449,6 +453,11 @@ func (chc *ControlHistoryCreate) check() error {
 	}
 	if _, ok := chc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlHistory.display_id"`)}
+	}
+	if v, ok := chc.mutation.Status(); ok {
+		if err := controlhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.status": %w`, err)}
+		}
 	}
 	if v, ok := chc.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
@@ -560,7 +569,7 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_node.AuditorReferenceID = value
 	}
 	if value, ok := chc.mutation.Status(); ok {
-		_spec.SetField(controlhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := chc.mutation.Source(); ok {

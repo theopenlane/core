@@ -218,7 +218,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			request: openlaneclient.CreateSubcontrolInput{
 				RefCode:     "Another Subcontrol",
 				Description: lo.ToPtr("A description of the Subcontrol"),
-				Status:      lo.ToPtr("mitigated"),
+				Status:      &enums.ControlStatusPreparing,
 				Tags:        []string{"tag1", "tag2"},
 				Source:      &enums.ControlSourceFramework,
 				ControlType: &enums.ControlTypeDetective,
@@ -375,11 +375,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Description)
 			}
 
-			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.CreateSubcontrol.Subcontrol.Status)
-			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Status)
-			}
+			assert.Equal(t, enums.ControlStatusPreparing, *resp.CreateSubcontrol.Subcontrol.Status)
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source)
@@ -423,7 +419,7 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateSubcontrolInput{
-				Status: lo.ToPtr("mitigated"),
+				Status: &enums.ControlStatusPreparing,
 				Tags:   []string{"tag1", "tag2"},
 				Source: lo.ToPtr(enums.ControlSourceFramework),
 			},

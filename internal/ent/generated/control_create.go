@@ -190,15 +190,15 @@ func (cc *ControlCreate) SetNillableAuditorReferenceID(s *string) *ControlCreate
 }
 
 // SetStatus sets the "status" field.
-func (cc *ControlCreate) SetStatus(s string) *ControlCreate {
-	cc.mutation.SetStatus(s)
+func (cc *ControlCreate) SetStatus(es enums.ControlStatus) *ControlCreate {
+	cc.mutation.SetStatus(es)
 	return cc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableStatus(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetStatus(*s)
+func (cc *ControlCreate) SetNillableStatus(es *enums.ControlStatus) *ControlCreate {
+	if es != nil {
+		cc.SetStatus(*es)
 	}
 	return cc
 }
@@ -677,6 +677,10 @@ func (cc *ControlCreate) defaults() error {
 		v := control.DefaultTags
 		cc.mutation.SetTags(v)
 	}
+	if _, ok := cc.mutation.Status(); !ok {
+		v := control.DefaultStatus
+		cc.mutation.SetStatus(v)
+	}
 	if _, ok := cc.mutation.Source(); !ok {
 		v := control.DefaultSource
 		cc.mutation.SetSource(v)
@@ -708,6 +712,11 @@ func (cc *ControlCreate) check() error {
 	if v, ok := cc.mutation.OwnerID(); ok {
 		if err := control.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := cc.mutation.Status(); ok {
+		if err := control.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
 		}
 	}
 	if v, ok := cc.mutation.Source(); ok {
@@ -809,7 +818,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_node.AuditorReferenceID = value
 	}
 	if value, ok := cc.mutation.Status(); ok {
-		_spec.SetField(control.FieldStatus, field.TypeString, value)
+		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := cc.mutation.Source(); ok {
