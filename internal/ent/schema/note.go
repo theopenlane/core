@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -69,6 +70,7 @@ func (n Note) Edges() []ent.Edge {
 			edgeSchema: Task{},
 			ref:        "comments",
 		}),
+		defaultEdgeToWithPagination(n, File{}),
 	}
 }
 
@@ -92,4 +94,11 @@ func (Note) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)
+}
+
+// Hooks of the Note
+func (Note) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookNoteFiles(),
+	}
 }

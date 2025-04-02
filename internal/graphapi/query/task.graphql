@@ -171,6 +171,16 @@ query GetAllTasks {
               createdBy
               updatedAt
               updatedBy
+              files {
+                edges {
+                  node {
+                    id
+                    storagePath
+                    storageScheme
+                    storageVolume
+                  }
+                }
+              }
             }
           }
         }
@@ -219,6 +229,16 @@ query GetTaskByID($taskId: ID!) {
           createdBy
           updatedAt
           updatedBy
+          files {
+            edges {
+              node {
+                id
+                storagePath
+                storageScheme
+                storageVolume
+              }
+            }
+          }
         }
       }
     }
@@ -263,6 +283,16 @@ query GetTasks($where: TaskWhereInput) {
               createdBy
               updatedAt
               updatedBy
+              files {
+                edges {
+                  node {
+                    id
+                    storagePath
+                    storageScheme
+                    storageVolume
+                  }
+                }
+              }
             }
           }
         }

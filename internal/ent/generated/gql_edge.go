@@ -2331,6 +2331,27 @@ func (n *Note) Task(ctx context.Context) (*Task, error) {
 	return result, MaskNotFound(err)
 }
 
+func (n *Note) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := n.Edges.totalCount[2][alias]
+	if nodes, err := n.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return n.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Onboarding) Organization(ctx context.Context) (*Organization, error) {
 	result, err := o.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {

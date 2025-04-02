@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -23,15 +25,17 @@ import (
 // NoteQuery is the builder for querying Note entities.
 type NoteQuery struct {
 	config
-	ctx        *QueryContext
-	order      []note.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Note
-	withOwner  *OrganizationQuery
-	withTask   *TaskQuery
-	withFKs    bool
-	loadTotal  []func(context.Context, []*Note) error
-	modifiers  []func(*sql.Selector)
+	ctx            *QueryContext
+	order          []note.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.Note
+	withOwner      *OrganizationQuery
+	withTask       *TaskQuery
+	withFiles      *FileQuery
+	withFKs        bool
+	loadTotal      []func(context.Context, []*Note) error
+	modifiers      []func(*sql.Selector)
+	withNamedFiles map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -112,6 +116,31 @@ func (nq *NoteQuery) QueryTask() *TaskQuery {
 		schemaConfig := nq.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (nq *NoteQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, note.FilesTable, note.FilesColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -312,6 +341,7 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		predicates: append([]predicate.Note{}, nq.predicates...),
 		withOwner:  nq.withOwner.Clone(),
 		withTask:   nq.withTask.Clone(),
+		withFiles:  nq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
 		path:      nq.path,
@@ -338,6 +368,17 @@ func (nq *NoteQuery) WithTask(opts ...func(*TaskQuery)) *NoteQuery {
 		opt(query)
 	}
 	nq.withTask = query
+	return nq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
+	query := (&FileClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withFiles = query
 	return nq
 }
 
@@ -426,9 +467,10 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = nq.withFKs
 		_spec       = nq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			nq.withOwner != nil,
 			nq.withTask != nil,
+			nq.withFiles != nil,
 		}
 	)
 	if nq.withTask != nil {
@@ -469,6 +511,20 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := nq.withTask; query != nil {
 		if err := nq.loadTask(ctx, query, nodes, nil,
 			func(n *Note, e *Task) { n.Edges.Task = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withFiles; query != nil {
+		if err := nq.loadFiles(ctx, query, nodes,
+			func(n *Note) { n.Edges.Files = []*File{} },
+			func(n *Note, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range nq.withNamedFiles {
+		if err := nq.loadFiles(ctx, query, nodes,
+			func(n *Note) { n.appendNamedFiles(name) },
+			func(n *Note, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -538,6 +594,37 @@ func (nq *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*No
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (nq *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Note, init func(*Note), assign func(*Note, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Note)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(note.FilesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.note_files
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "note_files" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "note_files" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -641,6 +728,20 @@ func (nq *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (nq *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
 	nq.modifiers = append(nq.modifiers, modifiers...)
 	return nq.Select()
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *NoteQuery {
+	query := (&FileClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if nq.withNamedFiles == nil {
+		nq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	nq.withNamedFiles[name] = query
+	return nq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

@@ -9477,6 +9477,25 @@ func (c *NoteClient) QueryTask(n *Note) *TaskQuery {
 	return query
 }
 
+// QueryFiles queries the files edge of a Note.
+func (c *NoteClient) QueryFiles(n *Note) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, note.FilesTable, note.FilesColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *NoteClient) Hooks() []Hook {
 	hooks := c.hooks.Note

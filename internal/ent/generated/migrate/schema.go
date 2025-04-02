@@ -895,12 +895,21 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "note_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
 		Name:       "files",
 		Columns:    FilesColumns,
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "files_notes_files",
+				Columns:    []*schema.Column{FilesColumns[22]},
+				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
@@ -5415,6 +5424,7 @@ func init() {
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
 	}
+	FilesTable.ForeignKeys[0].RefTable = NotesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}

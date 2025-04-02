@@ -14570,6 +14570,95 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			n.withTask = query
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: n.config}).Query()
+			)
+			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newFilePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Note) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"note_files"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(note.FilesColumn), ids...))
+						})
+						if err := query.GroupBy(note.FilesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Note) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Files)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(note.FilesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			n.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[note.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, note.FieldCreatedAt)

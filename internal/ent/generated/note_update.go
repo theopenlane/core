@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -137,6 +138,21 @@ func (nu *NoteUpdate) SetTask(t *Task) *NoteUpdate {
 	return nu.SetTaskID(t.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (nu *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
+	nu.mutation.AddFileIDs(ids...)
+	return nu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (nu *NoteUpdate) AddFiles(f ...*File) *NoteUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return nu.AddFileIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
@@ -146,6 +162,27 @@ func (nu *NoteUpdate) Mutation() *NoteMutation {
 func (nu *NoteUpdate) ClearTask() *NoteUpdate {
 	nu.mutation.ClearTask()
 	return nu
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (nu *NoteUpdate) ClearFiles() *NoteUpdate {
+	nu.mutation.ClearFiles()
+	return nu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (nu *NoteUpdate) RemoveFileIDs(ids ...string) *NoteUpdate {
+	nu.mutation.RemoveFileIDs(ids...)
+	return nu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (nu *NoteUpdate) RemoveFiles(f ...*File) *NoteUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return nu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -282,6 +319,54 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !nu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = nu.schemaConfig.Note
 	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
 	_spec.AddModifiers(nu.modifiers...)
@@ -411,6 +496,21 @@ func (nuo *NoteUpdateOne) SetTask(t *Task) *NoteUpdateOne {
 	return nuo.SetTaskID(t.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (nuo *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.AddFileIDs(ids...)
+	return nuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (nuo *NoteUpdateOne) AddFiles(f ...*File) *NoteUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return nuo.AddFileIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
@@ -420,6 +520,27 @@ func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 func (nuo *NoteUpdateOne) ClearTask() *NoteUpdateOne {
 	nuo.mutation.ClearTask()
 	return nuo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (nuo *NoteUpdateOne) ClearFiles() *NoteUpdateOne {
+	nuo.mutation.ClearFiles()
+	return nuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (nuo *NoteUpdateOne) RemoveFileIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.RemoveFileIDs(ids...)
+	return nuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (nuo *NoteUpdateOne) RemoveFiles(f ...*File) *NoteUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return nuo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
@@ -581,6 +702,54 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !nuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.FilesTable,
+			Columns: []string{note.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -2027,6 +2027,7 @@ type ComplexityRoot struct {
 		DeletedAt func(childComplexity int) int
 		DeletedBy func(childComplexity int) int
 		DisplayID func(childComplexity int) int
+		Files     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID        func(childComplexity int) int
 		Owner     func(childComplexity int) int
 		OwnerID   func(childComplexity int) int
@@ -14125,6 +14126,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Note.DisplayID(childComplexity), true
+
+	case "Note.files":
+		if e.complexity.Note.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Note_files_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Note.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "Note.id":
 		if e.complexity.Note.ID == nil {
@@ -31762,6 +31775,7 @@ input CreateNoteInput {
   text: String!
   ownerID: ID
   taskID: ID
+  fileIDs: [ID!]
 }
 """
 CreateOnboardingInput is used for create Onboarding object.
@@ -43378,6 +43392,37 @@ type Note implements Node {
   text: String!
   owner: Organization
   task: Task
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -43886,6 +43931,11 @@ input NoteWhereInput {
   """
   hasTask: Boolean
   hasTaskWith: [TaskWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 type Onboarding implements Node {
   id: ID!
@@ -60598,6 +60648,9 @@ input UpdateNoteInput {
   text: String
   taskID: ID
   clearTask: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateOrgMembershipInput is used for update OrgMembership object.
