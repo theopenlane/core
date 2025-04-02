@@ -31925,14 +31925,69 @@ func (t *GetNarrativeHistories_NarrativeHistories) GetEdges() []*GetNarrativeHis
 	return t.Edges
 }
 
+type GetNoteByID_Note_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetNoteByID_Note_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetNoteByID_Note_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetNoteByID_Note_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetNoteByID_Note_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetNoteByID_Note_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetNoteByID_Note_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetNoteByID_Note_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetNoteByID_Note_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetNoteByID_Note_Files_Edges struct {
+	Node *GetNoteByID_Note_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetNoteByID_Note_Files_Edges) GetNode() *GetNoteByID_Note_Files_Edges_Node {
+	if t == nil {
+		t = &GetNoteByID_Note_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetNoteByID_Note_Files struct {
+	Edges []*GetNoteByID_Note_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetNoteByID_Note_Files) GetEdges() []*GetNoteByID_Note_Files_Edges {
+	if t == nil {
+		t = &GetNoteByID_Note_Files{}
+	}
+	return t.Edges
+}
+
 type GetNoteByID_Note struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                 "json:\"displayID\" graphql:\"displayID\""
+	Files     GetNoteByID_Note_Files "json:\"files\" graphql:\"files\""
+	ID        string                 "json:\"id\" graphql:\"id\""
+	Text      string                 "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetNoteByID_Note) GetCreatedAt() *time.Time {
@@ -31952,6 +32007,12 @@ func (t *GetNoteByID_Note) GetDisplayID() string {
 		t = &GetNoteByID_Note{}
 	}
 	return t.DisplayID
+}
+func (t *GetNoteByID_Note) GetFiles() *GetNoteByID_Note_Files {
+	if t == nil {
+		t = &GetNoteByID_Note{}
+	}
+	return &t.Files
 }
 func (t *GetNoteByID_Note) GetID() string {
 	if t == nil {
@@ -53760,14 +53821,69 @@ func (t *GetAllTasks_Tasks_Edges_Node_Owner) GetName() string {
 	return t.Name
 }
 
+type GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges struct {
+	Node *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges) GetNode() *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files struct {
+	Edges []*GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files) GetEdges() []*GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                                 "json:\"displayID\" graphql:\"displayID\""
+	Files     GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                                 "json:\"id\" graphql:\"id\""
+	Text      string                                                 "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node) GetCreatedAt() *time.Time {
@@ -53787,6 +53903,12 @@ func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node) GetDisplayID() string
 		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node) GetFiles() *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *GetAllTasks_Tasks_Edges_Node_Comments_Edges_Node) GetID() string {
 	if t == nil {
@@ -54055,14 +54177,69 @@ func (t *GetTaskByID_Task_Owner) GetName() string {
 	return t.Name
 }
 
+type GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetTaskByID_Task_Comments_Edges_Node_Files_Edges struct {
+	Node *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files_Edges) GetNode() *GetTaskByID_Task_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetTaskByID_Task_Comments_Edges_Node_Files struct {
+	Edges []*GetTaskByID_Task_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTaskByID_Task_Comments_Edges_Node_Files) GetEdges() []*GetTaskByID_Task_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type GetTaskByID_Task_Comments_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                     "json:\"displayID\" graphql:\"displayID\""
+	Files     GetTaskByID_Task_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                     "json:\"id\" graphql:\"id\""
+	Text      string                                     "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTaskByID_Task_Comments_Edges_Node) GetCreatedAt() *time.Time {
@@ -54082,6 +54259,12 @@ func (t *GetTaskByID_Task_Comments_Edges_Node) GetDisplayID() string {
 		t = &GetTaskByID_Task_Comments_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *GetTaskByID_Task_Comments_Edges_Node) GetFiles() *GetTaskByID_Task_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &GetTaskByID_Task_Comments_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *GetTaskByID_Task_Comments_Edges_Node) GetID() string {
 	if t == nil {
@@ -54310,14 +54493,69 @@ func (t *GetTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
+type GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges struct {
+	Node *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges) GetNode() *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files struct {
+	Edges []*GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files) GetEdges() []*GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type GetTasks_Tasks_Edges_Node_Comments_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                              "json:\"displayID\" graphql:\"displayID\""
+	Files     GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                              "json:\"id\" graphql:\"id\""
+	Text      string                                              "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node) GetCreatedAt() *time.Time {
@@ -54337,6 +54575,12 @@ func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node) GetDisplayID() string {
 		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node) GetFiles() *GetTasks_Tasks_Edges_Node_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Comments_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *GetTasks_Tasks_Edges_Node_Comments_Edges_Node) GetID() string {
 	if t == nil {
@@ -72050,6 +72294,16 @@ const GetNoteByIDDocument = `query GetNoteByID ($noteId: ID!) {
 		createdBy
 		updatedAt
 		updatedBy
+		files {
+			edges {
+				node {
+					id
+					storagePath
+					storageScheme
+					storageVolume
+				}
+			}
+		}
 	}
 }
 `
@@ -78014,6 +78268,16 @@ const GetAllTasksDocument = `query GetAllTasks {
 							createdBy
 							updatedAt
 							updatedBy
+							files {
+								edges {
+									node {
+										id
+										storagePath
+										storageScheme
+										storageVolume
+									}
+								}
+							}
 						}
 					}
 				}
@@ -78078,6 +78342,16 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 					createdBy
 					updatedAt
 					updatedBy
+					files {
+						edges {
+							node {
+								id
+								storagePath
+								storageScheme
+								storageVolume
+							}
+						}
+					}
 				}
 			}
 		}
@@ -78140,6 +78414,16 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 							createdBy
 							updatedAt
 							updatedBy
+							files {
+								edges {
+									node {
+										id
+										storagePath
+										storageScheme
+										storageVolume
+									}
+								}
+							}
 						}
 					}
 				}

@@ -7,5 +7,15 @@ query GetNoteByID($noteId: ID!) {
     createdBy
     updatedAt
     updatedBy
+    files {
+      edges {
+        node {
+          id
+          storagePath
+          storageScheme
+          storageVolume
+        }
+      }
+    }
   }
 }

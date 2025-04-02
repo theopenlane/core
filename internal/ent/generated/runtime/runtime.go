@@ -2188,6 +2188,7 @@ func init() {
 	noteMixinHooks1 := noteMixin[1].Hooks()
 	noteMixinHooks2 := noteMixin[2].Hooks()
 	noteMixinHooks4 := noteMixin[4].Hooks()
+	noteHooks := schema.Note{}.Hooks()
 
 	note.Hooks[1] = noteMixinHooks0[0]
 
@@ -2200,6 +2201,8 @@ func init() {
 	note.Hooks[5] = noteMixinHooks4[1]
 
 	note.Hooks[6] = noteMixinHooks4[2]
+
+	note.Hooks[7] = noteHooks[0]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters4 := noteMixin[4].Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]
