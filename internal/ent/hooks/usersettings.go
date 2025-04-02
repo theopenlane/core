@@ -35,8 +35,8 @@ func HookUserSetting() ent.Hook {
 
 // allowDefaultOrgUpdate checks if the user has access to the organization being updated as their default org
 func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation, orgID string) bool {
-	// allow if explicitly allowed
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	// allow if explicitly allowed or if it's an internal request
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
 	}
 
