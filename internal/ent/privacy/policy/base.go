@@ -4,12 +4,17 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // prePolicy is executed before privacy policy
 var prePolicy = privacy.Policy{
-	Query:    privacy.QueryPolicy{},
-	Mutation: privacy.MutationPolicy{},
+	Query: privacy.QueryPolicy{
+		rule.AllowIfInternalRequest(),
+	},
+	Mutation: privacy.MutationPolicy{
+		rule.AllowIfInternalRequest(),
+	},
 }
 
 // postPolicy is executed after privacy policy

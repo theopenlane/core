@@ -312,9 +312,7 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSu
 // setContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func setContext(ctx context.Context, db *ent.Client) context.Context {
-	ctx = context.WithValue(ctx, rule.InternalRequestContextKey{}, true)
-
-	return ent.NewContext(ctx, db)
+	return ent.NewContext(rule.WithInternalContext(ctx), db)
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
