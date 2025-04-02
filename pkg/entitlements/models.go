@@ -61,12 +61,12 @@ func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 // Validate checks if the OrganizationCustomer contains necessary fields
 func (o *OrganizationCustomer) Validate() error {
 	o.OrganizationID = strings.TrimSpace(o.OrganizationID)
-	o.Email = strings.TrimSpace(o.Email)
+	o.ContactInfo.Email = strings.TrimSpace(o.ContactInfo.Email)
 
 	switch {
 	case o.OrganizationID == "":
 		return rout.NewMissingRequiredFieldError("organization_id")
-	case o.Email == "":
+	case o.ContactInfo.Email == "":
 		return rout.NewMissingRequiredFieldError("billing_email")
 	}
 
@@ -166,6 +166,15 @@ type Feature struct {
 	Lookupkey string `json:"lookupkey" yaml:"lookupkey"`
 }
 
+// PricingTier is the defined relationship between the product and price
+type PricingTier struct {
+	Name     string   `json:"name" koanf:"name"`
+	ID       string   `json:"id" koanf:"id"`
+	Price    int64    `json:"price" koanf:"price"`
+	Features []string `json:"features" koanf:"features"` // List of feature IDs
+}
+
+// ProductFeature is the defined relationship between the product and feature
 type ProductFeature struct {
 	FeatureID string `json:"feature_id" yaml:"feature_id"`
 	ProductID string `json:"product_id"`

@@ -13,12 +13,22 @@ func main() {
 	// Get the list of plans
 	client := initStripeClient()
 
-	plans := client.GetProducts()
+	plans := client.GetAllProductPricesMapped()
 
 	sortPlansByFeatureCount(plans)
 
+	tuplestruct := client.CreateTupleStruct("user", "relation", "object")
+
+	log.Warn().Msgf("TupleStruct: %v", tuplestruct)
+
+	// Write the tuple struct to a YAML file
+	err := entitlements.WriteTuplesToYaml(tuplestruct, "fga/tests/tuples/subscriptions_automated.yaml")
+	if err != nil {
+		log.Fatal().Msgf("failed to write tuples to YAML file: %v", err)
+	}
+
 	// Write the plans to a YAML file
-	err := entitlements.WritePlansToYAML(plans, "pkg/entitlements/test/plans.yaml")
+	err = entitlements.WritePlansToYAML(plans, "pkg/entitlements/test/plans.yaml")
 	if err != nil {
 		log.Fatal().Msgf("failed to write plans to YAML file: %v", err)
 	}

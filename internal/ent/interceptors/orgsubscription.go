@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog"
-
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 func InterceptorSubscriptionURL() ent.Interceptor {
@@ -20,12 +19,14 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 				return nil, err
 			}
 
-			// get the fields that were queried and check for the subscriptionURL field
-			fields := graphutils.CheckForRequestedField(ctx, "subscriptionURL")
+			urlFields := []string{"subscriptionURL", "managePaymentMethods", "cancellation"}
 
-			// if the SubscriptionURL field wasn't queried, return the result as is
-			if !fields {
-				return v, nil
+			for _, field := range urlFields {
+				fields := graphutils.CheckForRequestedField(ctx, field)
+
+				if !fields {
+					return v, nil
+				}
 			}
 
 			// cast to the expected output format
@@ -33,7 +34,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			if ok {
 				for _, orgSub := range orgSubResult {
 					if err := setSubscriptionURL(orgSub, q); err != nil {
-						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
+						log.Warn().Err(err).Msg("failed to set subscription URL")
 					}
 				}
 
@@ -44,7 +45,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			orgSub, ok := v.(*generated.OrgSubscription)
 			if ok {
 				if err := setSubscriptionURL(orgSub, q); err != nil {
-					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
+					log.Warn().Err(err).Msg("failed to set subscription URL")
 				}
 
 				return v, nil
@@ -67,13 +68,31 @@ func setSubscriptionURL(orgSub *generated.OrgSubscription, q *generated.OrgSubsc
 	}
 
 	// create a billing portal session
-	portalSession, err := q.EntitlementManager.CreateBillingPortalUpdateSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
+		log.Err(err).Msg("failed to create billing portal session")
+
+		return err
+	}
+
+	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	if err != nil {
+		log.Err(err).Msg("failed to create billing portal session")
+
+		return err
+	}
+
+	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	if err != nil {
+		log.Err(err).Msg("failed to create billing portal session")
+
 		return err
 	}
 
 	// add the subscription URL to the result
-	orgSub.SubscriptionURL = portalSession.URL
+	orgSub.SubscriptionURL = updateSubscription.ManageSubscription
+	orgSub.Cancellation = cancelSubscription.Cancellation
+	orgSub.ManagePaymentMethods = updatePaymentMethod.PaymentMethods
 
 	return nil
 }
