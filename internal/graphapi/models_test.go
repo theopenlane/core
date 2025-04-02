@@ -260,7 +260,7 @@ func randomName(t *testing.T) string {
 	err := gofakeit.Struct(&f)
 	require.NoError(t, err)
 
-	return f.Name
+	return f.Name + "_" + gofakeit.UUID()
 }
 
 // DeleteClient is an interface for deleting entities
