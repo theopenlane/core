@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 
@@ -39,7 +38,6 @@ func checkNoteFiles[T GenericMutation](ctx context.Context, m T) (context.Contex
 	// get the file from the context, if it exists
 	file, err := objects.FilesFromContextWithKey(ctx, key)
 	if err != nil {
-		fmt.Println("ER", err)
 		return ctx, err
 	}
 
