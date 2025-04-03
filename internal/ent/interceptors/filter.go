@@ -35,7 +35,6 @@ func FilterListQuery() ent.Interceptor {
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 	// by pass checks on invite or pre-allowed request
-
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return nil
 	}
