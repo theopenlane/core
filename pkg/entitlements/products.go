@@ -60,7 +60,7 @@ func (sc *StripeClient) DeleteProduct(productID string) (*stripe.Product, error)
 	return sc.Client.Products.Del(productID, nil)
 }
 
-// GetProducts retrieves all products from stripe which are active
+// GetAllProductPricesMapped retrieves all products and prices from stripe which are active
 func (sc *StripeClient) GetAllProductPricesMapped() []Product {
 	productParams := &stripe.ProductListParams{}
 	productParams.Filters.AddFilter("active", "", "true")

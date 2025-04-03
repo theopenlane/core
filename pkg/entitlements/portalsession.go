@@ -45,7 +45,7 @@ func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string)
 	}, nil
 }
 
-// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
+// CancellationBillingPortalSession generates a session in stripe's billing portal which allows the customer to cancel their subscription
 func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (*BillingPortalSession, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,

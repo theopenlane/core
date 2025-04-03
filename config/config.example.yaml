@@ -199,9 +199,11 @@ sessions:
     signingKey: my-signing-secret
 subscription:
     enabled: false
+    features: null
     personalOrgSubscriptionPriceID: price_1QycPyBvxky1R7Svz0gOWnNh
     privateStripeKey: ""
     publicStripeKey: ""
+    saasPricingTiers: null
     stripeBillingPortalSuccessURL: https://console.openlane.com/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing/subscription_canceled
     stripeWebhookSecret: ""

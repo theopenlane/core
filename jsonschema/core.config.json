@@ -8,6 +8,18 @@
       },
       "type": "array"
     },
+    "[]entitlements.Feature": {
+      "items": {
+        "$ref": "#/$defs/entitlements.Feature"
+      },
+      "type": "array"
+    },
+    "[]entitlements.PricingTier": {
+      "items": {
+        "$ref": "#/$defs/entitlements.PricingTier"
+      },
+      "type": "array"
+    },
     "[]rivertype.Hook": {
       "items": true,
       "type": "array"
@@ -351,6 +363,45 @@
         },
         "stripeCancellationReturnURL": {
           "type": "string"
+        },
+        "saasPricingTiers": {
+          "$ref": "#/$defs/[]entitlements.PricingTier"
+        },
+        "features": {
+          "$ref": "#/$defs/[]entitlements.Feature"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entitlements.Feature": {
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Lookupkey": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entitlements.PricingTier": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "features": {
+          "$ref": "#/$defs/[]string"
         }
       },
       "additionalProperties": false,

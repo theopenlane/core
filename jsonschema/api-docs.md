@@ -690,6 +690,18 @@ Config defines the configuration settings for the default rate limiter
 |**stripeWebhookURL**|`string`|||
 |**stripeBillingPortalSuccessURL**|`string`|||
 |**stripeCancellationReturnURL**|`string`|||
+|[**saasPricingTiers**](#subscriptionsaaspricingtiers)|`array`|||
+|[**features**](#subscriptionfeatures)|`array`|||
 
 **Additional Properties:** not allowed  
+<a name="subscriptionsaaspricingtiers"></a>
+### subscription\.saasPricingTiers: array
+
+**Items**
+
+<a name="subscriptionfeatures"></a>
+### subscription\.features: array
+
+**Items**
+
 

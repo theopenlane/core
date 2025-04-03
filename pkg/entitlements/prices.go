@@ -2,7 +2,7 @@ package entitlements
 
 import "github.com/stripe/stripe-go/v81"
 
-// Create a price for a product:
+// CreatePrice a price for a product in stripe
 func (sc *StripeClient) CreatePrice(productID string, unitAmount int64, currency, interval string) (*stripe.Price, error) {
 	params := &stripe.PriceParams{
 		Product:    stripe.String(productID),
@@ -39,7 +39,7 @@ func (sc *StripeClient) ListPrices() ([]*stripe.Price, error) {
 	return prices, nil
 }
 
-// GetPrices retrieves all prices from stripe which are active and maps them into a []Price struct
+// GetPricesMapped retrieves all prices from stripe which are active and maps them into a []Price struct
 func (sc *StripeClient) GetPricesMapped() []Price {
 	priceParams := &stripe.PriceListParams{}
 
