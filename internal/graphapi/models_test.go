@@ -884,6 +884,10 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		mutation.SetStandardID(c.StandardID)
 	}
 
+	if c.OwnerID != "" {
+		mutation.SetOwnerID(c.OwnerID)
+	}
+
 	if c.AllFields {
 		mutation.SetDescription(gofakeit.HipsterSentence(5)).
 			SetCategory(gofakeit.Adjective()).
