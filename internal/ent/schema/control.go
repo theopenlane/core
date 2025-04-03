@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -34,10 +33,6 @@ func (Control) GetType() any {
 	return Control.Type
 }
 
-func (c Control) GetStringType() any {
-	return Control.Type
-}
-
 func (Control) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaControl)
 }
@@ -47,18 +42,18 @@ func (Control) Fields() []ent.Field {
 	// add any fields that are specific to the parent control here
 	additionalFields := []ent.Field{
 		field.String("ref_code").
+			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("ref_code"),
 			).
-			NotEmpty().
 			Comment("the unique reference code for the control"),
 		field.String("standard_id").
 			Comment("the id of the standard that the control belongs to, if applicable").
 			Optional(),
 	}
 
-	return append(controlFields, additionalFields...)
+	return additionalFields
 }
 
 // Edges of the Control
@@ -72,48 +67,17 @@ func (c Control) Edges() []ent.Edge {
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
 
-		defaultEdgeFromWithPagination(c, Evidence{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    c,
 			edgeSchema:    ControlImplementation{},
 			cascadeDelete: "Controls",
 			comment:       "the implementation(s) of the control",
 		}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: c,
-			edgeSchema: MappedControl{},
-			comment:    "mapped subcontrols that have a relation to another control or subcontrol",
-		}),
-
 		// controls have control objectives and subcontrols
-		defaultEdgeToWithPagination(c, ControlObjective{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    c,
 			edgeSchema:    Subcontrol{},
 			cascadeDelete: "Control",
-		}),
-
-		// controls can have associated task, narratives, risks, and action plans
-		defaultEdgeToWithPagination(c, Task{}),
-		defaultEdgeToWithPagination(c, Narrative{}),
-		defaultEdgeToWithPagination(c, Risk{}),
-		defaultEdgeToWithPagination(c, ActionPlan{}),
-
-		// policies and procedures are used to implement the control
-		defaultEdgeToWithPagination(c, Procedure{}),
-		defaultEdgeToWithPagination(c, InternalPolicy{}),
-		// owner is the user who is responsible for the control
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: c,
-			name:       "control_owner",
-			t:          Group.Type,
-			comment:    "the group of users who are responsible for the control, will be assigned tasks, approval, etc.",
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: c,
-			name:       "delegate",
-			t:          Group.Type,
-			comment:    "temporary delegate for the control, used for temporary control ownership",
 		}),
 	}
 }
@@ -133,6 +97,10 @@ func (c Control) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "CTL",
 		additionalMixins: []ent.Mixin{
+			// add the common overlap between control and subcontrol
+			ControlMixin{
+				SchemaType: c,
+			},
 			// controls must be associated with an organization but do not inherit permissions from the organization
 			// controls can inherit permissions from the associated programs
 			newObjectOwnedMixin[generated.Control](c,
@@ -143,13 +111,6 @@ func (c Control) Mixin() []ent.Mixin {
 			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
-}
-
-// Annotations of the Control
-func (Control) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
-	}
 }
 
 // Policy of the Control

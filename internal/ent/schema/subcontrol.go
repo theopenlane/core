@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -44,11 +43,11 @@ func (Subcontrol) Fields() []ent.Field {
 	// add any fields that are specific to the subcontrol here
 	additionalFields := []ent.Field{
 		field.String("ref_code").
+			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("ref_code"),
 			).
-			NotEmpty().
 			Comment("the unique reference code for the control"),
 		field.String("control_id").
 			Unique().
@@ -56,7 +55,7 @@ func (Subcontrol) Fields() []ent.Field {
 			NotEmpty(),
 	}
 
-	return append(controlFields, additionalFields...)
+	return additionalFields
 }
 
 // Edges of the Subcontrol
@@ -69,38 +68,11 @@ func (s Subcontrol) Edges() []ent.Edge {
 			field:      "control_id",
 			required:   true,
 		}),
-		// controls can be mapped to other controls as a reference
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: s,
-			edgeSchema: MappedControl{},
-			comment:    "mapped subcontrols that have a relation to another control or subcontrol",
-		}),
-		// evidence can be associated with the control
-		defaultEdgeFromWithPagination(s, Evidence{}),
-		defaultEdgeToWithPagination(s, ControlObjective{}),
-
-		// sub controls can have associated task, narratives, risks, and action plans
-		defaultEdgeToWithPagination(s, Task{}),
-		defaultEdgeToWithPagination(s, Narrative{}),
-		defaultEdgeToWithPagination(s, Risk{}),
-		defaultEdgeToWithPagination(s, ActionPlan{}),
-
-		// policies and procedures are used to implement the subcontrol
-		defaultEdgeToWithPagination(s, Procedure{}),
-		defaultEdgeToWithPagination(s, InternalPolicy{}),
-
-		// owner is the user who is responsible for the subcontrol
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: s,
-			name:       "control_owner",
-			t:          Group.Type,
-			comment:    "the user who is responsible for the subcontrol, defaults to the parent control owner if not set",
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: s,
-			name:       "delegate",
-			t:          Group.Type,
-			comment:    "temporary delegate for the subcontrol, used for temporary control ownership",
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    s,
+			edgeSchema:    ControlImplementation{},
+			cascadeDelete: "Subcontrols",
+			comment:       "the implementation(s) of the subcontrol",
 		}),
 	}
 }
@@ -110,6 +82,10 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "SCL",
 		additionalMixins: []ent.Mixin{
+			// add the common overlap between control and subcontrol
+			ControlMixin{
+				SchemaType: s,
+			},
 			// subcontrols can inherit permissions from the parent control
 			newObjectOwnedMixin[generated.Subcontrol](s,
 				withParents(Control{}),
@@ -119,6 +95,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+// Indexes of the Subcontrol
 func (Subcontrol) Indexes() []ent.Index {
 	return []ent.Index{
 		// ref_code should be unique within the parent control
@@ -126,13 +103,6 @@ func (Subcontrol) Indexes() []ent.Index {
 			Unique().Annotations(
 			entsql.IndexWhere("deleted_at is NULL"),
 		),
-	}
-}
-
-// Annotations of the Subcontrol
-func (Subcontrol) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
 	}
 }
 

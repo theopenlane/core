@@ -241,7 +241,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
@@ -316,7 +316,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 					},
 				},
 				ControlOwnerID: &ownerGroup.ID,
-				DelegateID:     &deleteGroup.ID,
+				DelegateID:     &delegateGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 				ProgramIDs:     []string{program1.ID, program2.ID}, // multiple programs
 			},

@@ -47,3 +47,9 @@
 - user: program:program-1
   relation: parent
   object: control_objective:control_objective-3
+- user: group:control-owner-1#member
+  relation: owner
+  object: control:control-1
+- user: user:ulid-group-control-owner-1
+  relation: member
+  object: group:control-owner-1

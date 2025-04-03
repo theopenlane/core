@@ -149,6 +149,10 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 	// group for the view only user
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
 
+	// approver and delegator groups for the test user
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateInternalPolicyInput
@@ -173,6 +177,8 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 				PolicyType: lo.ToPtr("sop"),
 				Revision:   lo.ToPtr("v1.1.0"),
 				Details:    lo.ToPtr("do stuff"),
+				ApproverID: &approverGroup.ID,
+				DelegateID: &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -294,6 +300,19 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			} else {
 				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
 			}
+
+			// if tc.request.ApproverID != nil {
+			// 	require.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy)
+			// 	assert.Equal(t, *tc.request.ApproverID, resp.CreateInternalPolicy.InternalPolicy.ApproverID)
+			// } else {
+			// 	assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.ApproverID)
+			// }
+
+			// if tc.request.DelegateID != nil {
+			// 	assert.Equal(t, *tc.request.DelegateID, resp.CreateInternalPolicy.InternalPolicy.DelegateID)
+			// } else {
+			// 	assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.DelegateID)
+			// }
 		})
 	}
 }

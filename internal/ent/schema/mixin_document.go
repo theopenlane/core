@@ -10,6 +10,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
+	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 )
@@ -43,8 +45,20 @@ func (d DocumentMixin) Edges() []ent.Edge {
 
 // Hooks of the DocumentMixin.
 func (d DocumentMixin) Hooks() []ent.Hook {
-	// TODO (sfunk): add hook to update permissions for the approver
-	return []ent.Hook{}
+	return []ent.Hook{
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"approver": "group",
+			}, "approver"),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"delegate": "group",
+			}, "delegate"),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+	}
 }
 
 // getDocumentFields returns the fields for a document type schema
@@ -93,6 +107,15 @@ func getDocumentFields(documentType string) []ent.Field {
 			).
 			Default(enums.FrequencyYearly.String()).
 			Comment(fmt.Sprintf("the frequency at which the %s should be reviewed, used to calculate the review_due date", documentType)),
+		field.String("approver_id").
+			Optional().
+			Unique().
+			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)).
+			StructTag(`json:"approver_id,omitempty"`),
+		field.String("delegate_id").
+			Optional().
+			Unique().
+			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)),
 	}
 }
 
@@ -100,9 +123,11 @@ func getApproverEdges(documentType string) []ent.Edge {
 	return []ent.Edge{
 		edge.To("approver", Group.Type).
 			Unique().
+			Field("approver_id").
 			Comment(fmt.Sprintf("the group of users who are responsible for approving the %s", documentType)),
 		edge.To("delegate", Group.Type).
 			Unique().
+			Field("delegate_id").
 			Comment(fmt.Sprintf("temporary delegates for the %s, used for temporary approval", documentType)),
 	}
 }

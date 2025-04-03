@@ -178,6 +178,9 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	// add adminUser to the program so that they can create a subcontrol
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
@@ -262,6 +265,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 						Description:       "Create a policy",
 					},
 				},
+				DelegateID:     &delegateGroup.ID,
+				ControlOwnerID: &ownerGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -381,6 +386,20 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				assert.Equal(t, *tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source)
 			} else {
 				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateSubcontrol.Subcontrol.Source)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else {
+				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateSubcontrol.Subcontrol.Delegate.ID)
+			} else {
+				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
 			}
 
 			// ensure the org owner has access to the subcontrol that was created by an api token

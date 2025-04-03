@@ -18,6 +18,8 @@ const (
 	ProgramParent = "program"
 	// ControlParent is the parent type for control
 	ControlParent = "control"
+	// SubcontrolParent is the parent type for subcontrol
+	SubcontrolParent = "subcontrol"
 )
 
 // CanCreateObjectsUnderParent is a rule that returns allow decision if user has edit access in the parent(s)

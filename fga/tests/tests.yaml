@@ -645,7 +645,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: true
+          can_delete: false
       - user: user:ulid-group-control-1-viewer
         object: control:control-1
         assertions:
@@ -681,7 +681,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: true
+          can_delete: false
       - user: user:ulid-group-control-1-viewer
         object: subcontrol:subcontrol-1
         assertions:
@@ -717,7 +717,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: true
+          can_delete: false
       - user: user:ulid-group-control-1-viewer
         object: control_objective:control_objective-1
         assertions:
@@ -753,7 +753,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: true
+          can_delete: false
       - user: user:ulid-group-control-1-viewer
         object: control_objective:control_objective-2
         assertions:
@@ -820,6 +820,12 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-group-control-owner-1
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: standard
     description: standards can be made public with system-owned standards, or organizations can create their own custom standards
     tuple_file: tuples/standards.yaml

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // ControlImplementationHistory holds the schema definition for the ControlImplementationHistory entity.
@@ -34,6 +35,11 @@ func (ControlImplementationHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "control_implementation",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -93,6 +99,6 @@ func (ControlImplementationHistory) Indexes() []ent.Index {
 // Interceptors of the ControlImplementationHistory
 func (ControlImplementationHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

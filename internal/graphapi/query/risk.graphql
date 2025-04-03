@@ -17,6 +17,14 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      stakeholder {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -40,6 +48,14 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       tags
       updatedAt
       updatedBy
+      stakeholder {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -80,6 +96,14 @@ mutation CreateRisk($input: CreateRiskInput!) {
         name
       }
       blockedGroups {
+        id
+        name
+      }
+      stakeholder {
+        id
+        name
+      }
+      delegate {
         id
         name
       }
@@ -134,6 +158,14 @@ query GetAllRisks {
           id
           name
         }
+        stakeholder {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
     }
   }
@@ -175,6 +207,14 @@ query GetRiskByID($riskId: ID!) {
       name
     }
     blockedGroups {
+      id
+      name
+    }
+    stakeholder {
+      id
+      name
+    }
+    delegate {
       id
       name
     }
@@ -222,6 +262,14 @@ query GetRisks($where: RiskWhereInput) {
           id
           name
         }
+        stakeholder {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
     }
   }
@@ -264,6 +312,14 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
         name
       }
       blockedGroups {
+        id
+        name
+      }
+      stakeholder {
+        id
+        name
+      }
+      delegate {
         id
         name
       }
