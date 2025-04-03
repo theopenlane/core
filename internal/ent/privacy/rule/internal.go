@@ -3,8 +3,9 @@ package rule
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 type internalAllowContextKey struct{}
