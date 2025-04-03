@@ -1,12 +1,31 @@
+- product_id: prod_RsNAfcb81gBFtq
+  name: Free Tier
+  description: A tier used for personal organizations
+  features:
+    - id: feat_61S80NfVpO6vhjKyW41Bvxky1R7Sv3Mm
+      name: Free Tier
+      lookupkey: free-tier
+  prices:
+    - price_id: price_1QycPyBvxky1R7Svz0gOWnNh
+      price: 0
+      currency: ""
+      product_name: ""
+      interval: year
 - product_id: prod_RClVi0ZeIWJHOR
   name: Starter Tier
   features:
+    - id: feat_61SD5SBN7JsOQJE0l41Bvxky1R7SvIIq
+      name: Template Registry
+      lookupkey: template-registry
+    - id: feat_61SD5PlM7k0cBvAVj41Bvxky1R7SvG3M
+      name: Asset Management
+      lookupkey: asset-management
+    - id: feat_61RSmKdT2wmqQdyK141Bvxky1R7SvPvk
+      name: Vendor Management
+      lookupkey: vendor-management
     - id: feat_61RSmLtyXmxzlTaC541Bvxky1R7Sv8Qi
       name: Centralized Audit Documentation
       lookupkey: centralized-audit-docuemtnation
-    - id: feat_61RSmKVSYRqkKCRLg41Bvxky1R7SvRZg
-      name: Risk Management
-      lookupkey: risk-management
     - id: feat_61RSmGpuIwzRc6sLb41Bvxky1R7Sv0NE
       name: Policy and Procedure module
       lookupkey: policy-and-procedure-module
@@ -16,19 +35,56 @@
   prices:
     - price_id: price_1QKO97Bvxky1R7SvcMA1YYG1
       price: 1000
+      currency: ""
+      product_name: ""
       interval: year
     - price_id: price_1QKLyeBvxky1R7SvaZYGWyQb
       price: 100
+      currency: ""
+      product_name: ""
       interval: month
 - product_id: prod_RClW8LT3bzMeyG
   name: Business Tier
   features:
+    - id: feat_61SD5VN7ELPeU9Zb041Bvxky1R7SvHuq
+      name: Automated Evidence Capture
+      lookupkey: automated-evidence-capture
+    - id: feat_61RSmMOtfJd9bZgNM41Bvxky1R7SvApU
+      name: Employee Onboarding Automation
+      lookupkey: employee-onboarding-automation
+    - id: feat_61RSmMdzv0HRMJO4k41Bvxky1R7Sv3Ki
+      name: Continuous Monitoring
+      lookupkey: continuous-monitoring
+    - id: feat_61SD5WCXpLdlt94oU41Bvxky1R7SvOSW
+      name: Reporting
+      lookupkey: reporting
+    - id: feat_61SD5R5w2Uhsbx6Wc41Bvxky1R7SvAJM
+      name: Domain Scanning
+      lookupkey: domain-scanning
+    - id: feat_61SD5SBN7JsOQJE0l41Bvxky1R7SvIIq
+      name: Template Registry
+      lookupkey: template-registry
+    - id: feat_61SD5Uu1EuFGivdkv41Bvxky1R7SvQsS
+      name: Risk Assessments
+      lookupkey: risk-assessments
+    - id: feat_61SD5TSZtM6KsZt2J41Bvxky1R7SvCqO
+      name: Employee Training
+      lookupkey: employee-training
+    - id: feat_61SD5WuvGaDTxtNew41Bvxky1R7SvXuK
+      name: Trust Center
+      lookupkey: trust-center
+    - id: feat_61SD5PlM7k0cBvAVj41Bvxky1R7SvG3M
+      name: Asset Management
+      lookupkey: asset-management
+    - id: feat_61RSmKdT2wmqQdyK141Bvxky1R7SvPvk
+      name: Vendor Management
+      lookupkey: vendor-management
+    - id: feat_61SD5YXVC3hoLhZ5P41Bvxky1R7SvSsC
+      name: AI ComplianceBot
+      lookupkey: ai-compliancebot
     - id: feat_61RSmLtyXmxzlTaC541Bvxky1R7Sv8Qi
       name: Centralized Audit Documentation
       lookupkey: centralized-audit-docuemtnation
-    - id: feat_61RSmKVSYRqkKCRLg41Bvxky1R7SvRZg
-      name: Risk Management
-      lookupkey: risk-management
     - id: feat_61RSmGwlWtNg1oj2741Bvxky1R7Sv4Fk
       name: Webhooks
       lookupkey: webhooks
@@ -50,13 +106,50 @@
   prices:
     - price_id: price_1QKmtZBvxky1R7Sv1wNhoHRP
       price: 2500
+      currency: ""
+      product_name: ""
       interval: year
     - price_id: price_1QKLzjBvxky1R7SvtvVT63Kn
       price: 250
+      currency: ""
+      product_name: ""
       interval: month
 - product_id: prod_RClqj0AttVzg4k
   name: Enterprise Tier
   features:
+    - id: feat_61SD5VN7ELPeU9Zb041Bvxky1R7SvHuq
+      name: Automated Evidence Capture
+      lookupkey: automated-evidence-capture
+    - id: feat_61SD5UIYeJlRC9ziS41Bvxky1R7SvGJc
+      name: Source Code Scanning and Monitoring
+      lookupkey: source-code-scanning-and-monitoring
+    - id: feat_61SD5WCXpLdlt94oU41Bvxky1R7SvOSW
+      name: Reporting
+      lookupkey: reporting
+    - id: feat_61SD5R5w2Uhsbx6Wc41Bvxky1R7SvAJM
+      name: Domain Scanning
+      lookupkey: domain-scanning
+    - id: feat_61SD5SBN7JsOQJE0l41Bvxky1R7SvIIq
+      name: Template Registry
+      lookupkey: template-registry
+    - id: feat_61SD5Uu1EuFGivdkv41Bvxky1R7SvQsS
+      name: Risk Assessments
+      lookupkey: risk-assessments
+    - id: feat_61SD5TSZtM6KsZt2J41Bvxky1R7SvCqO
+      name: Employee Training
+      lookupkey: employee-training
+    - id: feat_61SD5PlM7k0cBvAVj41Bvxky1R7SvG3M
+      name: Asset Management
+      lookupkey: asset-management
+    - id: feat_61SD5WuvGaDTxtNew41Bvxky1R7SvXuK
+      name: Trust Center
+      lookupkey: trust-center
+    - id: feat_61SD5XHLd1z02P9BW41Bvxky1R7SvG7E
+      name: Incident Management
+      lookupkey: incident-management
+    - id: feat_61SD5YXVC3hoLhZ5P41Bvxky1R7SvSsC
+      name: AI ComplianceBot
+      lookupkey: ai-compliancebot
     - id: feat_61RSmMOtfJd9bZgNM41Bvxky1R7SvApU
       name: Employee Onboarding Automation
       lookupkey: employee-onboarding-automation
@@ -96,7 +189,11 @@
   prices:
     - price_id: price_1QKmuZBvxky1R7SvHAwybmEZ
       price: 4000
+      currency: ""
+      product_name: ""
       interval: year
     - price_id: price_1QKMJ6Bvxky1R7SvgbFmumzr
       price: 400
+      currency: ""
+      product_name: ""
       interval: month

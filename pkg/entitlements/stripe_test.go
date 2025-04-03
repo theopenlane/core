@@ -42,7 +42,8 @@ func TestWithConfig(t *testing.T) {
 
 	option(client)
 
-	if client.Config != config {
+	if client.Config.PublicStripeKey != config.PublicStripeKey ||
+		client.Config.PrivateStripeKey != config.PrivateStripeKey {
 		t.Errorf("expected config %v, got %v", config, client.Config)
 	}
 }

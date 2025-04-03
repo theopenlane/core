@@ -1,0 +1,87 @@
+- user: plan:Free Tier
+  relation: associated_plan
+  object: feature:free-tier
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:trust-center
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:incident-management
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:ai-compliancebot
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:employee-onboarding-automation
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:centralized-audit-documentation
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:vendor-management
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:risk-management
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:sso
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:webhooks
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:evidence-storage
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:questionnaire-automation
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:policy-and-procedure-module
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:compliance-module
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:vulnerability-management
+- user: plan:Enterprise Tier
+  relation: associated_plan
+  object: feature:continuous-monitoring
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:ai-compliancebot
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:centralized-audit-documentation
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:risk-management
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:webhooks
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:evidence-storage
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:questionnaire-automation
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:policy-and-procedure-module
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:compliance-module
+- user: plan:Business Tier
+  relation: associated_plan
+  object: feature:vulnerability-management
+- user: plan:Starter Tier
+  relation: associated_plan
+  object: feature:centralized-audit-documentation
+- user: plan:Starter Tier
+  relation: associated_plan
+  object: feature:risk-management
+- user: plan:Starter Tier
+  relation: associated_plan
+  object: feature:policy-and-procedure-module
+- user: plan:Starter Tier
+  relation: associated_plan
+  object: feature:compliance-module
