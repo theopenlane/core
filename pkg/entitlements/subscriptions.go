@@ -1,9 +1,6 @@
 package entitlements
 
 import (
-	"context"
-
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 )
@@ -19,13 +16,13 @@ func (sc *StripeClient) CreateSubscription(params *stripe.SubscriptionParams) (*
 }
 
 // ListStripeSubscriptions lists stripe subscriptions by customer
-func (sc *StripeClient) ListOrCreateSubscriptions(ctx context.Context, customerID string) (*Subscription, error) {
+func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscription, error) {
 	i := sc.Client.Subscriptions.List(&stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
 	})
 
 	if !i.Next() {
-		sub, err := sc.CreateTrialSubscription(ctx, &stripe.Customer{ID: customerID})
+		sub, err := sc.CreateTrialSubscription(&stripe.Customer{ID: customerID})
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to create trial subscription")
 			return nil, err
@@ -54,16 +51,6 @@ func (sc *StripeClient) GetSubscriptionByID(id string) (*stripe.Subscription, er
 	return subscription, nil
 }
 
-// GetProductByID gets a product by ID
-func (sc *StripeClient) GetProductByID(id string) (*stripe.Product, error) {
-	product, err := sc.Client.Products.Get(id, &stripe.ProductParams{})
-	if err != nil {
-		return nil, err
-	}
-
-	return product, nil
-}
-
 // UpdateSubscription updates a subscription
 func (sc *StripeClient) UpdateSubscription(id string, params *stripe.SubscriptionParams) (*stripe.Subscription, error) {
 	subscription, err := sc.Client.Subscriptions.Update(id, params)
@@ -87,7 +74,7 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *stripe.Customer) (*Subscription, error) {
+func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
@@ -114,11 +101,7 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 		return nil, err
 	}
 
-	zerolog.Ctx(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
-		return c.Str("customer_id", cust.ID).Str("subscription_id", subs.ID)
-	})
-	zerolog.Ctx(ctx).Debug().Str("customer_id", cust.ID).Str("subscription_id", subs.ID).Msg("Created trial subscription")
-	zerolog.Ctx(ctx).Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
+	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
 	mappedsubscription := sc.MapStripeSubscription(subs)
 
@@ -144,30 +127,6 @@ func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(customerID string) (*Subsc
 	}
 
 	return sc.MapStripeSubscription(subs), nil
-}
-
-// CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
-func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (*Checkout, error) {
-	params := &stripe.BillingPortalSessionParams{
-		Customer:  &custID,
-		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
-		FlowData: &stripe.BillingPortalSessionFlowDataParams{
-			Type: stripe.String("subscription_update"),
-			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
-				Subscription: &subsID,
-			},
-		},
-	}
-
-	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Checkout{
-		ID:  billingPortalSession.ID,
-		URL: billingPortalSession.URL,
-	}, nil
 }
 
 // retrieveActiveEntitlements retrieves active entitlements for a customer
@@ -240,58 +199,4 @@ func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscr
 		DaysUntilDue:     subs.DaysUntilDue,
 		Features:         subscript.Features,
 	}
-}
-
-type Subs struct {
-	SubsID string
-	Prices []Price
-}
-
-// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CreateBillingPortalPaymentMethods(custID string) (*BillingPortalSession, error) {
-	params := &stripe.BillingPortalSessionParams{
-		Customer:  &custID,
-		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
-		FlowData: &stripe.BillingPortalSessionFlowDataParams{
-			Type: stripe.String("payment_method_update"),
-		},
-	}
-
-	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
-	if err != nil {
-		return nil, err
-	}
-
-	return &BillingPortalSession{
-		PaymentMethods: billingPortalSession.URL,
-	}, nil
-}
-
-// CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CancellationBillingPortalSession(subsID, custID string) (*BillingPortalSession, error) {
-	params := &stripe.BillingPortalSessionParams{
-		Customer:  &custID,
-		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL, // this is the "return back to website" URL, not a cancellation / update specific one
-		FlowData: &stripe.BillingPortalSessionFlowDataParams{
-			Type: stripe.String("subscription_cancel"),
-			SubscriptionCancel: &stripe.BillingPortalSessionFlowDataSubscriptionCancelParams{
-				Subscription: &subsID,
-			},
-			AfterCompletion: &stripe.BillingPortalSessionFlowDataAfterCompletionParams{
-				Type: stripe.String("redirect"),
-				Redirect: &stripe.BillingPortalSessionFlowDataAfterCompletionRedirectParams{
-					ReturnURL: &sc.Config.StripeCancellationReturnURL,
-				},
-			},
-		},
-	}
-
-	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
-	if err != nil {
-		return nil, err
-	}
-
-	return &BillingPortalSession{
-		Cancellation: billingPortalSession.URL,
-	}, nil
 }

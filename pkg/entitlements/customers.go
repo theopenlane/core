@@ -29,9 +29,10 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 			Country:    c.Country,
 		},
 		Metadata: map[string]string{
-			"organization_id":          c.OrganizationID,
-			"organization_settings_id": c.OrganizationSettingsID,
-			"organization_name":        c.OrganizationName,
+			"organization_id":              c.OrganizationID,
+			"organization_settings_id":     c.OrganizationSettingsID,
+			"organization_name":            c.OrganizationName,
+			"organization_subscription_id": c.OrganizationSubscriptionID,
 		},
 	})
 	if err != nil {
@@ -102,7 +103,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("personal org subscription created")
 		} else {
-			subscription, err = sc.CreateTrialSubscription(ctx, customer)
+			subscription, err = sc.CreateTrialSubscription(customer)
 			if err != nil {
 				return nil
 			}

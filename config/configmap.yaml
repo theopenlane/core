@@ -179,3 +179,5 @@ data:
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.core.subscription.stripeWebhookURL | default "https://api.openlane.com/v1/stripe/webhook" }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.core.subscription.stripeBillingPortalSuccessURL | default "https://console.openlane.com/billing" }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.core.subscription.stripeCancellationReturnURL | default "https://console.theopenlane.io/organization-settings/billing/subscription_canceled" }}
+  CORE_SUBSCRIPTION_SAASPRICINGTIERS: {{ .Values.core.subscription.saasPricingTiers }}
+  CORE_SUBSCRIPTION_FEATURES: {{ .Values.core.subscription.features }}
