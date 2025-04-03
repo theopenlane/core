@@ -26,7 +26,7 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 }
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
-func (sc *StripeClient) CreateBillingPortalPaymentMethods(subsID, custID string) (*BillingPortalSession, error) {
+func (sc *StripeClient) CreateBillingPortalPaymentMethods(custID string) (*BillingPortalSession, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,

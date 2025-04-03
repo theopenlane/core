@@ -6,9 +6,10 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 func InterceptorSubscriptionURL() ent.Interceptor {
@@ -86,7 +87,7 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 		return err
 	}
 
-	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeSubscriptionID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create billing portal session")
 

@@ -17,7 +17,7 @@ func main() {
 
 	sortPlansByFeatureCount(plans)
 
-	tuplestruct := client.CreateTupleStruct("user", "relation", "object")
+	tuplestruct := client.CreateTupleStruct()
 
 	log.Warn().Msgf("TupleStruct: %v", tuplestruct)
 

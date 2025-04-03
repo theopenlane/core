@@ -25,6 +25,7 @@ func (sc *StripeClient) CreateProduct(name, description string) (*stripe.Product
 // ListProducts lists all products in Stripe
 func (sc *StripeClient) ListProducts() ([]*stripe.Product, error) {
 	var products []*stripe.Product
+
 	params := &stripe.ProductListParams{}
 	i := sc.Client.Products.List(params)
 

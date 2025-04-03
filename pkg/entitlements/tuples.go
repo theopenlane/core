@@ -10,7 +10,7 @@ type TupleStruct struct {
 	Object   string `yaml:"object"`
 }
 
-func (sc *StripeClient) CreateTupleStruct(user, relation, object string) []TupleStruct {
+func (sc *StripeClient) CreateTupleStruct() []TupleStruct {
 	products := sc.GetAllProductPricesMapped()
 
 	tuples := []TupleStruct{}

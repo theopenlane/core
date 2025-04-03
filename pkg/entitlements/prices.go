@@ -24,6 +24,7 @@ func (sc *StripeClient) GetPrice(priceID string) (*stripe.Price, error) {
 // ListPrices retrieves all prices from stripe
 func (sc *StripeClient) ListPrices() ([]*stripe.Price, error) {
 	var prices []*stripe.Price
+
 	params := &stripe.PriceListParams{}
 	i := sc.Client.Prices.List(params)
 
