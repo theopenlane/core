@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
@@ -34,7 +35,8 @@ func FilterListQuery() ent.Interceptor {
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return nil
 	}
 
