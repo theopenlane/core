@@ -56,7 +56,7 @@ func HookSubcontrolCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubcontrolFunc(func(ctx context.Context, m *generated.SubcontrolMutation) (generated.Value, error) {
 			// check if the subcontrol has an owner assigned
-			if _, ok := m.OwnerID(); !ok {
+			if _, ok := m.ControlOwnerID(); !ok {
 				// if not, check if the parent control has an owner
 				// subcontrols must have a control assigned
 				controlID, _ := m.ControlID()
@@ -67,8 +67,8 @@ func HookSubcontrolCreate() ent.Hook {
 				}
 
 				// if the control has an owner, assign it to the subcontrol
-				if control.OwnerID != "" {
-					m.SetOwnerID(control.OwnerID)
+				if control.ControlOwnerID != "" {
+					m.SetControlOwnerID(control.ControlOwnerID)
 				}
 			}
 
