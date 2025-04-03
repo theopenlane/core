@@ -179,6 +179,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anotherOwnerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a subcontrol
@@ -188,6 +189,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 
 	control1 := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlWithOwner := (&ControlBuilder{client: suite.client, ProgramID: program.ID,
+		OwnerID: ownerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name                string
@@ -212,6 +215,25 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			request: openlaneclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, parent control has owner",
+			request: openlaneclient.CreateSubcontrolInput{
+				RefCode:   "SC-2",
+				ControlID: controlWithOwner.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, parent control has owner, subcontrol should override it",
+			request: openlaneclient.CreateSubcontrolInput{
+				RefCode:   "SC-2",
+				ControlID: controlWithOwner.ID,
+				OwnerID:   &anotherOwnerGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -391,6 +413,10 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			if tc.request.ControlOwnerID != nil {
 				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
 				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else if tc.request.ControlID == controlWithOwner.ID {
+				// it should inherit the owner from the parent control if it was set
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, controlWithOwner.OwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
 			} else {
 				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
 			}

@@ -109,6 +109,7 @@ func (Subcontrol) Indexes() []ent.Index {
 // Hooks of the Subcontrol
 func (Subcontrol) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookSubcontrolCreate(),
 		hooks.HookSubcontrolUpdate(),
 	}
 }

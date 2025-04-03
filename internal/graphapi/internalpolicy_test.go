@@ -301,18 +301,18 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
 			}
 
-			// if tc.request.ApproverID != nil {
-			// 	require.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy)
-			// 	assert.Equal(t, *tc.request.ApproverID, resp.CreateInternalPolicy.InternalPolicy.ApproverID)
-			// } else {
-			// 	assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.ApproverID)
-			// }
+			if tc.request.ApproverID != nil {
+				require.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy)
+				assert.Equal(t, *tc.request.ApproverID, resp.CreateInternalPolicy.InternalPolicy.Approver.ID)
+			} else {
+				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Approver)
+			}
 
-			// if tc.request.DelegateID != nil {
-			// 	assert.Equal(t, *tc.request.DelegateID, resp.CreateInternalPolicy.InternalPolicy.DelegateID)
-			// } else {
-			// 	assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.DelegateID)
-			// }
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateInternalPolicy.InternalPolicy.Delegate.ID)
+			} else {
+				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Delegate)
+			}
 		})
 	}
 }

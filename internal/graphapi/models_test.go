@@ -220,6 +220,7 @@ type ControlBuilder struct {
 	Name       string
 	ProgramID  string
 	StandardID string
+	OwnerID    string
 	// AllFields will set all direct fields on the control with random data
 	AllFields bool
 }

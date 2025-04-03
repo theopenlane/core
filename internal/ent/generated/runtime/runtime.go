@@ -3532,6 +3532,8 @@ func init() {
 	subcontrol.Hooks[8] = subcontrolMixinHooks6[2]
 
 	subcontrol.Hooks[9] = subcontrolHooks[0]
+
+	subcontrol.Hooks[10] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
