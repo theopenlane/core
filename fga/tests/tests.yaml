@@ -645,7 +645,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
       - user: user:ulid-group-control-1-viewer
         object: control:control-1
         assertions:
@@ -681,7 +681,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
       - user: user:ulid-group-control-1-viewer
         object: subcontrol:subcontrol-1
         assertions:
@@ -717,7 +717,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
       - user: user:ulid-group-control-1-viewer
         object: control_objective:control_objective-1
         assertions:
@@ -753,7 +753,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
       - user: user:ulid-group-control-1-viewer
         object: control_objective:control_objective-2
         assertions:
