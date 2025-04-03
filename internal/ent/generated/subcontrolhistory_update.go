@@ -430,6 +430,46 @@ func (shu *SubcontrolHistoryUpdate) ClearReferences() *SubcontrolHistoryUpdate {
 	return shu
 }
 
+// SetControlOwnerID sets the "control_owner_id" field.
+func (shu *SubcontrolHistoryUpdate) SetControlOwnerID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetControlOwnerID(s)
+	return shu
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableControlOwnerID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetControlOwnerID(*s)
+	}
+	return shu
+}
+
+// ClearControlOwnerID clears the value of the "control_owner_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearControlOwnerID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearControlOwnerID()
+	return shu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (shu *SubcontrolHistoryUpdate) SetDelegateID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetDelegateID(s)
+	return shu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableDelegateID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetDelegateID(*s)
+	}
+	return shu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearDelegateID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearDelegateID()
+	return shu
+}
+
 // SetRefCode sets the "ref_code" field.
 func (shu *SubcontrolHistoryUpdate) SetRefCode(s string) *SubcontrolHistoryUpdate {
 	shu.mutation.SetRefCode(s)
@@ -581,9 +621,6 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
 	}
-	if shu.mutation.OwnerIDCleared() {
-		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
-	}
 	if value, ok := shu.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)
 	}
@@ -714,6 +751,21 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if shu.mutation.ReferencesCleared() {
 		_spec.ClearField(subcontrolhistory.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := shu.mutation.ControlOwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)
+	}
+	if shu.mutation.ControlOwnerIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOwnerID, field.TypeString)
+	}
+	if value, ok := shu.mutation.DelegateID(); ok {
+		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if shu.mutation.DelegateIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDelegateID, field.TypeString)
+	}
+	if shu.mutation.OwnerIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := shu.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)
@@ -1141,6 +1193,46 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearReferences() *SubcontrolHistoryUpda
 	return shuo
 }
 
+// SetControlOwnerID sets the "control_owner_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetControlOwnerID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetControlOwnerID(s)
+	return shuo
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableControlOwnerID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetControlOwnerID(*s)
+	}
+	return shuo
+}
+
+// ClearControlOwnerID clears the value of the "control_owner_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearControlOwnerID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearControlOwnerID()
+	return shuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetDelegateID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetDelegateID(s)
+	return shuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableDelegateID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetDelegateID(*s)
+	}
+	return shuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearDelegateID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearDelegateID()
+	return shuo
+}
+
 // SetRefCode sets the "ref_code" field.
 func (shuo *SubcontrolHistoryUpdateOne) SetRefCode(s string) *SubcontrolHistoryUpdateOne {
 	shuo.mutation.SetRefCode(s)
@@ -1322,9 +1414,6 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
 	}
-	if shuo.mutation.OwnerIDCleared() {
-		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
-	}
 	if value, ok := shuo.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)
 	}
@@ -1455,6 +1544,21 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.ReferencesCleared() {
 		_spec.ClearField(subcontrolhistory.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := shuo.mutation.ControlOwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)
+	}
+	if shuo.mutation.ControlOwnerIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOwnerID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.DelegateID(); ok {
+		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if shuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDelegateID, field.TypeString)
+	}
+	if shuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := shuo.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

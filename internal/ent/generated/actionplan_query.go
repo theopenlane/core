@@ -635,9 +635,6 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			apq.withPrograms != nil,
 		}
 	)
-	if apq.withApprover != nil || apq.withDelegate != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, actionplan.ForeignKeys...)
 	}
@@ -750,10 +747,7 @@ func (apq *ActionPlanQuery) loadApprover(ctx context.Context, query *GroupQuery,
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
-		if nodes[i].action_plan_approver == nil {
-			continue
-		}
-		fk := *nodes[i].action_plan_approver
+		fk := nodes[i].ApproverID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -770,7 +764,7 @@ func (apq *ActionPlanQuery) loadApprover(ctx context.Context, query *GroupQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "action_plan_approver" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "approver_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -782,10 +776,7 @@ func (apq *ActionPlanQuery) loadDelegate(ctx context.Context, query *GroupQuery,
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
-		if nodes[i].action_plan_delegate == nil {
-			continue
-		}
-		fk := *nodes[i].action_plan_delegate
+		fk := nodes[i].DelegateID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -802,7 +793,7 @@ func (apq *ActionPlanQuery) loadDelegate(ctx context.Context, query *GroupQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "action_plan_delegate" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1117,6 +1108,12 @@ func (apq *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != actionplan.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if apq.withApprover != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldApproverID)
+		}
+		if apq.withDelegate != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldDelegateID)
 		}
 		if apq.withOwner != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldOwnerID)

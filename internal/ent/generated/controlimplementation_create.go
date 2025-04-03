@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -111,6 +113,20 @@ func (cic *ControlImplementationCreate) SetTags(s []string) *ControlImplementati
 	return cic
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (cic *ControlImplementationCreate) SetOwnerID(s string) *ControlImplementationCreate {
+	cic.mutation.SetOwnerID(s)
+	return cic
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cic *ControlImplementationCreate) SetNillableOwnerID(s *string) *ControlImplementationCreate {
+	if s != nil {
+		cic.SetOwnerID(*s)
+	}
+	return cic
+}
+
 // SetStatus sets the "status" field.
 func (cic *ControlImplementationCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationCreate {
 	cic.mutation.SetStatus(es)
@@ -195,6 +211,11 @@ func (cic *ControlImplementationCreate) SetNillableID(s *string) *ControlImpleme
 	return cic
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (cic *ControlImplementationCreate) SetOwner(o *Organization) *ControlImplementationCreate {
+	return cic.SetOwnerID(o.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (cic *ControlImplementationCreate) AddControlIDs(ids ...string) *ControlImplementationCreate {
 	cic.mutation.AddControlIDs(ids...)
@@ -208,6 +229,21 @@ func (cic *ControlImplementationCreate) AddControls(c ...*Control) *ControlImple
 		ids[i] = c[i].ID
 	}
 	return cic.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (cic *ControlImplementationCreate) AddSubcontrolIDs(ids ...string) *ControlImplementationCreate {
+	cic.mutation.AddSubcontrolIDs(ids...)
+	return cic
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (cic *ControlImplementationCreate) AddSubcontrols(s ...*Subcontrol) *ControlImplementationCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cic.AddSubcontrolIDs(ids...)
 }
 
 // Mutation returns the ControlImplementationMutation object of the builder.
@@ -281,6 +317,11 @@ func (cic *ControlImplementationCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cic *ControlImplementationCreate) check() error {
+	if v, ok := cic.mutation.OwnerID(); ok {
+		if err := controlimplementation.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := cic.mutation.Status(); ok {
 		if err := controlimplementation.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.status": %w`, err)}
@@ -370,6 +411,24 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 		_spec.SetField(controlimplementation.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
+	if nodes := cic.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlimplementation.OwnerTable,
+			Columns: []string{controlimplementation.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cic.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := cic.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -382,6 +441,23 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 			},
 		}
 		edge.Schema = cic.schemaConfig.ControlControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cic.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cic.schemaConfig.SubcontrolControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

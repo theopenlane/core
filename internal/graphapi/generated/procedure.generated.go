@@ -101,6 +101,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_Procedure_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -205,6 +209,10 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_Procedure_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -353,6 +361,10 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_Procedure_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":

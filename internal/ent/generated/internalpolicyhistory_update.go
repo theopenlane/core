@@ -297,6 +297,46 @@ func (iphu *InternalPolicyHistoryUpdate) ClearReviewFrequency() *InternalPolicyH
 	return iphu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetApproverID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetApproverID(s)
+	return iphu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableApproverID(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetApproverID(*s)
+	}
+	return iphu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearApproverID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearApproverID()
+	return iphu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDelegateID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDelegateID(s)
+	return iphu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableDelegateID(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetDelegateID(*s)
+	}
+	return iphu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDelegateID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDelegateID()
+	return iphu
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return iphu.mutation
@@ -465,6 +505,18 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if iphu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := iphu.mutation.ApproverID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldApproverID, field.TypeString, value)
+	}
+	if iphu.mutation.ApproverIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := iphu.mutation.DelegateID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if iphu.mutation.DelegateIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = iphu.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphu.schemaConfig)
@@ -754,6 +806,46 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearReviewFrequency() *InternalPol
 	return iphuo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetApproverID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetApproverID(s)
+	return iphuo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableApproverID(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetApproverID(*s)
+	}
+	return iphuo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearApproverID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearApproverID()
+	return iphuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDelegateID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDelegateID(s)
+	return iphuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDelegateID(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetDelegateID(*s)
+	}
+	return iphuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDelegateID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDelegateID()
+	return iphuo
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphuo *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return iphuo.mutation
@@ -952,6 +1044,18 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if iphuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := iphuo.mutation.ApproverID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldApproverID, field.TypeString, value)
+	}
+	if iphuo.mutation.ApproverIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.DelegateID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if iphuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = iphuo.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphuo.schemaConfig)

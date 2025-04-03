@@ -83,8 +83,6 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -117,16 +115,16 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
 				return ec.fieldContext_Subcontrol_controlID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "control":
-				return ec.fieldContext_Subcontrol_control(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			case "controlObjectives":
@@ -143,10 +141,18 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -211,8 +217,6 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -245,16 +249,16 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
 				return ec.fieldContext_Subcontrol_controlID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "control":
-				return ec.fieldContext_Subcontrol_control(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			case "controlObjectives":
@@ -271,10 +275,18 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -383,8 +395,6 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -417,16 +427,16 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
 				return ec.fieldContext_Subcontrol_controlID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "control":
-				return ec.fieldContext_Subcontrol_control(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			case "controlObjectives":
@@ -443,10 +453,18 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

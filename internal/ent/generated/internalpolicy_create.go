@@ -243,6 +243,34 @@ func (ipc *InternalPolicyCreate) SetNillableReviewFrequency(e *enums.Frequency) 
 	return ipc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (ipc *InternalPolicyCreate) SetApproverID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetApproverID(s)
+	return ipc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableApproverID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetApproverID(*s)
+	}
+	return ipc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (ipc *InternalPolicyCreate) SetDelegateID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetDelegateID(s)
+	return ipc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDelegateID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetDelegateID(*s)
+	}
+	return ipc
+}
+
 // SetID sets the "id" field.
 func (ipc *InternalPolicyCreate) SetID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetID(s)
@@ -292,37 +320,9 @@ func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
 	return ipc.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (ipc *InternalPolicyCreate) SetApproverID(id string) *InternalPolicyCreate {
-	ipc.mutation.SetApproverID(id)
-	return ipc
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableApproverID(id *string) *InternalPolicyCreate {
-	if id != nil {
-		ipc = ipc.SetApproverID(*id)
-	}
-	return ipc
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (ipc *InternalPolicyCreate) SetApprover(g *Group) *InternalPolicyCreate {
 	return ipc.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (ipc *InternalPolicyCreate) SetDelegateID(id string) *InternalPolicyCreate {
-	ipc.mutation.SetDelegateID(id)
-	return ipc
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDelegateID(id *string) *InternalPolicyCreate {
-	if id != nil {
-		ipc = ipc.SetDelegateID(*id)
-	}
-	return ipc
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -710,7 +710,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.internal_policy_approver = &nodes[0]
+		_node.ApproverID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ipc.mutation.DelegateIDs(); len(nodes) > 0 {
@@ -728,7 +728,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.internal_policy_delegate = &nodes[0]
+		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ipc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {

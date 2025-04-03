@@ -797,9 +797,6 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			ipq.withPrograms != nil,
 		}
 	)
-	if ipq.withApprover != nil || ipq.withDelegate != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicy.ForeignKeys...)
 	}
@@ -1123,10 +1120,7 @@ func (ipq *InternalPolicyQuery) loadApprover(ctx context.Context, query *GroupQu
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
-		if nodes[i].internal_policy_approver == nil {
-			continue
-		}
-		fk := *nodes[i].internal_policy_approver
+		fk := nodes[i].ApproverID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1143,7 +1137,7 @@ func (ipq *InternalPolicyQuery) loadApprover(ctx context.Context, query *GroupQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "internal_policy_approver" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "approver_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1155,10 +1149,7 @@ func (ipq *InternalPolicyQuery) loadDelegate(ctx context.Context, query *GroupQu
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
-		if nodes[i].internal_policy_delegate == nil {
-			continue
-		}
-		fk := *nodes[i].internal_policy_delegate
+		fk := nodes[i].DelegateID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1175,7 +1166,7 @@ func (ipq *InternalPolicyQuery) loadDelegate(ctx context.Context, query *GroupQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "internal_policy_delegate" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1526,6 +1517,12 @@ func (ipq *InternalPolicyQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if ipq.withOwner != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldOwnerID)
+		}
+		if ipq.withApprover != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldApproverID)
+		}
+		if ipq.withDelegate != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldDelegateID)
 		}
 	}
 	if ps := ipq.predicates; len(ps) > 0 {

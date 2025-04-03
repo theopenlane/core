@@ -15,7 +15,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -23,14 +25,17 @@ import (
 // ControlImplementationQuery is the builder for querying ControlImplementation entities.
 type ControlImplementationQuery struct {
 	config
-	ctx               *QueryContext
-	order             []controlimplementation.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.ControlImplementation
-	withControls      *ControlQuery
-	loadTotal         []func(context.Context, []*ControlImplementation) error
-	modifiers         []func(*sql.Selector)
-	withNamedControls map[string]*ControlQuery
+	ctx                  *QueryContext
+	order                []controlimplementation.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.ControlImplementation
+	withOwner            *OrganizationQuery
+	withControls         *ControlQuery
+	withSubcontrols      *SubcontrolQuery
+	loadTotal            []func(context.Context, []*ControlImplementation) error
+	modifiers            []func(*sql.Selector)
+	withNamedControls    map[string]*ControlQuery
+	withNamedSubcontrols map[string]*SubcontrolQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -67,6 +72,31 @@ func (ciq *ControlImplementationQuery) Order(o ...controlimplementation.OrderOpt
 	return ciq
 }
 
+// QueryOwner chains the current query on the "owner" edge.
+func (ciq *ControlImplementationQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: ciq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ciq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ciq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, controlimplementation.OwnerTable, controlimplementation.OwnerColumn),
+		)
+		schemaConfig := ciq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ControlImplementation
+		fromU = sqlgraph.SetNeighbors(ciq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControls chains the current query on the "controls" edge.
 func (ciq *ControlImplementationQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: ciq.config}).Query()
@@ -86,6 +116,31 @@ func (ciq *ControlImplementationQuery) QueryControls() *ControlQuery {
 		schemaConfig := ciq.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlControlImplementations
+		fromU = sqlgraph.SetNeighbors(ciq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (ciq *ControlImplementationQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: ciq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ciq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ciq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.SubcontrolsTable, controlimplementation.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := ciq.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolControlImplementations
 		fromU = sqlgraph.SetNeighbors(ciq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -279,17 +334,30 @@ func (ciq *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 		return nil
 	}
 	return &ControlImplementationQuery{
-		config:       ciq.config,
-		ctx:          ciq.ctx.Clone(),
-		order:        append([]controlimplementation.OrderOption{}, ciq.order...),
-		inters:       append([]Interceptor{}, ciq.inters...),
-		predicates:   append([]predicate.ControlImplementation{}, ciq.predicates...),
-		withControls: ciq.withControls.Clone(),
+		config:          ciq.config,
+		ctx:             ciq.ctx.Clone(),
+		order:           append([]controlimplementation.OrderOption{}, ciq.order...),
+		inters:          append([]Interceptor{}, ciq.inters...),
+		predicates:      append([]predicate.ControlImplementation{}, ciq.predicates...),
+		withOwner:       ciq.withOwner.Clone(),
+		withControls:    ciq.withControls.Clone(),
+		withSubcontrols: ciq.withSubcontrols.Clone(),
 		// clone intermediate query.
 		sql:       ciq.sql.Clone(),
 		path:      ciq.path,
 		modifiers: append([]func(*sql.Selector){}, ciq.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (ciq *ControlImplementationQuery) WithOwner(opts ...func(*OrganizationQuery)) *ControlImplementationQuery {
+	query := (&OrganizationClient{config: ciq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ciq.withOwner = query
+	return ciq
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
@@ -300,6 +368,17 @@ func (ciq *ControlImplementationQuery) WithControls(opts ...func(*ControlQuery))
 		opt(query)
 	}
 	ciq.withControls = query
+	return ciq
+}
+
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (ciq *ControlImplementationQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ControlImplementationQuery {
+	query := (&SubcontrolClient{config: ciq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ciq.withSubcontrols = query
 	return ciq
 }
 
@@ -387,8 +466,10 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 	var (
 		nodes       = []*ControlImplementation{}
 		_spec       = ciq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			ciq.withOwner != nil,
 			ciq.withControls != nil,
+			ciq.withSubcontrols != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -414,6 +495,12 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := ciq.withOwner; query != nil {
+		if err := ciq.loadOwner(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := ciq.withControls; query != nil {
 		if err := ciq.loadControls(ctx, query, nodes,
 			func(n *ControlImplementation) { n.Edges.Controls = []*Control{} },
@@ -421,10 +508,24 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 			return nil, err
 		}
 	}
+	if query := ciq.withSubcontrols; query != nil {
+		if err := ciq.loadSubcontrols(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *ControlImplementation, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ciq.withNamedControls {
 		if err := ciq.loadControls(ctx, query, nodes,
 			func(n *ControlImplementation) { n.appendNamedControls(name) },
 			func(n *ControlImplementation, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ciq.withNamedSubcontrols {
+		if err := ciq.loadSubcontrols(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedSubcontrols(name) },
+			func(n *ControlImplementation, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -436,6 +537,35 @@ func (ciq *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...quer
 	return nodes, nil
 }
 
+func (ciq *ControlImplementationQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (ciq *ControlImplementationQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlImplementation)
@@ -498,6 +628,68 @@ func (ciq *ControlImplementationQuery) loadControls(ctx context.Context, query *
 	}
 	return nil
 }
+func (ciq *ControlImplementationQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlImplementation)
+	nids := make(map[string]map[*ControlImplementation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlimplementation.SubcontrolsTable)
+		joinT.Schema(ciq.schemaConfig.SubcontrolControlImplementations)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(controlimplementation.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlimplementation.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlimplementation.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlImplementation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (ciq *ControlImplementationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ciq.querySpec()
@@ -528,6 +720,9 @@ func (ciq *ControlImplementationQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != controlimplementation.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if ciq.withOwner != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldOwnerID)
 		}
 	}
 	if ps := ciq.predicates; len(ps) > 0 {
@@ -608,6 +803,20 @@ func (ciq *ControlImplementationQuery) WithNamedControls(name string, opts ...fu
 		ciq.withNamedControls = make(map[string]*ControlQuery)
 	}
 	ciq.withNamedControls[name] = query
+	return ciq
+}
+
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ciq *ControlImplementationQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ControlImplementationQuery {
+	query := (&SubcontrolClient{config: ciq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ciq.withNamedSubcontrols == nil {
+		ciq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	ciq.withNamedSubcontrols[name] = query
 	return ciq
 }
 

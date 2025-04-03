@@ -221,6 +221,34 @@ func (apc *ActionPlanCreate) SetNillableReviewFrequency(e *enums.Frequency) *Act
 	return apc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (apc *ActionPlanCreate) SetApproverID(s string) *ActionPlanCreate {
+	apc.mutation.SetApproverID(s)
+	return apc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableApproverID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetApproverID(*s)
+	}
+	return apc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (apc *ActionPlanCreate) SetDelegateID(s string) *ActionPlanCreate {
+	apc.mutation.SetDelegateID(s)
+	return apc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableDelegateID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetDelegateID(*s)
+	}
+	return apc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apc *ActionPlanCreate) SetOwnerID(s string) *ActionPlanCreate {
 	apc.mutation.SetOwnerID(s)
@@ -291,37 +319,9 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (apc *ActionPlanCreate) SetApproverID(id string) *ActionPlanCreate {
-	apc.mutation.SetApproverID(id)
-	return apc
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableApproverID(id *string) *ActionPlanCreate {
-	if id != nil {
-		apc = apc.SetApproverID(*id)
-	}
-	return apc
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (apc *ActionPlanCreate) SetApprover(g *Group) *ActionPlanCreate {
 	return apc.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (apc *ActionPlanCreate) SetDelegateID(id string) *ActionPlanCreate {
-	apc.mutation.SetDelegateID(id)
-	return apc
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableDelegateID(id *string) *ActionPlanCreate {
-	if id != nil {
-		apc = apc.SetDelegateID(*id)
-	}
-	return apc
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -637,7 +637,7 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.action_plan_approver = &nodes[0]
+		_node.ApproverID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.DelegateIDs(); len(nodes) > 0 {
@@ -655,7 +655,7 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.action_plan_delegate = &nodes[0]
+		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.OwnerIDs(); len(nodes) > 0 {

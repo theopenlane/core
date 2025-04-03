@@ -250,6 +250,34 @@ func (aphc *ActionPlanHistoryCreate) SetNillableReviewFrequency(e *enums.Frequen
 	return aphc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (aphc *ActionPlanHistoryCreate) SetApproverID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetApproverID(s)
+	return aphc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableApproverID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetApproverID(*s)
+	}
+	return aphc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (aphc *ActionPlanHistoryCreate) SetDelegateID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDelegateID(s)
+	return aphc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableDelegateID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetDelegateID(*s)
+	}
+	return aphc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphc *ActionPlanHistoryCreate) SetOwnerID(s string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetOwnerID(s)
@@ -535,6 +563,14 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplanhistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := aphc.mutation.ApproverID(); ok {
+		_spec.SetField(actionplanhistory.FieldApproverID, field.TypeString, value)
+		_node.ApproverID = value
+	}
+	if value, ok := aphc.mutation.DelegateID(); ok {
+		_spec.SetField(actionplanhistory.FieldDelegateID, field.TypeString, value)
+		_node.DelegateID = value
 	}
 	if value, ok := aphc.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

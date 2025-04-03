@@ -48,6 +48,10 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
+	// FieldApproverID holds the string denoting the approver_id field in the database.
+	FieldApproverID = "approver_id"
+	// FieldDelegateID holds the string denoting the delegate_id field in the database.
+	FieldDelegateID = "delegate_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
@@ -78,14 +82,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ApproverInverseTable = "groups"
 	// ApproverColumn is the table column denoting the approver relation/edge.
-	ApproverColumn = "action_plan_approver"
+	ApproverColumn = "approver_id"
 	// DelegateTable is the table that holds the delegate relation/edge.
 	DelegateTable = "action_plans"
 	// DelegateInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
-	DelegateColumn = "action_plan_delegate"
+	DelegateColumn = "delegate_id"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "action_plans"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -133,6 +137,8 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
+	FieldApproverID,
+	FieldDelegateID,
 	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
@@ -142,8 +148,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "action_plans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"action_plan_approver",
-	"action_plan_delegate",
 	"subcontrol_action_plans",
 }
 
@@ -183,7 +187,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -320,6 +324,16 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByApproverID orders the results by the approver_id field.
+func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApproverID, opts...).ToFunc()
+}
+
+// ByDelegateID orders the results by the delegate_id field.
+func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

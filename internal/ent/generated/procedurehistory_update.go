@@ -297,6 +297,46 @@ func (phu *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdat
 	return phu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (phu *ProcedureHistoryUpdate) SetApproverID(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetApproverID(s)
+	return phu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableApproverID(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetApproverID(*s)
+	}
+	return phu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (phu *ProcedureHistoryUpdate) ClearApproverID() *ProcedureHistoryUpdate {
+	phu.mutation.ClearApproverID()
+	return phu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (phu *ProcedureHistoryUpdate) SetDelegateID(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDelegateID(s)
+	return phu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableDelegateID(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetDelegateID(*s)
+	}
+	return phu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (phu *ProcedureHistoryUpdate) ClearDelegateID() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDelegateID()
+	return phu
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return phu.mutation
@@ -465,6 +505,18 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := phu.mutation.ApproverID(); ok {
+		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
+	}
+	if phu.mutation.ApproverIDCleared() {
+		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := phu.mutation.DelegateID(); ok {
+		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
+	}
+	if phu.mutation.DelegateIDCleared() {
+		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -754,6 +806,46 @@ func (phuo *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryU
 	return phuo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (phuo *ProcedureHistoryUpdateOne) SetApproverID(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetApproverID(s)
+	return phuo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableApproverID(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetApproverID(*s)
+	}
+	return phuo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearApproverID() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearApproverID()
+	return phuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDelegateID(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDelegateID(s)
+	return phuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableDelegateID(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetDelegateID(*s)
+	}
+	return phuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDelegateID() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDelegateID()
+	return phuo
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phuo *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return phuo.mutation
@@ -952,6 +1044,18 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := phuo.mutation.ApproverID(); ok {
+		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
+	}
+	if phuo.mutation.ApproverIDCleared() {
+		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := phuo.mutation.DelegateID(); ok {
+		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
+	}
+	if phuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

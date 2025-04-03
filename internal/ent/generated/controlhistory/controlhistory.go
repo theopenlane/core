@@ -40,8 +40,6 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldOwnerID holds the string denoting the owner_id field in the database.
-	FieldOwnerID = "owner_id"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldReferenceID holds the string denoting the reference_id field in the database.
@@ -74,6 +72,12 @@ const (
 	FieldExampleEvidence = "example_evidence"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
+	// FieldControlOwnerID holds the string denoting the control_owner_id field in the database.
+	FieldControlOwnerID = "control_owner_id"
+	// FieldDelegateID holds the string denoting the delegate_id field in the database.
+	FieldDelegateID = "delegate_id"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
@@ -96,7 +100,6 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
-	FieldOwnerID,
 	FieldDescription,
 	FieldReferenceID,
 	FieldAuditorReferenceID,
@@ -113,6 +116,9 @@ var Columns = []string{
 	FieldImplementationGuidance,
 	FieldExampleEvidence,
 	FieldReferences,
+	FieldControlOwnerID,
+	FieldDelegateID,
+	FieldOwnerID,
 	FieldRefCode,
 	FieldStandardID,
 }
@@ -252,11 +258,6 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
-// ByOwnerID orders the results by the owner_id field.
-func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
-}
-
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
@@ -300,6 +301,21 @@ func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
 // BySubcategory orders the results by the subcategory field.
 func BySubcategory(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubcategory, opts...).ToFunc()
+}
+
+// ByControlOwnerID orders the results by the control_owner_id field.
+func ByControlOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOwnerID, opts...).ToFunc()
+}
+
+// ByDelegateID orders the results by the delegate_id field.
+func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByRefCode orders the results by the ref_code field.

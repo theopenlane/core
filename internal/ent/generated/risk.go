@@ -59,12 +59,14 @@ type Risk struct {
 	Details string `json:"details,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts string `json:"business_costs,omitempty"`
+	// the id of the group responsible for risk oversight
+	StakeholderID string `json:"stakeholder_id,omitempty"`
+	// the id of the group responsible for risk oversight on behalf of the stakeholder
+	DelegateID string `json:"delegate_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
-	risk_stakeholder        *string
-	risk_delegate           *string
 	subcontrol_risks        *string
 	selectValues            sql.SelectValues
 }
@@ -211,17 +213,13 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case risk.FieldScore:
 			values[i] = new(sql.NullInt64)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldName, risk.FieldStatus, risk.FieldRiskType, risk.FieldCategory, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldName, risk.FieldStatus, risk.FieldRiskType, risk.FieldCategory, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
 			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[1]: // risk_stakeholder
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[2]: // risk_delegate
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[3]: // subcontrol_risks
+		case risk.ForeignKeys[1]: // subcontrol_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -360,6 +358,18 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.BusinessCosts = value.String
 			}
+		case risk.FieldStakeholderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_id", values[i])
+			} else if value.Valid {
+				r.StakeholderID = value.String
+			}
+		case risk.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				r.DelegateID = value.String
+			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_risks", values[i])
@@ -368,20 +378,6 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 				*r.control_objective_risks = value.String
 			}
 		case risk.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field risk_stakeholder", values[i])
-			} else if value.Valid {
-				r.risk_stakeholder = new(string)
-				*r.risk_stakeholder = value.String
-			}
-		case risk.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field risk_delegate", values[i])
-			} else if value.Valid {
-				r.risk_delegate = new(string)
-				*r.risk_delegate = value.String
-			}
-		case risk.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_risks", values[i])
 			} else if value.Valid {
@@ -530,6 +526,12 @@ func (r *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("business_costs=")
 	builder.WriteString(r.BusinessCosts)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_id=")
+	builder.WriteString(r.StakeholderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(r.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

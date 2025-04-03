@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -33,6 +34,8 @@ type ControlImplementation struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -51,24 +54,49 @@ type ControlImplementation struct {
 
 // ControlImplementationEdges holds the relations/edges for other nodes in the graph.
 type ControlImplementationEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
 
-	namedControls map[string][]*Control
+	namedControls    map[string][]*Control
+	namedSubcontrols map[string][]*Subcontrol
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[2] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -80,7 +108,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
+		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldOwnerID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -149,6 +177,12 @@ func (ci *ControlImplementation) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case controlimplementation.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				ci.OwnerID = value.String
+			}
 		case controlimplementation.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -192,9 +226,19 @@ func (ci *ControlImplementation) Value(name string) (ent.Value, error) {
 	return ci.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QueryOwner() *OrganizationQuery {
+	return NewControlImplementationClient(ci.config).QueryOwner(ci)
+}
+
 // QueryControls queries the "controls" edge of the ControlImplementation entity.
 func (ci *ControlImplementation) QueryControls() *ControlQuery {
 	return NewControlImplementationClient(ci.config).QueryControls(ci)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QuerySubcontrols() *SubcontrolQuery {
+	return NewControlImplementationClient(ci.config).QuerySubcontrols(ci)
 }
 
 // Update returns a builder for updating this ControlImplementation.
@@ -241,6 +285,9 @@ func (ci *ControlImplementation) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ci.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(ci.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", ci.Status))
 	builder.WriteString(", ")
@@ -280,6 +327,30 @@ func (ci *ControlImplementation) appendNamedControls(name string, edges ...*Cont
 		ci.Edges.namedControls[name] = []*Control{}
 	} else {
 		ci.Edges.namedControls[name] = append(ci.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ci *ControlImplementation) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if ci.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ci.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ci *ControlImplementation) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if ci.Edges.namedSubcontrols == nil {
+		ci.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		ci.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		ci.Edges.namedSubcontrols[name] = append(ci.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
