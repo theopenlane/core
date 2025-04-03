@@ -4,21 +4,18 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/utils/contextx"
 )
 
-type contextKey string
-
-const (
-	internalCtx contextKey = "internalCtx"
-)
+type internalAllowContextKey struct{}
 
 func WithInternalContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, internalCtx, true)
+	return contextx.With(ctx, internalAllowContextKey{})
 }
 
 // IsInternalRequest checks if the context has an internal request key
 func IsInternalRequest(ctx context.Context) bool {
-	_, ok := ctx.Value(internalCtx).(bool)
+	_, ok := contextx.From[internalAllowContextKey](ctx)
 	return ok
 }
 
