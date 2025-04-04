@@ -64,7 +64,11 @@ type RiskHistory struct {
 	Details string `json:"details,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts string `json:"business_costs,omitempty"`
-	selectValues  sql.SelectValues
+	// the id of the group responsible for risk oversight
+	StakeholderID string `json:"stakeholder_id,omitempty"`
+	// the id of the group responsible for risk oversight on behalf of the stakeholder
+	DelegateID   string `json:"delegate_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -78,7 +82,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case riskhistory.FieldScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -237,6 +241,18 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.BusinessCosts = value.String
 			}
+		case riskhistory.FieldStakeholderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_id", values[i])
+			} else if value.Valid {
+				rh.StakeholderID = value.String
+			}
+		case riskhistory.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				rh.DelegateID = value.String
+			}
 		default:
 			rh.selectValues.Set(columns[i], values[i])
 		}
@@ -338,6 +354,12 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("business_costs=")
 	builder.WriteString(rh.BusinessCosts)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_id=")
+	builder.WriteString(rh.StakeholderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(rh.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

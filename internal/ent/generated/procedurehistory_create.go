@@ -270,6 +270,34 @@ func (phc *ProcedureHistoryCreate) SetNillableReviewFrequency(e *enums.Frequency
 	return phc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (phc *ProcedureHistoryCreate) SetApproverID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetApproverID(s)
+	return phc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableApproverID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetApproverID(*s)
+	}
+	return phc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (phc *ProcedureHistoryCreate) SetDelegateID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetDelegateID(s)
+	return phc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableDelegateID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetDelegateID(*s)
+	}
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -505,6 +533,14 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := phc.mutation.ApproverID(); ok {
+		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
+		_node.ApproverID = value
+	}
+	if value, ok := phc.mutation.DelegateID(); ok {
+		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
+		_node.DelegateID = value
 	}
 	return _node, _spec
 }

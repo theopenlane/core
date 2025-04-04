@@ -182,6 +182,10 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_ActionPlan_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_ActionPlan_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -344,6 +348,8 @@ func (ec *executionContext) fieldContext_ControlImplementationSearchResult_contr
 				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_ControlImplementation_ownerID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -354,8 +360,12 @@ func (ec *executionContext) fieldContext_ControlImplementationSearchResult_contr
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
+			case "owner":
+				return ec.fieldContext_ControlImplementation_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ControlImplementation_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -522,8 +532,6 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
 			case "referenceID":
@@ -556,32 +564,20 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Control_references(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Control_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Control_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Control_ownerID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Control_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Control_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
-			case "standard":
-				return ec.fieldContext_Control_standard(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Control_controlImplementations(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Control_controlObjectives(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "narratives":
@@ -594,10 +590,28 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Control_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_Control_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Control_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Control_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Control_viewers(ctx, field)
+			case "standard":
+				return ec.fieldContext_Control_standard(ctx, field)
+			case "programs":
+				return ec.fieldContext_Control_programs(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Control_controlImplementations(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Control_subcontrols(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -1399,6 +1413,10 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -1819,6 +1837,8 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Organization_controlImplementations(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "standards":
@@ -2074,6 +2094,10 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_Procedure_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -2294,6 +2318,10 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_details(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "stakeholderID":
+				return ec.fieldContext_Risk_stakeholderID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Risk_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -2612,8 +2640,6 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
 			case "referenceID":
@@ -2646,16 +2672,16 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "controlOwnerID":
+				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
 				return ec.fieldContext_Subcontrol_controlID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subcontrol_owner(ctx, field)
-			case "control":
-				return ec.fieldContext_Subcontrol_control(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Subcontrol_evidence(ctx, field)
 			case "controlObjectives":
@@ -2672,10 +2698,18 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Subcontrol_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subcontrol_owner(ctx, field)
+			case "control":
+				return ec.fieldContext_Subcontrol_control(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

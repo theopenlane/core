@@ -52,6 +52,10 @@ const (
 	FieldReviewDue = "review_due"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
+	// FieldApproverID holds the string denoting the approver_id field in the database.
+	FieldApproverID = "approver_id"
+	// FieldDelegateID holds the string denoting the delegate_id field in the database.
+	FieldDelegateID = "delegate_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -99,14 +103,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ApproverInverseTable = "groups"
 	// ApproverColumn is the table column denoting the approver relation/edge.
-	ApproverColumn = "procedure_approver"
+	ApproverColumn = "approver_id"
 	// DelegateTable is the table that holds the delegate relation/edge.
 	DelegateTable = "procedures"
 	// DelegateInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
-	DelegateColumn = "procedure_delegate"
+	DelegateColumn = "delegate_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_procedures"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -161,14 +165,14 @@ var Columns = []string{
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
+	FieldApproverID,
+	FieldDelegateID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_procedures",
-	"procedure_approver",
-	"procedure_delegate",
 	"subcontrol_procedures",
 }
 
@@ -217,7 +221,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -356,6 +360,16 @@ func ByReviewDue(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByApproverID orders the results by the approver_id field.
+func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApproverID, opts...).ToFunc()
+}
+
+// ByDelegateID orders the results by the delegate_id field.
+func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

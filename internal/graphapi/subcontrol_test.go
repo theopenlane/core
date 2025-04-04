@@ -178,6 +178,10 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anotherOwnerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	// add adminUser to the program so that they can create a subcontrol
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
@@ -185,6 +189,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 
 	control1 := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlWithOwner := (&ControlBuilder{client: suite.client, ProgramID: program.ID,
+		ControlOwnerID: ownerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name                string
@@ -209,6 +215,25 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			request: openlaneclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, parent control has owner",
+			request: openlaneclient.CreateSubcontrolInput{
+				RefCode:   "SC-2-1",
+				ControlID: controlWithOwner.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, parent control has owner, subcontrol should override it",
+			request: openlaneclient.CreateSubcontrolInput{
+				RefCode:        "SC-2-2",
+				ControlID:      controlWithOwner.ID,
+				ControlOwnerID: &anotherOwnerGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -262,6 +287,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 						Description:       "Create a policy",
 					},
 				},
+				DelegateID:     &delegateGroup.ID,
+				ControlOwnerID: &ownerGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -383,6 +410,24 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateSubcontrol.Subcontrol.Source)
 			}
 
+			if tc.request.ControlOwnerID != nil {
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else if tc.request.ControlID == controlWithOwner.ID {
+				// it should inherit the owner from the parent control if it was set
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else {
+				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateSubcontrol.Subcontrol.Delegate.ID)
+			} else {
+				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
+			}
+
 			// ensure the org owner has access to the subcontrol that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetSubcontrolByID(testUser1.UserCtx, resp.CreateSubcontrol.Subcontrol.ID)
@@ -400,6 +445,9 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
+
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -419,9 +467,11 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateSubcontrolInput{
-				Status: &enums.ControlStatusPreparing,
-				Tags:   []string{"tag1", "tag2"},
-				Source: lo.ToPtr(enums.ControlSourceFramework),
+				Status:         &enums.ControlStatusPreparing,
+				Tags:           []string{"tag1", "tag2"},
+				Source:         lo.ToPtr(enums.ControlSourceFramework),
+				ControlOwnerID: &ownerGroup.ID,
+				DelegateID:     &delegateGroup.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -483,6 +533,20 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateSubcontrol.Subcontrol.Source)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else {
+				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
+				assert.Equal(t, *tc.request.DelegateID, resp.UpdateSubcontrol.Subcontrol.Delegate.ID)
+			} else {
+				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
 			}
 		})
 	}

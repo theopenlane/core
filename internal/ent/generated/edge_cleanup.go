@@ -543,6 +543,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", evidenceCount).Msg("deleting evidence")
@@ -680,6 +687,13 @@ func StandardHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasSubcontrolsWith(subcontrol.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasSubcontrolsWith(subcontrol.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			return err
+		}
+	}
 
 	return nil
 }

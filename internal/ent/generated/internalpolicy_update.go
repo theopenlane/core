@@ -305,6 +305,46 @@ func (ipu *InternalPolicyUpdate) ClearReviewFrequency() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (ipu *InternalPolicyUpdate) SetApproverID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetApproverID(s)
+	return ipu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableApproverID(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetApproverID(*s)
+	}
+	return ipu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (ipu *InternalPolicyUpdate) ClearApproverID() *InternalPolicyUpdate {
+	ipu.mutation.ClearApproverID()
+	return ipu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (ipu *InternalPolicyUpdate) SetDelegateID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetDelegateID(s)
+	return ipu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableDelegateID(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetDelegateID(*s)
+	}
+	return ipu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (ipu *InternalPolicyUpdate) ClearDelegateID() *InternalPolicyUpdate {
+	ipu.mutation.ClearDelegateID()
+	return ipu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
 	return ipu.SetOwnerID(o.ID)
@@ -340,37 +380,9 @@ func (ipu *InternalPolicyUpdate) AddEditors(g ...*Group) *InternalPolicyUpdate {
 	return ipu.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (ipu *InternalPolicyUpdate) SetApproverID(id string) *InternalPolicyUpdate {
-	ipu.mutation.SetApproverID(id)
-	return ipu
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableApproverID(id *string) *InternalPolicyUpdate {
-	if id != nil {
-		ipu = ipu.SetApproverID(*id)
-	}
-	return ipu
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (ipu *InternalPolicyUpdate) SetApprover(g *Group) *InternalPolicyUpdate {
 	return ipu.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (ipu *InternalPolicyUpdate) SetDelegateID(id string) *InternalPolicyUpdate {
-	ipu.mutation.SetDelegateID(id)
-	return ipu
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDelegateID(id *string) *InternalPolicyUpdate {
-	if id != nil {
-		ipu = ipu.SetDelegateID(*id)
-	}
-	return ipu
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -1600,6 +1612,46 @@ func (ipuo *InternalPolicyUpdateOne) ClearReviewFrequency() *InternalPolicyUpdat
 	return ipuo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetApproverID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetApproverID(s)
+	return ipuo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableApproverID(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetApproverID(*s)
+	}
+	return ipuo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearApproverID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearApproverID()
+	return ipuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetDelegateID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetDelegateID(s)
+	return ipuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableDelegateID(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetDelegateID(*s)
+	}
+	return ipuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearDelegateID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearDelegateID()
+	return ipuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
 	return ipuo.SetOwnerID(o.ID)
@@ -1635,37 +1687,9 @@ func (ipuo *InternalPolicyUpdateOne) AddEditors(g ...*Group) *InternalPolicyUpda
 	return ipuo.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (ipuo *InternalPolicyUpdateOne) SetApproverID(id string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetApproverID(id)
-	return ipuo
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableApproverID(id *string) *InternalPolicyUpdateOne {
-	if id != nil {
-		ipuo = ipuo.SetApproverID(*id)
-	}
-	return ipuo
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (ipuo *InternalPolicyUpdateOne) SetApprover(g *Group) *InternalPolicyUpdateOne {
 	return ipuo.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (ipuo *InternalPolicyUpdateOne) SetDelegateID(id string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDelegateID(id)
-	return ipuo
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDelegateID(id *string) *InternalPolicyUpdateOne {
-	if id != nil {
-		ipuo = ipuo.SetDelegateID(*id)
-	}
-	return ipuo
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.

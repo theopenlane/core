@@ -105,6 +105,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_details(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "stakeholderID":
+				return ec.fieldContext_Risk_stakeholderID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Risk_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -211,6 +215,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_details(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "stakeholderID":
+				return ec.fieldContext_Risk_stakeholderID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Risk_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -361,6 +369,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_details(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "stakeholderID":
+				return ec.fieldContext_Risk_stakeholderID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Risk_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":

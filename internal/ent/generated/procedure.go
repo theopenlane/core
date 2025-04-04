@@ -55,12 +55,14 @@ type Procedure struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the id of the group responsible for approving the procedure
+	ApproverID string `json:"approver_id,omitempty"`
+	// the id of the group responsible for approving the procedure
+	DelegateID string `json:"delegate_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
-	procedure_approver           *string
-	procedure_delegate           *string
 	subcontrol_procedures        *string
 	selectValues                 sql.SelectValues
 }
@@ -219,17 +221,13 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
 			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[1]: // procedure_approver
-			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[2]: // procedure_delegate
-			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[3]: // subcontrol_procedures
+		case procedure.ForeignKeys[1]: // subcontrol_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -356,6 +354,18 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ReviewFrequency = enums.Frequency(value.String)
 			}
+		case procedure.FieldApproverID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
+			} else if value.Valid {
+				pr.ApproverID = value.String
+			}
+		case procedure.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				pr.DelegateID = value.String
+			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_procedures", values[i])
@@ -364,20 +374,6 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				*pr.control_objective_procedures = value.String
 			}
 		case procedure.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field procedure_approver", values[i])
-			} else if value.Valid {
-				pr.procedure_approver = new(string)
-				*pr.procedure_approver = value.String
-			}
-		case procedure.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field procedure_delegate", values[i])
-			} else if value.Valid {
-				pr.procedure_delegate = new(string)
-				*pr.procedure_delegate = value.String
-			}
-		case procedure.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_procedures", values[i])
 			} else if value.Valid {
@@ -525,6 +521,12 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", pr.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("approver_id=")
+	builder.WriteString(pr.ApproverID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(pr.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

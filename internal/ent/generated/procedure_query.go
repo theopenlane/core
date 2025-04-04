@@ -797,9 +797,6 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			pq.withTasks != nil,
 		}
 	)
-	if pq.withApprover != nil || pq.withDelegate != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, procedure.ForeignKeys...)
 	}
@@ -1121,10 +1118,7 @@ func (pq *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, n
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
-		if nodes[i].procedure_approver == nil {
-			continue
-		}
-		fk := *nodes[i].procedure_approver
+		fk := nodes[i].ApproverID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1141,7 +1135,7 @@ func (pq *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, n
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "procedure_approver" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "approver_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1153,10 +1147,7 @@ func (pq *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, n
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
-		if nodes[i].procedure_delegate == nil {
-			continue
-		}
-		fk := *nodes[i].procedure_delegate
+		fk := nodes[i].DelegateID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1173,7 +1164,7 @@ func (pq *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, n
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "procedure_delegate" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1555,6 +1546,12 @@ func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if pq.withOwner != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldOwnerID)
+		}
+		if pq.withApprover != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldApproverID)
+		}
+		if pq.withDelegate != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldDelegateID)
 		}
 	}
 	if ps := pq.predicates; len(ps) > 0 {

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -96,6 +97,7 @@ type OrganizationQuery struct {
 	withNarratives                    *NarrativeQuery
 	withControls                      *ControlQuery
 	withSubcontrols                   *SubcontrolQuery
+	withControlImplementations        *ControlImplementationQuery
 	withEvidence                      *EvidenceQuery
 	withStandards                     *StandardQuery
 	withActionPlans                   *ActionPlanQuery
@@ -138,6 +140,7 @@ type OrganizationQuery struct {
 	withNamedNarratives               map[string]*NarrativeQuery
 	withNamedControls                 map[string]*ControlQuery
 	withNamedSubcontrols              map[string]*SubcontrolQuery
+	withNamedControlImplementations   map[string]*ControlImplementationQuery
 	withNamedEvidence                 map[string]*EvidenceQuery
 	withNamedStandards                map[string]*StandardQuery
 	withNamedActionPlans              map[string]*ActionPlanQuery
@@ -1153,6 +1156,31 @@ func (oq *OrganizationQuery) QuerySubcontrols() *SubcontrolQuery {
 	return query
 }
 
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (oq *OrganizationQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlImplementationsTable, organization.ControlImplementationsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (oq *OrganizationQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: oq.config}).Query()
@@ -1484,6 +1512,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withNarratives:               oq.withNarratives.Clone(),
 		withControls:                 oq.withControls.Clone(),
 		withSubcontrols:              oq.withSubcontrols.Clone(),
+		withControlImplementations:   oq.withControlImplementations.Clone(),
 		withEvidence:                 oq.withEvidence.Clone(),
 		withStandards:                oq.withStandards.Clone(),
 		withActionPlans:              oq.withActionPlans.Clone(),
@@ -1924,6 +1953,17 @@ func (oq *OrganizationQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *Or
 	return oq
 }
 
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *OrganizationQuery {
+	query := (&ControlImplementationClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withControlImplementations = query
+	return oq
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithEvidence(opts ...func(*EvidenceQuery)) *OrganizationQuery {
@@ -2052,7 +2092,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [43]bool{
+		loadedTypes = [44]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -2092,6 +2132,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withNarratives != nil,
 			oq.withControls != nil,
 			oq.withSubcontrols != nil,
+			oq.withControlImplementations != nil,
 			oq.withEvidence != nil,
 			oq.withStandards != nil,
 			oq.withActionPlans != nil,
@@ -2403,6 +2444,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withControlImplementations; query != nil {
+		if err := oq.loadControlImplementations(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *Organization, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withEvidence; query != nil {
 		if err := oq.loadEvidence(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Evidence = []*Evidence{} },
@@ -2680,6 +2730,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadSubcontrols(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedSubcontrols(name) },
 			func(n *Organization, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedControlImplementations {
+		if err := oq.loadControlImplementations(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedControlImplementations(name) },
+			func(n *Organization, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4066,6 +4123,36 @@ func (oq *OrganizationQuery) loadSubcontrols(ctx context.Context, query *Subcont
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ControlImplementation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(controlimplementation.FieldOwnerID)
+	}
+	query.Where(predicate.ControlImplementation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ControlImplementationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Evidence)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -4793,6 +4880,20 @@ func (oq *OrganizationQuery) WithNamedSubcontrols(name string, opts ...func(*Sub
 		oq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	oq.withNamedSubcontrols[name] = query
+	return oq
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *OrganizationQuery {
+	query := (&ControlImplementationClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedControlImplementations == nil {
+		oq.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	oq.withNamedControlImplementations[name] = query
 	return oq
 }
 

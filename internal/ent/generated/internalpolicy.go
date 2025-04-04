@@ -55,12 +55,14 @@ type InternalPolicy struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the id of the group responsible for approving the policy
+	ApproverID string `json:"approver_id,omitempty"`
+	// the id of the group responsible for approving the policy
+	DelegateID string `json:"delegate_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                        InternalPolicyEdges `json:"edges"`
 	control_internal_policies    *string
-	internal_policy_approver     *string
-	internal_policy_delegate     *string
 	subcontrol_internal_policies *string
 	selectValues                 sql.SelectValues
 }
@@ -219,17 +221,13 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case internalpolicy.ForeignKeys[0]: // control_internal_policies
 			values[i] = new(sql.NullString)
-		case internalpolicy.ForeignKeys[1]: // internal_policy_approver
-			values[i] = new(sql.NullString)
-		case internalpolicy.ForeignKeys[2]: // internal_policy_delegate
-			values[i] = new(sql.NullString)
-		case internalpolicy.ForeignKeys[3]: // subcontrol_internal_policies
+		case internalpolicy.ForeignKeys[1]: // subcontrol_internal_policies
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -356,6 +354,18 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.ReviewFrequency = enums.Frequency(value.String)
 			}
+		case internalpolicy.FieldApproverID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
+			} else if value.Valid {
+				ip.ApproverID = value.String
+			}
+		case internalpolicy.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				ip.DelegateID = value.String
+			}
 		case internalpolicy.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_internal_policies", values[i])
@@ -364,20 +374,6 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				*ip.control_internal_policies = value.String
 			}
 		case internalpolicy.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field internal_policy_approver", values[i])
-			} else if value.Valid {
-				ip.internal_policy_approver = new(string)
-				*ip.internal_policy_approver = value.String
-			}
-		case internalpolicy.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field internal_policy_delegate", values[i])
-			} else if value.Valid {
-				ip.internal_policy_delegate = new(string)
-				*ip.internal_policy_delegate = value.String
-			}
-		case internalpolicy.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_internal_policies", values[i])
 			} else if value.Valid {
@@ -525,6 +521,12 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ip.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("approver_id=")
+	builder.WriteString(ip.ApproverID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(ip.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -50,3 +50,32 @@ func HookSubcontrolUpdate() ent.Hook {
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
+
+// HookSubcontrolCreate sets default values for the subcontrol on creation
+func HookSubcontrolCreate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.SubcontrolFunc(func(ctx context.Context, m *generated.SubcontrolMutation) (generated.Value, error) {
+			// check if the subcontrol has an owner assigned
+			if _, ok := m.ControlOwnerID(); !ok {
+				// subcontrols should always have a control ID but we will let the regular validation
+				// handle this
+				controlID, ok := m.ControlID()
+				if !ok || controlID == "" {
+					return next.Mutate(ctx, m)
+				}
+
+				control, err := m.Client().Control.Get(ctx, controlID)
+				if err != nil {
+					return nil, err
+				}
+
+				// if the control has an owner, assign it to the subcontrol
+				if control.ControlOwnerID != "" {
+					m.SetControlOwnerID(control.ControlOwnerID)
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate)
+}

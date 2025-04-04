@@ -6331,6 +6331,10 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_ActionPlan_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_ActionPlan_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -6431,6 +6435,10 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_ActionPlan_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_ActionPlan_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":
@@ -6575,6 +6583,10 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_ActionPlan_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_ActionPlan_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_ActionPlan_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
 			case "dueDate":

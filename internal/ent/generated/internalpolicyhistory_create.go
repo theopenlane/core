@@ -270,6 +270,34 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableReviewFrequency(e *enums.Fre
 	return iphc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetApproverID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetApproverID(s)
+	return iphc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableApproverID(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetApproverID(*s)
+	}
+	return iphc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetDelegateID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDelegateID(s)
+	return iphc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableDelegateID(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetDelegateID(*s)
+	}
+	return iphc
+}
+
 // SetID sets the "id" field.
 func (iphc *InternalPolicyHistoryCreate) SetID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetID(s)
@@ -505,6 +533,14 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := iphc.mutation.ApproverID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldApproverID, field.TypeString, value)
+		_node.ApproverID = value
+	}
+	if value, ok := iphc.mutation.DelegateID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
+		_node.DelegateID = value
 	}
 	return _node, _spec
 }

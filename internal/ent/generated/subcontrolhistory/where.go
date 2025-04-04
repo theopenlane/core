@@ -111,11 +111,6 @@ func DisplayID(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
-// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
-func OwnerID(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldOwnerID, v))
-}
-
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDescription, v))
@@ -144,6 +139,21 @@ func CategoryID(v string) predicate.SubcontrolHistory {
 // Subcategory applies equality check predicate on the "subcategory" field. It's identical to SubcategoryEQ.
 func Subcategory(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcategory, v))
+}
+
+// ControlOwnerID applies equality check predicate on the "control_owner_id" field. It's identical to ControlOwnerIDEQ.
+func ControlOwnerID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOwnerID, v))
+}
+
+// DelegateID applies equality check predicate on the "delegate_id" field. It's identical to DelegateIDEQ.
+func DelegateID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDelegateID, v))
+}
+
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
@@ -739,81 +749,6 @@ func TagsIsNil() predicate.SubcontrolHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldTags))
-}
-
-// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
-func OwnerIDEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEQ(FieldOwnerID, v))
-}
-
-// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
-func OwnerIDNEQ(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldOwnerID, v))
-}
-
-// OwnerIDIn applies the In predicate on the "owner_id" field.
-func OwnerIDIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
-func OwnerIDNotIn(vs ...string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDGT applies the GT predicate on the "owner_id" field.
-func OwnerIDGT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGT(FieldOwnerID, v))
-}
-
-// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
-func OwnerIDGTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldGTE(FieldOwnerID, v))
-}
-
-// OwnerIDLT applies the LT predicate on the "owner_id" field.
-func OwnerIDLT(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLT(FieldOwnerID, v))
-}
-
-// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
-func OwnerIDLTE(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldLTE(FieldOwnerID, v))
-}
-
-// OwnerIDContains applies the Contains predicate on the "owner_id" field.
-func OwnerIDContains(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContains(FieldOwnerID, v))
-}
-
-// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
-func OwnerIDHasPrefix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldOwnerID, v))
-}
-
-// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
-func OwnerIDHasSuffix(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldOwnerID, v))
-}
-
-// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
-func OwnerIDIsNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldOwnerID))
-}
-
-// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
-func OwnerIDNotNil() predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldOwnerID))
-}
-
-// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
-func OwnerIDEqualFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldOwnerID, v))
-}
-
-// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
-func OwnerIDContainsFold(v string) predicate.SubcontrolHistory {
-	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -1454,6 +1389,231 @@ func ReferencesIsNil() predicate.SubcontrolHistory {
 // ReferencesNotNil applies the NotNil predicate on the "references" field.
 func ReferencesNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldReferences))
+}
+
+// ControlOwnerIDEQ applies the EQ predicate on the "control_owner_id" field.
+func ControlOwnerIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDNEQ applies the NEQ predicate on the "control_owner_id" field.
+func ControlOwnerIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDIn applies the In predicate on the "control_owner_id" field.
+func ControlOwnerIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldControlOwnerID, vs...))
+}
+
+// ControlOwnerIDNotIn applies the NotIn predicate on the "control_owner_id" field.
+func ControlOwnerIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldControlOwnerID, vs...))
+}
+
+// ControlOwnerIDGT applies the GT predicate on the "control_owner_id" field.
+func ControlOwnerIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDGTE applies the GTE predicate on the "control_owner_id" field.
+func ControlOwnerIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDLT applies the LT predicate on the "control_owner_id" field.
+func ControlOwnerIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDLTE applies the LTE predicate on the "control_owner_id" field.
+func ControlOwnerIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDContains applies the Contains predicate on the "control_owner_id" field.
+func ControlOwnerIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDHasPrefix applies the HasPrefix predicate on the "control_owner_id" field.
+func ControlOwnerIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDHasSuffix applies the HasSuffix predicate on the "control_owner_id" field.
+func ControlOwnerIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDIsNil applies the IsNil predicate on the "control_owner_id" field.
+func ControlOwnerIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldControlOwnerID))
+}
+
+// ControlOwnerIDNotNil applies the NotNil predicate on the "control_owner_id" field.
+func ControlOwnerIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldControlOwnerID))
+}
+
+// ControlOwnerIDEqualFold applies the EqualFold predicate on the "control_owner_id" field.
+func ControlOwnerIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldControlOwnerID, v))
+}
+
+// ControlOwnerIDContainsFold applies the ContainsFold predicate on the "control_owner_id" field.
+func ControlOwnerIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldControlOwnerID, v))
+}
+
+// DelegateIDEQ applies the EQ predicate on the "delegate_id" field.
+func DelegateIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldDelegateID, v))
+}
+
+// DelegateIDNEQ applies the NEQ predicate on the "delegate_id" field.
+func DelegateIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldDelegateID, v))
+}
+
+// DelegateIDIn applies the In predicate on the "delegate_id" field.
+func DelegateIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDNotIn applies the NotIn predicate on the "delegate_id" field.
+func DelegateIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDGT applies the GT predicate on the "delegate_id" field.
+func DelegateIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldDelegateID, v))
+}
+
+// DelegateIDGTE applies the GTE predicate on the "delegate_id" field.
+func DelegateIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldDelegateID, v))
+}
+
+// DelegateIDLT applies the LT predicate on the "delegate_id" field.
+func DelegateIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldDelegateID, v))
+}
+
+// DelegateIDLTE applies the LTE predicate on the "delegate_id" field.
+func DelegateIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldDelegateID, v))
+}
+
+// DelegateIDContains applies the Contains predicate on the "delegate_id" field.
+func DelegateIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldDelegateID, v))
+}
+
+// DelegateIDHasPrefix applies the HasPrefix predicate on the "delegate_id" field.
+func DelegateIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldDelegateID, v))
+}
+
+// DelegateIDHasSuffix applies the HasSuffix predicate on the "delegate_id" field.
+func DelegateIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldDelegateID, v))
+}
+
+// DelegateIDIsNil applies the IsNil predicate on the "delegate_id" field.
+func DelegateIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldDelegateID))
+}
+
+// DelegateIDNotNil applies the NotNil predicate on the "delegate_id" field.
+func DelegateIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldDelegateID))
+}
+
+// DelegateIDEqualFold applies the EqualFold predicate on the "delegate_id" field.
+func DelegateIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldDelegateID, v))
+}
+
+// DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
+func DelegateIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.

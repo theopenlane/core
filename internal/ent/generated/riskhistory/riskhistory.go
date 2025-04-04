@@ -62,6 +62,10 @@ const (
 	FieldDetails = "details"
 	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
 	FieldBusinessCosts = "business_costs"
+	// FieldStakeholderID holds the string denoting the stakeholder_id field in the database.
+	FieldStakeholderID = "stakeholder_id"
+	// FieldDelegateID holds the string denoting the delegate_id field in the database.
+	FieldDelegateID = "delegate_id"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -91,6 +95,8 @@ var Columns = []string{
 	FieldMitigation,
 	FieldDetails,
 	FieldBusinessCosts,
+	FieldStakeholderID,
+	FieldDelegateID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -281,6 +287,16 @@ func ByDetails(opts ...sql.OrderTermOption) OrderOption {
 // ByBusinessCosts orders the results by the business_costs field.
 func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
+}
+
+// ByStakeholderID orders the results by the stakeholder_id field.
+func ByStakeholderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderID, opts...).ToFunc()
+}
+
+// ByDelegateID orders the results by the delegate_id field.
+func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
 }
 
 var (

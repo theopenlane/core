@@ -146,6 +146,20 @@ func (cihc *ControlImplementationHistoryCreate) SetTags(s []string) *ControlImpl
 	return cihc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (cihc *ControlImplementationHistoryCreate) SetOwnerID(s string) *ControlImplementationHistoryCreate {
+	cihc.mutation.SetOwnerID(s)
+	return cihc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cihc *ControlImplementationHistoryCreate) SetNillableOwnerID(s *string) *ControlImplementationHistoryCreate {
+	if s != nil {
+		cihc.SetOwnerID(*s)
+	}
+	return cihc
+}
+
 // SetStatus sets the "status" field.
 func (cihc *ControlImplementationHistoryCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryCreate {
 	cihc.mutation.SetStatus(es)
@@ -384,6 +398,10 @@ func (cihc *ControlImplementationHistoryCreate) createSpec() (*ControlImplementa
 	if value, ok := cihc.mutation.Tags(); ok {
 		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := cihc.mutation.OwnerID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := cihc.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)

@@ -298,6 +298,34 @@ func (rhc *RiskHistoryCreate) SetNillableBusinessCosts(s *string) *RiskHistoryCr
 	return rhc
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (rhc *RiskHistoryCreate) SetStakeholderID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetStakeholderID(s)
+	return rhc
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableStakeholderID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetStakeholderID(*s)
+	}
+	return rhc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (rhc *RiskHistoryCreate) SetDelegateID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetDelegateID(s)
+	return rhc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableDelegateID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetDelegateID(*s)
+	}
+	return rhc
+}
+
 // SetID sets the "id" field.
 func (rhc *RiskHistoryCreate) SetID(s string) *RiskHistoryCreate {
 	rhc.mutation.SetID(s)
@@ -538,6 +566,14 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := rhc.mutation.BusinessCosts(); ok {
 		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
 		_node.BusinessCosts = value
+	}
+	if value, ok := rhc.mutation.StakeholderID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderID, field.TypeString, value)
+		_node.StakeholderID = value
+	}
+	if value, ok := rhc.mutation.DelegateID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
+		_node.DelegateID = value
 	}
 	return _node, _spec
 }

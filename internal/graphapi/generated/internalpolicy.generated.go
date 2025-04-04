@@ -101,6 +101,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -205,6 +209,10 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -353,6 +361,10 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

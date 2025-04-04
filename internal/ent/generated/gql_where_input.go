@@ -1142,6 +1142,40 @@ type ActionPlanWhereInput struct {
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
 
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1803,6 +1837,96 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, actionplan.ReviewFrequencyNotNil())
 	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, actionplan.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, actionplan.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, actionplan.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, actionplan.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, actionplan.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, actionplan.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, actionplan.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, actionplan.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, actionplan.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, actionplan.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, actionplan.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, actionplan.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, actionplan.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, actionplan.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, actionplan.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, actionplan.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, actionplan.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, actionplan.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, actionplan.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, actionplan.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, actionplan.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, actionplan.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, actionplan.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, actionplan.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, actionplan.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, actionplan.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, actionplan.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, actionplan.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, actionplan.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, actionplan.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, actionplan.OwnerIDEQ(*i.OwnerID))
 	}
@@ -2316,6 +2440,40 @@ type ActionPlanHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
+
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
@@ -3030,6 +3188,96 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, actionplanhistory.ReviewFrequencyNotNil())
+	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, actionplanhistory.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, actionplanhistory.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, actionplanhistory.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, actionplanhistory.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, actionplanhistory.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, actionplanhistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, actionplanhistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, actionplanhistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, actionplanhistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, actionplanhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, actionplanhistory.OwnerIDEQ(*i.OwnerID))
@@ -5257,23 +5505,6 @@ type ControlWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
@@ -5400,6 +5631,57 @@ type ControlWhereInput struct {
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
 
+	// "control_owner_id" field predicates.
+	ControlOwnerID             *string  `json:"controlOwnerID,omitempty"`
+	ControlOwnerIDNEQ          *string  `json:"controlOwnerIDNEQ,omitempty"`
+	ControlOwnerIDIn           []string `json:"controlOwnerIDIn,omitempty"`
+	ControlOwnerIDNotIn        []string `json:"controlOwnerIDNotIn,omitempty"`
+	ControlOwnerIDGT           *string  `json:"controlOwnerIDGT,omitempty"`
+	ControlOwnerIDGTE          *string  `json:"controlOwnerIDGTE,omitempty"`
+	ControlOwnerIDLT           *string  `json:"controlOwnerIDLT,omitempty"`
+	ControlOwnerIDLTE          *string  `json:"controlOwnerIDLTE,omitempty"`
+	ControlOwnerIDContains     *string  `json:"controlOwnerIDContains,omitempty"`
+	ControlOwnerIDHasPrefix    *string  `json:"controlOwnerIDHasPrefix,omitempty"`
+	ControlOwnerIDHasSuffix    *string  `json:"controlOwnerIDHasSuffix,omitempty"`
+	ControlOwnerIDIsNil        bool     `json:"controlOwnerIDIsNil,omitempty"`
+	ControlOwnerIDNotNil       bool     `json:"controlOwnerIDNotNil,omitempty"`
+	ControlOwnerIDEqualFold    *string  `json:"controlOwnerIDEqualFold,omitempty"`
+	ControlOwnerIDContainsFold *string  `json:"controlOwnerIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNEQ          *string  `json:"refCodeNEQ,omitempty"`
@@ -5432,49 +5714,13 @@ type ControlWhereInput struct {
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 
-	// "owner" edge predicates.
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-
-	// "blocked_groups" edge predicates.
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
-
-	// "editors" edge predicates.
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "viewers" edge predicates.
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-
-	// "standard" edge predicates.
-	HasStandard     *bool                 `json:"hasStandard,omitempty"`
-	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
-
-	// "programs" edge predicates.
-	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
-	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 
-	// "control_implementations" edge predicates.
-	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
-	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
-
-	// "mapped_controls" edge predicates.
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
-
 	// "control_objectives" edge predicates.
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
 	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
-
-	// "subcontrols" edge predicates.
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
@@ -5500,6 +5746,10 @@ type ControlWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
+	// "mapped_controls" edge predicates.
+	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
+	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
+
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -5507,6 +5757,38 @@ type ControlWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
+	// "standard" edge predicates.
+	HasStandard     *bool                 `json:"hasStandard,omitempty"`
+	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
+
+	// "programs" edge predicates.
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+
+	// "subcontrols" edge predicates.
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -5874,51 +6156,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, control.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, control.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, control.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, control.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, control.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, control.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, control.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, control.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, control.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, control.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, control.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, control.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, control.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, control.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, control.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, control.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 	if i.Description != nil {
 		predicates = append(predicates, control.DescriptionEQ(*i.Description))
 	}
@@ -6243,6 +6480,141 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if i.SubcategoryContainsFold != nil {
 		predicates = append(predicates, control.SubcategoryContainsFold(*i.SubcategoryContainsFold))
 	}
+	if i.ControlOwnerID != nil {
+		predicates = append(predicates, control.ControlOwnerIDEQ(*i.ControlOwnerID))
+	}
+	if i.ControlOwnerIDNEQ != nil {
+		predicates = append(predicates, control.ControlOwnerIDNEQ(*i.ControlOwnerIDNEQ))
+	}
+	if len(i.ControlOwnerIDIn) > 0 {
+		predicates = append(predicates, control.ControlOwnerIDIn(i.ControlOwnerIDIn...))
+	}
+	if len(i.ControlOwnerIDNotIn) > 0 {
+		predicates = append(predicates, control.ControlOwnerIDNotIn(i.ControlOwnerIDNotIn...))
+	}
+	if i.ControlOwnerIDGT != nil {
+		predicates = append(predicates, control.ControlOwnerIDGT(*i.ControlOwnerIDGT))
+	}
+	if i.ControlOwnerIDGTE != nil {
+		predicates = append(predicates, control.ControlOwnerIDGTE(*i.ControlOwnerIDGTE))
+	}
+	if i.ControlOwnerIDLT != nil {
+		predicates = append(predicates, control.ControlOwnerIDLT(*i.ControlOwnerIDLT))
+	}
+	if i.ControlOwnerIDLTE != nil {
+		predicates = append(predicates, control.ControlOwnerIDLTE(*i.ControlOwnerIDLTE))
+	}
+	if i.ControlOwnerIDContains != nil {
+		predicates = append(predicates, control.ControlOwnerIDContains(*i.ControlOwnerIDContains))
+	}
+	if i.ControlOwnerIDHasPrefix != nil {
+		predicates = append(predicates, control.ControlOwnerIDHasPrefix(*i.ControlOwnerIDHasPrefix))
+	}
+	if i.ControlOwnerIDHasSuffix != nil {
+		predicates = append(predicates, control.ControlOwnerIDHasSuffix(*i.ControlOwnerIDHasSuffix))
+	}
+	if i.ControlOwnerIDIsNil {
+		predicates = append(predicates, control.ControlOwnerIDIsNil())
+	}
+	if i.ControlOwnerIDNotNil {
+		predicates = append(predicates, control.ControlOwnerIDNotNil())
+	}
+	if i.ControlOwnerIDEqualFold != nil {
+		predicates = append(predicates, control.ControlOwnerIDEqualFold(*i.ControlOwnerIDEqualFold))
+	}
+	if i.ControlOwnerIDContainsFold != nil {
+		predicates = append(predicates, control.ControlOwnerIDContainsFold(*i.ControlOwnerIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, control.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, control.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, control.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, control.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, control.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, control.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, control.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, control.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, control.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, control.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, control.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, control.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, control.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, control.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, control.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, control.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, control.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, control.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, control.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, control.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, control.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, control.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, control.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, control.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, control.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, control.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, control.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, control.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, control.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, control.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.RefCode != nil {
 		predicates = append(predicates, control.RefCodeEQ(*i.RefCode))
 	}
@@ -6328,114 +6700,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		predicates = append(predicates, control.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
-	if i.HasOwner != nil {
-		p := control.HasOwner()
-		if !*i.HasOwner {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOwnerWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
-		for _, w := range i.HasOwnerWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasOwnerWith(with...))
-	}
-	if i.HasBlockedGroups != nil {
-		p := control.HasBlockedGroups()
-		if !*i.HasBlockedGroups {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBlockedGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
-		for _, w := range i.HasBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasBlockedGroupsWith(with...))
-	}
-	if i.HasEditors != nil {
-		p := control.HasEditors()
-		if !*i.HasEditors {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEditorsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
-		for _, w := range i.HasEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasEditorsWith(with...))
-	}
-	if i.HasViewers != nil {
-		p := control.HasViewers()
-		if !*i.HasViewers {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasViewersWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasViewersWith))
-		for _, w := range i.HasViewersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasViewersWith(with...))
-	}
-	if i.HasStandard != nil {
-		p := control.HasStandard()
-		if !*i.HasStandard {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasStandardWith) > 0 {
-		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
-		for _, w := range i.HasStandardWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasStandardWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasStandardWith(with...))
-	}
-	if i.HasPrograms != nil {
-		p := control.HasPrograms()
-		if !*i.HasPrograms {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProgramsWith) > 0 {
-		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
-		for _, w := range i.HasProgramsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasProgramsWith(with...))
-	}
 	if i.HasEvidence != nil {
 		p := control.HasEvidence()
 		if !*i.HasEvidence {
@@ -6454,42 +6718,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasEvidenceWith(with...))
 	}
-	if i.HasControlImplementations != nil {
-		p := control.HasControlImplementations()
-		if !*i.HasControlImplementations {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlImplementationsWith) > 0 {
-		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
-		for _, w := range i.HasControlImplementationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasControlImplementationsWith(with...))
-	}
-	if i.HasMappedControls != nil {
-		p := control.HasMappedControls()
-		if !*i.HasMappedControls {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasMappedControlsWith) > 0 {
-		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
-		for _, w := range i.HasMappedControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasMappedControlsWith(with...))
-	}
 	if i.HasControlObjectives != nil {
 		p := control.HasControlObjectives()
 		if !*i.HasControlObjectives {
@@ -6507,24 +6735,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasControlObjectivesWith(with...))
-	}
-	if i.HasSubcontrols != nil {
-		p := control.HasSubcontrols()
-		if !*i.HasSubcontrols {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubcontrolsWith) > 0 {
-		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
-		for _, w := range i.HasSubcontrolsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasSubcontrolsWith(with...))
 	}
 	if i.HasTasks != nil {
 		p := control.HasTasks()
@@ -6634,6 +6844,24 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasInternalPoliciesWith(with...))
 	}
+	if i.HasMappedControls != nil {
+		p := control.HasMappedControls()
+		if !*i.HasMappedControls {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlsWith) > 0 {
+		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
+		for _, w := range i.HasMappedControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasMappedControlsWith(with...))
+	}
 	if i.HasControlOwner != nil {
 		p := control.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -6669,6 +6897,150 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasDelegateWith(with...))
+	}
+	if i.HasOwner != nil {
+		p := control.HasOwner()
+		if !*i.HasOwner {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := control.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := control.HasEditors()
+		if !*i.HasEditors {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasEditorsWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := control.HasViewers()
+		if !*i.HasViewers {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasViewersWith(with...))
+	}
+	if i.HasStandard != nil {
+		p := control.HasStandard()
+		if !*i.HasStandard {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStandardWith) > 0 {
+		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		for _, w := range i.HasStandardWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStandardWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasStandardWith(with...))
+	}
+	if i.HasPrograms != nil {
+		p := control.HasPrograms()
+		if !*i.HasPrograms {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		for _, w := range i.HasProgramsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasProgramsWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := control.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasControlImplementationsWith(with...))
+	}
+	if i.HasSubcontrols != nil {
+		p := control.HasSubcontrols()
+		if !*i.HasSubcontrols {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		for _, w := range i.HasSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasSubcontrolsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -6834,23 +7206,6 @@ type ControlHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
@@ -6976,6 +7331,57 @@ type ControlHistoryWhereInput struct {
 	SubcategoryNotNil       bool     `json:"subcategoryNotNil,omitempty"`
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
+
+	// "control_owner_id" field predicates.
+	ControlOwnerID             *string  `json:"controlOwnerID,omitempty"`
+	ControlOwnerIDNEQ          *string  `json:"controlOwnerIDNEQ,omitempty"`
+	ControlOwnerIDIn           []string `json:"controlOwnerIDIn,omitempty"`
+	ControlOwnerIDNotIn        []string `json:"controlOwnerIDNotIn,omitempty"`
+	ControlOwnerIDGT           *string  `json:"controlOwnerIDGT,omitempty"`
+	ControlOwnerIDGTE          *string  `json:"controlOwnerIDGTE,omitempty"`
+	ControlOwnerIDLT           *string  `json:"controlOwnerIDLT,omitempty"`
+	ControlOwnerIDLTE          *string  `json:"controlOwnerIDLTE,omitempty"`
+	ControlOwnerIDContains     *string  `json:"controlOwnerIDContains,omitempty"`
+	ControlOwnerIDHasPrefix    *string  `json:"controlOwnerIDHasPrefix,omitempty"`
+	ControlOwnerIDHasSuffix    *string  `json:"controlOwnerIDHasSuffix,omitempty"`
+	ControlOwnerIDIsNil        bool     `json:"controlOwnerIDIsNil,omitempty"`
+	ControlOwnerIDNotNil       bool     `json:"controlOwnerIDNotNil,omitempty"`
+	ControlOwnerIDEqualFold    *string  `json:"controlOwnerIDEqualFold,omitempty"`
+	ControlOwnerIDContainsFold *string  `json:"controlOwnerIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
@@ -7456,51 +7862,6 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, controlhistory.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, controlhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, controlhistory.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, controlhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, controlhistory.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, controlhistory.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, controlhistory.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, controlhistory.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, controlhistory.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, controlhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, controlhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, controlhistory.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, controlhistory.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, controlhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, controlhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 	if i.Description != nil {
 		predicates = append(predicates, controlhistory.DescriptionEQ(*i.Description))
 	}
@@ -7825,6 +8186,141 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.SubcategoryContainsFold != nil {
 		predicates = append(predicates, controlhistory.SubcategoryContainsFold(*i.SubcategoryContainsFold))
 	}
+	if i.ControlOwnerID != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDEQ(*i.ControlOwnerID))
+	}
+	if i.ControlOwnerIDNEQ != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDNEQ(*i.ControlOwnerIDNEQ))
+	}
+	if len(i.ControlOwnerIDIn) > 0 {
+		predicates = append(predicates, controlhistory.ControlOwnerIDIn(i.ControlOwnerIDIn...))
+	}
+	if len(i.ControlOwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ControlOwnerIDNotIn(i.ControlOwnerIDNotIn...))
+	}
+	if i.ControlOwnerIDGT != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDGT(*i.ControlOwnerIDGT))
+	}
+	if i.ControlOwnerIDGTE != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDGTE(*i.ControlOwnerIDGTE))
+	}
+	if i.ControlOwnerIDLT != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDLT(*i.ControlOwnerIDLT))
+	}
+	if i.ControlOwnerIDLTE != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDLTE(*i.ControlOwnerIDLTE))
+	}
+	if i.ControlOwnerIDContains != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDContains(*i.ControlOwnerIDContains))
+	}
+	if i.ControlOwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDHasPrefix(*i.ControlOwnerIDHasPrefix))
+	}
+	if i.ControlOwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDHasSuffix(*i.ControlOwnerIDHasSuffix))
+	}
+	if i.ControlOwnerIDIsNil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDIsNil())
+	}
+	if i.ControlOwnerIDNotNil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDNotNil())
+	}
+	if i.ControlOwnerIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDEqualFold(*i.ControlOwnerIDEqualFold))
+	}
+	if i.ControlOwnerIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.ControlOwnerIDContainsFold(*i.ControlOwnerIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, controlhistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, controlhistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, controlhistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, controlhistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, controlhistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, controlhistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, controlhistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, controlhistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, controlhistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, controlhistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, controlhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, controlhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, controlhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, controlhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, controlhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, controlhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, controlhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, controlhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.RefCode != nil {
 		predicates = append(predicates, controlhistory.RefCodeEQ(*i.RefCode))
 	}
@@ -8026,6 +8522,23 @@ type ControlImplementationWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status       *enums.DocumentStatus  `json:"status,omitempty"`
 	StatusNEQ    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
@@ -8081,9 +8594,17 @@ type ControlImplementationWhereInput struct {
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
 
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+
+	// "subcontrols" edge predicates.
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8412,6 +8933,51 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlimplementation.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlimplementation.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlimplementation.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.Status != nil {
 		predicates = append(predicates, controlimplementation.StatusEQ(*i.Status))
 	}
@@ -8548,6 +9114,24 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 		predicates = append(predicates, controlimplementation.DetailsContainsFold(*i.DetailsContainsFold))
 	}
 
+	if i.HasOwner != nil {
+		p := controlimplementation.HasOwner()
+		if !*i.HasOwner {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasOwnerWith(with...))
+	}
 	if i.HasControls != nil {
 		p := controlimplementation.HasControls()
 		if !*i.HasControls {
@@ -8565,6 +9149,24 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlimplementation.HasControlsWith(with...))
+	}
+	if i.HasSubcontrols != nil {
+		p := controlimplementation.HasSubcontrols()
+		if !*i.HasSubcontrols {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		for _, w := range i.HasSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasSubcontrolsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -8714,6 +9316,23 @@ type ControlImplementationHistoryWhereInput struct {
 	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "status" field predicates.
 	Status       *enums.DocumentStatus  `json:"status,omitempty"`
@@ -9177,6 +9796,51 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlimplementationhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Status != nil {
 		predicates = append(predicates, controlimplementationhistory.StatusEQ(*i.Status))
@@ -30276,6 +30940,40 @@ type InternalPolicyWhereInput struct {
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
 
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -30983,6 +31681,96 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, internalpolicy.ReviewFrequencyNotNil())
 	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, internalpolicy.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicy.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, internalpolicy.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, internalpolicy.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, internalpolicy.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, internalpolicy.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicy.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, internalpolicy.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, internalpolicy.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, internalpolicy.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := internalpolicy.HasOwner()
@@ -31462,6 +32250,40 @@ type InternalPolicyHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
+
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -32206,6 +33028,96 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, internalpolicyhistory.ReviewFrequencyNotNil())
+	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -41598,6 +42510,10 @@ type OrganizationWhereInput struct {
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -42859,6 +43775,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasSubcontrolsWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := organization.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasControlImplementationsWith(with...))
 	}
 	if i.HasEvidence != nil {
 		p := organization.HasEvidence()
@@ -46608,6 +47542,40 @@ type ProcedureWhereInput struct {
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
 
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -47315,6 +48283,96 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, procedure.ReviewFrequencyNotNil())
 	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, procedure.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, procedure.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, procedure.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, procedure.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, procedure.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, procedure.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, procedure.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, procedure.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, procedure.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, procedure.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, procedure.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, procedure.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, procedure.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, procedure.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, procedure.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, procedure.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, procedure.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, procedure.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, procedure.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, procedure.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, procedure.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, procedure.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, procedure.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, procedure.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, procedure.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, procedure.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, procedure.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, procedure.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, procedure.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, procedure.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := procedure.HasOwner()
@@ -47794,6 +48852,40 @@ type ProcedureHistoryWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
+
+	// "approver_id" field predicates.
+	ApproverID             *string  `json:"approverID,omitempty"`
+	ApproverIDNEQ          *string  `json:"approverIDNEQ,omitempty"`
+	ApproverIDIn           []string `json:"approverIDIn,omitempty"`
+	ApproverIDNotIn        []string `json:"approverIDNotIn,omitempty"`
+	ApproverIDGT           *string  `json:"approverIDGT,omitempty"`
+	ApproverIDGTE          *string  `json:"approverIDGTE,omitempty"`
+	ApproverIDLT           *string  `json:"approverIDLT,omitempty"`
+	ApproverIDLTE          *string  `json:"approverIDLTE,omitempty"`
+	ApproverIDContains     *string  `json:"approverIDContains,omitempty"`
+	ApproverIDHasPrefix    *string  `json:"approverIDHasPrefix,omitempty"`
+	ApproverIDHasSuffix    *string  `json:"approverIDHasSuffix,omitempty"`
+	ApproverIDIsNil        bool     `json:"approverIDIsNil,omitempty"`
+	ApproverIDNotNil       bool     `json:"approverIDNotNil,omitempty"`
+	ApproverIDEqualFold    *string  `json:"approverIDEqualFold,omitempty"`
+	ApproverIDContainsFold *string  `json:"approverIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -48538,6 +49630,96 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, procedurehistory.ReviewFrequencyNotNil())
+	}
+	if i.ApproverID != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDEQ(*i.ApproverID))
+	}
+	if i.ApproverIDNEQ != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDNEQ(*i.ApproverIDNEQ))
+	}
+	if len(i.ApproverIDIn) > 0 {
+		predicates = append(predicates, procedurehistory.ApproverIDIn(i.ApproverIDIn...))
+	}
+	if len(i.ApproverIDNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.ApproverIDNotIn(i.ApproverIDNotIn...))
+	}
+	if i.ApproverIDGT != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDGT(*i.ApproverIDGT))
+	}
+	if i.ApproverIDGTE != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDGTE(*i.ApproverIDGTE))
+	}
+	if i.ApproverIDLT != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDLT(*i.ApproverIDLT))
+	}
+	if i.ApproverIDLTE != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDLTE(*i.ApproverIDLTE))
+	}
+	if i.ApproverIDContains != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDContains(*i.ApproverIDContains))
+	}
+	if i.ApproverIDHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDHasPrefix(*i.ApproverIDHasPrefix))
+	}
+	if i.ApproverIDHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDHasSuffix(*i.ApproverIDHasSuffix))
+	}
+	if i.ApproverIDIsNil {
+		predicates = append(predicates, procedurehistory.ApproverIDIsNil())
+	}
+	if i.ApproverIDNotNil {
+		predicates = append(predicates, procedurehistory.ApproverIDNotNil())
+	}
+	if i.ApproverIDEqualFold != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDEqualFold(*i.ApproverIDEqualFold))
+	}
+	if i.ApproverIDContainsFold != nil {
+		predicates = append(predicates, procedurehistory.ApproverIDContainsFold(*i.ApproverIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, procedurehistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, procedurehistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, procedurehistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, procedurehistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -52248,6 +53430,40 @@ type RiskWhereInput struct {
 	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
 	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
 
+	// "stakeholder_id" field predicates.
+	StakeholderID             *string  `json:"stakeholderID,omitempty"`
+	StakeholderIDNEQ          *string  `json:"stakeholderIDNEQ,omitempty"`
+	StakeholderIDIn           []string `json:"stakeholderIDIn,omitempty"`
+	StakeholderIDNotIn        []string `json:"stakeholderIDNotIn,omitempty"`
+	StakeholderIDGT           *string  `json:"stakeholderIDGT,omitempty"`
+	StakeholderIDGTE          *string  `json:"stakeholderIDGTE,omitempty"`
+	StakeholderIDLT           *string  `json:"stakeholderIDLT,omitempty"`
+	StakeholderIDLTE          *string  `json:"stakeholderIDLTE,omitempty"`
+	StakeholderIDContains     *string  `json:"stakeholderIDContains,omitempty"`
+	StakeholderIDHasPrefix    *string  `json:"stakeholderIDHasPrefix,omitempty"`
+	StakeholderIDHasSuffix    *string  `json:"stakeholderIDHasSuffix,omitempty"`
+	StakeholderIDIsNil        bool     `json:"stakeholderIDIsNil,omitempty"`
+	StakeholderIDNotNil       bool     `json:"stakeholderIDNotNil,omitempty"`
+	StakeholderIDEqualFold    *string  `json:"stakeholderIDEqualFold,omitempty"`
+	StakeholderIDContainsFold *string  `json:"stakeholderIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -53047,6 +54263,96 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	if i.BusinessCostsContainsFold != nil {
 		predicates = append(predicates, risk.BusinessCostsContainsFold(*i.BusinessCostsContainsFold))
 	}
+	if i.StakeholderID != nil {
+		predicates = append(predicates, risk.StakeholderIDEQ(*i.StakeholderID))
+	}
+	if i.StakeholderIDNEQ != nil {
+		predicates = append(predicates, risk.StakeholderIDNEQ(*i.StakeholderIDNEQ))
+	}
+	if len(i.StakeholderIDIn) > 0 {
+		predicates = append(predicates, risk.StakeholderIDIn(i.StakeholderIDIn...))
+	}
+	if len(i.StakeholderIDNotIn) > 0 {
+		predicates = append(predicates, risk.StakeholderIDNotIn(i.StakeholderIDNotIn...))
+	}
+	if i.StakeholderIDGT != nil {
+		predicates = append(predicates, risk.StakeholderIDGT(*i.StakeholderIDGT))
+	}
+	if i.StakeholderIDGTE != nil {
+		predicates = append(predicates, risk.StakeholderIDGTE(*i.StakeholderIDGTE))
+	}
+	if i.StakeholderIDLT != nil {
+		predicates = append(predicates, risk.StakeholderIDLT(*i.StakeholderIDLT))
+	}
+	if i.StakeholderIDLTE != nil {
+		predicates = append(predicates, risk.StakeholderIDLTE(*i.StakeholderIDLTE))
+	}
+	if i.StakeholderIDContains != nil {
+		predicates = append(predicates, risk.StakeholderIDContains(*i.StakeholderIDContains))
+	}
+	if i.StakeholderIDHasPrefix != nil {
+		predicates = append(predicates, risk.StakeholderIDHasPrefix(*i.StakeholderIDHasPrefix))
+	}
+	if i.StakeholderIDHasSuffix != nil {
+		predicates = append(predicates, risk.StakeholderIDHasSuffix(*i.StakeholderIDHasSuffix))
+	}
+	if i.StakeholderIDIsNil {
+		predicates = append(predicates, risk.StakeholderIDIsNil())
+	}
+	if i.StakeholderIDNotNil {
+		predicates = append(predicates, risk.StakeholderIDNotNil())
+	}
+	if i.StakeholderIDEqualFold != nil {
+		predicates = append(predicates, risk.StakeholderIDEqualFold(*i.StakeholderIDEqualFold))
+	}
+	if i.StakeholderIDContainsFold != nil {
+		predicates = append(predicates, risk.StakeholderIDContainsFold(*i.StakeholderIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, risk.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, risk.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, risk.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, risk.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, risk.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, risk.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, risk.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, risk.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, risk.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, risk.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, risk.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, risk.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, risk.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, risk.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, risk.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := risk.HasOwner()
@@ -53544,6 +54850,40 @@ type RiskHistoryWhereInput struct {
 	BusinessCostsNotNil       bool     `json:"businessCostsNotNil,omitempty"`
 	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
 	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
+
+	// "stakeholder_id" field predicates.
+	StakeholderID             *string  `json:"stakeholderID,omitempty"`
+	StakeholderIDNEQ          *string  `json:"stakeholderIDNEQ,omitempty"`
+	StakeholderIDIn           []string `json:"stakeholderIDIn,omitempty"`
+	StakeholderIDNotIn        []string `json:"stakeholderIDNotIn,omitempty"`
+	StakeholderIDGT           *string  `json:"stakeholderIDGT,omitempty"`
+	StakeholderIDGTE          *string  `json:"stakeholderIDGTE,omitempty"`
+	StakeholderIDLT           *string  `json:"stakeholderIDLT,omitempty"`
+	StakeholderIDLTE          *string  `json:"stakeholderIDLTE,omitempty"`
+	StakeholderIDContains     *string  `json:"stakeholderIDContains,omitempty"`
+	StakeholderIDHasPrefix    *string  `json:"stakeholderIDHasPrefix,omitempty"`
+	StakeholderIDHasSuffix    *string  `json:"stakeholderIDHasSuffix,omitempty"`
+	StakeholderIDIsNil        bool     `json:"stakeholderIDIsNil,omitempty"`
+	StakeholderIDNotNil       bool     `json:"stakeholderIDNotNil,omitempty"`
+	StakeholderIDEqualFold    *string  `json:"stakeholderIDEqualFold,omitempty"`
+	StakeholderIDContainsFold *string  `json:"stakeholderIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -54384,6 +55724,96 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.BusinessCostsContainsFold != nil {
 		predicates = append(predicates, riskhistory.BusinessCostsContainsFold(*i.BusinessCostsContainsFold))
+	}
+	if i.StakeholderID != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDEQ(*i.StakeholderID))
+	}
+	if i.StakeholderIDNEQ != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDNEQ(*i.StakeholderIDNEQ))
+	}
+	if len(i.StakeholderIDIn) > 0 {
+		predicates = append(predicates, riskhistory.StakeholderIDIn(i.StakeholderIDIn...))
+	}
+	if len(i.StakeholderIDNotIn) > 0 {
+		predicates = append(predicates, riskhistory.StakeholderIDNotIn(i.StakeholderIDNotIn...))
+	}
+	if i.StakeholderIDGT != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDGT(*i.StakeholderIDGT))
+	}
+	if i.StakeholderIDGTE != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDGTE(*i.StakeholderIDGTE))
+	}
+	if i.StakeholderIDLT != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDLT(*i.StakeholderIDLT))
+	}
+	if i.StakeholderIDLTE != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDLTE(*i.StakeholderIDLTE))
+	}
+	if i.StakeholderIDContains != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDContains(*i.StakeholderIDContains))
+	}
+	if i.StakeholderIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDHasPrefix(*i.StakeholderIDHasPrefix))
+	}
+	if i.StakeholderIDHasSuffix != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDHasSuffix(*i.StakeholderIDHasSuffix))
+	}
+	if i.StakeholderIDIsNil {
+		predicates = append(predicates, riskhistory.StakeholderIDIsNil())
+	}
+	if i.StakeholderIDNotNil {
+		predicates = append(predicates, riskhistory.StakeholderIDNotNil())
+	}
+	if i.StakeholderIDEqualFold != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDEqualFold(*i.StakeholderIDEqualFold))
+	}
+	if i.StakeholderIDContainsFold != nil {
+		predicates = append(predicates, riskhistory.StakeholderIDContainsFold(*i.StakeholderIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, riskhistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, riskhistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, riskhistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, riskhistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, riskhistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, riskhistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, riskhistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, riskhistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, riskhistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, riskhistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, riskhistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, riskhistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, riskhistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, riskhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -57071,23 +58501,6 @@ type SubcontrolWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
@@ -57214,6 +58627,57 @@ type SubcontrolWhereInput struct {
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
 
+	// "control_owner_id" field predicates.
+	ControlOwnerID             *string  `json:"controlOwnerID,omitempty"`
+	ControlOwnerIDNEQ          *string  `json:"controlOwnerIDNEQ,omitempty"`
+	ControlOwnerIDIn           []string `json:"controlOwnerIDIn,omitempty"`
+	ControlOwnerIDNotIn        []string `json:"controlOwnerIDNotIn,omitempty"`
+	ControlOwnerIDGT           *string  `json:"controlOwnerIDGT,omitempty"`
+	ControlOwnerIDGTE          *string  `json:"controlOwnerIDGTE,omitempty"`
+	ControlOwnerIDLT           *string  `json:"controlOwnerIDLT,omitempty"`
+	ControlOwnerIDLTE          *string  `json:"controlOwnerIDLTE,omitempty"`
+	ControlOwnerIDContains     *string  `json:"controlOwnerIDContains,omitempty"`
+	ControlOwnerIDHasPrefix    *string  `json:"controlOwnerIDHasPrefix,omitempty"`
+	ControlOwnerIDHasSuffix    *string  `json:"controlOwnerIDHasSuffix,omitempty"`
+	ControlOwnerIDIsNil        bool     `json:"controlOwnerIDIsNil,omitempty"`
+	ControlOwnerIDNotNil       bool     `json:"controlOwnerIDNotNil,omitempty"`
+	ControlOwnerIDEqualFold    *string  `json:"controlOwnerIDEqualFold,omitempty"`
+	ControlOwnerIDContainsFold *string  `json:"controlOwnerIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNEQ          *string  `json:"refCodeNEQ,omitempty"`
@@ -57243,18 +58707,6 @@ type SubcontrolWhereInput struct {
 	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
 	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
 	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
-
-	// "owner" edge predicates.
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-
-	// "control" edge predicates.
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
-
-	// "mapped_controls" edge predicates.
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
@@ -57288,6 +58740,10 @@ type SubcontrolWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
+	// "mapped_controls" edge predicates.
+	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
+	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
+
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -57295,6 +58751,18 @@ type SubcontrolWhereInput struct {
 	// "delegate" edge predicates.
 	HasDelegate     *bool              `json:"hasDelegate,omitempty"`
 	HasDelegateWith []*GroupWhereInput `json:"hasDelegateWith,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "control" edge predicates.
+	HasControl     *bool                `json:"hasControl,omitempty"`
+	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -57662,51 +59130,6 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, subcontrol.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, subcontrol.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, subcontrol.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, subcontrol.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, subcontrol.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, subcontrol.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, subcontrol.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, subcontrol.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, subcontrol.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, subcontrol.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, subcontrol.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, subcontrol.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, subcontrol.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, subcontrol.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, subcontrol.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, subcontrol.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 	if i.Description != nil {
 		predicates = append(predicates, subcontrol.DescriptionEQ(*i.Description))
 	}
@@ -58031,6 +59454,141 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if i.SubcategoryContainsFold != nil {
 		predicates = append(predicates, subcontrol.SubcategoryContainsFold(*i.SubcategoryContainsFold))
 	}
+	if i.ControlOwnerID != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDEQ(*i.ControlOwnerID))
+	}
+	if i.ControlOwnerIDNEQ != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDNEQ(*i.ControlOwnerIDNEQ))
+	}
+	if len(i.ControlOwnerIDIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOwnerIDIn(i.ControlOwnerIDIn...))
+	}
+	if len(i.ControlOwnerIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOwnerIDNotIn(i.ControlOwnerIDNotIn...))
+	}
+	if i.ControlOwnerIDGT != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDGT(*i.ControlOwnerIDGT))
+	}
+	if i.ControlOwnerIDGTE != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDGTE(*i.ControlOwnerIDGTE))
+	}
+	if i.ControlOwnerIDLT != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDLT(*i.ControlOwnerIDLT))
+	}
+	if i.ControlOwnerIDLTE != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDLTE(*i.ControlOwnerIDLTE))
+	}
+	if i.ControlOwnerIDContains != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDContains(*i.ControlOwnerIDContains))
+	}
+	if i.ControlOwnerIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDHasPrefix(*i.ControlOwnerIDHasPrefix))
+	}
+	if i.ControlOwnerIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDHasSuffix(*i.ControlOwnerIDHasSuffix))
+	}
+	if i.ControlOwnerIDIsNil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDIsNil())
+	}
+	if i.ControlOwnerIDNotNil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDNotNil())
+	}
+	if i.ControlOwnerIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDEqualFold(*i.ControlOwnerIDEqualFold))
+	}
+	if i.ControlOwnerIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.ControlOwnerIDContainsFold(*i.ControlOwnerIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, subcontrol.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, subcontrol.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, subcontrol.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, subcontrol.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, subcontrol.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, subcontrol.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, subcontrol.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, subcontrol.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, subcontrol.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, subcontrol.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, subcontrol.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, subcontrol.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, subcontrol.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, subcontrol.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, subcontrol.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, subcontrol.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, subcontrol.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, subcontrol.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subcontrol.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subcontrol.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.RefCode != nil {
 		predicates = append(predicates, subcontrol.RefCodeEQ(*i.RefCode))
 	}
@@ -58110,60 +59668,6 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		predicates = append(predicates, subcontrol.ControlIDContainsFold(*i.ControlIDContainsFold))
 	}
 
-	if i.HasOwner != nil {
-		p := subcontrol.HasOwner()
-		if !*i.HasOwner {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOwnerWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
-		for _, w := range i.HasOwnerWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasOwnerWith(with...))
-	}
-	if i.HasControl != nil {
-		p := subcontrol.HasControl()
-		if !*i.HasControl {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlWith))
-		for _, w := range i.HasControlWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasControlWith(with...))
-	}
-	if i.HasMappedControls != nil {
-		p := subcontrol.HasMappedControls()
-		if !*i.HasMappedControls {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasMappedControlsWith) > 0 {
-		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
-		for _, w := range i.HasMappedControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasMappedControlsWith(with...))
-	}
 	if i.HasEvidence != nil {
 		p := subcontrol.HasEvidence()
 		if !*i.HasEvidence {
@@ -58308,6 +59812,24 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		}
 		predicates = append(predicates, subcontrol.HasInternalPoliciesWith(with...))
 	}
+	if i.HasMappedControls != nil {
+		p := subcontrol.HasMappedControls()
+		if !*i.HasMappedControls {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlsWith) > 0 {
+		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
+		for _, w := range i.HasMappedControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasMappedControlsWith(with...))
+	}
 	if i.HasControlOwner != nil {
 		p := subcontrol.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -58343,6 +59865,60 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasDelegateWith(with...))
+	}
+	if i.HasOwner != nil {
+		p := subcontrol.HasOwner()
+		if !*i.HasOwner {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasOwnerWith(with...))
+	}
+	if i.HasControl != nil {
+		p := subcontrol.HasControl()
+		if !*i.HasControl {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		for _, w := range i.HasControlWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasControlWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := subcontrol.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasControlImplementationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -58508,23 +60084,6 @@ type SubcontrolHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
@@ -58650,6 +60209,57 @@ type SubcontrolHistoryWhereInput struct {
 	SubcategoryNotNil       bool     `json:"subcategoryNotNil,omitempty"`
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
+
+	// "control_owner_id" field predicates.
+	ControlOwnerID             *string  `json:"controlOwnerID,omitempty"`
+	ControlOwnerIDNEQ          *string  `json:"controlOwnerIDNEQ,omitempty"`
+	ControlOwnerIDIn           []string `json:"controlOwnerIDIn,omitempty"`
+	ControlOwnerIDNotIn        []string `json:"controlOwnerIDNotIn,omitempty"`
+	ControlOwnerIDGT           *string  `json:"controlOwnerIDGT,omitempty"`
+	ControlOwnerIDGTE          *string  `json:"controlOwnerIDGTE,omitempty"`
+	ControlOwnerIDLT           *string  `json:"controlOwnerIDLT,omitempty"`
+	ControlOwnerIDLTE          *string  `json:"controlOwnerIDLTE,omitempty"`
+	ControlOwnerIDContains     *string  `json:"controlOwnerIDContains,omitempty"`
+	ControlOwnerIDHasPrefix    *string  `json:"controlOwnerIDHasPrefix,omitempty"`
+	ControlOwnerIDHasSuffix    *string  `json:"controlOwnerIDHasSuffix,omitempty"`
+	ControlOwnerIDIsNil        bool     `json:"controlOwnerIDIsNil,omitempty"`
+	ControlOwnerIDNotNil       bool     `json:"controlOwnerIDNotNil,omitempty"`
+	ControlOwnerIDEqualFold    *string  `json:"controlOwnerIDEqualFold,omitempty"`
+	ControlOwnerIDContainsFold *string  `json:"controlOwnerIDContainsFold,omitempty"`
+
+	// "delegate_id" field predicates.
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	DelegateIDNEQ          *string  `json:"delegateIDNEQ,omitempty"`
+	DelegateIDIn           []string `json:"delegateIDIn,omitempty"`
+	DelegateIDNotIn        []string `json:"delegateIDNotIn,omitempty"`
+	DelegateIDGT           *string  `json:"delegateIDGT,omitempty"`
+	DelegateIDGTE          *string  `json:"delegateIDGTE,omitempty"`
+	DelegateIDLT           *string  `json:"delegateIDLT,omitempty"`
+	DelegateIDLTE          *string  `json:"delegateIDLTE,omitempty"`
+	DelegateIDContains     *string  `json:"delegateIDContains,omitempty"`
+	DelegateIDHasPrefix    *string  `json:"delegateIDHasPrefix,omitempty"`
+	DelegateIDHasSuffix    *string  `json:"delegateIDHasSuffix,omitempty"`
+	DelegateIDIsNil        bool     `json:"delegateIDIsNil,omitempty"`
+	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
+	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
+	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
@@ -59128,51 +60738,6 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, subcontrolhistory.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, subcontrolhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, subcontrolhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 	if i.Description != nil {
 		predicates = append(predicates, subcontrolhistory.DescriptionEQ(*i.Description))
 	}
@@ -59496,6 +61061,141 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.SubcategoryContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.SubcategoryContainsFold(*i.SubcategoryContainsFold))
+	}
+	if i.ControlOwnerID != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDEQ(*i.ControlOwnerID))
+	}
+	if i.ControlOwnerIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDNEQ(*i.ControlOwnerIDNEQ))
+	}
+	if len(i.ControlOwnerIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDIn(i.ControlOwnerIDIn...))
+	}
+	if len(i.ControlOwnerIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDNotIn(i.ControlOwnerIDNotIn...))
+	}
+	if i.ControlOwnerIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDGT(*i.ControlOwnerIDGT))
+	}
+	if i.ControlOwnerIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDGTE(*i.ControlOwnerIDGTE))
+	}
+	if i.ControlOwnerIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDLT(*i.ControlOwnerIDLT))
+	}
+	if i.ControlOwnerIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDLTE(*i.ControlOwnerIDLTE))
+	}
+	if i.ControlOwnerIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDContains(*i.ControlOwnerIDContains))
+	}
+	if i.ControlOwnerIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDHasPrefix(*i.ControlOwnerIDHasPrefix))
+	}
+	if i.ControlOwnerIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDHasSuffix(*i.ControlOwnerIDHasSuffix))
+	}
+	if i.ControlOwnerIDIsNil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDIsNil())
+	}
+	if i.ControlOwnerIDNotNil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDNotNil())
+	}
+	if i.ControlOwnerIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDEqualFold(*i.ControlOwnerIDEqualFold))
+	}
+	if i.ControlOwnerIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.ControlOwnerIDContainsFold(*i.ControlOwnerIDContainsFold))
+	}
+	if i.DelegateID != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDEQ(*i.DelegateID))
+	}
+	if i.DelegateIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDNEQ(*i.DelegateIDNEQ))
+	}
+	if len(i.DelegateIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.DelegateIDIn(i.DelegateIDIn...))
+	}
+	if len(i.DelegateIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.DelegateIDNotIn(i.DelegateIDNotIn...))
+	}
+	if i.DelegateIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDGT(*i.DelegateIDGT))
+	}
+	if i.DelegateIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDGTE(*i.DelegateIDGTE))
+	}
+	if i.DelegateIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDLT(*i.DelegateIDLT))
+	}
+	if i.DelegateIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDLTE(*i.DelegateIDLTE))
+	}
+	if i.DelegateIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDContains(*i.DelegateIDContains))
+	}
+	if i.DelegateIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDHasPrefix(*i.DelegateIDHasPrefix))
+	}
+	if i.DelegateIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDHasSuffix(*i.DelegateIDHasSuffix))
+	}
+	if i.DelegateIDIsNil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDIsNil())
+	}
+	if i.DelegateIDNotNil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDNotNil())
+	}
+	if i.DelegateIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDEqualFold(*i.DelegateIDEqualFold))
+	}
+	if i.DelegateIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.RefCode != nil {
 		predicates = append(predicates, subcontrolhistory.RefCodeEQ(*i.RefCode))

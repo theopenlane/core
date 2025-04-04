@@ -153,20 +153,6 @@ func (shc *SubcontrolHistoryCreate) SetTags(s []string) *SubcontrolHistoryCreate
 	return shc
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (shc *SubcontrolHistoryCreate) SetOwnerID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetOwnerID(s)
-	return shc
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableOwnerID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetOwnerID(*s)
-	}
-	return shc
-}
-
 // SetDescription sets the "description" field.
 func (shc *SubcontrolHistoryCreate) SetDescription(s string) *SubcontrolHistoryCreate {
 	shc.mutation.SetDescription(s)
@@ -332,6 +318,48 @@ func (shc *SubcontrolHistoryCreate) SetExampleEvidence(me []models.ExampleEviden
 // SetReferences sets the "references" field.
 func (shc *SubcontrolHistoryCreate) SetReferences(m []models.Reference) *SubcontrolHistoryCreate {
 	shc.mutation.SetReferences(m)
+	return shc
+}
+
+// SetControlOwnerID sets the "control_owner_id" field.
+func (shc *SubcontrolHistoryCreate) SetControlOwnerID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetControlOwnerID(s)
+	return shc
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableControlOwnerID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetControlOwnerID(*s)
+	}
+	return shc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (shc *SubcontrolHistoryCreate) SetDelegateID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetDelegateID(s)
+	return shc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableDelegateID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetDelegateID(*s)
+	}
+	return shc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (shc *SubcontrolHistoryCreate) SetOwnerID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetOwnerID(s)
+	return shc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableOwnerID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetOwnerID(*s)
+	}
 	return shc
 }
 
@@ -547,10 +575,6 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := shc.mutation.OwnerID(); ok {
-		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
-		_node.OwnerID = value
-	}
 	if value, ok := shc.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
@@ -614,6 +638,18 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 	if value, ok := shc.mutation.References(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferences, field.TypeJSON, value)
 		_node.References = value
+	}
+	if value, ok := shc.mutation.ControlOwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)
+		_node.ControlOwnerID = value
+	}
+	if value, ok := shc.mutation.DelegateID(); ok {
+		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
+		_node.DelegateID = value
+	}
+	if value, ok := shc.mutation.OwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := shc.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

@@ -755,9 +755,6 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			rq.withDelegate != nil,
 		}
 	)
-	if rq.withStakeholder != nil || rq.withDelegate != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.ForeignKeys...)
 	}
@@ -1375,10 +1372,7 @@ func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nod
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
 	for i := range nodes {
-		if nodes[i].risk_stakeholder == nil {
-			continue
-		}
-		fk := *nodes[i].risk_stakeholder
+		fk := nodes[i].StakeholderID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1395,7 +1389,7 @@ func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nod
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "risk_stakeholder" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "stakeholder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1407,10 +1401,7 @@ func (rq *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes 
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
 	for i := range nodes {
-		if nodes[i].risk_delegate == nil {
-			continue
-		}
-		fk := *nodes[i].risk_delegate
+		fk := nodes[i].DelegateID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1427,7 +1418,7 @@ func (rq *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes 
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "risk_delegate" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "delegate_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1468,6 +1459,12 @@ func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if rq.withOwner != nil {
 			_spec.Node.AddColumnOnce(risk.FieldOwnerID)
+		}
+		if rq.withStakeholder != nil {
+			_spec.Node.AddColumnOnce(risk.FieldStakeholderID)
+		}
+		if rq.withDelegate != nil {
+			_spec.Node.AddColumnOnce(risk.FieldDelegateID)
 		}
 	}
 	if ps := rq.predicates; len(ps) > 0 {

@@ -146,6 +146,16 @@ func ReviewDue(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldReviewDue, v))
 }
 
+// ApproverID applies equality check predicate on the "approver_id" field. It's identical to ApproverIDEQ.
+func ApproverID(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldApproverID, v))
+}
+
+// DelegateID applies equality check predicate on the "delegate_id" field. It's identical to DelegateIDEQ.
+func DelegateID(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldDelegateID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1244,6 +1254,156 @@ func ReviewFrequencyIsNil() predicate.ProcedureHistory {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// ApproverIDEQ applies the EQ predicate on the "approver_id" field.
+func ApproverIDEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldApproverID, v))
+}
+
+// ApproverIDNEQ applies the NEQ predicate on the "approver_id" field.
+func ApproverIDNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldApproverID, v))
+}
+
+// ApproverIDIn applies the In predicate on the "approver_id" field.
+func ApproverIDIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldApproverID, vs...))
+}
+
+// ApproverIDNotIn applies the NotIn predicate on the "approver_id" field.
+func ApproverIDNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldApproverID, vs...))
+}
+
+// ApproverIDGT applies the GT predicate on the "approver_id" field.
+func ApproverIDGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldApproverID, v))
+}
+
+// ApproverIDGTE applies the GTE predicate on the "approver_id" field.
+func ApproverIDGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldApproverID, v))
+}
+
+// ApproverIDLT applies the LT predicate on the "approver_id" field.
+func ApproverIDLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldApproverID, v))
+}
+
+// ApproverIDLTE applies the LTE predicate on the "approver_id" field.
+func ApproverIDLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldApproverID, v))
+}
+
+// ApproverIDContains applies the Contains predicate on the "approver_id" field.
+func ApproverIDContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldApproverID, v))
+}
+
+// ApproverIDHasPrefix applies the HasPrefix predicate on the "approver_id" field.
+func ApproverIDHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldApproverID, v))
+}
+
+// ApproverIDHasSuffix applies the HasSuffix predicate on the "approver_id" field.
+func ApproverIDHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldApproverID, v))
+}
+
+// ApproverIDIsNil applies the IsNil predicate on the "approver_id" field.
+func ApproverIDIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldApproverID))
+}
+
+// ApproverIDNotNil applies the NotNil predicate on the "approver_id" field.
+func ApproverIDNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldApproverID))
+}
+
+// ApproverIDEqualFold applies the EqualFold predicate on the "approver_id" field.
+func ApproverIDEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldApproverID, v))
+}
+
+// ApproverIDContainsFold applies the ContainsFold predicate on the "approver_id" field.
+func ApproverIDContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldApproverID, v))
+}
+
+// DelegateIDEQ applies the EQ predicate on the "delegate_id" field.
+func DelegateIDEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldDelegateID, v))
+}
+
+// DelegateIDNEQ applies the NEQ predicate on the "delegate_id" field.
+func DelegateIDNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldDelegateID, v))
+}
+
+// DelegateIDIn applies the In predicate on the "delegate_id" field.
+func DelegateIDIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDNotIn applies the NotIn predicate on the "delegate_id" field.
+func DelegateIDNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDGT applies the GT predicate on the "delegate_id" field.
+func DelegateIDGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldDelegateID, v))
+}
+
+// DelegateIDGTE applies the GTE predicate on the "delegate_id" field.
+func DelegateIDGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldDelegateID, v))
+}
+
+// DelegateIDLT applies the LT predicate on the "delegate_id" field.
+func DelegateIDLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldDelegateID, v))
+}
+
+// DelegateIDLTE applies the LTE predicate on the "delegate_id" field.
+func DelegateIDLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldDelegateID, v))
+}
+
+// DelegateIDContains applies the Contains predicate on the "delegate_id" field.
+func DelegateIDContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldDelegateID, v))
+}
+
+// DelegateIDHasPrefix applies the HasPrefix predicate on the "delegate_id" field.
+func DelegateIDHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldDelegateID, v))
+}
+
+// DelegateIDHasSuffix applies the HasSuffix predicate on the "delegate_id" field.
+func DelegateIDHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldDelegateID, v))
+}
+
+// DelegateIDIsNil applies the IsNil predicate on the "delegate_id" field.
+func DelegateIDIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldDelegateID))
+}
+
+// DelegateIDNotNil applies the NotNil predicate on the "delegate_id" field.
+func DelegateIDNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDelegateID))
+}
+
+// DelegateIDEqualFold applies the EqualFold predicate on the "delegate_id" field.
+func DelegateIDEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldDelegateID, v))
+}
+
+// DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
+func DelegateIDContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldDelegateID, v))
 }
 
 // And groups predicates with the AND operator between them.

@@ -40,6 +40,8 @@ type ControlImplementationHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -64,7 +66,7 @@ func (*ControlImplementationHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new(history.OpType)
 		case controlimplementationhistory.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
+		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldOwnerID, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementationhistory.FieldHistoryTime, controlimplementationhistory.FieldCreatedAt, controlimplementationhistory.FieldUpdatedAt, controlimplementationhistory.FieldDeletedAt, controlimplementationhistory.FieldImplementationDate, controlimplementationhistory.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -150,6 +152,12 @@ func (cih *ControlImplementationHistory) assignValues(columns []string, values [
 				if err := json.Unmarshal(*value, &cih.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case controlimplementationhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				cih.OwnerID = value.String
 			}
 		case controlimplementationhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -246,6 +254,9 @@ func (cih *ControlImplementationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", cih.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(cih.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", cih.Status))

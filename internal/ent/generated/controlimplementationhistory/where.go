@@ -106,6 +106,11 @@ func DeletedBy(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // ImplementationDate applies equality check predicate on the "implementation_date" field. It's identical to ImplementationDateEQ.
 func ImplementationDate(v time.Time) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldImplementationDate, v))
@@ -644,6 +649,81 @@ func TagsIsNil() predicate.ControlImplementationHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldTags))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

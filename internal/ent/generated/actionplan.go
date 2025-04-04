@@ -51,6 +51,10 @@ type ActionPlan struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the id of the group responsible for approving the action_plan
+	ApproverID string `json:"approver_id,omitempty"`
+	// the id of the group responsible for approving the action_plan
+	DelegateID string `json:"delegate_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
@@ -62,8 +66,6 @@ type ActionPlan struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges                   ActionPlanEdges `json:"edges"`
-	action_plan_approver    *string
-	action_plan_delegate    *string
 	subcontrol_action_plans *string
 	selectValues            sql.SelectValues
 }
@@ -174,15 +176,11 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldOwnerID, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldOwnerID, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
-		case actionplan.ForeignKeys[0]: // action_plan_approver
-			values[i] = new(sql.NullString)
-		case actionplan.ForeignKeys[1]: // action_plan_delegate
-			values[i] = new(sql.NullString)
-		case actionplan.ForeignKeys[2]: // subcontrol_action_plans
+		case actionplan.ForeignKeys[0]: // subcontrol_action_plans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -297,6 +295,18 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.ReviewFrequency = enums.Frequency(value.String)
 			}
+		case actionplan.FieldApproverID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
+			} else if value.Valid {
+				ap.ApproverID = value.String
+			}
+		case actionplan.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				ap.DelegateID = value.String
+			}
 		case actionplan.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -322,20 +332,6 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 				ap.Source = value.String
 			}
 		case actionplan.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field action_plan_approver", values[i])
-			} else if value.Valid {
-				ap.action_plan_approver = new(string)
-				*ap.action_plan_approver = value.String
-			}
-		case actionplan.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field action_plan_delegate", values[i])
-			} else if value.Valid {
-				ap.action_plan_delegate = new(string)
-				*ap.action_plan_delegate = value.String
-			}
-		case actionplan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_action_plans", values[i])
 			} else if value.Valid {
@@ -457,6 +453,12 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ap.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("approver_id=")
+	builder.WriteString(ap.ApproverID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(ap.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ap.OwnerID)

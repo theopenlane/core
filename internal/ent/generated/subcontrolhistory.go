@@ -43,8 +43,6 @@ type SubcontrolHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the ID of the organization owner of the object
-	OwnerID string `json:"owner_id,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -77,6 +75,12 @@ type SubcontrolHistory struct {
 	ExampleEvidence []models.ExampleEvidence `json:"example_evidence,omitempty"`
 	// references for the control
 	References []models.Reference `json:"references,omitempty"`
+	// the id of the group that owns the control
+	ControlOwnerID string `json:"control_owner_id,omitempty"`
+	// the id of the group that is temporarily delegated to own the control
+	DelegateID string `json:"delegate_id,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the parent control
@@ -93,7 +97,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldSource, subcontrolhistory.FieldControlType, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -185,12 +189,6 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				if err := json.Unmarshal(*value, &sh.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
-			}
-		case subcontrolhistory.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				sh.OwnerID = value.String
 			}
 		case subcontrolhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -302,6 +300,24 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 					return fmt.Errorf("unmarshal field references: %w", err)
 				}
 			}
+		case subcontrolhistory.FieldControlOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
+			} else if value.Valid {
+				sh.ControlOwnerID = value.String
+			}
+		case subcontrolhistory.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				sh.DelegateID = value.String
+			}
+		case subcontrolhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				sh.OwnerID = value.String
+			}
 		case subcontrolhistory.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
@@ -383,9 +399,6 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(sh.OwnerID)
-	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(sh.Description)
 	builder.WriteString(", ")
@@ -433,6 +446,15 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", sh.References))
+	builder.WriteString(", ")
+	builder.WriteString("control_owner_id=")
+	builder.WriteString(sh.ControlOwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(sh.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(sh.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(sh.RefCode)
