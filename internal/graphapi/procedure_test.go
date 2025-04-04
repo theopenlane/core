@@ -156,6 +156,9 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 	// group for the view only user
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
 
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateProcedureInput
@@ -180,6 +183,8 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 				Status:        &enums.DocumentDraft,
 				ProcedureType: lo.ToPtr("sop"),
 				Revision:      lo.ToPtr("v1.0.0"),
+				ApproverID:    &approverGroup.ID,
+				DelegateID:    &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -316,6 +321,18 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			} else {
 				assert.Empty(t, resp.CreateProcedure.Procedure.BlockedGroups)
 			}
+
+			if tc.request.ApproverID != nil {
+				assert.Equal(t, *tc.request.ApproverID, resp.CreateProcedure.Procedure.Approver.ID)
+			} else {
+				assert.Empty(t, resp.CreateProcedure.Procedure.Approver)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.CreateProcedure.Procedure.Delegate.ID)
+			} else {
+				assert.Empty(t, resp.CreateProcedure.Procedure.Delegate)
+			}
 		})
 	}
 }
@@ -345,6 +362,11 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
 
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anotherApproverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anotherDelegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateProcedureInput
@@ -357,6 +379,8 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 			request: openlaneclient.UpdateProcedureInput{
 				Name:         lo.ToPtr("Updated Procedure Name"),
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for subsequent tests
+				ApproverID:   &approverGroup.ID,
+				DelegateID:   &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -367,6 +391,8 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 				Status:       &enums.DocumentPublished,
 				Details:      lo.ToPtr("Updated description"),
 				RevisionBump: &models.Minor,
+				ApproverID:   &anotherApproverGroup.ID,
+				DelegateID:   &anotherDelegateGroup.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -487,6 +513,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.UpdateProcedure.Procedure.Details)
+			}
+
+			if tc.request.ApproverID != nil {
+				assert.Equal(t, *tc.request.ApproverID, resp.UpdateProcedure.Procedure.Approver.ID)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, resp.UpdateProcedure.Procedure.Delegate.ID)
 			}
 		})
 	}

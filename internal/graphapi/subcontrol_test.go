@@ -416,7 +416,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			} else if tc.request.ControlID == controlWithOwner.ID {
 				// it should inherit the owner from the parent control if it was set
 				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
-				assert.Equal(t, controlWithOwner.OwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+				assert.Equal(t, controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
 			} else {
 				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
 			}
@@ -446,6 +446,9 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 
 	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
 
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateSubcontrolInput
@@ -464,9 +467,11 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateSubcontrolInput{
-				Status: &enums.ControlStatusPreparing,
-				Tags:   []string{"tag1", "tag2"},
-				Source: lo.ToPtr(enums.ControlSourceFramework),
+				Status:         &enums.ControlStatusPreparing,
+				Tags:           []string{"tag1", "tag2"},
+				Source:         lo.ToPtr(enums.ControlSourceFramework),
+				ControlOwnerID: &ownerGroup.ID,
+				DelegateID:     &delegateGroup.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -528,6 +533,20 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 
 			if tc.request.Source != nil {
 				assert.Equal(t, *tc.request.Source, *resp.UpdateSubcontrol.Subcontrol.Source)
+			}
+
+			if tc.request.ControlOwnerID != nil {
+				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
+				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateSubcontrol.Subcontrol.ControlOwner.ID)
+			} else {
+				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
+			}
+
+			if tc.request.DelegateID != nil {
+				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
+				assert.Equal(t, *tc.request.DelegateID, resp.UpdateSubcontrol.Subcontrol.Delegate.ID)
+			} else {
+				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
 			}
 		})
 	}

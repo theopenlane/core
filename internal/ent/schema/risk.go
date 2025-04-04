@@ -145,7 +145,7 @@ func (Risk) Hooks() []ent.Hook {
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"stakeholder": "group",
-			}, "owner"),
+			}, "stakeholder"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 		hook.On(

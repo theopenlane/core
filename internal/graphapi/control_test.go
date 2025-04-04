@@ -839,7 +839,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
@@ -920,7 +920,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 					},
 				},
 				ControlOwnerID: &ownerGroup.ID,
-				DelegateID:     &deleteGroup.ID,
+				DelegateID:     &delegateGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 			},
 			client: suite.client.apiWithPAT,
