@@ -17,31 +17,60 @@ tasks:
     cmds:
       - "docker build -f ./docker/all-in-one/Dockerfile.all-in-one -t core:dev-aio ."
 
-  core:
+  core:local:
+    aliases: ['core:up']
     dir: ..
     desc: brings up the compose environment for the core server
     deps: [build]
     cmds:
       - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose.yml -p core up -d"
 
-  core:down:
+  core:local:down:
+    aliases: ['core:down']
     dir: ..
     desc: brings the core compose environment down
     cmds:
       - "docker compose -p core down"
 
-  all:up:
+  core:published:
+    dir: ..
+    desc: brings up the compose environment for the core server using the published docker image. currently this will only work on x86 machines as its built using an x86 server
+    cmds:
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-published.yml -p core up -d"
+
+  core:published:down:
+    dir: ..
+    desc: brings the core compose environment down
+    cmds:
+      - "docker compose -p core down"
+
+  all:local:up:
+    aliases: ['all:up']
     dir: ..
     desc: brings up the full docker compose development environment including core server, fga, and rover
     cmds:
       - task: core
       - task: :rover
 
-  all:down:
+  all:local:down:
+    aliases: ['all:down']
     dir: ..
     desc: brings down both fga and core server compose environments
     cmds:
       - task: core:down
+
+  all:published:up:
+    dir: ..
+    desc: brings up the full docker compose development environment including core server, fga, and rover
+    cmds:
+      - task: core:published
+      - task: :rover
+
+  all:published:down:
+    dir: ..
+    desc: brings down both fga and core server compose environments
+    cmds:
+      - task: core:published:down
 
   redis:
     dir: ..
