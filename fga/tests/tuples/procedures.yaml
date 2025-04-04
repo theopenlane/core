@@ -52,3 +52,20 @@
 - user: program:program-1#auditor
   relation: viewer
   object: procedure:procedure-1
+
+
+# setup approver permissions for the procedure
+- user: group:internal-policy-approver#member
+  relation: approver
+  object: procedure:procedure-1
+- user: user:user-in-group-approver
+  relation: member
+  object: group:internal-policy-approver
+
+# setup delegate permissions for the procedure
+- user: group:internal-policy-delegate#member
+  relation: delegate
+  object: procedure:procedure-1
+- user: user:user-in-group-delegate
+  relation: member
+  object: group:internal-policy-delegate

@@ -518,6 +518,18 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+      - user: user:user-in-group-approver # approver of the procedure should have full permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:user-in-group-delegate
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
   - name: internal policies
     description: policies are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
     tuple_file: tuples/policies.yaml
@@ -545,6 +557,18 @@ tests:
         assertions:
           can_view: true
           can_edit: false
+          can_delete: false
+      - user: user:user-in-group-approver # approver of the internal_policy should have full permissions
+        object: internal_policy:internal_policy-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:user-in-group-delegate
+        object: internal_policy:internal_policy-1
+        assertions:
+          can_view: true
+          can_edit: true
           can_delete: false
   - name: programs
     description: programs are associated with an organization
