@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -313,10 +313,7 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSu
 // setContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func setContext(ctx context.Context, db *ent.Client) context.Context {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	return ent.NewContext(ctx, db)
+	return ent.NewContext(rule.WithInternalContext(ctx), db)
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database

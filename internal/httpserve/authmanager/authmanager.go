@@ -389,8 +389,8 @@ func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*g
 
 // skipOrgValidation checks if the org validation should be skipped based on the context
 func skipOrgValidation(ctx context.Context) bool {
-	// skip if explicitly allowed
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	// skip if explicitly allowed or if it's an internal request
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
 	}
 

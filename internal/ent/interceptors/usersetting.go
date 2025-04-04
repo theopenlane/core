@@ -14,14 +14,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 func InterceptorUserSetting() ent.Interceptor {
 	return intercept.TraverseUserSetting(func(ctx context.Context, q *generated.UserSettingQuery) error {
-		// bypass filter if the request is allowed, this happens when a user is
-		// being created, via invite or other method by another authenticated user
-		// or in tests
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
+		// bypass filter if the request is allowed or if it's an internal request
+		if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 			return nil
 		}
 

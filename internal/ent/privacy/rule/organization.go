@@ -30,8 +30,8 @@ type genericMutation interface {
 // This rule assumes that the organization id and user id are set in the context
 // and only checks for access to the single organization
 func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
-	// skip if permission is already set to allow
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	// skip if permission is already set to allow or if it's an internal request
+	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
 		return privacy.Allow
 	}
 
@@ -57,6 +57,11 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 // CheckOrgAccessBasedOnRequest checks if the authenticated user has access to the organizations that are requested
 // in the organization query based on the relation provided
 func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *generated.OrganizationQuery) error {
+	// skip if it's an internal request
+	if IsInternalRequest(ctx) {
+		return privacy.Allow
+	}
+
 	// run the query with allow context to get the list of organizations
 	// the user is trying to access
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -83,8 +88,8 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 
 // checkOrgAccess checks if the authenticated user has access to the organization
 func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
-	// skip if permission is already set to allow
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	// skip if permission is already set to allow or if it's an internal request
+	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
 		return nil
 	}
 
