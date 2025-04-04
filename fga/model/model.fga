@@ -68,8 +68,9 @@ type organization
 
     define control_creator: [group#member]
     define can_create_control: can_edit or control_creator
-    # subcontrols inherit access from their parent control
+    # subcontrols and control_implementations inherit access from their parent control
     define can_create_subcontrol: can_edit or control_creator
+    define can_create_control_implementation: can_edit or control_creator
 
     define control_objective_creator: [group#member]
     define can_create_control_objective: can_edit or control_objective_creator

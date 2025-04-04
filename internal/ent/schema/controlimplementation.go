@@ -108,6 +108,7 @@ func (ControlImplementation) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlsParent),    // if mutation contains control_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
+			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
 		),
 	)
