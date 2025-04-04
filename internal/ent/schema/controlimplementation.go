@@ -106,9 +106,8 @@ func (ControlImplementation) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlParent),    // if mutation contains control_id, check access
-			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolParent), // if mutation contains control_id, check access
-			policy.CheckCreateAccess(),
+			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlsParent),    // if mutation contains control_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
 			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
 		),
 	)

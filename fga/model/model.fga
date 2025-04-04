@@ -198,7 +198,7 @@ type control
 # subcontrols inherit access from the their parent control(s)
 type subcontrol
   relations
-    define can_view: [user, service]  or parent or can_edit or ((can_view from parent or viewer) but not blocked)
+    define can_view: [user, service] or parent or can_edit or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user, service] or owner or delegate or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user, service] or owner or ((can_delete from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
@@ -219,6 +219,18 @@ type control_objective
     define can_delete: [user, service] or ((can_delete from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program, control, subcontrol]
+    define viewer: [group#member]
+    define editor: [group#member, organization#owner]
+    define blocked: [user, group#member]
+# control implementations inherit access from the associated controls or from associated groups
+# the control implementation author will be assigned as an admin of the control objective
+type control_implementation
+  relations
+    define can_view: [user, service] or parent or can_edit or ((can_view from parent or viewer) but not blocked)
+    define can_edit: [user, service] or ((can_edit from parent or editor) but not blocked)
+    define can_delete: [user, service] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, control, subcontrol]
     define viewer: [group#member]
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
