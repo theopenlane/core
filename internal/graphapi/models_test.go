@@ -218,12 +218,13 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name                 string
-	ProgramID            string
-	StandardID           string
-	ControlOwnerID       string
-	ControlViewerGroupID string
-	ControlEditorGroupID string
+	Name                    string
+	ProgramID               string
+	StandardID              string
+	ControlOwnerID          string
+	ControlViewerGroupID    string
+	ControlEditorGroupID    string
+	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
 	AllFields bool
 }
@@ -904,6 +905,10 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.ControlEditorGroupID != "" {
 		mutation.AddEditorIDs(c.ControlEditorGroupID)
+	}
+
+	if c.ControlImplementationID != "" {
+		mutation.AddControlImplementationIDs(c.ControlImplementationID)
 	}
 
 	if c.AllFields {

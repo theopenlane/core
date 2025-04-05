@@ -104,6 +104,15 @@ mutation CreateControl($input: CreateControlInput!) {
           }
         }
       }
+      controlImplementations {
+        edges {
+          node {
+            id
+            details
+            status
+          }
+        }
+      }
       editors {
         id
         name
@@ -175,6 +184,15 @@ query GetAllControls {
           shortName
           governingBody
         }
+        controlImplementations {
+          edges {
+            node {
+              id
+              details
+              status
+            }
+          }
+        }
         programs {
           edges {
             node {
@@ -240,6 +258,15 @@ query GetControlByID($controlId: ID!) {
       name
       shortName
       governingBody
+    }
+    controlImplementations {
+      edges {
+        node {
+          id
+          details
+          status
+        }
+      }
     }
     programs {
       edges {
@@ -314,6 +341,15 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
           shortName
           governingBody
         }
+        controlImplementations {
+          edges {
+            node {
+              id
+              details
+              status
+            }
+          }
+        }
         programs {
           edges {
             node {
@@ -380,6 +416,15 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
         name
         shortName
         governingBody
+      }
+      controlImplementations {
+        edges {
+          node {
+            id
+            details
+            status
+          }
+        }
       }
       programs {
         edges {

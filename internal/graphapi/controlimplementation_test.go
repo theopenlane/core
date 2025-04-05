@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryControlImplementation() {
@@ -427,7 +428,6 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 	t := suite.T()
 
 	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	yesterday := time.Now().Add(-time.Hour * 24)
@@ -445,11 +445,10 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	// // create one control without group permissions
-	// control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	// allControlIDs := append(controlIDs, control.ID)
+	// create one control without group permissions
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	numSubcontrols := 2
+	numSubcontrols := 3
 	subcontrolIDs := []string{}
 	for range numSubcontrols {
 		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: controlIDs[0]}).MustNew(testUser1.UserCtx, t)
@@ -482,9 +481,16 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
 				Verified:           lo.ToPtr(true),
-				// TODO: add default if this isn't set for when updating to true
+				Tags:               []string{"control-imp", "ref-code"},
+			},
+			id:     controlImplementation1.ID,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, update verification date",
+			request: openlaneclient.UpdateControlImplementationInput{
 				VerificationDate: &yesterday,
-				Tags:             []string{"control-imp", "ref-code"},
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.apiWithPAT,
@@ -500,7 +506,47 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 			ctx:    viewOnlyUser.UserCtx,
 		},
 		{
+			name: "happy path remove control IDs",
+			request: openlaneclient.UpdateControlImplementationInput{
+				RemoveControlIDs: controlIDs,
+			},
+			id:     controlImplementation1.ID,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "no longer allowed because previous request removed control IDs the user has access to ",
+			request: openlaneclient.UpdateControlImplementationInput{
+				Status: &enums.DocumentPublished,
+			},
+			id:     controlImplementation1.ID,
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
+		{
 			name: "update not allowed, not enough permissions, not found",
+			request: openlaneclient.UpdateControlImplementationInput{
+				Status: &enums.DocumentPublished,
+			},
+			id:          controlImplementation2.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "happy path, add control IDs",
+			request: openlaneclient.UpdateControlImplementationInput{
+				Status: &enums.DocumentPublished,
+				AddControlIDs: []string{
+					control.ID,
+				},
+			},
+			id:     controlImplementation2.ID,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "update still not allowed, not enough permissions, not permissions to control either",
 			request: openlaneclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
@@ -549,6 +595,9 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 
 			if tc.request.VerificationDate != nil {
 				assert.WithinDuration(t, yesterday, *resp.UpdateControlImplementation.ControlImplementation.VerificationDate, time.Hour)
+			} else if tc.request.Verified != nil && *tc.request.Verified {
+				// default value is time.Now() in the model if verified is true
+				assert.WithinDuration(t, time.Now(), *resp.UpdateControlImplementation.ControlImplementation.VerificationDate, time.Hour)
 			}
 
 			if tc.request.ImplementationDate != nil {
@@ -560,81 +609,81 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 			}
 
 			if tc.request.AddControlIDs != nil {
-				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Controls.Edges, numControls)
-				assert.Equal(t, int64(numControls), resp.UpdateControlImplementation.ControlImplementation.Controls.TotalCount)
+				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Controls.Edges, len(tc.request.AddControlIDs))
+				assert.Equal(t, int64(len(tc.request.AddControlIDs)), resp.UpdateControlImplementation.ControlImplementation.Controls.TotalCount)
 			}
 
 			if tc.request.AddSubcontrolIDs != nil {
-				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Subcontrols.Edges, numControls)
-				assert.Equal(t, int64(numControls), resp.UpdateControlImplementation.ControlImplementation.Subcontrols.TotalCount)
+				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Subcontrols.Edges, numSubcontrols)
+				assert.Equal(t, int64(numSubcontrols), resp.UpdateControlImplementation.ControlImplementation.Subcontrols.TotalCount)
 			}
 		})
 	}
 }
 
-// func (suite *GraphTestSuite) TestMutationDeletecontrolImplementation() {
-// 	t := suite.T()
+func (suite *GraphTestSuite) TestMutationDeletecontrolImplementation() {
+	t := suite.T()
 
-// 	// create controlImplementations to be deleted
-// 	controlImplementation1 := (&controlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	controlImplementation2 := (&controlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create controlImplementations to be deleted
+	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-// 	testCases := []struct {
-// 		name        string
-// 		idToDelete  string
-// 		client      *openlaneclient.OpenlaneClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:        "not authorized, delete",
-// 			idToDelete:  controlImplementation1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 		{
-// 			name:       "happy path, delete",
-// 			idToDelete: controlImplementation1.ID,
-// 			client:     suite.client.api,
-// 			ctx:        testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:        "already deleted, not found",
-// 			idToDelete:  controlImplementation1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "not found",
-// 		},
-// 		{
-// 			name:       "happy path, delete using personal access token",
-// 			idToDelete: controlImplementation2.ID,
-// 			client:     suite.client.apiWithPAT,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:        "unknown id, not found",
-// 			idToDelete:  ulids.New().String(),
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not authorized, delete",
+			idToDelete:  controlImplementation1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:       "happy path, delete",
+			idToDelete: controlImplementation1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  controlImplementation1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: controlImplementation2.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:        "unknown id, not found",
+			idToDelete:  ulids.New().String(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
 
-// 	for _, tc := range testCases {
-// 		t.Run("Delete "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.DeletecontrolImplementation(tc.ctx, tc.idToDelete)
-// 			if tc.expectedErr != "" {
-// 				require.Error(t, err)
-// 				assert.ErrorContains(t, err, tc.expectedErr)
-// 				assert.Nil(t, resp)
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteControlImplementation(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Nil(t, resp)
 
-// 				return
-// 			}
+				return
+			}
 
-// 			require.NoError(t, err)
-// 			require.NotNil(t, resp)
-// 			assert.Equal(t, tc.idToDelete, resp.DeletecontrolImplementation.DeletedID)
-// 		})
-// 	}
-// }
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			assert.Equal(t, tc.idToDelete, resp.DeleteControlImplementation.DeletedID)
+		})
+	}
+}
