@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -217,10 +218,13 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name           string
-	ProgramID      string
-	StandardID     string
-	ControlOwnerID string
+	Name                    string
+	ProgramID               string
+	StandardID              string
+	ControlOwnerID          string
+	ControlViewerGroupID    string
+	ControlEditorGroupID    string
+	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
 	AllFields bool
 }
@@ -249,6 +253,16 @@ type StandardBuilder struct {
 	Name      string
 	Framework string
 	IsPublic  bool
+}
+
+type ControlImplementationBuilder struct {
+	client *client
+
+	// Fields
+	Details            string
+	ImplementationDate time.Time
+	ControlIDs         []string
+	SubcontrolIDs      []string
 }
 
 // Faker structs with random injected data
@@ -885,6 +899,18 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		mutation.SetControlOwnerID(c.ControlOwnerID)
 	}
 
+	if c.ControlViewerGroupID != "" {
+		mutation.AddViewerIDs(c.ControlViewerGroupID)
+	}
+
+	if c.ControlEditorGroupID != "" {
+		mutation.AddEditorIDs(c.ControlEditorGroupID)
+	}
+
+	if c.ControlImplementationID != "" {
+		mutation.AddControlImplementationIDs(c.ControlImplementationID)
+	}
+
 	if c.AllFields {
 		mutation.SetDescription(gofakeit.HipsterSentence(5)).
 			SetCategory(gofakeit.Adjective()).
@@ -991,4 +1017,36 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		SaveX(ctx)
 
 	return Standard
+}
+
+// MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
+func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlImplementation {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if e.Details == "" {
+		e.Details = gofakeit.Paragraph(3, 4, 300, "<br />")
+	}
+
+	if e.ImplementationDate.IsZero() {
+		e.ImplementationDate = time.Now()
+	}
+
+	mutation := e.client.db.ControlImplementation.Create().
+		SetDetails(e.Details).
+		SetImplementationDate(e.ImplementationDate)
+
+	if len(e.ControlIDs) > 0 {
+		mutation.AddControlIDs(e.ControlIDs...)
+	}
+
+	if len(e.SubcontrolIDs) > 0 {
+		mutation.AddSubcontrolIDs(e.SubcontrolIDs...)
+	}
+
+	controlImplementation, err := mutation.
+		Save(ctx)
+
+	require.NoError(t, err)
+
+	return controlImplementation
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -92,6 +93,13 @@ func (c ControlImplementation) Edges() []ent.Edge {
 	}
 }
 
+// Hooks of the ControlImplementation
+func (ControlImplementation) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookControlImplementation(),
+	}
+}
+
 // Annotations of the ControlImplementation
 func (ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -108,6 +116,7 @@ func (ControlImplementation) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlsParent),    // if mutation contains control_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
+			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
 		),
 	)

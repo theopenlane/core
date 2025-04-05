@@ -25,16 +25,6 @@ var (
 	ControlStatusInvalid ControlStatus = "CONTROL_STATUS_INVALID"
 )
 
-func (r ControlStatus) Valid() bool {
-	for _, v := range r.Values() {
-		if v == string(r) {
-			return true
-		}
-	}
-
-	return false
-}
-
 // Values returns a slice of strings that represents all the possible values of the ControlType enum.
 // Possible default values are "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED",
 // "APPROVED" and "ARCHIVED".
@@ -48,11 +38,15 @@ func (ControlStatus) Values() (kinds []string) {
 }
 
 // String returns the ControlStatus as a string
-func (r ControlStatus) String() string { return string(r) }
+func (r ControlStatus) String() string {
+	return string(r)
+}
 
 // ToControlStatus returns the control type enum based on string input
 func ToControlStatus(r string) *ControlStatus {
 	switch r := strings.ToUpper(r); r {
+	case "", ControlStatusNull.String():
+		return &ControlStatusNull
 	case ControlStatusPreparing.String():
 		return &ControlStatusPreparing
 	case ControlStatusNeedsApproval.String():

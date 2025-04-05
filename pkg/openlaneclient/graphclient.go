@@ -52,8 +52,8 @@ type OpenlaneGraphClient interface {
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
 	GetControlHistories(ctx context.Context, where *ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlHistories, error)
-	CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlImplementation, error)
 	CreateBulkControlImplementation(ctx context.Context, input []*CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlImplementation, error)
+	CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlImplementation, error)
 	CreateControlImplementation(ctx context.Context, input CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlImplementation, error)
 	DeleteControlImplementation(ctx context.Context, deleteControlImplementationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControlImplementation, error)
 	GetAllControlImplementations(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlImplementations, error)
@@ -6731,6 +6731,53 @@ func (t *CreateControl_CreateControl_Control_Programs) GetEdges() []*CreateContr
 	return t.Edges
 }
 
+type CreateControl_CreateControl_Control_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *CreateControl_CreateControl_Control_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *CreateControl_CreateControl_Control_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateControl_CreateControl_Control_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type CreateControl_CreateControl_Control_ControlImplementations_Edges struct {
+	Node *CreateControl_CreateControl_Control_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateControl_CreateControl_Control_ControlImplementations_Edges) GetNode() *CreateControl_CreateControl_Control_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type CreateControl_CreateControl_Control_ControlImplementations struct {
+	Edges []*CreateControl_CreateControl_Control_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateControl_CreateControl_Control_ControlImplementations) GetEdges() []*CreateControl_CreateControl_Control_ControlImplementations_Edges {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_ControlImplementations{}
+	}
+	return t.Edges
+}
+
 type CreateControl_CreateControl_Control_Editors struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -6786,36 +6833,37 @@ func (t *CreateControl_CreateControl_Control_BlockedGroups) GetName() string {
 }
 
 type CreateControl_CreateControl_Control struct {
-	AssessmentMethods      []*models.AssessmentMethod                           "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective                        "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	BlockedGroups          []*CreateControl_CreateControl_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	Category               *string                                              "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                              "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlOwner           *CreateControl_CreateControl_Control_ControlOwner    "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
-	ControlQuestions       []string                                             "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                                   "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Delegate               *CreateControl_CreateControl_Control_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
-	Description            *string                                              "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                               "json:\"displayID\" graphql:\"displayID\""
-	Editors                []*CreateControl_CreateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ExampleEvidence        []*models.ExampleEvidence                            "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                               "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance                     "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                             "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Programs               CreateControl_CreateControl_Control_Programs         "json:\"programs\" graphql:\"programs\""
-	RefCode                string                                               "json:\"refCode\" graphql:\"refCode\""
-	References             []*models.Reference                                  "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                                 "json:\"source,omitempty\" graphql:\"source\""
-	StandardID             *string                                              "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                                 "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                   []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                []*CreateControl_CreateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	AssessmentMethods      []*models.AssessmentMethod                                 "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                              "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          []*CreateControl_CreateControl_Control_BlockedGroups       "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Category               *string                                                    "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                                    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations CreateControl_CreateControl_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *CreateControl_CreateControl_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                                         "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *CreateControl_CreateControl_Control_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                                     "json:\"displayID\" graphql:\"displayID\""
+	Editors                []*CreateControl_CreateControl_Control_Editors             "json:\"editors,omitempty\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                                  "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                                     "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance                           "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               CreateControl_CreateControl_Control_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                                     "json:\"refCode\" graphql:\"refCode\""
+	References             []*models.Reference                                        "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
+	StandardID             *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Viewers                []*CreateControl_CreateControl_Control_Viewers             "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
 func (t *CreateControl_CreateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -6847,6 +6895,12 @@ func (t *CreateControl_CreateControl_Control) GetCategoryID() *string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.CategoryID
+}
+func (t *CreateControl_CreateControl_Control) GetControlImplementations() *CreateControl_CreateControl_Control_ControlImplementations {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return &t.ControlImplementations
 }
 func (t *CreateControl_CreateControl_Control) GetControlOwner() *CreateControl_CreateControl_Control_ControlOwner {
 	if t == nil {
@@ -7121,6 +7175,53 @@ func (t *GetAllControls_Controls_Edges_Node_Standard) GetShortName() *string {
 	return t.ShortName
 }
 
+type GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type GetAllControls_Controls_Edges_Node_ControlImplementations_Edges struct {
+	Node *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges) GetNode() *GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControls_Controls_Edges_Node_ControlImplementations struct {
+	Edges []*GetAllControls_Controls_Edges_Node_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_ControlImplementations) GetEdges() []*GetAllControls_Controls_Edges_Node_ControlImplementations_Edges {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_ControlImplementations{}
+	}
+	return t.Edges
+}
+
 type GetAllControls_Controls_Edges_Node_Programs_Edges_Node struct {
 	DisplayID string "json:\"displayID\" graphql:\"displayID\""
 	ID        string "json:\"id\" graphql:\"id\""
@@ -7223,37 +7324,38 @@ func (t *GetAllControls_Controls_Edges_Node_BlockedGroups) GetName() string {
 }
 
 type GetAllControls_Controls_Edges_Node struct {
-	AssessmentMethods      []*models.AssessmentMethod                          "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective                       "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	BlockedGroups          []*GetAllControls_Controls_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	Category               *string                                             "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlOwner           *GetAllControls_Controls_Edges_Node_ControlOwner    "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
-	ControlQuestions       []string                                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                                  "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Delegate               *GetAllControls_Controls_Edges_Node_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
-	Description            *string                                             "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                              "json:\"displayID\" graphql:\"displayID\""
-	Editors                []*GetAllControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ExampleEvidence        []*models.ExampleEvidence                           "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                              "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance                    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Programs               GetAllControls_Controls_Edges_Node_Programs         "json:\"programs\" graphql:\"programs\""
-	RefCode                string                                              "json:\"refCode\" graphql:\"refCode\""
-	References             []*models.Reference                                 "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                                "json:\"source,omitempty\" graphql:\"source\""
-	Standard               *GetAllControls_Controls_Edges_Node_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
-	StandardID             *string                                             "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                                "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                   []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                []*GetAllControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	AssessmentMethods      []*models.AssessmentMethod                                "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                             "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          []*GetAllControls_Controls_Edges_Node_BlockedGroups       "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Category               *string                                                   "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                                   "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations GetAllControls_Controls_Edges_Node_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *GetAllControls_Controls_Edges_Node_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                                  "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                                        "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *GetAllControls_Controls_Edges_Node_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                                   "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                                    "json:\"displayID\" graphql:\"displayID\""
+	Editors                []*GetAllControls_Controls_Edges_Node_Editors             "json:\"editors,omitempty\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                                 "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                                    "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance                          "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                                  "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               GetAllControls_Controls_Edges_Node_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                                    "json:\"refCode\" graphql:\"refCode\""
+	References             []*models.Reference                                       "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                                      "json:\"source,omitempty\" graphql:\"source\""
+	Standard               *GetAllControls_Controls_Edges_Node_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
+	StandardID             *string                                                   "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Viewers                []*GetAllControls_Controls_Edges_Node_Viewers             "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
 func (t *GetAllControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -7285,6 +7387,12 @@ func (t *GetAllControls_Controls_Edges_Node) GetCategoryID() *string {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.CategoryID
+}
+func (t *GetAllControls_Controls_Edges_Node) GetControlImplementations() *GetAllControls_Controls_Edges_Node_ControlImplementations {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return &t.ControlImplementations
 }
 func (t *GetAllControls_Controls_Edges_Node) GetControlOwner() *GetAllControls_Controls_Edges_Node_ControlOwner {
 	if t == nil {
@@ -7547,6 +7655,53 @@ func (t *GetControlByID_Control_Standard) GetShortName() *string {
 	return t.ShortName
 }
 
+type GetControlByID_Control_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *GetControlByID_Control_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &GetControlByID_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControlByID_Control_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &GetControlByID_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type GetControlByID_Control_ControlImplementations_Edges struct {
+	Node *GetControlByID_Control_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlByID_Control_ControlImplementations_Edges) GetNode() *GetControlByID_Control_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &GetControlByID_Control_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlByID_Control_ControlImplementations struct {
+	Edges []*GetControlByID_Control_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetControlByID_Control_ControlImplementations) GetEdges() []*GetControlByID_Control_ControlImplementations_Edges {
+	if t == nil {
+		t = &GetControlByID_Control_ControlImplementations{}
+	}
+	return t.Edges
+}
+
 type GetControlByID_Control_Programs_Edges_Node struct {
 	DisplayID string "json:\"displayID\" graphql:\"displayID\""
 	ID        string "json:\"id\" graphql:\"id\""
@@ -7649,37 +7804,38 @@ func (t *GetControlByID_Control_BlockedGroups) GetName() string {
 }
 
 type GetControlByID_Control struct {
-	AssessmentMethods      []*models.AssessmentMethod              "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective           "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	BlockedGroups          []*GetControlByID_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	Category               *string                                 "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                 "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlOwner           *GetControlByID_Control_ControlOwner    "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
-	ControlQuestions       []string                                "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                      "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Delegate               *GetControlByID_Control_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
-	Description            *string                                 "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                  "json:\"displayID\" graphql:\"displayID\""
-	Editors                []*GetControlByID_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ExampleEvidence        []*models.ExampleEvidence               "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                  "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance        "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Programs               GetControlByID_Control_Programs         "json:\"programs\" graphql:\"programs\""
-	RefCode                string                                  "json:\"refCode\" graphql:\"refCode\""
-	References             []*models.Reference                     "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                    "json:\"source,omitempty\" graphql:\"source\""
-	Standard               *GetControlByID_Control_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
-	StandardID             *string                                 "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                    "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                 "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                   []string                                "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                []*GetControlByID_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	AssessmentMethods      []*models.AssessmentMethod                    "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                 "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          []*GetControlByID_Control_BlockedGroups       "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Category               *string                                       "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                       "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations GetControlByID_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *GetControlByID_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                      "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                            "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *GetControlByID_Control_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                        "json:\"displayID\" graphql:\"displayID\""
+	Editors                []*GetControlByID_Control_Editors             "json:\"editors,omitempty\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                     "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                        "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance              "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                      "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               GetControlByID_Control_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                        "json:\"refCode\" graphql:\"refCode\""
+	References             []*models.Reference                           "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                          "json:\"source,omitempty\" graphql:\"source\""
+	Standard               *GetControlByID_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
+	StandardID             *string                                       "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                          "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                       "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Viewers                []*GetControlByID_Control_Viewers             "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
 func (t *GetControlByID_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -7711,6 +7867,12 @@ func (t *GetControlByID_Control) GetCategoryID() *string {
 		t = &GetControlByID_Control{}
 	}
 	return t.CategoryID
+}
+func (t *GetControlByID_Control) GetControlImplementations() *GetControlByID_Control_ControlImplementations {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return &t.ControlImplementations
 }
 func (t *GetControlByID_Control) GetControlOwner() *GetControlByID_Control_ControlOwner {
 	if t == nil {
@@ -7969,6 +8131,53 @@ func (t *GetControls_Controls_Edges_Node_Standard) GetShortName() *string {
 	return t.ShortName
 }
 
+type GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type GetControls_Controls_Edges_Node_ControlImplementations_Edges struct {
+	Node *GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControls_Controls_Edges_Node_ControlImplementations_Edges) GetNode() *GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type GetControls_Controls_Edges_Node_ControlImplementations struct {
+	Edges []*GetControls_Controls_Edges_Node_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetControls_Controls_Edges_Node_ControlImplementations) GetEdges() []*GetControls_Controls_Edges_Node_ControlImplementations_Edges {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_ControlImplementations{}
+	}
+	return t.Edges
+}
+
 type GetControls_Controls_Edges_Node_Programs_Edges_Node struct {
 	DisplayID string "json:\"displayID\" graphql:\"displayID\""
 	ID        string "json:\"id\" graphql:\"id\""
@@ -8071,37 +8280,38 @@ func (t *GetControls_Controls_Edges_Node_BlockedGroups) GetName() string {
 }
 
 type GetControls_Controls_Edges_Node struct {
-	AssessmentMethods      []*models.AssessmentMethod                       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective                    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	BlockedGroups          []*GetControls_Controls_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	Category               *string                                          "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                          "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlOwner           *GetControls_Controls_Edges_Node_ControlOwner    "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
-	ControlQuestions       []string                                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                               "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Delegate               *GetControls_Controls_Edges_Node_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
-	Description            *string                                          "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                           "json:\"displayID\" graphql:\"displayID\""
-	Editors                []*GetControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ExampleEvidence        []*models.ExampleEvidence                        "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                           "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance                 "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                         "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Programs               GetControls_Controls_Edges_Node_Programs         "json:\"programs\" graphql:\"programs\""
-	RefCode                string                                           "json:\"refCode\" graphql:\"refCode\""
-	References             []*models.Reference                              "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                             "json:\"source,omitempty\" graphql:\"source\""
-	Standard               *GetControls_Controls_Edges_Node_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
-	StandardID             *string                                          "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                             "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                          "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                   []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                []*GetControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	AssessmentMethods      []*models.AssessmentMethod                             "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                          "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          []*GetControls_Controls_Edges_Node_BlockedGroups       "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Category               *string                                                "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                                "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations GetControls_Controls_Edges_Node_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *GetControls_Controls_Edges_Node_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                               "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                                     "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *GetControls_Controls_Edges_Node_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                                 "json:\"displayID\" graphql:\"displayID\""
+	Editors                []*GetControls_Controls_Edges_Node_Editors             "json:\"editors,omitempty\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                              "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                                 "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance                       "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                               "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               GetControls_Controls_Edges_Node_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                                 "json:\"refCode\" graphql:\"refCode\""
+	References             []*models.Reference                                    "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                                   "json:\"source,omitempty\" graphql:\"source\""
+	Standard               *GetControls_Controls_Edges_Node_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
+	StandardID             *string                                                "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                                   "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Viewers                []*GetControls_Controls_Edges_Node_Viewers             "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
 func (t *GetControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -8133,6 +8343,12 @@ func (t *GetControls_Controls_Edges_Node) GetCategoryID() *string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.CategoryID
+}
+func (t *GetControls_Controls_Edges_Node) GetControlImplementations() *GetControls_Controls_Edges_Node_ControlImplementations {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return &t.ControlImplementations
 }
 func (t *GetControls_Controls_Edges_Node) GetControlOwner() *GetControls_Controls_Edges_Node_ControlOwner {
 	if t == nil {
@@ -8395,6 +8611,53 @@ func (t *UpdateControl_UpdateControl_Control_Standard) GetShortName() *string {
 	return t.ShortName
 }
 
+type UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type UpdateControl_UpdateControl_Control_ControlImplementations_Edges struct {
+	Node *UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_ControlImplementations_Edges) GetNode() *UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateControl_UpdateControl_Control_ControlImplementations struct {
+	Edges []*UpdateControl_UpdateControl_Control_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_ControlImplementations) GetEdges() []*UpdateControl_UpdateControl_Control_ControlImplementations_Edges {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_ControlImplementations{}
+	}
+	return t.Edges
+}
+
 type UpdateControl_UpdateControl_Control_Programs_Edges_Node struct {
 	DisplayID string "json:\"displayID\" graphql:\"displayID\""
 	ID        string "json:\"id\" graphql:\"id\""
@@ -8497,37 +8760,38 @@ func (t *UpdateControl_UpdateControl_Control_BlockedGroups) GetName() string {
 }
 
 type UpdateControl_UpdateControl_Control struct {
-	AssessmentMethods      []*models.AssessmentMethod                           "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives   []*models.AssessmentObjective                        "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	BlockedGroups          []*UpdateControl_UpdateControl_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
-	Category               *string                                              "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID             *string                                              "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlOwner           *UpdateControl_UpdateControl_Control_ControlOwner    "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
-	ControlQuestions       []string                                             "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	ControlType            *enums.ControlType                                   "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt              *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Delegate               *UpdateControl_UpdateControl_Control_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
-	Description            *string                                              "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID              string                                               "json:\"displayID\" graphql:\"displayID\""
-	Editors                []*UpdateControl_UpdateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
-	ExampleEvidence        []*models.ExampleEvidence                            "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ID                     string                                               "json:\"id\" graphql:\"id\""
-	ImplementationGuidance []*models.ImplementationGuidance                     "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	MappedCategories       []string                                             "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                *string                                              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Programs               UpdateControl_UpdateControl_Control_Programs         "json:\"programs\" graphql:\"programs\""
-	RefCode                string                                               "json:\"refCode\" graphql:\"refCode\""
-	References             []*models.Reference                                  "json:\"references,omitempty\" graphql:\"references\""
-	Source                 *enums.ControlSource                                 "json:\"source,omitempty\" graphql:\"source\""
-	Standard               *UpdateControl_UpdateControl_Control_Standard        "json:\"standard,omitempty\" graphql:\"standard\""
-	StandardID             *string                                              "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                 *enums.ControlStatus                                 "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory            *string                                              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                   []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                []*UpdateControl_UpdateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	AssessmentMethods      []*models.AssessmentMethod                                 "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                              "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          []*UpdateControl_UpdateControl_Control_BlockedGroups       "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Category               *string                                                    "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                                    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations UpdateControl_UpdateControl_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *UpdateControl_UpdateControl_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                                         "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *UpdateControl_UpdateControl_Control_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                                     "json:\"displayID\" graphql:\"displayID\""
+	Editors                []*UpdateControl_UpdateControl_Control_Editors             "json:\"editors,omitempty\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                                  "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                                     "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance                           "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               UpdateControl_UpdateControl_Control_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                                     "json:\"refCode\" graphql:\"refCode\""
+	References             []*models.Reference                                        "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
+	Standard               *UpdateControl_UpdateControl_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
+	StandardID             *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Viewers                []*UpdateControl_UpdateControl_Control_Viewers             "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
 func (t *UpdateControl_UpdateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -8559,6 +8823,12 @@ func (t *UpdateControl_UpdateControl_Control) GetCategoryID() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.CategoryID
+}
+func (t *UpdateControl_UpdateControl_Control) GetControlImplementations() *UpdateControl_UpdateControl_Control_ControlImplementations {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return &t.ControlImplementations
 }
 func (t *UpdateControl_UpdateControl_Control) GetControlOwner() *UpdateControl_UpdateControl_Control_ControlOwner {
 	if t == nil {
@@ -9395,112 +9665,122 @@ func (t *GetControlHistories_ControlHistories) GetEdges() []*GetControlHistories
 	return t.Edges
 }
 
-type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
 }
 
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetCreatedAt() *time.Time {
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetDetails() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.Details
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetImplementationDate() *time.Time {
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node) GetRefCode() string {
 	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node{}
 	}
-	return t.ImplementationDate
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.Status
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetVerificationDate() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.VerificationDate
-}
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetVerified() *bool {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
-	}
-	return t.Verified
+	return t.RefCode
 }
 
-type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation struct {
-	ControlImplementations []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges struct {
+	Node *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation) GetControlImplementations() []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations {
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges) GetNode() *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges_Node {
 	if t == nil {
-		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation{}
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges{}
 	}
-	return t.ControlImplementations
+	return t.Node
+}
+
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls struct {
+	Edges      []*CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls) GetEdges() []*CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls_Edges {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges struct {
+	Node *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges) GetNode() *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols struct {
+	Edges      []*CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols) GetEdges() []*CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols_Edges {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+	Controls           CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                                            "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                                             "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                                                         "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                                              "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                                           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                                                         "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                                              "json:\"verified,omitempty\" graphql:\"verified\""
 }
 
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetControls() *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Controls {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
+	}
+	return &t.Controls
+}
 func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
@@ -9536,6 +9816,12 @@ func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_Control
 		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
 	}
 	return t.Status
+}
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetSubcontrols() *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
+	}
+	return &t.Subcontrols
 }
 func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetTags() []string {
 	if t == nil {
@@ -9579,20 +9865,322 @@ func (t *CreateBulkControlImplementation_CreateBulkControlImplementation) GetCon
 	return t.ControlImplementations
 }
 
-type CreateControlImplementation_CreateControlImplementation_ControlImplementation struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
 }
 
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges struct {
+	Node *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges) GetNode() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls struct {
+	Edges      []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls) GetEdges() []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls_Edges {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges struct {
+	Node *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges) GetNode() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols struct {
+	Edges      []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols) GetEdges() []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols_Edges {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations struct {
+	Controls           CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                                                  "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                                                   "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                                                               "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                                                    "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                                                               "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                                                    "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetControls() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Controls {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return &t.Controls
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetDetails() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetImplementationDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.ImplementationDate
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.Status
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetSubcontrols() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return &t.Subcontrols
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetVerificationDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.VerificationDate
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetVerified() *bool {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.Verified
+}
+
+type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation struct {
+	ControlImplementations []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+}
+
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation) GetControlImplementations() []*CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation{}
+	}
+	return t.ControlImplementations
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges struct {
+	Node *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges) GetNode() *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls struct {
+	Edges      []*CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls) GetEdges() []*CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls_Edges {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls{}
+	}
+	return t.Edges
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls{}
+	}
+	return t.TotalCount
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges struct {
+	Node *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges) GetNode() *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols struct {
+	Edges      []*CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols) GetEdges() []*CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols_Edges {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type CreateControlImplementation_CreateControlImplementation_ControlImplementation struct {
+	Controls           CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                                   "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                                    "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                                                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                                                "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                                     "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetControls() *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Controls {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
+	}
+	return &t.Controls
+}
 func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
@@ -9628,6 +10216,12 @@ func (t *CreateControlImplementation_CreateControlImplementation_ControlImplemen
 		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
 	}
 	return t.Status
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetSubcontrols() *CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
+	}
+	return &t.Subcontrols
 }
 func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetTags() []string {
 	if t == nil {
@@ -9682,20 +10276,154 @@ func (t *DeleteControlImplementation_DeleteControlImplementation) GetDeletedID()
 	return t.DeletedID
 }
 
-type GetAllControlImplementations_ControlImplementations_Edges_Node struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+type GetAllControlImplementations_ControlImplementations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
+func (t *GetAllControlImplementations_ControlImplementations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllControlImplementations_ControlImplementations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllControlImplementations_ControlImplementations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllControlImplementations_ControlImplementations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges struct {
+	Node *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges) GetNode() *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Controls struct {
+	Edges      []*GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls) GetEdges() []*GetAllControlImplementations_ControlImplementations_Edges_Node_Controls_Edges {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Controls{}
+	}
+	return t.Edges
+}
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Controls{}
+	}
+	return t.TotalCount
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges struct {
+	Node *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges) GetNode() *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols struct {
+	Edges      []*GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols) GetEdges() []*GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type GetAllControlImplementations_ControlImplementations_Edges_Node struct {
+	Controls           GetAllControlImplementations_ControlImplementations_Edges_Node_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                    "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                     "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                                 "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                      "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                                 "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                      "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetControls() *GetAllControlImplementations_ControlImplementations_Edges_Node_Controls {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node{}
+	}
+	return &t.Controls
+}
 func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllControlImplementations_ControlImplementations_Edges_Node{}
@@ -9731,6 +10459,12 @@ func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetStat
 		t = &GetAllControlImplementations_ControlImplementations_Edges_Node{}
 	}
 	return t.Status
+}
+func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetSubcontrols() *GetAllControlImplementations_ControlImplementations_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations_Edges_Node{}
+	}
+	return &t.Subcontrols
 }
 func (t *GetAllControlImplementations_ControlImplementations_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -9775,7 +10509,9 @@ func (t *GetAllControlImplementations_ControlImplementations_Edges) GetNode() *G
 }
 
 type GetAllControlImplementations_ControlImplementations struct {
-	Edges []*GetAllControlImplementations_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllControlImplementations_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllControlImplementations_ControlImplementations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllControlImplementations_ControlImplementations) GetEdges() []*GetAllControlImplementations_ControlImplementations_Edges {
@@ -9784,21 +10520,135 @@ func (t *GetAllControlImplementations_ControlImplementations) GetEdges() []*GetA
 	}
 	return t.Edges
 }
-
-type GetControlImplementationByID_ControlImplementation struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+func (t *GetAllControlImplementations_ControlImplementations) GetPageInfo() *GetAllControlImplementations_ControlImplementations_PageInfo {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllControlImplementations_ControlImplementations) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControlImplementations_ControlImplementations{}
+	}
+	return t.TotalCount
 }
 
+type GetControlImplementationByID_ControlImplementation_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlImplementationByID_ControlImplementation_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetControlImplementationByID_ControlImplementation_Controls_Edges struct {
+	Node *GetControlImplementationByID_ControlImplementation_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Controls_Edges) GetNode() *GetControlImplementationByID_ControlImplementation_Controls_Edges_Node {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlImplementationByID_ControlImplementation_Controls struct {
+	Edges      []*GetControlImplementationByID_ControlImplementation_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Controls) GetEdges() []*GetControlImplementationByID_ControlImplementation_Controls_Edges {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Controls{}
+	}
+	return t.Edges
+}
+func (t *GetControlImplementationByID_ControlImplementation_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Controls{}
+	}
+	return t.TotalCount
+}
+
+type GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetControlImplementationByID_ControlImplementation_Subcontrols_Edges struct {
+	Node *GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Subcontrols_Edges) GetNode() *GetControlImplementationByID_ControlImplementation_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlImplementationByID_ControlImplementation_Subcontrols struct {
+	Edges      []*GetControlImplementationByID_ControlImplementation_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation_Subcontrols) GetEdges() []*GetControlImplementationByID_ControlImplementation_Subcontrols_Edges {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GetControlImplementationByID_ControlImplementation_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type GetControlImplementationByID_ControlImplementation struct {
+	Controls           GetControlImplementationByID_ControlImplementation_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                        "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                         "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                     "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                          "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        GetControlImplementationByID_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                     "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                          "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *GetControlImplementationByID_ControlImplementation) GetControls() *GetControlImplementationByID_ControlImplementation_Controls {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation{}
+	}
+	return &t.Controls
+}
 func (t *GetControlImplementationByID_ControlImplementation) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetControlImplementationByID_ControlImplementation{}
@@ -9835,6 +10685,12 @@ func (t *GetControlImplementationByID_ControlImplementation) GetStatus() *enums.
 	}
 	return t.Status
 }
+func (t *GetControlImplementationByID_ControlImplementation) GetSubcontrols() *GetControlImplementationByID_ControlImplementation_Subcontrols {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation{}
+	}
+	return &t.Subcontrols
+}
 func (t *GetControlImplementationByID_ControlImplementation) GetTags() []string {
 	if t == nil {
 		t = &GetControlImplementationByID_ControlImplementation{}
@@ -9866,20 +10722,154 @@ func (t *GetControlImplementationByID_ControlImplementation) GetVerified() *bool
 	return t.Verified
 }
 
-type GetControlImplementations_ControlImplementations_Edges_Node struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+type GetControlImplementations_ControlImplementations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
+func (t *GetControlImplementations_ControlImplementations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControlImplementations_ControlImplementations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetControlImplementations_ControlImplementations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetControlImplementations_ControlImplementations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges struct {
+	Node *GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges) GetNode() *GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges_Node {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Controls struct {
+	Edges      []*GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Controls) GetEdges() []*GetControlImplementations_ControlImplementations_Edges_Node_Controls_Edges {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Controls{}
+	}
+	return t.Edges
+}
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Controls{}
+	}
+	return t.TotalCount
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges struct {
+	Node *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges) GetNode() *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols struct {
+	Edges      []*GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols) GetEdges() []*GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols_Edges {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type GetControlImplementations_ControlImplementations_Edges_Node struct {
+	Controls           GetControlImplementations_ControlImplementations_Edges_Node_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                 "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                  "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                              "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                   "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                              "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                   "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetControls() *GetControlImplementations_ControlImplementations_Edges_Node_Controls {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node{}
+	}
+	return &t.Controls
+}
 func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetControlImplementations_ControlImplementations_Edges_Node{}
@@ -9915,6 +10905,12 @@ func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetStatus(
 		t = &GetControlImplementations_ControlImplementations_Edges_Node{}
 	}
 	return t.Status
+}
+func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetSubcontrols() *GetControlImplementations_ControlImplementations_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations_Edges_Node{}
+	}
+	return &t.Subcontrols
 }
 func (t *GetControlImplementations_ControlImplementations_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -9959,7 +10955,9 @@ func (t *GetControlImplementations_ControlImplementations_Edges) GetNode() *GetC
 }
 
 type GetControlImplementations_ControlImplementations struct {
-	Edges []*GetControlImplementations_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetControlImplementations_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetControlImplementations_ControlImplementations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetControlImplementations_ControlImplementations) GetEdges() []*GetControlImplementations_ControlImplementations_Edges {
@@ -9968,21 +10966,135 @@ func (t *GetControlImplementations_ControlImplementations) GetEdges() []*GetCont
 	}
 	return t.Edges
 }
-
-type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation struct {
-	CreatedAt          *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details            *string               "json:\"details,omitempty\" graphql:\"details\""
-	ID                 string                "json:\"id\" graphql:\"id\""
-	ImplementationDate *time.Time            "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	Status             *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
-	Tags               []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VerificationDate   *time.Time            "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
-	Verified           *bool                 "json:\"verified,omitempty\" graphql:\"verified\""
+func (t *GetControlImplementations_ControlImplementations) GetPageInfo() *GetControlImplementations_ControlImplementations_PageInfo {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations{}
+	}
+	return &t.PageInfo
+}
+func (t *GetControlImplementations_ControlImplementations) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlImplementations_ControlImplementations{}
+	}
+	return t.TotalCount
 }
 
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges struct {
+	Node *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges) GetNode() *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges_Node {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls struct {
+	Edges      []*UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls) GetEdges() []*UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls_Edges {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls{}
+	}
+	return t.Edges
+}
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls{}
+	}
+	return t.TotalCount
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges struct {
+	Node *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges) GetNode() *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols struct {
+	Edges      []*UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols) GetEdges() []*UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols_Edges {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type UpdateControlImplementation_UpdateControlImplementation_ControlImplementation struct {
+	Controls           UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt          *time.Time                                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details            *string                                                                                   "json:\"details,omitempty\" graphql:\"details\""
+	ID                 string                                                                                    "json:\"id\" graphql:\"id\""
+	ImplementationDate *time.Time                                                                                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	Status             *enums.DocumentStatus                                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Subcontrols        UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags               []string                                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time                                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VerificationDate   *time.Time                                                                                "json:\"verificationDate,omitempty\" graphql:\"verificationDate\""
+	Verified           *bool                                                                                     "json:\"verified,omitempty\" graphql:\"verified\""
+}
+
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetControls() *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Controls {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
+	}
+	return &t.Controls
+}
 func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
@@ -10018,6 +11130,12 @@ func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplemen
 		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
 	}
 	return t.Status
+}
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetSubcontrols() *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
+	}
+	return &t.Subcontrols
 }
 func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetTags() []string {
 	if t == nil {
@@ -61133,17 +62251,6 @@ func (t *GetControlHistories) GetControlHistories() *GetControlHistories_Control
 	return &t.ControlHistories
 }
 
-type CreateBulkCSVControlImplementation struct {
-	CreateBulkCSVControlImplementation CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation "json:\"createBulkCSVControlImplementation\" graphql:\"createBulkCSVControlImplementation\""
-}
-
-func (t *CreateBulkCSVControlImplementation) GetCreateBulkCSVControlImplementation() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation {
-	if t == nil {
-		t = &CreateBulkCSVControlImplementation{}
-	}
-	return &t.CreateBulkCSVControlImplementation
-}
-
 type CreateBulkControlImplementation struct {
 	CreateBulkControlImplementation CreateBulkControlImplementation_CreateBulkControlImplementation "json:\"createBulkControlImplementation\" graphql:\"createBulkControlImplementation\""
 }
@@ -61153,6 +62260,17 @@ func (t *CreateBulkControlImplementation) GetCreateBulkControlImplementation() *
 		t = &CreateBulkControlImplementation{}
 	}
 	return &t.CreateBulkControlImplementation
+}
+
+type CreateBulkCSVControlImplementation struct {
+	CreateBulkCSVControlImplementation CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation "json:\"createBulkCSVControlImplementation\" graphql:\"createBulkCSVControlImplementation\""
+}
+
+func (t *CreateBulkCSVControlImplementation) GetCreateBulkCSVControlImplementation() *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation{}
+	}
+	return &t.CreateBulkCSVControlImplementation
 }
 
 type CreateControlImplementation struct {
@@ -66103,6 +67221,15 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 					}
 				}
 			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
+			}
 			editors {
 				id
 				name
@@ -66210,6 +67337,15 @@ const GetAllControlsDocument = `query GetAllControls {
 					shortName
 					governingBody
 				}
+				controlImplementations {
+					edges {
+						node {
+							id
+							details
+							status
+						}
+					}
+				}
 				programs {
 					edges {
 						node {
@@ -66291,6 +67427,15 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 			name
 			shortName
 			governingBody
+		}
+		controlImplementations {
+			edges {
+				node {
+					id
+					details
+					status
+				}
+			}
 		}
 		programs {
 			edges {
@@ -66383,6 +67528,15 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 					shortName
 					governingBody
 				}
+				controlImplementations {
+					edges {
+						node {
+							id
+							details
+							status
+						}
+					}
+				}
 				programs {
 					edges {
 						node {
@@ -66469,6 +67623,15 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 				name
 				shortName
 				governingBody
+			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
 			}
 			programs {
 				edges {
@@ -66678,42 +67841,6 @@ func (c *Client) GetControlHistories(ctx context.Context, where *ControlHistoryW
 	return &res, nil
 }
 
-const CreateBulkCSVControlImplementationDocument = `mutation CreateBulkCSVControlImplementation ($input: Upload!) {
-	createBulkCSVControlImplementation(input: $input) {
-		controlImplementations {
-			createdAt
-			createdBy
-			details
-			id
-			implementationDate
-			status
-			tags
-			updatedAt
-			updatedBy
-			verificationDate
-			verified
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlImplementation, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVControlImplementation
-	if err := c.Client.Post(ctx, "CreateBulkCSVControlImplementation", CreateBulkCSVControlImplementationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkControlImplementationDocument = `mutation CreateBulkControlImplementation ($input: [CreateControlImplementationInput!]) {
 	createBulkControlImplementation(input: $input) {
 		controlImplementations {
@@ -66728,6 +67855,24 @@ const CreateBulkControlImplementationDocument = `mutation CreateBulkControlImple
 			updatedBy
 			verificationDate
 			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
 		}
 	}
 }
@@ -66740,6 +67885,60 @@ func (c *Client) CreateBulkControlImplementation(ctx context.Context, input []*C
 
 	var res CreateBulkControlImplementation
 	if err := c.Client.Post(ctx, "CreateBulkControlImplementation", CreateBulkControlImplementationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVControlImplementationDocument = `mutation CreateBulkCSVControlImplementation ($input: Upload!) {
+	createBulkCSVControlImplementation(input: $input) {
+		controlImplementations {
+			createdAt
+			createdBy
+			details
+			id
+			implementationDate
+			status
+			tags
+			updatedAt
+			updatedBy
+			verificationDate
+			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlImplementation, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVControlImplementation
+	if err := c.Client.Post(ctx, "CreateBulkCSVControlImplementation", CreateBulkCSVControlImplementationDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -66764,6 +67963,24 @@ const CreateControlImplementationDocument = `mutation CreateControlImplementatio
 			updatedBy
 			verificationDate
 			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
 		}
 	}
 }
@@ -66812,6 +68029,13 @@ func (c *Client) DeleteControlImplementation(ctx context.Context, deleteControlI
 
 const GetAllControlImplementationsDocument = `query GetAllControlImplementations {
 	controlImplementations {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				createdAt
@@ -66825,6 +68049,24 @@ const GetAllControlImplementationsDocument = `query GetAllControlImplementations
 				updatedBy
 				verificationDate
 				verified
+				controls {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
 			}
 		}
 	}
@@ -66859,6 +68101,24 @@ const GetControlImplementationByIDDocument = `query GetControlImplementationByID
 		updatedBy
 		verificationDate
 		verified
+		controls {
+			totalCount
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
+		subcontrols {
+			totalCount
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
 	}
 }
 `
@@ -66882,6 +68142,13 @@ func (c *Client) GetControlImplementationByID(ctx context.Context, controlImplem
 
 const GetControlImplementationsDocument = `query GetControlImplementations ($where: ControlImplementationWhereInput) {
 	controlImplementations(where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				createdAt
@@ -66895,6 +68162,24 @@ const GetControlImplementationsDocument = `query GetControlImplementations ($whe
 				updatedBy
 				verificationDate
 				verified
+				controls {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
 			}
 		}
 	}
@@ -66932,6 +68217,24 @@ const UpdateControlImplementationDocument = `mutation UpdateControlImplementatio
 			updatedBy
 			verificationDate
 			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
 		}
 	}
 }
@@ -81370,8 +82673,8 @@ var DocumentOperationNames = map[string]string{
 	CreateControlsByCloneDocument:                "CreateControlsByClone",
 	GetAllControlHistoriesDocument:               "GetAllControlHistories",
 	GetControlHistoriesDocument:                  "GetControlHistories",
-	CreateBulkCSVControlImplementationDocument:   "CreateBulkCSVControlImplementation",
 	CreateBulkControlImplementationDocument:      "CreateBulkControlImplementation",
+	CreateBulkCSVControlImplementationDocument:   "CreateBulkCSVControlImplementation",
 	CreateControlImplementationDocument:          "CreateControlImplementation",
 	DeleteControlImplementationDocument:          "DeleteControlImplementation",
 	GetAllControlImplementationsDocument:         "GetAllControlImplementations",

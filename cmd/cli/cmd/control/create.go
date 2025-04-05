@@ -2,7 +2,7 @@ package control
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/spf13/cobra"
 
@@ -74,16 +74,9 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 		input.Subcategory = &subcategory
 	}
 
-	status := cmd.Config.String("status")
-	if status != "" {
-		input.Status = enums.ToControlStatus(status)
-	} else {
-		input.Status = &enums.ControlStatusPreparing
-	}
+	input.Status = enums.ToControlStatus(cmd.Config.String("status"))
 
-	if input.Status.Valid() {
-		return openlaneclient.CreateControlInput{}, errors.New("status is invalid")
-	}
+	fmt.Println("Status:", input.Status.String())
 
 	controlType := cmd.Config.String("control-type")
 	if controlType != "" {
