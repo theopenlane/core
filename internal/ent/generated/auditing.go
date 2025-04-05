@@ -1102,6 +1102,9 @@ func (hh *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(hh.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(hushhistory.FieldDeletedBy, hh.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(hh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(hushhistory.FieldOwnerID, hh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(hh.Name, new.Name) {
 		changes = append(changes, NewChange(hushhistory.FieldName, hh.Name, new.Name))
 	}

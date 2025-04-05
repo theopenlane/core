@@ -1535,11 +1535,11 @@ func HasSecrets() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, SecretsTable, SecretsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.OrganizationSecrets
+		step.Edge.Schema = schemaConfig.Hush
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1550,7 +1550,7 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.Organization {
 		step := newSecretsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.OrganizationSecrets
+		step.Edge.Schema = schemaConfig.Hush
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

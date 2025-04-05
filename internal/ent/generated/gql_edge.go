@@ -1909,6 +1909,14 @@ func (gs *GroupSetting) Group(ctx context.Context) (*Group, error) {
 	return result, MaskNotFound(err)
 }
 
+func (h *Hush) Owner(ctx context.Context) (*Organization, error) {
+	result, err := h.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (h *Hush) Integrations(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*IntegrationOrder, where *IntegrationWhereInput,
 ) (*IntegrationConnection, error) {
@@ -1917,7 +1925,7 @@ func (h *Hush) Integrations(
 		WithIntegrationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := h.Edges.totalCount[0][alias]
+	totalCount, hasTotalCount := h.Edges.totalCount[1][alias]
 	if nodes, err := h.NamedIntegrations(alias); err == nil || hasTotalCount {
 		pager, err := newIntegrationPager(opts, last != nil)
 		if err != nil {
@@ -1928,18 +1936,6 @@ func (h *Hush) Integrations(
 		return conn, nil
 	}
 	return h.QueryIntegrations().Paginate(ctx, after, first, before, last, opts...)
-}
-
-func (h *Hush) Organization(ctx context.Context) (result []*Organization, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = h.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = h.Edges.OrganizationOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = h.QueryOrganization().All(ctx)
-	}
-	return result, err
 }
 
 func (h *Hush) Events(

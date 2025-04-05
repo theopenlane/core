@@ -68,10 +68,9 @@ func (c Control) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(c, Program{}),
 
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema:    c,
-			edgeSchema:    ControlImplementation{},
-			cascadeDelete: "Controls",
-			comment:       "the implementation(s) of the control",
+			fromSchema: c,
+			edgeSchema: ControlImplementation{},
+			comment:    "the implementation(s) of the control",
 		}),
 		// controls have control objectives and subcontrols
 		edgeToWithPagination(&edgeDefinition{

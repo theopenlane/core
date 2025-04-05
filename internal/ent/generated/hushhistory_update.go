@@ -103,6 +103,26 @@ func (hhu *HushHistoryUpdate) ClearDeletedBy() *HushHistoryUpdate {
 	return hhu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (hhu *HushHistoryUpdate) SetOwnerID(s string) *HushHistoryUpdate {
+	hhu.mutation.SetOwnerID(s)
+	return hhu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (hhu *HushHistoryUpdate) SetNillableOwnerID(s *string) *HushHistoryUpdate {
+	if s != nil {
+		hhu.SetOwnerID(*s)
+	}
+	return hhu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (hhu *HushHistoryUpdate) ClearOwnerID() *HushHistoryUpdate {
+	hhu.mutation.ClearOwnerID()
+	return hhu
+}
+
 // SetName sets the "name" field.
 func (hhu *HushHistoryUpdate) SetName(s string) *HushHistoryUpdate {
 	hhu.mutation.SetName(s)
@@ -246,6 +266,12 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hhu.mutation.DeletedByCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := hhu.mutation.OwnerID(); ok {
+		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if hhu.mutation.OwnerIDCleared() {
+		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := hhu.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
 	}
@@ -360,6 +386,26 @@ func (hhuo *HushHistoryUpdateOne) SetNillableDeletedBy(s *string) *HushHistoryUp
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (hhuo *HushHistoryUpdateOne) ClearDeletedBy() *HushHistoryUpdateOne {
 	hhuo.mutation.ClearDeletedBy()
+	return hhuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (hhuo *HushHistoryUpdateOne) SetOwnerID(s string) *HushHistoryUpdateOne {
+	hhuo.mutation.SetOwnerID(s)
+	return hhuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (hhuo *HushHistoryUpdateOne) SetNillableOwnerID(s *string) *HushHistoryUpdateOne {
+	if s != nil {
+		hhuo.SetOwnerID(*s)
+	}
+	return hhuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (hhuo *HushHistoryUpdateOne) ClearOwnerID() *HushHistoryUpdateOne {
+	hhuo.mutation.ClearOwnerID()
 	return hhuo
 }
 
@@ -535,6 +581,12 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	}
 	if hhuo.mutation.DeletedByCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := hhuo.mutation.OwnerID(); ok {
+		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if hhuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := hhuo.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

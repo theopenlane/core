@@ -107,6 +107,20 @@ func (hc *HushCreate) SetNillableDeletedBy(s *string) *HushCreate {
 	return hc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (hc *HushCreate) SetOwnerID(s string) *HushCreate {
+	hc.mutation.SetOwnerID(s)
+	return hc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (hc *HushCreate) SetNillableOwnerID(s *string) *HushCreate {
+	if s != nil {
+		hc.SetOwnerID(*s)
+	}
+	return hc
+}
+
 // SetName sets the "name" field.
 func (hc *HushCreate) SetName(s string) *HushCreate {
 	hc.mutation.SetName(s)
@@ -183,6 +197,11 @@ func (hc *HushCreate) SetNillableID(s *string) *HushCreate {
 	return hc
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (hc *HushCreate) SetOwner(o *Organization) *HushCreate {
+	return hc.SetOwnerID(o.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (hc *HushCreate) AddIntegrationIDs(ids ...string) *HushCreate {
 	hc.mutation.AddIntegrationIDs(ids...)
@@ -196,21 +215,6 @@ func (hc *HushCreate) AddIntegrations(i ...*Integration) *HushCreate {
 		ids[j] = i[j].ID
 	}
 	return hc.AddIntegrationIDs(ids...)
-}
-
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (hc *HushCreate) AddOrganizationIDs(ids ...string) *HushCreate {
-	hc.mutation.AddOrganizationIDs(ids...)
-	return hc
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (hc *HushCreate) AddOrganization(o ...*Organization) *HushCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return hc.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -291,6 +295,11 @@ func (hc *HushCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (hc *HushCreate) check() error {
+	if v, ok := hc.mutation.OwnerID(); ok {
+		if err := hush.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := hc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Hush.name"`)}
 	}
@@ -379,6 +388,24 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 		_spec.SetField(hush.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
 	}
+	if nodes := hc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hc.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := hc.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -391,23 +418,6 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = hc.schemaConfig.IntegrationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := hc.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = hc.schemaConfig.OrganizationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

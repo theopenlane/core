@@ -1664,18 +1664,24 @@ func init() {
 	hushMixin := schema.Hush{}.Mixin()
 	hushMixinHooks0 := hushMixin[0].Hooks()
 	hushMixinHooks1 := hushMixin[1].Hooks()
+	hushMixinHooks4 := hushMixin[4].Hooks()
 	hushHooks := schema.Hush{}.Hooks()
 	hush.Hooks[0] = hushMixinHooks0[0]
 	hush.Hooks[1] = hushMixinHooks1[0]
-	hush.Hooks[2] = hushHooks[0]
+	hush.Hooks[2] = hushMixinHooks4[0]
+	hush.Hooks[3] = hushHooks[0]
 	hushMixinInters1 := hushMixin[1].Interceptors()
+	hushMixinInters4 := hushMixin[4].Interceptors()
 	hushInters := schema.Hush{}.Interceptors()
 	hush.Interceptors[0] = hushMixinInters1[0]
-	hush.Interceptors[1] = hushInters[0]
+	hush.Interceptors[1] = hushMixinInters4[0]
+	hush.Interceptors[2] = hushInters[0]
 	hushMixinFields0 := hushMixin[0].Fields()
 	_ = hushMixinFields0
 	hushMixinFields2 := hushMixin[2].Fields()
 	_ = hushMixinFields2
+	hushMixinFields4 := hushMixin[4].Fields()
+	_ = hushMixinFields4
 	hushFields := schema.Hush{}.Fields()
 	_ = hushFields
 	// hushDescCreatedAt is the schema descriptor for created_at field.
@@ -1688,6 +1694,10 @@ func init() {
 	hush.DefaultUpdatedAt = hushDescUpdatedAt.Default.(func() time.Time)
 	// hush.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	hush.UpdateDefaultUpdatedAt = hushDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// hushDescOwnerID is the schema descriptor for owner_id field.
+	hushDescOwnerID := hushMixinFields4[0].Descriptor()
+	// hush.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	hush.OwnerIDValidator = hushDescOwnerID.Validators[0].(func(string) error)
 	// hushDescName is the schema descriptor for name field.
 	hushDescName := hushFields[0].Descriptor()
 	// hush.NameValidator is a validator for the "name" field. It is called by the builders before save.
