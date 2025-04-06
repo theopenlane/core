@@ -1,3 +1,38 @@
+mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
+  createBulkControlImplementation(input: $input) {
+    controlImplementations {
+      createdAt
+      createdBy
+      details
+      id
+      implementationDate
+      status
+      tags
+      updatedAt
+      updatedBy
+      verificationDate
+      verified
+      controls {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+    }
+  }
+}
 
 mutation CreateBulkCSVControlImplementation($input: Upload!) {
   createBulkCSVControlImplementation(input: $input) {
@@ -13,24 +48,24 @@ mutation CreateBulkCSVControlImplementation($input: Upload!) {
       updatedBy
       verificationDate
       verified
-    }
-  }
-}
-
-mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
-  createBulkControlImplementation(input: $input) {
-    controlImplementations {
-      createdAt
-      createdBy
-      details
-      id
-      implementationDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      verificationDate
-      verified
+      controls {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -49,6 +84,24 @@ mutation CreateControlImplementation($input: CreateControlImplementationInput!) 
       updatedBy
       verificationDate
       verified
+      controls {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -61,6 +114,13 @@ mutation DeleteControlImplementation($deleteControlImplementationId: ID!) {
 
 query GetAllControlImplementations {
   controlImplementations {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         createdAt
@@ -74,10 +134,29 @@ query GetAllControlImplementations {
         updatedBy
         verificationDate
         verified
+        controls {
+          totalCount
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        subcontrols {
+          totalCount
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 query GetControlImplementationByID($controlImplementationId: ID!) {
   controlImplementation(id: $controlImplementationId) {
     createdAt
@@ -91,11 +170,36 @@ query GetControlImplementationByID($controlImplementationId: ID!) {
     updatedBy
     verificationDate
     verified
+    controls {
+      totalCount
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    subcontrols {
+      totalCount
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
   }
 }
 
 query GetControlImplementations($where: ControlImplementationWhereInput) {
   controlImplementations(where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         createdAt
@@ -109,10 +213,29 @@ query GetControlImplementations($where: ControlImplementationWhereInput) {
         updatedBy
         verificationDate
         verified
+        controls {
+          totalCount
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        subcontrols {
+          totalCount
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateControlImplementation($updateControlImplementationId: ID!, $input: UpdateControlImplementationInput!) {
   updateControlImplementation(id: $updateControlImplementationId, input: $input) {
     controlImplementation {
@@ -127,6 +250,24 @@ mutation UpdateControlImplementation($updateControlImplementationId: ID!, $input
       updatedBy
       verificationDate
       verified
+      controls {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        totalCount
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }

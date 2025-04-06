@@ -524,6 +524,7 @@ func init() {
 	controlimplementationMixinHooks0 := controlimplementationMixin[0].Hooks()
 	controlimplementationMixinHooks1 := controlimplementationMixin[1].Hooks()
 	controlimplementationMixinHooks5 := controlimplementationMixin[5].Hooks()
+	controlimplementationHooks := schema.ControlImplementation{}.Hooks()
 
 	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
 
@@ -534,6 +535,8 @@ func init() {
 	controlimplementation.Hooks[4] = controlimplementationMixinHooks5[1]
 
 	controlimplementation.Hooks[5] = controlimplementationMixinHooks5[2]
+
+	controlimplementation.Hooks[6] = controlimplementationHooks[0]
 	controlimplementationMixinInters1 := controlimplementationMixin[1].Interceptors()
 	controlimplementationMixinInters5 := controlimplementationMixin[5].Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters1[0]

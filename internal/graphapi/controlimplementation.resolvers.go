@@ -17,6 +17,13 @@ import (
 
 // CreateControlImplementation is the resolver for the createControlImplementation field.
 func (r *mutationResolver) CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlimplementation"})
@@ -31,6 +38,14 @@ func (r *mutationResolver) CreateControlImplementation(ctx context.Context, inpu
 func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, input []*generated.CreateControlImplementationInput) (*model.ControlImplementationBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.bulkCreateControlImplementation(ctx, input)
@@ -49,6 +64,14 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateControlImplementation(ctx, data)
 }
 
@@ -57,6 +80,13 @@ func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id s
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlimplementation"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request
