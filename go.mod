@@ -41,7 +41,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.64
+	github.com/miekg/dns v1.1.65
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.6.0
 	github.com/oNaiPs/go-generate-fast v0.3.0
@@ -49,15 +49,15 @@ require (
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.12
+	github.com/projectdiscovery/cdncheck v1.1.13
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.16
+	github.com/projectdiscovery/utils v0.4.17
 	github.com/prometheus/client_golang v1.21.1
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.3
-	github.com/riverqueue/river v0.20.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.0
+	github.com/riverqueue/river v0.20.1
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.49.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -74,7 +74,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.10.1
 	github.com/theopenlane/newman v0.1.4
-	github.com/theopenlane/riverboat v0.0.9
+	github.com/theopenlane/riverboat v0.0.10
 	github.com/theopenlane/utils v0.4.5
 	github.com/vektah/gqlparser/v2 v2.5.23
 	github.com/wk8/go-ordered-map/v2 v2.1.8
@@ -512,15 +512,15 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.22
+	github.com/projectdiscovery/wappalyzergo v0.2.23
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.17.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.20.0 // indirect
-	github.com/riverqueue/river/rivershared v0.20.0 // indirect
-	github.com/riverqueue/river/rivertype v0.20.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.20.1 // indirect
+	github.com/riverqueue/river/rivershared v0.20.1 // indirect
+	github.com/riverqueue/river/rivertype v0.20.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
