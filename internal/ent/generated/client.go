@@ -7485,6 +7485,25 @@ func (c *HushClient) GetX(ctx context.Context, id string) *Hush {
 	return obj
 }
 
+// QueryOwner queries the owner edge of a Hush.
+func (c *HushClient) QueryOwner(h *Hush) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, hush.OwnerTable, hush.OwnerColumn),
+		)
+		schemaConfig := h.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Hush
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a Hush.
 func (c *HushClient) QueryIntegrations(h *Hush) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -7498,25 +7517,6 @@ func (c *HushClient) QueryIntegrations(h *Hush) *IntegrationQuery {
 		schemaConfig := h.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrganization queries the organization edge of a Hush.
-func (c *HushClient) QueryOrganization(h *Hush) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(hush.Table, hush.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, hush.OrganizationTable, hush.OrganizationPrimaryKey...),
-		)
-		schemaConfig := h.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationSecrets
 		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10920,11 +10920,11 @@ func (c *OrganizationClient) QuerySecrets(o *Organization) *HushQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(hush.Table, hush.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.SecretsTable, organization.SecretsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SecretsTable, organization.SecretsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.OrganizationSecrets
+		step.Edge.Schema = schemaConfig.Hush
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}

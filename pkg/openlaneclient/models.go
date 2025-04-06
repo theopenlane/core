@@ -4358,10 +4358,10 @@ type CreateHushInput struct {
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
 	// the secret value
-	SecretValue     *string  `json:"secretValue,omitempty"`
-	IntegrationIDs  []string `json:"integrationIDs,omitempty"`
-	OrganizationIDs []string `json:"organizationIDs,omitempty"`
-	EventIDs        []string `json:"eventIDs,omitempty"`
+	SecretValue    *string  `json:"secretValue,omitempty"`
+	OwnerID        *string  `json:"ownerID,omitempty"`
+	IntegrationIDs []string `json:"integrationIDs,omitempty"`
+	EventIDs       []string `json:"eventIDs,omitempty"`
 }
 
 // CreateIntegrationInput is used for create Integration object.
@@ -9754,6 +9754,8 @@ type Hush struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -9762,8 +9764,8 @@ type Hush struct {
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
 	SecretName   *string                `json:"secretName,omitempty"`
+	Owner        *Organization          `json:"owner,omitempty"`
 	Integrations *IntegrationConnection `json:"integrations"`
-	Organization []*Organization        `json:"organization,omitempty"`
 	Events       *EventConnection       `json:"events"`
 }
 
@@ -9816,6 +9818,8 @@ type HushHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -9982,6 +9986,22 @@ type HushHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -10142,6 +10162,22 @@ type HushWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -10188,12 +10224,12 @@ type HushWhereInput struct {
 	SecretNameNotNil       *bool    `json:"secretNameNotNil,omitempty"`
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
@@ -22493,17 +22529,16 @@ type UpdateHushInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the kind of secret, such as sshkey, certificate, api token, etc.
-	Kind                  *string  `json:"kind,omitempty"`
-	ClearKind             *bool    `json:"clearKind,omitempty"`
-	AddIntegrationIDs     []string `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs  []string `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations     *bool    `json:"clearIntegrations,omitempty"`
-	AddOrganizationIDs    []string `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs []string `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization     *bool    `json:"clearOrganization,omitempty"`
-	AddEventIDs           []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs        []string `json:"removeEventIDs,omitempty"`
-	ClearEvents           *bool    `json:"clearEvents,omitempty"`
+	Kind                 *string  `json:"kind,omitempty"`
+	ClearKind            *bool    `json:"clearKind,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ClearOwner           *bool    `json:"clearOwner,omitempty"`
+	AddIntegrationIDs    []string `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs []string `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations    *bool    `json:"clearIntegrations,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateIntegrationInput is used for update Integration object.

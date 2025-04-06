@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
 
 // Hush is the model entity for the Hush schema.
@@ -29,6 +30,8 @@ type Hush struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -47,10 +50,10 @@ type Hush struct {
 
 // HushEdges holds the relations/edges for other nodes in the graph.
 type HushEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// the integration associated with the secret
 	Integrations []*Integration `json:"integrations,omitempty"`
-	// Organization holds the value of the organization edge.
-	Organization []*Organization `json:"organization,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -60,26 +63,27 @@ type HushEdges struct {
 	totalCount [3]map[string]int
 
 	namedIntegrations map[string][]*Integration
-	namedOrganization map[string][]*Organization
 	namedEvents       map[string][]*Event
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HushEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
-}
-
-// OrganizationOrErr returns the Organization value or an error if the edge
-// was not loaded in eager-loading.
-func (e HushEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
-		return e.Organization, nil
-	}
-	return nil, &NotLoadedError{edge: "organization"}
 }
 
 // EventsOrErr returns the Events value or an error if the edge
@@ -96,7 +100,7 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldDeletedBy, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
+		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldDeletedBy, hush.FieldOwnerID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -157,6 +161,12 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.DeletedBy = value.String
 			}
+		case hush.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				h.OwnerID = value.String
+			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -200,14 +210,14 @@ func (h *Hush) Value(name string) (ent.Value, error) {
 	return h.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the Hush entity.
+func (h *Hush) QueryOwner() *OrganizationQuery {
+	return NewHushClient(h.config).QueryOwner(h)
+}
+
 // QueryIntegrations queries the "integrations" edge of the Hush entity.
 func (h *Hush) QueryIntegrations() *IntegrationQuery {
 	return NewHushClient(h.config).QueryIntegrations(h)
-}
-
-// QueryOrganization queries the "organization" edge of the Hush entity.
-func (h *Hush) QueryOrganization() *OrganizationQuery {
-	return NewHushClient(h.config).QueryOrganization(h)
 }
 
 // QueryEvents queries the "events" edge of the Hush entity.
@@ -256,6 +266,9 @@ func (h *Hush) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(h.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(h.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(h.Name)
 	builder.WriteString(", ")
@@ -294,30 +307,6 @@ func (h *Hush) appendNamedIntegrations(name string, edges ...*Integration) {
 		h.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		h.Edges.namedIntegrations[name] = append(h.Edges.namedIntegrations[name], edges...)
-	}
-}
-
-// NamedOrganization returns the Organization named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (h *Hush) NamedOrganization(name string) ([]*Organization, error) {
-	if h.Edges.namedOrganization == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := h.Edges.namedOrganization[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (h *Hush) appendNamedOrganization(name string, edges ...*Organization) {
-	if h.Edges.namedOrganization == nil {
-		h.Edges.namedOrganization = make(map[string][]*Organization)
-	}
-	if len(edges) == 0 {
-		h.Edges.namedOrganization[name] = []*Organization{}
-	} else {
-		h.Edges.namedOrganization[name] = append(h.Edges.namedOrganization[name], edges...)
 	}
 }
 

@@ -77,7 +77,6 @@ func (h Hush) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "the integration associated with the secret",
 		}),
-		defaultEdgeFrom(h, Organization{}),
 		defaultEdgeToWithPagination(h, Event{}),
 	}
 }
@@ -88,8 +87,13 @@ func (Hush) Annotations() []schema.Annotation {
 }
 
 // Mixin of the Hush shhhh
-func (Hush) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true}.getMixins()
+func (h Hush) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(h),
+		},
+	}.getMixins()
 }
 
 // Hooks of the Hush

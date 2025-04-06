@@ -3594,6 +3594,10 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -3680,6 +3684,12 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(hush.DeletedBy)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(hush.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -3748,6 +3758,7 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(hush.UpdatedBy).
 			SetDeletedAt(hush.DeletedAt).
 			SetDeletedBy(hush.DeletedBy).
+			SetOwnerID(hush.OwnerID).
 			SetName(hush.Name).
 			SetDescription(hush.Description).
 			SetKind(hush.Kind).

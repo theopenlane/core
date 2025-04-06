@@ -25533,17 +25533,6 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations) GetEdges() []*
 	return t.Edges
 }
 
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Organization{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -25578,14 +25567,14 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events) GetEdges() []*Create
 }
 
 type CreateBulkCSVHush_CreateBulkCSVHush_Hushes struct {
-	Description  *string                                                    "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                                     "json:\"id\" graphql:\"id\""
-	Integrations CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                                    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                     "json:\"name\" graphql:\"name\""
-	Organization []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                                    "json:\"secretName,omitempty\" graphql:\"secretName\""
+	Description  *string                                                 "json:\"description,omitempty\" graphql:\"description\""
+	Events       CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                                  "json:\"id\" graphql:\"id\""
+	Integrations CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                                  "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                                 "json:\"secretName,omitempty\" graphql:\"secretName\""
 }
 
 func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetDescription() *string {
@@ -25624,11 +25613,11 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetOrganization() []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Organization {
+func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetSecretName() *string {
 	if t == nil {
@@ -25681,17 +25670,6 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations) GetEdges() []*Create
 	return t.Edges
 }
 
-type CreateBulkHush_CreateBulkHush_Hushes_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Organization{}
-	}
-	return t.ID
-}
-
 type CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -25726,14 +25704,14 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes_Events) GetEdges() []*CreateBulkHu
 }
 
 type CreateBulkHush_CreateBulkHush_Hushes struct {
-	Description  *string                                              "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateBulkHush_CreateBulkHush_Hushes_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                               "json:\"id\" graphql:\"id\""
-	Integrations CreateBulkHush_CreateBulkHush_Hushes_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                              "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                               "json:\"name\" graphql:\"name\""
-	Organization []*CreateBulkHush_CreateBulkHush_Hushes_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                              "json:\"secretName,omitempty\" graphql:\"secretName\""
+	Description  *string                                           "json:\"description,omitempty\" graphql:\"description\""
+	Events       CreateBulkHush_CreateBulkHush_Hushes_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                            "json:\"id\" graphql:\"id\""
+	Integrations CreateBulkHush_CreateBulkHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                            "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                           "json:\"secretName,omitempty\" graphql:\"secretName\""
 }
 
 func (t *CreateBulkHush_CreateBulkHush_Hushes) GetDescription() *string {
@@ -25772,11 +25750,11 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetOrganization() []*CreateBulkHush_CreateBulkHush_Hushes_Organization {
+func (t *CreateBulkHush_CreateBulkHush_Hushes) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkHush_CreateBulkHush_Hushes{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *CreateBulkHush_CreateBulkHush_Hushes) GetSecretName() *string {
 	if t == nil {
@@ -25829,17 +25807,6 @@ func (t *CreateHush_CreateHush_Hush_Integrations) GetEdges() []*CreateHush_Creat
 	return t.Edges
 }
 
-type CreateHush_CreateHush_Hush_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateHush_CreateHush_Hush_Organization) GetID() string {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush_Organization{}
-	}
-	return t.ID
-}
-
 type CreateHush_CreateHush_Hush_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -25874,14 +25841,14 @@ func (t *CreateHush_CreateHush_Hush_Events) GetEdges() []*CreateHush_CreateHush_
 }
 
 type CreateHush_CreateHush_Hush struct {
-	Description  *string                                    "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateHush_CreateHush_Hush_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                     "json:\"id\" graphql:\"id\""
-	Integrations CreateHush_CreateHush_Hush_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                     "json:\"name\" graphql:\"name\""
-	Organization []*CreateHush_CreateHush_Hush_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                    "json:\"secretName,omitempty\" graphql:\"secretName\""
+	Description  *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	Events       CreateHush_CreateHush_Hush_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                  "json:\"id\" graphql:\"id\""
+	Integrations CreateHush_CreateHush_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                 "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                  "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                 "json:\"secretName,omitempty\" graphql:\"secretName\""
 }
 
 func (t *CreateHush_CreateHush_Hush) GetDescription() *string {
@@ -25920,11 +25887,11 @@ func (t *CreateHush_CreateHush_Hush) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateHush_CreateHush_Hush) GetOrganization() []*CreateHush_CreateHush_Hush_Organization {
+func (t *CreateHush_CreateHush_Hush) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateHush_CreateHush_Hush{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *CreateHush_CreateHush_Hush) GetSecretName() *string {
 	if t == nil {
@@ -25977,17 +25944,6 @@ func (t *GetAllHushes_Hushes_Edges_Node_Integrations) GetEdges() []*GetAllHushes
 	return t.Edges
 }
 
-type GetAllHushes_Hushes_Edges_Node_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllHushes_Hushes_Edges_Node_Organization) GetID() string {
-	if t == nil {
-		t = &GetAllHushes_Hushes_Edges_Node_Organization{}
-	}
-	return t.ID
-}
-
 type GetAllHushes_Hushes_Edges_Node_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -26022,18 +25978,18 @@ func (t *GetAllHushes_Hushes_Edges_Node_Events) GetEdges() []*GetAllHushes_Hushe
 }
 
 type GetAllHushes_Hushes_Edges_Node struct {
-	CreatedAt    *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string                                        "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetAllHushes_Hushes_Edges_Node_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                         "json:\"id\" graphql:\"id\""
-	Integrations GetAllHushes_Hushes_Edges_Node_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                        "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                         "json:\"name\" graphql:\"name\""
-	Organization []*GetAllHushes_Hushes_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                        "json:\"secretName,omitempty\" graphql:\"secretName\""
-	UpdatedAt    *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Events       GetAllHushes_Hushes_Edges_Node_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                      "json:\"id\" graphql:\"id\""
+	Integrations GetAllHushes_Hushes_Edges_Node_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                     "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                      "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                     "json:\"secretName,omitempty\" graphql:\"secretName\""
+	UpdatedAt    *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
@@ -26084,11 +26040,11 @@ func (t *GetAllHushes_Hushes_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllHushes_Hushes_Edges_Node) GetOrganization() []*GetAllHushes_Hushes_Edges_Node_Organization {
+func (t *GetAllHushes_Hushes_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllHushes_Hushes_Edges_Node{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *GetAllHushes_Hushes_Edges_Node) GetSecretName() *string {
 	if t == nil {
@@ -26164,17 +26120,6 @@ func (t *GetHushByID_Hush_Integrations) GetEdges() []*GetHushByID_Hush_Integrati
 	return t.Edges
 }
 
-type GetHushByID_Hush_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetHushByID_Hush_Organization) GetID() string {
-	if t == nil {
-		t = &GetHushByID_Hush_Organization{}
-	}
-	return t.ID
-}
-
 type GetHushByID_Hush_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -26209,18 +26154,18 @@ func (t *GetHushByID_Hush_Events) GetEdges() []*GetHushByID_Hush_Events_Edges {
 }
 
 type GetHushByID_Hush struct {
-	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetHushByID_Hush_Events          "json:\"events\" graphql:\"events\""
-	ID           string                           "json:\"id\" graphql:\"id\""
-	Integrations GetHushByID_Hush_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                          "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                           "json:\"name\" graphql:\"name\""
-	Organization []*GetHushByID_Hush_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                          "json:\"secretName,omitempty\" graphql:\"secretName\""
-	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                       "json:\"description,omitempty\" graphql:\"description\""
+	Events       GetHushByID_Hush_Events       "json:\"events\" graphql:\"events\""
+	ID           string                        "json:\"id\" graphql:\"id\""
+	Integrations GetHushByID_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                       "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                        "json:\"name\" graphql:\"name\""
+	OwnerID      *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                       "json:\"secretName,omitempty\" graphql:\"secretName\""
+	UpdatedAt    *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetHushByID_Hush) GetCreatedAt() *time.Time {
@@ -26271,11 +26216,11 @@ func (t *GetHushByID_Hush) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetHushByID_Hush) GetOrganization() []*GetHushByID_Hush_Organization {
+func (t *GetHushByID_Hush) GetOwnerID() *string {
 	if t == nil {
 		t = &GetHushByID_Hush{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *GetHushByID_Hush) GetSecretName() *string {
 	if t == nil {
@@ -26329,17 +26274,6 @@ func (t *GetHushes_Hushes_Edges_Node_Integrations) GetEdges() []*GetHushes_Hushe
 	return t.Edges
 }
 
-type GetHushes_Hushes_Edges_Node_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetHushes_Hushes_Edges_Node_Organization) GetID() string {
-	if t == nil {
-		t = &GetHushes_Hushes_Edges_Node_Organization{}
-	}
-	return t.ID
-}
-
 type GetHushes_Hushes_Edges_Node_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -26374,18 +26308,18 @@ func (t *GetHushes_Hushes_Edges_Node_Events) GetEdges() []*GetHushes_Hushes_Edge
 }
 
 type GetHushes_Hushes_Edges_Node struct {
-	CreatedAt    *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetHushes_Hushes_Edges_Node_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                      "json:\"id\" graphql:\"id\""
-	Integrations GetHushes_Hushes_Edges_Node_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                     "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                      "json:\"name\" graphql:\"name\""
-	Organization []*GetHushes_Hushes_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                     "json:\"secretName,omitempty\" graphql:\"secretName\""
-	UpdatedAt    *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                  "json:\"description,omitempty\" graphql:\"description\""
+	Events       GetHushes_Hushes_Edges_Node_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                   "json:\"id\" graphql:\"id\""
+	Integrations GetHushes_Hushes_Edges_Node_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                  "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                   "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                  "json:\"secretName,omitempty\" graphql:\"secretName\""
+	UpdatedAt    *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetHushes_Hushes_Edges_Node) GetCreatedAt() *time.Time {
@@ -26436,11 +26370,11 @@ func (t *GetHushes_Hushes_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetHushes_Hushes_Edges_Node) GetOrganization() []*GetHushes_Hushes_Edges_Node_Organization {
+func (t *GetHushes_Hushes_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetHushes_Hushes_Edges_Node{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *GetHushes_Hushes_Edges_Node) GetSecretName() *string {
 	if t == nil {
@@ -26516,17 +26450,6 @@ func (t *UpdateHush_UpdateHush_Hush_Integrations) GetEdges() []*UpdateHush_Updat
 	return t.Edges
 }
 
-type UpdateHush_UpdateHush_Hush_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateHush_UpdateHush_Hush_Organization) GetID() string {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush_Organization{}
-	}
-	return t.ID
-}
-
 type UpdateHush_UpdateHush_Hush_Events_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -26561,14 +26484,14 @@ func (t *UpdateHush_UpdateHush_Hush_Events) GetEdges() []*UpdateHush_UpdateHush_
 }
 
 type UpdateHush_UpdateHush_Hush struct {
-	Description  *string                                    "json:\"description,omitempty\" graphql:\"description\""
-	Events       UpdateHush_UpdateHush_Hush_Events          "json:\"events\" graphql:\"events\""
-	ID           string                                     "json:\"id\" graphql:\"id\""
-	Integrations UpdateHush_UpdateHush_Hush_Integrations    "json:\"integrations\" graphql:\"integrations\""
-	Kind         *string                                    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                     "json:\"name\" graphql:\"name\""
-	Organization []*UpdateHush_UpdateHush_Hush_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	SecretName   *string                                    "json:\"secretName,omitempty\" graphql:\"secretName\""
+	Description  *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	Events       UpdateHush_UpdateHush_Hush_Events       "json:\"events\" graphql:\"events\""
+	ID           string                                  "json:\"id\" graphql:\"id\""
+	Integrations UpdateHush_UpdateHush_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
+	Kind         *string                                 "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                  "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SecretName   *string                                 "json:\"secretName,omitempty\" graphql:\"secretName\""
 }
 
 func (t *UpdateHush_UpdateHush_Hush) GetDescription() *string {
@@ -26607,11 +26530,11 @@ func (t *UpdateHush_UpdateHush_Hush) GetName() string {
 	}
 	return t.Name
 }
-func (t *UpdateHush_UpdateHush_Hush) GetOrganization() []*UpdateHush_UpdateHush_Hush_Organization {
+func (t *UpdateHush_UpdateHush_Hush) GetOwnerID() *string {
 	if t == nil {
 		t = &UpdateHush_UpdateHush_Hush{}
 	}
-	return t.Organization
+	return t.OwnerID
 }
 func (t *UpdateHush_UpdateHush_Hush) GetSecretName() *string {
 	if t == nil {
@@ -72455,9 +72378,7 @@ const CreateBulkCSVHushDocument = `mutation CreateBulkCSVHush ($input: Upload!) 
 					}
 				}
 			}
-			organization {
-				id
-			}
+			ownerID
 			events {
 				edges {
 					node {
@@ -72502,9 +72423,7 @@ const CreateBulkHushDocument = `mutation CreateBulkHush ($input: [CreateHushInpu
 					}
 				}
 			}
-			organization {
-				id
-			}
+			ownerID
 			events {
 				edges {
 					node {
@@ -72549,9 +72468,7 @@ const CreateHushDocument = `mutation CreateHush ($input: CreateHushInput!) {
 					}
 				}
 			}
-			organization {
-				id
-			}
+			ownerID
 			events {
 				edges {
 					node {
@@ -72597,9 +72514,7 @@ const GetAllHushesDocument = `query GetAllHushes {
 						}
 					}
 				}
-				organization {
-					id
-				}
+				ownerID
 				events {
 					edges {
 						node {
@@ -72646,9 +72561,7 @@ const GetHushByIDDocument = `query GetHushByID ($hushId: ID!) {
 				}
 			}
 		}
-		organization {
-			id
-		}
+		ownerID
 		events {
 			edges {
 				node {
@@ -72697,9 +72610,7 @@ const GetHushesDocument = `query GetHushes ($where: HushWhereInput) {
 						}
 					}
 				}
-				organization {
-					id
-				}
+				ownerID
 				events {
 					edges {
 						node {
@@ -72749,9 +72660,7 @@ const UpdateHushDocument = `mutation UpdateHush ($updateHushId: ID!, $input: Upd
 					}
 				}
 			}
-			organization {
-				id
-			}
+			ownerID
 			events {
 				edges {
 					node {

@@ -6525,8 +6525,8 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  ownerID: ID
   integrationIDs: [ID!]
-  organizationIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -14342,6 +14342,10 @@ type Hush implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -14357,6 +14361,7 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  owner: Organization
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -14388,7 +14393,6 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
-  organization: [Organization!]
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -14462,6 +14466,10 @@ type HushHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -14690,6 +14698,24 @@ input HushHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -14879,6 +14905,24 @@ input HushWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -14931,15 +14975,15 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   events edge predicates
   """
@@ -35767,12 +35811,11 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean

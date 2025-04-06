@@ -69,10 +69,9 @@ func (s Subcontrol) Edges() []ent.Edge {
 			required:   true,
 		}),
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema:    s,
-			edgeSchema:    ControlImplementation{},
-			cascadeDelete: "Subcontrols",
-			comment:       "the implementation(s) of the subcontrol",
+			fromSchema: s,
+			edgeSchema: ControlImplementation{},
+			comment:    "the implementation(s) of the subcontrol",
 		}),
 	}
 }

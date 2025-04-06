@@ -1415,7 +1415,8 @@ type ComplexityRoot struct {
 		Integrations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
-		Organization func(childComplexity int) int
+		Owner        func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
 		SecretName   func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
@@ -1455,6 +1456,7 @@ type ComplexityRoot struct {
 		Kind        func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		SecretName  func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
@@ -10235,12 +10237,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hush.Name(childComplexity), true
 
-	case "Hush.organization":
-		if e.complexity.Hush.Organization == nil {
+	case "Hush.owner":
+		if e.complexity.Hush.Owner == nil {
 			break
 		}
 
-		return e.complexity.Hush.Organization(childComplexity), true
+		return e.complexity.Hush.Owner(childComplexity), true
+
+	case "Hush.ownerID":
+		if e.complexity.Hush.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Hush.OwnerID(childComplexity), true
 
 	case "Hush.secretName":
 		if e.complexity.Hush.SecretName == nil {
@@ -10388,6 +10397,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.HushHistory.Operation(childComplexity), true
+
+	case "HushHistory.ownerID":
+		if e.complexity.HushHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.OwnerID(childComplexity), true
 
 	case "HushHistory.ref":
 		if e.complexity.HushHistory.Ref == nil {
@@ -32127,8 +32143,8 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  ownerID: ID
   integrationIDs: [ID!]
-  organizationIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -39944,6 +39960,10 @@ type Hush implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -39959,6 +39979,7 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  owner: Organization
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -39990,7 +40011,6 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
-  organization: [Organization!]
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40064,6 +40084,10 @@ type HushHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -40292,6 +40316,24 @@ input HushHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -40481,6 +40523,24 @@ input HushWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -40533,15 +40593,15 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   events edge predicates
   """
@@ -61369,12 +61429,11 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean

@@ -36,6 +36,8 @@ type HushHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -56,7 +58,7 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case hushhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldDeletedBy, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
+		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldDeletedBy, hushhistory.FieldOwnerID, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -134,6 +136,12 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				hh.DeletedBy = value.String
+			}
+		case hushhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				hh.OwnerID = value.String
 			}
 		case hushhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -227,6 +235,9 @@ func (hh *HushHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(hh.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(hh.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(hh.Name)

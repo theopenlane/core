@@ -991,6 +991,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hush.FieldUpdatedBy:   {Type: field.TypeString, Column: hush.FieldUpdatedBy},
 			hush.FieldDeletedAt:   {Type: field.TypeTime, Column: hush.FieldDeletedAt},
 			hush.FieldDeletedBy:   {Type: field.TypeString, Column: hush.FieldDeletedBy},
+			hush.FieldOwnerID:     {Type: field.TypeString, Column: hush.FieldOwnerID},
 			hush.FieldName:        {Type: field.TypeString, Column: hush.FieldName},
 			hush.FieldDescription: {Type: field.TypeString, Column: hush.FieldDescription},
 			hush.FieldKind:        {Type: field.TypeString, Column: hush.FieldKind},
@@ -1018,6 +1019,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: hushhistory.FieldUpdatedBy},
 			hushhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: hushhistory.FieldDeletedAt},
 			hushhistory.FieldDeletedBy:   {Type: field.TypeString, Column: hushhistory.FieldDeletedBy},
+			hushhistory.FieldOwnerID:     {Type: field.TypeString, Column: hushhistory.FieldOwnerID},
 			hushhistory.FieldName:        {Type: field.TypeString, Column: hushhistory.FieldName},
 			hushhistory.FieldDescription: {Type: field.TypeString, Column: hushhistory.FieldDescription},
 			hushhistory.FieldKind:        {Type: field.TypeString, Column: hushhistory.FieldKind},
@@ -3846,6 +3848,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+		},
+		"Hush",
+		"Organization",
+	)
+	graph.MustAddE(
 		"integrations",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3856,18 +3870,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Hush",
 		"Integration",
-	)
-	graph.MustAddE(
-		"organization",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-		},
-		"Hush",
-		"Organization",
 	)
 	graph.MustAddE(
 		"events",
@@ -4484,10 +4486,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"secrets",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.SecretsTable,
-			Columns: organization.SecretsPrimaryKey,
+			Columns: []string{organization.SecretsColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -11517,6 +11519,11 @@ func (f *HushFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(hush.FieldDeletedBy))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *HushFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(hush.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *HushFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(hush.FieldName))
@@ -11542,6 +11549,20 @@ func (f *HushFilter) WhereSecretValue(p entql.StringP) {
 	f.Where(p.Field(hush.FieldSecretValue))
 }
 
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *HushFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *HushFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
 func (f *HushFilter) WhereHasIntegrations() {
 	f.Where(entql.HasEdge("integrations"))
@@ -11550,20 +11571,6 @@ func (f *HushFilter) WhereHasIntegrations() {
 // WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
 func (f *HushFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
 	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasOrganization applies a predicate to check if query has an edge organization.
-func (f *HushFilter) WhereHasOrganization() {
-	f.Where(entql.HasEdge("organization"))
-}
-
-// WhereHasOrganizationWith applies a predicate to check if query has an edge organization with a given conditions (other predicates).
-func (f *HushFilter) WhereHasOrganizationWith(preds ...predicate.Organization) {
-	f.Where(entql.HasEdgeWith("organization", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11667,6 +11674,11 @@ func (f *HushHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 // WhereDeletedBy applies the entql string predicate on the deleted_by field.
 func (f *HushHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(hushhistory.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *HushHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(hushhistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.

@@ -1265,12 +1265,21 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "secret_name", Type: field.TypeString, Nullable: true},
 		{Name: "secret_value", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// HushesTable holds the schema information for the "hushes" table.
 	HushesTable = &schema.Table{
 		Name:       "hushes",
 		Columns:    HushesColumns,
 		PrimaryKey: []*schema.Column{HushesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "hushes_organizations_secrets",
+				Columns:    []*schema.Column{HushesColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// HushHistoryColumns holds the columns for the "hush_history" table.
 	HushHistoryColumns = []*schema.Column{
@@ -1284,6 +1293,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
@@ -4408,31 +4418,6 @@ var (
 			},
 		},
 	}
-	// OrganizationSecretsColumns holds the columns for the "organization_secrets" table.
-	OrganizationSecretsColumns = []*schema.Column{
-		{Name: "organization_id", Type: field.TypeString},
-		{Name: "hush_id", Type: field.TypeString},
-	}
-	// OrganizationSecretsTable holds the schema information for the "organization_secrets" table.
-	OrganizationSecretsTable = &schema.Table{
-		Name:       "organization_secrets",
-		Columns:    OrganizationSecretsColumns,
-		PrimaryKey: []*schema.Column{OrganizationSecretsColumns[0], OrganizationSecretsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "organization_secrets_organization_id",
-				Columns:    []*schema.Column{OrganizationSecretsColumns[0]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "organization_secrets_hush_id",
-				Columns:    []*schema.Column{OrganizationSecretsColumns[1]},
-				RefColumns: []*schema.Column{HushesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// OrganizationSettingFilesColumns holds the columns for the "organization_setting_files" table.
 	OrganizationSettingFilesColumns = []*schema.Column{
 		{Name: "organization_setting_id", Type: field.TypeString},
@@ -5384,7 +5369,6 @@ var (
 		OrganizationPersonalAccessTokensTable,
 		OrganizationFilesTable,
 		OrganizationEventsTable,
-		OrganizationSecretsTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		ProcedureBlockedGroupsTable,
@@ -5500,6 +5484,7 @@ func init() {
 	GroupSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_setting_history",
 	}
+	HushesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
@@ -5711,8 +5696,6 @@ func init() {
 	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationEventsTable.ForeignKeys[1].RefTable = EventsTable
-	OrganizationSecretsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable

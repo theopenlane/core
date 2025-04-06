@@ -11482,6 +11482,21 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			h.withOwner = query
+			if _, ok := fieldSeen[hush.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldOwnerID)
+				fieldSeen[hush.FieldOwnerID] = struct{}{}
+			}
+
 		case "integrations":
 			var (
 				alias = field.Alias
@@ -11529,10 +11544,10 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -11540,10 +11555,10 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 					h.loadTotal = append(h.loadTotal, func(_ context.Context, nodes []*Hush) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Integrations)
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -11572,19 +11587,6 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				query = pager.applyOrder(query)
 			}
 			h.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
-				*wq = *query
-			})
-
-		case "organization":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: h.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			h.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -11709,6 +11711,11 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[hush.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, hush.FieldDeletedBy)
 				fieldSeen[hush.FieldDeletedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[hush.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldOwnerID)
+				fieldSeen[hush.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[hush.FieldName]; !ok {
@@ -11864,6 +11871,11 @@ func (hh *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[hushhistory.FieldDeletedBy]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldDeletedBy)
 				fieldSeen[hushhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[hushhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldOwnerID)
+				fieldSeen[hushhistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[hushhistory.FieldName]; !ok {
@@ -16802,17 +16814,13 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_id"`
+							NodeID string `sql:"owner_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(organization.SecretsTable)
-							s.Join(joinT).On(s.C(hush.FieldID), joinT.C(organization.SecretsPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(organization.SecretsPrimaryKey[0]), ids...))
-							s.Select(joinT.C(organization.SecretsPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(organization.SecretsPrimaryKey[0]))
+							s.Where(sql.InValues(s.C(organization.SecretsColumn), ids...))
 						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.SecretsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -16857,7 +16865,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.SecretsPrimaryKey[0], limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.SecretsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {

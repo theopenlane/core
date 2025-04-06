@@ -3547,14 +3547,14 @@ func (c *GroupSettingUpdateOne) SetInput(i UpdateGroupSettingInput) *GroupSettin
 
 // CreateHushInput represents a mutation input for creating hushes.
 type CreateHushInput struct {
-	Name            string
-	Description     *string
-	Kind            *string
-	SecretName      *string
-	SecretValue     *string
-	IntegrationIDs  []string
-	OrganizationIDs []string
-	EventIDs        []string
+	Name           string
+	Description    *string
+	Kind           *string
+	SecretName     *string
+	SecretValue    *string
+	OwnerID        *string
+	IntegrationIDs []string
+	EventIDs       []string
 }
 
 // Mutate applies the CreateHushInput on the HushMutation builder.
@@ -3572,11 +3572,11 @@ func (i *CreateHushInput) Mutate(m *HushMutation) {
 	if v := i.SecretValue; v != nil {
 		m.SetSecretValue(*v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
-	}
-	if v := i.OrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -3591,20 +3591,19 @@ func (c *HushCreate) SetInput(i CreateHushInput) *HushCreate {
 
 // UpdateHushInput represents a mutation input for updating hushes.
 type UpdateHushInput struct {
-	Name                  *string
-	ClearDescription      bool
-	Description           *string
-	ClearKind             bool
-	Kind                  *string
-	ClearIntegrations     bool
-	AddIntegrationIDs     []string
-	RemoveIntegrationIDs  []string
-	ClearOrganization     bool
-	AddOrganizationIDs    []string
-	RemoveOrganizationIDs []string
-	ClearEvents           bool
-	AddEventIDs           []string
-	RemoveEventIDs        []string
+	Name                 *string
+	ClearDescription     bool
+	Description          *string
+	ClearKind            bool
+	Kind                 *string
+	ClearOwner           bool
+	OwnerID              *string
+	ClearIntegrations    bool
+	AddIntegrationIDs    []string
+	RemoveIntegrationIDs []string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
 }
 
 // Mutate applies the UpdateHushInput on the HushMutation builder.
@@ -3624,6 +3623,12 @@ func (i *UpdateHushInput) Mutate(m *HushMutation) {
 	if v := i.Kind; v != nil {
 		m.SetKind(*v)
 	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
 	}
@@ -3632,15 +3637,6 @@ func (i *UpdateHushInput) Mutate(m *HushMutation) {
 	}
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
-	}
-	if i.ClearOrganization {
-		m.ClearOrganization()
-	}
-	if v := i.AddOrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
-	if v := i.RemoveOrganizationIDs; len(v) > 0 {
-		m.RemoveOrganizationIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
