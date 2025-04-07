@@ -244,7 +244,7 @@ steps:
         if: build.branch != "main" && build.tag == null
         commands: |
           #!/bin/bash
-          ls
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
@@ -279,7 +279,7 @@ steps:
         if: build.branch == "main" && build.tag == null
         commands: |
           #!/bin/bash
-          ls
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
@@ -345,6 +345,7 @@ steps:
         if: build.tag != null
         commands: |
           #!/bin/bash
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
