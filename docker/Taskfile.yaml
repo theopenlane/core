@@ -1,5 +1,8 @@
 version: "3"
 
+env:
+  COMPOSE_PROJECT_NAME: openlane
+
 tasks:
   build:
     dir: ..
@@ -36,7 +39,7 @@ tasks:
     dir: ..
     desc: brings up the compose environment for the core server using the published docker image. currently this will only work on x86 machines as its built using an x86 server
     cmds:
-      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-published.yml -p core up -d"
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-published.yml up -d"
 
   core:published:down:
     dir: ..
