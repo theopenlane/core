@@ -249,7 +249,7 @@ steps:
           - artifacts#v1.9.4:
               download:
                 - from: "bin/${APP_NAME}"
-                  to: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
               step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
@@ -284,7 +284,7 @@ steps:
           - artifacts#v1.9.4:
               download:
                 - from: "bin/${APP_NAME}"
-                  to: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
               step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
@@ -349,7 +349,7 @@ steps:
           - artifacts#v1.9.4:
               download:
                 - from: "bin/${APP_NAME}"
-                  to: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
               step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
