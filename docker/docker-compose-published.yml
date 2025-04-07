@@ -13,7 +13,7 @@ services:
         source: ../config/.config.yaml
         target: /config/.config.yaml
     ports:
-      - "17608:17608"
+      - "17612:17608"
     restart: unless-stopped
     environment:
       - CORE_REDIS_ADDRESS=redis:6379

@@ -3,7 +3,7 @@ services:
     image: envoyproxy/envoy:contrib-v1.30-latest
     ports:
       - "${PORT_PROXY:-10000}:10000"
-      - "${PORT_ADMIN:-8001}:8001"
+      - "${PORT_ADMIN:-8003}:8001"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
 

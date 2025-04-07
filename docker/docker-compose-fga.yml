@@ -39,12 +39,12 @@ services:
       retries: 3
     ports:
       # Needed for the http server
-      - "8080:8080"
+      - "8082:8080"
       # Needed for the grpc server (if used)
-      - "8081:8081"
+      - "8083:8081"
       # Needed for the playground (Do not enable in prod!)
-      - "3000:3000"
+      - "3002:3000"
       # Needed for the prometheus metrics
-      - "2112:2112" #prometheus metrics
+      - "2110:2112" #prometheus metrics
     networks:
       - default

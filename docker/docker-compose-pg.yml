@@ -3,7 +3,7 @@ services:
     image: postgres:17
     command: postgres -c 'max_connections=150'
     ports:
-      - "5432:5432"
+      - "5430:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -25,6 +25,6 @@ services:
       - DATA_SOURCE_USER=postgres
       - DATA_SOURCE_PASS=password
     ports:
-      - "9187:9187"
+      - "9185:9187"
     depends_on:
       - postgres
