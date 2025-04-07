@@ -7,6 +7,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -17,7 +18,7 @@ import (
 )
 
 // UpdateTaskComment is the resolver for the updateTaskComment field.
-func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput) (*model.TaskUpdatePayload, error) {
+func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})

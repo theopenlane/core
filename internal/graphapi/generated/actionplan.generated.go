@@ -120,7 +120,7 @@ type MutationResolver interface {
 	CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error)
 	UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error)
 	DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error)
-	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput) (*model.TaskUpdatePayload, error)
+	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error)
 	CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error)
 	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
 	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error)
@@ -5990,6 +5990,11 @@ func (ec *executionContext) field_Mutation_updateTaskComment_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateTaskComment_argsNoteFiles(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFiles"] = arg2
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_updateTaskComment_argsID(
@@ -6025,6 +6030,24 @@ func (ec *executionContext) field_Mutation_updateTaskComment_argsInput(
 	}
 
 	var zeroVal generated.UpdateNoteInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateTaskComment_argsNoteFiles(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*graphql.Upload, error) {
+	if _, ok := rawArgs["noteFiles"]; !ok {
+		var zeroVal []*graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("noteFiles"))
+	if tmp, ok := rawArgs["noteFiles"]; ok {
+		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*graphql.Upload
 	return zeroVal, nil
 }
 
@@ -12636,7 +12659,7 @@ func (ec *executionContext) _Mutation_updateTaskComment(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTaskComment(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput))
+		return ec.resolvers.Mutation().UpdateTaskComment(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
