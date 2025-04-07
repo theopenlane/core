@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/theopenlane/core:2830-33bc5a3a
+    image: ghcr.io/theopenlane/core:2864-d64de915
     depends_on:
       - openfga
     command:
