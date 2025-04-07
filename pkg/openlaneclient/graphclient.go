@@ -325,7 +325,7 @@ type OpenlaneGraphClient interface {
 	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
 	GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
-	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
+	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
 	UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error)
 	GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error)
 	GetTaskHistories(ctx context.Context, where *TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTaskHistories, error)
@@ -54810,14 +54810,69 @@ func (t *UpdateTask_UpdateTask_Task_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
+type UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges struct {
+	Node *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges) GetNode() *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files struct {
+	Edges []*UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files) GetEdges() []*UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type UpdateTask_UpdateTask_Task_Comments_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                               "json:\"displayID\" graphql:\"displayID\""
+	Files     UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                               "json:\"id\" graphql:\"id\""
+	Text      string                                               "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node) GetCreatedAt() *time.Time {
@@ -54837,6 +54892,12 @@ func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node) GetDisplayID() string {
 		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node) GetFiles() *UpdateTask_UpdateTask_Task_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Comments_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *UpdateTask_UpdateTask_Task_Comments_Edges_Node) GetID() string {
 	if t == nil {
@@ -78503,8 +78564,8 @@ func (c *Client) GetTasks(ctx context.Context, where *TaskWhereInput, intercepto
 	return &res, nil
 }
 
-const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
-	updateTask(id: $updateTaskId, input: $input) {
+const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!, $noteFiles: [Upload!]) {
+	updateTask(id: $updateTaskId, input: $input, noteFiles: $noteFiles) {
 		task {
 			assignee {
 				id
@@ -78532,6 +78593,16 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 						createdBy
 						updatedAt
 						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
 					}
 				}
 			}
@@ -78548,10 +78619,11 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 }
 `
 
-func (c *Client) UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error) {
+func (c *Client) UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error) {
 	vars := map[string]any{
 		"updateTaskId": updateTaskID,
 		"input":        input,
+		"noteFiles":    noteFiles,
 	}
 
 	var res UpdateTask

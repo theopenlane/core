@@ -76,7 +76,7 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 }
 
 // UpdateTask is the resolver for the updateTask field.
-func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
+func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})

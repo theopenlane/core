@@ -1931,7 +1931,7 @@ type ComplexityRoot struct {
 		UpdateSubcontrol                   func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubscriber                   func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                   func(childComplexity int, input generated.UpdateTFASettingInput) int
-		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput, noteFiles []*graphql.Upload) int
 		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -13682,7 +13682,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTask(childComplexity, args["id"].(string), args["input"].(generated.UpdateTaskInput)), true
+		return e.complexity.Mutation.UpdateTask(childComplexity, args["id"].(string), args["input"].(generated.UpdateTaskInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTaskComment":
 		if e.complexity.Mutation.UpdateTaskComment == nil {
@@ -67055,6 +67055,10 @@ extend type Mutation{
         New values for the task
         """
         input: UpdateTaskInput!
+        """
+        Files to attach to the comment when adding a new comment
+        """
+        noteFiles: [Upload!]
     ): TaskUpdatePayload!
     """
     Delete an existing task

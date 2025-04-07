@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -419,7 +420,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			)
 
 			if tc.request != nil {
-				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request)
+				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request, []*graphql.Upload{})
 				if tc.expectedErr != "" {
 					require.Error(t, err)
 					assert.ErrorContains(t, err, tc.expectedErr)
@@ -428,8 +429,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 					return
 				}
 			} else if tc.updateCommentRequest != nil {
-				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest)
-
+				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, []*graphql.Upload{})
 			}
 
 			if tc.expectedErr != "" {

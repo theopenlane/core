@@ -309,8 +309,8 @@ query GetTasks($where: TaskWhereInput) {
   }
 }
 
-mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
-  updateTask(id: $updateTaskId, input: $input) {
+mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!, $noteFiles: [Upload!]) {
+  updateTask(id: $updateTaskId, input: $input, noteFiles: $noteFiles) {
     task {
       assignee {
         id
@@ -338,6 +338,16 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
             createdBy
             updatedAt
             updatedBy
+            files {
+              edges {
+                node {
+                  id
+                  storagePath
+                  storageScheme
+                  storageVolume
+                }
+              }
+            }
           }
         }
       }

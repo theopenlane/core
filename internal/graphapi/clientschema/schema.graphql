@@ -19811,6 +19811,11 @@ type Mutation {
 		New values for the task
 		"""
 		input: UpdateTaskInput!
+
+		"""
+		Files to attach to the comment when adding a new comment
+		"""
+		noteFiles: [Upload!]
 	): TaskUpdatePayload!
 	"""
 	Delete an existing task

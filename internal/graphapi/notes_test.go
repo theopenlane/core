@@ -4,9 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -15,9 +17,22 @@ func (suite *GraphTestSuite) TestMutationUpdateNote() {
 
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	require.NoError(t, err)
+
+	csvFile, err := objects.NewUploadFile("testdata/uploads/orgs.csv")
+	require.NoError(t, err)
+
+	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	require.NoError(t, err)
+
+	txtFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateTaskInput
+		files       []*graphql.Upload
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
@@ -33,11 +48,50 @@ func (suite *GraphTestSuite) TestMutationUpdateNote() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path with PAT",
+			name: "happy path with file upload - PNG",
 			request: openlaneclient.UpdateTaskInput{
 				AddComment: &openlaneclient.CreateNoteInput{
-					Text:    "This is a test note using PAT",
+					Text:    "This is a test note with PNG file",
 					OwnerID: &testUser1.OrganizationID,
+				},
+			},
+			files: []*graphql.Upload{
+				{
+					File:        pngFile.File,
+					Filename:    pngFile.Filename,
+					Size:        pngFile.Size,
+					ContentType: pngFile.ContentType,
+				},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path with multiple file uploads",
+			request: openlaneclient.UpdateTaskInput{
+				AddComment: &openlaneclient.CreateNoteInput{
+					Text:    "This is a test note with multiple files",
+					OwnerID: &testUser1.OrganizationID,
+				},
+			},
+			files: []*graphql.Upload{
+				{
+					File:        csvFile.File,
+					Filename:    csvFile.Filename,
+					Size:        csvFile.Size,
+					ContentType: csvFile.ContentType,
+				},
+				{
+					File:        pdfFile.File,
+					Filename:    pdfFile.Filename,
+					Size:        pdfFile.Size,
+					ContentType: pdfFile.ContentType,
+				},
+				{
+					File:        txtFile.File,
+					Filename:    txtFile.Filename,
+					Size:        txtFile.Size,
+					ContentType: txtFile.ContentType,
 				},
 			},
 			client: suite.client.apiWithPAT,
@@ -79,8 +133,11 @@ func (suite *GraphTestSuite) TestMutationUpdateNote() {
 
 	for idx, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if len(tc.files) > 0 {
+				expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
+			}
 
-			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request)
+			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request, tc.files)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -102,6 +159,10 @@ func (suite *GraphTestSuite) TestMutationUpdateNote() {
 
 			_, err = tc.client.GetNoteByID(tc.ctx, noteID)
 			require.NoError(t, err)
+
+			if tc.files != nil && len(tc.files) > 0 {
+				assert.Len(t, resp.UpdateTask.Task.Comments.Edges[idx].Node.Files.Edges, len(tc.files))
+			}
 		})
 	}
 }
@@ -113,7 +174,7 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 
 	testCases := []struct {
 		name        string
-		request     func() openlaneclient.UpdateTaskInput // changed to function to get fresh note ID each time
+		request     func() openlaneclient.UpdateTaskInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
@@ -125,7 +186,7 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 					AddComment: &openlaneclient.CreateNoteInput{
 						Text: "Note to be deleted",
 					},
-				})
+				}, []*graphql.Upload{})
 				require.NoError(t, err)
 				require.NotNil(t, createResp)
 				require.NotNil(t, createResp.UpdateTask.Task.Comments)
@@ -146,7 +207,7 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 					AddComment: &openlaneclient.CreateNoteInput{
 						Text: "Note to be deleted with PAT",
 					},
-				})
+				}, []*graphql.Upload{})
 				require.NoError(t, err)
 				require.NotNil(t, createResp)
 				require.NotNil(t, createResp.UpdateTask.Task.Comments)
@@ -175,7 +236,7 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			request := tc.request() // get fresh request with new note
-			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, request)
+			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, request, []*graphql.Upload{})
 			if tc.expectedErr != "" {
 				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -206,7 +267,7 @@ func (suite *GraphTestSuite) TestQueryNote() {
 		AddComment: &openlaneclient.CreateNoteInput{
 			Text: "Note for querying",
 		},
-	})
+	}, []*graphql.Upload{})
 	require.NoError(t, err)
 	require.NotNil(t, createResp)
 	require.NotNil(t, createResp.UpdateTask.Task.Comments)
