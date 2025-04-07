@@ -265,7 +265,7 @@ steps:
                 - "${IMAGE_TAG}"
           - theopenlane/container-build#v1.1.1:
               dockerfile: docker/Dockerfile
-              push: false
+              push: true
               build-args:
                 - NAME=${APP_NAME}
           - equinixmetal-buildkite/trivy#v1.19.0:
