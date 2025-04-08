@@ -336,6 +336,9 @@ func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n 
 	if cihu.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
+	if cihu.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := cihu.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 	}
@@ -722,6 +725,9 @@ func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context)
 	}
 	if cihuo.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
+	}
+	if cihuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := cihuo.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)

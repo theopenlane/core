@@ -105,6 +105,14 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
+	if approverID, exists := m.ApproverID(); exists {
+		create = create.SetApproverID(approverID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -241,6 +249,18 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetReviewFrequency(actionplan.ReviewFrequency)
 		}
 
+		if approverID, exists := m.ApproverID(); exists {
+			create = create.SetApproverID(approverID)
+		} else {
+			create = create.SetApproverID(actionplan.ApproverID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(actionplan.DelegateID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -312,6 +332,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetApprovalRequired(actionplan.ApprovalRequired).
 			SetReviewDue(actionplan.ReviewDue).
 			SetReviewFrequency(actionplan.ReviewFrequency).
+			SetApproverID(actionplan.ApproverID).
+			SetDelegateID(actionplan.DelegateID).
 			SetOwnerID(actionplan.OwnerID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
@@ -623,10 +645,6 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
@@ -689,6 +707,18 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if references, exists := m.References(); exists {
 		create = create.SetReferences(references)
+	}
+
+	if controlOwnerID, exists := m.ControlOwnerID(); exists {
+		create = create.SetControlOwnerID(controlOwnerID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -775,12 +805,6 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(control.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(control.OwnerID)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -879,6 +903,24 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReferences(control.References)
 		}
 
+		if controlOwnerID, exists := m.ControlOwnerID(); exists {
+			create = create.SetControlOwnerID(controlOwnerID)
+		} else {
+			create = create.SetControlOwnerID(control.ControlOwnerID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(control.DelegateID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(control.OwnerID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -931,7 +973,6 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(control.DeletedBy).
 			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
-			SetOwnerID(control.OwnerID).
 			SetDescription(control.Description).
 			SetReferenceID(control.ReferenceID).
 			SetAuditorReferenceID(control.AuditorReferenceID).
@@ -948,6 +989,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
 			SetReferences(control.References).
+			SetControlOwnerID(control.ControlOwnerID).
+			SetDelegateID(control.DelegateID).
+			SetOwnerID(control.OwnerID).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -1000,6 +1044,10 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -1094,6 +1142,12 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetTags(controlimplementation.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(controlimplementation.OwnerID)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -1163,6 +1217,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetDeletedAt(controlimplementation.DeletedAt).
 			SetDeletedBy(controlimplementation.DeletedBy).
 			SetTags(controlimplementation.Tags).
+			SetOwnerID(controlimplementation.OwnerID).
 			SetStatus(controlimplementation.Status).
 			SetImplementationDate(controlimplementation.ImplementationDate).
 			SetVerified(controlimplementation.Verified).
@@ -3539,6 +3594,10 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -3625,6 +3684,12 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedBy(hush.DeletedBy)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(hush.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -3693,6 +3758,7 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedBy(hush.UpdatedBy).
 			SetDeletedAt(hush.DeletedAt).
 			SetDeletedBy(hush.DeletedBy).
+			SetOwnerID(hush.OwnerID).
 			SetName(hush.Name).
 			SetDescription(hush.Description).
 			SetKind(hush.Kind).
@@ -3997,6 +4063,14 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
+	if approverID, exists := m.ApproverID(); exists {
+		create = create.SetApproverID(approverID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4129,6 +4203,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetReviewFrequency(internalpolicy.ReviewFrequency)
 		}
 
+		if approverID, exists := m.ApproverID(); exists {
+			create = create.SetApproverID(approverID)
+		} else {
+			create = create.SetApproverID(internalpolicy.ApproverID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(internalpolicy.DelegateID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4178,6 +4264,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetApprovalRequired(internalpolicy.ApprovalRequired).
 			SetReviewDue(internalpolicy.ReviewDue).
 			SetReviewFrequency(internalpolicy.ReviewFrequency).
+			SetApproverID(internalpolicy.ApproverID).
+			SetDelegateID(internalpolicy.DelegateID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5895,6 +5983,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
+	if approverID, exists := m.ApproverID(); exists {
+		create = create.SetApproverID(approverID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6027,6 +6123,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(procedure.ReviewFrequency)
 		}
 
+		if approverID, exists := m.ApproverID(); exists {
+			create = create.SetApproverID(approverID)
+		} else {
+			create = create.SetApproverID(procedure.ApproverID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(procedure.DelegateID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6076,6 +6184,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetApprovalRequired(procedure.ApprovalRequired).
 			SetReviewDue(procedure.ReviewDue).
 			SetReviewFrequency(procedure.ReviewFrequency).
+			SetApproverID(procedure.ApproverID).
+			SetDelegateID(procedure.DelegateID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6634,6 +6744,14 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetBusinessCosts(businessCosts)
 	}
 
+	if stakeholderID, exists := m.StakeholderID(); exists {
+		create = create.SetStakeholderID(stakeholderID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6778,6 +6896,18 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetBusinessCosts(risk.BusinessCosts)
 		}
 
+		if stakeholderID, exists := m.StakeholderID(); exists {
+			create = create.SetStakeholderID(stakeholderID)
+		} else {
+			create = create.SetStakeholderID(risk.StakeholderID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(risk.DelegateID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6829,6 +6959,8 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMitigation(risk.Mitigation).
 			SetDetails(risk.Details).
 			SetBusinessCosts(risk.BusinessCosts).
+			SetStakeholderID(risk.StakeholderID).
+			SetDelegateID(risk.DelegateID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7224,10 +7356,6 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTags(tags)
 	}
 
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
@@ -7290,6 +7418,18 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if references, exists := m.References(); exists {
 		create = create.SetReferences(references)
+	}
+
+	if controlOwnerID, exists := m.ControlOwnerID(); exists {
+		create = create.SetControlOwnerID(controlOwnerID)
+	}
+
+	if delegateID, exists := m.DelegateID(); exists {
+		create = create.SetDelegateID(delegateID)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -7376,12 +7516,6 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(subcontrol.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(subcontrol.OwnerID)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -7480,6 +7614,24 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetReferences(subcontrol.References)
 		}
 
+		if controlOwnerID, exists := m.ControlOwnerID(); exists {
+			create = create.SetControlOwnerID(controlOwnerID)
+		} else {
+			create = create.SetControlOwnerID(subcontrol.ControlOwnerID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		} else {
+			create = create.SetDelegateID(subcontrol.DelegateID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(subcontrol.OwnerID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -7532,7 +7684,6 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(subcontrol.DeletedBy).
 			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
-			SetOwnerID(subcontrol.OwnerID).
 			SetDescription(subcontrol.Description).
 			SetReferenceID(subcontrol.ReferenceID).
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
@@ -7549,6 +7700,9 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
 			SetReferences(subcontrol.References).
+			SetControlOwnerID(subcontrol.ControlOwnerID).
+			SetDelegateID(subcontrol.DelegateID).
+			SetOwnerID(subcontrol.OwnerID).
 			SetRefCode(subcontrol.RefCode).
 			SetControlID(subcontrol.ControlID).
 			Save(ctx)

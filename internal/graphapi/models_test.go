@@ -12,6 +12,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -217,9 +218,13 @@ type ControlBuilder struct {
 	client *client
 
 	// Fields
-	Name       string
-	ProgramID  string
-	StandardID string
+	Name                    string
+	ProgramID               string
+	StandardID              string
+	ControlOwnerID          string
+	ControlViewerGroupID    string
+	ControlEditorGroupID    string
+	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
 	AllFields bool
 }
@@ -250,6 +255,7 @@ type StandardBuilder struct {
 	IsPublic  bool
 }
 
+<<<<<<< HEAD
 type NoteBuilder struct {
 	client *client
 
@@ -258,6 +264,17 @@ type NoteBuilder struct {
 	OwnerID string
 	TaskID  string
 	FileIDs []string
+||||||| 35d12dda
+=======
+type ControlImplementationBuilder struct {
+	client *client
+
+	// Fields
+	Details            string
+	ImplementationDate time.Time
+	ControlIDs         []string
+	SubcontrolIDs      []string
+>>>>>>> origin/main
 }
 
 // Faker structs with random injected data
@@ -322,10 +339,7 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSu
 // setContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func setContext(ctx context.Context, db *ent.Client) context.Context {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// add client to context
-	return ent.NewContext(ctx, db)
+	return ent.NewContext(rule.WithInternalContext(ctx), db)
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
@@ -893,6 +907,22 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		mutation.SetStandardID(c.StandardID)
 	}
 
+	if c.ControlOwnerID != "" {
+		mutation.SetControlOwnerID(c.ControlOwnerID)
+	}
+
+	if c.ControlViewerGroupID != "" {
+		mutation.AddViewerIDs(c.ControlViewerGroupID)
+	}
+
+	if c.ControlEditorGroupID != "" {
+		mutation.AddEditorIDs(c.ControlEditorGroupID)
+	}
+
+	if c.ControlImplementationID != "" {
+		mutation.AddControlImplementationIDs(c.ControlImplementationID)
+	}
+
 	if c.AllFields {
 		mutation.SetDescription(gofakeit.HipsterSentence(5)).
 			SetCategory(gofakeit.Adjective()).
@@ -1001,6 +1031,7 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 	return Standard
 }
 
+<<<<<<< HEAD
 // MustNew note builder is used to create, without authz checks, notes in the database
 func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	ctx = setContext(ctx, n.client.db)
@@ -1027,4 +1058,37 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	note := mutation.SaveX(ctx)
 
 	return note
+||||||| 35d12dda
+=======
+// MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
+func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlImplementation {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if e.Details == "" {
+		e.Details = gofakeit.Paragraph(3, 4, 300, "<br />")
+	}
+
+	if e.ImplementationDate.IsZero() {
+		e.ImplementationDate = time.Now()
+	}
+
+	mutation := e.client.db.ControlImplementation.Create().
+		SetDetails(e.Details).
+		SetImplementationDate(e.ImplementationDate)
+
+	if len(e.ControlIDs) > 0 {
+		mutation.AddControlIDs(e.ControlIDs...)
+	}
+
+	if len(e.SubcontrolIDs) > 0 {
+		mutation.AddSubcontrolIDs(e.SubcontrolIDs...)
+	}
+
+	controlImplementation, err := mutation.
+		Save(ctx)
+
+	require.NoError(t, err)
+
+	return controlImplementation
+>>>>>>> origin/main
 }

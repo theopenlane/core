@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -87,10 +89,10 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "owner":
+				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "organization":
-				return ec.fieldContext_Hush_organization(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}
@@ -153,6 +155,8 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -161,10 +165,10 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "owner":
+				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "organization":
-				return ec.fieldContext_Hush_organization(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}
@@ -271,6 +275,8 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -279,10 +285,10 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "owner":
+				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "organization":
-				return ec.fieldContext_Hush_organization(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}

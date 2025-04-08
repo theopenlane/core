@@ -117,10 +117,12 @@ type ComplexityRoot struct {
 		ActionPlanType   func(childComplexity int) int
 		ApprovalRequired func(childComplexity int) int
 		Approver         func(childComplexity int) int
+		ApproverID       func(childComplexity int) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
 		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
@@ -169,8 +171,10 @@ type ComplexityRoot struct {
 	ActionPlanHistory struct {
 		ActionPlanType   func(childComplexity int) int
 		ApprovalRequired func(childComplexity int) int
+		ApproverID       func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
 		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
@@ -328,11 +332,13 @@ type ComplexityRoot struct {
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner           func(childComplexity int) int
+		ControlOwnerID         func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
 		ControlType            func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Delegate               func(childComplexity int) int
+		DelegateID             func(childComplexity int) int
 		DeletedAt              func(childComplexity int) int
 		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
@@ -396,10 +402,12 @@ type ComplexityRoot struct {
 		AuditorReferenceID     func(childComplexity int) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
+		ControlOwnerID         func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
 		ControlType            func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
+		DelegateID             func(childComplexity int) int
 		DeletedAt              func(childComplexity int) int
 		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
@@ -444,7 +452,10 @@ type ComplexityRoot struct {
 		Details            func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
 		Status             func(childComplexity int) int
+		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags               func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 		UpdatedBy          func(childComplexity int) int
@@ -485,6 +496,7 @@ type ComplexityRoot struct {
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
 		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
 		Ref                func(childComplexity int) int
 		Status             func(childComplexity int) int
 		Tags               func(childComplexity int) int
@@ -1403,7 +1415,8 @@ type ComplexityRoot struct {
 		Integrations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
-		Organization func(childComplexity int) int
+		Owner        func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
 		SecretName   func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
@@ -1443,6 +1456,7 @@ type ComplexityRoot struct {
 		Kind        func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		SecretName  func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
@@ -1545,12 +1559,14 @@ type ComplexityRoot struct {
 	InternalPolicy struct {
 		ApprovalRequired  func(childComplexity int) int
 		Approver          func(childComplexity int) int
+		ApproverID        func(childComplexity int) int
 		BlockedGroups     func(childComplexity int) int
 		ControlObjectives func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		Delegate          func(childComplexity int) int
+		DelegateID        func(childComplexity int) int
 		DeletedAt         func(childComplexity int) int
 		DeletedBy         func(childComplexity int) int
 		Details           func(childComplexity int) int
@@ -1599,8 +1615,10 @@ type ComplexityRoot struct {
 
 	InternalPolicyHistory struct {
 		ApprovalRequired func(childComplexity int) int
+		ApproverID       func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
 		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
@@ -2256,6 +2274,7 @@ type ComplexityRoot struct {
 		Children                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		Contacts                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ControlCreators          func(childComplexity int) int
+		ControlImplementations   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectiveCreators func(childComplexity int) int
 		ControlObjectives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -2526,11 +2545,13 @@ type ComplexityRoot struct {
 	Procedure struct {
 		ApprovalRequired func(childComplexity int) int
 		Approver         func(childComplexity int) int
+		ApproverID       func(childComplexity int) int
 		BlockedGroups    func(childComplexity int) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
 		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
@@ -2580,8 +2601,10 @@ type ComplexityRoot struct {
 
 	ProcedureHistory struct {
 		ApprovalRequired func(childComplexity int) int
+		ApproverID       func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
 		DeletedAt        func(childComplexity int) int
 		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
@@ -2987,6 +3010,7 @@ type ComplexityRoot struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Delegate      func(childComplexity int) int
+		DelegateID    func(childComplexity int) int
 		DeletedAt     func(childComplexity int) int
 		DeletedBy     func(childComplexity int) int
 		Details       func(childComplexity int) int
@@ -3004,6 +3028,7 @@ type ComplexityRoot struct {
 		RiskType      func(childComplexity int) int
 		Score         func(childComplexity int) int
 		Stakeholder   func(childComplexity int) int
+		StakeholderID func(childComplexity int) int
 		Status        func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
@@ -3039,6 +3064,7 @@ type ComplexityRoot struct {
 		Category      func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
+		DelegateID    func(childComplexity int) int
 		DeletedAt     func(childComplexity int) int
 		DeletedBy     func(childComplexity int) int
 		Details       func(childComplexity int) int
@@ -3054,6 +3080,7 @@ type ComplexityRoot struct {
 		Ref           func(childComplexity int) int
 		RiskType      func(childComplexity int) int
 		Score         func(childComplexity int) int
+		StakeholderID func(childComplexity int) int
 		Status        func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
@@ -3195,13 +3222,16 @@ type ComplexityRoot struct {
 		CategoryID             func(childComplexity int) int
 		Control                func(childComplexity int) int
 		ControlID              func(childComplexity int) int
+		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlOwner           func(childComplexity int) int
+		ControlOwnerID         func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
 		ControlType            func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Delegate               func(childComplexity int) int
+		DelegateID             func(childComplexity int) int
 		DeletedAt              func(childComplexity int) int
 		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
@@ -3260,10 +3290,12 @@ type ComplexityRoot struct {
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		ControlID              func(childComplexity int) int
+		ControlOwnerID         func(childComplexity int) int
 		ControlQuestions       func(childComplexity int) int
 		ControlType            func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
+		DelegateID             func(childComplexity int) int
 		DeletedAt              func(childComplexity int) int
 		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
@@ -4017,6 +4049,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ActionPlan.Approver(childComplexity), true
 
+	case "ActionPlan.approverID":
+		if e.complexity.ActionPlan.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ApproverID(childComplexity), true
+
 	case "ActionPlan.controls":
 		if e.complexity.ActionPlan.Controls == nil {
 			break
@@ -4049,6 +4088,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ActionPlan.Delegate(childComplexity), true
+
+	case "ActionPlan.delegateID":
+		if e.complexity.ActionPlan.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DelegateID(childComplexity), true
 
 	case "ActionPlan.deletedAt":
 		if e.complexity.ActionPlan.DeletedAt == nil {
@@ -4275,6 +4321,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ActionPlanHistory.ApprovalRequired(childComplexity), true
 
+	case "ActionPlanHistory.approverID":
+		if e.complexity.ActionPlanHistory.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.ApproverID(childComplexity), true
+
 	case "ActionPlanHistory.createdAt":
 		if e.complexity.ActionPlanHistory.CreatedAt == nil {
 			break
@@ -4288,6 +4341,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ActionPlanHistory.CreatedBy(childComplexity), true
+
+	case "ActionPlanHistory.delegateID":
+		if e.complexity.ActionPlanHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DelegateID(childComplexity), true
 
 	case "ActionPlanHistory.deletedAt":
 		if e.complexity.ActionPlanHistory.DeletedAt == nil {
@@ -5014,6 +5074,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.ControlOwner(childComplexity), true
 
+	case "Control.controlOwnerID":
+		if e.complexity.Control.ControlOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Control.ControlOwnerID(childComplexity), true
+
 	case "Control.controlQuestions":
 		if e.complexity.Control.ControlQuestions == nil {
 			break
@@ -5048,6 +5115,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Control.Delegate(childComplexity), true
+
+	case "Control.delegateID":
+		if e.complexity.Control.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.Control.DelegateID(childComplexity), true
 
 	case "Control.deletedAt":
 		if e.complexity.Control.DeletedAt == nil {
@@ -5409,6 +5483,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.CategoryID(childComplexity), true
 
+	case "ControlHistory.controlOwnerID":
+		if e.complexity.ControlHistory.ControlOwnerID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ControlOwnerID(childComplexity), true
+
 	case "ControlHistory.controlQuestions":
 		if e.complexity.ControlHistory.ControlQuestions == nil {
 			break
@@ -5436,6 +5517,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlHistory.CreatedBy(childComplexity), true
+
+	case "ControlHistory.delegateID":
+		if e.complexity.ControlHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.DelegateID(childComplexity), true
 
 	case "ControlHistory.deletedAt":
 		if e.complexity.ControlHistory.DeletedAt == nil {
@@ -5687,12 +5775,38 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlImplementation.ImplementationDate(childComplexity), true
 
+	case "ControlImplementation.owner":
+		if e.complexity.ControlImplementation.Owner == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.Owner(childComplexity), true
+
+	case "ControlImplementation.ownerID":
+		if e.complexity.ControlImplementation.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.OwnerID(childComplexity), true
+
 	case "ControlImplementation.status":
 		if e.complexity.ControlImplementation.Status == nil {
 			break
 		}
 
 		return e.complexity.ControlImplementation.Status(childComplexity), true
+
+	case "ControlImplementation.subcontrols":
+		if e.complexity.ControlImplementation.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_subcontrols_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlImplementation.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "ControlImplementation.tags":
 		if e.complexity.ControlImplementation.Tags == nil {
@@ -5847,6 +5961,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlImplementationHistory.Operation(childComplexity), true
+
+	case "ControlImplementationHistory.ownerID":
+		if e.complexity.ControlImplementationHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.OwnerID(childComplexity), true
 
 	case "ControlImplementationHistory.ref":
 		if e.complexity.ControlImplementationHistory.Ref == nil {
@@ -10116,12 +10237,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hush.Name(childComplexity), true
 
-	case "Hush.organization":
-		if e.complexity.Hush.Organization == nil {
+	case "Hush.owner":
+		if e.complexity.Hush.Owner == nil {
 			break
 		}
 
-		return e.complexity.Hush.Organization(childComplexity), true
+		return e.complexity.Hush.Owner(childComplexity), true
+
+	case "Hush.ownerID":
+		if e.complexity.Hush.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Hush.OwnerID(childComplexity), true
 
 	case "Hush.secretName":
 		if e.complexity.Hush.SecretName == nil {
@@ -10269,6 +10397,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.HushHistory.Operation(childComplexity), true
+
+	case "HushHistory.ownerID":
+		if e.complexity.HushHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.OwnerID(childComplexity), true
 
 	case "HushHistory.ref":
 		if e.complexity.HushHistory.Ref == nil {
@@ -10679,6 +10814,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicy.Approver(childComplexity), true
 
+	case "InternalPolicy.approverID":
+		if e.complexity.InternalPolicy.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ApproverID(childComplexity), true
+
 	case "InternalPolicy.blockedGroups":
 		if e.complexity.InternalPolicy.BlockedGroups == nil {
 			break
@@ -10730,6 +10872,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InternalPolicy.Delegate(childComplexity), true
+
+	case "InternalPolicy.delegateID":
+		if e.complexity.InternalPolicy.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DelegateID(childComplexity), true
 
 	case "InternalPolicy.deletedAt":
 		if e.complexity.InternalPolicy.DeletedAt == nil {
@@ -10961,6 +11110,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicyHistory.ApprovalRequired(childComplexity), true
 
+	case "InternalPolicyHistory.approverID":
+		if e.complexity.InternalPolicyHistory.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ApproverID(childComplexity), true
+
 	case "InternalPolicyHistory.createdAt":
 		if e.complexity.InternalPolicyHistory.CreatedAt == nil {
 			break
@@ -10974,6 +11130,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InternalPolicyHistory.CreatedBy(childComplexity), true
+
+	case "InternalPolicyHistory.delegateID":
+		if e.complexity.InternalPolicyHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DelegateID(childComplexity), true
 
 	case "InternalPolicyHistory.deletedAt":
 		if e.complexity.InternalPolicyHistory.DeletedAt == nil {
@@ -15240,6 +15403,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.ControlCreators(childComplexity), true
 
+	case "Organization.controlImplementations":
+		if e.complexity.Organization.ControlImplementations == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_controlImplementations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
 	case "Organization.controlObjectiveCreators":
 		if e.complexity.Organization.ControlObjectiveCreators == nil {
 			break
@@ -16614,6 +16789,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Procedure.Approver(childComplexity), true
 
+	case "Procedure.approverID":
+		if e.complexity.Procedure.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ApproverID(childComplexity), true
+
 	case "Procedure.blockedGroups":
 		if e.complexity.Procedure.BlockedGroups == nil {
 			break
@@ -16653,6 +16835,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Procedure.Delegate(childComplexity), true
+
+	case "Procedure.delegateID":
+		if e.complexity.Procedure.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DelegateID(childComplexity), true
 
 	case "Procedure.deletedAt":
 		if e.complexity.Procedure.DeletedAt == nil {
@@ -16896,6 +17085,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProcedureHistory.ApprovalRequired(childComplexity), true
 
+	case "ProcedureHistory.approverID":
+		if e.complexity.ProcedureHistory.ApproverID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ApproverID(childComplexity), true
+
 	case "ProcedureHistory.createdAt":
 		if e.complexity.ProcedureHistory.CreatedAt == nil {
 			break
@@ -16909,6 +17105,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProcedureHistory.CreatedBy(childComplexity), true
+
+	case "ProcedureHistory.delegateID":
+		if e.complexity.ProcedureHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DelegateID(childComplexity), true
 
 	case "ProcedureHistory.deletedAt":
 		if e.complexity.ProcedureHistory.DeletedAt == nil {
@@ -20153,6 +20356,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Risk.Delegate(childComplexity), true
 
+	case "Risk.delegateID":
+		if e.complexity.Risk.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.Risk.DelegateID(childComplexity), true
+
 	case "Risk.deletedAt":
 		if e.complexity.Risk.DeletedAt == nil {
 			break
@@ -20282,6 +20492,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Risk.Stakeholder(childComplexity), true
 
+	case "Risk.stakeholderID":
+		if e.complexity.Risk.StakeholderID == nil {
+			break
+		}
+
+		return e.complexity.Risk.StakeholderID(childComplexity), true
+
 	case "Risk.status":
 		if e.complexity.Risk.Status == nil {
 			break
@@ -20401,6 +20618,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RiskHistory.CreatedBy(childComplexity), true
 
+	case "RiskHistory.delegateID":
+		if e.complexity.RiskHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.DelegateID(childComplexity), true
+
 	case "RiskHistory.deletedAt":
 		if e.complexity.RiskHistory.DeletedAt == nil {
 			break
@@ -20505,6 +20729,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.RiskHistory.Score(childComplexity), true
+
+	case "RiskHistory.stakeholderID":
+		if e.complexity.RiskHistory.StakeholderID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.StakeholderID(childComplexity), true
 
 	case "RiskHistory.status":
 		if e.complexity.RiskHistory.Status == nil {
@@ -21146,6 +21377,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.ControlID(childComplexity), true
 
+	case "Subcontrol.controlImplementations":
+		if e.complexity.Subcontrol.ControlImplementations == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_controlImplementations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
 	case "Subcontrol.controlObjectives":
 		if e.complexity.Subcontrol.ControlObjectives == nil {
 			break
@@ -21164,6 +21407,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subcontrol.ControlOwner(childComplexity), true
+
+	case "Subcontrol.controlOwnerID":
+		if e.complexity.Subcontrol.ControlOwnerID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ControlOwnerID(childComplexity), true
 
 	case "Subcontrol.controlQuestions":
 		if e.complexity.Subcontrol.ControlQuestions == nil {
@@ -21199,6 +21449,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subcontrol.Delegate(childComplexity), true
+
+	case "Subcontrol.delegateID":
+		if e.complexity.Subcontrol.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.DelegateID(childComplexity), true
 
 	case "Subcontrol.deletedAt":
 		if e.complexity.Subcontrol.DeletedAt == nil {
@@ -21515,6 +21772,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.ControlID(childComplexity), true
 
+	case "SubcontrolHistory.controlOwnerID":
+		if e.complexity.SubcontrolHistory.ControlOwnerID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ControlOwnerID(childComplexity), true
+
 	case "SubcontrolHistory.controlQuestions":
 		if e.complexity.SubcontrolHistory.ControlQuestions == nil {
 			break
@@ -21542,6 +21806,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.CreatedBy(childComplexity), true
+
+	case "SubcontrolHistory.delegateID":
+		if e.complexity.SubcontrolHistory.DelegateID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.DelegateID(childComplexity), true
 
 	case "SubcontrolHistory.deletedAt":
 		if e.complexity.SubcontrolHistory.DeletedAt == nil {
@@ -25731,6 +26002,14 @@ type ActionPlan implements Node {
   """
   reviewFrequency: ActionPlanFrequency
   """
+  the id of the group responsible for approving the action_plan
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  delegateID: ID
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -25976,6 +26255,14 @@ type ActionPlanHistory implements Node {
   the frequency at which the action_plan should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ActionPlanHistoryFrequency
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  delegateID: String
   """
   the organization id that owns the object
   """
@@ -26346,6 +26633,42 @@ input ActionPlanHistoryWhereInput {
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
   """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -26663,6 +26986,42 @@ input ActionPlanWhereInput {
   reviewFrequencyNotIn: [ActionPlanFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner_id field predicates
   """
@@ -27611,10 +27970,6 @@ type Control implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -27679,6 +28034,18 @@ type Control implements Node {
   """
   references: [Reference!]
   """
+  the id of the group that owns the control
+  """
+  controlOwnerID: ID
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: ID
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -27686,51 +28053,6 @@ type Control implements Node {
   the id of the standard that the control belongs to, if applicable
   """
   standardID: ID
-  owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
-  standard: Standard
-  programs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Programs returned from the connection.
-    """
-    orderBy: [ProgramOrder!]
-
-    """
-    Filtering options for Programs returned from the connection.
-    """
-    where: ProgramWhereInput
-  ): ProgramConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -27762,68 +28084,6 @@ type Control implements Node {
     """
     where: EvidenceWhereInput
   ): EvidenceConnection!
-  controlImplementations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlImplementations returned from the connection.
-    """
-    orderBy: [ControlImplementationOrder!]
-
-    """
-    Filtering options for ControlImplementations returned from the connection.
-    """
-    where: ControlImplementationWhereInput
-  ): ControlImplementationConnection!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   controlObjectives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -27855,37 +28115,6 @@ type Control implements Node {
     """
     where: ControlObjectiveWhereInput
   ): ControlObjectiveConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
   tasks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -28072,6 +28301,37 @@ type Control implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -28080,6 +28340,113 @@ type Control implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  owner: Organization
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
+  """
+  provides view access to the risk to members of the group
+  """
+  viewers: [Group!]
+  standard: Standard
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -28160,10 +28527,6 @@ type ControlHistory implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -28227,6 +28590,18 @@ type ControlHistory implements Node {
   references for the control
   """
   references: [Reference!]
+  """
+  the id of the group that owns the control
+  """
+  controlOwnerID: String
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   the unique reference code for the control
   """
@@ -28496,24 +28871,6 @@ input ControlHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -28649,6 +29006,60 @@ input ControlHistoryWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: String
+  controlOwnerIDNEQ: String
+  controlOwnerIDIn: [String!]
+  controlOwnerIDNotIn: [String!]
+  controlOwnerIDGT: String
+  controlOwnerIDGTE: String
+  controlOwnerIDLT: String
+  controlOwnerIDLTE: String
+  controlOwnerIDContains: String
+  controlOwnerIDHasPrefix: String
+  controlOwnerIDHasSuffix: String
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: String
+  controlOwnerIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -28696,6 +29107,10 @@ type ControlImplementation implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   status of the %s, e.g. draft, published, archived, etc.
   """
   status: ControlImplementationDocumentStatus
@@ -28715,6 +29130,7 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
+  owner: Organization
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -28746,6 +29162,37 @@ type ControlImplementation implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -28802,6 +29249,10 @@ type ControlImplementationHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -29046,6 +29497,24 @@ input ControlImplementationHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   status field predicates
   """
   status: ControlImplementationHistoryDocumentStatus
@@ -29245,6 +29714,24 @@ input ControlImplementationWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   status field predicates
   """
   status: ControlImplementationDocumentStatus
@@ -29305,10 +29792,20 @@ input ControlImplementationWhereInput {
   detailsEqualFold: String
   detailsContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type ControlObjective implements Node {
   id: ID!
@@ -30673,24 +31170,6 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   description field predicates
   """
   description: String
@@ -30826,6 +31305,60 @@ input ControlWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: ID
+  controlOwnerIDNEQ: ID
+  controlOwnerIDIn: [ID!]
+  controlOwnerIDNotIn: [ID!]
+  controlOwnerIDGT: ID
+  controlOwnerIDGTE: ID
+  controlOwnerIDLT: ID
+  controlOwnerIDLTE: ID
+  controlOwnerIDContains: ID
+  controlOwnerIDHasPrefix: ID
+  controlOwnerIDHasSuffix: ID
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: ID
+  controlOwnerIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   ref_code field predicates
   """
   refCode: String
@@ -30860,60 +31393,15 @@ input ControlWhereInput {
   standardIDEqualFold: ID
   standardIDContainsFold: ID
   """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  standard edge predicates
-  """
-  hasStandard: Boolean
-  hasStandardWith: [StandardWhereInput!]
-  """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
   evidence edge predicates
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
-  control_implementations edge predicates
-  """
-  hasControlImplementations: Boolean
-  hasControlImplementationsWith: [ControlImplementationWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
-  """
   control_objectives edge predicates
   """
   hasControlObjectives: Boolean
   hasControlObjectivesWith: [ControlObjectiveWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   tasks edge predicates
   """
@@ -30945,6 +31433,11 @@ input ControlWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -30954,6 +31447,46 @@ input ControlWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -31127,7 +31660,9 @@ input CreateControlImplementationInput {
   details of the control implementation
   """
   details: String
+  ownerID: ID
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateControlInput is used for create Control object.
@@ -31206,25 +31741,25 @@ input CreateControlInput {
   the unique reference code for the control
   """
   refCode: String!
-  ownerID: ID
-  blockedGroupIDs: [ID!]
-  editorIDs: [ID!]
-  viewerIDs: [ID!]
-  standardID: ID
-  programIDs: [ID!]
   evidenceIDs: [ID!]
-  controlImplementationIDs: [ID!]
-  mappedControlIDs: [ID!]
   controlObjectiveIDs: [ID!]
-  subcontrolIDs: [ID!]
   taskIDs: [ID!]
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  standardID: ID
+  programIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -31608,8 +32143,8 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  ownerID: ID
   integrationIDs: [ID!]
-  organizationIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -31888,6 +32423,7 @@ input CreateOrganizationInput {
   narrativeIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  controlImplementationIDs: [ID!]
   evidenceIDs: [ID!]
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -32294,9 +32830,6 @@ input CreateSubcontrolInput {
   the unique reference code for the control
   """
   refCode: String!
-  ownerID: ID
-  controlID: ID!
-  mappedControlIDs: [ID!]
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -32305,8 +32838,12 @@ input CreateSubcontrolInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  ownerID: ID
+  controlID: ID!
+  controlImplementationIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -39423,6 +39960,10 @@ type Hush implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -39438,6 +39979,7 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  owner: Organization
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -39469,7 +40011,6 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
-  organization: [Organization!]
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -39543,6 +40084,10 @@ type HushHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -39771,6 +40316,24 @@ input HushHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -39960,6 +40523,24 @@ input HushWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -40012,15 +40593,15 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   events edge predicates
   """
@@ -40694,6 +41275,14 @@ type InternalPolicy implements Node {
   the frequency at which the policy should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: InternalPolicyFrequency
+  """
+  the id of the group responsible for approving the policy
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the policy
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -41002,6 +41591,14 @@ type InternalPolicyHistory implements Node {
   the frequency at which the policy should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: InternalPolicyHistoryFrequency
+  """
+  the id of the group responsible for approving the policy
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the policy
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -41377,6 +41974,42 @@ input InternalPolicyHistoryWhereInput {
   reviewFrequencyNotIn: [InternalPolicyHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -41659,6 +42292,42 @@ input InternalPolicyWhereInput {
   reviewFrequencyNotIn: [InternalPolicyFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -46324,6 +46993,37 @@ type Organization implements Node {
     """
     where: SubcontrolWhereInput
   ): SubcontrolConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -47969,6 +48669,11 @@ input OrganizationWhereInput {
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
   evidence edge predicates
   """
   hasEvidence: Boolean
@@ -48452,6 +49157,14 @@ type Procedure implements Node {
   the frequency at which the procedure should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ProcedureFrequency
+  """
+  the id of the group responsible for approving the procedure
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the procedure
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -48760,6 +49473,14 @@ type ProcedureHistory implements Node {
   the frequency at which the procedure should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ProcedureHistoryFrequency
+  """
+  the id of the group responsible for approving the procedure
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the procedure
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -49135,6 +49856,42 @@ input ProcedureHistoryWhereInput {
   reviewFrequencyNotIn: [ProcedureHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -49417,6 +50174,42 @@ input ProcedureWhereInput {
   reviewFrequencyNotIn: [ProcedureFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -53561,6 +54354,14 @@ type Risk implements Node {
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  the id of the group responsible for risk oversight
+  """
+  stakeholderID: ID
+  """
+  the id of the group responsible for risk oversight on behalf of the stakeholder
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -53800,6 +54601,14 @@ type RiskHistory implements Node {
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  the id of the group responsible for risk oversight
+  """
+  stakeholderID: String
+  """
+  the id of the group responsible for risk oversight on behalf of the stakeholder
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -54224,6 +55033,42 @@ input RiskHistoryWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+  """
+  stakeholder_id field predicates
+  """
+  stakeholderID: String
+  stakeholderIDNEQ: String
+  stakeholderIDIn: [String!]
+  stakeholderIDNotIn: [String!]
+  stakeholderIDGT: String
+  stakeholderIDGTE: String
+  stakeholderIDLT: String
+  stakeholderIDLTE: String
+  stakeholderIDContains: String
+  stakeholderIDHasPrefix: String
+  stakeholderIDHasSuffix: String
+  stakeholderIDIsNil: Boolean
+  stakeholderIDNotNil: Boolean
+  stakeholderIDEqualFold: String
+  stakeholderIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for Risk connections
@@ -54574,6 +55419,42 @@ input RiskWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+  """
+  stakeholder_id field predicates
+  """
+  stakeholderID: ID
+  stakeholderIDNEQ: ID
+  stakeholderIDIn: [ID!]
+  stakeholderIDNotIn: [ID!]
+  stakeholderIDGT: ID
+  stakeholderIDGTE: ID
+  stakeholderIDLT: ID
+  stakeholderIDLTE: ID
+  stakeholderIDContains: ID
+  stakeholderIDHasPrefix: ID
+  stakeholderIDHasSuffix: ID
+  stakeholderIDIsNil: Boolean
+  stakeholderIDNotNil: Boolean
+  stakeholderIDEqualFold: ID
+  stakeholderIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -55697,10 +56578,6 @@ type Subcontrol implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -55765,6 +56642,18 @@ type Subcontrol implements Node {
   """
   references: [Reference!]
   """
+  the id of the group that owns the control
+  """
+  controlOwnerID: ID
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: ID
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -55772,39 +56661,6 @@ type Subcontrol implements Node {
   the id of the parent control
   """
   controlID: ID!
-  owner: Organization
-  control: Control!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56053,14 +56909,78 @@ type Subcontrol implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   """
-  the user who is responsible for the subcontrol, defaults to the parent control owner if not set
+  the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
   controlOwner: Group
   """
-  temporary delegate for the subcontrol, used for temporary control ownership
+  temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  owner: Organization
+  control: Control!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
 }
 """
 A connection to a list of items.
@@ -56141,10 +57061,6 @@ type SubcontrolHistory implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -56208,6 +57124,18 @@ type SubcontrolHistory implements Node {
   references for the control
   """
   references: [Reference!]
+  """
+  the id of the group that owns the control
+  """
+  controlOwnerID: String
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   the unique reference code for the control
   """
@@ -56477,24 +57405,6 @@ input SubcontrolHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -56629,6 +57539,60 @@ input SubcontrolHistoryWhereInput {
   subcategoryNotNil: Boolean
   subcategoryEqualFold: String
   subcategoryContainsFold: String
+  """
+  control_owner_id field predicates
+  """
+  controlOwnerID: String
+  controlOwnerIDNEQ: String
+  controlOwnerIDIn: [String!]
+  controlOwnerIDNotIn: [String!]
+  controlOwnerIDGT: String
+  controlOwnerIDGTE: String
+  controlOwnerIDLT: String
+  controlOwnerIDLTE: String
+  controlOwnerIDContains: String
+  controlOwnerIDHasPrefix: String
+  controlOwnerIDHasSuffix: String
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: String
+  controlOwnerIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   ref_code field predicates
   """
@@ -56819,24 +57783,6 @@ input SubcontrolWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   description field predicates
   """
   description: String
@@ -56972,6 +57918,60 @@ input SubcontrolWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: ID
+  controlOwnerIDNEQ: ID
+  controlOwnerIDIn: [ID!]
+  controlOwnerIDNotIn: [ID!]
+  controlOwnerIDGT: ID
+  controlOwnerIDGTE: ID
+  controlOwnerIDLT: ID
+  controlOwnerIDLTE: ID
+  controlOwnerIDContains: ID
+  controlOwnerIDHasPrefix: ID
+  controlOwnerIDHasSuffix: ID
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: ID
+  controlOwnerIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   ref_code field predicates
   """
   refCode: String
@@ -57003,21 +58003,6 @@ input SubcontrolWhereInput {
   controlIDHasSuffix: ID
   controlIDEqualFold: ID
   controlIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  control edge predicates
-  """
-  hasControl: Boolean
-  hasControlWith: [ControlWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   evidence edge predicates
   """
@@ -57059,6 +58044,11 @@ input SubcontrolWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -57068,6 +58058,21 @@ input SubcontrolWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -59694,6 +60699,9 @@ input UpdateControlImplementationInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -59797,35 +60805,12 @@ input UpdateControlInput {
   the unique reference code for the control
   """
   refCode: String
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  standardID: ID
-  clearStandard: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
-  addControlImplementationIDs: [ID!]
-  removeControlImplementationIDs: [ID!]
-  clearControlImplementations: Boolean
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
@@ -59844,10 +60829,33 @@ input UpdateControlInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  standardID: ID
+  clearStandard: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -60421,12 +61429,11 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -60802,6 +61809,9 @@ input UpdateOrganizationInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -61366,10 +62376,6 @@ input UpdateSubcontrolInput {
   the unique reference code for the control
   """
   refCode: String
-  controlID: ID
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -61394,10 +62400,17 @@ input UpdateSubcontrolInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  controlID: ID
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.

@@ -125,6 +125,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
+	EdgeControlImplementations = "control_implementations"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeStandards holds the string denoting the standards edge name in mutations.
@@ -240,11 +242,13 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// SecretsTable is the table that holds the secrets relation/edge. The primary key declared below.
-	SecretsTable = "organization_secrets"
+	// SecretsTable is the table that holds the secrets relation/edge.
+	SecretsTable = "hushes"
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
+	// SecretsColumn is the table column denoting the secrets relation/edge.
+	SecretsColumn = "owner_id"
 	// AvatarFileTable is the table that holds the avatar_file relation/edge.
 	AvatarFileTable = "organizations"
 	// AvatarFileInverseTable is the table name for the File entity.
@@ -392,6 +396,13 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "owner_id"
+	// ControlImplementationsTable is the table that holds the control_implementations relation/edge.
+	ControlImplementationsTable = "control_implementations"
+	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
+	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
+	ControlImplementationsInverseTable = "control_implementations"
+	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
+	ControlImplementationsColumn = "owner_id"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "evidences"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -456,9 +467,6 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"organization_id", "event_id"}
-	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
-	// primary key for the secrets relation (M2M).
-	SecretsPrimaryKey = []string{"organization_id", "hush_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -1116,6 +1124,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlImplementationsCount orders the results by control_implementations count.
+func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlImplementationsStep(), opts...)
+	}
+}
+
+// ByControlImplementations orders the results by control_implementations terms.
+func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEvidenceCount orders the results by evidence count.
 func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1294,7 +1316,7 @@ func newSecretsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SecretsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, SecretsTable, SecretsColumn),
 	)
 }
 func newAvatarFileStep() *sqlgraph.Step {
@@ -1442,6 +1464,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newControlImplementationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

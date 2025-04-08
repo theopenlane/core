@@ -60,7 +60,11 @@ type ProcedureHistory struct {
 	ReviewDue time.Time `json:"review_due,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	selectValues    sql.SelectValues
+	// the id of the group responsible for approving the procedure
+	ApproverID string `json:"approver_id,omitempty"`
+	// the id of the group responsible for approving the procedure
+	DelegateID   string `json:"delegate_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -74,7 +78,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -221,6 +225,18 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.ReviewFrequency = enums.Frequency(value.String)
 			}
+		case procedurehistory.FieldApproverID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
+			} else if value.Valid {
+				ph.ApproverID = value.String
+			}
+		case procedurehistory.FieldDelegateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
+			} else if value.Valid {
+				ph.DelegateID = value.String
+			}
 		default:
 			ph.selectValues.Set(columns[i], values[i])
 		}
@@ -316,6 +332,12 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", ph.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("approver_id=")
+	builder.WriteString(ph.ApproverID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_id=")
+	builder.WriteString(ph.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }

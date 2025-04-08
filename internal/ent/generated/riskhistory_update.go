@@ -324,6 +324,46 @@ func (rhu *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
 	return rhu
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (rhu *RiskHistoryUpdate) SetStakeholderID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetStakeholderID(s)
+	return rhu
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableStakeholderID(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetStakeholderID(*s)
+	}
+	return rhu
+}
+
+// ClearStakeholderID clears the value of the "stakeholder_id" field.
+func (rhu *RiskHistoryUpdate) ClearStakeholderID() *RiskHistoryUpdate {
+	rhu.mutation.ClearStakeholderID()
+	return rhu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (rhu *RiskHistoryUpdate) SetDelegateID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetDelegateID(s)
+	return rhu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableDelegateID(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetDelegateID(*s)
+	}
+	return rhu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (rhu *RiskHistoryUpdate) ClearDelegateID() *RiskHistoryUpdate {
+	rhu.mutation.ClearDelegateID()
+	return rhu
+}
+
 // Mutation returns the RiskHistoryMutation object of the builder.
 func (rhu *RiskHistoryUpdate) Mutation() *RiskHistoryMutation {
 	return rhu.mutation
@@ -509,6 +549,18 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if rhu.mutation.BusinessCostsCleared() {
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
+	}
+	if value, ok := rhu.mutation.StakeholderID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderID, field.TypeString, value)
+	}
+	if rhu.mutation.StakeholderIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderID, field.TypeString)
+	}
+	if value, ok := rhu.mutation.DelegateID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if rhu.mutation.DelegateIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = rhu.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhu.schemaConfig)
@@ -825,6 +877,46 @@ func (rhuo *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetStakeholderID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetStakeholderID(s)
+	return rhuo
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableStakeholderID(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetStakeholderID(*s)
+	}
+	return rhuo
+}
+
+// ClearStakeholderID clears the value of the "stakeholder_id" field.
+func (rhuo *RiskHistoryUpdateOne) ClearStakeholderID() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearStakeholderID()
+	return rhuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetDelegateID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetDelegateID(s)
+	return rhuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableDelegateID(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetDelegateID(*s)
+	}
+	return rhuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (rhuo *RiskHistoryUpdateOne) ClearDelegateID() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearDelegateID()
+	return rhuo
+}
+
 // Mutation returns the RiskHistoryMutation object of the builder.
 func (rhuo *RiskHistoryUpdateOne) Mutation() *RiskHistoryMutation {
 	return rhuo.mutation
@@ -1040,6 +1132,18 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	}
 	if rhuo.mutation.BusinessCostsCleared() {
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
+	}
+	if value, ok := rhuo.mutation.StakeholderID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderID, field.TypeString, value)
+	}
+	if rhuo.mutation.StakeholderIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderID, field.TypeString)
+	}
+	if value, ok := rhuo.mutation.DelegateID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if rhuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateID, field.TypeString)
 	}
 	_spec.Node.Schema = rhuo.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhuo.schemaConfig)

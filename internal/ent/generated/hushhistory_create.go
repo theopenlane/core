@@ -139,6 +139,20 @@ func (hhc *HushHistoryCreate) SetNillableDeletedBy(s *string) *HushHistoryCreate
 	return hhc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (hhc *HushHistoryCreate) SetOwnerID(s string) *HushHistoryCreate {
+	hhc.mutation.SetOwnerID(s)
+	return hhc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableOwnerID(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetOwnerID(*s)
+	}
+	return hhc
+}
+
 // SetName sets the "name" field.
 func (hhc *HushHistoryCreate) SetName(s string) *HushHistoryCreate {
 	hhc.mutation.SetName(s)
@@ -355,6 +369,10 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 	if value, ok := hhc.mutation.DeletedBy(); ok {
 		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := hhc.mutation.OwnerID(); ok {
+		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := hhc.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

@@ -56,6 +56,10 @@ const (
 	FieldDetails = "details"
 	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
 	FieldBusinessCosts = "business_costs"
+	// FieldStakeholderID holds the string denoting the stakeholder_id field in the database.
+	FieldStakeholderID = "stakeholder_id"
+	// FieldDelegateID holds the string denoting the delegate_id field in the database.
+	FieldDelegateID = "delegate_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -126,14 +130,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	StakeholderInverseTable = "groups"
 	// StakeholderColumn is the table column denoting the stakeholder relation/edge.
-	StakeholderColumn = "risk_stakeholder"
+	StakeholderColumn = "stakeholder_id"
 	// DelegateTable is the table that holds the delegate relation/edge.
 	DelegateTable = "risks"
 	// DelegateInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	DelegateInverseTable = "groups"
 	// DelegateColumn is the table column denoting the delegate relation/edge.
-	DelegateColumn = "risk_delegate"
+	DelegateColumn = "delegate_id"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -158,14 +162,14 @@ var Columns = []string{
 	FieldMitigation,
 	FieldDetails,
 	FieldBusinessCosts,
+	FieldStakeholderID,
+	FieldDelegateID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "risks"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
-	"risk_stakeholder",
-	"risk_delegate",
 	"subcontrol_risks",
 }
 
@@ -214,7 +218,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -367,6 +371,16 @@ func ByDetails(opts ...sql.OrderTermOption) OrderOption {
 // ByBusinessCosts orders the results by the business_costs field.
 func ByBusinessCosts(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessCosts, opts...).ToFunc()
+}
+
+// ByStakeholderID orders the results by the stakeholder_id field.
+func ByStakeholderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderID, opts...).ToFunc()
+}
+
+// ByDelegateID orders the results by the delegate_id field.
+func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

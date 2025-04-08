@@ -329,6 +329,46 @@ func (ru *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
 	return ru
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (ru *RiskUpdate) SetStakeholderID(s string) *RiskUpdate {
+	ru.mutation.SetStakeholderID(s)
+	return ru
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableStakeholderID(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetStakeholderID(*s)
+	}
+	return ru
+}
+
+// ClearStakeholderID clears the value of the "stakeholder_id" field.
+func (ru *RiskUpdate) ClearStakeholderID() *RiskUpdate {
+	ru.mutation.ClearStakeholderID()
+	return ru
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (ru *RiskUpdate) SetDelegateID(s string) *RiskUpdate {
+	ru.mutation.SetDelegateID(s)
+	return ru
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableDelegateID(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetDelegateID(*s)
+	}
+	return ru
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (ru *RiskUpdate) ClearDelegateID() *RiskUpdate {
+	ru.mutation.ClearDelegateID()
+	return ru
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (ru *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
 	ru.mutation.AddBlockedGroupIDs(ids...)
@@ -434,37 +474,9 @@ func (ru *RiskUpdate) AddActionPlans(a ...*ActionPlan) *RiskUpdate {
 	return ru.AddActionPlanIDs(ids...)
 }
 
-// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
-func (ru *RiskUpdate) SetStakeholderID(id string) *RiskUpdate {
-	ru.mutation.SetStakeholderID(id)
-	return ru
-}
-
-// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
-func (ru *RiskUpdate) SetNillableStakeholderID(id *string) *RiskUpdate {
-	if id != nil {
-		ru = ru.SetStakeholderID(*id)
-	}
-	return ru
-}
-
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ru *RiskUpdate) SetStakeholder(g *Group) *RiskUpdate {
 	return ru.SetStakeholderID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (ru *RiskUpdate) SetDelegateID(id string) *RiskUpdate {
-	ru.mutation.SetDelegateID(id)
-	return ru
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDelegateID(id *string) *RiskUpdate {
-	if id != nil {
-		ru = ru.SetDelegateID(*id)
-	}
-	return ru
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -1535,6 +1547,46 @@ func (ruo *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
 	return ruo
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (ruo *RiskUpdateOne) SetStakeholderID(s string) *RiskUpdateOne {
+	ruo.mutation.SetStakeholderID(s)
+	return ruo
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableStakeholderID(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetStakeholderID(*s)
+	}
+	return ruo
+}
+
+// ClearStakeholderID clears the value of the "stakeholder_id" field.
+func (ruo *RiskUpdateOne) ClearStakeholderID() *RiskUpdateOne {
+	ruo.mutation.ClearStakeholderID()
+	return ruo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (ruo *RiskUpdateOne) SetDelegateID(s string) *RiskUpdateOne {
+	ruo.mutation.SetDelegateID(s)
+	return ruo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableDelegateID(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetDelegateID(*s)
+	}
+	return ruo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (ruo *RiskUpdateOne) ClearDelegateID() *RiskUpdateOne {
+	ruo.mutation.ClearDelegateID()
+	return ruo
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (ruo *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
 	ruo.mutation.AddBlockedGroupIDs(ids...)
@@ -1640,37 +1692,9 @@ func (ruo *RiskUpdateOne) AddActionPlans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.AddActionPlanIDs(ids...)
 }
 
-// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
-func (ruo *RiskUpdateOne) SetStakeholderID(id string) *RiskUpdateOne {
-	ruo.mutation.SetStakeholderID(id)
-	return ruo
-}
-
-// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableStakeholderID(id *string) *RiskUpdateOne {
-	if id != nil {
-		ruo = ruo.SetStakeholderID(*id)
-	}
-	return ruo
-}
-
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ruo *RiskUpdateOne) SetStakeholder(g *Group) *RiskUpdateOne {
 	return ruo.SetStakeholderID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (ruo *RiskUpdateOne) SetDelegateID(id string) *RiskUpdateOne {
-	ruo.mutation.SetDelegateID(id)
-	return ruo
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDelegateID(id *string) *RiskUpdateOne {
-	if id != nil {
-		ruo = ruo.SetDelegateID(*id)
-	}
-	return ruo
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.

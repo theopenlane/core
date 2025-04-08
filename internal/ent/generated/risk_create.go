@@ -269,6 +269,34 @@ func (rc *RiskCreate) SetNillableBusinessCosts(s *string) *RiskCreate {
 	return rc
 }
 
+// SetStakeholderID sets the "stakeholder_id" field.
+func (rc *RiskCreate) SetStakeholderID(s string) *RiskCreate {
+	rc.mutation.SetStakeholderID(s)
+	return rc
+}
+
+// SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableStakeholderID(s *string) *RiskCreate {
+	if s != nil {
+		rc.SetStakeholderID(*s)
+	}
+	return rc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (rc *RiskCreate) SetDelegateID(s string) *RiskCreate {
+	rc.mutation.SetDelegateID(s)
+	return rc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableDelegateID(s *string) *RiskCreate {
+	if s != nil {
+		rc.SetDelegateID(*s)
+	}
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *RiskCreate) SetID(s string) *RiskCreate {
 	rc.mutation.SetID(s)
@@ -393,37 +421,9 @@ func (rc *RiskCreate) AddActionPlans(a ...*ActionPlan) *RiskCreate {
 	return rc.AddActionPlanIDs(ids...)
 }
 
-// SetStakeholderID sets the "stakeholder" edge to the Group entity by ID.
-func (rc *RiskCreate) SetStakeholderID(id string) *RiskCreate {
-	rc.mutation.SetStakeholderID(id)
-	return rc
-}
-
-// SetNillableStakeholderID sets the "stakeholder" edge to the Group entity by ID if the given value is not nil.
-func (rc *RiskCreate) SetNillableStakeholderID(id *string) *RiskCreate {
-	if id != nil {
-		rc = rc.SetStakeholderID(*id)
-	}
-	return rc
-}
-
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (rc *RiskCreate) SetStakeholder(g *Group) *RiskCreate {
 	return rc.SetStakeholderID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (rc *RiskCreate) SetDelegateID(id string) *RiskCreate {
-	rc.mutation.SetDelegateID(id)
-	return rc
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (rc *RiskCreate) SetNillableDelegateID(id *string) *RiskCreate {
-	if id != nil {
-		rc = rc.SetDelegateID(*id)
-	}
-	return rc
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -806,7 +806,7 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.risk_stakeholder = &nodes[0]
+		_node.StakeholderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := rc.mutation.DelegateIDs(); len(nodes) > 0 {
@@ -824,7 +824,7 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.risk_delegate = &nodes[0]
+		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

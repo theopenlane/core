@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -18,6 +19,10 @@ const (
 	ProgramParent = "program"
 	// ControlParent is the parent type for control
 	ControlParent = "control"
+	// ControlsParent is the parent type for control when used in the plural context
+	ControlsParent = "controls"
+	// SubcontrolParent is the parent type for subcontrol when used in the plural context
+	SubcontrolsParent = "subcontrols"
 )
 
 // CanCreateObjectsUnderParent is a rule that returns allow decision if user has edit access in the parent(s)
@@ -46,7 +51,7 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 				SubjectID:   user.SubjectID,
 				SubjectType: auth.GetAuthzSubjectType(ctx),
 				ObjectID:    pID,
-				ObjectType:  fgax.Kind(parentType),
+				ObjectType:  fgax.Kind(strings.TrimRight(parentType, "s")), // trim trailing 's' for plural
 				Relation:    relation,
 				Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
 			}
@@ -88,12 +93,12 @@ func getProgramIDFromEntMutation[T ProgramParentMutation](m generated.Mutation) 
 	return m.(T).ProgramsIDs()
 }
 
-// ControlParentMutation is an interface that defines the method to get the control ids from the mutation
+// ControlParentMutation is an interface that defines the method to get the control id from the mutation
 type ControlParentMutation interface {
 	ControlID() (string, bool)
 }
 
-// getProgramIDFromEntMutation returns the program ids from the mutation
+// getProgramIDFromEntMutation returns the control id from the mutation
 func getControlIDFromEntMutation[T ControlParentMutation](m generated.Mutation) string {
 	id, ok := m.(T).ControlID()
 	if !ok {
@@ -101,6 +106,26 @@ func getControlIDFromEntMutation[T ControlParentMutation](m generated.Mutation) 
 	}
 
 	return id
+}
+
+// ControlsParentMutation is an interface that defines the method to get the control ids from the mutation
+type ControlsParentMutation interface {
+	ControlsIDs() []string
+}
+
+// getProgramIDFromEntMutation returns the control ids from the mutation
+func getControlIDsFromEntMutation[T ControlsParentMutation](m generated.Mutation) []string {
+	return m.(T).ControlsIDs()
+}
+
+// SubcontrolParentMutation is an interface that defines the method to get the subcontrol ids from the mutation
+type SubcontrolParentMutation interface {
+	SubcontrolsIDs() []string
+}
+
+// getSubcontrolIDFromEntMutation returns the subcontrol ids from the mutation
+func getSubcontrolIDsFromEntMutation[T SubcontrolParentMutation](m generated.Mutation) []string {
+	return m.(T).SubcontrolsIDs()
 }
 
 // getParentIDFromEntMutation returns the parent ids from the mutation
@@ -115,6 +140,10 @@ func getParentIDFromEntMutation[T ent.Mutation](m generated.Mutation, parentType
 		}
 
 		return []string{}
+	case ControlsParent:
+		return getControlIDsFromEntMutation[ControlsParentMutation](m)
+	case SubcontrolsParent:
+		return getSubcontrolIDsFromEntMutation[SubcontrolParentMutation](m)
 	}
 
 	return []string{}

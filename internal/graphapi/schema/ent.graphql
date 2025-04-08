@@ -384,6 +384,14 @@ type ActionPlan implements Node {
   """
   reviewFrequency: ActionPlanFrequency
   """
+  the id of the group responsible for approving the action_plan
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  delegateID: ID
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -629,6 +637,14 @@ type ActionPlanHistory implements Node {
   the frequency at which the action_plan should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ActionPlanHistoryFrequency
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the action_plan
+  """
+  delegateID: String
   """
   the organization id that owns the object
   """
@@ -999,6 +1015,42 @@ input ActionPlanHistoryWhereInput {
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
   """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -1316,6 +1368,42 @@ input ActionPlanWhereInput {
   reviewFrequencyNotIn: [ActionPlanFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner_id field predicates
   """
@@ -2264,10 +2352,6 @@ type Control implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -2332,6 +2416,18 @@ type Control implements Node {
   """
   references: [Reference!]
   """
+  the id of the group that owns the control
+  """
+  controlOwnerID: ID
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: ID
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -2339,51 +2435,6 @@ type Control implements Node {
   the id of the standard that the control belongs to, if applicable
   """
   standardID: ID
-  owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
-  standard: Standard
-  programs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Programs returned from the connection.
-    """
-    orderBy: [ProgramOrder!]
-
-    """
-    Filtering options for Programs returned from the connection.
-    """
-    where: ProgramWhereInput
-  ): ProgramConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -2415,68 +2466,6 @@ type Control implements Node {
     """
     where: EvidenceWhereInput
   ): EvidenceConnection!
-  controlImplementations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlImplementations returned from the connection.
-    """
-    orderBy: [ControlImplementationOrder!]
-
-    """
-    Filtering options for ControlImplementations returned from the connection.
-    """
-    where: ControlImplementationWhereInput
-  ): ControlImplementationConnection!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   controlObjectives(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -2508,37 +2497,6 @@ type Control implements Node {
     """
     where: ControlObjectiveWhereInput
   ): ControlObjectiveConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
   tasks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -2725,6 +2683,37 @@ type Control implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -2733,6 +2722,113 @@ type Control implements Node {
   temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  owner: Organization
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
+  """
+  provides view access to the risk to members of the group
+  """
+  viewers: [Group!]
+  standard: Standard
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -2813,10 +2909,6 @@ type ControlHistory implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -2880,6 +2972,18 @@ type ControlHistory implements Node {
   references for the control
   """
   references: [Reference!]
+  """
+  the id of the group that owns the control
+  """
+  controlOwnerID: String
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   the unique reference code for the control
   """
@@ -3149,24 +3253,6 @@ input ControlHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -3302,6 +3388,60 @@ input ControlHistoryWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: String
+  controlOwnerIDNEQ: String
+  controlOwnerIDIn: [String!]
+  controlOwnerIDNotIn: [String!]
+  controlOwnerIDGT: String
+  controlOwnerIDGTE: String
+  controlOwnerIDLT: String
+  controlOwnerIDLTE: String
+  controlOwnerIDContains: String
+  controlOwnerIDHasPrefix: String
+  controlOwnerIDHasSuffix: String
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: String
+  controlOwnerIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -3349,6 +3489,10 @@ type ControlImplementation implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   status of the %s, e.g. draft, published, archived, etc.
   """
   status: ControlImplementationDocumentStatus
@@ -3368,6 +3512,7 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
+  owner: Organization
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -3399,6 +3544,37 @@ type ControlImplementation implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -3455,6 +3631,10 @@ type ControlImplementationHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -3699,6 +3879,24 @@ input ControlImplementationHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   status field predicates
   """
   status: ControlImplementationHistoryDocumentStatus
@@ -3898,6 +4096,24 @@ input ControlImplementationWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   status field predicates
   """
   status: ControlImplementationDocumentStatus
@@ -3958,10 +4174,20 @@ input ControlImplementationWhereInput {
   detailsEqualFold: String
   detailsContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type ControlObjective implements Node {
   id: ID!
@@ -5326,24 +5552,6 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   description field predicates
   """
   description: String
@@ -5479,6 +5687,60 @@ input ControlWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: ID
+  controlOwnerIDNEQ: ID
+  controlOwnerIDIn: [ID!]
+  controlOwnerIDNotIn: [ID!]
+  controlOwnerIDGT: ID
+  controlOwnerIDGTE: ID
+  controlOwnerIDLT: ID
+  controlOwnerIDLTE: ID
+  controlOwnerIDContains: ID
+  controlOwnerIDHasPrefix: ID
+  controlOwnerIDHasSuffix: ID
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: ID
+  controlOwnerIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   ref_code field predicates
   """
   refCode: String
@@ -5513,60 +5775,15 @@ input ControlWhereInput {
   standardIDEqualFold: ID
   standardIDContainsFold: ID
   """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  standard edge predicates
-  """
-  hasStandard: Boolean
-  hasStandardWith: [StandardWhereInput!]
-  """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
   evidence edge predicates
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
-  control_implementations edge predicates
-  """
-  hasControlImplementations: Boolean
-  hasControlImplementationsWith: [ControlImplementationWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
-  """
   control_objectives edge predicates
   """
   hasControlObjectives: Boolean
   hasControlObjectivesWith: [ControlObjectiveWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   tasks edge predicates
   """
@@ -5598,6 +5815,11 @@ input ControlWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -5607,6 +5829,46 @@ input ControlWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -5780,7 +6042,9 @@ input CreateControlImplementationInput {
   details of the control implementation
   """
   details: String
+  ownerID: ID
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateControlInput is used for create Control object.
@@ -5859,25 +6123,25 @@ input CreateControlInput {
   the unique reference code for the control
   """
   refCode: String!
-  ownerID: ID
-  blockedGroupIDs: [ID!]
-  editorIDs: [ID!]
-  viewerIDs: [ID!]
-  standardID: ID
-  programIDs: [ID!]
   evidenceIDs: [ID!]
-  controlImplementationIDs: [ID!]
-  mappedControlIDs: [ID!]
   controlObjectiveIDs: [ID!]
-  subcontrolIDs: [ID!]
   taskIDs: [ID!]
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  standardID: ID
+  programIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -6261,8 +6525,8 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  ownerID: ID
   integrationIDs: [ID!]
-  organizationIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -6541,6 +6805,7 @@ input CreateOrganizationInput {
   narrativeIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  controlImplementationIDs: [ID!]
   evidenceIDs: [ID!]
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -6947,9 +7212,6 @@ input CreateSubcontrolInput {
   the unique reference code for the control
   """
   refCode: String!
-  ownerID: ID
-  controlID: ID!
-  mappedControlIDs: [ID!]
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -6958,8 +7220,12 @@ input CreateSubcontrolInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
+  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
+  ownerID: ID
+  controlID: ID!
+  controlImplementationIDs: [ID!]
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -14076,6 +14342,10 @@ type Hush implements Node {
   deletedAt: Time
   deletedBy: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -14091,6 +14361,7 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  owner: Organization
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -14122,7 +14393,6 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
-  organization: [Organization!]
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -14196,6 +14466,10 @@ type HushHistory implements Node {
   updatedBy: String
   deletedAt: Time
   deletedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -14424,6 +14698,24 @@ input HushHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -14613,6 +14905,24 @@ input HushWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -14665,15 +14975,15 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   events edge predicates
   """
@@ -15347,6 +15657,14 @@ type InternalPolicy implements Node {
   the frequency at which the policy should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: InternalPolicyFrequency
+  """
+  the id of the group responsible for approving the policy
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the policy
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -15655,6 +15973,14 @@ type InternalPolicyHistory implements Node {
   the frequency at which the policy should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: InternalPolicyHistoryFrequency
+  """
+  the id of the group responsible for approving the policy
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the policy
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -16030,6 +16356,42 @@ input InternalPolicyHistoryWhereInput {
   reviewFrequencyNotIn: [InternalPolicyHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -16312,6 +16674,42 @@ input InternalPolicyWhereInput {
   reviewFrequencyNotIn: [InternalPolicyFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -20977,6 +21375,37 @@ type Organization implements Node {
     """
     where: SubcontrolWhereInput
   ): SubcontrolConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -22622,6 +23051,11 @@ input OrganizationWhereInput {
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
   evidence edge predicates
   """
   hasEvidence: Boolean
@@ -23105,6 +23539,14 @@ type Procedure implements Node {
   the frequency at which the procedure should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ProcedureFrequency
+  """
+  the id of the group responsible for approving the procedure
+  """
+  approverID: ID
+  """
+  the id of the group responsible for approving the procedure
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -23413,6 +23855,14 @@ type ProcedureHistory implements Node {
   the frequency at which the procedure should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ProcedureHistoryFrequency
+  """
+  the id of the group responsible for approving the procedure
+  """
+  approverID: String
+  """
+  the id of the group responsible for approving the procedure
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -23788,6 +24238,42 @@ input ProcedureHistoryWhereInput {
   reviewFrequencyNotIn: [ProcedureHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: String
+  approverIDNEQ: String
+  approverIDIn: [String!]
+  approverIDNotIn: [String!]
+  approverIDGT: String
+  approverIDGTE: String
+  approverIDLT: String
+  approverIDLTE: String
+  approverIDContains: String
+  approverIDHasPrefix: String
+  approverIDHasSuffix: String
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: String
+  approverIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -24070,6 +24556,42 @@ input ProcedureWhereInput {
   reviewFrequencyNotIn: [ProcedureFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  approver_id field predicates
+  """
+  approverID: ID
+  approverIDNEQ: ID
+  approverIDIn: [ID!]
+  approverIDNotIn: [ID!]
+  approverIDGT: ID
+  approverIDGTE: ID
+  approverIDLT: ID
+  approverIDLTE: ID
+  approverIDContains: ID
+  approverIDHasPrefix: ID
+  approverIDHasSuffix: ID
+  approverIDIsNil: Boolean
+  approverIDNotNil: Boolean
+  approverIDEqualFold: ID
+  approverIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -28214,6 +28736,14 @@ type Risk implements Node {
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  the id of the group responsible for risk oversight
+  """
+  stakeholderID: ID
+  """
+  the id of the group responsible for risk oversight on behalf of the stakeholder
+  """
+  delegateID: ID
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -28453,6 +28983,14 @@ type RiskHistory implements Node {
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  the id of the group responsible for risk oversight
+  """
+  stakeholderID: String
+  """
+  the id of the group responsible for risk oversight on behalf of the stakeholder
+  """
+  delegateID: String
 }
 """
 A connection to a list of items.
@@ -28877,6 +29415,42 @@ input RiskHistoryWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+  """
+  stakeholder_id field predicates
+  """
+  stakeholderID: String
+  stakeholderIDNEQ: String
+  stakeholderIDIn: [String!]
+  stakeholderIDNotIn: [String!]
+  stakeholderIDGT: String
+  stakeholderIDGTE: String
+  stakeholderIDLT: String
+  stakeholderIDLTE: String
+  stakeholderIDContains: String
+  stakeholderIDHasPrefix: String
+  stakeholderIDHasSuffix: String
+  stakeholderIDIsNil: Boolean
+  stakeholderIDNotNil: Boolean
+  stakeholderIDEqualFold: String
+  stakeholderIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
 }
 """
 Ordering options for Risk connections
@@ -29227,6 +29801,42 @@ input RiskWhereInput {
   businessCostsNotNil: Boolean
   businessCostsEqualFold: String
   businessCostsContainsFold: String
+  """
+  stakeholder_id field predicates
+  """
+  stakeholderID: ID
+  stakeholderIDNEQ: ID
+  stakeholderIDIn: [ID!]
+  stakeholderIDNotIn: [ID!]
+  stakeholderIDGT: ID
+  stakeholderIDGTE: ID
+  stakeholderIDLT: ID
+  stakeholderIDLTE: ID
+  stakeholderIDContains: ID
+  stakeholderIDHasPrefix: ID
+  stakeholderIDHasSuffix: ID
+  stakeholderIDIsNil: Boolean
+  stakeholderIDNotNil: Boolean
+  stakeholderIDEqualFold: ID
+  stakeholderIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
   """
   owner edge predicates
   """
@@ -30350,10 +30960,6 @@ type Subcontrol implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -30418,6 +31024,18 @@ type Subcontrol implements Node {
   """
   references: [Reference!]
   """
+  the id of the group that owns the control
+  """
+  controlOwnerID: ID
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: ID
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -30425,39 +31043,6 @@ type Subcontrol implements Node {
   the id of the parent control
   """
   controlID: ID!
-  owner: Organization
-  control: Control!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -30706,14 +31291,78 @@ type Subcontrol implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   """
-  the user who is responsible for the subcontrol, defaults to the parent control owner if not set
+  the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
   controlOwner: Group
   """
-  temporary delegate for the subcontrol, used for temporary control ownership
+  temporary delegate for the control, used for temporary control ownership
   """
   delegate: Group
+  owner: Organization
+  control: Control!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
 }
 """
 A connection to a list of items.
@@ -30794,10 +31443,6 @@ type SubcontrolHistory implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
-  """
   description of what the control is supposed to accomplish
   """
   description: String
@@ -30861,6 +31506,18 @@ type SubcontrolHistory implements Node {
   references for the control
   """
   references: [Reference!]
+  """
+  the id of the group that owns the control
+  """
+  controlOwnerID: String
+  """
+  the id of the group that is temporarily delegated to own the control
+  """
+  delegateID: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   the unique reference code for the control
   """
@@ -31130,24 +31787,6 @@ input SubcontrolHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
   description field predicates
   """
   description: String
@@ -31282,6 +31921,60 @@ input SubcontrolHistoryWhereInput {
   subcategoryNotNil: Boolean
   subcategoryEqualFold: String
   subcategoryContainsFold: String
+  """
+  control_owner_id field predicates
+  """
+  controlOwnerID: String
+  controlOwnerIDNEQ: String
+  controlOwnerIDIn: [String!]
+  controlOwnerIDNotIn: [String!]
+  controlOwnerIDGT: String
+  controlOwnerIDGTE: String
+  controlOwnerIDLT: String
+  controlOwnerIDLTE: String
+  controlOwnerIDContains: String
+  controlOwnerIDHasPrefix: String
+  controlOwnerIDHasSuffix: String
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: String
+  controlOwnerIDContainsFold: String
+  """
+  delegate_id field predicates
+  """
+  delegateID: String
+  delegateIDNEQ: String
+  delegateIDIn: [String!]
+  delegateIDNotIn: [String!]
+  delegateIDGT: String
+  delegateIDGTE: String
+  delegateIDLT: String
+  delegateIDLTE: String
+  delegateIDContains: String
+  delegateIDHasPrefix: String
+  delegateIDHasSuffix: String
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: String
+  delegateIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   ref_code field predicates
   """
@@ -31472,24 +32165,6 @@ input SubcontrolWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
   description field predicates
   """
   description: String
@@ -31625,6 +32300,60 @@ input SubcontrolWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
   """
+  control_owner_id field predicates
+  """
+  controlOwnerID: ID
+  controlOwnerIDNEQ: ID
+  controlOwnerIDIn: [ID!]
+  controlOwnerIDNotIn: [ID!]
+  controlOwnerIDGT: ID
+  controlOwnerIDGTE: ID
+  controlOwnerIDLT: ID
+  controlOwnerIDLTE: ID
+  controlOwnerIDContains: ID
+  controlOwnerIDHasPrefix: ID
+  controlOwnerIDHasSuffix: ID
+  controlOwnerIDIsNil: Boolean
+  controlOwnerIDNotNil: Boolean
+  controlOwnerIDEqualFold: ID
+  controlOwnerIDContainsFold: ID
+  """
+  delegate_id field predicates
+  """
+  delegateID: ID
+  delegateIDNEQ: ID
+  delegateIDIn: [ID!]
+  delegateIDNotIn: [ID!]
+  delegateIDGT: ID
+  delegateIDGTE: ID
+  delegateIDLT: ID
+  delegateIDLTE: ID
+  delegateIDContains: ID
+  delegateIDHasPrefix: ID
+  delegateIDHasSuffix: ID
+  delegateIDIsNil: Boolean
+  delegateIDNotNil: Boolean
+  delegateIDEqualFold: ID
+  delegateIDContainsFold: ID
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   ref_code field predicates
   """
   refCode: String
@@ -31656,21 +32385,6 @@ input SubcontrolWhereInput {
   controlIDHasSuffix: ID
   controlIDEqualFold: ID
   controlIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  control edge predicates
-  """
-  hasControl: Boolean
-  hasControlWith: [ControlWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   evidence edge predicates
   """
@@ -31712,6 +32426,11 @@ input SubcontrolWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -31721,6 +32440,21 @@ input SubcontrolWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -34347,6 +35081,9 @@ input UpdateControlImplementationInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -34450,35 +35187,12 @@ input UpdateControlInput {
   the unique reference code for the control
   """
   refCode: String
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  standardID: ID
-  clearStandard: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
-  addControlImplementationIDs: [ID!]
-  removeControlImplementationIDs: [ID!]
-  clearControlImplementations: Boolean
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   addControlObjectiveIDs: [ID!]
   removeControlObjectiveIDs: [ID!]
   clearControlObjectives: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
@@ -34497,10 +35211,33 @@ input UpdateControlInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  standardID: ID
+  clearStandard: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -35074,12 +35811,11 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -35455,6 +36191,9 @@ input UpdateOrganizationInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -36019,10 +36758,6 @@ input UpdateSubcontrolInput {
   the unique reference code for the control
   """
   refCode: String
-  controlID: ID
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -36047,10 +36782,17 @@ input UpdateSubcontrolInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
   clearDelegate: Boolean
+  controlID: ID
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.

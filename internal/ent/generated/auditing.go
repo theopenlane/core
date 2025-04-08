@@ -118,6 +118,12 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.ReviewFrequency, new.ReviewFrequency) {
 		changes = append(changes, NewChange(actionplanhistory.FieldReviewFrequency, aph.ReviewFrequency, new.ReviewFrequency))
 	}
+	if !reflect.DeepEqual(aph.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldApproverID, aph.ApproverID, new.ApproverID))
+	}
+	if !reflect.DeepEqual(aph.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDelegateID, aph.DelegateID, new.DelegateID))
+	}
 	if !reflect.DeepEqual(aph.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, aph.OwnerID, new.OwnerID))
 	}
@@ -253,9 +259,6 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlhistory.FieldTags, ch.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(controlhistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
-	}
 	if !reflect.DeepEqual(ch.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, ch.Description, new.Description))
 	}
@@ -303,6 +306,15 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(ch.References, new.References) {
 		changes = append(changes, NewChange(controlhistory.FieldReferences, ch.References, new.References))
+	}
+	if !reflect.DeepEqual(ch.ControlOwnerID, new.ControlOwnerID) {
+		changes = append(changes, NewChange(controlhistory.FieldControlOwnerID, ch.ControlOwnerID, new.ControlOwnerID))
+	}
+	if !reflect.DeepEqual(ch.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(controlhistory.FieldDelegateID, ch.DelegateID, new.DelegateID))
+	}
+	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlhistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
 	}
 	if !reflect.DeepEqual(ch.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(controlhistory.FieldRefCode, ch.RefCode, new.RefCode))
@@ -357,6 +369,9 @@ func (cih *ControlImplementationHistory) changes(new *ControlImplementationHisto
 	}
 	if !reflect.DeepEqual(cih.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldTags, cih.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(cih.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldOwnerID, cih.OwnerID, new.OwnerID))
 	}
 	if !reflect.DeepEqual(cih.Status, new.Status) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, cih.Status, new.Status))
@@ -1087,6 +1102,9 @@ func (hh *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(hh.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(hushhistory.FieldDeletedBy, hh.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(hh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(hushhistory.FieldOwnerID, hh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(hh.Name, new.Name) {
 		changes = append(changes, NewChange(hushhistory.FieldName, hh.Name, new.Name))
 	}
@@ -1239,6 +1257,12 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	}
 	if !reflect.DeepEqual(iph.ReviewFrequency, new.ReviewFrequency) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewFrequency, iph.ReviewFrequency, new.ReviewFrequency))
+	}
+	if !reflect.DeepEqual(iph.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldApproverID, iph.ApproverID, new.ApproverID))
+	}
+	if !reflect.DeepEqual(iph.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDelegateID, iph.DelegateID, new.DelegateID))
 	}
 	return changes
 }
@@ -1786,6 +1810,12 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(ph.ReviewFrequency, new.ReviewFrequency) {
 		changes = append(changes, NewChange(procedurehistory.FieldReviewFrequency, ph.ReviewFrequency, new.ReviewFrequency))
 	}
+	if !reflect.DeepEqual(ph.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(procedurehistory.FieldApproverID, ph.ApproverID, new.ApproverID))
+	}
+	if !reflect.DeepEqual(ph.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(procedurehistory.FieldDelegateID, ph.DelegateID, new.DelegateID))
+	}
 	return changes
 }
 
@@ -2002,6 +2032,12 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(rh.BusinessCosts, new.BusinessCosts) {
 		changes = append(changes, NewChange(riskhistory.FieldBusinessCosts, rh.BusinessCosts, new.BusinessCosts))
 	}
+	if !reflect.DeepEqual(rh.StakeholderID, new.StakeholderID) {
+		changes = append(changes, NewChange(riskhistory.FieldStakeholderID, rh.StakeholderID, new.StakeholderID))
+	}
+	if !reflect.DeepEqual(rh.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(riskhistory.FieldDelegateID, rh.DelegateID, new.DelegateID))
+	}
 	return changes
 }
 
@@ -2149,9 +2185,6 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.Tags, new.Tags) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldTags, sh.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
-	}
 	if !reflect.DeepEqual(sh.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, sh.Description, new.Description))
 	}
@@ -2199,6 +2232,15 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.References, new.References) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldReferences, sh.References, new.References))
+	}
+	if !reflect.DeepEqual(sh.ControlOwnerID, new.ControlOwnerID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlOwnerID, sh.ControlOwnerID, new.ControlOwnerID))
+	}
+	if !reflect.DeepEqual(sh.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDelegateID, sh.DelegateID, new.DelegateID))
+	}
+	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
 	}
 	if !reflect.DeepEqual(sh.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, sh.RefCode, new.RefCode))

@@ -430,6 +430,46 @@ func (chu *ControlHistoryUpdate) ClearReferences() *ControlHistoryUpdate {
 	return chu
 }
 
+// SetControlOwnerID sets the "control_owner_id" field.
+func (chu *ControlHistoryUpdate) SetControlOwnerID(s string) *ControlHistoryUpdate {
+	chu.mutation.SetControlOwnerID(s)
+	return chu
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableControlOwnerID(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetControlOwnerID(*s)
+	}
+	return chu
+}
+
+// ClearControlOwnerID clears the value of the "control_owner_id" field.
+func (chu *ControlHistoryUpdate) ClearControlOwnerID() *ControlHistoryUpdate {
+	chu.mutation.ClearControlOwnerID()
+	return chu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (chu *ControlHistoryUpdate) SetDelegateID(s string) *ControlHistoryUpdate {
+	chu.mutation.SetDelegateID(s)
+	return chu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableDelegateID(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetDelegateID(*s)
+	}
+	return chu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (chu *ControlHistoryUpdate) ClearDelegateID() *ControlHistoryUpdate {
+	chu.mutation.ClearDelegateID()
+	return chu
+}
+
 // SetRefCode sets the "ref_code" field.
 func (chu *ControlHistoryUpdate) SetRefCode(s string) *ControlHistoryUpdate {
 	chu.mutation.SetRefCode(s)
@@ -587,9 +627,6 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if chu.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if chu.mutation.OwnerIDCleared() {
-		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
-	}
 	if value, ok := chu.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 	}
@@ -720,6 +757,21 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if chu.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := chu.mutation.ControlOwnerID(); ok {
+		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
+	}
+	if chu.mutation.ControlOwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlOwnerID, field.TypeString)
+	}
+	if value, ok := chu.mutation.DelegateID(); ok {
+		_spec.SetField(controlhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if chu.mutation.DelegateIDCleared() {
+		_spec.ClearField(controlhistory.FieldDelegateID, field.TypeString)
+	}
+	if chu.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := chu.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
@@ -1150,6 +1202,46 @@ func (chuo *ControlHistoryUpdateOne) ClearReferences() *ControlHistoryUpdateOne 
 	return chuo
 }
 
+// SetControlOwnerID sets the "control_owner_id" field.
+func (chuo *ControlHistoryUpdateOne) SetControlOwnerID(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetControlOwnerID(s)
+	return chuo
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableControlOwnerID(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetControlOwnerID(*s)
+	}
+	return chuo
+}
+
+// ClearControlOwnerID clears the value of the "control_owner_id" field.
+func (chuo *ControlHistoryUpdateOne) ClearControlOwnerID() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearControlOwnerID()
+	return chuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (chuo *ControlHistoryUpdateOne) SetDelegateID(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetDelegateID(s)
+	return chuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableDelegateID(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetDelegateID(*s)
+	}
+	return chuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (chuo *ControlHistoryUpdateOne) ClearDelegateID() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearDelegateID()
+	return chuo
+}
+
 // SetRefCode sets the "ref_code" field.
 func (chuo *ControlHistoryUpdateOne) SetRefCode(s string) *ControlHistoryUpdateOne {
 	chuo.mutation.SetRefCode(s)
@@ -1337,9 +1429,6 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	if chuo.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if chuo.mutation.OwnerIDCleared() {
-		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
-	}
 	if value, ok := chuo.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 	}
@@ -1470,6 +1559,21 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	}
 	if chuo.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := chuo.mutation.ControlOwnerID(); ok {
+		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
+	}
+	if chuo.mutation.ControlOwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlOwnerID, field.TypeString)
+	}
+	if value, ok := chuo.mutation.DelegateID(); ok {
+		_spec.SetField(controlhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if chuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(controlhistory.FieldDelegateID, field.TypeString)
+	}
+	if chuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := chuo.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

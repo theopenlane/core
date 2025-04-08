@@ -283,6 +283,46 @@ func (apu *ActionPlanUpdate) ClearReviewFrequency() *ActionPlanUpdate {
 	return apu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (apu *ActionPlanUpdate) SetApproverID(s string) *ActionPlanUpdate {
+	apu.mutation.SetApproverID(s)
+	return apu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableApproverID(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetApproverID(*s)
+	}
+	return apu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (apu *ActionPlanUpdate) ClearApproverID() *ActionPlanUpdate {
+	apu.mutation.ClearApproverID()
+	return apu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (apu *ActionPlanUpdate) SetDelegateID(s string) *ActionPlanUpdate {
+	apu.mutation.SetDelegateID(s)
+	return apu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableDelegateID(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetDelegateID(*s)
+	}
+	return apu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (apu *ActionPlanUpdate) ClearDelegateID() *ActionPlanUpdate {
+	apu.mutation.ClearDelegateID()
+	return apu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apu *ActionPlanUpdate) SetOwnerID(s string) *ActionPlanUpdate {
 	apu.mutation.SetOwnerID(s)
@@ -363,37 +403,9 @@ func (apu *ActionPlanUpdate) ClearSource() *ActionPlanUpdate {
 	return apu
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (apu *ActionPlanUpdate) SetApproverID(id string) *ActionPlanUpdate {
-	apu.mutation.SetApproverID(id)
-	return apu
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableApproverID(id *string) *ActionPlanUpdate {
-	if id != nil {
-		apu = apu.SetApproverID(*id)
-	}
-	return apu
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (apu *ActionPlanUpdate) SetApprover(g *Group) *ActionPlanUpdate {
 	return apu.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (apu *ActionPlanUpdate) SetDelegateID(id string) *ActionPlanUpdate {
-	apu.mutation.SetDelegateID(id)
-	return apu
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDelegateID(id *string) *ActionPlanUpdate {
-	if id != nil {
-		apu = apu.SetDelegateID(*id)
-	}
-	return apu
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -1325,6 +1337,46 @@ func (apuo *ActionPlanUpdateOne) ClearReviewFrequency() *ActionPlanUpdateOne {
 	return apuo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (apuo *ActionPlanUpdateOne) SetApproverID(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetApproverID(s)
+	return apuo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableApproverID(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetApproverID(*s)
+	}
+	return apuo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (apuo *ActionPlanUpdateOne) ClearApproverID() *ActionPlanUpdateOne {
+	apuo.mutation.ClearApproverID()
+	return apuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (apuo *ActionPlanUpdateOne) SetDelegateID(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetDelegateID(s)
+	return apuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableDelegateID(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetDelegateID(*s)
+	}
+	return apuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (apuo *ActionPlanUpdateOne) ClearDelegateID() *ActionPlanUpdateOne {
+	apuo.mutation.ClearDelegateID()
+	return apuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apuo *ActionPlanUpdateOne) SetOwnerID(s string) *ActionPlanUpdateOne {
 	apuo.mutation.SetOwnerID(s)
@@ -1405,37 +1457,9 @@ func (apuo *ActionPlanUpdateOne) ClearSource() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (apuo *ActionPlanUpdateOne) SetApproverID(id string) *ActionPlanUpdateOne {
-	apuo.mutation.SetApproverID(id)
-	return apuo
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableApproverID(id *string) *ActionPlanUpdateOne {
-	if id != nil {
-		apuo = apuo.SetApproverID(*id)
-	}
-	return apuo
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (apuo *ActionPlanUpdateOne) SetApprover(g *Group) *ActionPlanUpdateOne {
 	return apuo.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (apuo *ActionPlanUpdateOne) SetDelegateID(id string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDelegateID(id)
-	return apuo
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDelegateID(id *string) *ActionPlanUpdateOne {
-	if id != nil {
-		apuo = apuo.SetDelegateID(*id)
-	}
-	return apuo
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.

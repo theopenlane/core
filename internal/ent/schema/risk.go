@@ -10,7 +10,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -102,6 +104,14 @@ func (Risk) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("business costs associated with the risk"),
+		field.String("stakeholder_id").
+			Optional().
+			Unique().
+			Comment("the id of the group responsible for risk oversight"),
+		field.String("delegate_id").
+			Optional().
+			Unique().
+			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
 	}
 }
 
@@ -116,14 +126,34 @@ func (r Risk) Edges() []ent.Edge {
 			fromSchema: r,
 			name:       "stakeholder",
 			t:          Group.Type,
+			field:      "stakeholder_id",
 			comment:    "the group of users who are responsible for risk oversight",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
 			name:       "delegate",
 			t:          Group.Type,
+			field:      "delegate_id",
 			comment:    "temporary delegates for the risk, used for temporary ownership",
 		}),
+	}
+}
+
+// Hooks of the Risk
+func (Risk) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"stakeholder": "group",
+			}, "stakeholder"),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"delegate": "group",
+			}, "delegate"),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
 	}
 }
 

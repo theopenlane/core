@@ -241,7 +241,7 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
@@ -251,6 +251,9 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 	// create groups to be associated with the control
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create control implementation to be associated with the control
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -315,10 +318,11 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 						URL:  "https://example.com",
 					},
 				},
-				ControlOwnerID: &ownerGroup.ID,
-				DelegateID:     &deleteGroup.ID,
-				Source:         &enums.ControlSourceFramework,
-				ProgramIDs:     []string{program1.ID, program2.ID}, // multiple programs
+				ControlOwnerID:           &ownerGroup.ID,
+				DelegateID:               &delegateGroup.ID,
+				Source:                   &enums.ControlSourceFramework,
+				ProgramIDs:               []string{program1.ID, program2.ID}, // multiple programs
+				ControlImplementationIDs: []string{controlImplementation.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -569,12 +573,20 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				}
 			}
 
+			if tc.request.ControlImplementationIDs != nil {
+				require.Len(t, resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs))
+			}
+
 			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
 				require.NoError(t, err)
 				require.NotEmpty(t, res)
 				assert.Equal(t, resp.CreateControl.Control.ID, res.Control.ID)
+
+				if tc.request.ControlImplementationIDs != nil {
+					require.Len(t, res.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs))
+				}
 			}
 
 		})
@@ -803,8 +815,6 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				}
 
 				// ensure view only user can see the control created by the admin user
-				// TODO (sfunk): verify its okay users without access to the program can see a control
-				// from a public standard
 				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
 				if tc.expectNoAccessViewer {
 					require.Error(t, err)
@@ -839,7 +849,10 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	deleteGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create control implementation to be associated with the control
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
@@ -869,6 +882,9 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 				Description:   lo.ToPtr("Updated description"),
 				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
 				AddViewerIDs:  []string{groupMember.GroupID},
+				AddControlImplementationIDs: []string{
+					controlImplementation.ID,
+				},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -920,7 +936,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 					},
 				},
 				ControlOwnerID: &ownerGroup.ID,
-				DelegateID:     &deleteGroup.ID,
+				DelegateID:     &delegateGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 			},
 			client: suite.client.apiWithPAT,
@@ -1062,6 +1078,10 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 
 			if tc.request.ClearMappedCategories != nil && *tc.request.ClearMappedCategories {
 				assert.Empty(t, resp.UpdateControl.Control.MappedCategories)
+			}
+
+			if tc.request.AddControlImplementationIDs != nil {
+				require.Len(t, resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs))
 			}
 
 			// ensure the program is set

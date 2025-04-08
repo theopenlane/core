@@ -7,9 +7,13 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
@@ -69,30 +73,51 @@ func (ControlImplementation) Fields() []ent.Field {
 }
 
 // Mixin of the ControlImplementation
-func (ControlImplementation) Mixin() []ent.Mixin {
-	return getDefaultMixins()
+func (c ControlImplementation) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			// subcontrols can inherit permissions from the parent control
+			newObjectOwnedMixin[generated.ControlImplementation](c,
+				withParents(Control{}, Subcontrol{}),
+				withOrganizationOwner(true),
+			),
+		},
+	}.getMixins()
 }
 
 // Edges of the ControlImplementation
 func (c ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(c, Control{}),
+		defaultEdgeFromWithPagination(c, Subcontrol{}),
+	}
+}
+
+// Hooks of the ControlImplementation
+func (ControlImplementation) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookControlImplementation(),
 	}
 }
 
 // Annotations of the ControlImplementation
 func (ControlImplementation) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
 
 // Policy of the ControlImplementation
 func (ControlImplementation) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlsParent),    // if mutation contains control_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
 		),
 	)
 }

@@ -133,20 +133,6 @@ func (cc *ControlCreate) SetTags(s []string) *ControlCreate {
 	return cc
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (cc *ControlCreate) SetOwnerID(s string) *ControlCreate {
-	cc.mutation.SetOwnerID(s)
-	return cc
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableOwnerID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetOwnerID(*s)
-	}
-	return cc
-}
-
 // SetDescription sets the "description" field.
 func (cc *ControlCreate) SetDescription(s string) *ControlCreate {
 	cc.mutation.SetDescription(s)
@@ -315,6 +301,48 @@ func (cc *ControlCreate) SetReferences(m []models.Reference) *ControlCreate {
 	return cc
 }
 
+// SetControlOwnerID sets the "control_owner_id" field.
+func (cc *ControlCreate) SetControlOwnerID(s string) *ControlCreate {
+	cc.mutation.SetControlOwnerID(s)
+	return cc
+}
+
+// SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableControlOwnerID(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetControlOwnerID(*s)
+	}
+	return cc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (cc *ControlCreate) SetDelegateID(s string) *ControlCreate {
+	cc.mutation.SetDelegateID(s)
+	return cc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableDelegateID(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetDelegateID(*s)
+	}
+	return cc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (cc *ControlCreate) SetOwnerID(s string) *ControlCreate {
+	cc.mutation.SetOwnerID(s)
+	return cc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableOwnerID(s *string) *ControlCreate {
+	if s != nil {
+		cc.SetOwnerID(*s)
+	}
+	return cc
+}
+
 // SetRefCode sets the "ref_code" field.
 func (cc *ControlCreate) SetRefCode(s string) *ControlCreate {
 	cc.mutation.SetRefCode(s)
@@ -349,76 +377,6 @@ func (cc *ControlCreate) SetNillableID(s *string) *ControlCreate {
 	return cc
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (cc *ControlCreate) SetOwner(o *Organization) *ControlCreate {
-	return cc.SetOwnerID(o.ID)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddBlockedGroupIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddBlockedGroupIDs(ids...)
-	return cc
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (cc *ControlCreate) AddBlockedGroups(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cc.AddBlockedGroupIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddEditorIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddEditorIDs(ids...)
-	return cc
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (cc *ControlCreate) AddEditors(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cc.AddEditorIDs(ids...)
-}
-
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddViewerIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddViewerIDs(ids...)
-	return cc
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (cc *ControlCreate) AddViewers(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cc.AddViewerIDs(ids...)
-}
-
-// SetStandard sets the "standard" edge to the Standard entity.
-func (cc *ControlCreate) SetStandard(s *Standard) *ControlCreate {
-	return cc.SetStandardID(s.ID)
-}
-
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (cc *ControlCreate) AddProgramIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddProgramIDs(ids...)
-	return cc
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cc.AddProgramIDs(ids...)
-}
-
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (cc *ControlCreate) AddEvidenceIDs(ids ...string) *ControlCreate {
 	cc.mutation.AddEvidenceIDs(ids...)
@@ -434,36 +392,6 @@ func (cc *ControlCreate) AddEvidence(e ...*Evidence) *ControlCreate {
 	return cc.AddEvidenceIDs(ids...)
 }
 
-// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (cc *ControlCreate) AddControlImplementationIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddControlImplementationIDs(ids...)
-	return cc
-}
-
-// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (cc *ControlCreate) AddControlImplementations(c ...*ControlImplementation) *ControlCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return cc.AddControlImplementationIDs(ids...)
-}
-
-// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (cc *ControlCreate) AddMappedControlIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddMappedControlIDs(ids...)
-	return cc
-}
-
-// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (cc *ControlCreate) AddMappedControls(m ...*MappedControl) *ControlCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return cc.AddMappedControlIDs(ids...)
-}
-
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
 func (cc *ControlCreate) AddControlObjectiveIDs(ids ...string) *ControlCreate {
 	cc.mutation.AddControlObjectiveIDs(ids...)
@@ -477,21 +405,6 @@ func (cc *ControlCreate) AddControlObjectives(c ...*ControlObjective) *ControlCr
 		ids[i] = c[i].ID
 	}
 	return cc.AddControlObjectiveIDs(ids...)
-}
-
-// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (cc *ControlCreate) AddSubcontrolIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddSubcontrolIDs(ids...)
-	return cc
-}
-
-// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (cc *ControlCreate) AddSubcontrols(s ...*Subcontrol) *ControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return cc.AddSubcontrolIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -584,18 +497,19 @@ func (cc *ControlCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlCreat
 	return cc.AddInternalPolicyIDs(ids...)
 }
 
-// SetControlOwnerID sets the "control_owner" edge to the Group entity by ID.
-func (cc *ControlCreate) SetControlOwnerID(id string) *ControlCreate {
-	cc.mutation.SetControlOwnerID(id)
+// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
+func (cc *ControlCreate) AddMappedControlIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddMappedControlIDs(ids...)
 	return cc
 }
 
-// SetNillableControlOwnerID sets the "control_owner" edge to the Group entity by ID if the given value is not nil.
-func (cc *ControlCreate) SetNillableControlOwnerID(id *string) *ControlCreate {
-	if id != nil {
-		cc = cc.SetControlOwnerID(*id)
+// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
+func (cc *ControlCreate) AddMappedControls(m ...*MappedControl) *ControlCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
 	}
-	return cc
+	return cc.AddMappedControlIDs(ids...)
 }
 
 // SetControlOwner sets the "control_owner" edge to the Group entity.
@@ -603,23 +517,109 @@ func (cc *ControlCreate) SetControlOwner(g *Group) *ControlCreate {
 	return cc.SetControlOwnerID(g.ID)
 }
 
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (cc *ControlCreate) SetDelegateID(id string) *ControlCreate {
-	cc.mutation.SetDelegateID(id)
-	return cc
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (cc *ControlCreate) SetNillableDelegateID(id *string) *ControlCreate {
-	if id != nil {
-		cc = cc.SetDelegateID(*id)
-	}
-	return cc
-}
-
 // SetDelegate sets the "delegate" edge to the Group entity.
 func (cc *ControlCreate) SetDelegate(g *Group) *ControlCreate {
 	return cc.SetDelegateID(g.ID)
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (cc *ControlCreate) SetOwner(o *Organization) *ControlCreate {
+	return cc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddBlockedGroupIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddBlockedGroupIDs(ids...)
+	return cc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (cc *ControlCreate) AddBlockedGroups(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddEditorIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddEditorIDs(ids...)
+	return cc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (cc *ControlCreate) AddEditors(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddViewerIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddViewerIDs(ids...)
+	return cc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (cc *ControlCreate) AddViewers(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddViewerIDs(ids...)
+}
+
+// SetStandard sets the "standard" edge to the Standard entity.
+func (cc *ControlCreate) SetStandard(s *Standard) *ControlCreate {
+	return cc.SetStandardID(s.ID)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (cc *ControlCreate) AddProgramIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddProgramIDs(ids...)
+	return cc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddProgramIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (cc *ControlCreate) AddControlImplementationIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddControlImplementationIDs(ids...)
+	return cc
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (cc *ControlCreate) AddControlImplementations(c ...*ControlImplementation) *ControlCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddControlImplementationIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (cc *ControlCreate) AddSubcontrolIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddSubcontrolIDs(ids...)
+	return cc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (cc *ControlCreate) AddSubcontrols(s ...*Subcontrol) *ControlCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cc.AddSubcontrolIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -709,11 +709,6 @@ func (cc *ControlCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Control.display_id": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.OwnerID(); ok {
-		if err := control.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := cc.mutation.Status(); ok {
 		if err := control.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
@@ -727,6 +722,11 @@ func (cc *ControlCreate) check() error {
 	if v, ok := cc.mutation.ControlType(); ok {
 		if err := control.ControlTypeValidator(v); err != nil {
 			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "Control.control_type": %w`, err)}
+		}
+	}
+	if v, ok := cc.mutation.OwnerID(); ok {
+		if err := control.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
 		}
 	}
 	if _, ok := cc.mutation.RefCode(); !ok {
@@ -873,110 +873,6 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
 	}
-	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.OwnerTable,
-			Columns: []string{control.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.OwnerID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.BlockedGroupsTable,
-			Columns: control.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ControlBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.EditorsTable,
-			Columns: control.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ControlEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ControlViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.StandardIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   control.StandardTable,
-			Columns: []string{control.StandardColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.Control
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.StandardID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ProgramsTable,
-			Columns: control.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ProgramControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := cc.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -994,40 +890,6 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ControlImplementationsTable,
-			Columns: control.ControlImplementationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ControlControlImplementations
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.MappedControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.MappedControlsTable,
-			Columns: control.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.MappedControlControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := cc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1040,23 +902,6 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ControlControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   control.SubcontrolsTable,
-			Columns: []string{control.SubcontrolsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1164,6 +1009,23 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := cc.mutation.MappedControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.MappedControlsTable,
+			Columns: control.MappedControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.MappedControlControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := cc.mutation.ControlOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1179,7 +1041,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.control_control_owner = &nodes[0]
+		_node.ControlOwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.DelegateIDs(); len(nodes) > 0 {
@@ -1197,7 +1059,145 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.control_delegate = &nodes[0]
+		_node.DelegateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   control.OwnerTable,
+			Columns: []string{control.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.BlockedGroupsTable,
+			Columns: control.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.EditorsTable,
+			Columns: control.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ViewersTable,
+			Columns: control.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.StandardIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   control.StandardTable,
+			Columns: []string{control.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StandardID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ProgramsTable,
+			Columns: control.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ControlImplementationsTable,
+			Columns: control.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.SubcontrolsTable,
+			Columns: []string{control.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

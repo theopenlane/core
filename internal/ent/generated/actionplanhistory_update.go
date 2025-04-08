@@ -277,6 +277,46 @@ func (aphu *ActionPlanHistoryUpdate) ClearReviewFrequency() *ActionPlanHistoryUp
 	return aphu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetApproverID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetApproverID(s)
+	return aphu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableApproverID(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetApproverID(*s)
+	}
+	return aphu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearApproverID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearApproverID()
+	return aphu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetDelegateID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDelegateID(s)
+	return aphu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableDelegateID(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetDelegateID(*s)
+	}
+	return aphu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDelegateID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDelegateID()
+	return aphu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphu *ActionPlanHistoryUpdate) SetOwnerID(s string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetOwnerID(s)
@@ -524,6 +564,18 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if aphu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := aphu.mutation.ApproverID(); ok {
+		_spec.SetField(actionplanhistory.FieldApproverID, field.TypeString, value)
+	}
+	if aphu.mutation.ApproverIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := aphu.mutation.DelegateID(); ok {
+		_spec.SetField(actionplanhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if aphu.mutation.DelegateIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldDelegateID, field.TypeString)
 	}
 	if value, ok := aphu.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
@@ -817,6 +869,46 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearReviewFrequency() *ActionPlanHisto
 	return aphuo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetApproverID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetApproverID(s)
+	return aphuo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableApproverID(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetApproverID(*s)
+	}
+	return aphuo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearApproverID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearApproverID()
+	return aphuo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDelegateID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDelegateID(s)
+	return aphuo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDelegateID(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetDelegateID(*s)
+	}
+	return aphuo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDelegateID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDelegateID()
+	return aphuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphuo *ActionPlanHistoryUpdateOne) SetOwnerID(s string) *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.SetOwnerID(s)
@@ -1094,6 +1186,18 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if aphuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplanhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := aphuo.mutation.ApproverID(); ok {
+		_spec.SetField(actionplanhistory.FieldApproverID, field.TypeString, value)
+	}
+	if aphuo.mutation.ApproverIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldApproverID, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.DelegateID(); ok {
+		_spec.SetField(actionplanhistory.FieldDelegateID, field.TypeString, value)
+	}
+	if aphuo.mutation.DelegateIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldDelegateID, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

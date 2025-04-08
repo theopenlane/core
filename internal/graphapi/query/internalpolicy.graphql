@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVInternalPolicy($input: Upload!) {
   createBulkCSVInternalPolicy(input: $input) {
     internalPolicies {
@@ -18,6 +17,14 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -41,6 +48,14 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       tags
       updatedAt
       updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -69,6 +84,14 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
         name
       }
       blockedGroups {
+        id
+        name
+      }
+      approver {
+        id
+        name
+      }
+      delegate {
         id
         name
       }
@@ -110,35 +133,15 @@ query GetAllInternalPolicies {
           id
           name
         }
+        approver {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
-    }
-  }
-}
-query GetInternalPolicyByID($internalPolicyId: ID!) {
-  internalPolicy(id: $internalPolicyId) {
-    approvalRequired
-    createdAt
-    createdBy
-    details
-    displayID
-    id
-    name
-    ownerID
-    policyType
-    reviewDue
-    reviewFrequency
-    revision
-    status
-    tags
-    updatedAt
-    updatedBy
-    editors {
-      id
-      name
-    }
-    blockedGroups {
-      id
-      name
     }
   }
 }
@@ -171,10 +174,56 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
           id
           name
         }
+        approver {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
     }
   }
 }
+
+query GetInternalPolicyByID($internalPolicyId: ID!) {
+  internalPolicy(id: $internalPolicyId) {
+    approvalRequired
+    createdAt
+    createdBy
+    details
+    displayID
+    id
+    name
+    ownerID
+    policyType
+    reviewDue
+    reviewFrequency
+    revision
+    status
+    tags
+    updatedAt
+    updatedBy
+    editors {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
+    approver {
+      id
+      name
+    }
+    delegate {
+      id
+      name
+    }
+  }
+}
+
 mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
   updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
     internalPolicy {
@@ -199,6 +248,14 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
         name
       }
       blockedGroups {
+        id
+        name
+      }
+      approver {
+        id
+        name
+      }
+      delegate {
         id
         name
       }

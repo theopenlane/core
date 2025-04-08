@@ -138,6 +138,16 @@ func ReviewDue(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldReviewDue, v))
 }
 
+// ApproverID applies equality check predicate on the "approver_id" field. It's identical to ApproverIDEQ.
+func ApproverID(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldApproverID, v))
+}
+
+// DelegateID applies equality check predicate on the "delegate_id" field. It's identical to DelegateIDEQ.
+func DelegateID(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldDelegateID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldCreatedAt, v))
@@ -1101,6 +1111,156 @@ func ReviewFrequencyIsNil() predicate.Procedure {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// ApproverIDEQ applies the EQ predicate on the "approver_id" field.
+func ApproverIDEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldApproverID, v))
+}
+
+// ApproverIDNEQ applies the NEQ predicate on the "approver_id" field.
+func ApproverIDNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldApproverID, v))
+}
+
+// ApproverIDIn applies the In predicate on the "approver_id" field.
+func ApproverIDIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldApproverID, vs...))
+}
+
+// ApproverIDNotIn applies the NotIn predicate on the "approver_id" field.
+func ApproverIDNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldApproverID, vs...))
+}
+
+// ApproverIDGT applies the GT predicate on the "approver_id" field.
+func ApproverIDGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldApproverID, v))
+}
+
+// ApproverIDGTE applies the GTE predicate on the "approver_id" field.
+func ApproverIDGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldApproverID, v))
+}
+
+// ApproverIDLT applies the LT predicate on the "approver_id" field.
+func ApproverIDLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldApproverID, v))
+}
+
+// ApproverIDLTE applies the LTE predicate on the "approver_id" field.
+func ApproverIDLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldApproverID, v))
+}
+
+// ApproverIDContains applies the Contains predicate on the "approver_id" field.
+func ApproverIDContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldApproverID, v))
+}
+
+// ApproverIDHasPrefix applies the HasPrefix predicate on the "approver_id" field.
+func ApproverIDHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldApproverID, v))
+}
+
+// ApproverIDHasSuffix applies the HasSuffix predicate on the "approver_id" field.
+func ApproverIDHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldApproverID, v))
+}
+
+// ApproverIDIsNil applies the IsNil predicate on the "approver_id" field.
+func ApproverIDIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldApproverID))
+}
+
+// ApproverIDNotNil applies the NotNil predicate on the "approver_id" field.
+func ApproverIDNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldApproverID))
+}
+
+// ApproverIDEqualFold applies the EqualFold predicate on the "approver_id" field.
+func ApproverIDEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldApproverID, v))
+}
+
+// ApproverIDContainsFold applies the ContainsFold predicate on the "approver_id" field.
+func ApproverIDContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldApproverID, v))
+}
+
+// DelegateIDEQ applies the EQ predicate on the "delegate_id" field.
+func DelegateIDEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldDelegateID, v))
+}
+
+// DelegateIDNEQ applies the NEQ predicate on the "delegate_id" field.
+func DelegateIDNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldDelegateID, v))
+}
+
+// DelegateIDIn applies the In predicate on the "delegate_id" field.
+func DelegateIDIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDNotIn applies the NotIn predicate on the "delegate_id" field.
+func DelegateIDNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldDelegateID, vs...))
+}
+
+// DelegateIDGT applies the GT predicate on the "delegate_id" field.
+func DelegateIDGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldDelegateID, v))
+}
+
+// DelegateIDGTE applies the GTE predicate on the "delegate_id" field.
+func DelegateIDGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldDelegateID, v))
+}
+
+// DelegateIDLT applies the LT predicate on the "delegate_id" field.
+func DelegateIDLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldDelegateID, v))
+}
+
+// DelegateIDLTE applies the LTE predicate on the "delegate_id" field.
+func DelegateIDLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldDelegateID, v))
+}
+
+// DelegateIDContains applies the Contains predicate on the "delegate_id" field.
+func DelegateIDContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldDelegateID, v))
+}
+
+// DelegateIDHasPrefix applies the HasPrefix predicate on the "delegate_id" field.
+func DelegateIDHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldDelegateID, v))
+}
+
+// DelegateIDHasSuffix applies the HasSuffix predicate on the "delegate_id" field.
+func DelegateIDHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldDelegateID, v))
+}
+
+// DelegateIDIsNil applies the IsNil predicate on the "delegate_id" field.
+func DelegateIDIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDelegateID))
+}
+
+// DelegateIDNotNil applies the NotNil predicate on the "delegate_id" field.
+func DelegateIDNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDelegateID))
+}
+
+// DelegateIDEqualFold applies the EqualFold predicate on the "delegate_id" field.
+func DelegateIDEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldDelegateID, v))
+}
+
+// DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
+func DelegateIDContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldDelegateID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

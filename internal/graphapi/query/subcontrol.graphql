@@ -25,6 +25,14 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      controlOwner {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -56,6 +64,14 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
       tags
       updatedAt
       updatedBy
+      controlOwner {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -87,6 +103,14 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       tags
       updatedAt
       updatedBy
+      controlOwner {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }

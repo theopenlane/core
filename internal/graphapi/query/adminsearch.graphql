@@ -22,6 +22,8 @@ query AdminSearch($query: String!) {
           name
           actionPlanType
           details
+          approverID
+          delegateID
           ownerID
           source
         }
@@ -46,7 +48,6 @@ query AdminSearch($query: String!) {
           id
           displayID
           tags
-          ownerID
           description
           referenceID
           auditorReferenceID
@@ -60,6 +61,9 @@ query AdminSearch($query: String!) {
           implementationGuidance
           exampleEvidence
           references
+          controlOwnerID
+          delegateID
+          ownerID
           refCode
           standardID
         }
@@ -69,6 +73,7 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          ownerID
           details
         }
       }
@@ -195,6 +200,8 @@ query AdminSearch($query: String!) {
           name
           policyType
           details
+          approverID
+          delegateID
         }
       }
       ... on MappedControlSearchResult {
@@ -283,6 +290,8 @@ query AdminSearch($query: String!) {
           name
           procedureType
           details
+          approverID
+          delegateID
         }
       }
       ... on ProgramSearchResult {
@@ -309,6 +318,8 @@ query AdminSearch($query: String!) {
           mitigation
           details
           businessCosts
+          stakeholderID
+          delegateID
         }
       }
       ... on StandardSearchResult {
@@ -336,7 +347,6 @@ query AdminSearch($query: String!) {
           id
           displayID
           tags
-          ownerID
           description
           referenceID
           auditorReferenceID
@@ -350,6 +360,9 @@ query AdminSearch($query: String!) {
           implementationGuidance
           exampleEvidence
           references
+          controlOwnerID
+          delegateID
+          ownerID
           refCode
           controlID
         }

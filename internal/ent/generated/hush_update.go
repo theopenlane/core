@@ -106,6 +106,26 @@ func (hu *HushUpdate) ClearDeletedBy() *HushUpdate {
 	return hu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (hu *HushUpdate) SetOwnerID(s string) *HushUpdate {
+	hu.mutation.SetOwnerID(s)
+	return hu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (hu *HushUpdate) SetNillableOwnerID(s *string) *HushUpdate {
+	if s != nil {
+		hu.SetOwnerID(*s)
+	}
+	return hu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (hu *HushUpdate) ClearOwnerID() *HushUpdate {
+	hu.mutation.ClearOwnerID()
+	return hu
+}
+
 // SetName sets the "name" field.
 func (hu *HushUpdate) SetName(s string) *HushUpdate {
 	hu.mutation.SetName(s)
@@ -160,6 +180,11 @@ func (hu *HushUpdate) ClearKind() *HushUpdate {
 	return hu
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (hu *HushUpdate) SetOwner(o *Organization) *HushUpdate {
+	return hu.SetOwnerID(o.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (hu *HushUpdate) AddIntegrationIDs(ids ...string) *HushUpdate {
 	hu.mutation.AddIntegrationIDs(ids...)
@@ -173,21 +198,6 @@ func (hu *HushUpdate) AddIntegrations(i ...*Integration) *HushUpdate {
 		ids[j] = i[j].ID
 	}
 	return hu.AddIntegrationIDs(ids...)
-}
-
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (hu *HushUpdate) AddOrganizationIDs(ids ...string) *HushUpdate {
-	hu.mutation.AddOrganizationIDs(ids...)
-	return hu
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (hu *HushUpdate) AddOrganization(o ...*Organization) *HushUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return hu.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -210,6 +220,12 @@ func (hu *HushUpdate) Mutation() *HushMutation {
 	return hu.mutation
 }
 
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (hu *HushUpdate) ClearOwner() *HushUpdate {
+	hu.mutation.ClearOwner()
+	return hu
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (hu *HushUpdate) ClearIntegrations() *HushUpdate {
 	hu.mutation.ClearIntegrations()
@@ -229,27 +245,6 @@ func (hu *HushUpdate) RemoveIntegrations(i ...*Integration) *HushUpdate {
 		ids[j] = i[j].ID
 	}
 	return hu.RemoveIntegrationIDs(ids...)
-}
-
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (hu *HushUpdate) ClearOrganization() *HushUpdate {
-	hu.mutation.ClearOrganization()
-	return hu
-}
-
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
-func (hu *HushUpdate) RemoveOrganizationIDs(ids ...string) *HushUpdate {
-	hu.mutation.RemoveOrganizationIDs(ids...)
-	return hu
-}
-
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (hu *HushUpdate) RemoveOrganization(o ...*Organization) *HushUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return hu.RemoveOrganizationIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -317,6 +312,11 @@ func (hu *HushUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (hu *HushUpdate) check() error {
+	if v, ok := hu.mutation.OwnerID(); ok {
+		if err := hush.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := hu.mutation.Name(); ok {
 		if err := hush.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Hush.name": %w`, err)}
@@ -394,6 +394,37 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
+	if hu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if hu.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -437,54 +468,6 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = hu.schemaConfig.IntegrationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if hu.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = hu.schemaConfig.OrganizationSecrets
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := hu.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !hu.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = hu.schemaConfig.OrganizationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := hu.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = hu.schemaConfig.OrganizationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -634,6 +617,26 @@ func (huo *HushUpdateOne) ClearDeletedBy() *HushUpdateOne {
 	return huo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (huo *HushUpdateOne) SetOwnerID(s string) *HushUpdateOne {
+	huo.mutation.SetOwnerID(s)
+	return huo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (huo *HushUpdateOne) SetNillableOwnerID(s *string) *HushUpdateOne {
+	if s != nil {
+		huo.SetOwnerID(*s)
+	}
+	return huo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (huo *HushUpdateOne) ClearOwnerID() *HushUpdateOne {
+	huo.mutation.ClearOwnerID()
+	return huo
+}
+
 // SetName sets the "name" field.
 func (huo *HushUpdateOne) SetName(s string) *HushUpdateOne {
 	huo.mutation.SetName(s)
@@ -688,6 +691,11 @@ func (huo *HushUpdateOne) ClearKind() *HushUpdateOne {
 	return huo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (huo *HushUpdateOne) SetOwner(o *Organization) *HushUpdateOne {
+	return huo.SetOwnerID(o.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (huo *HushUpdateOne) AddIntegrationIDs(ids ...string) *HushUpdateOne {
 	huo.mutation.AddIntegrationIDs(ids...)
@@ -701,21 +709,6 @@ func (huo *HushUpdateOne) AddIntegrations(i ...*Integration) *HushUpdateOne {
 		ids[j] = i[j].ID
 	}
 	return huo.AddIntegrationIDs(ids...)
-}
-
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (huo *HushUpdateOne) AddOrganizationIDs(ids ...string) *HushUpdateOne {
-	huo.mutation.AddOrganizationIDs(ids...)
-	return huo
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (huo *HushUpdateOne) AddOrganization(o ...*Organization) *HushUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return huo.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -738,6 +731,12 @@ func (huo *HushUpdateOne) Mutation() *HushMutation {
 	return huo.mutation
 }
 
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (huo *HushUpdateOne) ClearOwner() *HushUpdateOne {
+	huo.mutation.ClearOwner()
+	return huo
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (huo *HushUpdateOne) ClearIntegrations() *HushUpdateOne {
 	huo.mutation.ClearIntegrations()
@@ -757,27 +756,6 @@ func (huo *HushUpdateOne) RemoveIntegrations(i ...*Integration) *HushUpdateOne {
 		ids[j] = i[j].ID
 	}
 	return huo.RemoveIntegrationIDs(ids...)
-}
-
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (huo *HushUpdateOne) ClearOrganization() *HushUpdateOne {
-	huo.mutation.ClearOrganization()
-	return huo
-}
-
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
-func (huo *HushUpdateOne) RemoveOrganizationIDs(ids ...string) *HushUpdateOne {
-	huo.mutation.RemoveOrganizationIDs(ids...)
-	return huo
-}
-
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (huo *HushUpdateOne) RemoveOrganization(o ...*Organization) *HushUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return huo.RemoveOrganizationIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -858,6 +836,11 @@ func (huo *HushUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (huo *HushUpdateOne) check() error {
+	if v, ok := huo.mutation.OwnerID(); ok {
+		if err := hush.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := huo.mutation.Name(); ok {
 		if err := hush.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Hush.name": %w`, err)}
@@ -952,6 +935,37 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	if huo.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
+	if huo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hush.OwnerTable,
+			Columns: []string{hush.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if huo.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -995,54 +1009,6 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 			},
 		}
 		edge.Schema = huo.schemaConfig.IntegrationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if huo.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = huo.schemaConfig.OrganizationSecrets
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := huo.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !huo.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = huo.schemaConfig.OrganizationSecrets
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := huo.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   hush.OrganizationTable,
-			Columns: hush.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = huo.schemaConfig.OrganizationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

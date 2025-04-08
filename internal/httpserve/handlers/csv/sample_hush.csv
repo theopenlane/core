@@ -1,2 +1,2 @@
-Name,Description,Kind,SecretName,SecretValue,IntegrationIDs,OrganizationIDs,EventIDs
-example_name,example_description,example_kind,example_secretname,example_secretvalue,example_integrationids,example_organizationids,example_eventids
+Name,Description,Kind,SecretName,SecretValue,OwnerId,IntegrationIDs,EventIDs
+example_name,example_description,example_kind,example_secretname,example_secretvalue,example_ownerid,example_integrationids,example_eventids

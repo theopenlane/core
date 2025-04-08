@@ -305,6 +305,46 @@ func (pu *ProcedureUpdate) ClearReviewFrequency() *ProcedureUpdate {
 	return pu
 }
 
+// SetApproverID sets the "approver_id" field.
+func (pu *ProcedureUpdate) SetApproverID(s string) *ProcedureUpdate {
+	pu.mutation.SetApproverID(s)
+	return pu
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableApproverID(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetApproverID(*s)
+	}
+	return pu
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (pu *ProcedureUpdate) ClearApproverID() *ProcedureUpdate {
+	pu.mutation.ClearApproverID()
+	return pu
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (pu *ProcedureUpdate) SetDelegateID(s string) *ProcedureUpdate {
+	pu.mutation.SetDelegateID(s)
+	return pu
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableDelegateID(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetDelegateID(*s)
+	}
+	return pu
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (pu *ProcedureUpdate) ClearDelegateID() *ProcedureUpdate {
+	pu.mutation.ClearDelegateID()
+	return pu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -340,37 +380,9 @@ func (pu *ProcedureUpdate) AddEditors(g ...*Group) *ProcedureUpdate {
 	return pu.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (pu *ProcedureUpdate) SetApproverID(id string) *ProcedureUpdate {
-	pu.mutation.SetApproverID(id)
-	return pu
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableApproverID(id *string) *ProcedureUpdate {
-	if id != nil {
-		pu = pu.SetApproverID(*id)
-	}
-	return pu
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (pu *ProcedureUpdate) SetApprover(g *Group) *ProcedureUpdate {
 	return pu.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (pu *ProcedureUpdate) SetDelegateID(id string) *ProcedureUpdate {
-	pu.mutation.SetDelegateID(id)
-	return pu
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (pu *ProcedureUpdate) SetNillableDelegateID(id *string) *ProcedureUpdate {
-	if id != nil {
-		pu = pu.SetDelegateID(*id)
-	}
-	return pu
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -1600,6 +1612,46 @@ func (puo *ProcedureUpdateOne) ClearReviewFrequency() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetApproverID sets the "approver_id" field.
+func (puo *ProcedureUpdateOne) SetApproverID(s string) *ProcedureUpdateOne {
+	puo.mutation.SetApproverID(s)
+	return puo
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableApproverID(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetApproverID(*s)
+	}
+	return puo
+}
+
+// ClearApproverID clears the value of the "approver_id" field.
+func (puo *ProcedureUpdateOne) ClearApproverID() *ProcedureUpdateOne {
+	puo.mutation.ClearApproverID()
+	return puo
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (puo *ProcedureUpdateOne) SetDelegateID(s string) *ProcedureUpdateOne {
+	puo.mutation.SetDelegateID(s)
+	return puo
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableDelegateID(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetDelegateID(*s)
+	}
+	return puo
+}
+
+// ClearDelegateID clears the value of the "delegate_id" field.
+func (puo *ProcedureUpdateOne) ClearDelegateID() *ProcedureUpdateOne {
+	puo.mutation.ClearDelegateID()
+	return puo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -1635,37 +1687,9 @@ func (puo *ProcedureUpdateOne) AddEditors(g ...*Group) *ProcedureUpdateOne {
 	return puo.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (puo *ProcedureUpdateOne) SetApproverID(id string) *ProcedureUpdateOne {
-	puo.mutation.SetApproverID(id)
-	return puo
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableApproverID(id *string) *ProcedureUpdateOne {
-	if id != nil {
-		puo = puo.SetApproverID(*id)
-	}
-	return puo
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (puo *ProcedureUpdateOne) SetApprover(g *Group) *ProcedureUpdateOne {
 	return puo.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (puo *ProcedureUpdateOne) SetDelegateID(id string) *ProcedureUpdateOne {
-	puo.mutation.SetDelegateID(id)
-	return puo
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (puo *ProcedureUpdateOne) SetNillableDelegateID(id *string) *ProcedureUpdateOne {
-	if id != nil {
-		puo = puo.SetDelegateID(*id)
-	}
-	return puo
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.

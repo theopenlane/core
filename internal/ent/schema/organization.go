@@ -148,7 +148,11 @@ func (o Organization) Edges() []ent.Edge {
 			cascadeDelete: "Organization",
 		}),
 		defaultEdgeToWithPagination(o, PersonalAccessToken{}),
-		defaultEdgeToWithPagination(o, APIToken{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         APIToken{},
+			cascadeDeleteOwner: true,
+		}),
 
 		edge.From("users", User.Type).
 			Ref("organizations").
@@ -165,10 +169,14 @@ func (o Organization) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("Organization"), // 1:m so we override the default
 			},
+			cascadeDeleteOwner: true,
 		}),
-
 		defaultEdgeToWithPagination(o, Event{}),
-		defaultEdgeToWithPagination(o, Hush{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Hush{},
+			cascadeDeleteOwner: true,
+		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: o,
 			name:       "avatar_file",
@@ -274,6 +282,11 @@ func (o Organization) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
 			edgeSchema:         Subcontrol{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         ControlImplementation{},
 			cascadeDeleteOwner: true,
 		}),
 		edgeToWithPagination(&edgeDefinition{

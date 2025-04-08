@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -239,6 +240,21 @@ func (ciu *ControlImplementationUpdate) AddControls(c ...*Control) *ControlImple
 	return ciu.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ciu *ControlImplementationUpdate) AddSubcontrolIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.AddSubcontrolIDs(ids...)
+	return ciu
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ciu *ControlImplementationUpdate) AddSubcontrols(s ...*Subcontrol) *ControlImplementationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ciu.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (ciu *ControlImplementationUpdate) Mutation() *ControlImplementationMutation {
 	return ciu.mutation
@@ -263,6 +279,27 @@ func (ciu *ControlImplementationUpdate) RemoveControls(c ...*Control) *ControlIm
 		ids[i] = c[i].ID
 	}
 	return ciu.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ciu *ControlImplementationUpdate) ClearSubcontrols() *ControlImplementationUpdate {
+	ciu.mutation.ClearSubcontrols()
+	return ciu
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ciu *ControlImplementationUpdate) RemoveSubcontrolIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.RemoveSubcontrolIDs(ids...)
+	return ciu
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ciu *ControlImplementationUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlImplementationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ciu.RemoveSubcontrolIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -449,6 +486,54 @@ func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err
 			},
 		}
 		edge.Schema = ciu.schemaConfig.ControlControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.SubcontrolControlImplementations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ciu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.SubcontrolControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.SubcontrolControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -683,6 +768,21 @@ func (ciuo *ControlImplementationUpdateOne) AddControls(c ...*Control) *ControlI
 	return ciuo.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ciuo *ControlImplementationUpdateOne) AddSubcontrolIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.AddSubcontrolIDs(ids...)
+	return ciuo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ciuo *ControlImplementationUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlImplementationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ciuo.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (ciuo *ControlImplementationUpdateOne) Mutation() *ControlImplementationMutation {
 	return ciuo.mutation
@@ -707,6 +807,27 @@ func (ciuo *ControlImplementationUpdateOne) RemoveControls(c ...*Control) *Contr
 		ids[i] = c[i].ID
 	}
 	return ciuo.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ciuo *ControlImplementationUpdateOne) ClearSubcontrols() *ControlImplementationUpdateOne {
+	ciuo.mutation.ClearSubcontrols()
+	return ciuo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ciuo *ControlImplementationUpdateOne) RemoveSubcontrolIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.RemoveSubcontrolIDs(ids...)
+	return ciuo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ciuo *ControlImplementationUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlImplementationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ciuo.RemoveSubcontrolIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlImplementationUpdate builder.
@@ -923,6 +1044,54 @@ func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node 
 			},
 		}
 		edge.Schema = ciuo.schemaConfig.ControlControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.SubcontrolControlImplementations
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ciuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.SubcontrolControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SubcontrolsTable,
+			Columns: controlimplementation.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.SubcontrolControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

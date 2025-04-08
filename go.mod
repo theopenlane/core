@@ -13,10 +13,10 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.31.0
 	github.com/alicebob/miniredis/v2 v2.34.0
-	github.com/alitto/pond/v2 v2.3.0
-	github.com/aws/aws-sdk-go-v2/config v1.29.12
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.65
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.0
+	github.com/alitto/pond/v2 v2.3.2
+	github.com/aws/aws-sdk-go-v2/config v1.29.13
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.66
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.1
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/danielgtaylor/huma/v2 v2.32.0
@@ -41,7 +41,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.64
+	github.com/miekg/dns v1.1.65
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.6.0
 	github.com/oNaiPs/go-generate-fast v0.3.0
@@ -49,15 +49,15 @@ require (
 	github.com/openfga/go-sdk v0.6.5
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.12
+	github.com/projectdiscovery/cdncheck v1.1.13
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.16
+	github.com/projectdiscovery/utils v0.4.17
 	github.com/prometheus/client_golang v1.21.1
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.3
-	github.com/riverqueue/river v0.19.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.19.0
+	github.com/riverqueue/river v0.20.1
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.49.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -72,19 +72,19 @@ require (
 	github.com/theopenlane/entx v0.6.1
 	github.com/theopenlane/gqlgen-plugins v0.5.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.10.0
+	github.com/theopenlane/iam v0.10.1
 	github.com/theopenlane/newman v0.1.4
-	github.com/theopenlane/riverboat v0.0.9
+	github.com/theopenlane/riverboat v0.0.10
 	github.com/theopenlane/utils v0.4.5
 	github.com/vektah/gqlparser/v2 v2.5.23
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.41.0
-	golang.org/x/crypto v0.36.0
-	golang.org/x/oauth2 v0.28.0
-	golang.org/x/term v0.30.0
-	golang.org/x/text v0.23.0
-	golang.org/x/tools v0.31.0
+	golang.org/x/crypto v0.37.0
+	golang.org/x/oauth2 v0.29.0
+	golang.org/x/term v0.31.0
+	golang.org/x/text v0.24.0
+	golang.org/x/tools v0.32.0
 )
 
 require (
@@ -136,9 +136,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.7.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.15 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.15 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.25.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.33.17 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.25.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.33.18 // indirect
 	github.com/aws/smithy-go v1.22.3 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bitfield/gotestdox v0.2.2 // indirect
@@ -179,6 +179,7 @@ require (
 	github.com/dnephin/pflag v1.0.7 // indirect
 	github.com/docker/docker v28.0.4+incompatible // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
+	github.com/ebitengine/purego v0.8.2 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/firefart/nonamedreturns v1.0.5 // indirect
@@ -315,6 +316,7 @@ require (
 	github.com/securego/gosec/v2 v2.22.2 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/shirou/gopsutil/v3 v3.24.5 // indirect
+	github.com/shirou/gopsutil/v4 v4.25.2 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sivchari/containedctx v1.0.3 // indirect
 	github.com/sivchari/tenv v1.12.1 // indirect
@@ -326,8 +328,8 @@ require (
 	github.com/stbenjam/no-sprintf-host-port v0.2.0 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tdakkota/asciicheck v0.4.1 // indirect
-	github.com/testcontainers/testcontainers-go v0.35.0 // indirect
-	github.com/testcontainers/testcontainers-go/modules/openfga v0.35.0 // indirect
+	github.com/testcontainers/testcontainers-go v0.36.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/openfga v0.36.0 // indirect
 	github.com/tetafro/godot v1.5.0 // indirect
 	github.com/tidwall/btree v1.7.0 // indirect
 	github.com/tidwall/buntdb v1.3.2 // indirect
@@ -414,7 +416,7 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.36.3
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.70
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.71
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -502,7 +504,7 @@ require (
 	github.com/opencontainers/runc v1.2.5 // indirect
 	github.com/openfga/api/proto v0.0.0-20250127102726-f9709139a369 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20250220223040-ed0cfba54336 // indirect
-	github.com/openfga/openfga v1.8.8 // indirect
+	github.com/openfga/openfga v1.8.9 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -510,15 +512,15 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.22
+	github.com/projectdiscovery/wappalyzergo v0.2.23
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.17.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.19.0 // indirect
-	github.com/riverqueue/river/rivershared v0.19.0 // indirect
-	github.com/riverqueue/river/rivertype v0.19.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.20.1 // indirect
+	github.com/riverqueue/river/rivershared v0.20.1 // indirect
+	github.com/riverqueue/river/rivertype v0.20.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
@@ -530,7 +532,7 @@ require (
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1
 	github.com/spf13/pflag v1.0.6 // indirect
-	github.com/spf13/viper v1.20.0 // indirect
+	github.com/spf13/viper v1.20.1 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/stripe/stripe-go/v81 v81.4.0
 	github.com/subosito/gotenv v1.6.0 // indirect
@@ -565,9 +567,9 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/mod v0.24.0
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sync v0.12.0
-	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/sync v0.13.0
+	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/api v0.228.0 // indirect

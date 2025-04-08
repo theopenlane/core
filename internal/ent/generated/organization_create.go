@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -870,6 +871,21 @@ func (oc *OrganizationCreate) AddSubcontrols(s ...*Subcontrol) *OrganizationCrea
 	return oc.AddSubcontrolIDs(ids...)
 }
 
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (oc *OrganizationCreate) AddControlImplementationIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddControlImplementationIDs(ids...)
+	return oc
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (oc *OrganizationCreate) AddControlImplementations(c ...*ControlImplementation) *OrganizationCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return oc.AddControlImplementationIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (oc *OrganizationCreate) AddEvidenceIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddEvidenceIDs(ids...)
@@ -1431,16 +1447,16 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	}
 	if nodes := oc.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.SecretsTable,
-			Columns: organization.SecretsPrimaryKey,
+			Columns: []string{organization.SecretsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrganizationSecrets
+		edge.Schema = oc.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1799,6 +1815,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlImplementationsTable,
+			Columns: []string{organization.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

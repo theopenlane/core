@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
@@ -23,7 +24,7 @@ func TraverseUser() ent.Interceptor {
 		// bypass filter if the request is allowed, this happens when a user is
 		// being created, via invite or other method by another authenticated user
 		// or in tests
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
+		if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 			return nil
 		}
 

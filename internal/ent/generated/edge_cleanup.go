@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -21,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -81,13 +83,6 @@ func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func ControlEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")), entfga.DeleteTuplesFirstKey{})
-
-	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasControlsWith(control.ID(id)))).Exist(ctx); err == nil && exists {
-		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasControlsWith(control.ID(id))).Exec(ctx); err != nil {
-			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
-			return err
-		}
-	}
 
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
@@ -396,9 +391,23 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).APIToken.Query().Where((apitoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if apitokenCount, err := FromContext(ctx).APIToken.Delete().Where(apitoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", apitokenCount).Msg("deleting apitoken")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).File.Query().Where((file.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", fileCount).Msg("deleting file")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Hush.Query().Where((hush.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if hushCount, err := FromContext(ctx).Hush.Delete().Where(hush.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", hushCount).Msg("deleting hush")
 			return err
 		}
 	}
@@ -543,6 +552,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", evidenceCount).Msg("deleting evidence")
@@ -661,13 +677,6 @@ func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func StandardEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")), entfga.DeleteTuplesFirstKey{})
-
-	if exists, err := FromContext(ctx).Control.Query().Where((control.HasStandardWith(standard.ID(id)))).Exist(ctx); err == nil && exists {
-		if controlCount, err := FromContext(ctx).Control.Delete().Where(control.HasStandardWith(standard.ID(id))).Exec(ctx); err != nil {
-			log.Debug().Err(err).Int("count", controlCount).Msg("deleting control")
-			return err
-		}
-	}
 
 	return nil
 }

@@ -14,16 +14,16 @@ type SchemaConfig struct {
 	ContactFiles                     string // Contact-files->File table.
 	ContactHistory                   string // ContactHistory table.
 	Control                          string // Control table.
-	ControlBlockedGroups             string // Control-blocked_groups->Group table.
-	ControlEditors                   string // Control-editors->Group table.
-	ControlViewers                   string // Control-viewers->Group table.
-	ControlControlImplementations    string // Control-control_implementations->ControlImplementation table.
 	ControlControlObjectives         string // Control-control_objectives->ControlObjective table.
 	ControlTasks                     string // Control-tasks->Task table.
 	ControlNarratives                string // Control-narratives->Narrative table.
 	ControlRisks                     string // Control-risks->Risk table.
 	ControlActionPlans               string // Control-action_plans->ActionPlan table.
 	ControlProcedures                string // Control-procedures->Procedure table.
+	ControlBlockedGroups             string // Control-blocked_groups->Group table.
+	ControlEditors                   string // Control-editors->Group table.
+	ControlViewers                   string // Control-viewers->Group table.
+	ControlControlImplementations    string // Control-control_implementations->ControlImplementation table.
 	ControlHistory                   string // ControlHistory table.
 	ControlImplementation            string // ControlImplementation table.
 	ControlImplementationHistory     string // ControlImplementationHistory table.
@@ -103,7 +103,6 @@ type SchemaConfig struct {
 	OrganizationPersonalAccessTokens string // Organization-personal_access_tokens->PersonalAccessToken table.
 	OrganizationFiles                string // Organization-files->File table.
 	OrganizationEvents               string // Organization-events->Event table.
-	OrganizationSecrets              string // Organization-secrets->Hush table.
 	OrganizationHistory              string // OrganizationHistory table.
 	OrganizationSetting              string // OrganizationSetting table.
 	OrganizationSettingFiles         string // OrganizationSetting-files->File table.
@@ -145,6 +144,7 @@ type SchemaConfig struct {
 	Subcontrol                       string // Subcontrol table.
 	SubcontrolControlObjectives      string // Subcontrol-control_objectives->ControlObjective table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
+	SubcontrolControlImplementations string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.
 	SubscriberEvents                 string // Subscriber-events->Event table.

@@ -243,6 +243,34 @@ func (pc *ProcedureCreate) SetNillableReviewFrequency(e *enums.Frequency) *Proce
 	return pc
 }
 
+// SetApproverID sets the "approver_id" field.
+func (pc *ProcedureCreate) SetApproverID(s string) *ProcedureCreate {
+	pc.mutation.SetApproverID(s)
+	return pc
+}
+
+// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableApproverID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetApproverID(*s)
+	}
+	return pc
+}
+
+// SetDelegateID sets the "delegate_id" field.
+func (pc *ProcedureCreate) SetDelegateID(s string) *ProcedureCreate {
+	pc.mutation.SetDelegateID(s)
+	return pc
+}
+
+// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableDelegateID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetDelegateID(*s)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProcedureCreate) SetID(s string) *ProcedureCreate {
 	pc.mutation.SetID(s)
@@ -292,37 +320,9 @@ func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
 	return pc.AddEditorIDs(ids...)
 }
 
-// SetApproverID sets the "approver" edge to the Group entity by ID.
-func (pc *ProcedureCreate) SetApproverID(id string) *ProcedureCreate {
-	pc.mutation.SetApproverID(id)
-	return pc
-}
-
-// SetNillableApproverID sets the "approver" edge to the Group entity by ID if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableApproverID(id *string) *ProcedureCreate {
-	if id != nil {
-		pc = pc.SetApproverID(*id)
-	}
-	return pc
-}
-
 // SetApprover sets the "approver" edge to the Group entity.
 func (pc *ProcedureCreate) SetApprover(g *Group) *ProcedureCreate {
 	return pc.SetApproverID(g.ID)
-}
-
-// SetDelegateID sets the "delegate" edge to the Group entity by ID.
-func (pc *ProcedureCreate) SetDelegateID(id string) *ProcedureCreate {
-	pc.mutation.SetDelegateID(id)
-	return pc
-}
-
-// SetNillableDelegateID sets the "delegate" edge to the Group entity by ID if the given value is not nil.
-func (pc *ProcedureCreate) SetNillableDelegateID(id *string) *ProcedureCreate {
-	if id != nil {
-		pc = pc.SetDelegateID(*id)
-	}
-	return pc
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
@@ -710,7 +710,7 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.procedure_approver = &nodes[0]
+		_node.ApproverID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.DelegateIDs(); len(nodes) > 0 {
@@ -728,7 +728,7 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.procedure_delegate = &nodes[0]
+		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.ControlsIDs(); len(nodes) > 0 {

@@ -18,6 +18,14 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -41,6 +49,14 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       tags
       updatedAt
       updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
     }
   }
 }
@@ -69,6 +85,14 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
         name
       }
       blockedGroups{
+        id
+        name
+      }
+      approver {
+        id
+        name
+      }
+      delegate {
         id
         name
       }
@@ -110,6 +134,14 @@ query GetAllProcedures {
           id
           name
         }
+        approver {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
     }
   }
@@ -137,6 +169,14 @@ query GetProcedureByID($procedureId: ID!) {
       name
     }
     blockedGroups{
+      id
+      name
+    }
+    approver {
+      id
+      name
+    }
+    delegate {
       id
       name
     }
@@ -171,6 +211,14 @@ query GetProcedures($where: ProcedureWhereInput) {
           id
           name
         }
+        approver {
+          id
+          name
+        }
+        delegate {
+          id
+          name
+        }
       }
     }
   }
@@ -199,6 +247,14 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
         name
       }
       blockedGroups{
+        id
+        name
+      }
+      approver {
+        id
+        name
+      }
+      delegate {
         id
         name
       }

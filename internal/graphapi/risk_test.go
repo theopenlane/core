@@ -182,6 +182,9 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateRiskInput
@@ -211,6 +214,8 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				Mitigation:    lo.ToPtr("did the thing"),
 				Score:         lo.ToPtr(int64(5)),
 				ProgramIDs:    []string{program1.ID, program2.ID}, // multiple programs
+				StakeholderID: &stakeholderGroup.ID,
+				DelegateID:    &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -409,6 +414,18 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				}
 			}
 
+			if tc.request.StakeholderID != nil {
+				assert.Equal(t, *tc.request.StakeholderID, *&resp.CreateRisk.Risk.Stakeholder.ID)
+			} else {
+				assert.Empty(t, resp.CreateRisk.Risk.Stakeholder)
+			}
+
+			if tc.request.DelegateID != nil {
+				assert.Equal(t, *tc.request.DelegateID, *&resp.CreateRisk.Risk.Delegate.ID)
+			} else {
+				assert.Empty(t, resp.CreateRisk.Risk.Delegate)
+			}
+
 			// ensure the org owner has access to the risk that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetRiskByID(testUser1.UserCtx, resp.CreateRisk.Risk.ID)
@@ -433,6 +450,11 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
+	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	anotherStakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	// ensure the user does not currently have access to the risk
 	res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
 	require.Error(t, err)
@@ -448,8 +470,10 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateRiskInput{
-				Details:      lo.ToPtr("Updated details"),
-				AddViewerIDs: []string{groupMember.GroupID},
+				Details:       lo.ToPtr("Updated details"),
+				AddViewerIDs:  []string{groupMember.GroupID},
+				StakeholderID: &stakeholderGroup.ID,
+				DelegateID:    &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -457,11 +481,12 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateRiskInput{
-				Status:     &enums.RiskArchived,
-				Tags:       []string{"tag1", "tag2"},
-				Mitigation: lo.ToPtr("Updated mitigation"),
-				Impact:     &enums.RiskImpactModerate,
-				Likelihood: &enums.RiskLikelihoodLow,
+				Status:        &enums.RiskArchived,
+				Tags:          []string{"tag1", "tag2"},
+				Mitigation:    lo.ToPtr("Updated mitigation"),
+				Impact:        &enums.RiskImpactModerate,
+				Likelihood:    &enums.RiskLikelihoodLow,
+				StakeholderID: &anotherStakeholderGroup.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

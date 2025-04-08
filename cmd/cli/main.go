@@ -8,6 +8,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/apitokens"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/contact"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/control"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/controlimplementation"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjective"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entity"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytype"
@@ -46,6 +47,7 @@ import (
 
 	// history commands
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlhistory"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/controlimplementationhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjectivehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/documentdatahistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entityhistory"
