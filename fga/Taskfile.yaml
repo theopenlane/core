@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 vars:
   # defaults to the dev token, to override pass `task <task_name> FGA_API_TOKEN=your_token`
@@ -7,7 +7,6 @@ vars:
   SYSTEM_ADMIN_RELATION: "system_admin"
   STORE_ID:
     sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
-
 
 tasks:
   create:
@@ -25,7 +24,6 @@ tasks:
     vars:
       LOGGED_IN_USER:
         sh: openlane user get -z json | jq -r '.self.id'
-      USER_ID: '{{ .USER_ID | default .LOGGED_IN_USER }}'
+      USER_ID: "{{ .USER_ID | default .LOGGED_IN_USER }}"
     cmds:
       - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} {{ .SYSTEM_ADMIN_RELATION }} {{ .SYSTEM_OBJECT }} --api-token={{ .FGA_API_TOKEN }}
-

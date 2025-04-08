@@ -19607,6 +19607,11 @@ type Mutation {
 		New values for the comment
 		"""
 		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
 	): TaskUpdatePayload!
 	"""
 	Create a new onboarding
