@@ -260,7 +260,6 @@ type NoteBuilder struct {
 
 	// Fields
 	Text    string
-	OwnerID string
 	TaskID  string
 	FileIDs []string
 }
