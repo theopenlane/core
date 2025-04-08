@@ -68,7 +68,7 @@ require (
 	github.com/theopenlane/beacon v0.1.1
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.3
-	github.com/theopenlane/emailtemplates v0.1.3
+	github.com/theopenlane/emailtemplates v0.1.4
 	github.com/theopenlane/entx v0.6.1
 	github.com/theopenlane/gqlgen-plugins v0.5.0
 	github.com/theopenlane/httpsling v0.2.2
