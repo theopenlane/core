@@ -255,7 +255,6 @@ type StandardBuilder struct {
 	IsPublic  bool
 }
 
-<<<<<<< HEAD
 type NoteBuilder struct {
 	client *client
 
@@ -264,8 +263,8 @@ type NoteBuilder struct {
 	OwnerID string
 	TaskID  string
 	FileIDs []string
-||||||| 35d12dda
-=======
+}
+
 type ControlImplementationBuilder struct {
 	client *client
 
@@ -274,7 +273,6 @@ type ControlImplementationBuilder struct {
 	ImplementationDate time.Time
 	ControlIDs         []string
 	SubcontrolIDs      []string
->>>>>>> origin/main
 }
 
 // Faker structs with random injected data
@@ -1031,7 +1029,6 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 	return Standard
 }
 
-<<<<<<< HEAD
 // MustNew note builder is used to create, without authz checks, notes in the database
 func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	ctx = setContext(ctx, n.client.db)
@@ -1058,8 +1055,8 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	note := mutation.SaveX(ctx)
 
 	return note
-||||||| 35d12dda
-=======
+}
+
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlImplementation {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -1090,5 +1087,4 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 	require.NoError(t, err)
 
 	return controlImplementation
->>>>>>> origin/main
 }

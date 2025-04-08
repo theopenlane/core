@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -12,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -277,6 +279,12 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	group := (&GroupBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
+	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	require.NoError(t, err)
+
+	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
+	require.NoError(t, err)
+
 	taskCommentID := ""
 
 	// make sure the user cannot can see the task before they are the assigner
@@ -295,6 +303,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 		name                 string
 		request              *openlaneclient.UpdateTaskInput
 		updateCommentRequest *openlaneclient.UpdateNoteInput
+		files                []*graphql.Upload
 		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedErr          string
@@ -319,12 +328,36 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, update comment",
+			name: "happy path, update comment with files",
 			updateCommentRequest: &openlaneclient.UpdateNoteInput{
 				Text: lo.ToPtr("sarah is better"),
 			},
+			files: []*graphql.Upload{
+				{
+					File:        pngFile.File,
+					Filename:    pngFile.Filename,
+					Size:        pngFile.Size,
+					ContentType: pngFile.ContentType,
+				},
+			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "happy path, update comment with file using PAT",
+			updateCommentRequest: &openlaneclient.UpdateNoteInput{
+				Text: lo.ToPtr("sarah is still better"),
+			},
+			files: []*graphql.Upload{
+				{
+					File:        pdfFile.File,
+					Filename:    pdfFile.Filename,
+					Size:        pdfFile.Size,
+					ContentType: pdfFile.ContentType,
+				},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, delete comment",
@@ -428,8 +461,8 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 					return
 				}
 			} else if tc.updateCommentRequest != nil {
-				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest)
-
+				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID,
+					*tc.updateCommentRequest, tc.files)
 			}
 
 			if tc.expectedErr != "" {
