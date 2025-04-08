@@ -292,6 +292,9 @@
         },
         "urls": {
           "$ref": "#/$defs/emailtemplates.URLConfig"
+        },
+        "templatesPath": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
