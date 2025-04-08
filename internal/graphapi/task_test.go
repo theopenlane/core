@@ -461,8 +461,10 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 					return
 				}
 			} else if tc.updateCommentRequest != nil {
-				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID,
-					*tc.updateCommentRequest, tc.files)
+				if len(tc.files) > 0 {
+					expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
+				}
+				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)
 			}
 
 			if tc.expectedErr != "" {
