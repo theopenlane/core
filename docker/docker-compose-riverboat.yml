@@ -4,7 +4,6 @@ services:
     # if you run without the taskfile and the env var set it will default to arm64-latest
     # image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
     image: ghcr.io/theopenlane/riverboat:arm64-78-90832455
-    container_name: riverboat
     environment:
       # this needs to use host.docker.internal since it is a separate docker-compose file
       - RIVERBOAT_JOBQUEUE_DATABASEHOST=postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable

@@ -244,7 +244,7 @@ steps:
         if: build.branch != "main" && build.tag == null
         commands: |
           #!/bin/bash
-          ls
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
@@ -265,7 +265,7 @@ steps:
                 - "${IMAGE_TAG}"
           - theopenlane/container-build#v1.1.1:
               dockerfile: docker/Dockerfile
-              push: false
+              push: true
               build-args:
                 - NAME=${APP_NAME}
           - equinixmetal-buildkite/trivy#v1.19.0:
@@ -279,7 +279,7 @@ steps:
         if: build.branch == "main" && build.tag == null
         commands: |
           #!/bin/bash
-          ls
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
@@ -298,6 +298,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
+                - "latest"
           - theopenlane/container-build#v1.1.1:
               dockerfile: docker/Dockerfile
               push: true
@@ -344,6 +345,7 @@ steps:
         if: build.tag != null
         commands: |
           #!/bin/bash
+          chmod +x ${APP_NAME}
         plugins:
           - artifacts#v1.9.4:
               download:
