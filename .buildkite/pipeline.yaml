@@ -303,20 +303,20 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-      - label: ":rocket: Trigger core-deploy"
-        key: "trigger-deploy"
+      - trigger: "core-deploy"
+        depends_on: "docker-pr-build"
+        label: ":rocket: Trigger core-deploy"
         if: build.tag != null
-        depends_on:
-          - step: "docker-build-and-tag"
-            allow_failure: false
-        plugins:
-          - trigger#v2.1.0:
-              build:
-                org: "theopenlane"
-                pipeline: "core-deploy"
-                branch: "main"
-                env:
-                  CORE_IMAGE: "${BUILDKITE_TAG}"
+        build:
+          env:
+            CORE_IMAGE: "${IMAGE_TAG}"
+          meta_data:
+            org: "theopenlane"
+            pipeline: "core-deploy"
+            branch: "main"
+            CORE_IMAGE: "${BUILDKITE_TAG}"
+            env:
+              CORE_IMAGE: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
