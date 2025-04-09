@@ -305,11 +305,9 @@ steps:
                 - NAME=${APP_NAME}
       - label: ":rocket: Trigger core-deploy"
         key: "trigger-deploy"
-        if: build.branch == "main" || build.tag != null
+        if: build.tag != null
         depends_on:
-          - step: "docker-pr-build"
-            allow_failure: false
-          - step: "docker-build-and-tag" 
+          - step: "docker-build-and-tag"
             allow_failure: false
         plugins:
           - trigger#v2.1.0:
@@ -318,7 +316,7 @@ steps:
                 pipeline: "core-deploy"
                 branch: "main"
                 env:
-                  CORE_IMAGE: "${IMAGE_TAG}"
+                  CORE_IMAGE: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
