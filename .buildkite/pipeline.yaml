@@ -275,70 +275,6 @@ steps:
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.57.1"
       - label: ":docker: docker build and publish"
-        cancel_on_build_failing: true
-        if: build.branch == "main" && build.tag == null
-        commands: |
-          #!/bin/bash
-          ls
-        plugins:
-          - artifacts#v1.9.4:
-              download:
-                - from: "bin/${APP_NAME}"
-                  to: "${APP_NAME}"
-              step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.1:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/Dockerfile
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
-              severity: CRITICAL,HIGH
-              ignore-unfixed: true
-              scanners: misconfig,secret,vuln
-              skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.57.1"
-      - label: ":docker: docker build and publish all in one"
-        key: "docker-build-aio"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        if: build.branch == "main" && build.tag == null
-        cancel_on_build_failing: true
-        commands: |
-          #!/bin/bash
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: _json_key_base64
-              password-env: SECRET_GCR_PUBLISH_TOKEN
-              server: us-west1-docker.pkg.dev
-          - theopenlane/docker-metadata#v1.0.1:
-              tag_prefix: "aio-"
-              debug: true
-              images:
-                - "${GCR_REPO}"
-              extra_tags:
-                - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/all-in-one/Dockerfile.all-in-one
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
-      - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
         if: build.tag != null
@@ -367,35 +303,20 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-      - label: ":docker: docker build and publish all in one"
-        key: "docker-build-aio-and-tag"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
+      - label: ":rocket: Trigger core-deploy"
+        key: "trigger-deploy"
         if: build.tag != null
-        commands: |
-          #!/bin/bash
+        depends_on:
+          - step: "docker-build-and-tag"
+            allow_failure: false
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: _json_key_base64
-              password-env: SECRET_GCR_PUBLISH_TOKEN
-              server: us-west1-docker.pkg.dev
-          - theopenlane/docker-metadata#v1.0.1:
-              tag_prefix: "aio-"
-              debug: true
-              images:
-                - "${GCR_REPO}"
-              extra_tags:
-                - "${BUILDKITE_TAG}"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/all-in-one/Dockerfile.all-in-one
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
+          - trigger#v2.1.0:
+              build:
+                org: "theopenlane"
+                pipeline: "core-deploy"
+                branch: "main"
+                env:
+                  CORE_IMAGE: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
