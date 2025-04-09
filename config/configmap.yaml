@@ -144,6 +144,7 @@ data:
   CORE_EMAIL_URLS_INVITE: {{ .Values.core.email.urls.invite }}
   CORE_EMAIL_URLS_RESET: {{ .Values.core.email.urls.reset }}
   CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.core.email.urls.verifySubscriber }}
+  CORE_EMAIL_TEMPLATESPATH: {{ .Values.core.email.templatesPath }}
   CORE_SESSIONS_SIGNINGKEY: {{ .Values.core.sessions.signingKey | default "my-signing-secret" }}
   CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
   CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}

@@ -70,6 +70,7 @@ email:
     fromEmail: ""
     logoURL: ""
     supportEmail: ""
+    templatesPath: ""
     urls:
         docs: ""
         invite: ""
