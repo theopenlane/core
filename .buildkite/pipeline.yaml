@@ -305,7 +305,7 @@ steps:
                 - NAME=${APP_NAME}
       - trigger: "core-deploy"
         depends_on: "docker-pr-build"
-        label: ":rocket: Trigger core-deploy"
+        label: ":rocket: trigger core-deploy"
         if: build.tag != null
         build:
           env:
