@@ -585,6 +585,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**supportEmail**|`string`|||
 |**logoURL**|`string`|||
 |[**urls**](#emailurls)|`object`|||
+|**templatesPath**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="emailurls"></a>
