@@ -309,14 +309,7 @@ steps:
         if: build.tag != null
         build:
           env:
-            CORE_IMAGE: "${IMAGE_TAG}"
-          meta_data:
-            org: "theopenlane"
-            pipeline: "core-deploy"
-            branch: "main"
             CORE_IMAGE: "${BUILDKITE_TAG}"
-            env:
-              CORE_IMAGE: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
