@@ -309,7 +309,7 @@ steps:
         if: build.tag != null
         build:
           env:
-            CORE_IMAGE: "${BUILDKITE_TAG}"
+            CORE_TAG: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
