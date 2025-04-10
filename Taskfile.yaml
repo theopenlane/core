@@ -75,9 +75,24 @@ tasks:
 
   ## Go tasks
   go:lint:
-    desc: runs golangci-lint, the most annoying opinionated linter ever
+    desc: runs golangci-lint (optionally only on changed files with --changed=true)
+    vars:
+      CHANGED: '{{.CHANGED | default "false"}}'
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats
+      - |
+        if [ "{{.CHANGED}}" = "true" ]; then
+          changed_files=$(git diff --name-only --diff-filter=ACMRTUXB HEAD | grep '\.go$' || true)
+          if [ -n "$changed_files" ]; then
+            echo "🔍 Linting changed files only:"
+            echo "$changed_files"
+            golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats $changed_files
+          else
+            echo "✅ No changed Go files to lint."
+          fi
+        else
+          echo "🧹 Linting all Go files..."
+          golangci-lint run --config=.golangci.yaml --verbose
+        fi
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
