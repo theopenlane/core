@@ -94,6 +94,13 @@ func (Subscriber) Fields() []ent.Field {
 			Comment("indicates if the subscriber has unsubscribed from communications").
 			Default(false).
 			Annotations(entgql.Skip(entgql.SkipMutationCreateInput), entgql.OrderField("unsubscribed")),
+		field.Int("send_attempts").
+			Comment("the number of attempts made to perform email send of the subscription, maximum of 5").
+			Annotations(
+				entgql.OrderField("send_attempts"),
+				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+			).
+			Default(1),
 	}
 }
 

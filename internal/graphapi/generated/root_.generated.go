@@ -3350,6 +3350,7 @@ type ComplexityRoot struct {
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		PhoneNumber   func(childComplexity int) int
+		SendAttempts  func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Unsubscribed  func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
@@ -22091,6 +22092,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Subscriber.PhoneNumber(childComplexity), true
+
+	case "Subscriber.sendAttempts":
+		if e.complexity.Subscriber.SendAttempts == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.SendAttempts(childComplexity), true
 
 	case "Subscriber.tags":
 		if e.complexity.Subscriber.Tags == nil {
@@ -58114,6 +58122,10 @@ type Subscriber implements Node {
   indicates if the subscriber has unsubscribed from communications
   """
   unsubscribed: Boolean!
+  """
+  the number of attempts made to perform email send of the subscription, maximum of 5
+  """
+  sendAttempts: Int!
   owner: Organization
   events(
     """
@@ -58199,6 +58211,7 @@ enum SubscriberOrderField {
   email
   active
   unsubscribed
+  send_attempts
 }
 """
 SubscriberWhereInput is used for filtering Subscriber objects.
@@ -58386,6 +58399,17 @@ input SubscriberWhereInput {
   """
   unsubscribed: Boolean
   unsubscribedNEQ: Boolean
+  """
+  send_attempts field predicates
+  """
+  sendAttempts: Int
+  sendAttemptsNEQ: Int
+  sendAttemptsIn: [Int!]
+  sendAttemptsNotIn: [Int!]
+  sendAttemptsGT: Int
+  sendAttemptsGTE: Int
+  sendAttemptsLT: Int
+  sendAttemptsLTE: Int
   """
   owner edge predicates
   """

@@ -95,6 +95,8 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 				return ec.fieldContext_Subscriber_active(ctx, field)
 			case "unsubscribed":
 				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
+			case "sendAttempts":
+				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
@@ -175,6 +177,8 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_active(ctx, field)
 			case "unsubscribed":
 				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
+			case "sendAttempts":
+				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
@@ -299,6 +303,8 @@ func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_active(ctx, field)
 			case "unsubscribed":
 				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
+			case "sendAttempts":
+				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":

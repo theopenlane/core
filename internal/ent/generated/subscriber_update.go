@@ -268,6 +268,27 @@ func (su *SubscriberUpdate) SetNillableUnsubscribed(b *bool) *SubscriberUpdate {
 	return su
 }
 
+// SetSendAttempts sets the "send_attempts" field.
+func (su *SubscriberUpdate) SetSendAttempts(i int) *SubscriberUpdate {
+	su.mutation.ResetSendAttempts()
+	su.mutation.SetSendAttempts(i)
+	return su
+}
+
+// SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
+func (su *SubscriberUpdate) SetNillableSendAttempts(i *int) *SubscriberUpdate {
+	if i != nil {
+		su.SetSendAttempts(*i)
+	}
+	return su
+}
+
+// AddSendAttempts adds i to the "send_attempts" field.
+func (su *SubscriberUpdate) AddSendAttempts(i int) *SubscriberUpdate {
+	su.mutation.AddSendAttempts(i)
+	return su
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (su *SubscriberUpdate) SetOwner(o *Organization) *SubscriberUpdate {
 	return su.SetOwnerID(o.ID)
@@ -480,6 +501,12 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
+	}
+	if value, ok := su.mutation.SendAttempts(); ok {
+		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedSendAttempts(); ok {
+		_spec.AddField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
 	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -818,6 +845,27 @@ func (suo *SubscriberUpdateOne) SetNillableUnsubscribed(b *bool) *SubscriberUpda
 	return suo
 }
 
+// SetSendAttempts sets the "send_attempts" field.
+func (suo *SubscriberUpdateOne) SetSendAttempts(i int) *SubscriberUpdateOne {
+	suo.mutation.ResetSendAttempts()
+	suo.mutation.SetSendAttempts(i)
+	return suo
+}
+
+// SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
+func (suo *SubscriberUpdateOne) SetNillableSendAttempts(i *int) *SubscriberUpdateOne {
+	if i != nil {
+		suo.SetSendAttempts(*i)
+	}
+	return suo
+}
+
+// AddSendAttempts adds i to the "send_attempts" field.
+func (suo *SubscriberUpdateOne) AddSendAttempts(i int) *SubscriberUpdateOne {
+	suo.mutation.AddSendAttempts(i)
+	return suo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (suo *SubscriberUpdateOne) SetOwner(o *Organization) *SubscriberUpdateOne {
 	return suo.SetOwnerID(o.ID)
@@ -1060,6 +1108,12 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	}
 	if value, ok := suo.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
+	}
+	if value, ok := suo.mutation.SendAttempts(); ok {
+		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedSendAttempts(); ok {
+		_spec.AddField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
 	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

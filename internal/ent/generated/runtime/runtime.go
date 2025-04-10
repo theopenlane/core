@@ -3712,6 +3712,10 @@ func init() {
 	subscriberDescUnsubscribed := subscriberFields[8].Descriptor()
 	// subscriber.DefaultUnsubscribed holds the default value on creation for the unsubscribed field.
 	subscriber.DefaultUnsubscribed = subscriberDescUnsubscribed.Default.(bool)
+	// subscriberDescSendAttempts is the schema descriptor for send_attempts field.
+	subscriberDescSendAttempts := subscriberFields[9].Descriptor()
+	// subscriber.DefaultSendAttempts holds the default value on creation for the send_attempts field.
+	subscriber.DefaultSendAttempts = subscriberDescSendAttempts.Default.(int)
 	// subscriberDescID is the schema descriptor for id field.
 	subscriberDescID := subscriberMixinFields2[0].Descriptor()
 	// subscriber.DefaultID holds the default value on creation for the id field.

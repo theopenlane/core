@@ -32,6 +32,8 @@ var (
 	ErrEmailRequired = errors.New("email is required but not provided")
 	// ErrMaxAttempts is returned when a user has reached the max attempts to resend an invitation to an org
 	ErrMaxAttempts = errors.New("too many attempts to resend org invitation")
+	// ErrMaxSubscriptionAttempts is returned when a user has reached the max attempts to subscribe to an org
+	ErrMaxSubscriptionAttempts = errors.New("too many attempts to resend org subscription email")
 	// ErrMissingRecipientEmail is returned when an email is required but not provided
 	ErrMissingRecipientEmail = errors.New("recipient email is required but not provided")
 	// ErrMissingRequiredName is returned when a name is required but not provided
