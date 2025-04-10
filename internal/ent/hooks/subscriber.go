@@ -69,6 +69,7 @@ func HookSubscriberUpdated() ent.Hook {
 			unsubscribed, ok := m.Unsubscribed()
 			if ok && unsubscribed {
 				m.SetActive(false)
+				m.SetSendAttempts(0)
 			}
 
 			return next.Mutate(ctx, m)

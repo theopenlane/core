@@ -246,6 +246,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 				require.True(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
 				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
+				require.Zero(t, resp.UpdateSubscriber.Subscriber.SendAttempts) // reset attempts count to zero
 			}
 		})
 	}
@@ -434,4 +435,3 @@ func (suite *GraphTestSuite) TestDeleteSubscriber() {
 		})
 	}
 }
-

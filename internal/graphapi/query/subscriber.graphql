@@ -70,6 +70,7 @@ query GetSubscriberByEmail($email: String!) {
     ownerID
     verifiedEmail
     unsubscribed
+    sendAttempts
   }
 }
 
@@ -83,6 +84,7 @@ query GetSubscribers($where: SubscriberWhereInput) {
         ownerID
         verifiedEmail
         unsubscribed
+        sendAttempts
       }
     }
   }
@@ -102,6 +104,7 @@ mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
       verifiedEmail
       verifiedPhone
       unsubscribed
+      sendAttempts
     }
   }
 }

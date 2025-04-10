@@ -55075,6 +55075,7 @@ type GetSubscriberByEmail_Subscriber struct {
 	Email         string  "json:\"email\" graphql:\"email\""
 	ID            string  "json:\"id\" graphql:\"id\""
 	OwnerID       *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts  int64   "json:\"sendAttempts\" graphql:\"sendAttempts\""
 	Unsubscribed  bool    "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool    "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
@@ -55103,6 +55104,12 @@ func (t *GetSubscriberByEmail_Subscriber) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
+func (t *GetSubscriberByEmail_Subscriber) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetSubscriberByEmail_Subscriber{}
+	}
+	return t.SendAttempts
+}
 func (t *GetSubscriberByEmail_Subscriber) GetUnsubscribed() bool {
 	if t == nil {
 		t = &GetSubscriberByEmail_Subscriber{}
@@ -55121,6 +55128,7 @@ type GetSubscribers_Subscribers_Edges_Node struct {
 	Email         string  "json:\"email\" graphql:\"email\""
 	ID            string  "json:\"id\" graphql:\"id\""
 	OwnerID       *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SendAttempts  int64   "json:\"sendAttempts\" graphql:\"sendAttempts\""
 	Unsubscribed  bool    "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	VerifiedEmail bool    "json:\"verifiedEmail\" graphql:\"verifiedEmail\""
 }
@@ -55148,6 +55156,12 @@ func (t *GetSubscribers_Subscribers_Edges_Node) GetOwnerID() *string {
 		t = &GetSubscribers_Subscribers_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetSubscribers_Subscribers_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_Edges_Node{}
+	}
+	return t.SendAttempts
 }
 func (t *GetSubscribers_Subscribers_Edges_Node) GetUnsubscribed() bool {
 	if t == nil {
@@ -55191,6 +55205,7 @@ type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
 	Email         string     "json:\"email\" graphql:\"email\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	PhoneNumber   *string    "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	SendAttempts  int64      "json:\"sendAttempts\" graphql:\"sendAttempts\""
 	Unsubscribed  bool       "json:\"unsubscribed\" graphql:\"unsubscribed\""
 	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -55233,6 +55248,12 @@ func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetPhoneNumber() *string 
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
 	}
 	return t.PhoneNumber
+}
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetSendAttempts() int64 {
+	if t == nil {
+		t = &UpdateSubscriber_UpdateSubscriber_Subscriber{}
+	}
+	return t.SendAttempts
 }
 func (t *UpdateSubscriber_UpdateSubscriber_Subscriber) GetUnsubscribed() bool {
 	if t == nil {
@@ -80624,6 +80645,7 @@ const GetSubscriberByEmailDocument = `query GetSubscriberByEmail ($email: String
 		ownerID
 		verifiedEmail
 		unsubscribed
+		sendAttempts
 	}
 }
 `
@@ -80655,6 +80677,7 @@ const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInp
 				ownerID
 				verifiedEmail
 				unsubscribed
+				sendAttempts
 			}
 		}
 	}
@@ -80692,6 +80715,7 @@ const UpdateSubscriberDocument = `mutation UpdateSubscriber ($email: String!, $i
 			verifiedEmail
 			verifiedPhone
 			unsubscribed
+			sendAttempts
 		}
 	}
 }
