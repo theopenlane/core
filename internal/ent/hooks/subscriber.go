@@ -173,4 +173,3 @@ func updateSubscriber(ctx context.Context,
 		SetSecret(secret).
 		Save(ctx)
 }
-
