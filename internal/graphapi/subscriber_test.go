@@ -223,7 +223,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		wantErr          bool
-		expectedAttempts int
+		expectedAttempts int64
 	}{
 		{
 			name:             "happy path, new subscriber",
@@ -297,7 +297,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
 			}
 
-			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.email)
+			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, strings.ToLower(tc.email))
 			require.NoError(t, err)
 
 			if tc.setUnsubscribed {
