@@ -147,7 +147,7 @@ func (suite *GraphTestSuite) TestQuerySubscribers() {
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
+func (suite *GraphTestSuite) TestMutationCreateSubscriber_Tokens() {
 	t := suite.T()
 
 	testCases := []struct {
@@ -158,33 +158,8 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		wantErr          bool
-		expectedAttempts int64
+		expectedAttempts int
 	}{
-		{
-			name:             "happy path, new subscriber",
-			email:            "c.stark@example.com",
-			setUnsubscribed:  true, //unsubscribe the subscriber to test for re-creation
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			wantErr:          false,
-			expectedAttempts: 1,
-		},
-		{
-			name:             "happy path, duplicate subscriber but original was unsubscribed",
-			email:            "c.stark@example.com",
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			wantErr:          false,
-			expectedAttempts: 2,
-		},
-		{
-			name:             "happy path, duplicate subscriber, case insensitive",
-			email:            "c.STARK@example.com",
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			wantErr:          false,
-			expectedAttempts: 3,
-		},
 		{
 			name:             "happy path, new subscriber using api token",
 			email:            "e.stark@example.com",
@@ -236,6 +211,82 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 			// Since we convert to lower case already on insertion/update
 			assert.Equal(t, strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email)
 			assert.False(t, resp.CreateSubscriber.Subscriber.Unsubscribed)
+		})
+	}
+}
+
+func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
+	t := suite.T()
+
+	testCases := []struct {
+		name             string
+		email            string
+		ownerID          string
+		setUnsubscribed  bool
+		client           *openlaneclient.OpenlaneClient
+		ctx              context.Context
+		wantErr          bool
+		expectedAttempts int
+	}{
+		{
+			name:             "happy path, new subscriber",
+			email:            "c.stark@example.com",
+			setUnsubscribed:  true, //unsubscribe the subscriber to test for re-creation
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 0, // since we unsubscribe, it should reset
+		},
+		{
+			name:             "happy path, duplicate subscriber but original was unsubscribed",
+			email:            "c.stark@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 1,
+		},
+		{
+			name:             "happy path, duplicate subscriber, case insensitive",
+			email:            "c.STARK@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 2,
+		},
+		{
+			name:    "missing email",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			input := openlaneclient.CreateSubscriberInput{
+				Email: tc.email,
+			}
+
+			if tc.ownerID != "" {
+				input.OwnerID = &tc.ownerID
+			}
+
+			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
+
+			if tc.wantErr {
+				require.Error(t, err)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+
+			// Assert matching fields
+			// Since we convert to lower case already on insertion/update
+			assert.Equal(t, strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email)
+			assert.False(t, resp.CreateSubscriber.Subscriber.Unsubscribed)
 
 			if tc.setUnsubscribed {
 				// Set the subscriber as unsubscribed to test for duplicate email
@@ -247,18 +298,25 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 				require.True(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
 				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
-
-				// fetch from db to verify send attempts
-				ctx := setContext(tc.ctx, suite.client.db)
-
-				sub, err := suite.client.db.Subscriber.
-					Query().
-					Where(subscriber.Email(tc.email)).
-					Only(ctx)
-
-				require.NoError(t, err)
-				require.Zero(t, sub.SendAttempts) // reset attempts count to zero
 			}
+
+			// fetch from db to verify send attempts
+			ctx := setContext(tc.ctx, suite.client.db)
+
+			sub, err := suite.client.db.Subscriber.
+				Query().
+				Where(subscriber.Email(strings.ToLower(tc.email))).
+				Only(ctx)
+
+			require.NoError(t, err)
+
+			if tc.setUnsubscribed {
+				require.Zero(t, sub.SendAttempts) // reset attempts count to zero
+				return
+			}
+
+			require.NoError(t, err)
+			require.Equal(t, tc.expectedAttempts, sub.SendAttempts)
 		})
 	}
 }
