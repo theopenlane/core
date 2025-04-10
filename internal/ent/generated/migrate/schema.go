@@ -1503,7 +1503,7 @@ var (
 		{Name: "recipient", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVITATION_SENT", "APPROVAL_REQUIRED", "INVITATION_ACCEPTED", "INVITATION_EXPIRED"}, Default: "INVITATION_SENT"},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
-		{Name: "send_attempts", Type: field.TypeInt, Default: 0},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2805,6 +2805,7 @@ var (
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "unsubscribed", Type: field.TypeBool, Default: false},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubscribersTable holds the schema information for the "subscribers" table.
@@ -2815,7 +2816,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subscribers_organizations_subscribers",
-				Columns:    []*schema.Column{SubscribersColumns[17]},
+				Columns:    []*schema.Column{SubscribersColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2824,7 +2825,7 @@ var (
 			{
 				Name:    "subscriber_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[8], SubscribersColumns[17]},
+				Columns: []*schema.Column{SubscribersColumns[8], SubscribersColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and unsubscribed = false",
 				},

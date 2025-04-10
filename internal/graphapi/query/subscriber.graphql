@@ -57,6 +57,7 @@ query GetAllSubscribers {
         ownerID
         verifiedEmail
         unsubscribed
+        sendAttempts
       }
     }
   }
@@ -70,6 +71,7 @@ query GetSubscriberByEmail($email: String!) {
     ownerID
     verifiedEmail
     unsubscribed
+    sendAttempts
   }
 }
 
@@ -83,6 +85,7 @@ query GetSubscribers($where: SubscriberWhereInput) {
         ownerID
         verifiedEmail
         unsubscribed
+        sendAttempts
       }
     }
   }

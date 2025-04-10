@@ -147,6 +147,11 @@ func Unsubscribed(v bool) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldUnsubscribed, v))
 }
 
+// SendAttempts applies equality check predicate on the "send_attempts" field. It's identical to SendAttemptsEQ.
+func SendAttempts(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldSendAttempts, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldCreatedAt, v))
@@ -930,6 +935,46 @@ func UnsubscribedEQ(v bool) predicate.Subscriber {
 // UnsubscribedNEQ applies the NEQ predicate on the "unsubscribed" field.
 func UnsubscribedNEQ(v bool) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldNEQ(FieldUnsubscribed, v))
+}
+
+// SendAttemptsEQ applies the EQ predicate on the "send_attempts" field.
+func SendAttemptsEQ(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldSendAttempts, v))
+}
+
+// SendAttemptsNEQ applies the NEQ predicate on the "send_attempts" field.
+func SendAttemptsNEQ(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNEQ(FieldSendAttempts, v))
+}
+
+// SendAttemptsIn applies the In predicate on the "send_attempts" field.
+func SendAttemptsIn(vs ...int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIn(FieldSendAttempts, vs...))
+}
+
+// SendAttemptsNotIn applies the NotIn predicate on the "send_attempts" field.
+func SendAttemptsNotIn(vs ...int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotIn(FieldSendAttempts, vs...))
+}
+
+// SendAttemptsGT applies the GT predicate on the "send_attempts" field.
+func SendAttemptsGT(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGT(FieldSendAttempts, v))
+}
+
+// SendAttemptsGTE applies the GTE predicate on the "send_attempts" field.
+func SendAttemptsGTE(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGTE(FieldSendAttempts, v))
+}
+
+// SendAttemptsLT applies the LT predicate on the "send_attempts" field.
+func SendAttemptsLT(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLT(FieldSendAttempts, v))
+}
+
+// SendAttemptsLTE applies the LTE predicate on the "send_attempts" field.
+func SendAttemptsLTE(v int) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLTE(FieldSendAttempts, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

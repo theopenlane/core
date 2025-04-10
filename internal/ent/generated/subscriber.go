@@ -53,6 +53,8 @@ type Subscriber struct {
 	Secret *[]byte `json:"secret,omitempty"`
 	// indicates if the subscriber has unsubscribed from communications
 	Unsubscribed bool `json:"unsubscribed,omitempty"`
+	// the number of attempts made to perform email send of the subscription, maximum of 5
+	SendAttempts int `json:"send_attempts,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubscriberQuery when eager-loading is set.
 	Edges        SubscriberEdges `json:"edges"`
@@ -103,6 +105,8 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subscriber.FieldVerifiedEmail, subscriber.FieldVerifiedPhone, subscriber.FieldActive, subscriber.FieldUnsubscribed:
 			values[i] = new(sql.NullBool)
+		case subscriber.FieldSendAttempts:
+			values[i] = new(sql.NullInt64)
 		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
 			values[i] = new(sql.NullString)
 		case subscriber.FieldCreatedAt, subscriber.FieldUpdatedAt, subscriber.FieldDeletedAt, subscriber.FieldTTL:
@@ -233,6 +237,12 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Unsubscribed = value.Bool
 			}
+		case subscriber.FieldSendAttempts:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
+			} else if value.Valid {
+				s.SendAttempts = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -333,6 +343,9 @@ func (s *Subscriber) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("unsubscribed=")
 	builder.WriteString(fmt.Sprintf("%v", s.Unsubscribed))
+	builder.WriteString(", ")
+	builder.WriteString("send_attempts=")
+	builder.WriteString(fmt.Sprintf("%v", s.SendAttempts))
 	builder.WriteByte(')')
 	return builder.String()
 }

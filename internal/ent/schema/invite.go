@@ -90,7 +90,7 @@ func (Invite) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("send_attempts"),
 			).
-			Default(0),
+			Default(1),
 		field.String("requestor_id").
 			Comment("the user who initiated the invitation").
 			Immutable().

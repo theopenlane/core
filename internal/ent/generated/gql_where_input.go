@@ -61581,6 +61581,16 @@ type SubscriberWhereInput struct {
 	Unsubscribed    *bool `json:"unsubscribed,omitempty"`
 	UnsubscribedNEQ *bool `json:"unsubscribedNEQ,omitempty"`
 
+	// "send_attempts" field predicates.
+	SendAttempts      *int  `json:"sendAttempts,omitempty"`
+	SendAttemptsNEQ   *int  `json:"sendAttemptsNEQ,omitempty"`
+	SendAttemptsIn    []int `json:"sendAttemptsIn,omitempty"`
+	SendAttemptsNotIn []int `json:"sendAttemptsNotIn,omitempty"`
+	SendAttemptsGT    *int  `json:"sendAttemptsGT,omitempty"`
+	SendAttemptsGTE   *int  `json:"sendAttemptsGTE,omitempty"`
+	SendAttemptsLT    *int  `json:"sendAttemptsLT,omitempty"`
+	SendAttemptsLTE   *int  `json:"sendAttemptsLTE,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -62068,6 +62078,30 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 	}
 	if i.UnsubscribedNEQ != nil {
 		predicates = append(predicates, subscriber.UnsubscribedNEQ(*i.UnsubscribedNEQ))
+	}
+	if i.SendAttempts != nil {
+		predicates = append(predicates, subscriber.SendAttemptsEQ(*i.SendAttempts))
+	}
+	if i.SendAttemptsNEQ != nil {
+		predicates = append(predicates, subscriber.SendAttemptsNEQ(*i.SendAttemptsNEQ))
+	}
+	if len(i.SendAttemptsIn) > 0 {
+		predicates = append(predicates, subscriber.SendAttemptsIn(i.SendAttemptsIn...))
+	}
+	if len(i.SendAttemptsNotIn) > 0 {
+		predicates = append(predicates, subscriber.SendAttemptsNotIn(i.SendAttemptsNotIn...))
+	}
+	if i.SendAttemptsGT != nil {
+		predicates = append(predicates, subscriber.SendAttemptsGT(*i.SendAttemptsGT))
+	}
+	if i.SendAttemptsGTE != nil {
+		predicates = append(predicates, subscriber.SendAttemptsGTE(*i.SendAttemptsGTE))
+	}
+	if i.SendAttemptsLT != nil {
+		predicates = append(predicates, subscriber.SendAttemptsLT(*i.SendAttemptsLT))
+	}
+	if i.SendAttemptsLTE != nil {
+		predicates = append(predicates, subscriber.SendAttemptsLTE(*i.SendAttemptsLTE))
 	}
 
 	if i.HasOwner != nil {
