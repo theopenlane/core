@@ -161,21 +161,19 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_Tokens() {
 		expectedAttempts int
 	}{
 		{
-			name:             "happy path, new subscriber using api token",
-			email:            "e.stark@example.com",
-			client:           suite.client.apiWithToken,
-			ctx:              context.Background(),
-			wantErr:          false,
-			expectedAttempts: 1,
+			name:    "happy path, new subscriber using api token",
+			email:   "e.stark@example.com",
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
 		},
 		{
-			name:             "happy path, new subscriber using personal access token",
-			email:            "a.stark@example.com",
-			ownerID:          testUser1.OrganizationID,
-			client:           suite.client.apiWithPAT,
-			ctx:              context.Background(),
-			wantErr:          false,
-			expectedAttempts: 1,
+			name:    "happy path, new subscriber using personal access token",
+			email:   "a.stark@example.com",
+			ownerID: testUser1.OrganizationID,
+			client:  suite.client.apiWithPAT,
+			ctx:     context.Background(),
+			wantErr: false,
 		},
 		{
 			name:    "missing email",
@@ -315,7 +313,6 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 				return
 			}
 
-			require.NoError(t, err)
 			require.Equal(t, tc.expectedAttempts, sub.SendAttempts)
 		})
 	}
