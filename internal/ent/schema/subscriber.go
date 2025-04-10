@@ -98,6 +98,7 @@ func (Subscriber) Fields() []ent.Field {
 			Comment("the number of attempts made to perform email send of the subscription, maximum of 5").
 			Annotations(
 				entgql.OrderField("send_attempts"),
+				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
 			).
 			Default(1),
 	}

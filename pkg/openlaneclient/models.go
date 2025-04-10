@@ -4834,11 +4834,9 @@ type CreateSubscriberInput struct {
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
-	PhoneNumber *string `json:"phoneNumber,omitempty"`
-	// the number of attempts made to perform email send of the subscription, maximum of 5
-	SendAttempts *int64   `json:"sendAttempts,omitempty"`
-	OwnerID      *string  `json:"ownerID,omitempty"`
-	EventIDs     []string `json:"eventIDs,omitempty"`
+	PhoneNumber *string  `json:"phoneNumber,omitempty"`
+	OwnerID     *string  `json:"ownerID,omitempty"`
+	EventIDs    []string `json:"eventIDs,omitempty"`
 }
 
 // CreateTFASettingInput is used for create TFASetting object.
@@ -23323,9 +23321,7 @@ type UpdateSubscriberInput struct {
 	PhoneNumber      *string `json:"phoneNumber,omitempty"`
 	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
 	// indicates if the subscriber has unsubscribed from communications
-	Unsubscribed *bool `json:"unsubscribed,omitempty"`
-	// the number of attempts made to perform email send of the subscription, maximum of 5
-	SendAttempts   *int64   `json:"sendAttempts,omitempty"`
+	Unsubscribed   *bool    `json:"unsubscribed,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	ClearOwner     *bool    `json:"clearOwner,omitempty"`
 	AddEventIDs    []string `json:"addEventIDs,omitempty"`

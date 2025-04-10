@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -298,22 +297,15 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
 			}
 
-			// fetch from db to verify send attempts
-			ctx := setContext(tc.ctx, suite.client.db)
-
-			sub, err := suite.client.db.Subscriber.
-				Query().
-				Where(subscriber.Email(strings.ToLower(tc.email))).
-				Only(ctx)
-
+			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.email)
 			require.NoError(t, err)
 
 			if tc.setUnsubscribed {
-				require.Zero(t, sub.SendAttempts) // reset attempts count to zero
+				require.Zero(t, sub.Subscriber.SendAttempts) // reset attempts count to zero
 				return
 			}
 
-			require.Equal(t, tc.expectedAttempts, sub.SendAttempts)
+			require.Equal(t, tc.expectedAttempts, sub.Subscriber.SendAttempts)
 		})
 	}
 }

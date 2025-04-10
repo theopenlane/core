@@ -32870,10 +32870,6 @@ input CreateSubscriberInput {
   phone number of the subscriber
   """
   phoneNumber: String
-  """
-  the number of attempts made to perform email send of the subscription, maximum of 5
-  """
-  sendAttempts: Int
   ownerID: ID
   eventIDs: [ID!]
 }
@@ -62464,10 +62460,6 @@ input UpdateSubscriberInput {
   indicates if the subscriber has unsubscribed from communications
   """
   unsubscribed: Boolean
-  """
-  the number of attempts made to perform email send of the subscription, maximum of 5
-  """
-  sendAttempts: Int
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

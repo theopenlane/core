@@ -1,2 +1,2 @@
-Tags,Email,PhoneNumber,SendAttempts,OwnerId,EventIDs
-example_tags,example_email,example_phonenumber,example_sendattempts,example_ownerid,example_eventids
+Tags,Email,PhoneNumber,OwnerId,EventIDs
+example_tags,example_email,example_phonenumber,example_ownerid,example_eventids
