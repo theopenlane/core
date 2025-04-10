@@ -4834,9 +4834,11 @@ type CreateSubscriberInput struct {
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
-	PhoneNumber *string  `json:"phoneNumber,omitempty"`
-	OwnerID     *string  `json:"ownerID,omitempty"`
-	EventIDs    []string `json:"eventIDs,omitempty"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
+	// the number of attempts made to perform email send of the subscription, maximum of 5
+	SendAttempts *int64   `json:"sendAttempts,omitempty"`
+	OwnerID      *string  `json:"ownerID,omitempty"`
+	EventIDs     []string `json:"eventIDs,omitempty"`
 }
 
 // CreateTFASettingInput is used for create TFASetting object.
@@ -20181,7 +20183,9 @@ type Subscriber struct {
 	// indicates if the subscriber is active or not, active users will have at least one verified contact method
 	Active bool `json:"active"`
 	// indicates if the subscriber has unsubscribed from communications
-	Unsubscribed bool             `json:"unsubscribed"`
+	Unsubscribed bool `json:"unsubscribed"`
+	// the number of attempts made to perform email send of the subscription, maximum of 5
+	SendAttempts int64            `json:"sendAttempts"`
 	Owner        *Organization    `json:"owner,omitempty"`
 	Events       *EventConnection `json:"events"`
 }
@@ -20400,6 +20404,15 @@ type SubscriberWhereInput struct {
 	// unsubscribed field predicates
 	Unsubscribed    *bool `json:"unsubscribed,omitempty"`
 	UnsubscribedNeq *bool `json:"unsubscribedNEQ,omitempty"`
+	// send_attempts field predicates
+	SendAttempts      *int64  `json:"sendAttempts,omitempty"`
+	SendAttemptsNeq   *int64  `json:"sendAttemptsNEQ,omitempty"`
+	SendAttemptsIn    []int64 `json:"sendAttemptsIn,omitempty"`
+	SendAttemptsNotIn []int64 `json:"sendAttemptsNotIn,omitempty"`
+	SendAttemptsGt    *int64  `json:"sendAttemptsGT,omitempty"`
+	SendAttemptsGte   *int64  `json:"sendAttemptsGTE,omitempty"`
+	SendAttemptsLt    *int64  `json:"sendAttemptsLT,omitempty"`
+	SendAttemptsLte   *int64  `json:"sendAttemptsLTE,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -23310,7 +23323,9 @@ type UpdateSubscriberInput struct {
 	PhoneNumber      *string `json:"phoneNumber,omitempty"`
 	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
 	// indicates if the subscriber has unsubscribed from communications
-	Unsubscribed   *bool    `json:"unsubscribed,omitempty"`
+	Unsubscribed *bool `json:"unsubscribed,omitempty"`
+	// the number of attempts made to perform email send of the subscription, maximum of 5
+	SendAttempts   *int64   `json:"sendAttempts,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	ClearOwner     *bool    `json:"clearOwner,omitempty"`
 	AddEventIDs    []string `json:"addEventIDs,omitempty"`
@@ -27883,6 +27898,7 @@ const (
 	SubscriberOrderFieldEmail        SubscriberOrderField = "email"
 	SubscriberOrderFieldActive       SubscriberOrderField = "active"
 	SubscriberOrderFieldUnsubscribed SubscriberOrderField = "unsubscribed"
+	SubscriberOrderFieldSendAttempts SubscriberOrderField = "send_attempts"
 )
 
 var AllSubscriberOrderField = []SubscriberOrderField{
@@ -27891,11 +27907,12 @@ var AllSubscriberOrderField = []SubscriberOrderField{
 	SubscriberOrderFieldEmail,
 	SubscriberOrderFieldActive,
 	SubscriberOrderFieldUnsubscribed,
+	SubscriberOrderFieldSendAttempts,
 }
 
 func (e SubscriberOrderField) IsValid() bool {
 	switch e {
-	case SubscriberOrderFieldCreatedAt, SubscriberOrderFieldUpdatedAt, SubscriberOrderFieldEmail, SubscriberOrderFieldActive, SubscriberOrderFieldUnsubscribed:
+	case SubscriberOrderFieldCreatedAt, SubscriberOrderFieldUpdatedAt, SubscriberOrderFieldEmail, SubscriberOrderFieldActive, SubscriberOrderFieldUnsubscribed, SubscriberOrderFieldSendAttempts:
 		return true
 	}
 	return false

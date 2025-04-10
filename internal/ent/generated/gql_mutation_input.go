@@ -7441,11 +7441,12 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
-	Tags        []string
-	Email       string
-	PhoneNumber *string
-	OwnerID     *string
-	EventIDs    []string
+	Tags         []string
+	Email        string
+	PhoneNumber  *string
+	SendAttempts *int
+	OwnerID      *string
+	EventIDs     []string
 }
 
 // Mutate applies the CreateSubscriberInput on the SubscriberMutation builder.
@@ -7456,6 +7457,9 @@ func (i *CreateSubscriberInput) Mutate(m *SubscriberMutation) {
 	m.SetEmail(i.Email)
 	if v := i.PhoneNumber; v != nil {
 		m.SetPhoneNumber(*v)
+	}
+	if v := i.SendAttempts; v != nil {
+		m.SetSendAttempts(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -7480,6 +7484,7 @@ type UpdateSubscriberInput struct {
 	ClearPhoneNumber bool
 	PhoneNumber      *string
 	Unsubscribed     *bool
+	SendAttempts     *int
 	ClearOwner       bool
 	OwnerID          *string
 	ClearEvents      bool
@@ -7509,6 +7514,9 @@ func (i *UpdateSubscriberInput) Mutate(m *SubscriberMutation) {
 	}
 	if v := i.Unsubscribed; v != nil {
 		m.SetUnsubscribed(*v)
+	}
+	if v := i.SendAttempts; v != nil {
+		m.SetSendAttempts(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

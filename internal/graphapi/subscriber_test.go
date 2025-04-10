@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/samber/lo"
@@ -149,50 +150,56 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 	t := suite.T()
 
 	testCases := []struct {
-		name            string
-		email           string
-		ownerID         string
-		setUnsubscribed bool
-		client          *openlaneclient.OpenlaneClient
-		ctx             context.Context
-		wantErr         bool
+		name             string
+		email            string
+		ownerID          string
+		setUnsubscribed  bool
+		client           *openlaneclient.OpenlaneClient
+		ctx              context.Context
+		wantErr          bool
+		expectedAttempts int64
 	}{
 		{
-			name:            "happy path, new subscriber",
-			email:           "c.stark@example.com",
-			setUnsubscribed: true, //unsubscribe the subscriber to test for re-creation
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			wantErr:         false,
+			name:             "happy path, new subscriber",
+			email:            "c.stark@example.com",
+			setUnsubscribed:  true, //unsubscribe the subscriber to test for re-creation
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 1,
 		},
 		{
-			name:    "happy path, duplicate subscriber but original was unsubscribed",
-			email:   "c.stark@example.com",
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
-			wantErr: false,
+			name:             "happy path, duplicate subscriber but original was unsubscribed",
+			email:            "c.stark@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 2,
 		},
 		{
-			name:    "happy path, duplicate subscriber, case insensitive",
-			email:   "c.STARK@example.com",
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
-			wantErr: true,
+			name:             "happy path, duplicate subscriber, case insensitive",
+			email:            "c.STARK@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 3,
 		},
 		{
-			name:    "happy path, new subscriber using api token",
-			email:   "e.stark@example.com",
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			wantErr: false,
+			name:             "happy path, new subscriber using api token",
+			email:            "e.stark@example.com",
+			client:           suite.client.apiWithToken,
+			ctx:              context.Background(),
+			wantErr:          false,
+			expectedAttempts: 1,
 		},
 		{
-			name:    "happy path, new subscriber using personal access token",
-			email:   "a.stark@example.com",
-			ownerID: testUser1.OrganizationID,
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			wantErr: false,
+			name:             "happy path, new subscriber using personal access token",
+			email:            "a.stark@example.com",
+			ownerID:          testUser1.OrganizationID,
+			client:           suite.client.apiWithPAT,
+			ctx:              context.Background(),
+			wantErr:          false,
+			expectedAttempts: 1,
 		},
 		{
 			name:    "missing email",
@@ -225,7 +232,9 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 			require.NotNil(t, resp)
 
 			// Assert matching fields
-			assert.Equal(t, tc.email, resp.CreateSubscriber.Subscriber.Email)
+			// Since we convert to lower case already on insertion/update
+			assert.Equal(t, strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email)
+			assert.False(t, resp.CreateSubscriber.Subscriber.Unsubscribed)
 
 			if tc.setUnsubscribed {
 				// Set the subscriber as unsubscribed to test for duplicate email
@@ -425,3 +434,4 @@ func (suite *GraphTestSuite) TestDeleteSubscriber() {
 		})
 	}
 }
+

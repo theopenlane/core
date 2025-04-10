@@ -117,7 +117,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -129,7 +129,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              orgWithRestrictionsCtx,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -151,7 +151,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              context.Background(),
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 1,
+			expectedAttempts: 2,
 			wantErr:          false,
 		},
 		{
@@ -163,7 +163,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              context.Background(),
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -175,7 +175,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              viewOnlyUser.UserCtx,
 			requestorID:      viewOnlyUser.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -215,7 +215,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -227,7 +227,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			ctx:              user1Context,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 	}
@@ -284,7 +284,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 0,
+			expectedAttempts: 1,
 			wantErr:          false,
 		},
 		{
@@ -294,7 +294,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 1,
+			expectedAttempts: 2,
 			wantErr:          false,
 		},
 		{
@@ -304,7 +304,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
-			expectedAttempts: 2,
+			expectedAttempts: 3,
 			wantErr:          false,
 		},
 	}

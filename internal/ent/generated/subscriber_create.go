@@ -220,6 +220,20 @@ func (sc *SubscriberCreate) SetNillableUnsubscribed(b *bool) *SubscriberCreate {
 	return sc
 }
 
+// SetSendAttempts sets the "send_attempts" field.
+func (sc *SubscriberCreate) SetSendAttempts(i int) *SubscriberCreate {
+	sc.mutation.SetSendAttempts(i)
+	return sc
+}
+
+// SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
+func (sc *SubscriberCreate) SetNillableSendAttempts(i *int) *SubscriberCreate {
+	if i != nil {
+		sc.SetSendAttempts(*i)
+	}
+	return sc
+}
+
 // SetID sets the "id" field.
 func (sc *SubscriberCreate) SetID(s string) *SubscriberCreate {
 	sc.mutation.SetID(s)
@@ -325,6 +339,10 @@ func (sc *SubscriberCreate) defaults() error {
 		v := subscriber.DefaultUnsubscribed
 		sc.mutation.SetUnsubscribed(v)
 	}
+	if _, ok := sc.mutation.SendAttempts(); !ok {
+		v := subscriber.DefaultSendAttempts
+		sc.mutation.SetSendAttempts(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if subscriber.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.DefaultID (forgotten import generated/runtime?)")
@@ -385,6 +403,9 @@ func (sc *SubscriberCreate) check() error {
 	}
 	if _, ok := sc.mutation.Unsubscribed(); !ok {
 		return &ValidationError{Name: "unsubscribed", err: errors.New(`generated: missing required field "Subscriber.unsubscribed"`)}
+	}
+	if _, ok := sc.mutation.SendAttempts(); !ok {
+		return &ValidationError{Name: "send_attempts", err: errors.New(`generated: missing required field "Subscriber.send_attempts"`)}
 	}
 	return nil
 }
@@ -485,6 +506,10 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 		_node.Unsubscribed = value
+	}
+	if value, ok := sc.mutation.SendAttempts(); ok {
+		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
+		_node.SendAttempts = value
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

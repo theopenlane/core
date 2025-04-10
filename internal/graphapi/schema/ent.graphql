@@ -7244,6 +7244,10 @@ input CreateSubscriberInput {
   phone number of the subscriber
   """
   phoneNumber: String
+  """
+  the number of attempts made to perform email send of the subscription, maximum of 5
+  """
+  sendAttempts: Int
   ownerID: ID
   eventIDs: [ID!]
 }
@@ -32496,6 +32500,10 @@ type Subscriber implements Node {
   indicates if the subscriber has unsubscribed from communications
   """
   unsubscribed: Boolean!
+  """
+  the number of attempts made to perform email send of the subscription, maximum of 5
+  """
+  sendAttempts: Int!
   owner: Organization
   events(
     """
@@ -32581,6 +32589,7 @@ enum SubscriberOrderField {
   email
   active
   unsubscribed
+  send_attempts
 }
 """
 SubscriberWhereInput is used for filtering Subscriber objects.
@@ -32768,6 +32777,17 @@ input SubscriberWhereInput {
   """
   unsubscribed: Boolean
   unsubscribedNEQ: Boolean
+  """
+  send_attempts field predicates
+  """
+  sendAttempts: Int
+  sendAttemptsNEQ: Int
+  sendAttemptsIn: [Int!]
+  sendAttemptsNotIn: [Int!]
+  sendAttemptsGT: Int
+  sendAttemptsGTE: Int
+  sendAttemptsLT: Int
+  sendAttemptsLTE: Int
   """
   owner edge predicates
   """
@@ -36818,6 +36838,10 @@ input UpdateSubscriberInput {
   indicates if the subscriber has unsubscribed from communications
   """
   unsubscribed: Boolean
+  """
+  the number of attempts made to perform email send of the subscription, maximum of 5
+  """
+  sendAttempts: Int
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

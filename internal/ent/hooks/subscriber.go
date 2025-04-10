@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations
@@ -31,9 +32,25 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			retValue, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
+			var retValue ent.Value
+
+			existingSubscriber, err := getSubscriber(ctx, m)
+
+			if existingSubscriber != nil && err == nil {
+				zerolog.Ctx(ctx).Info().Msg("user is already a subscriber. Resending email now")
+
+				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
+				if err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to update email subscription")
+
+					return retValue, err
+				}
+			} else {
+				// create new subscription
+				retValue, err = next.Mutate(ctx, m)
+				if err != nil {
+					return retValue, err
+				}
 			}
 
 			if err := queueSubscriberEmail(ctx, m); err != nil {
@@ -119,3 +136,41 @@ func createVerificationToken(m *generated.SubscriberMutation, email string) erro
 
 	return nil
 }
+
+func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*generated.Subscriber, error) {
+	email, _ := m.Email()
+	ownerID, _ := m.OwnerID()
+
+	return m.Client().Subscriber.Query().
+		Where(subscriber.Email(email)).
+		Where(subscriber.OwnerID(ownerID)).Only(ctx)
+}
+
+func updateSubscriber(ctx context.Context,
+	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
+	if subscriber.SendAttempts >= maxAttempts {
+		return nil, ErrMaxSubscriptionAttempts
+	}
+
+	subscriber.SendAttempts++
+
+	m.SetSendAttempts(subscriber.SendAttempts)
+
+	// if a user is unsubscribed but getting here again
+	// we should toggle that
+	if subscriber.Unsubscribed {
+		subscriber.Unsubscribed = false
+	}
+
+	secret, _ := m.Secret()
+	token, _ := m.Token()
+
+	return m.Client().Subscriber.
+		UpdateOneID(subscriber.ID).
+		SetSendAttempts(subscriber.SendAttempts).
+		SetUnsubscribed(subscriber.Unsubscribed).
+		SetToken(token).
+		SetSecret(secret).
+		Save(ctx)
+}
+

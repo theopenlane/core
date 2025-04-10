@@ -49,6 +49,8 @@ const (
 	FieldSecret = "secret"
 	// FieldUnsubscribed holds the string denoting the unsubscribed field in the database.
 	FieldUnsubscribed = "unsubscribed"
+	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
+	FieldSendAttempts = "send_attempts"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -89,6 +91,7 @@ var Columns = []string{
 	FieldTTL,
 	FieldSecret,
 	FieldUnsubscribed,
+	FieldSendAttempts,
 }
 
 var (
@@ -142,6 +145,8 @@ var (
 	SecretValidator func([]byte) error
 	// DefaultUnsubscribed holds the default value on creation for the "unsubscribed" field.
 	DefaultUnsubscribed bool
+	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
+	DefaultSendAttempts int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -227,6 +232,11 @@ func ByTTL(opts ...sql.OrderTermOption) OrderOption {
 // ByUnsubscribed orders the results by the unsubscribed field.
 func ByUnsubscribed(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUnsubscribed, opts...).ToFunc()
+}
+
+// BySendAttempts orders the results by the send_attempts field.
+func BySendAttempts(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSendAttempts, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
