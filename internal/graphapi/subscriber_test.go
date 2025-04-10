@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -246,7 +247,17 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 				require.True(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
 				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
-				require.Zero(t, resp.UpdateSubscriber.Subscriber.SendAttempts) // reset attempts count to zero
+
+				// fetch from db to verify send attempts
+				ctx := setContext(tc.ctx, suite.client.db)
+
+				sub, err := suite.client.db.Subscriber.
+					Query().
+					Where(subscriber.Email(tc.email)).
+					Only(ctx)
+
+				require.NoError(t, err)
+				require.Zero(t, sub.SendAttempts) // reset attempts count to zero
 			}
 		})
 	}
@@ -432,6 +443,84 @@ func (suite *GraphTestSuite) TestDeleteSubscriber() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 			require.Equal(t, tc.email, resp.DeleteSubscriber.Email)
+		})
+	}
+}
+
+func (suite *GraphTestSuite) TestActiveSubscriber() {
+	t := suite.T()
+
+	testCases := []struct {
+		name       string
+		email      string
+		ownerID    string
+		client     *openlaneclient.OpenlaneClient
+		ctx        context.Context
+		wantErr    bool
+		markActive bool
+	}{
+		{
+			name:       "happy path, active subscriber",
+			email:      "c.stark@example.com",
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+			wantErr:    false,
+			markActive: true,
+		},
+		{
+			name:       "happy path, resubscribing",
+			email:      "aa.stark@example.com",
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+			wantErr:    false,
+			markActive: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			input := openlaneclient.CreateSubscriberInput{
+				Email: tc.email,
+			}
+
+			if tc.ownerID != "" {
+				input.OwnerID = &tc.ownerID
+			}
+
+			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
+
+			if tc.wantErr {
+				require.Error(t, err)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NotNil(t, resp)
+
+			if tc.markActive {
+
+				ctx := setContext(tc.ctx, suite.client.db)
+
+				// update the subscriber and mark active
+				_, err = suite.client.db.Subscriber.
+					UpdateOneID(resp.CreateSubscriber.Subscriber.ID).
+					SetActive(true).
+					Save(ctx)
+
+				require.NoError(t, err)
+			}
+
+			_, err = tc.client.CreateSubscriber(tc.ctx, input)
+
+			if tc.markActive {
+				// if we marked the user as active, this should fail
+				require.Error(t, err)
+
+				return
+			}
+
+			require.NoError(t, err)
 		})
 	}
 }

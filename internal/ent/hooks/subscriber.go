@@ -37,7 +37,9 @@ func HookSubscriberCreate() ent.Hook {
 			existingSubscriber, err := getSubscriber(ctx, m)
 
 			if existingSubscriber != nil && err == nil {
-				zerolog.Ctx(ctx).Info().Msg("user is already a subscriber. Resending email now")
+				if existingSubscriber.Active {
+					return nil, ErrUserAlreadySubscriber
+				}
 
 				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
 				if err != nil {
