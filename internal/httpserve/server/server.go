@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/metrics"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -145,6 +146,13 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 
 		return sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
 	}
+
+	newMetrics := metrics.New(s.config.Settings.Server.MetricsPort)
+	go func() {
+		if err := newMetrics.Start(ctx); err != nil {
+			log.Error().Err(err).Msg("metrics server failed to start")
+		}
+	}()
 	// otherwise, start without TLS
 	return sc.Start(s.Router.Echo)
 }

@@ -153,6 +153,8 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 		return nil, err
 	}
 
+	db.Use(hooks.MetricsHook())
+
 	return db, nil
 }
 

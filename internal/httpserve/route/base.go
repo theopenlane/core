@@ -3,7 +3,6 @@ package route
 import (
 	"net/http"
 
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -42,25 +41,6 @@ func registerReadinessHandler(router *Router) (err error) {
 		Handler: func(c echo.Context) error {
 			return router.Handler.ReadyChecks.ReadyHandler(c)
 		},
-	}
-
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// registerMetricsHandler registers the metrics handler
-func registerMetricsHandler(router *Router) (err error) {
-	path := "/metrics"
-	method := http.MethodGet
-
-	route := echo.Route{
-		Name:    "Metrics",
-		Method:  method,
-		Path:    path,
-		Handler: echo.WrapHandler(promhttp.Handler()),
 	}
 
 	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {

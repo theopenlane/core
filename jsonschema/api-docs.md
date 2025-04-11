@@ -37,6 +37,7 @@ Server settings for the echo server
 |**debug**|`boolean`|Debug enables debug mode for the server<br/>|no|
 |**dev**|`boolean`|Dev enables echo's dev mode options<br/>|no|
 |**listen**|`string`|Listen sets the listen address to serve the echo server on<br/>|yes|
+|**metricsPort**|`string`|MetricsPort sets the port for the metrics endpoint<br/>|no|
 |**shutdownGracePeriod**|`integer`|ShutdownGracePeriod sets the grace period for in flight requests before shutting down<br/>|no|
 |**readTimeout**|`integer`|ReadTimeout sets the maximum duration for reading the entire request including the body<br/>|no|
 |**writeTimeout**|`integer`|WriteTimeout sets the maximum duration before timing out writes of the response<br/>|no|

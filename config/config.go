@@ -78,6 +78,8 @@ type Server struct {
 	Dev bool `json:"dev" koanf:"dev" default:"false"`
 	// Listen sets the listen address to serve the echo server on
 	Listen string `json:"listen" koanf:"listen" jsonschema:"required" default:":17608"`
+	// MetricsPort sets the port for the metrics endpoint
+	MetricsPort string `json:"metricsPort" koanf:"metricsPort" default:":17609"`
 	// ShutdownGracePeriod sets the grace period for in flight requests before shutting down
 	ShutdownGracePeriod time.Duration `json:"shutdownGracePeriod" koanf:"shutdownGracePeriod" default:"10s"`
 	// ReadTimeout sets the maximum duration for reading the entire request including the body
