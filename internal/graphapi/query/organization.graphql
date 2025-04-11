@@ -74,12 +74,16 @@ mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInp
         tags
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -117,12 +121,16 @@ query GetAllOrganizations {
           }
         }
         members {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
+          edges {
+            node {
+              id
+              role
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
         setting {
@@ -229,12 +237,16 @@ query GetOrganizationByID($organizationId: ID!) {
       }
     }
     members {
-      id
-      role
-      user {
-        id
-        firstName
-        lastName
+      edges {
+        node {
+          id
+          role
+          user {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
     setting {
@@ -341,12 +353,16 @@ query GetOrganizations($where: OrganizationWhereInput) {
           }
         }
         members {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
+          edges {
+            node {
+              id
+              role
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
         setting {
@@ -447,9 +463,13 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       }
       tags
       members {
-        id
-        role
-        userID
+        edges {
+          node {
+            id
+            role
+            userID
+          }
+        }
       }
       setting {
         id

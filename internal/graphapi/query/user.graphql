@@ -176,8 +176,12 @@ query GetUserByID($userId: ID!) {
           name
           personalOrg
           members {
-            id
-            role
+            edges {
+              node {
+                id
+                role
+              }
+            }
           }
         }
       }
@@ -226,8 +230,6 @@ query GetUserByIDWithOrgs($userId: ID!) {
     orgMemberships {
       edges {
         node {
-          id
-          role
           id
           role
           user {

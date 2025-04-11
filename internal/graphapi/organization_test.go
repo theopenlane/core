@@ -80,13 +80,13 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 			require.NotNil(t, resp)
 			require.NotNil(t, resp.Organization)
 			require.NotNil(t, resp.Organization.Members)
-			assert.Len(t, resp.Organization.Members, tc.orgMembersExpected)
+			assert.Len(t, resp.Organization.Members.Edges, tc.orgMembersExpected)
 
 			if tc.orgMembersExpected > 1 {
 				orgMemberFound := false
 
-				for _, m := range resp.Organization.Members {
-					if m.User.ID == viewOnlyUser.ID {
+				for _, m := range resp.Organization.Members.Edges {
+					if m.Node.User.ID == viewOnlyUser.ID {
 						orgMemberFound = true
 					}
 				}
@@ -560,10 +560,14 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				Members: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members{
-					{
-						Role:   enums.RoleAdmin,
-						UserID: user1.ID,
+				Members: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members{
+					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges{
+						{
+							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{
+								Role:   enums.RoleAdmin,
+								UserID: user1.ID,
+							},
+						},
 					},
 				},
 			},
@@ -772,9 +776,9 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 				// Adding a member to an org will make it 3 users, there is an owner
 				// assigned to the org automatically and an another member added in the test and
 				// 3 created as part of the group member logic
-				assert.Len(t, updatedOrg.Members, 6)
-				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedOrg.Members[5].Role)
-				assert.Equal(t, tc.expectedRes.Members[0].UserID, updatedOrg.Members[5].UserID)
+				assert.Len(t, updatedOrg.Members.Edges, 6)
+				assert.Equal(t, tc.expectedRes.Members.Edges[0].Node.Role, updatedOrg.Members.Edges[5].Node.Role)
+				assert.Equal(t, tc.expectedRes.Members.Edges[0].Node.UserID, updatedOrg.Members.Edges[5].Node.UserID)
 			}
 
 			if tc.updateInput.UpdateOrgSettings != nil {
