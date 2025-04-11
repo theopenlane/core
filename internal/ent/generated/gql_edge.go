@@ -2638,16 +2638,25 @@ func (o *Organization) APITokens(
 	return o.QueryAPITokens().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (o *Organization) Users(ctx context.Context) (result []*User, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedUsers(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.UsersOrErr()
+func (o *Organization) Users(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*UserOrder, where *UserWhereInput,
+) (*UserConnection, error) {
+	opts := []UserPaginateOption{
+		WithUserOrder(orderBy),
+		WithUserFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryUsers().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[14][alias]
+	if nodes, err := o.NamedUsers(alias); err == nil || hasTotalCount {
+		pager, err := newUserPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &UserConnection{Edges: []*UserEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return o.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (o *Organization) Files(
@@ -3216,16 +3225,25 @@ func (o *Organization) ActionPlans(
 	return o.QueryActionPlans().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.MembersOrErr()
+func (o *Organization) Members(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
+) (*OrgMembershipConnection, error) {
+	opts := []OrgMembershipPaginateOption{
+		WithOrgMembershipOrder(orderBy),
+		WithOrgMembershipFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryMembers().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
+		pager, err := newOrgMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &OrgMembershipConnection{Edges: []*OrgMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return o.QueryMembers().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (os *OrganizationSetting) Organization(ctx context.Context) (*Organization, error) {

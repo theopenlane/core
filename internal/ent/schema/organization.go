@@ -158,7 +158,9 @@ func (o Organization) Edges() []ent.Edge {
 			Ref("organizations").
 			// Skip the mutation input for the users edge
 			// this should be done via the members edge
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.RelayConnection()).
 			Through("members", OrgMembership.Type),
 
 		// files can be owned by an organization, but don't have to be

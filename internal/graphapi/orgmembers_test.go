@@ -114,13 +114,6 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 
 	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// allow access to organization
-	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
-
-	orgMember, err := org1.Members(checkCtx)
-	require.NoError(t, err)
-	require.Len(t, orgMember, 1)
-
 	userCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

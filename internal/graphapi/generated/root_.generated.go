@@ -2298,7 +2298,7 @@ type ComplexityRoot struct {
 		InternalPolicies         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyCreators   func(childComplexity int) int
 		Invites                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		Members                  func(childComplexity int) int
+		Members                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		Name                     func(childComplexity int) int
 		NarrativeCreators        func(childComplexity int) int
 		Narratives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -2324,7 +2324,7 @@ type ComplexityRoot struct {
 		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
-		Users                    func(childComplexity int) int
+		Users                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -15642,7 +15642,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Members(childComplexity), true
+		args, err := ec.field_Organization_members_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Members(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Organization.name":
 		if e.complexity.Organization.Name == nil {
@@ -15884,7 +15889,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Organization.Users(childComplexity), true
+		args, err := ec.field_Organization_users_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "OrganizationBulkCreatePayload.organizations":
 		if e.complexity.OrganizationBulkCreatePayload.Organizations == nil {
@@ -46316,7 +46326,37 @@ type Organization implements Node {
     """
     where: APITokenWhereInput
   ): APITokenConnection!
-  users: [User!]
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -47125,7 +47165,37 @@ type Organization implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
-  members: [OrgMembership!]
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrgMemberships returned from the connection.
+    """
+    orderBy: [OrgMembershipOrder!]
+
+    """
+    Filtering options for OrgMemberships returned from the connection.
+    """
+    where: OrgMembershipWhereInput
+  ): OrgMembershipConnection!
 }
 """
 A connection to a list of items.

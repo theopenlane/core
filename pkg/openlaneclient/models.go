@@ -14304,7 +14304,7 @@ type Organization struct {
 	Setting                *OrganizationSetting             `json:"setting,omitempty"`
 	PersonalAccessTokens   *PersonalAccessTokenConnection   `json:"personalAccessTokens"`
 	APITokens              *APITokenConnection              `json:"apiTokens"`
-	Users                  []*User                          `json:"users,omitempty"`
+	Users                  *UserConnection                  `json:"users"`
 	Files                  *FileConnection                  `json:"files"`
 	Events                 *EventConnection                 `json:"events"`
 	Secrets                *HushConnection                  `json:"secrets"`
@@ -14333,7 +14333,7 @@ type Organization struct {
 	Evidence               *EvidenceConnection              `json:"evidence"`
 	Standards              *StandardConnection              `json:"standards"`
 	ActionPlans            *ActionPlanConnection            `json:"actionPlans"`
-	Members                []*OrgMembership                 `json:"members,omitempty"`
+	Members                *OrgMembershipConnection         `json:"members"`
 }
 
 func (Organization) IsNode() {}
