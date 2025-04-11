@@ -3,7 +3,6 @@ package metrics
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -92,7 +91,7 @@ func New(port string) *Metrics {
 func (m *Metrics) Start(ctx context.Context) error {
 	zerolog.Ctx(ctx).Info().Msg("starting metrics server")
 
-	if err := m.e.Start(fmt.Sprintf(":%s", m.port)); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := m.e.Start(m.port); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
 

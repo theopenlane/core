@@ -49,12 +49,15 @@ func initOpsDuration() *prometheus.HistogramVec {
 	)
 }
 
+// initialize the collectors, prometheus will register them automatically
+var (
+	opsProcessedTotal = initOpsProcessedTotal()
+	opsProcessedError = initOpsProcessedError()
+	opsDuration       = initOpsDuration()
+)
+
 // MetricsHook inits the collectors with count total at beginning, error on mutation error and a duration after the mutation
 func MetricsHook() ent.Hook {
-	opsProcessedTotal := initOpsProcessedTotal()
-	opsProcessedError := initOpsProcessedError()
-	opsDuration := initOpsDuration()
-
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// Before mutation, start measuring time
