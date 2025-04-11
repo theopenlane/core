@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -97,8 +98,19 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 			return h.BadRequest(ctx, err)
 		}
 
+		orgID, err := auth.GetOrganizationIDFromContext(userCtx)
+		if err != nil {
+			log.Err(err).Msg("unable to get user id from context")
+
+			return h.BadRequest(ctx, err)
+		}
+
 		if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
 			return h.BadRequest(ctx, err)
+		}
+
+		if err := h.sendWelcomeEmail(userCtx, user, orgID); err != nil {
+			return err
 		}
 	}
 

@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -254,6 +255,33 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	org, err := m.Client().Organization.Get(ctx, orgID)
 	if err != nil {
 		return err
+	}
+
+	authType := auth.GetAuthTypeFromContext(ctx)
+
+	switch authType {
+	case auth.JWTAuthentication:
+
+	case auth.PATAuthentication:
+
+		token, err := m.Client().PersonalAccessToken.Get(ctx, reqID)
+		if err != nil {
+			return err
+		}
+
+		reqID = token.CreatedBy
+
+	case auth.APITokenAuthentication:
+
+		token, err := m.Client().APIToken.Get(ctx, reqID)
+		if err != nil {
+			return err
+		}
+
+		reqID = token.CreatedBy
+	default:
+		// should never really get here
+		return errors.New("unsupported authentication type")
 	}
 
 	requestor, err := m.Client().User.Get(ctx, reqID)
