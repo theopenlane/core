@@ -7,6 +7,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -17,26 +18,34 @@ import (
 )
 
 // UpdateTaskComment is the resolver for the updateTaskComment field.
-func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput) (*model.TaskUpdatePayload, error) {
+func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "taskcomment"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "taskcomment"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
+	// Get the task that owns this comment
+	taskRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
 	return &model.TaskUpdatePayload{
-		Task: objectRes,
+		Task: taskRes,
 	}, nil
 }
 

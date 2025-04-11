@@ -255,6 +255,15 @@ type StandardBuilder struct {
 	IsPublic  bool
 }
 
+type NoteBuilder struct {
+	client *client
+
+	// Fields
+	Text    string
+	TaskID  string
+	FileIDs []string
+}
+
 type ControlImplementationBuilder struct {
 	client *client
 
@@ -1017,6 +1026,31 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		SaveX(ctx)
 
 	return Standard
+}
+
+// MustNew note builder is used to create, without authz checks, notes in the database
+func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
+	ctx = setContext(ctx, n.client.db)
+
+	if n.Text == "" {
+		n.Text = gofakeit.HipsterSentence(10)
+	}
+
+	mutation := n.client.db.Note.Create().
+		SetText(n.Text)
+
+
+	if n.TaskID != "" {
+		mutation.SetTaskID(n.TaskID)
+	}
+
+	if len(n.FileIDs) > 0 {
+		mutation.AddFileIDs(n.FileIDs...)
+	}
+
+	note := mutation.SaveX(ctx)
+
+	return note
 }
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database

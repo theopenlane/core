@@ -1950,7 +1950,7 @@ type ComplexityRoot struct {
 		UpdateSubscriber                   func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                   func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
-		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput) int
+		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
@@ -13858,7 +13858,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTaskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput)), true
+		return e.complexity.Mutation.UpdateTaskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTemplate":
 		if e.complexity.Mutation.UpdateTemplate == nil {
@@ -66268,6 +66268,10 @@ extend type Mutation{
         New values for the comment
         """
         input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
     ): TaskUpdatePayload!
 }
 
