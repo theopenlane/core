@@ -4,6 +4,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// These variables are stubs for now ad will be added throughout the codebase
 var (
 	WorkerExecutions = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "worker_executions_count",
@@ -13,7 +14,6 @@ var (
 		Name: "worker_execution_errors_count",
 		Help: "The number of worker execution errors",
 	}, []string{"name"})
-
 	Logins = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "logins_count",
 		Help: "The number of logins",
@@ -23,7 +23,6 @@ var (
 		Name: "registrations_count",
 		Help: "The number of registrations",
 	})
-
 	QueueTasksPushed = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "queue_tasks_pushed_total",
 		Help: "The number of tasks pushed to queue",
