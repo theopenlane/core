@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/pkg/metrics"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -144,6 +145,11 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		log.Info().Msg("starting in https mode")
 
 		return sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
+	}
+
+	newMetrics := metrics.New(17609)
+	if err := newMetrics.Start(ctx); err != nil {
+		return err
 	}
 	// otherwise, start without TLS
 	return sc.Start(s.Router.Echo)
