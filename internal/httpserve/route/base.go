@@ -49,22 +49,3 @@ func registerReadinessHandler(router *Router) (err error) {
 
 	return nil
 }
-
-// registerMetricsHandler registers the metrics handler
-//func registerMetricsHandler(router *Router) (err error) {
-//	path := "/metrics"
-//	method := http.MethodGet
-//
-//	route := echo.Route{
-//		Name:    "Metrics",
-//		Method:  method,
-//		Path:    path,
-//		Handler: echo.WrapHandler(promhttp.Handler()),
-//	}
-//
-//	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-//		return err
-//	}
-//
-//	return nil
-//}
