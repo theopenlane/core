@@ -80,27 +80,28 @@ tasks:
       CHANGED: '{{.CHANGED | default "false"}}'
     cmds:
       - |
-        if [ "$(git rev-parse --abbrev-ref HEAD)" = "main" ]; then
-          echo "⚠️  Skipping lint: you are on the 'main' branch."
-          exit 0
+        branch=$(git rev-parse --abbrev-ref HEAD)
+
+        if [ "$branch" = "main" ]; then
+          echo "🔎 On main branch — running full linter only..."
+          golangci-lint run --config=.golangci.yaml --verbose
+          # return the exit code from the linter
+          exit $?  
         fi
 
         if [ "{{.CHANGED}}" = "true" ]; then
-          # get all changed Go files (staged, unstaged, and committed differences from origin/main)
           changed_files=$(git diff origin/main --name-only --diff-filter=ACMRTUXB | grep '\.go$' || true)
 
           if [ -n "$changed_files" ]; then
-            echo "🔍 Linting changed files (grouped by directory):"
+            echo "🔍 Linting changed files only (grouped by directory):"
             echo "$changed_files"
 
-            # extract directories and run golangci-lint in each
-            # golangci lint cannot run against multiple directories at once
             echo "$changed_files" | xargs -n1 dirname | sort -u | while read -r dir; do
-              if [ -d "$dir" ]; then
-                echo "➡️  Linting directory: $dir"
-                golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats "$dir"
-              fi
-            done
+            if [ -d "$dir" ]; then
+              echo "➡️  Linting directory: $dir"
+              golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats "$dir"
+            fi
+          done
           else
             echo "✅ No changed Go files to lint."
           fi
