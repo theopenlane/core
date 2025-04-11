@@ -74,6 +74,7 @@ mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInp
         tags
       }
       members {
+        totalCount
         edges {
           node {
             id
@@ -121,6 +122,7 @@ query GetAllOrganizations {
           }
         }
         members {
+          totalCount
           edges {
             node {
               id
@@ -237,6 +239,7 @@ query GetOrganizationByID($organizationId: ID!) {
       }
     }
     members {
+      totalCount
       edges {
         node {
           id
@@ -353,6 +356,7 @@ query GetOrganizations($where: OrganizationWhereInput) {
           }
         }
         members {
+          totalCount
           edges {
             node {
               id
@@ -463,6 +467,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       }
       tags
       members {
+        totalCount
         edges {
           node {
             id

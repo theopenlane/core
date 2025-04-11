@@ -34225,7 +34225,8 @@ func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organizatio
 }
 
 type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members struct {
-	Edges []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetEdges() []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges {
@@ -34233,6 +34234,12 @@ func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organizatio
 		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
 	}
 	return t.Edges
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return t.TotalCount
 }
 
 type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization struct {
@@ -34430,7 +34437,8 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges) GetNode() *
 }
 
 type GetAllOrganizations_Organizations_Edges_Node_Members struct {
-	Edges []*GetAllOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetEdges() []*GetAllOrganizations_Organizations_Edges_Node_Members_Edges {
@@ -34438,6 +34446,12 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetEdges() []*Get
 		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
 	}
 	return t.Edges
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetAllOrganizations_Organizations_Edges_Node_Setting struct {
@@ -35151,7 +35165,8 @@ func (t *GetOrganizationByID_Organization_Members_Edges) GetNode() *GetOrganizat
 }
 
 type GetOrganizationByID_Organization_Members struct {
-	Edges []*GetOrganizationByID_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetOrganizationByID_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetOrganizationByID_Organization_Members) GetEdges() []*GetOrganizationByID_Organization_Members_Edges {
@@ -35159,6 +35174,12 @@ func (t *GetOrganizationByID_Organization_Members) GetEdges() []*GetOrganization
 		t = &GetOrganizationByID_Organization_Members{}
 	}
 	return t.Edges
+}
+func (t *GetOrganizationByID_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetOrganizationByID_Organization_Setting struct {
@@ -35878,7 +35899,8 @@ func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges) GetNode() *Get
 }
 
 type GetOrganizations_Organizations_Edges_Node_Members struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetOrganizations_Organizations_Edges_Node_Members) GetEdges() []*GetOrganizations_Organizations_Edges_Node_Members_Edges {
@@ -35886,6 +35908,12 @@ func (t *GetOrganizations_Organizations_Edges_Node_Members) GetEdges() []*GetOrg
 		t = &GetOrganizations_Organizations_Edges_Node_Members{}
 	}
 	return t.Edges
+}
+func (t *GetOrganizations_Organizations_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetOrganizations_Organizations_Edges_Node_Setting struct {
@@ -36513,7 +36541,8 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Members_Edges) GetNo
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_Members struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*UpdateOrganization_UpdateOrganization_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_Members_Edges {
@@ -36521,6 +36550,12 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetEdges() 
 		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
 	}
 	return t.Edges
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
+	}
+	return t.TotalCount
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_Setting struct {
@@ -75230,6 +75265,7 @@ const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMe
 				tags
 			}
 			members {
+				totalCount
 				edges {
 					node {
 						id
@@ -75314,6 +75350,7 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					}
 				}
 				members {
+					totalCount
 					edges {
 						node {
 							id
@@ -75446,6 +75483,7 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			}
 		}
 		members {
+			totalCount
 			edges {
 				node {
 					id
@@ -75580,6 +75618,7 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					}
 				}
 				members {
+					totalCount
 					edges {
 						node {
 							id
@@ -75704,6 +75743,7 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 			}
 			tags
 			members {
+				totalCount
 				edges {
 					node {
 						id
