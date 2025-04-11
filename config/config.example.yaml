@@ -165,6 +165,7 @@ server:
     idleTimeout: 30000000000
     listen: :17608
     maxResultLimit: 100
+    metricsPort: :17609
     mime:
         defaultContentType: application/data
         enabled: true

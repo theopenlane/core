@@ -45,7 +45,7 @@ var (
 		Help: "The length of time taken for a task to be processed in seconds",
 	}, []string{"task"})
 
-	ApiMetrics = []prometheus.Collector{
+	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
 		Logins,

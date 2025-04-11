@@ -147,7 +147,7 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		return sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
 	}
 
-	newMetrics := metrics.New(17609)
+	newMetrics := metrics.New(s.config.Settings.Server.MetricsPort)
 	go func() {
 		if err := newMetrics.Start(ctx); err != nil {
 			log.Error().Err(err).Msg("metrics server failed to start")

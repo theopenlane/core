@@ -17,12 +17,12 @@ import (
 // Metrics struct holds a distinct echo instance to report system metrics
 type Metrics struct {
 	e    *echo.Echo
-	port int
+	port string
 	reg  *sync.Once
 }
 
 // New creates a new Metrics instance
-func New(port int) *Metrics {
+func New(port string) *Metrics {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
@@ -42,7 +42,7 @@ func New(port int) *Metrics {
 
 	e.Use(echoprometheus.NewMiddlewareWithConfig(echoprometheus.MiddlewareConfig{
 		DoNotUseRequestPathFor404: true,
-		AfterNext: func(c echo.Context, err error) {
+		AfterNext: func(_ echo.Context, err error) {
 			customCounter.Inc() // use our custom metric in middleware after every request increment the counter
 		},
 		Skipper: func(c echo.Context) bool {
@@ -73,10 +73,11 @@ func New(port int) *Metrics {
 					104857600.0, // 100.0 MiB
 				}
 			}
+
 			return opts
 		},
 		LabelFuncs: map[string]echoprometheus.LabelValueFunc{
-			"url": func(c echo.Context, err error) string {
+			"url": func(c echo.Context, _ error) string {
 				return c.Path()
 			},
 		},
@@ -89,7 +90,8 @@ func New(port int) *Metrics {
 
 // Start starts the metrics server
 func (m *Metrics) Start(ctx context.Context) error {
-	zerolog.Ctx(ctx).Info().Msgf("starting metrics server", "port", m.port)
+	zerolog.Ctx(ctx).Info().Msg("starting metrics server")
+
 	if err := m.e.Start(fmt.Sprintf(":%d", m.port)); err != nil {
 		if !errors.Is(err, http.ErrServerClosed) {
 			return err
@@ -107,8 +109,12 @@ func (m *Metrics) Stop(ctx context.Context) error {
 }
 
 // Register registers metrics to the default registry
-func (m *Metrics) Register(metrics []prometheus.Collector) {
+func (m *Metrics) Register(metrics []prometheus.Collector) error {
 	for _, metric := range metrics {
-		prometheus.Register(metric)
+		if err := prometheus.Register(metric); err != nil {
+			return err
+		}
 	}
+
+	return nil
 }
