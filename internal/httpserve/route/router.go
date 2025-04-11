@@ -193,7 +193,6 @@ func RegisterRoutes(router *Router) error {
 		registerOAuthRegisterHandler,
 		registerSwitchRoute,
 		registerLivenessHandler,
-		registerMetricsHandler,
 		registerSecurityTxtHandler,
 		registerRobotsHandler,
 		registerFaviconHandler,
