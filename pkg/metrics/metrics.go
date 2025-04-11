@@ -42,7 +42,7 @@ func New(port string) *Metrics {
 
 	e.Use(echoprometheus.NewMiddlewareWithConfig(echoprometheus.MiddlewareConfig{
 		DoNotUseRequestPathFor404: true,
-		AfterNext: func(_ echo.Context, err error) {
+		AfterNext: func(_ echo.Context, _ error) {
 			customCounter.Inc() // use our custom metric in middleware after every request increment the counter
 		},
 		Skipper: func(c echo.Context) bool {
@@ -92,10 +92,8 @@ func New(port string) *Metrics {
 func (m *Metrics) Start(ctx context.Context) error {
 	zerolog.Ctx(ctx).Info().Msg("starting metrics server")
 
-	if err := m.e.Start(fmt.Sprintf(":%d", m.port)); err != nil {
-		if !errors.Is(err, http.ErrServerClosed) {
-			return err
-		}
+	if err := m.e.Start(fmt.Sprintf(":%s", m.port)); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
 	}
 
 	return nil

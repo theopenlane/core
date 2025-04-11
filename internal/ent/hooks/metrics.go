@@ -54,6 +54,7 @@ func MetricsHook() ent.Hook {
 	opsProcessedTotal := initOpsProcessedTotal()
 	opsProcessedError := initOpsProcessedError()
 	opsDuration := initOpsDuration()
+
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// Before mutation, start measuring time
