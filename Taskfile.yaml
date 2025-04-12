@@ -80,12 +80,28 @@ tasks:
       CHANGED: '{{.CHANGED | default "false"}}'
     cmds:
       - |
+        branch=$(git rev-parse --abbrev-ref HEAD)
+
+        if [ "$branch" = "main" ]; then
+          echo "🔎 On main branch — running full linter only..."
+          golangci-lint run --config=.golangci.yaml --verbose
+          # return the exit code from the linter
+          exit $?  
+        fi
+
         if [ "{{.CHANGED}}" = "true" ]; then
-          changed_files=$(git diff --name-only --diff-filter=ACMRTUXB HEAD | grep '\.go$' || true)
+          changed_files=$(git diff origin/main --name-only --diff-filter=ACMRTUXB | grep '\.go$' || true)
+
           if [ -n "$changed_files" ]; then
-            echo "🔍 Linting changed files only:"
+            echo "🔍 Linting changed files only (grouped by directory):"
             echo "$changed_files"
-            golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats $changed_files
+
+            echo "$changed_files" | xargs -n1 dirname | sort -u | while read -r dir; do
+            if [ -d "$dir" ]; then
+              echo "➡️  Linting directory: $dir"
+              golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats "$dir"
+            fi
+          done
           else
             echo "✅ No changed Go files to lint."
           fi
@@ -102,7 +118,7 @@ tasks:
 
   go:test:
     desc: runs and outputs results of created go tests
-    aliases: ['go:test:psql', 'test:psql']
+    aliases: ["go:test:psql", "test:psql"]
     env:
       TEST_DB_URL: "docker://postgres:17-alpine"
     cmds:
@@ -272,7 +288,7 @@ tasks:
     deps:
       - task: brew-installed
     status:
-      - '[ -f $(brew --prefix)/bin/{{.DEPS}} ]'
+      - "[ -f $(brew --prefix)/bin/{{.DEPS}} ]"
     vars:
       DEPS: >-
         age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
