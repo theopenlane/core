@@ -256,20 +256,13 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		return err
 	}
 
-	authType := auth.GetAuthTypeFromContext(ctx)
+	authType := auth.GetAuthzSubjectType(ctx)
 
 	switch authType {
-	case auth.JWTAuthentication:
+	case auth.UserSubjectType:
 	// fallthrough
 
-	case auth.PATAuthentication:
-		token, err := m.Client().PersonalAccessToken.Get(ctx, reqID)
-		if err != nil {
-			return err
-		}
-
-		reqID = token.CreatedBy
-	case auth.APITokenAuthentication:
+	case auth.ServiceSubjectType:
 		token, err := m.Client().APIToken.Get(ctx, reqID)
 		if err != nil {
 			return err
