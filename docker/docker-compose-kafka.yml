@@ -27,7 +27,6 @@ services:
       - "kafka_data:/bitnami"
 
   kafka-ui:
-    container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
       - 8090:8080

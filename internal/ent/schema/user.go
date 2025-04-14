@@ -145,9 +145,7 @@ func (User) Fields() []ent.Field {
 // Indexes of the User
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id").
-			Unique(), // enforce globally unique ids
-		index.Fields("email", "auth_provider").
+		index.Fields("email").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

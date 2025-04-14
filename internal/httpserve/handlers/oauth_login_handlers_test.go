@@ -60,7 +60,8 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			writes: true,
 		},
 		{
-			name: "happy path, same email, different provider",
+			// TODO (sfunk): allow this to pass by associating the user with an oauth login instead
+			name: "happy path, same email, different provider, this will fail today",
 			args: args{
 				name:     "Wanda Maximoff",
 				email:    "wmaximoff@marvel.com",
@@ -74,21 +75,22 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				AuthProvider:    enums.AuthProviderGoogle,
 				AvatarRemoteURL: lo.ToPtr("https://example.com/images/photo.jpg"),
 			},
-			writes: true,
+			writes:  false,
+			wantErr: true,
 		},
 		{
 			name: "user already exists, should not fail, just update last seen",
 			args: args{
 				name:     "Wanda Maximoff",
 				email:    "wmaximoff@marvel.com",
-				provider: enums.AuthProviderGoogle,
+				provider: enums.AuthProviderGitHub,
 				image:    "https://example.com/images/photo.jpg",
 			},
 			want: &ent.User{
 				FirstName:       "Wanda",
 				LastName:        "Maximoff",
 				Email:           "wmaximoff@marvel.com",
-				AuthProvider:    enums.AuthProviderGoogle,
+				AuthProvider:    enums.AuthProviderGitHub,
 				AvatarRemoteURL: lo.ToPtr("https://example.com/images/photo.jpg"),
 			},
 			writes: false,
