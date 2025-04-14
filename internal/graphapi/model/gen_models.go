@@ -10,10 +10,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-type SearchResult interface {
-	IsSearchResult()
-}
-
 // Return response for createBulkAPIToken mutation
 type APITokenBulkCreatePayload struct {
 	// Created apiTokens
@@ -31,12 +27,6 @@ type APITokenDeletePayload struct {
 	// Deleted apiToken ID
 	DeletedID string `json:"deletedID"`
 }
-
-type APITokenSearchResult struct {
-	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
-}
-
-func (APITokenSearchResult) IsSearchResult() {}
 
 // Return response for updateAPIToken mutation
 type APITokenUpdatePayload struct {
@@ -61,12 +51,6 @@ type ActionPlanDeletePayload struct {
 	// Deleted actionPlan ID
 	DeletedID string `json:"deletedID"`
 }
-
-type ActionPlanSearchResult struct {
-	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
-}
-
-func (ActionPlanSearchResult) IsSearchResult() {}
 
 // Return response for updateActionPlan mutation
 type ActionPlanUpdatePayload struct {
@@ -138,12 +122,6 @@ type ContactDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type ContactSearchResult struct {
-	Contacts []*generated.Contact `json:"contacts,omitempty"`
-}
-
-func (ContactSearchResult) IsSearchResult() {}
-
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
 	// Updated contact
@@ -186,12 +164,6 @@ type ControlImplementationDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type ControlImplementationSearchResult struct {
-	ControlImplementations []*generated.ControlImplementation `json:"controlImplementations,omitempty"`
-}
-
-func (ControlImplementationSearchResult) IsSearchResult() {}
-
 // Return response for updateControlImplementation mutation
 type ControlImplementationUpdatePayload struct {
 	// Updated controlImplementation
@@ -216,23 +188,11 @@ type ControlObjectiveDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type ControlObjectiveSearchResult struct {
-	ControlObjectives []*generated.ControlObjective `json:"controlObjectives,omitempty"`
-}
-
-func (ControlObjectiveSearchResult) IsSearchResult() {}
-
 // Return response for updateControlObjective mutation
 type ControlObjectiveUpdatePayload struct {
 	// Updated controlObjective
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
 }
-
-type ControlSearchResult struct {
-	Controls []*generated.Control `json:"controls,omitempty"`
-}
-
-func (ControlSearchResult) IsSearchResult() {}
 
 // Return response for updateControl mutation
 type ControlUpdatePayload struct {
@@ -282,12 +242,6 @@ type DocumentDataDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type DocumentDataSearchResult struct {
-	DocumentData []*generated.DocumentData `json:"documentData,omitempty"`
-}
-
-func (DocumentDataSearchResult) IsSearchResult() {}
-
 // Return response for updateDocumentData mutation
 type DocumentDataUpdatePayload struct {
 	// Updated documentData
@@ -312,12 +266,6 @@ type EntityDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type EntitySearchResult struct {
-	Entities []*generated.Entity `json:"entities,omitempty"`
-}
-
-func (EntitySearchResult) IsSearchResult() {}
-
 // Return response for createBulkEntityType mutation
 type EntityTypeBulkCreatePayload struct {
 	// Created entityTypes
@@ -335,12 +283,6 @@ type EntityTypeDeletePayload struct {
 	// Deleted entityType ID
 	DeletedID string `json:"deletedID"`
 }
-
-type EntityTypeSearchResult struct {
-	EntityTypes []*generated.EntityType `json:"entityTypes,omitempty"`
-}
-
-func (EntityTypeSearchResult) IsSearchResult() {}
 
 // Return response for updateEntityType mutation
 type EntityTypeUpdatePayload struct {
@@ -372,12 +314,6 @@ type EventDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type EventSearchResult struct {
-	Events []*generated.Event `json:"events,omitempty"`
-}
-
-func (EventSearchResult) IsSearchResult() {}
-
 // Return response for updateEvent mutation
 type EventUpdatePayload struct {
 	// Updated event
@@ -402,12 +338,6 @@ type EvidenceDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type EvidenceSearchResult struct {
-	Evidences []*generated.Evidence `json:"evidences,omitempty"`
-}
-
-func (EvidenceSearchResult) IsSearchResult() {}
-
 // Return response for updateEvidence mutation
 type EvidenceUpdatePayload struct {
 	// Updated evidence
@@ -419,12 +349,6 @@ type FileDeletePayload struct {
 	// Deleted file ID
 	DeletedID string `json:"deletedID"`
 }
-
-type FileSearchResult struct {
-	Files []*generated.File `json:"files,omitempty"`
-}
-
-func (FileSearchResult) IsSearchResult() {}
 
 // Return response for createBulkGroup mutation
 type GroupBulkCreatePayload struct {
@@ -485,12 +409,6 @@ type GroupPermissions struct {
 	DisplayID   *string          `json:"displayID,omitempty"`
 	Name        *string          `json:"name,omitempty"`
 }
-
-type GroupSearchResult struct {
-	Groups []*generated.Group `json:"groups,omitempty"`
-}
-
-func (GroupSearchResult) IsSearchResult() {}
 
 // Return response for createBulkGroupSetting mutation
 type GroupSettingBulkCreatePayload struct {
@@ -564,12 +482,6 @@ type IntegrationDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type IntegrationSearchResult struct {
-	Integrations []*generated.Integration `json:"integrations,omitempty"`
-}
-
-func (IntegrationSearchResult) IsSearchResult() {}
-
 // Return response for updateIntegration mutation
 type IntegrationUpdatePayload struct {
 	// Updated integration
@@ -593,12 +505,6 @@ type InternalPolicyDeletePayload struct {
 	// Deleted internalPolicy ID
 	DeletedID string `json:"deletedID"`
 }
-
-type InternalPolicySearchResult struct {
-	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
-}
-
-func (InternalPolicySearchResult) IsSearchResult() {}
 
 // Return response for updateInternalPolicy mutation
 type InternalPolicyUpdatePayload struct {
@@ -648,12 +554,6 @@ type MappedControlDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type MappedControlSearchResult struct {
-	MappedControls []*generated.MappedControl `json:"mappedControls,omitempty"`
-}
-
-func (MappedControlSearchResult) IsSearchResult() {}
-
 // Return response for updateMappedControl mutation
 type MappedControlUpdatePayload struct {
 	// Updated mappedControl
@@ -677,12 +577,6 @@ type NarrativeDeletePayload struct {
 	// Deleted narrative ID
 	DeletedID string `json:"deletedID"`
 }
-
-type NarrativeSearchResult struct {
-	Narratives []*generated.Narrative `json:"narratives,omitempty"`
-}
-
-func (NarrativeSearchResult) IsSearchResult() {}
 
 // Return response for updateNarrative mutation
 type NarrativeUpdatePayload struct {
@@ -727,12 +621,6 @@ type OrgMembershipUpdatePayload struct {
 	OrgMembership *generated.OrgMembership `json:"orgMembership"`
 }
 
-type OrgSubscriptionSearchResult struct {
-	OrgSubscriptions []*generated.OrgSubscription `json:"orgSubscriptions,omitempty"`
-}
-
-func (OrgSubscriptionSearchResult) IsSearchResult() {}
-
 // Return response for createBulkOrganization mutation
 type OrganizationBulkCreatePayload struct {
 	// Created organizations
@@ -751,12 +639,6 @@ type OrganizationDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type OrganizationSearchResult struct {
-	Organizations []*generated.Organization `json:"organizations,omitempty"`
-}
-
-func (OrganizationSearchResult) IsSearchResult() {}
-
 // Return response for createBulkOrganizationSetting mutation
 type OrganizationSettingBulkCreatePayload struct {
 	// Created organizationSettings
@@ -774,12 +656,6 @@ type OrganizationSettingDeletePayload struct {
 	// Deleted organizationSetting ID
 	DeletedID string `json:"deletedID"`
 }
-
-type OrganizationSettingSearchResult struct {
-	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
-}
-
-func (OrganizationSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateOrganizationSetting mutation
 type OrganizationSettingUpdatePayload struct {
@@ -811,12 +687,6 @@ type PersonalAccessTokenDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type PersonalAccessTokenSearchResult struct {
-	PersonalAccessTokens []*generated.PersonalAccessToken `json:"personalAccessTokens,omitempty"`
-}
-
-func (PersonalAccessTokenSearchResult) IsSearchResult() {}
-
 // Return response for updatePersonalAccessToken mutation
 type PersonalAccessTokenUpdatePayload struct {
 	// Updated personalAccessToken
@@ -840,12 +710,6 @@ type ProcedureDeletePayload struct {
 	// Deleted procedure ID
 	DeletedID string `json:"deletedID"`
 }
-
-type ProcedureSearchResult struct {
-	Procedures []*generated.Procedure `json:"procedures,omitempty"`
-}
-
-func (ProcedureSearchResult) IsSearchResult() {}
 
 // Return response for updateProcedure mutation
 type ProcedureUpdatePayload struct {
@@ -895,12 +759,6 @@ type ProgramMembershipUpdatePayload struct {
 	ProgramMembership *generated.ProgramMembership `json:"programMembership"`
 }
 
-type ProgramSearchResult struct {
-	Programs []*generated.Program `json:"programs,omitempty"`
-}
-
-func (ProgramSearchResult) IsSearchResult() {}
-
 // Return response for updateProgram mutation
 type ProgramUpdatePayload struct {
 	// Updated program
@@ -925,25 +783,49 @@ type RiskDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type RiskSearchResult struct {
-	Risks []*generated.Risk `json:"risks,omitempty"`
-}
-
-func (RiskSearchResult) IsSearchResult() {}
-
 // Return response for updateRisk mutation
 type RiskUpdatePayload struct {
 	// Updated risk
 	Risk *generated.Risk `json:"risk"`
 }
 
-type SearchResultConnection struct {
+type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount int `json:"totalCount"`
-	// A list of nodes with results.
-	Nodes []SearchResult `json:"nodes"`
+	TotalCount             int                                        `json:"totalCount"`
+	APITokens              *generated.APITokenConnection              `json:"apiTokens,omitempty"`
+	ActionPlans            *generated.ActionPlanConnection            `json:"actionPlans,omitempty"`
+	Contacts               *generated.ContactConnection               `json:"contacts,omitempty"`
+	Controls               *generated.ControlConnection               `json:"controls,omitempty"`
+	ControlImplementations *generated.ControlImplementationConnection `json:"controlImplementations,omitempty"`
+	ControlObjectives      *generated.ControlObjectiveConnection      `json:"controlObjectives,omitempty"`
+	DocumentData           *generated.DocumentDataConnection          `json:"documentData,omitempty"`
+	Entities               *generated.EntityConnection                `json:"entities,omitempty"`
+	EntityTypes            *generated.EntityTypeConnection            `json:"entityTypes,omitempty"`
+	Events                 *generated.EventConnection                 `json:"events,omitempty"`
+	Evidences              *generated.EvidenceConnection              `json:"evidences,omitempty"`
+	Files                  *generated.FileConnection                  `json:"files,omitempty"`
+	Groups                 *generated.GroupConnection                 `json:"groups,omitempty"`
+	Integrations           *generated.IntegrationConnection           `json:"integrations,omitempty"`
+	InternalPolicies       *generated.InternalPolicyConnection        `json:"internalPolicies,omitempty"`
+	Invites                *generated.InviteConnection                `json:"invites,omitempty"`
+	MappedControls         *generated.MappedControlConnection         `json:"mappedControls,omitempty"`
+	Narratives             *generated.NarrativeConnection             `json:"narratives,omitempty"`
+	OrgSubscriptions       *generated.OrgSubscriptionConnection       `json:"orgSubscriptions,omitempty"`
+	Organizations          *generated.OrganizationConnection          `json:"organizations,omitempty"`
+	OrganizationSettings   *generated.OrganizationSettingConnection   `json:"organizationSettings,omitempty"`
+	PersonalAccessTokens   *generated.PersonalAccessTokenConnection   `json:"personalAccessTokens,omitempty"`
+	Procedures             *generated.ProcedureConnection             `json:"procedures,omitempty"`
+	Programs               *generated.ProgramConnection               `json:"programs,omitempty"`
+	Risks                  *generated.RiskConnection                  `json:"risks,omitempty"`
+	Standards              *generated.StandardConnection              `json:"standards,omitempty"`
+	Subcontrols            *generated.SubcontrolConnection            `json:"subcontrols,omitempty"`
+	Subscribers            *generated.SubscriberConnection            `json:"subscribers,omitempty"`
+	Tasks                  *generated.TaskConnection                  `json:"tasks,omitempty"`
+	Templates              *generated.TemplateConnection              `json:"templates,omitempty"`
+	Users                  *generated.UserConnection                  `json:"users,omitempty"`
+	UserSettings           *generated.UserSettingConnection           `json:"userSettings,omitempty"`
 }
 
 // Return response for createBulkStandard mutation
@@ -963,12 +845,6 @@ type StandardDeletePayload struct {
 	// Deleted standard ID
 	DeletedID string `json:"deletedID"`
 }
-
-type StandardSearchResult struct {
-	Standards []*generated.Standard `json:"standards,omitempty"`
-}
-
-func (StandardSearchResult) IsSearchResult() {}
 
 // Return response for updateStandard mutation
 type StandardUpdatePayload struct {
@@ -994,12 +870,6 @@ type SubcontrolDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type SubcontrolSearchResult struct {
-	Subcontrols []*generated.Subcontrol `json:"subcontrols,omitempty"`
-}
-
-func (SubcontrolSearchResult) IsSearchResult() {}
-
 // Return response for updateSubcontrol mutation
 type SubcontrolUpdatePayload struct {
 	// Updated subcontrol
@@ -1023,12 +893,6 @@ type SubscriberDeletePayload struct {
 	// Deleted subscriber email
 	Email string `json:"email"`
 }
-
-type SubscriberSearchResult struct {
-	Subscribers []*generated.Subscriber `json:"subscribers,omitempty"`
-}
-
-func (SubscriberSearchResult) IsSearchResult() {}
 
 // Return response for updateSubscriber mutation
 type SubscriberUpdatePayload struct {
@@ -1071,12 +935,6 @@ type TaskDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type TaskSearchResult struct {
-	Tasks []*generated.Task `json:"tasks,omitempty"`
-}
-
-func (TaskSearchResult) IsSearchResult() {}
-
 // Return response for updateTask mutation
 type TaskUpdatePayload struct {
 	// Updated task
@@ -1100,12 +958,6 @@ type TemplateDeletePayload struct {
 	// Deleted template ID
 	DeletedID string `json:"deletedID"`
 }
-
-type TemplateSearchResult struct {
-	Templates []*generated.Template `json:"templates,omitempty"`
-}
-
-func (TemplateSearchResult) IsSearchResult() {}
 
 // Return response for updateTemplate mutation
 type TemplateUpdatePayload struct {
@@ -1131,12 +983,6 @@ type UserDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-type UserSearchResult struct {
-	Users []*generated.User `json:"users,omitempty"`
-}
-
-func (UserSearchResult) IsSearchResult() {}
-
 // Return response for createBulkUserSetting mutation
 type UserSettingBulkCreatePayload struct {
 	// Created userSettings
@@ -1148,12 +994,6 @@ type UserSettingCreatePayload struct {
 	// Created userSetting
 	UserSetting *generated.UserSetting `json:"userSetting"`
 }
-
-type UserSettingSearchResult struct {
-	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
-}
-
-func (UserSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateUserSetting mutation
 type UserSettingUpdatePayload struct {

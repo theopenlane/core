@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
@@ -63,138 +62,139 @@ func search(ctx context.Context) error { // setup http client
 }
 
 func consoleOutput(results *openlaneclient.GlobalSearch) error {
-	// fragments are duplicating results with gqlgenc,
-	// so we need to parse the results and create a new map
-	// so it aligns with what is expected in the json output
-	var realResult []map[string]interface{}
+	var fullResult map[string]any
 
-	for _, node := range results.GetSearch().GetNodes() {
-		var fullResult map[string]interface{}
-		err := mapstructure.Decode(node, &fullResult)
-		cobra.CheckErr(err)
-
-		for _, objectTypeResult := range fullResult {
-			var parsedObjectTypeResult map[string]interface{}
-			err := mapstructure.Decode(objectTypeResult, &parsedObjectTypeResult)
-			cobra.CheckErr(err)
-
-			for k, v := range parsedObjectTypeResult {
-				tmp, err := json.Marshal(v)
-				cobra.CheckErr(err)
-
-				var out []interface{}
-				err = json.Unmarshal(tmp, &out)
-				cobra.CheckErr(err)
-
-				if len(out) == 0 {
-					continue
-				}
-
-				realResult = append(realResult, map[string]interface{}{
-					k: out,
-				})
-			}
-		}
-	}
+	err := mapstructure.Decode(results, &fullResult)
+	cobra.CheckErr(err)
 
 	// check if the output format is JSON and print the output in JSON format
 	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
-		// create a full result map
-		full := map[string]interface{}{
-			"data": map[string]interface{}{
-				"search": map[string]interface{}{
-					"nodes": realResult,
-				},
-			},
-		}
-
-		return jsonOutput(full)
+		return jsonOutput(fullResult)
 	}
 
-	tableOutput(realResult)
+	tableOutput(fullResult)
 
 	return nil
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(results []map[string]interface{}) {
+func tableOutput(results map[string]any) {
+
 	for _, r := range results {
+
+		tmp, err := json.Marshal(r)
+		cobra.CheckErr(err)
+
+		var res map[string]any
+		err = json.Unmarshal(tmp, &res)
+		cobra.CheckErr(err)
+
 		writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout())
 
-		for k, v := range r {
+		for k, v := range res {
+
 			// print the object type header
-			fmt.Println(k)
+			fmt.Println(strings.ToUpper(k))
 
-			tmp, err := json.Marshal(v)
-			cobra.CheckErr(err)
+			edge, ok := v.(map[string]any)
+			if !ok {
+				continue
+			}
 
-			var res []map[string]interface{}
-			err = json.Unmarshal(tmp, &res)
-			cobra.CheckErr(err)
+			nodes, ok := edge["edges"].([]any)
+			if !ok {
+				continue
+			}
 
-			// add headers
-			headers := parseHeaders(writer, res)
+			headers := make([]string, len(nodes))
 
-			// add rows
-			parseRows(writer, res, headers)
+			for i, node := range nodes {
+				n, ok := node.(map[string]any)
+				if !ok {
+					continue
+				}
 
-			// render the table
+				tmp, err := json.Marshal(n["node"])
+				cobra.CheckErr(err)
+
+				var res map[string]any
+				err = json.Unmarshal(tmp, &res)
+				cobra.CheckErr(err)
+
+				// add headers the first time
+
+				if i == 0 {
+					headers = parseHeaders(writer, res)
+				}
+
+				// add rows
+				parseRows(writer, res, headers)
+
+			}
+
 			writer.Render()
 		}
+
 	}
 }
 
 // parseHeaders parses the headers from the result and sets them in the table
 // the id column is always added as the first column
-func parseHeaders(writer tables.TableOutputWriter, res []map[string]interface{}) (headers []string) {
+func parseHeaders(writer tables.TableOutputWriter, res map[string]any) []string {
 	if len(res) == 0 {
-		return
+		return nil
 	}
 
-	// always add the ID as the first column
-	headers = append(headers, "id")
+	headers := make([]string, len(res))
 
-	for header := range res[0] {
-		if strings.EqualFold(header, "id") {
+	// always add the ID as the first column
+	headers[0] = "ID"
+
+	// add other fields with ordering correctly
+	i := 1
+	for k, _ := range res {
+		if strings.EqualFold(k, "id") {
 			continue
 		}
 
-		headers = append(headers, header)
+		headers[i] = k
+
+		i++
 	}
+
+	// add empty row
+	writer.AddRow()
 
 	// add headers
 	writer.SetHeaders(headers...)
 
-	return
+	return headers
 }
 
-// parseRows parses the rows from the result and sets them in the table based on the headers
-func parseRows(writer tables.TableOutputWriter, row []map[string]interface{}, headers []string) {
-	for _, v := range row {
-		var values []interface{}
+func parseRows(writer tables.TableOutputWriter, res map[string]any, headers []string) {
+	if len(res) == 0 {
+		return
+	}
 
-		for _, h := range headers {
-			switch t := reflect.TypeOf(v[h]); t.Kind() {
-			case reflect.String:
-				values = append(values, fmt.Sprintf("%v", v[h]))
-			case reflect.Slice:
-				s, _ := v[h].([]interface{})
+	values := make([]any, len(res))
 
-				var stringVals []string
+	// always add the ID as the first column
+	values[0] = res["id"]
 
-				for _, val := range s {
-					stringVals = append(stringVals, fmt.Sprintf("%v", val))
-				}
-
-				values = append(values, strings.Join(stringVals, ", "))
-			default:
-				out, _ := json.MarshalIndent(v[h], "", " ")
-				values = append(values, string(out))
-			}
+	// add other fields with ordering correctly
+	for i, h := range headers {
+		if strings.EqualFold(h, "id") {
+			continue
 		}
 
-		writer.AddRow(values...)
+		values[i] = res[h]
+
+		i++
 	}
+
+	writer.AddRow(values...)
+
+	return
 }
 
 // jsonOutput prints the output in a JSON format

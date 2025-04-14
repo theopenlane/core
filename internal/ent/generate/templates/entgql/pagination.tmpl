@@ -637,7 +637,7 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 		}
 		{{- /* TotalCount will be settled by conn.build() */}}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if {{ $r }}, err = pager.applyCursors({{ $r }}, after, before); err != nil {

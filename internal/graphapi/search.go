@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -53,8 +55,8 @@ type searchResult[T any] struct {
 }
 
 // searchAPIToken searches for APIToken based on the query string looking for matches
-func searchAPITokens(ctx context.Context, query string) ([]*generated.APIToken, error) {
-	return withTransactionalMutation(ctx).APIToken.Query().
+func searchAPITokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.APITokenConnection, error) {
+	request := withTransactionalMutation(ctx).APIToken.Query().
 		Where(
 			apitoken.Or(
 				apitoken.ID(query), // search equal to ID
@@ -63,14 +65,14 @@ func searchAPITokens(ctx context.Context, query string) ([]*generated.APIToken, 
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchAPIToken searches for APIToken based on the query string looking for matches
-func adminSearchAPITokens(ctx context.Context, query string) ([]*generated.APIToken, error) {
-	return withTransactionalMutation(ctx).APIToken.Query().
+func adminSearchAPITokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.APITokenConnection, error) {
+	request := withTransactionalMutation(ctx).APIToken.Query().
 		Where(
 			apitoken.Or(
 				apitoken.DeletedByContainsFold(query), // search by DeletedBy
@@ -88,14 +90,14 @@ func adminSearchAPITokens(ctx context.Context, query string) ([]*generated.APITo
 				apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				apitoken.RevokedByContainsFold(query),     // search by RevokedBy
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchActionPlan searches for ActionPlan based on the query string looking for matches
-func searchActionPlans(ctx context.Context, query string) ([]*generated.ActionPlan, error) {
-	return withTransactionalMutation(ctx).ActionPlan.Query().
+func searchActionPlans(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ActionPlanConnection, error) {
+	request := withTransactionalMutation(ctx).ActionPlan.Query().
 		Where(
 			actionplan.Or(
 				actionplan.DetailsContainsFold(query), // search by Details
@@ -106,14 +108,14 @@ func searchActionPlans(ctx context.Context, query string) ([]*generated.ActionPl
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchActionPlan searches for ActionPlan based on the query string looking for matches
-func adminSearchActionPlans(ctx context.Context, query string) ([]*generated.ActionPlan, error) {
-	return withTransactionalMutation(ctx).ActionPlan.Query().
+func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ActionPlanConnection, error) {
+	request := withTransactionalMutation(ctx).ActionPlan.Query().
 		Where(
 			actionplan.Or(
 				actionplan.DeletedByContainsFold(query), // search by DeletedBy
@@ -131,14 +133,14 @@ func adminSearchActionPlans(ctx context.Context, query string) ([]*generated.Act
 				actionplan.OwnerIDContainsFold(query),        // search by OwnerID
 				actionplan.SourceContainsFold(query),         // search by Source
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchContact searches for Contact based on the query string looking for matches
-func searchContacts(ctx context.Context, query string) ([]*generated.Contact, error) {
-	return withTransactionalMutation(ctx).Contact.Query().
+func searchContacts(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
+	request := withTransactionalMutation(ctx).Contact.Query().
 		Where(
 			contact.Or(
 				contact.EmailContainsFold(query),    // search by Email
@@ -149,14 +151,14 @@ func searchContacts(ctx context.Context, query string) ([]*generated.Contact, er
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchContact searches for Contact based on the query string looking for matches
-func adminSearchContacts(ctx context.Context, query string) ([]*generated.Contact, error) {
-	return withTransactionalMutation(ctx).Contact.Query().
+func adminSearchContacts(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
+	request := withTransactionalMutation(ctx).Contact.Query().
 		Where(
 			contact.Or(
 				contact.DeletedByContainsFold(query), // search by DeletedBy
@@ -173,14 +175,14 @@ func adminSearchContacts(ctx context.Context, query string) ([]*generated.Contac
 				contact.PhoneNumberContainsFold(query), // search by PhoneNumber
 				contact.AddressContainsFold(query),     // search by Address
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControl searches for Control based on the query string looking for matches
-func searchControls(ctx context.Context, query string) ([]*generated.Control, error) {
-	return withTransactionalMutation(ctx).Control.Query().
+func searchControls(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlConnection, error) {
+	request := withTransactionalMutation(ctx).Control.Query().
 		Where(
 			control.Or(
 				control.CategoryContainsFold(query),    // search by Category
@@ -198,14 +200,14 @@ func searchControls(ctx context.Context, query string) ([]*generated.Control, er
 					s.Where(sql.ExprP("(tags)::text LIKE $8", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControl searches for Control based on the query string looking for matches
-func adminSearchControls(ctx context.Context, query string) ([]*generated.Control, error) {
-	return withTransactionalMutation(ctx).Control.Query().
+func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlConnection, error) {
+	request := withTransactionalMutation(ctx).Control.Query().
 		Where(
 			control.Or(
 				control.DeletedByContainsFold(query), // search by DeletedBy
@@ -255,14 +257,14 @@ func adminSearchControls(ctx context.Context, query string) ([]*generated.Contro
 				control.RefCodeContainsFold(query),        // search by RefCode
 				control.StandardIDContainsFold(query),     // search by StandardID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControlImplementation searches for ControlImplementation based on the query string looking for matches
-func searchControlImplementations(ctx context.Context, query string) ([]*generated.ControlImplementation, error) {
-	return withTransactionalMutation(ctx).ControlImplementation.Query().
+func searchControlImplementations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
+	request := withTransactionalMutation(ctx).ControlImplementation.Query().
 		Where(
 			controlimplementation.Or(
 				controlimplementation.ID(query), // search equal to ID
@@ -271,14 +273,14 @@ func searchControlImplementations(ctx context.Context, query string) ([]*generat
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControlImplementation searches for ControlImplementation based on the query string looking for matches
-func adminSearchControlImplementations(ctx context.Context, query string) ([]*generated.ControlImplementation, error) {
-	return withTransactionalMutation(ctx).ControlImplementation.Query().
+func adminSearchControlImplementations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
+	request := withTransactionalMutation(ctx).ControlImplementation.Query().
 		Where(
 			controlimplementation.Or(
 				controlimplementation.DeletedByContainsFold(query), // search by DeletedBy
@@ -290,14 +292,14 @@ func adminSearchControlImplementations(ctx context.Context, query string) ([]*ge
 				controlimplementation.OwnerIDContainsFold(query), // search by OwnerID
 				controlimplementation.DetailsContainsFold(query), // search by Details
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControlObjective searches for ControlObjective based on the query string looking for matches
-func searchControlObjectives(ctx context.Context, query string) ([]*generated.ControlObjective, error) {
-	return withTransactionalMutation(ctx).ControlObjective.Query().
+func searchControlObjectives(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
+	request := withTransactionalMutation(ctx).ControlObjective.Query().
 		Where(
 			controlobjective.Or(
 				controlobjective.CategoryContainsFold(query),    // search by Category
@@ -310,14 +312,14 @@ func searchControlObjectives(ctx context.Context, query string) ([]*generated.Co
 					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchControlObjective searches for ControlObjective based on the query string looking for matches
-func adminSearchControlObjectives(ctx context.Context, query string) ([]*generated.ControlObjective, error) {
-	return withTransactionalMutation(ctx).ControlObjective.Query().
+func adminSearchControlObjectives(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
+	request := withTransactionalMutation(ctx).ControlObjective.Query().
 		Where(
 			controlobjective.Or(
 				controlobjective.DeletedByContainsFold(query), // search by DeletedBy
@@ -336,14 +338,14 @@ func adminSearchControlObjectives(ctx context.Context, query string) ([]*generat
 				controlobjective.CategoryContainsFold(query),             // search by Category
 				controlobjective.SubcategoryContainsFold(query),          // search by Subcategory
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchDocumentData searches for DocumentData based on the query string looking for matches
-func searchDocumentData(ctx context.Context, query string) ([]*generated.DocumentData, error) {
-	return withTransactionalMutation(ctx).DocumentData.Query().
+func searchDocumentData(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
+	request := withTransactionalMutation(ctx).DocumentData.Query().
 		Where(
 			documentdata.Or(
 				documentdata.ID(query), // search equal to ID
@@ -352,14 +354,14 @@ func searchDocumentData(ctx context.Context, query string) ([]*generated.Documen
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchDocumentData searches for DocumentData based on the query string looking for matches
-func adminSearchDocumentData(ctx context.Context, query string) ([]*generated.DocumentData, error) {
-	return withTransactionalMutation(ctx).DocumentData.Query().
+func adminSearchDocumentData(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
+	request := withTransactionalMutation(ctx).DocumentData.Query().
 		Where(
 			documentdata.Or(
 				documentdata.DeletedByContainsFold(query), // search by DeletedBy
@@ -375,14 +377,14 @@ func adminSearchDocumentData(ctx context.Context, query string) ([]*generated.Do
 					s.Where(sql.ExprP("(data)::text LIKE $6", likeQuery)) // search by Data
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEntity searches for Entity based on the query string looking for matches
-func searchEntities(ctx context.Context, query string) ([]*generated.Entity, error) {
-	return withTransactionalMutation(ctx).Entity.Query().
+func searchEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
+	request := withTransactionalMutation(ctx).Entity.Query().
 		Where(
 			entity.Or(
 				entity.DescriptionContainsFold(query), // search by Description
@@ -394,14 +396,14 @@ func searchEntities(ctx context.Context, query string) ([]*generated.Entity, err
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEntity searches for Entity based on the query string looking for matches
-func adminSearchEntities(ctx context.Context, query string) ([]*generated.Entity, error) {
-	return withTransactionalMutation(ctx).Entity.Query().
+func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
+	request := withTransactionalMutation(ctx).Entity.Query().
 		Where(
 			entity.Or(
 				entity.DeletedByContainsFold(query), // search by DeletedBy
@@ -421,14 +423,14 @@ func adminSearchEntities(ctx context.Context, query string) ([]*generated.Entity
 				entity.EntityTypeIDContainsFold(query), // search by EntityTypeID
 				entity.StatusContainsFold(query),       // search by Status
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEntityType searches for EntityType based on the query string looking for matches
-func searchEntityTypes(ctx context.Context, query string) ([]*generated.EntityType, error) {
-	return withTransactionalMutation(ctx).EntityType.Query().
+func searchEntityTypes(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityTypeConnection, error) {
+	request := withTransactionalMutation(ctx).EntityType.Query().
 		Where(
 			entitytype.Or(
 				entitytype.ID(query), // search equal to ID
@@ -437,14 +439,14 @@ func searchEntityTypes(ctx context.Context, query string) ([]*generated.EntityTy
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEntityType searches for EntityType based on the query string looking for matches
-func adminSearchEntityTypes(ctx context.Context, query string) ([]*generated.EntityType, error) {
-	return withTransactionalMutation(ctx).EntityType.Query().
+func adminSearchEntityTypes(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityTypeConnection, error) {
+	request := withTransactionalMutation(ctx).EntityType.Query().
 		Where(
 			entitytype.Or(
 				entitytype.DeletedByContainsFold(query), // search by DeletedBy
@@ -456,14 +458,14 @@ func adminSearchEntityTypes(ctx context.Context, query string) ([]*generated.Ent
 				entitytype.OwnerIDContainsFold(query), // search by OwnerID
 				entitytype.NameContainsFold(query),    // search by Name
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEvent searches for Event based on the query string looking for matches
-func searchEvents(ctx context.Context, query string) ([]*generated.Event, error) {
-	return withTransactionalMutation(ctx).Event.Query().
+func searchEvents(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EventConnection, error) {
+	request := withTransactionalMutation(ctx).Event.Query().
 		Where(
 			event.Or(
 				event.ID(query), // search equal to ID
@@ -472,14 +474,14 @@ func searchEvents(ctx context.Context, query string) ([]*generated.Event, error)
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEvent searches for Event based on the query string looking for matches
-func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, error) {
-	return withTransactionalMutation(ctx).Event.Query().
+func adminSearchEvents(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EventConnection, error) {
+	request := withTransactionalMutation(ctx).Event.Query().
 		Where(
 			event.Or(
 				event.ID(query), // search equal to ID
@@ -495,14 +497,14 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 					s.Where(sql.ExprP("(metadata)::text LIKE $6", likeQuery)) // search by Metadata
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEvidence searches for Evidence based on the query string looking for matches
-func searchEvidences(ctx context.Context, query string) ([]*generated.Evidence, error) {
-	return withTransactionalMutation(ctx).Evidence.Query().
+func searchEvidences(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EvidenceConnection, error) {
+	request := withTransactionalMutation(ctx).Evidence.Query().
 		Where(
 			evidence.Or(
 				evidence.DisplayID(query),        // search equal to DisplayID
@@ -513,14 +515,14 @@ func searchEvidences(ctx context.Context, query string) ([]*generated.Evidence, 
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchEvidence searches for Evidence based on the query string looking for matches
-func adminSearchEvidences(ctx context.Context, query string) ([]*generated.Evidence, error) {
-	return withTransactionalMutation(ctx).Evidence.Query().
+func adminSearchEvidences(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EvidenceConnection, error) {
+	request := withTransactionalMutation(ctx).Evidence.Query().
 		Where(
 			evidence.Or(
 				evidence.DeletedByContainsFold(query), // search by DeletedBy
@@ -537,14 +539,14 @@ func adminSearchEvidences(ctx context.Context, query string) ([]*generated.Evide
 				evidence.SourceContainsFold(query),              // search by Source
 				evidence.URLContainsFold(query),                 // search by URL
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchFile searches for File based on the query string looking for matches
-func searchFiles(ctx context.Context, query string) ([]*generated.File, error) {
-	return withTransactionalMutation(ctx).File.Query().
+func searchFiles(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FileConnection, error) {
+	request := withTransactionalMutation(ctx).File.Query().
 		Where(
 			file.Or(
 				file.ID(query), // search equal to ID
@@ -553,14 +555,14 @@ func searchFiles(ctx context.Context, query string) ([]*generated.File, error) {
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchFile searches for File based on the query string looking for matches
-func adminSearchFiles(ctx context.Context, query string) ([]*generated.File, error) {
-	return withTransactionalMutation(ctx).File.Query().
+func adminSearchFiles(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FileConnection, error) {
+	request := withTransactionalMutation(ctx).File.Query().
 		Where(
 			file.Or(
 				file.DeletedByContainsFold(query), // search by DeletedBy
@@ -581,14 +583,14 @@ func adminSearchFiles(ctx context.Context, query string) ([]*generated.File, err
 				file.StorageVolumeContainsFold(query),         // search by StorageVolume
 				file.StoragePathContainsFold(query),           // search by StoragePath
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchGroup searches for Group based on the query string looking for matches
-func searchGroups(ctx context.Context, query string) ([]*generated.Group, error) {
-	return withTransactionalMutation(ctx).Group.Query().
+func searchGroups(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
+	request := withTransactionalMutation(ctx).Group.Query().
 		Where(
 			group.Or(
 				group.DisplayID(query),               // search equal to DisplayID
@@ -600,14 +602,14 @@ func searchGroups(ctx context.Context, query string) ([]*generated.Group, error)
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchGroup searches for Group based on the query string looking for matches
-func adminSearchGroups(ctx context.Context, query string) ([]*generated.Group, error) {
-	return withTransactionalMutation(ctx).Group.Query().
+func adminSearchGroups(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
+	request := withTransactionalMutation(ctx).Group.Query().
 		Where(
 			group.Or(
 				group.DeletedByContainsFold(query), // search by DeletedBy
@@ -621,14 +623,14 @@ func adminSearchGroups(ctx context.Context, query string) ([]*generated.Group, e
 				group.NameContainsFold(query),        // search by Name
 				group.DisplayNameContainsFold(query), // search by DisplayName
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchIntegration searches for Integration based on the query string looking for matches
-func searchIntegrations(ctx context.Context, query string) ([]*generated.Integration, error) {
-	return withTransactionalMutation(ctx).Integration.Query().
+func searchIntegrations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
+	request := withTransactionalMutation(ctx).Integration.Query().
 		Where(
 			integration.Or(
 				integration.ID(query), // search equal to ID
@@ -637,14 +639,14 @@ func searchIntegrations(ctx context.Context, query string) ([]*generated.Integra
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchIntegration searches for Integration based on the query string looking for matches
-func adminSearchIntegrations(ctx context.Context, query string) ([]*generated.Integration, error) {
-	return withTransactionalMutation(ctx).Integration.Query().
+func adminSearchIntegrations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
+	request := withTransactionalMutation(ctx).Integration.Query().
 		Where(
 			integration.Or(
 				integration.DeletedByContainsFold(query), // search by DeletedBy
@@ -657,14 +659,14 @@ func adminSearchIntegrations(ctx context.Context, query string) ([]*generated.In
 				integration.NameContainsFold(query),    // search by Name
 				integration.KindContainsFold(query),    // search by Kind
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchInternalPolicy searches for InternalPolicy based on the query string looking for matches
-func searchInternalPolicies(ctx context.Context, query string) ([]*generated.InternalPolicy, error) {
-	return withTransactionalMutation(ctx).InternalPolicy.Query().
+func searchInternalPolicies(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
+	request := withTransactionalMutation(ctx).InternalPolicy.Query().
 		Where(
 			internalpolicy.Or(
 				internalpolicy.DetailsContainsFold(query), // search by Details
@@ -676,14 +678,14 @@ func searchInternalPolicies(ctx context.Context, query string) ([]*generated.Int
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchInternalPolicy searches for InternalPolicy based on the query string looking for matches
-func adminSearchInternalPolicies(ctx context.Context, query string) ([]*generated.InternalPolicy, error) {
-	return withTransactionalMutation(ctx).InternalPolicy.Query().
+func adminSearchInternalPolicies(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
+	request := withTransactionalMutation(ctx).InternalPolicy.Query().
 		Where(
 			internalpolicy.Or(
 				internalpolicy.DeletedByContainsFold(query), // search by DeletedBy
@@ -701,14 +703,43 @@ func adminSearchInternalPolicies(ctx context.Context, query string) ([]*generate
 				internalpolicy.ApproverIDContainsFold(query), // search by ApproverID
 				internalpolicy.DelegateIDContainsFold(query), // search by DelegateID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchInvite searches for Invite based on the query string looking for matches
+func searchInvites(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InviteConnection, error) {
+	request := withTransactionalMutation(ctx).Invite.Query().
+		Where(
+			invite.Or(
+				invite.ID(query),                    // search equal to ID
+				invite.RecipientContainsFold(query), // search by Recipient
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchInvite searches for Invite based on the query string looking for matches
+func adminSearchInvites(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InviteConnection, error) {
+	request := withTransactionalMutation(ctx).Invite.Query().
+		Where(
+			invite.Or(
+				invite.DeletedByContainsFold(query),   // search by DeletedBy
+				invite.ID(query),                      // search equal to ID
+				invite.OwnerIDContainsFold(query),     // search by OwnerID
+				invite.RecipientContainsFold(query),   // search by Recipient
+				invite.RequestorIDContainsFold(query), // search by RequestorID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchMappedControl searches for MappedControl based on the query string looking for matches
-func searchMappedControls(ctx context.Context, query string) ([]*generated.MappedControl, error) {
-	return withTransactionalMutation(ctx).MappedControl.Query().
+func searchMappedControls(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
+	request := withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
 				mappedcontrol.ID(query), // search equal to ID
@@ -717,14 +748,14 @@ func searchMappedControls(ctx context.Context, query string) ([]*generated.Mappe
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchMappedControl searches for MappedControl based on the query string looking for matches
-func adminSearchMappedControls(ctx context.Context, query string) ([]*generated.MappedControl, error) {
-	return withTransactionalMutation(ctx).MappedControl.Query().
+func adminSearchMappedControls(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
+	request := withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
 				mappedcontrol.DeletedByContainsFold(query), // search by DeletedBy
@@ -736,14 +767,14 @@ func adminSearchMappedControls(ctx context.Context, query string) ([]*generated.
 				mappedcontrol.MappingTypeContainsFold(query), // search by MappingType
 				mappedcontrol.RelationContainsFold(query),    // search by Relation
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchNarrative searches for Narrative based on the query string looking for matches
-func searchNarratives(ctx context.Context, query string) ([]*generated.Narrative, error) {
-	return withTransactionalMutation(ctx).Narrative.Query().
+func searchNarratives(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
+	request := withTransactionalMutation(ctx).Narrative.Query().
 		Where(
 			narrative.Or(
 				narrative.DescriptionContainsFold(query), // search by Description
@@ -755,14 +786,14 @@ func searchNarratives(ctx context.Context, query string) ([]*generated.Narrative
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchNarrative searches for Narrative based on the query string looking for matches
-func adminSearchNarratives(ctx context.Context, query string) ([]*generated.Narrative, error) {
-	return withTransactionalMutation(ctx).Narrative.Query().
+func adminSearchNarratives(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
+	request := withTransactionalMutation(ctx).Narrative.Query().
 		Where(
 			narrative.Or(
 				narrative.DeletedByContainsFold(query), // search by DeletedBy
@@ -777,14 +808,14 @@ func adminSearchNarratives(ctx context.Context, query string) ([]*generated.Narr
 				narrative.DescriptionContainsFold(query), // search by Description
 				narrative.DetailsContainsFold(query),     // search by Details
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrgSubscription searches for OrgSubscription based on the query string looking for matches
-func searchOrgSubscriptions(ctx context.Context, query string) ([]*generated.OrgSubscription, error) {
-	return withTransactionalMutation(ctx).OrgSubscription.Query().
+func searchOrgSubscriptions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrgSubscriptionConnection, error) {
+	request := withTransactionalMutation(ctx).OrgSubscription.Query().
 		Where(
 			orgsubscription.Or(
 				orgsubscription.ID(query), // search equal to ID
@@ -793,14 +824,14 @@ func searchOrgSubscriptions(ctx context.Context, query string) ([]*generated.Org
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrgSubscription searches for OrgSubscription based on the query string looking for matches
-func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generated.OrgSubscription, error) {
-	return withTransactionalMutation(ctx).OrgSubscription.Query().
+func adminSearchOrgSubscriptions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrgSubscriptionConnection, error) {
+	request := withTransactionalMutation(ctx).OrgSubscription.Query().
 		Where(
 			orgsubscription.Or(
 				orgsubscription.DeletedByContainsFold(query), // search by DeletedBy
@@ -829,14 +860,14 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generate
 					s.Where(sql.ExprP("(feature_lookup_keys)::text LIKE $13", likeQuery)) // search by FeatureLookupKeys
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrganization searches for Organization based on the query string looking for matches
-func searchOrganizations(ctx context.Context, query string) ([]*generated.Organization, error) {
-	return withTransactionalMutation(ctx).Organization.Query().
+func searchOrganizations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
+	request := withTransactionalMutation(ctx).Organization.Query().
 		Where(
 			organization.Or(
 				organization.DisplayNameContainsFold(query), // search by DisplayName
@@ -847,14 +878,14 @@ func searchOrganizations(ctx context.Context, query string) ([]*generated.Organi
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrganization searches for Organization based on the query string looking for matches
-func adminSearchOrganizations(ctx context.Context, query string) ([]*generated.Organization, error) {
-	return withTransactionalMutation(ctx).Organization.Query().
+func adminSearchOrganizations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
+	request := withTransactionalMutation(ctx).Organization.Query().
 		Where(
 			organization.Or(
 				organization.DeletedByContainsFold(query), // search by DeletedBy
@@ -868,14 +899,14 @@ func adminSearchOrganizations(ctx context.Context, query string) ([]*generated.O
 				organization.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
 				organization.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrganizationSetting searches for OrganizationSetting based on the query string looking for matches
-func searchOrganizationSettings(ctx context.Context, query string) ([]*generated.OrganizationSetting, error) {
-	return withTransactionalMutation(ctx).OrganizationSetting.Query().
+func searchOrganizationSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationSettingConnection, error) {
+	request := withTransactionalMutation(ctx).OrganizationSetting.Query().
 		Where(
 			organizationsetting.Or(
 				organizationsetting.ID(query), // search equal to ID
@@ -884,14 +915,14 @@ func searchOrganizationSettings(ctx context.Context, query string) ([]*generated
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchOrganizationSetting searches for OrganizationSetting based on the query string looking for matches
-func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*generated.OrganizationSetting, error) {
-	return withTransactionalMutation(ctx).OrganizationSetting.Query().
+func adminSearchOrganizationSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationSettingConnection, error) {
+	request := withTransactionalMutation(ctx).OrganizationSetting.Query().
 		Where(
 			organizationsetting.Or(
 				organizationsetting.DeletedByContainsFold(query), // search by DeletedBy
@@ -918,14 +949,14 @@ func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*gene
 					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $11", likeQuery)) // search by AllowedEmailDomains
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchPersonalAccessToken searches for PersonalAccessToken based on the query string looking for matches
-func searchPersonalAccessTokens(ctx context.Context, query string) ([]*generated.PersonalAccessToken, error) {
-	return withTransactionalMutation(ctx).PersonalAccessToken.Query().
+func searchPersonalAccessTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PersonalAccessTokenConnection, error) {
+	request := withTransactionalMutation(ctx).PersonalAccessToken.Query().
 		Where(
 			personalaccesstoken.Or(
 				personalaccesstoken.ID(query), // search equal to ID
@@ -934,14 +965,14 @@ func searchPersonalAccessTokens(ctx context.Context, query string) ([]*generated
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchPersonalAccessToken searches for PersonalAccessToken based on the query string looking for matches
-func adminSearchPersonalAccessTokens(ctx context.Context, query string) ([]*generated.PersonalAccessToken, error) {
-	return withTransactionalMutation(ctx).PersonalAccessToken.Query().
+func adminSearchPersonalAccessTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PersonalAccessTokenConnection, error) {
+	request := withTransactionalMutation(ctx).PersonalAccessToken.Query().
 		Where(
 			personalaccesstoken.Or(
 				personalaccesstoken.DeletedByContainsFold(query), // search by DeletedBy
@@ -958,14 +989,14 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string) ([]*gene
 				personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchProcedure searches for Procedure based on the query string looking for matches
-func searchProcedures(ctx context.Context, query string) ([]*generated.Procedure, error) {
-	return withTransactionalMutation(ctx).Procedure.Query().
+func searchProcedures(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
+	request := withTransactionalMutation(ctx).Procedure.Query().
 		Where(
 			procedure.Or(
 				procedure.DetailsContainsFold(query), // search by Details
@@ -977,14 +1008,14 @@ func searchProcedures(ctx context.Context, query string) ([]*generated.Procedure
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchProcedure searches for Procedure based on the query string looking for matches
-func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Procedure, error) {
-	return withTransactionalMutation(ctx).Procedure.Query().
+func adminSearchProcedures(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
+	request := withTransactionalMutation(ctx).Procedure.Query().
 		Where(
 			procedure.Or(
 				procedure.DeletedByContainsFold(query), // search by DeletedBy
@@ -1002,14 +1033,14 @@ func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Proc
 				procedure.ApproverIDContainsFold(query),    // search by ApproverID
 				procedure.DelegateIDContainsFold(query),    // search by DelegateID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchProgram searches for Program based on the query string looking for matches
-func searchPrograms(ctx context.Context, query string) ([]*generated.Program, error) {
-	return withTransactionalMutation(ctx).Program.Query().
+func searchPrograms(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProgramConnection, error) {
+	request := withTransactionalMutation(ctx).Program.Query().
 		Where(
 			program.Or(
 				program.DescriptionContainsFold(query), // search by Description
@@ -1021,14 +1052,14 @@ func searchPrograms(ctx context.Context, query string) ([]*generated.Program, er
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchProgram searches for Program based on the query string looking for matches
-func adminSearchPrograms(ctx context.Context, query string) ([]*generated.Program, error) {
-	return withTransactionalMutation(ctx).Program.Query().
+func adminSearchPrograms(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProgramConnection, error) {
+	request := withTransactionalMutation(ctx).Program.Query().
 		Where(
 			program.Or(
 				program.DeletedByContainsFold(query), // search by DeletedBy
@@ -1042,14 +1073,14 @@ func adminSearchPrograms(ctx context.Context, query string) ([]*generated.Progra
 				program.NameContainsFold(query),        // search by Name
 				program.DescriptionContainsFold(query), // search by Description
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchRisk searches for Risk based on the query string looking for matches
-func searchRisks(ctx context.Context, query string) ([]*generated.Risk, error) {
-	return withTransactionalMutation(ctx).Risk.Query().
+func searchRisks(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
+	request := withTransactionalMutation(ctx).Risk.Query().
 		Where(
 			risk.Or(
 				risk.DisplayID(query),        // search equal to DisplayID
@@ -1060,14 +1091,14 @@ func searchRisks(ctx context.Context, query string) ([]*generated.Risk, error) {
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchRisk searches for Risk based on the query string looking for matches
-func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, error) {
-	return withTransactionalMutation(ctx).Risk.Query().
+func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
+	request := withTransactionalMutation(ctx).Risk.Query().
 		Where(
 			risk.Or(
 				risk.DeletedByContainsFold(query), // search by DeletedBy
@@ -1087,14 +1118,14 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 				risk.StakeholderIDContainsFold(query), // search by StakeholderID
 				risk.DelegateIDContainsFold(query),    // search by DelegateID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchStandard searches for Standard based on the query string looking for matches
-func searchStandards(ctx context.Context, query string) ([]*generated.Standard, error) {
-	return withTransactionalMutation(ctx).Standard.Query().
+func searchStandards(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
+	request := withTransactionalMutation(ctx).Standard.Query().
 		Where(
 			standard.Or(
 				func(s *sql.Selector) {
@@ -1111,14 +1142,14 @@ func searchStandards(ctx context.Context, query string) ([]*generated.Standard, 
 					s.Where(sql.ExprP("(tags)::text LIKE $7", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchStandard searches for Standard based on the query string looking for matches
-func adminSearchStandards(ctx context.Context, query string) ([]*generated.Standard, error) {
-	return withTransactionalMutation(ctx).Standard.Query().
+func adminSearchStandards(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
+	request := withTransactionalMutation(ctx).Standard.Query().
 		Where(
 			standard.Or(
 				standard.DeletedByContainsFold(query), // search by DeletedBy
@@ -1143,14 +1174,14 @@ func adminSearchStandards(ctx context.Context, query string) ([]*generated.Stand
 				standard.StandardTypeContainsFold(query), // search by StandardType
 				standard.VersionContainsFold(query),      // search by Version
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchSubcontrol searches for Subcontrol based on the query string looking for matches
-func searchSubcontrols(ctx context.Context, query string) ([]*generated.Subcontrol, error) {
-	return withTransactionalMutation(ctx).Subcontrol.Query().
+func searchSubcontrols(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubcontrolConnection, error) {
+	request := withTransactionalMutation(ctx).Subcontrol.Query().
 		Where(
 			subcontrol.Or(
 				subcontrol.CategoryContainsFold(query),    // search by Category
@@ -1168,14 +1199,14 @@ func searchSubcontrols(ctx context.Context, query string) ([]*generated.Subcontr
 					s.Where(sql.ExprP("(tags)::text LIKE $8", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchSubcontrol searches for Subcontrol based on the query string looking for matches
-func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Subcontrol, error) {
-	return withTransactionalMutation(ctx).Subcontrol.Query().
+func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubcontrolConnection, error) {
+	request := withTransactionalMutation(ctx).Subcontrol.Query().
 		Where(
 			subcontrol.Or(
 				subcontrol.DeletedByContainsFold(query), // search by DeletedBy
@@ -1225,14 +1256,14 @@ func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Sub
 				subcontrol.RefCodeContainsFold(query),        // search by RefCode
 				subcontrol.ControlIDContainsFold(query),      // search by ControlID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchSubscriber searches for Subscriber based on the query string looking for matches
-func searchSubscribers(ctx context.Context, query string) ([]*generated.Subscriber, error) {
-	return withTransactionalMutation(ctx).Subscriber.Query().
+func searchSubscribers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
+	request := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
 			subscriber.Or(
 				subscriber.EmailContainsFold(query), // search by Email
@@ -1242,14 +1273,14 @@ func searchSubscribers(ctx context.Context, query string) ([]*generated.Subscrib
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchSubscriber searches for Subscriber based on the query string looking for matches
-func adminSearchSubscribers(ctx context.Context, query string) ([]*generated.Subscriber, error) {
-	return withTransactionalMutation(ctx).Subscriber.Query().
+func adminSearchSubscribers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
+	request := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
 			subscriber.Or(
 				subscriber.DeletedByContainsFold(query), // search by DeletedBy
@@ -1262,14 +1293,14 @@ func adminSearchSubscribers(ctx context.Context, query string) ([]*generated.Sub
 				subscriber.EmailContainsFold(query),       // search by Email
 				subscriber.PhoneNumberContainsFold(query), // search by PhoneNumber
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchTask searches for Task based on the query string looking for matches
-func searchTasks(ctx context.Context, query string) ([]*generated.Task, error) {
-	return withTransactionalMutation(ctx).Task.Query().
+func searchTasks(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
+	request := withTransactionalMutation(ctx).Task.Query().
 		Where(
 			task.Or(
 				task.DescriptionContainsFold(query), // search by Description
@@ -1281,14 +1312,14 @@ func searchTasks(ctx context.Context, query string) ([]*generated.Task, error) {
 				},
 				task.TitleContainsFold(query), // search by Title
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchTask searches for Task based on the query string looking for matches
-func adminSearchTasks(ctx context.Context, query string) ([]*generated.Task, error) {
-	return withTransactionalMutation(ctx).Task.Query().
+func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
+	request := withTransactionalMutation(ctx).Task.Query().
 		Where(
 			task.Or(
 				task.DeletedByContainsFold(query), // search by DeletedBy
@@ -1306,14 +1337,14 @@ func adminSearchTasks(ctx context.Context, query string) ([]*generated.Task, err
 				task.AssigneeIDContainsFold(query),  // search by AssigneeID
 				task.AssignerIDContainsFold(query),  // search by AssignerID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchTemplate searches for Template based on the query string looking for matches
-func searchTemplates(ctx context.Context, query string) ([]*generated.Template, error) {
-	return withTransactionalMutation(ctx).Template.Query().
+func searchTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateConnection, error) {
+	request := withTransactionalMutation(ctx).Template.Query().
 		Where(
 			template.Or(
 				template.ID(query), // search equal to ID
@@ -1328,14 +1359,14 @@ func searchTemplates(ctx context.Context, query string) ([]*generated.Template, 
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchTemplate searches for Template based on the query string looking for matches
-func adminSearchTemplates(ctx context.Context, query string) ([]*generated.Template, error) {
-	return withTransactionalMutation(ctx).Template.Query().
+func adminSearchTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateConnection, error) {
+	request := withTransactionalMutation(ctx).Template.Query().
 		Where(
 			template.Or(
 				template.DeletedByContainsFold(query), // search by DeletedBy
@@ -1357,14 +1388,14 @@ func adminSearchTemplates(ctx context.Context, query string) ([]*generated.Templ
 					s.Where(sql.ExprP("(uischema)::text LIKE $8", likeQuery)) // search by Uischema
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchUser searches for User based on the query string looking for matches
-func searchUsers(ctx context.Context, query string) ([]*generated.User, error) {
-	return withTransactionalMutation(ctx).User.Query().
+func searchUsers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
+	request := withTransactionalMutation(ctx).User.Query().
 		Where(
 			user.Or(
 				user.DisplayID(query), // search equal to DisplayID
@@ -1374,14 +1405,14 @@ func searchUsers(ctx context.Context, query string) ([]*generated.User, error) {
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchUser searches for User based on the query string looking for matches
-func adminSearchUsers(ctx context.Context, query string) ([]*generated.User, error) {
-	return withTransactionalMutation(ctx).User.Query().
+func adminSearchUsers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
+	request := withTransactionalMutation(ctx).User.Query().
 		Where(
 			user.Or(
 				user.DeletedByContainsFold(query), // search by DeletedBy
@@ -1399,14 +1430,14 @@ func adminSearchUsers(ctx context.Context, query string) ([]*generated.User, err
 				user.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
 				user.SubContainsFold(query),               // search by Sub
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchUserSetting searches for UserSetting based on the query string looking for matches
-func searchUserSettings(ctx context.Context, query string) ([]*generated.UserSetting, error) {
-	return withTransactionalMutation(ctx).UserSetting.Query().
+func searchUserSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserSettingConnection, error) {
+	request := withTransactionalMutation(ctx).UserSetting.Query().
 		Where(
 			usersetting.Or(
 				usersetting.ID(query), // search equal to ID
@@ -1415,14 +1446,14 @@ func searchUserSettings(ctx context.Context, query string) ([]*generated.UserSet
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }
 
 // searchUserSetting searches for UserSetting based on the query string looking for matches
-func adminSearchUserSettings(ctx context.Context, query string) ([]*generated.UserSetting, error) {
-	return withTransactionalMutation(ctx).UserSetting.Query().
+func adminSearchUserSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserSettingConnection, error) {
+	request := withTransactionalMutation(ctx).UserSetting.Query().
 		Where(
 			usersetting.Or(
 				usersetting.DeletedByContainsFold(query), // search by DeletedBy
@@ -1433,7 +1464,7 @@ func adminSearchUserSettings(ctx context.Context, query string) ([]*generated.Us
 				},
 				usersetting.UserIDContainsFold(query), // search by UserID
 			),
-		).
-		Limit(100).
-		All(ctx)
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
 }

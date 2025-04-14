@@ -4,6 +4,10 @@ go 1.24.1
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
+
+replace github.com/theopenlane/entx => ../entx
+
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1
@@ -38,6 +42,7 @@ require (
 	github.com/knadh/koanf/providers/file v1.1.2
 	github.com/knadh/koanf/providers/posflag v0.1.0
 	github.com/knadh/koanf/v2 v2.1.2
+	github.com/labstack/echo-contrib v0.17.3
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/manifoldco/promptui v0.9.0
@@ -476,7 +481,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/knadh/koanf/maps v0.1.1 // indirect
-	github.com/labstack/echo-contrib v0.17.3
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/blackmagic v1.0.2 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
