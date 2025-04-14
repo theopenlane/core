@@ -1,542 +1,541 @@
 query GlobalSearch($query: String!) {
   search(query: $query) {
-        totalCount
-        apiTokens {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+    totalCount
+    apiTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        actionPlans {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              details
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    actionPlans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          id
+          name
+          tags
         }
-        contacts {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              email
-              fullName
-              id
-              tags
-            }
-          }
+      }
+    }
+    contacts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          fullName
+          id
+          tags
         }
-        controls {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              category
-              description
-              displayID
-              id
-              mappedCategories
-              refCode
-              subcategory
-              tags
-            }
-          }
+      }
+    }
+    controls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          category
+          description
+          displayID
+          id
+          mappedCategories
+          refCode
+          subcategory
+          tags
         }
-        controlImplementations {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    controlImplementations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        controlObjectives {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              category
-              displayID
-              id
-              name
-              subcategory
-              tags
-            }
-          }
+      }
+    }
+    controlObjectives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          category
+          displayID
+          id
+          name
+          subcategory
+          tags
         }
-        documentData {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    documentData {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        entities {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              description
-              displayName
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    entities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayName
+          id
+          name
+          tags
         }
-        entityTypes {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    entityTypes {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        events {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    events {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        evidences {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    evidences {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
         }
-        files {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    files {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        groups {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              displayID
-              displayName
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    groups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          displayName
+          id
+          name
+          tags
         }
-        integrations {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    integrations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        internalPolicies {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              details
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    internalPolicies {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          displayID
+          id
+          name
+          tags
         }
-        invites {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              recipient
-            }
-          }
+      }
+    }
+    invites {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          recipient
         }
-        mappedControls {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    mappedControls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        narratives {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              description
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    narratives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          name
+          tags
         }
-        orgSubscriptions {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    orgSubscriptions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        organizations {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              displayName
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    organizations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayName
+          id
+          name
+          tags
         }
-        organizationSettings {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    organizationSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        personalAccessTokens {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    personalAccessTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-        procedures {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              details
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    procedures {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          displayID
+          id
+          name
+          tags
         }
-        programs {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              description
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    programs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          name
+          tags
         }
-        risks {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              displayID
-              id
-              name
-              tags
-            }
-          }
+      }
+    }
+    risks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
         }
-        standards {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              domains
-              framework
-              governingBody
-              id
-              name
-              shortName
-              tags
-            }
-          }
+      }
+    }
+    standards {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          domains
+          framework
+          governingBody
+          id
+          name
+          shortName
+          tags
         }
-        subcontrols {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              category
-              description
-              displayID
-              id
-              mappedCategories
-              refCode
-              subcategory
-              tags
-            }
-          }
+      }
+    }
+    subcontrols {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          category
+          description
+          displayID
+          id
+          mappedCategories
+          refCode
+          subcategory
+          tags
         }
-        subscribers {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              email
-              id
-              tags
-            }
-          }
+      }
+    }
+    subscribers {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          id
+          tags
         }
-        tasks {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              description
-              displayID
-              id
-              tags
-              title
-            }
-          }
+      }
+    }
+    tasks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          tags
+          title
         }
-        templates {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              jsonconfig
-              name
-              tags
-            }
-          }
+      }
+    }
+    templates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          jsonconfig
+          name
+          tags
         }
-        users {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              displayID
-              id
-              tags
-            }
-          }
+      }
+    }
+    users {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
         }
-        userSettings {
-          totalCount
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-          edges {
-            node {
-              id
-              tags
-            }
-          }
+      }
+    }
+    userSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
-
+      }
+    }
   }
 }
