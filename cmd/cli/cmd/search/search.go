@@ -89,9 +89,14 @@ func tableOutput(results map[string]any) {
 		err = json.Unmarshal(tmp, &res)
 		cobra.CheckErr(err)
 
-		writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout())
-
 		for k, v := range res {
+			// setup the table writer per object type
+			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout())
+
+			// skip the totalCount field
+			if strings.EqualFold(k, "totalCount") {
+				continue
+			}
 
 			// print the object type header
 			fmt.Println(strings.ToUpper(k))
@@ -132,6 +137,7 @@ func tableOutput(results map[string]any) {
 
 			}
 
+			// render the table
 			writer.Render()
 		}
 
