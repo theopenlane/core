@@ -5,14 +5,16 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // Search is the resolver for the search field.
-func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.SearchResultConnection, error) {
+func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.SearchResults, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
@@ -22,255 +24,265 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 		return nil, ErrSearchQueryTooShort
 	}
 
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
 	var (
 		errors                       []error
-		apitokenResults              []*generated.APIToken
-		actionplanResults            []*generated.ActionPlan
-		contactResults               []*generated.Contact
-		controlResults               []*generated.Control
-		controlimplementationResults []*generated.ControlImplementation
-		controlobjectiveResults      []*generated.ControlObjective
-		documentdataResults          []*generated.DocumentData
-		entityResults                []*generated.Entity
-		entitytypeResults            []*generated.EntityType
-		eventResults                 []*generated.Event
-		evidenceResults              []*generated.Evidence
-		fileResults                  []*generated.File
-		groupResults                 []*generated.Group
-		integrationResults           []*generated.Integration
-		internalpolicyResults        []*generated.InternalPolicy
-		mappedcontrolResults         []*generated.MappedControl
-		narrativeResults             []*generated.Narrative
-		orgsubscriptionResults       []*generated.OrgSubscription
-		organizationResults          []*generated.Organization
-		organizationsettingResults   []*generated.OrganizationSetting
-		personalaccesstokenResults   []*generated.PersonalAccessToken
-		procedureResults             []*generated.Procedure
-		programResults               []*generated.Program
-		riskResults                  []*generated.Risk
-		standardResults              []*generated.Standard
-		subcontrolResults            []*generated.Subcontrol
-		subscriberResults            []*generated.Subscriber
-		taskResults                  []*generated.Task
-		templateResults              []*generated.Template
-		userResults                  []*generated.User
-		usersettingResults           []*generated.UserSetting
+		apitokenResults              *generated.APITokenConnection
+		actionplanResults            *generated.ActionPlanConnection
+		contactResults               *generated.ContactConnection
+		controlResults               *generated.ControlConnection
+		controlimplementationResults *generated.ControlImplementationConnection
+		controlobjectiveResults      *generated.ControlObjectiveConnection
+		documentdataResults          *generated.DocumentDataConnection
+		entityResults                *generated.EntityConnection
+		entitytypeResults            *generated.EntityTypeConnection
+		eventResults                 *generated.EventConnection
+		evidenceResults              *generated.EvidenceConnection
+		fileResults                  *generated.FileConnection
+		groupResults                 *generated.GroupConnection
+		integrationResults           *generated.IntegrationConnection
+		internalpolicyResults        *generated.InternalPolicyConnection
+		inviteResults                *generated.InviteConnection
+		mappedcontrolResults         *generated.MappedControlConnection
+		narrativeResults             *generated.NarrativeConnection
+		orgsubscriptionResults       *generated.OrgSubscriptionConnection
+		organizationResults          *generated.OrganizationConnection
+		organizationsettingResults   *generated.OrganizationSettingConnection
+		personalaccesstokenResults   *generated.PersonalAccessTokenConnection
+		procedureResults             *generated.ProcedureConnection
+		programResults               *generated.ProgramConnection
+		riskResults                  *generated.RiskConnection
+		standardResults              *generated.StandardConnection
+		subcontrolResults            *generated.SubcontrolConnection
+		subscriberResults            *generated.SubscriberConnection
+		taskResults                  *generated.TaskConnection
+		templateResults              *generated.TemplateConnection
+		userResults                  *generated.UserConnection
+		usersettingResults           *generated.UserSettingConnection
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
 		func() {
 			var err error
-			apitokenResults, err = searchAPITokens(ctx, query)
+			apitokenResults, err = searchAPITokens(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			actionplanResults, err = searchActionPlans(ctx, query)
+			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			contactResults, err = searchContacts(ctx, query)
+			contactResults, err = searchContacts(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlResults, err = searchControls(ctx, query)
+			controlResults, err = searchControls(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlimplementationResults, err = searchControlImplementations(ctx, query)
+			controlimplementationResults, err = searchControlImplementations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlobjectiveResults, err = searchControlObjectives(ctx, query)
+			controlobjectiveResults, err = searchControlObjectives(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			documentdataResults, err = searchDocumentData(ctx, query)
+			documentdataResults, err = searchDocumentData(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			entityResults, err = searchEntities(ctx, query)
+			entityResults, err = searchEntities(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			entitytypeResults, err = searchEntityTypes(ctx, query)
+			entitytypeResults, err = searchEntityTypes(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			eventResults, err = searchEvents(ctx, query)
+			eventResults, err = searchEvents(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			evidenceResults, err = searchEvidences(ctx, query)
+			evidenceResults, err = searchEvidences(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			fileResults, err = searchFiles(ctx, query)
+			fileResults, err = searchFiles(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			groupResults, err = searchGroups(ctx, query)
+			groupResults, err = searchGroups(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			integrationResults, err = searchIntegrations(ctx, query)
+			integrationResults, err = searchIntegrations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			internalpolicyResults, err = searchInternalPolicies(ctx, query)
+			internalpolicyResults, err = searchInternalPolicies(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			mappedcontrolResults, err = searchMappedControls(ctx, query)
+			inviteResults, err = searchInvites(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			narrativeResults, err = searchNarratives(ctx, query)
+			mappedcontrolResults, err = searchMappedControls(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query)
+			narrativeResults, err = searchNarratives(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			organizationResults, err = searchOrganizations(ctx, query)
+			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			organizationsettingResults, err = searchOrganizationSettings(ctx, query)
+			organizationResults, err = searchOrganizations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query)
+			organizationsettingResults, err = searchOrganizationSettings(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			procedureResults, err = searchProcedures(ctx, query)
+			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			programResults, err = searchPrograms(ctx, query)
+			procedureResults, err = searchProcedures(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			riskResults, err = searchRisks(ctx, query)
+			programResults, err = searchPrograms(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			standardResults, err = searchStandards(ctx, query)
+			riskResults, err = searchRisks(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			subcontrolResults, err = searchSubcontrols(ctx, query)
+			standardResults, err = searchStandards(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			subscriberResults, err = searchSubscribers(ctx, query)
+			subcontrolResults, err = searchSubcontrols(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			taskResults, err = searchTasks(ctx, query)
+			subscriberResults, err = searchSubscribers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			templateResults, err = searchTemplates(ctx, query)
+			taskResults, err = searchTasks(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			userResults, err = searchUsers(ctx, query)
+			templateResults, err = searchTemplates(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			usersettingResults, err = searchUserSettings(ctx, query)
+			userResults, err = searchUsers(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			usersettingResults, err = searchUserSettings(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -283,786 +295,745 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*model.S
 	}
 
 	// return the results
-	var nodes []model.SearchResult
-	resultCount := 0
-	if len(apitokenResults) > 0 {
-		nodes = append(nodes, model.APITokenSearchResult{
-			APITokens: apitokenResults,
-		})
-
-		resultCount += len(apitokenResults)
+	res := &model.SearchResults{
+		TotalCount: 0,
 	}
-	if len(actionplanResults) > 0 {
-		nodes = append(nodes, model.ActionPlanSearchResult{
-			ActionPlans: actionplanResults,
-		})
+	if apitokenResults != nil && len(apitokenResults.Edges) > 0 {
+		res.APITokens = apitokenResults
 
-		resultCount += len(actionplanResults)
+		res.TotalCount += apitokenResults.TotalCount
 	}
-	if len(contactResults) > 0 {
-		nodes = append(nodes, model.ContactSearchResult{
-			Contacts: contactResults,
-		})
+	if actionplanResults != nil && len(actionplanResults.Edges) > 0 {
+		res.ActionPlans = actionplanResults
 
-		resultCount += len(contactResults)
+		res.TotalCount += actionplanResults.TotalCount
 	}
-	if len(controlResults) > 0 {
-		nodes = append(nodes, model.ControlSearchResult{
-			Controls: controlResults,
-		})
+	if contactResults != nil && len(contactResults.Edges) > 0 {
+		res.Contacts = contactResults
 
-		resultCount += len(controlResults)
+		res.TotalCount += contactResults.TotalCount
 	}
-	if len(controlimplementationResults) > 0 {
-		nodes = append(nodes, model.ControlImplementationSearchResult{
-			ControlImplementations: controlimplementationResults,
-		})
+	if controlResults != nil && len(controlResults.Edges) > 0 {
+		res.Controls = controlResults
 
-		resultCount += len(controlimplementationResults)
+		res.TotalCount += controlResults.TotalCount
 	}
-	if len(controlobjectiveResults) > 0 {
-		nodes = append(nodes, model.ControlObjectiveSearchResult{
-			ControlObjectives: controlobjectiveResults,
-		})
+	if controlimplementationResults != nil && len(controlimplementationResults.Edges) > 0 {
+		res.ControlImplementations = controlimplementationResults
 
-		resultCount += len(controlobjectiveResults)
+		res.TotalCount += controlimplementationResults.TotalCount
 	}
-	if len(documentdataResults) > 0 {
-		nodes = append(nodes, model.DocumentDataSearchResult{
-			DocumentData: documentdataResults,
-		})
+	if controlobjectiveResults != nil && len(controlobjectiveResults.Edges) > 0 {
+		res.ControlObjectives = controlobjectiveResults
 
-		resultCount += len(documentdataResults)
+		res.TotalCount += controlobjectiveResults.TotalCount
 	}
-	if len(entityResults) > 0 {
-		nodes = append(nodes, model.EntitySearchResult{
-			Entities: entityResults,
-		})
+	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
+		res.DocumentData = documentdataResults
 
-		resultCount += len(entityResults)
+		res.TotalCount += documentdataResults.TotalCount
 	}
-	if len(entitytypeResults) > 0 {
-		nodes = append(nodes, model.EntityTypeSearchResult{
-			EntityTypes: entitytypeResults,
-		})
+	if entityResults != nil && len(entityResults.Edges) > 0 {
+		res.Entities = entityResults
 
-		resultCount += len(entitytypeResults)
+		res.TotalCount += entityResults.TotalCount
 	}
-	if len(eventResults) > 0 {
-		nodes = append(nodes, model.EventSearchResult{
-			Events: eventResults,
-		})
+	if entitytypeResults != nil && len(entitytypeResults.Edges) > 0 {
+		res.EntityTypes = entitytypeResults
 
-		resultCount += len(eventResults)
+		res.TotalCount += entitytypeResults.TotalCount
 	}
-	if len(evidenceResults) > 0 {
-		nodes = append(nodes, model.EvidenceSearchResult{
-			Evidences: evidenceResults,
-		})
+	if eventResults != nil && len(eventResults.Edges) > 0 {
+		res.Events = eventResults
 
-		resultCount += len(evidenceResults)
+		res.TotalCount += eventResults.TotalCount
 	}
-	if len(fileResults) > 0 {
-		nodes = append(nodes, model.FileSearchResult{
-			Files: fileResults,
-		})
+	if evidenceResults != nil && len(evidenceResults.Edges) > 0 {
+		res.Evidences = evidenceResults
 
-		resultCount += len(fileResults)
+		res.TotalCount += evidenceResults.TotalCount
 	}
-	if len(groupResults) > 0 {
-		nodes = append(nodes, model.GroupSearchResult{
-			Groups: groupResults,
-		})
+	if fileResults != nil && len(fileResults.Edges) > 0 {
+		res.Files = fileResults
 
-		resultCount += len(groupResults)
+		res.TotalCount += fileResults.TotalCount
 	}
-	if len(integrationResults) > 0 {
-		nodes = append(nodes, model.IntegrationSearchResult{
-			Integrations: integrationResults,
-		})
+	if groupResults != nil && len(groupResults.Edges) > 0 {
+		res.Groups = groupResults
 
-		resultCount += len(integrationResults)
+		res.TotalCount += groupResults.TotalCount
 	}
-	if len(internalpolicyResults) > 0 {
-		nodes = append(nodes, model.InternalPolicySearchResult{
-			InternalPolicies: internalpolicyResults,
-		})
+	if integrationResults != nil && len(integrationResults.Edges) > 0 {
+		res.Integrations = integrationResults
 
-		resultCount += len(internalpolicyResults)
+		res.TotalCount += integrationResults.TotalCount
 	}
-	if len(mappedcontrolResults) > 0 {
-		nodes = append(nodes, model.MappedControlSearchResult{
-			MappedControls: mappedcontrolResults,
-		})
+	if internalpolicyResults != nil && len(internalpolicyResults.Edges) > 0 {
+		res.InternalPolicies = internalpolicyResults
 
-		resultCount += len(mappedcontrolResults)
+		res.TotalCount += internalpolicyResults.TotalCount
 	}
-	if len(narrativeResults) > 0 {
-		nodes = append(nodes, model.NarrativeSearchResult{
-			Narratives: narrativeResults,
-		})
+	if inviteResults != nil && len(inviteResults.Edges) > 0 {
+		res.Invites = inviteResults
 
-		resultCount += len(narrativeResults)
+		res.TotalCount += inviteResults.TotalCount
 	}
-	if len(orgsubscriptionResults) > 0 {
-		nodes = append(nodes, model.OrgSubscriptionSearchResult{
-			OrgSubscriptions: orgsubscriptionResults,
-		})
+	if mappedcontrolResults != nil && len(mappedcontrolResults.Edges) > 0 {
+		res.MappedControls = mappedcontrolResults
 
-		resultCount += len(orgsubscriptionResults)
+		res.TotalCount += mappedcontrolResults.TotalCount
 	}
-	if len(organizationResults) > 0 {
-		nodes = append(nodes, model.OrganizationSearchResult{
-			Organizations: organizationResults,
-		})
+	if narrativeResults != nil && len(narrativeResults.Edges) > 0 {
+		res.Narratives = narrativeResults
 
-		resultCount += len(organizationResults)
+		res.TotalCount += narrativeResults.TotalCount
 	}
-	if len(organizationsettingResults) > 0 {
-		nodes = append(nodes, model.OrganizationSettingSearchResult{
-			OrganizationSettings: organizationsettingResults,
-		})
+	if orgsubscriptionResults != nil && len(orgsubscriptionResults.Edges) > 0 {
+		res.OrgSubscriptions = orgsubscriptionResults
 
-		resultCount += len(organizationsettingResults)
+		res.TotalCount += orgsubscriptionResults.TotalCount
 	}
-	if len(personalaccesstokenResults) > 0 {
-		nodes = append(nodes, model.PersonalAccessTokenSearchResult{
-			PersonalAccessTokens: personalaccesstokenResults,
-		})
+	if organizationResults != nil && len(organizationResults.Edges) > 0 {
+		res.Organizations = organizationResults
 
-		resultCount += len(personalaccesstokenResults)
+		res.TotalCount += organizationResults.TotalCount
 	}
-	if len(procedureResults) > 0 {
-		nodes = append(nodes, model.ProcedureSearchResult{
-			Procedures: procedureResults,
-		})
+	if organizationsettingResults != nil && len(organizationsettingResults.Edges) > 0 {
+		res.OrganizationSettings = organizationsettingResults
 
-		resultCount += len(procedureResults)
+		res.TotalCount += organizationsettingResults.TotalCount
 	}
-	if len(programResults) > 0 {
-		nodes = append(nodes, model.ProgramSearchResult{
-			Programs: programResults,
-		})
+	if personalaccesstokenResults != nil && len(personalaccesstokenResults.Edges) > 0 {
+		res.PersonalAccessTokens = personalaccesstokenResults
 
-		resultCount += len(programResults)
+		res.TotalCount += personalaccesstokenResults.TotalCount
 	}
-	if len(riskResults) > 0 {
-		nodes = append(nodes, model.RiskSearchResult{
-			Risks: riskResults,
-		})
+	if procedureResults != nil && len(procedureResults.Edges) > 0 {
+		res.Procedures = procedureResults
 
-		resultCount += len(riskResults)
+		res.TotalCount += procedureResults.TotalCount
 	}
-	if len(standardResults) > 0 {
-		nodes = append(nodes, model.StandardSearchResult{
-			Standards: standardResults,
-		})
+	if programResults != nil && len(programResults.Edges) > 0 {
+		res.Programs = programResults
 
-		resultCount += len(standardResults)
+		res.TotalCount += programResults.TotalCount
 	}
-	if len(subcontrolResults) > 0 {
-		nodes = append(nodes, model.SubcontrolSearchResult{
-			Subcontrols: subcontrolResults,
-		})
+	if riskResults != nil && len(riskResults.Edges) > 0 {
+		res.Risks = riskResults
 
-		resultCount += len(subcontrolResults)
+		res.TotalCount += riskResults.TotalCount
 	}
-	if len(subscriberResults) > 0 {
-		nodes = append(nodes, model.SubscriberSearchResult{
-			Subscribers: subscriberResults,
-		})
+	if standardResults != nil && len(standardResults.Edges) > 0 {
+		res.Standards = standardResults
 
-		resultCount += len(subscriberResults)
+		res.TotalCount += standardResults.TotalCount
 	}
-	if len(taskResults) > 0 {
-		nodes = append(nodes, model.TaskSearchResult{
-			Tasks: taskResults,
-		})
+	if subcontrolResults != nil && len(subcontrolResults.Edges) > 0 {
+		res.Subcontrols = subcontrolResults
 
-		resultCount += len(taskResults)
+		res.TotalCount += subcontrolResults.TotalCount
 	}
-	if len(templateResults) > 0 {
-		nodes = append(nodes, model.TemplateSearchResult{
-			Templates: templateResults,
-		})
+	if subscriberResults != nil && len(subscriberResults.Edges) > 0 {
+		res.Subscribers = subscriberResults
 
-		resultCount += len(templateResults)
+		res.TotalCount += subscriberResults.TotalCount
 	}
-	if len(userResults) > 0 {
-		nodes = append(nodes, model.UserSearchResult{
-			Users: userResults,
-		})
+	if taskResults != nil && len(taskResults.Edges) > 0 {
+		res.Tasks = taskResults
 
-		resultCount += len(userResults)
+		res.TotalCount += taskResults.TotalCount
 	}
-	if len(usersettingResults) > 0 {
-		nodes = append(nodes, model.UserSettingSearchResult{
-			UserSettings: usersettingResults,
-		})
+	if templateResults != nil && len(templateResults.Edges) > 0 {
+		res.Templates = templateResults
 
-		resultCount += len(usersettingResults)
+		res.TotalCount += templateResults.TotalCount
+	}
+	if userResults != nil && len(userResults.Edges) > 0 {
+		res.Users = userResults
+
+		res.TotalCount += userResults.TotalCount
+	}
+	if usersettingResults != nil && len(usersettingResults.Edges) > 0 {
+		res.UserSettings = usersettingResults
+
+		res.TotalCount += usersettingResults.TotalCount
 	}
 
-	return &model.SearchResultConnection{
-		TotalCount: resultCount,
-		Nodes:      nodes,
-	}, nil
+	return res, nil
 }
-func (r *queryResolver) AdminAPITokenSearch(ctx context.Context, query string) (*model.APITokenSearchResult, error) {
+func (r *queryResolver) AdminAPITokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.APITokenConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	apitokenResults, err := adminSearchAPITokens(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	apitokenResults, err := adminSearchAPITokens(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.APITokenSearchResult{
-		APITokens: apitokenResults,
-	}, nil
+	return apitokenResults, nil
 }
-func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string) (*model.ActionPlanSearchResult, error) {
+func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ActionPlanConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	actionplanResults, err := adminSearchActionPlans(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	actionplanResults, err := adminSearchActionPlans(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ActionPlanSearchResult{
-		ActionPlans: actionplanResults,
-	}, nil
+	return actionplanResults, nil
 }
-func (r *queryResolver) AdminContactSearch(ctx context.Context, query string) (*model.ContactSearchResult, error) {
+func (r *queryResolver) AdminContactSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	contactResults, err := adminSearchContacts(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	contactResults, err := adminSearchContacts(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ContactSearchResult{
-		Contacts: contactResults,
-	}, nil
+	return contactResults, nil
 }
-func (r *queryResolver) AdminControlSearch(ctx context.Context, query string) (*model.ControlSearchResult, error) {
+func (r *queryResolver) AdminControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	controlResults, err := adminSearchControls(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	controlResults, err := adminSearchControls(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlSearchResult{
-		Controls: controlResults,
-	}, nil
+	return controlResults, nil
 }
-func (r *queryResolver) AdminControlImplementationSearch(ctx context.Context, query string) (*model.ControlImplementationSearchResult, error) {
+func (r *queryResolver) AdminControlImplementationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	controlimplementationResults, err := adminSearchControlImplementations(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	controlimplementationResults, err := adminSearchControlImplementations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlImplementationSearchResult{
-		ControlImplementations: controlimplementationResults,
-	}, nil
+	return controlimplementationResults, nil
 }
-func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query string) (*model.ControlObjectiveSearchResult, error) {
+func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	controlobjectiveResults, err := adminSearchControlObjectives(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	controlobjectiveResults, err := adminSearchControlObjectives(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlObjectiveSearchResult{
-		ControlObjectives: controlobjectiveResults,
-	}, nil
+	return controlobjectiveResults, nil
 }
-func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query string) (*model.DocumentDataSearchResult, error) {
+func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	documentdataResults, err := adminSearchDocumentData(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	documentdataResults, err := adminSearchDocumentData(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.DocumentDataSearchResult{
-		DocumentData: documentdataResults,
-	}, nil
+	return documentdataResults, nil
 }
-func (r *queryResolver) AdminEntitySearch(ctx context.Context, query string) (*model.EntitySearchResult, error) {
+func (r *queryResolver) AdminEntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	entityResults, err := adminSearchEntities(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	entityResults, err := adminSearchEntities(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EntitySearchResult{
-		Entities: entityResults,
-	}, nil
+	return entityResults, nil
 }
-func (r *queryResolver) AdminEntityTypeSearch(ctx context.Context, query string) (*model.EntityTypeSearchResult, error) {
+func (r *queryResolver) AdminEntityTypeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityTypeConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	entitytypeResults, err := adminSearchEntityTypes(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	entitytypeResults, err := adminSearchEntityTypes(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EntityTypeSearchResult{
-		EntityTypes: entitytypeResults,
-	}, nil
+	return entitytypeResults, nil
 }
-func (r *queryResolver) AdminEventSearch(ctx context.Context, query string) (*model.EventSearchResult, error) {
+func (r *queryResolver) AdminEventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EventConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	eventResults, err := adminSearchEvents(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	eventResults, err := adminSearchEvents(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EventSearchResult{
-		Events: eventResults,
-	}, nil
+	return eventResults, nil
 }
-func (r *queryResolver) AdminEvidenceSearch(ctx context.Context, query string) (*model.EvidenceSearchResult, error) {
+func (r *queryResolver) AdminEvidenceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EvidenceConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	evidenceResults, err := adminSearchEvidences(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	evidenceResults, err := adminSearchEvidences(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EvidenceSearchResult{
-		Evidences: evidenceResults,
-	}, nil
+	return evidenceResults, nil
 }
-func (r *queryResolver) AdminFileSearch(ctx context.Context, query string) (*model.FileSearchResult, error) {
+func (r *queryResolver) AdminFileSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FileConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	fileResults, err := adminSearchFiles(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	fileResults, err := adminSearchFiles(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.FileSearchResult{
-		Files: fileResults,
-	}, nil
+	return fileResults, nil
 }
-func (r *queryResolver) AdminGroupSearch(ctx context.Context, query string) (*model.GroupSearchResult, error) {
+func (r *queryResolver) AdminGroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	groupResults, err := adminSearchGroups(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	groupResults, err := adminSearchGroups(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.GroupSearchResult{
-		Groups: groupResults,
-	}, nil
+	return groupResults, nil
 }
-func (r *queryResolver) AdminIntegrationSearch(ctx context.Context, query string) (*model.IntegrationSearchResult, error) {
+func (r *queryResolver) AdminIntegrationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	integrationResults, err := adminSearchIntegrations(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	integrationResults, err := adminSearchIntegrations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.IntegrationSearchResult{
-		Integrations: integrationResults,
-	}, nil
+	return integrationResults, nil
 }
-func (r *queryResolver) AdminInternalPolicySearch(ctx context.Context, query string) (*model.InternalPolicySearchResult, error) {
+func (r *queryResolver) AdminInternalPolicySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	internalpolicyResults, err := adminSearchInternalPolicies(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	internalpolicyResults, err := adminSearchInternalPolicies(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.InternalPolicySearchResult{
-		InternalPolicies: internalpolicyResults,
-	}, nil
+	return internalpolicyResults, nil
 }
-func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query string) (*model.MappedControlSearchResult, error) {
+func (r *queryResolver) AdminInviteSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InviteConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	mappedcontrolResults, err := adminSearchMappedControls(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	inviteResults, err := adminSearchInvites(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.MappedControlSearchResult{
-		MappedControls: mappedcontrolResults,
-	}, nil
+	return inviteResults, nil
 }
-func (r *queryResolver) AdminNarrativeSearch(ctx context.Context, query string) (*model.NarrativeSearchResult, error) {
+func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	narrativeResults, err := adminSearchNarratives(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	mappedcontrolResults, err := adminSearchMappedControls(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.NarrativeSearchResult{
-		Narratives: narrativeResults,
-	}, nil
+	return mappedcontrolResults, nil
 }
-func (r *queryResolver) AdminOrgSubscriptionSearch(ctx context.Context, query string) (*model.OrgSubscriptionSearchResult, error) {
+func (r *queryResolver) AdminNarrativeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	orgsubscriptionResults, err := adminSearchOrgSubscriptions(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	narrativeResults, err := adminSearchNarratives(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrgSubscriptionSearchResult{
-		OrgSubscriptions: orgsubscriptionResults,
-	}, nil
+	return narrativeResults, nil
 }
-func (r *queryResolver) AdminOrganizationSearch(ctx context.Context, query string) (*model.OrganizationSearchResult, error) {
+func (r *queryResolver) AdminOrgSubscriptionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrgSubscriptionConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	organizationResults, err := adminSearchOrganizations(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	orgsubscriptionResults, err := adminSearchOrgSubscriptions(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrganizationSearchResult{
-		Organizations: organizationResults,
-	}, nil
+	return orgsubscriptionResults, nil
 }
-func (r *queryResolver) AdminOrganizationSettingSearch(ctx context.Context, query string) (*model.OrganizationSettingSearchResult, error) {
+func (r *queryResolver) AdminOrganizationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	organizationsettingResults, err := adminSearchOrganizationSettings(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	organizationResults, err := adminSearchOrganizations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrganizationSettingSearchResult{
-		OrganizationSettings: organizationsettingResults,
-	}, nil
+	return organizationResults, nil
 }
-func (r *queryResolver) AdminPersonalAccessTokenSearch(ctx context.Context, query string) (*model.PersonalAccessTokenSearchResult, error) {
+func (r *queryResolver) AdminOrganizationSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationSettingConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	personalaccesstokenResults, err := adminSearchPersonalAccessTokens(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	organizationsettingResults, err := adminSearchOrganizationSettings(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.PersonalAccessTokenSearchResult{
-		PersonalAccessTokens: personalaccesstokenResults,
-	}, nil
+	return organizationsettingResults, nil
 }
-func (r *queryResolver) AdminProcedureSearch(ctx context.Context, query string) (*model.ProcedureSearchResult, error) {
+func (r *queryResolver) AdminPersonalAccessTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PersonalAccessTokenConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	procedureResults, err := adminSearchProcedures(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	personalaccesstokenResults, err := adminSearchPersonalAccessTokens(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ProcedureSearchResult{
-		Procedures: procedureResults,
-	}, nil
+	return personalaccesstokenResults, nil
 }
-func (r *queryResolver) AdminProgramSearch(ctx context.Context, query string) (*model.ProgramSearchResult, error) {
+func (r *queryResolver) AdminProcedureSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	programResults, err := adminSearchPrograms(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	procedureResults, err := adminSearchProcedures(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ProgramSearchResult{
-		Programs: programResults,
-	}, nil
+	return procedureResults, nil
 }
-func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string) (*model.RiskSearchResult, error) {
+func (r *queryResolver) AdminProgramSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProgramConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	riskResults, err := adminSearchRisks(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	programResults, err := adminSearchPrograms(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.RiskSearchResult{
-		Risks: riskResults,
-	}, nil
+	return programResults, nil
 }
-func (r *queryResolver) AdminStandardSearch(ctx context.Context, query string) (*model.StandardSearchResult, error) {
+func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	standardResults, err := adminSearchStandards(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	riskResults, err := adminSearchRisks(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.StandardSearchResult{
-		Standards: standardResults,
-	}, nil
+	return riskResults, nil
 }
-func (r *queryResolver) AdminSubcontrolSearch(ctx context.Context, query string) (*model.SubcontrolSearchResult, error) {
+func (r *queryResolver) AdminStandardSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	subcontrolResults, err := adminSearchSubcontrols(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	standardResults, err := adminSearchStandards(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.SubcontrolSearchResult{
-		Subcontrols: subcontrolResults,
-	}, nil
+	return standardResults, nil
 }
-func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string) (*model.SubscriberSearchResult, error) {
+func (r *queryResolver) AdminSubcontrolSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubcontrolConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	subscriberResults, err := adminSearchSubscribers(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	subcontrolResults, err := adminSearchSubcontrols(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.SubscriberSearchResult{
-		Subscribers: subscriberResults,
-	}, nil
+	return subcontrolResults, nil
 }
-func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string) (*model.TaskSearchResult, error) {
+func (r *queryResolver) AdminSubscriberSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	taskResults, err := adminSearchTasks(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	subscriberResults, err := adminSearchSubscribers(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.TaskSearchResult{
-		Tasks: taskResults,
-	}, nil
+	return subscriberResults, nil
 }
-func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string) (*model.TemplateSearchResult, error) {
+func (r *queryResolver) AdminTaskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	templateResults, err := adminSearchTemplates(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	taskResults, err := adminSearchTasks(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.TemplateSearchResult{
-		Templates: templateResults,
-	}, nil
+	return taskResults, nil
 }
-func (r *queryResolver) AdminUserSearch(ctx context.Context, query string) (*model.UserSearchResult, error) {
+func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	userResults, err := adminSearchUsers(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	templateResults, err := adminSearchTemplates(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.UserSearchResult{
-		Users: userResults,
-	}, nil
+	return templateResults, nil
 }
-func (r *queryResolver) AdminUserSettingSearch(ctx context.Context, query string) (*model.UserSettingSearchResult, error) {
+func (r *queryResolver) AdminUserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
 		return nil, generated.ErrPermissionDenied
 	}
 
-	usersettingResults, err := adminSearchUserSettings(ctx, query)
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	userResults, err := adminSearchUsers(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.UserSettingSearchResult{
-		UserSettings: usersettingResults,
-	}, nil
+	return userResults, nil
+}
+func (r *queryResolver) AdminUserSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserSettingConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	usersettingResults, err := adminSearchUserSettings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return usersettingResults, nil
 }

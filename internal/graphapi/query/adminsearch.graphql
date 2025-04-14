@@ -1,8 +1,16 @@
 query AdminSearch($query: String!) {
   adminSearch(query: $query) {
-    nodes {
-      ... on APITokenSearchResult {
-        apiTokens {
+    totalCount
+    apiTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -13,8 +21,17 @@ query AdminSearch($query: String!) {
           revokedBy
         }
       }
-      ... on ActionPlanSearchResult {
-        actionPlans {
+    }
+    actionPlans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -28,8 +45,17 @@ query AdminSearch($query: String!) {
           source
         }
       }
-      ... on ContactSearchResult {
-        contacts {
+    }
+    contacts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -42,8 +68,17 @@ query AdminSearch($query: String!) {
           address
         }
       }
-      ... on ControlSearchResult {
-        controls {
+    }
+    controls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -68,8 +103,17 @@ query AdminSearch($query: String!) {
           standardID
         }
       }
-      ... on ControlImplementationSearchResult {
-        controlImplementations {
+    }
+    controlImplementations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -77,8 +121,17 @@ query AdminSearch($query: String!) {
           details
         }
       }
-      ... on ControlObjectiveSearchResult {
-        controlObjectives {
+    }
+    controlObjectives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -93,8 +146,17 @@ query AdminSearch($query: String!) {
           subcategory
         }
       }
-      ... on DocumentDataSearchResult {
-        documentData {
+    }
+    documentData {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -103,8 +165,17 @@ query AdminSearch($query: String!) {
           data
         }
       }
-      ... on EntitySearchResult {
-        entities {
+    }
+    entities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -117,8 +188,17 @@ query AdminSearch($query: String!) {
           status
         }
       }
-      ... on EntityTypeSearchResult {
-        entityTypes {
+    }
+    entityTypes {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -126,8 +206,17 @@ query AdminSearch($query: String!) {
           name
         }
       }
-      ... on EventSearchResult {
-        events {
+    }
+    events {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
           eventID
@@ -136,8 +225,17 @@ query AdminSearch($query: String!) {
           metadata
         }
       }
-      ... on EvidenceSearchResult {
-        evidences {
+    }
+    evidences {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -150,8 +248,17 @@ query AdminSearch($query: String!) {
           url
         }
       }
-      ... on FileSearchResult {
-        files {
+    }
+    files {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -168,8 +275,17 @@ query AdminSearch($query: String!) {
           storagePath
         }
       }
-      ... on GroupSearchResult {
-        groups {
+    }
+    groups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -179,8 +295,17 @@ query AdminSearch($query: String!) {
           displayName
         }
       }
-      ... on IntegrationSearchResult {
-        integrations {
+    }
+    integrations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -189,8 +314,17 @@ query AdminSearch($query: String!) {
           kind
         }
       }
-      ... on InternalPolicySearchResult {
-        internalPolicies {
+    }
+    internalPolicies {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -204,8 +338,35 @@ query AdminSearch($query: String!) {
           delegateID
         }
       }
-      ... on MappedControlSearchResult {
-        mappedControls {
+    }
+    invites {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          ownerID
+          recipient
+          requestorID
+        }
+      }
+    }
+    mappedControls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -213,8 +374,17 @@ query AdminSearch($query: String!) {
           relation
         }
       }
-      ... on NarrativeSearchResult {
-        narratives {
+    }
+    narratives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -225,8 +395,17 @@ query AdminSearch($query: String!) {
           details
         }
       }
-      ... on OrgSubscriptionSearchResult {
-        orgSubscriptions {
+    }
+    orgSubscriptions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -242,8 +421,17 @@ query AdminSearch($query: String!) {
           featureLookupKeys
         }
       }
-      ... on OrganizationSearchResult {
-        organizations {
+    }
+    organizations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -253,8 +441,17 @@ query AdminSearch($query: String!) {
           avatarLocalFileID
         }
       }
-      ... on OrganizationSettingSearchResult {
-        organizationSettings {
+    }
+    organizationSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -268,8 +465,17 @@ query AdminSearch($query: String!) {
           allowedEmailDomains
         }
       }
-      ... on PersonalAccessTokenSearchResult {
-        personalAccessTokens {
+    }
+    personalAccessTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -279,8 +485,17 @@ query AdminSearch($query: String!) {
           revokedBy
         }
       }
-      ... on ProcedureSearchResult {
-        procedures {
+    }
+    procedures {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -294,8 +509,17 @@ query AdminSearch($query: String!) {
           delegateID
         }
       }
-      ... on ProgramSearchResult {
-        programs {
+    }
+    programs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -305,8 +529,17 @@ query AdminSearch($query: String!) {
           description
         }
       }
-      ... on RiskSearchResult {
-        risks {
+    }
+    risks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -322,8 +555,17 @@ query AdminSearch($query: String!) {
           delegateID
         }
       }
-      ... on StandardSearchResult {
-        standards {
+    }
+    standards {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -341,8 +583,17 @@ query AdminSearch($query: String!) {
           version
         }
       }
-      ... on SubcontrolSearchResult {
-        subcontrols {
+    }
+    subcontrols {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -367,8 +618,17 @@ query AdminSearch($query: String!) {
           controlID
         }
       }
-      ... on SubscriberSearchResult {
-        subscribers {
+    }
+    subscribers {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -377,8 +637,17 @@ query AdminSearch($query: String!) {
           phoneNumber
         }
       }
-      ... on TaskSearchResult {
-        tasks {
+    }
+    tasks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -392,8 +661,17 @@ query AdminSearch($query: String!) {
           assignerID
         }
       }
-      ... on TemplateSearchResult {
-        templates {
+    }
+    templates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
@@ -404,8 +682,17 @@ query AdminSearch($query: String!) {
           uischema
         }
       }
-      ... on UserSearchResult {
-        users {
+    }
+    users {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           displayID
@@ -419,8 +706,17 @@ query AdminSearch($query: String!) {
           sub
         }
       }
-      ... on UserSettingSearchResult {
-        userSettings {
+    }
+    userSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           deletedBy
           id
           tags
