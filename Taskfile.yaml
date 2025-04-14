@@ -78,6 +78,7 @@ tasks:
     desc: runs golangci-lint (optionally only on changed files with --changed=true)
     vars:
       CHANGED: '{{.CHANGED | default "false"}}'
+    silent: true
     cmds:
       - |
         branch=$(git rev-parse --abbrev-ref HEAD)
@@ -86,7 +87,7 @@ tasks:
           echo "🔎 On main branch — running full linter only..."
           golangci-lint run --config=.golangci.yaml --verbose
           # return the exit code from the linter
-          exit $?  
+          exit $?
         fi
 
         if [ "{{.CHANGED}}" = "true" ]; then

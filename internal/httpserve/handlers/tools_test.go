@@ -41,7 +41,7 @@ var (
 	validPassword    = "sup3rs3cu7e!"
 	otpManagerSecret = totp.Secret{
 		Version: 0,
-		Key:     "9f0c6da662f018b58b04a093e2dbb2e1d8d54250",
+		Key:     "9f0c6da662f018b58b04a093e2dbb2e1",
 	}
 	webhookSecret = "whsec_test_secret"
 )

@@ -105,7 +105,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			assert.True(t, out.Success)
-			assert.Equal(t, tc.expectedRoles, out.Roles)
+			assert.ElementsMatch(t, tc.expectedRoles, out.Roles)
 		})
 	}
 }

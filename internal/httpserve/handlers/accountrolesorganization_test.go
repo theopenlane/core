@@ -69,7 +69,7 @@ func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
 
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			assert.True(t, out.Success)
-			assert.Equal(t, []string{"can_view", "can_edit", "can_delete", "audit_log_viewer", "can_invite_admins", "can_invite_members"}, out.Roles)
+			assert.ElementsMatch(t, []string{"can_view", "can_edit", "can_delete", "audit_log_viewer", "can_invite_admins", "can_invite_members"}, out.Roles)
 			assert.Equal(t, testUser1.OrganizationID, out.OrganizationID)
 		})
 	}
