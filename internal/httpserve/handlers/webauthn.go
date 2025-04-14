@@ -61,6 +61,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	// options is the object that needs to be returned for the front end to open the creation dialog for the user to create the passkey
 	options, session, err := h.WebAuthn.BeginRegistration(user,
+		webauthn.WithRegistrationRelyingPartyName("Openlane"),
 		webauthn.WithResidentKeyRequirement(protocol.ResidentKeyRequirementRequired),
 		webauthn.WithExclusions(user.CredentialExcludeList()),
 	)
