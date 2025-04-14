@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -73,6 +74,9 @@ func (Invite) Fields() []ent.Field {
 				_, err := mail.ParseAddress(email)
 				return err
 			}).
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Immutable().
 			NotEmpty(),
 		field.Enum("status").

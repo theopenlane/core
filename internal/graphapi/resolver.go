@@ -188,8 +188,8 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 
 			if rc.OperationName == "GlobalSearch" {
 				// allow more complexity for the global search
-				// e.g. if the complexity limit is 100, we allow 200 for the global search
-				return r.complexityLimit * 2 //nolint:mnd
+				// e.g. if the complexity limit is 100, we allow 500 for the global search
+				return r.complexityLimit * 5 //nolint:mnd
 			}
 
 			if r.complexityLimit > 0 {

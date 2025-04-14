@@ -14,6 +14,7 @@ data:
   CORE_SERVER_DEBUG: {{ .Values.core.server.debug | default false }}
   CORE_SERVER_DEV: {{ .Values.core.server.dev | default false }}
   CORE_SERVER_LISTEN: {{ .Values.core.server.listen | default ":17608" }}
+  CORE_SERVER_METRICSPORT: {{ .Values.core.server.metricsPort | default ":17609" }}
   CORE_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.core.server.shutdownGracePeriod | default "10s" }}
   CORE_SERVER_READTIMEOUT: {{ .Values.core.server.readTimeout | default "15s" }}
   CORE_SERVER_WRITETIMEOUT: {{ .Values.core.server.writeTimeout | default "15s" }}

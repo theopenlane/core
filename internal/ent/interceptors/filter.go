@@ -378,7 +378,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		checks = append(checks, ac)
 	}
 
-	allowedIDs, err := utils.AuthzClientFromContext(ctx).BatchGetAllowedIDs(ctx, checks)
+	allowedIDs, err := utils.AuthzClientFromContext(ctx).BatchCheckObjectAccess(ctx, checks)
 	if err != nil {
 		return []string{}, err
 	}

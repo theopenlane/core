@@ -96,7 +96,7 @@ func tableOutput(out []openlaneclient.Organization) {
 			childrenLen = len(i.Children.Edges)
 		}
 
-		writer.AddRow(i.ID, i.DisplayName, *i.Description, *i.PersonalOrg, childrenLen, len(i.Members))
+		writer.AddRow(i.ID, i.DisplayName, *i.Description, *i.PersonalOrg, childrenLen, i.Members.TotalCount)
 	}
 
 	writer.Render()

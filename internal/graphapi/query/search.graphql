@@ -1,30 +1,65 @@
 query GlobalSearch($query: String!) {
   search(query: $query) {
-    nodes {
-      ... on APITokenSearchResult {
-        apiTokens {
+    totalCount
+    apiTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on ActionPlanSearchResult {
-        actionPlans {
+    }
+    actionPlans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           details
           id
           name
           tags
         }
       }
-      ... on ContactSearchResult {
-        contacts {
+    }
+    contacts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           email
           fullName
           id
           tags
         }
       }
-      ... on ControlSearchResult {
-        controls {
+    }
+    controls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           category
           description
           displayID
@@ -35,14 +70,32 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on ControlImplementationSearchResult {
-        controlImplementations {
+    }
+    controlImplementations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on ControlObjectiveSearchResult {
-        controlObjectives {
+    }
+    controlObjectives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           category
           displayID
           id
@@ -51,14 +104,32 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on DocumentDataSearchResult {
-        documentData {
+    }
+    documentData {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on EntitySearchResult {
-        entities {
+    }
+    entities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           description
           displayName
           id
@@ -66,34 +137,79 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on EntityTypeSearchResult {
-        entityTypes {
+    }
+    entityTypes {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on EventSearchResult {
-        events {
+    }
+    events {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on EvidenceSearchResult {
-        evidences {
+    }
+    evidences {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           displayID
           id
           name
           tags
         }
       }
-      ... on FileSearchResult {
-        files {
+    }
+    files {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on GroupSearchResult {
-        groups {
+    }
+    groups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           displayID
           displayName
           id
@@ -101,14 +217,32 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on IntegrationSearchResult {
-        integrations {
+    }
+    integrations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on InternalPolicySearchResult {
-        internalPolicies {
+    }
+    internalPolicies {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           details
           displayID
           id
@@ -116,14 +250,47 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on MappedControlSearchResult {
-        mappedControls {
+    }
+    invites {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          recipient
+        }
+      }
+    }
+    mappedControls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on NarrativeSearchResult {
-        narratives {
+    }
+    narratives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           description
           displayID
           id
@@ -131,34 +298,79 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on OrgSubscriptionSearchResult {
-        orgSubscriptions {
+    }
+    orgSubscriptions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on OrganizationSearchResult {
-        organizations {
+    }
+    organizations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           displayName
           id
           name
           tags
         }
       }
-      ... on OrganizationSettingSearchResult {
-        organizationSettings {
+    }
+    organizationSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on PersonalAccessTokenSearchResult {
-        personalAccessTokens {
+    }
+    personalAccessTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }
       }
-      ... on ProcedureSearchResult {
-        procedures {
+    }
+    procedures {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           details
           displayID
           id
@@ -166,8 +378,17 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on ProgramSearchResult {
-        programs {
+    }
+    programs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           description
           displayID
           id
@@ -175,16 +396,34 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on RiskSearchResult {
-        risks {
+    }
+    risks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           displayID
           id
           name
           tags
         }
       }
-      ... on StandardSearchResult {
-        standards {
+    }
+    standards {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           domains
           framework
           governingBody
@@ -194,8 +433,17 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on SubcontrolSearchResult {
-        subcontrols {
+    }
+    subcontrols {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           category
           description
           displayID
@@ -206,15 +454,33 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on SubscriberSearchResult {
-        subscribers {
+    }
+    subscribers {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           email
           id
           tags
         }
       }
-      ... on TaskSearchResult {
-        tasks {
+    }
+    tasks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           description
           displayID
           id
@@ -222,23 +488,50 @@ query GlobalSearch($query: String!) {
           title
         }
       }
-      ... on TemplateSearchResult {
-        templates {
+    }
+    templates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           jsonconfig
           name
           tags
         }
       }
-      ... on UserSearchResult {
-        users {
+    }
+    users {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           displayID
           id
           tags
         }
       }
-      ... on UserSettingSearchResult {
-        userSettings {
+    }
+    userSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
           id
           tags
         }

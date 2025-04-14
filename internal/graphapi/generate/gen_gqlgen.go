@@ -18,8 +18,6 @@ const (
 	graphapiGenDir = "internal/graphapi/generate/"
 	// csvDir is the directory where the CSV files will be stored for example bulk operations
 	csvDir = "internal/httpserve/handlers/csv"
-	// maxSearchResultsPerObject restricts the search queries to only return a maximum of 100 results per object
-	maxSearchResultsPerObject = 100
 )
 
 func main() {
@@ -50,7 +48,6 @@ func main() {
 			searchgen.WithEntGeneratedPackage(entPackage),
 			searchgen.WithModelPackage(modelImport),
 			searchgen.WithRulePackage(rulePackage),
-			searchgen.WithMaxResults(maxSearchResultsPerObject),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")

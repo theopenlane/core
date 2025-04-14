@@ -326,7 +326,7 @@ type OpenlaneGraphClient interface {
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
 	GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
 	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
-	UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error)
+	UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error)
 	GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error)
 	GetTaskHistories(ctx context.Context, where *TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTaskHistories, error)
 	CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTemplate, error)
@@ -1658,7 +1658,39 @@ func (t *GetActionPlanHistories_ActionPlanHistories) GetEdges() []*GetActionPlan
 	return t.Edges
 }
 
-type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
+type AdminSearch_AdminSearch_APITokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
 	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	Name          string   "json:\"name\" graphql:\"name\""
@@ -1669,67 +1701,124 @@ type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetID() string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetName() string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedBy() *string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetRevokedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.RevokedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetRevokedReason() *string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetRevokedReason() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.RevokedReason
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetScopes() []string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetScopes() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Scopes
 }
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetTags() []string {
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_APITokenSearchResult struct {
-	APITokens []*AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+type AdminSearch_AdminSearch_APITokens_Edges struct {
+	Node *AdminSearch_AdminSearch_APITokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult) GetAPITokens() []*AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens {
+func (t *AdminSearch_AdminSearch_APITokens_Edges) GetNode() *AdminSearch_AdminSearch_APITokens_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult{}
+		t = &AdminSearch_AdminSearch_APITokens_Edges{}
 	}
-	return t.APITokens
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
+type AdminSearch_AdminSearch_APITokens struct {
+	Edges      []*AdminSearch_AdminSearch_APITokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_APITokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_APITokens) GetEdges() []*AdminSearch_AdminSearch_APITokens_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_APITokens) GetPageInfo() *AdminSearch_AdminSearch_APITokens_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_APITokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_ActionPlans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_ActionPlans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_ActionPlans_Edges_Node struct {
 	ActionPlanType *string  "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
 	ApproverID     *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID     *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
@@ -1743,85 +1832,142 @@ type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
 	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetActionPlanType() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetActionPlanType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.ActionPlanType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetApproverID() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetApproverID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.ApproverID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetID() string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetName() string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetRevision() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetRevision() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Revision
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetSource() *string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetSource() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Source
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetTags() []string {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult struct {
-	ActionPlans []*AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+type AdminSearch_AdminSearch_ActionPlans_Edges struct {
+	Node *AdminSearch_AdminSearch_ActionPlans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult) GetActionPlans() []*AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans {
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges) GetNode() *AdminSearch_AdminSearch_ActionPlans_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult{}
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges{}
 	}
-	return t.ActionPlans
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts struct {
+type AdminSearch_AdminSearch_ActionPlans struct {
+	Edges      []*AdminSearch_AdminSearch_ActionPlans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_ActionPlans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_ActionPlans) GetEdges() []*AdminSearch_AdminSearch_ActionPlans_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_ActionPlans) GetPageInfo() *AdminSearch_AdminSearch_ActionPlans_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_ActionPlans) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Contacts_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Contacts_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Contacts_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Contacts_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Contacts_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Contacts_Edges_Node struct {
 	Address     *string  "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string  "json:\"company,omitempty\" graphql:\"company\""
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -1834,79 +1980,136 @@ type AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts struct {
 	Title       *string  "json:\"title,omitempty\" graphql:\"title\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetAddress() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetAddress() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Address
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetCompany() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetCompany() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Company
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetEmail() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Email
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetFullName() string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetFullName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.FullName
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetID() string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetPhoneNumber() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetPhoneNumber() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.PhoneNumber
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetTitle() *string {
+func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetTitle() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Title
 }
 
-type AdminSearch_AdminSearch_Nodes_ContactSearchResult struct {
-	Contacts []*AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+type AdminSearch_AdminSearch_Contacts_Edges struct {
+	Node *AdminSearch_AdminSearch_Contacts_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult) GetContacts() []*AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts {
+func (t *AdminSearch_AdminSearch_Contacts_Edges) GetNode() *AdminSearch_AdminSearch_Contacts_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult{}
+		t = &AdminSearch_AdminSearch_Contacts_Edges{}
 	}
-	return t.Contacts
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
+type AdminSearch_AdminSearch_Contacts struct {
+	Edges      []*AdminSearch_AdminSearch_Contacts_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Contacts_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Contacts) GetEdges() []*AdminSearch_AdminSearch_Contacts_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Contacts) GetPageInfo() *AdminSearch_AdminSearch_Contacts_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Contacts) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Contacts{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Controls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Controls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Controls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Controls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Controls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Controls_Edges_Node struct {
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -1931,151 +2134,208 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.AssessmentMethods
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetAssessmentObjectives() []*models.AssessmentObjective {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetAssessmentObjectives() []*models.AssessmentObjective {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.AssessmentObjectives
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetAuditorReferenceID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetAuditorReferenceID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.AuditorReferenceID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetCategoryID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetCategoryID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.CategoryID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetControlOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ControlOwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlQuestions() []string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetControlQuestions() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ControlQuestions
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetExampleEvidence() []*models.ExampleEvidence {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetExampleEvidence() []*models.ExampleEvidence {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ExampleEvidence
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetID() string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetImplementationGuidance() []*models.ImplementationGuidance {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetImplementationGuidance() []*models.ImplementationGuidance {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ImplementationGuidance
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetMappedCategories() []string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetMappedCategories() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.MappedCategories
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetRefCode() string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetRefCode() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.RefCode
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetReferenceID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetReferenceID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.ReferenceID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetReferences() []*models.Reference {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetReferences() []*models.Reference {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.References
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetStandardID() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetStandardID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.StandardID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetSubcategory() *string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlSearchResult struct {
-	Controls []*AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+type AdminSearch_AdminSearch_Controls_Edges struct {
+	Node *AdminSearch_AdminSearch_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult) GetControls() []*AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls {
+func (t *AdminSearch_AdminSearch_Controls_Edges) GetNode() *AdminSearch_AdminSearch_Controls_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult{}
+		t = &AdminSearch_AdminSearch_Controls_Edges{}
 	}
-	return t.Controls
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations struct {
+type AdminSearch_AdminSearch_Controls struct {
+	Edges      []*AdminSearch_AdminSearch_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Controls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Controls) GetEdges() []*AdminSearch_AdminSearch_Controls_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Controls) GetPageInfo() *AdminSearch_AdminSearch_Controls_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Controls{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_ControlImplementations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_ControlImplementations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_ControlImplementations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_ControlImplementations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_ControlImplementations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_ControlImplementations_Edges_Node struct {
 	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
 	ID        string   "json:\"id\" graphql:\"id\""
@@ -2083,49 +2343,106 @@ type AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImpl
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetID() string {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations) GetTags() []string {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult struct {
-	ControlImplementations []*AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+type AdminSearch_AdminSearch_ControlImplementations_Edges struct {
+	Node *AdminSearch_AdminSearch_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult) GetControlImplementations() []*AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult_ControlImplementations {
+func (t *AdminSearch_AdminSearch_ControlImplementations_Edges) GetNode() *AdminSearch_AdminSearch_ControlImplementations_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult{}
+		t = &AdminSearch_AdminSearch_ControlImplementations_Edges{}
 	}
-	return t.ControlImplementations
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives struct {
+type AdminSearch_AdminSearch_ControlImplementations struct {
+	Edges      []*AdminSearch_AdminSearch_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_ControlImplementations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_ControlImplementations) GetEdges() []*AdminSearch_AdminSearch_ControlImplementations_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_ControlImplementations) GetPageInfo() *AdminSearch_AdminSearch_ControlImplementations_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_ControlImplementations) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlImplementations{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_ControlObjectives_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_ControlObjectives_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_ControlObjectives_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_ControlObjectives_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_ControlObjectives_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_ControlObjectives_Edges_Node struct {
 	Category             *string  "json:\"category,omitempty\" graphql:\"category\""
 	ControlObjectiveType *string  "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	DeletedBy            *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -2140,91 +2457,148 @@ type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjective
 	Tags                 []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetControlObjectiveType() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetControlObjectiveType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.ControlObjectiveType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDesiredOutcome() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetDesiredOutcome() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.DesiredOutcome
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetID() string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetName() string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetRevision() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetRevision() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Revision
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetStatus() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetStatus() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Status
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetSubcategory() *string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetTags() []string {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult struct {
-	ControlObjectives []*AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+type AdminSearch_AdminSearch_ControlObjectives_Edges struct {
+	Node *AdminSearch_AdminSearch_ControlObjectives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult) GetControlObjectives() []*AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives {
+func (t *AdminSearch_AdminSearch_ControlObjectives_Edges) GetNode() *AdminSearch_AdminSearch_ControlObjectives_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult{}
+		t = &AdminSearch_AdminSearch_ControlObjectives_Edges{}
 	}
-	return t.ControlObjectives
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct {
+type AdminSearch_AdminSearch_ControlObjectives struct {
+	Edges      []*AdminSearch_AdminSearch_ControlObjectives_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_ControlObjectives_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_ControlObjectives) GetEdges() []*AdminSearch_AdminSearch_ControlObjectives_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_ControlObjectives) GetPageInfo() *AdminSearch_AdminSearch_ControlObjectives_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_ControlObjectives) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ControlObjectives{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_DocumentData_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_DocumentData_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_DocumentData_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_DocumentData_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_DocumentData_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_DocumentData_Edges_Node struct {
 	Data       map[string]any "json:\"data\" graphql:\"data\""
 	DeletedBy  *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID         string         "json:\"id\" graphql:\"id\""
@@ -2233,55 +2607,112 @@ type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct 
 	TemplateID string         "json:\"templateID\" graphql:\"templateID\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetData() map[string]any {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetData() map[string]any {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.Data
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetID() string {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetTags() []string {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetTemplateID() string {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetTemplateID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.TemplateID
 }
 
-type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult struct {
-	DocumentData []*AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData "json:\"documentData,omitempty\" graphql:\"documentData\""
+type AdminSearch_AdminSearch_DocumentData_Edges struct {
+	Node *AdminSearch_AdminSearch_DocumentData_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult) GetDocumentData() []*AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData {
+func (t *AdminSearch_AdminSearch_DocumentData_Edges) GetNode() *AdminSearch_AdminSearch_DocumentData_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult{}
+		t = &AdminSearch_AdminSearch_DocumentData_Edges{}
 	}
-	return t.DocumentData
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
+type AdminSearch_AdminSearch_DocumentData struct {
+	Edges      []*AdminSearch_AdminSearch_DocumentData_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_DocumentData_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_DocumentData) GetEdges() []*AdminSearch_AdminSearch_DocumentData_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_DocumentData) GetPageInfo() *AdminSearch_AdminSearch_DocumentData_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_DocumentData) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DocumentData{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Entities_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Entities_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Entities_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Entities_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Entities_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Entities_Edges_Node struct {
 	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description  *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName  *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
@@ -2294,79 +2725,136 @@ type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
 	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDisplayName() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDomains() []string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDomains() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.Domains
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetEntityTypeID() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetEntityTypeID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.EntityTypeID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetID() string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetName() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetName() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetStatus() *string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetStatus() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.Status
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_EntitySearchResult struct {
-	Entities []*AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
+type AdminSearch_AdminSearch_Entities_Edges struct {
+	Node *AdminSearch_AdminSearch_Entities_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult) GetEntities() []*AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities {
+func (t *AdminSearch_AdminSearch_Entities_Edges) GetNode() *AdminSearch_AdminSearch_Entities_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult{}
+		t = &AdminSearch_AdminSearch_Entities_Edges{}
 	}
-	return t.Entities
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes struct {
+type AdminSearch_AdminSearch_Entities struct {
+	Edges      []*AdminSearch_AdminSearch_Entities_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Entities_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Entities) GetEdges() []*AdminSearch_AdminSearch_Entities_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Entities) GetPageInfo() *AdminSearch_AdminSearch_Entities_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Entities) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Entities{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_EntityTypes_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_EntityTypes_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_EntityTypes_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_EntityTypes_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_EntityTypes_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_EntityTypes_Edges_Node struct {
 	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Name      string   "json:\"name\" graphql:\"name\""
@@ -2374,49 +2862,106 @@ type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes struct {
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetID() string {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetName() string {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetTags() []string {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult struct {
-	EntityTypes []*AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+type AdminSearch_AdminSearch_EntityTypes_Edges struct {
+	Node *AdminSearch_AdminSearch_EntityTypes_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult) GetEntityTypes() []*AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes {
+func (t *AdminSearch_AdminSearch_EntityTypes_Edges) GetNode() *AdminSearch_AdminSearch_EntityTypes_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult{}
+		t = &AdminSearch_AdminSearch_EntityTypes_Edges{}
 	}
-	return t.EntityTypes
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_EventSearchResult_Events struct {
+type AdminSearch_AdminSearch_EntityTypes struct {
+	Edges      []*AdminSearch_AdminSearch_EntityTypes_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_EntityTypes_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_EntityTypes) GetEdges() []*AdminSearch_AdminSearch_EntityTypes_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_EntityTypes) GetPageInfo() *AdminSearch_AdminSearch_EntityTypes_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_EntityTypes) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_EntityTypes{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Events_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Events_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Events_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Events_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Events_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Events_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
 	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
@@ -2425,55 +2970,112 @@ type AdminSearch_AdminSearch_Nodes_EventSearchResult_Events struct {
 	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetCorrelationID() *string {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetCorrelationID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.CorrelationID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventID() *string {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetEventID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventType() string {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetEventType() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.EventType
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetID() string {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetMetadata() map[string]any {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.Metadata
 }
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Events_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+		t = &AdminSearch_AdminSearch_Events_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_EventSearchResult struct {
-	Events []*AdminSearch_AdminSearch_Nodes_EventSearchResult_Events "json:\"events,omitempty\" graphql:\"events\""
+type AdminSearch_AdminSearch_Events_Edges struct {
+	Node *AdminSearch_AdminSearch_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult) GetEvents() []*AdminSearch_AdminSearch_Nodes_EventSearchResult_Events {
+func (t *AdminSearch_AdminSearch_Events_Edges) GetNode() *AdminSearch_AdminSearch_Events_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult{}
+		t = &AdminSearch_AdminSearch_Events_Edges{}
 	}
-	return t.Events
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences struct {
+type AdminSearch_AdminSearch_Events struct {
+	Edges      []*AdminSearch_AdminSearch_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Events_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Events) GetEdges() []*AdminSearch_AdminSearch_Events_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Events) GetPageInfo() *AdminSearch_AdminSearch_Events_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Events) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Events{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Evidences_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Evidences_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Evidences_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Evidences_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Evidences_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Evidences_Edges_Node struct {
 	CollectionProcedure *string  "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	DeletedBy           *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description         *string  "json:\"description,omitempty\" graphql:\"description\""
@@ -2486,79 +3088,136 @@ type AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences struct {
 	URL                 *string  "json:\"url,omitempty\" graphql:\"url\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetCollectionProcedure() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetCollectionProcedure() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.CollectionProcedure
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetID() string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetName() string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetSource() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetSource() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.Source
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences) GetURL() *string {
+func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetURL() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.URL
 }
 
-type AdminSearch_AdminSearch_Nodes_EvidenceSearchResult struct {
-	Evidences []*AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences "json:\"evidences,omitempty\" graphql:\"evidences\""
+type AdminSearch_AdminSearch_Evidences_Edges struct {
+	Node *AdminSearch_AdminSearch_Evidences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult) GetEvidences() []*AdminSearch_AdminSearch_Nodes_EvidenceSearchResult_Evidences {
+func (t *AdminSearch_AdminSearch_Evidences_Edges) GetNode() *AdminSearch_AdminSearch_Evidences_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_EvidenceSearchResult{}
+		t = &AdminSearch_AdminSearch_Evidences_Edges{}
 	}
-	return t.Evidences
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_FileSearchResult_Files struct {
+type AdminSearch_AdminSearch_Evidences struct {
+	Edges      []*AdminSearch_AdminSearch_Evidences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Evidences_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Evidences) GetEdges() []*AdminSearch_AdminSearch_Evidences_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Evidences) GetPageInfo() *AdminSearch_AdminSearch_Evidences_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Evidences) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Evidences{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Files_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Files_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Files_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Files_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Files_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Files_Edges_Node struct {
 	CategoryType          *string  "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	DeletedBy             *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DetectedContentType   string   "json:\"detectedContentType\" graphql:\"detectedContentType\""
@@ -2575,103 +3234,160 @@ type AdminSearch_AdminSearch_Nodes_FileSearchResult_Files struct {
 	URI                   *string  "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCategoryType() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetCategoryType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.CategoryType
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDetectedContentType() string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.DetectedContentType
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDetectedMimeType() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetDetectedMimeType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.DetectedMimeType
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetID() string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetMd5Hash() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetMd5Hash() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.Md5Hash
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetProvidedFileExtension() string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetProvidedFileExtension() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.ProvidedFileExtension
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetProvidedFileName() string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetProvidedFileName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.ProvidedFileName
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoragePath() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStoragePath() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.StoragePath
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStorageScheme() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStorageScheme() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.StorageScheme
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStorageVolume() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStorageVolume() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.StorageVolume
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoreKey() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStoreKey() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.StoreKey
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetURI() *string {
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetURI() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.URI
 }
 
-type AdminSearch_AdminSearch_Nodes_FileSearchResult struct {
-	Files []*AdminSearch_AdminSearch_Nodes_FileSearchResult_Files "json:\"files,omitempty\" graphql:\"files\""
+type AdminSearch_AdminSearch_Files_Edges struct {
+	Node *AdminSearch_AdminSearch_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult) GetFiles() []*AdminSearch_AdminSearch_Nodes_FileSearchResult_Files {
+func (t *AdminSearch_AdminSearch_Files_Edges) GetNode() *AdminSearch_AdminSearch_Files_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult{}
+		t = &AdminSearch_AdminSearch_Files_Edges{}
 	}
-	return t.Files
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
+type AdminSearch_AdminSearch_Files struct {
+	Edges      []*AdminSearch_AdminSearch_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Files_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Files) GetEdges() []*AdminSearch_AdminSearch_Files_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Files) GetPageInfo() *AdminSearch_AdminSearch_Files_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Files) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Groups_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Groups_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Groups_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Groups_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Groups_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Groups_Edges_Node struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
@@ -2681,61 +3397,118 @@ type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetDisplayName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetID() string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetName() string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_GroupSearchResult struct {
-	Groups []*AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
+type AdminSearch_AdminSearch_Groups_Edges struct {
+	Node *AdminSearch_AdminSearch_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult) GetGroups() []*AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups {
+func (t *AdminSearch_AdminSearch_Groups_Edges) GetNode() *AdminSearch_AdminSearch_Groups_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult{}
+		t = &AdminSearch_AdminSearch_Groups_Edges{}
 	}
-	return t.Groups
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations struct {
+type AdminSearch_AdminSearch_Groups struct {
+	Edges      []*AdminSearch_AdminSearch_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Groups_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Groups) GetEdges() []*AdminSearch_AdminSearch_Groups_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Groups) GetPageInfo() *AdminSearch_AdminSearch_Groups_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Groups) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Groups{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Integrations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Integrations_Edges_Node struct {
 	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Kind      *string  "json:\"kind,omitempty\" graphql:\"kind\""
@@ -2744,55 +3517,112 @@ type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations struct {
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetID() string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetKind() *string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetKind() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.Kind
 }
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetName() string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult struct {
-	Integrations []*AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
+type AdminSearch_AdminSearch_Integrations_Edges struct {
+	Node *AdminSearch_AdminSearch_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult) GetIntegrations() []*AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations {
+func (t *AdminSearch_AdminSearch_Integrations_Edges) GetNode() *AdminSearch_AdminSearch_Integrations_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult{}
+		t = &AdminSearch_AdminSearch_Integrations_Edges{}
 	}
-	return t.Integrations
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies struct {
+type AdminSearch_AdminSearch_Integrations struct {
+	Edges      []*AdminSearch_AdminSearch_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Integrations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Integrations) GetEdges() []*AdminSearch_AdminSearch_Integrations_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Integrations) GetPageInfo() *AdminSearch_AdminSearch_Integrations_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Integrations) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	ApproverID *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
 	DeletedBy  *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -2806,85 +3636,249 @@ type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies s
 	Tags       []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetApproverID() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetApproverID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.ApproverID
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetID() string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetName() string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetPolicyType() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetPolicyType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.PolicyType
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetRevision() *string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetRevision() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Revision
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetTags() []string {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult struct {
-	InternalPolicies []*AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+type AdminSearch_AdminSearch_InternalPolicies_Edges struct {
+	Node *AdminSearch_AdminSearch_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult) GetInternalPolicies() []*AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies {
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges) GetNode() *AdminSearch_AdminSearch_InternalPolicies_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult{}
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges{}
 	}
-	return t.InternalPolicies
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls struct {
+type AdminSearch_AdminSearch_InternalPolicies struct {
+	Edges      []*AdminSearch_AdminSearch_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_InternalPolicies) GetEdges() []*AdminSearch_AdminSearch_InternalPolicies_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies) GetPageInfo() *AdminSearch_AdminSearch_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Invites_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Invites_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Invites_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Invites_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Invites_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Invites_Edges_Node struct {
+	DeletedBy   *string "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	OwnerID     *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Recipient   string  "json:\"recipient\" graphql:\"recipient\""
+	RequestorID *string "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+}
+
+func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetRecipient() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
+	}
+	return t.Recipient
+}
+func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
+	}
+	return t.RequestorID
+}
+
+type AdminSearch_AdminSearch_Invites_Edges struct {
+	Node *AdminSearch_AdminSearch_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Invites_Edges) GetNode() *AdminSearch_AdminSearch_Invites_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Invites struct {
+	Edges      []*AdminSearch_AdminSearch_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Invites_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Invites) GetEdges() []*AdminSearch_AdminSearch_Invites_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Invites) GetPageInfo() *AdminSearch_AdminSearch_Invites_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Invites) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Invites{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_MappedControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_MappedControls_Edges_Node struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	MappingType *string  "json:\"mappingType,omitempty\" graphql:\"mappingType\""
@@ -2892,49 +3886,106 @@ type AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls stru
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls) GetID() string {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls) GetMappingType() *string {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetMappingType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.MappingType
 }
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls) GetRelation() *string {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.Relation
 }
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls) GetTags() []string {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_MappedControlSearchResult struct {
-	MappedControls []*AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+type AdminSearch_AdminSearch_MappedControls_Edges struct {
+	Node *AdminSearch_AdminSearch_MappedControls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult) GetMappedControls() []*AdminSearch_AdminSearch_Nodes_MappedControlSearchResult_MappedControls {
+func (t *AdminSearch_AdminSearch_MappedControls_Edges) GetNode() *AdminSearch_AdminSearch_MappedControls_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_MappedControlSearchResult{}
+		t = &AdminSearch_AdminSearch_MappedControls_Edges{}
 	}
-	return t.MappedControls
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
+type AdminSearch_AdminSearch_MappedControls struct {
+	Edges      []*AdminSearch_AdminSearch_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_MappedControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_MappedControls) GetEdges() []*AdminSearch_AdminSearch_MappedControls_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_MappedControls) GetPageInfo() *AdminSearch_AdminSearch_MappedControls_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_MappedControls) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Narratives_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Narratives_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Narratives_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Narratives_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Narratives_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Narratives_Edges_Node struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string  "json:\"details,omitempty\" graphql:\"details\""
@@ -2945,67 +3996,124 @@ type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetID() string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetName() string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult struct {
-	Narratives []*AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives "json:\"narratives,omitempty\" graphql:\"narratives\""
+type AdminSearch_AdminSearch_Narratives_Edges struct {
+	Node *AdminSearch_AdminSearch_Narratives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult) GetNarratives() []*AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives {
+func (t *AdminSearch_AdminSearch_Narratives_Edges) GetNode() *AdminSearch_AdminSearch_Narratives_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult{}
+		t = &AdminSearch_AdminSearch_Narratives_Edges{}
 	}
-	return t.Narratives
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
+type AdminSearch_AdminSearch_Narratives struct {
+	Edges      []*AdminSearch_AdminSearch_Narratives_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Narratives_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Narratives) GetEdges() []*AdminSearch_AdminSearch_Narratives_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Narratives) GetPageInfo() *AdminSearch_AdminSearch_Narratives_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Narratives) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Narratives{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_OrgSubscriptions_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node struct {
 	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
 	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
@@ -3021,97 +4129,154 @@ type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions 
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDaysUntilDue() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetDaysUntilDue() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.DaysUntilDue
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetFeatureLookupKeys() []string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetFeatureLookupKeys() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.FeatureLookupKeys
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetFeatures() []string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetFeatures() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.Features
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetID() string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetProductPrice() *models.Price {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetProductPrice() *models.Price {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ProductPrice
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetProductTier() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetProductTier() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ProductTier
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetStripeCustomerID() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeCustomerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.StripeCustomerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetStripeProductTierID() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeProductTierID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.StripeProductTierID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetStripeSubscriptionID() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeSubscriptionID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.StripeSubscriptionID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeSubscriptionStatus() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.StripeSubscriptionStatus
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetTags() []string {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult struct {
-	OrgSubscriptions []*AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+type AdminSearch_AdminSearch_OrgSubscriptions_Edges struct {
+	Node *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult) GetOrgSubscriptions() []*AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions {
+func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges) GetNode() *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult{}
+		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges{}
 	}
-	return t.OrgSubscriptions
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations struct {
+type AdminSearch_AdminSearch_OrgSubscriptions struct {
+	Edges      []*AdminSearch_AdminSearch_OrgSubscriptions_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_OrgSubscriptions_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_OrgSubscriptions) GetEdges() []*AdminSearch_AdminSearch_OrgSubscriptions_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_OrgSubscriptions) GetPageInfo() *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_OrgSubscriptions) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrgSubscriptions{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Organizations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Organizations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Organizations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Organizations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Organizations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Organizations_Edges_Node struct {
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -3121,61 +4286,118 @@ type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations struct
 	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetAvatarLocalFileID() *string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetAvatarLocalFileID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.AvatarLocalFileID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetAvatarRemoteURL() *string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetAvatarRemoteURL() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.AvatarRemoteURL
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetDisplayName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetID() string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetName() string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult struct {
-	Organizations []*AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+type AdminSearch_AdminSearch_Organizations_Edges struct {
+	Node *AdminSearch_AdminSearch_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult) GetOrganizations() []*AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations {
+func (t *AdminSearch_AdminSearch_Organizations_Edges) GetNode() *AdminSearch_AdminSearch_Organizations_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult{}
+		t = &AdminSearch_AdminSearch_Organizations_Edges{}
 	}
-	return t.Organizations
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
+type AdminSearch_AdminSearch_Organizations struct {
+	Edges      []*AdminSearch_AdminSearch_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Organizations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Organizations) GetEdges() []*AdminSearch_AdminSearch_Organizations_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Organizations) GetPageInfo() *AdminSearch_AdminSearch_Organizations_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Organizations) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Organizations{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_OrganizationSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_OrganizationSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
 	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
 	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
 	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
@@ -3189,85 +4411,142 @@ type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationS
 	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetAllowedEmailDomains() []string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.AllowedEmailDomains
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingAddress() *models.Address {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingAddress() *models.Address {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.BillingAddress
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingContact() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingContact() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.BillingContact
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingEmail() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingEmail() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.BillingEmail
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingPhone() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingPhone() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.BillingPhone
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDomains() []string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetDomains() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.Domains
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetID() string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetOrganizationID() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetOrganizationID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.OrganizationID
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTags() []string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTaxIdentifier() *string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetTaxIdentifier() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.TaxIdentifier
 }
 
-type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult struct {
-	OrganizationSettings []*AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+type AdminSearch_AdminSearch_OrganizationSettings_Edges struct {
+	Node *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult) GetOrganizationSettings() []*AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges) GetNode() *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult{}
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges{}
 	}
-	return t.OrganizationSettings
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
+type AdminSearch_AdminSearch_OrganizationSettings struct {
+	Edges      []*AdminSearch_AdminSearch_OrganizationSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_OrganizationSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_OrganizationSettings) GetEdges() []*AdminSearch_AdminSearch_OrganizationSettings_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings) GetPageInfo() *AdminSearch_AdminSearch_OrganizationSettings_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
 	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	Name          string   "json:\"name\" graphql:\"name\""
@@ -3277,61 +4556,118 @@ type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAcces
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetID() string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetName() string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedBy() *string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetRevokedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.RevokedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetRevokedReason() *string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetRevokedReason() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.RevokedReason
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetScopes() []string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetScopes() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Scopes
 }
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetTags() []string {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult struct {
-	PersonalAccessTokens []*AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+type AdminSearch_AdminSearch_PersonalAccessTokens_Edges struct {
+	Node *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult) GetPersonalAccessTokens() []*AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens {
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges) GetNode() *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult{}
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges{}
 	}
-	return t.PersonalAccessTokens
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
+type AdminSearch_AdminSearch_PersonalAccessTokens struct {
+	Edges      []*AdminSearch_AdminSearch_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens) GetEdges() []*AdminSearch_AdminSearch_PersonalAccessTokens_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens) GetPageInfo() *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Procedures_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	ApproverID    *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID    *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
 	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -3345,85 +4681,142 @@ type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetApproverID() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetApproverID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.ApproverID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetID() string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetName() string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetProcedureType() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetProcedureType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.ProcedureType
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetRevision() *string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetRevision() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Revision
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult struct {
-	Procedures []*AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+type AdminSearch_AdminSearch_Procedures_Edges struct {
+	Node *AdminSearch_AdminSearch_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult) GetProcedures() []*AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures {
+func (t *AdminSearch_AdminSearch_Procedures_Edges) GetNode() *AdminSearch_AdminSearch_Procedures_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult{}
+		t = &AdminSearch_AdminSearch_Procedures_Edges{}
 	}
-	return t.Procedures
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
+type AdminSearch_AdminSearch_Procedures struct {
+	Edges      []*AdminSearch_AdminSearch_Procedures_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Procedures_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Procedures) GetEdges() []*AdminSearch_AdminSearch_Procedures_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Procedures) GetPageInfo() *AdminSearch_AdminSearch_Procedures_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Procedures) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Programs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Programs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Programs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Programs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Programs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Programs_Edges_Node struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
@@ -3433,61 +4826,118 @@ type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetID() string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetName() string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_ProgramSearchResult struct {
-	Programs []*AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+type AdminSearch_AdminSearch_Programs_Edges struct {
+	Node *AdminSearch_AdminSearch_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult) GetPrograms() []*AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs {
+func (t *AdminSearch_AdminSearch_Programs_Edges) GetNode() *AdminSearch_AdminSearch_Programs_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult{}
+		t = &AdminSearch_AdminSearch_Programs_Edges{}
 	}
-	return t.Programs
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
+type AdminSearch_AdminSearch_Programs struct {
+	Edges      []*AdminSearch_AdminSearch_Programs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Programs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Programs) GetEdges() []*AdminSearch_AdminSearch_Programs_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Programs) GetPageInfo() *AdminSearch_AdminSearch_Programs_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Programs) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Risks_Edges_Node struct {
 	BusinessCosts *string  "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	Category      *string  "json:\"category,omitempty\" graphql:\"category\""
 	DelegateID    *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
@@ -3503,97 +4953,154 @@ type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetBusinessCosts() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetBusinessCosts() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.BusinessCosts
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetID() string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetMitigation() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetMitigation() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.Mitigation
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetName() string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetRiskType() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetRiskType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.RiskType
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetStakeholderID() *string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetStakeholderID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.StakeholderID
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_RiskSearchResult struct {
-	Risks []*AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks "json:\"risks,omitempty\" graphql:\"risks\""
+type AdminSearch_AdminSearch_Risks_Edges struct {
+	Node *AdminSearch_AdminSearch_Risks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult) GetRisks() []*AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks {
+func (t *AdminSearch_AdminSearch_Risks_Edges) GetNode() *AdminSearch_AdminSearch_Risks_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult{}
+		t = &AdminSearch_AdminSearch_Risks_Edges{}
 	}
-	return t.Risks
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards struct {
+type AdminSearch_AdminSearch_Risks struct {
+	Edges      []*AdminSearch_AdminSearch_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Risks) GetEdges() []*AdminSearch_AdminSearch_Risks_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Risks) GetPageInfo() *AdminSearch_AdminSearch_Risks_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Risks{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Standards_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Standards_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Standards_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Standards_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Standards_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Standards_Edges_Node struct {
 	DeletedBy            *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
 	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
@@ -3611,109 +5118,166 @@ type AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards struct {
 	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDomains() []string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetDomains() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Domains
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetFramework() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetFramework() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Framework
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetGoverningBody() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetGoverningBody() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.GoverningBody
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetGoverningBodyLogoURL() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetGoverningBodyLogoURL() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.GoverningBodyLogoURL
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetID() string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetLink() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetLink() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Link
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetName() string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetRevision() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetRevision() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Revision
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetShortName() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetShortName() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.ShortName
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetStandardType() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetStandardType() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.StandardType
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetVersion() *string {
+func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetVersion() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
+		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
 	}
 	return t.Version
 }
 
-type AdminSearch_AdminSearch_Nodes_StandardSearchResult struct {
-	Standards []*AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards "json:\"standards,omitempty\" graphql:\"standards\""
+type AdminSearch_AdminSearch_Standards_Edges struct {
+	Node *AdminSearch_AdminSearch_Standards_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult) GetStandards() []*AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards {
+func (t *AdminSearch_AdminSearch_Standards_Edges) GetNode() *AdminSearch_AdminSearch_Standards_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult{}
+		t = &AdminSearch_AdminSearch_Standards_Edges{}
 	}
-	return t.Standards
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
+type AdminSearch_AdminSearch_Standards struct {
+	Edges      []*AdminSearch_AdminSearch_Standards_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Standards_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Standards) GetEdges() []*AdminSearch_AdminSearch_Standards_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Standards) GetPageInfo() *AdminSearch_AdminSearch_Standards_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Standards) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Standards{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Subcontrols_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Subcontrols_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Subcontrols_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Subcontrols_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Subcontrols_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Subcontrols_Edges_Node struct {
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
 	AuditorReferenceID     *string                          "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
@@ -3738,151 +5302,208 @@ type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	Tags                   []string                         "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetAssessmentMethods() []*models.AssessmentMethod {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.AssessmentMethods
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetAssessmentObjectives() []*models.AssessmentObjective {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetAssessmentObjectives() []*models.AssessmentObjective {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.AssessmentObjectives
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetAuditorReferenceID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetAuditorReferenceID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.AuditorReferenceID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetCategoryID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetCategoryID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.CategoryID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetControlID() string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetControlID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ControlID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetControlOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetControlOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ControlOwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetControlQuestions() []string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetControlQuestions() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ControlQuestions
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDelegateID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDelegateID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.DelegateID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetExampleEvidence() []*models.ExampleEvidence {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetExampleEvidence() []*models.ExampleEvidence {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ExampleEvidence
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetID() string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationGuidance() []*models.ImplementationGuidance {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetImplementationGuidance() []*models.ImplementationGuidance {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ImplementationGuidance
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetMappedCategories() []string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetMappedCategories() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.MappedCategories
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetRefCode() string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetRefCode() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.RefCode
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetReferenceID() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetReferenceID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.ReferenceID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetReferences() []*models.Reference {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetReferences() []*models.Reference {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.References
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcategory() *string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult struct {
-	Subcontrols []*AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+type AdminSearch_AdminSearch_Subcontrols_Edges struct {
+	Node *AdminSearch_AdminSearch_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult) GetSubcontrols() []*AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols {
+func (t *AdminSearch_AdminSearch_Subcontrols_Edges) GetNode() *AdminSearch_AdminSearch_Subcontrols_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult{}
+		t = &AdminSearch_AdminSearch_Subcontrols_Edges{}
 	}
-	return t.Subcontrols
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
+type AdminSearch_AdminSearch_Subcontrols struct {
+	Edges      []*AdminSearch_AdminSearch_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Subcontrols_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Subcontrols) GetEdges() []*AdminSearch_AdminSearch_Subcontrols_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Subcontrols) GetPageInfo() *AdminSearch_AdminSearch_Subcontrols_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Subscribers_Edges_Node struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Email       string   "json:\"email\" graphql:\"email\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -3891,55 +5512,112 @@ type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetEmail() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.Email
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetPhoneNumber() *string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetPhoneNumber() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.PhoneNumber
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult struct {
-	Subscribers []*AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+type AdminSearch_AdminSearch_Subscribers_Edges struct {
+	Node *AdminSearch_AdminSearch_Subscribers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() []*AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers {
+func (t *AdminSearch_AdminSearch_Subscribers_Edges) GetNode() *AdminSearch_AdminSearch_Subscribers_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult{}
+		t = &AdminSearch_AdminSearch_Subscribers_Edges{}
 	}
-	return t.Subscribers
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
+type AdminSearch_AdminSearch_Subscribers struct {
+	Edges      []*AdminSearch_AdminSearch_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Subscribers) GetEdges() []*AdminSearch_AdminSearch_Subscribers_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Subscribers) GetPageInfo() *AdminSearch_AdminSearch_Subscribers_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subscribers{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Tasks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Tasks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Tasks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Tasks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Tasks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Tasks_Edges_Node struct {
 	AssigneeID  *string  "json:\"assigneeID,omitempty\" graphql:\"assigneeID\""
 	AssignerID  *string  "json:\"assignerID,omitempty\" graphql:\"assignerID\""
 	Category    *string  "json:\"category,omitempty\" graphql:\"category\""
@@ -3953,85 +5631,142 @@ type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
 	Title       string   "json:\"title\" graphql:\"title\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssigneeID() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetAssigneeID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.AssigneeID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetAssignerID() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetAssignerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.AssignerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDetails() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetID() string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetTitle() string {
+func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetTitle() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Title
 }
 
-type AdminSearch_AdminSearch_Nodes_TaskSearchResult struct {
-	Tasks []*AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+type AdminSearch_AdminSearch_Tasks_Edges struct {
+	Node *AdminSearch_AdminSearch_Tasks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult) GetTasks() []*AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks {
+func (t *AdminSearch_AdminSearch_Tasks_Edges) GetNode() *AdminSearch_AdminSearch_Tasks_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult{}
+		t = &AdminSearch_AdminSearch_Tasks_Edges{}
 	}
-	return t.Tasks
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
+type AdminSearch_AdminSearch_Tasks struct {
+	Edges      []*AdminSearch_AdminSearch_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Tasks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Tasks) GetEdges() []*AdminSearch_AdminSearch_Tasks_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Tasks) GetPageInfo() *AdminSearch_AdminSearch_Tasks_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Tasks) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Tasks{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Templates_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Templates_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Templates_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Templates_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Templates_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Templates_Edges_Node struct {
 	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	ID          string         "json:\"id\" graphql:\"id\""
@@ -4042,67 +5777,124 @@ type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
 	Uischema    map[string]any "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetID() string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetJsonconfig() map[string]any {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetJsonconfig() map[string]any {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.Jsonconfig
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetName() string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetUischema() map[string]any {
+func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetUischema() map[string]any {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
 	}
 	return t.Uischema
 }
 
-type AdminSearch_AdminSearch_Nodes_TemplateSearchResult struct {
-	Templates []*AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates "json:\"templates,omitempty\" graphql:\"templates\""
+type AdminSearch_AdminSearch_Templates_Edges struct {
+	Node *AdminSearch_AdminSearch_Templates_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult) GetTemplates() []*AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates {
+func (t *AdminSearch_AdminSearch_Templates_Edges) GetNode() *AdminSearch_AdminSearch_Templates_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult{}
+		t = &AdminSearch_AdminSearch_Templates_Edges{}
 	}
-	return t.Templates
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
+type AdminSearch_AdminSearch_Templates struct {
+	Edges      []*AdminSearch_AdminSearch_Templates_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Templates_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Templates) GetEdges() []*AdminSearch_AdminSearch_Templates_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Templates) GetPageInfo() *AdminSearch_AdminSearch_Templates_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Templates) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Templates{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Users_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Users_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Users_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Users_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Users_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Users_Edges_Node struct {
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -4116,357 +5908,442 @@ type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
 	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarLocalFileID() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetAvatarLocalFileID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.AvatarLocalFileID
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarRemoteURL() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetAvatarRemoteURL() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.AvatarRemoteURL
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayID() string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayName() string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetDisplayName() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetEmail() string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetEmail() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.Email
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetFirstName() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetFirstName() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.FirstName
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetID() string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetLastName() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetLastName() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.LastName
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetSub() *string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetSub() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.Sub
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type AdminSearch_AdminSearch_Nodes_UserSearchResult struct {
-	Users []*AdminSearch_AdminSearch_Nodes_UserSearchResult_Users "json:\"users,omitempty\" graphql:\"users\""
+type AdminSearch_AdminSearch_Users_Edges struct {
+	Node *AdminSearch_AdminSearch_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult) GetUsers() []*AdminSearch_AdminSearch_Nodes_UserSearchResult_Users {
+func (t *AdminSearch_AdminSearch_Users_Edges) GetNode() *AdminSearch_AdminSearch_Users_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult{}
+		t = &AdminSearch_AdminSearch_Users_Edges{}
 	}
-	return t.Users
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings struct {
+type AdminSearch_AdminSearch_Users struct {
+	Edges      []*AdminSearch_AdminSearch_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Users_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Users) GetEdges() []*AdminSearch_AdminSearch_Users_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Users) GetPageInfo() *AdminSearch_AdminSearch_Users_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Users) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Users{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_UserSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_UserSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_UserSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_UserSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_UserSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_UserSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_UserSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_UserSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_UserSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_UserSettings_Edges_Node struct {
 	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 	UserID    *string  "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetID() string {
+func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetID() string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetTags() []string {
+func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetUserID() *string {
+func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetUserID() *string {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
 	}
 	return t.UserID
 }
 
-type AdminSearch_AdminSearch_Nodes_UserSettingSearchResult struct {
-	UserSettings []*AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+type AdminSearch_AdminSearch_UserSettings_Edges struct {
+	Node *AdminSearch_AdminSearch_UserSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult) GetUserSettings() []*AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings {
+func (t *AdminSearch_AdminSearch_UserSettings_Edges) GetNode() *AdminSearch_AdminSearch_UserSettings_Edges_Node {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult{}
+		t = &AdminSearch_AdminSearch_UserSettings_Edges{}
 	}
-	return t.UserSettings
+	return t.Node
 }
 
-type AdminSearch_AdminSearch_Nodes struct {
-	APITokenSearchResult              AdminSearch_AdminSearch_Nodes_APITokenSearchResult              "graphql:\"... on APITokenSearchResult\""
-	ActionPlanSearchResult            AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult            "graphql:\"... on ActionPlanSearchResult\""
-	ContactSearchResult               AdminSearch_AdminSearch_Nodes_ContactSearchResult               "graphql:\"... on ContactSearchResult\""
-	ControlImplementationSearchResult AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult "graphql:\"... on ControlImplementationSearchResult\""
-	ControlObjectiveSearchResult      AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult      "graphql:\"... on ControlObjectiveSearchResult\""
-	ControlSearchResult               AdminSearch_AdminSearch_Nodes_ControlSearchResult               "graphql:\"... on ControlSearchResult\""
-	DocumentDataSearchResult          AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult          "graphql:\"... on DocumentDataSearchResult\""
-	EntitySearchResult                AdminSearch_AdminSearch_Nodes_EntitySearchResult                "graphql:\"... on EntitySearchResult\""
-	EntityTypeSearchResult            AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult            "graphql:\"... on EntityTypeSearchResult\""
-	EventSearchResult                 AdminSearch_AdminSearch_Nodes_EventSearchResult                 "graphql:\"... on EventSearchResult\""
-	EvidenceSearchResult              AdminSearch_AdminSearch_Nodes_EvidenceSearchResult              "graphql:\"... on EvidenceSearchResult\""
-	FileSearchResult                  AdminSearch_AdminSearch_Nodes_FileSearchResult                  "graphql:\"... on FileSearchResult\""
-	GroupSearchResult                 AdminSearch_AdminSearch_Nodes_GroupSearchResult                 "graphql:\"... on GroupSearchResult\""
-	IntegrationSearchResult           AdminSearch_AdminSearch_Nodes_IntegrationSearchResult           "graphql:\"... on IntegrationSearchResult\""
-	InternalPolicySearchResult        AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult        "graphql:\"... on InternalPolicySearchResult\""
-	MappedControlSearchResult         AdminSearch_AdminSearch_Nodes_MappedControlSearchResult         "graphql:\"... on MappedControlSearchResult\""
-	NarrativeSearchResult             AdminSearch_AdminSearch_Nodes_NarrativeSearchResult             "graphql:\"... on NarrativeSearchResult\""
-	OrgSubscriptionSearchResult       AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult       "graphql:\"... on OrgSubscriptionSearchResult\""
-	OrganizationSearchResult          AdminSearch_AdminSearch_Nodes_OrganizationSearchResult          "graphql:\"... on OrganizationSearchResult\""
-	OrganizationSettingSearchResult   AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult   "graphql:\"... on OrganizationSettingSearchResult\""
-	PersonalAccessTokenSearchResult   AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult   "graphql:\"... on PersonalAccessTokenSearchResult\""
-	ProcedureSearchResult             AdminSearch_AdminSearch_Nodes_ProcedureSearchResult             "graphql:\"... on ProcedureSearchResult\""
-	ProgramSearchResult               AdminSearch_AdminSearch_Nodes_ProgramSearchResult               "graphql:\"... on ProgramSearchResult\""
-	RiskSearchResult                  AdminSearch_AdminSearch_Nodes_RiskSearchResult                  "graphql:\"... on RiskSearchResult\""
-	StandardSearchResult              AdminSearch_AdminSearch_Nodes_StandardSearchResult              "graphql:\"... on StandardSearchResult\""
-	SubcontrolSearchResult            AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult            "graphql:\"... on SubcontrolSearchResult\""
-	SubscriberSearchResult            AdminSearch_AdminSearch_Nodes_SubscriberSearchResult            "graphql:\"... on SubscriberSearchResult\""
-	TaskSearchResult                  AdminSearch_AdminSearch_Nodes_TaskSearchResult                  "graphql:\"... on TaskSearchResult\""
-	TemplateSearchResult              AdminSearch_AdminSearch_Nodes_TemplateSearchResult              "graphql:\"... on TemplateSearchResult\""
-	UserSearchResult                  AdminSearch_AdminSearch_Nodes_UserSearchResult                  "graphql:\"... on UserSearchResult\""
-	UserSettingSearchResult           AdminSearch_AdminSearch_Nodes_UserSettingSearchResult           "graphql:\"... on UserSettingSearchResult\""
+type AdminSearch_AdminSearch_UserSettings struct {
+	Edges      []*AdminSearch_AdminSearch_UserSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_UserSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
-func (t *AdminSearch_AdminSearch_Nodes) GetAPITokenSearchResult() *AdminSearch_AdminSearch_Nodes_APITokenSearchResult {
+func (t *AdminSearch_AdminSearch_UserSettings) GetEdges() []*AdminSearch_AdminSearch_UserSettings_Edges {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
+		t = &AdminSearch_AdminSearch_UserSettings{}
 	}
-	return &t.APITokenSearchResult
+	return t.Edges
 }
-func (t *AdminSearch_AdminSearch_Nodes) GetActionPlanSearchResult() *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult {
+func (t *AdminSearch_AdminSearch_UserSettings) GetPageInfo() *AdminSearch_AdminSearch_UserSettings_PageInfo {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
+		t = &AdminSearch_AdminSearch_UserSettings{}
 	}
-	return &t.ActionPlanSearchResult
+	return &t.PageInfo
 }
-func (t *AdminSearch_AdminSearch_Nodes) GetContactSearchResult() *AdminSearch_AdminSearch_Nodes_ContactSearchResult {
+func (t *AdminSearch_AdminSearch_UserSettings) GetTotalCount() int64 {
 	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
+		t = &AdminSearch_AdminSearch_UserSettings{}
 	}
-	return &t.ContactSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetControlImplementationSearchResult() *AdminSearch_AdminSearch_Nodes_ControlImplementationSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.ControlImplementationSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetControlObjectiveSearchResult() *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.ControlObjectiveSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetControlSearchResult() *AdminSearch_AdminSearch_Nodes_ControlSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.ControlSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetDocumentDataSearchResult() *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.DocumentDataSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetEntitySearchResult() *AdminSearch_AdminSearch_Nodes_EntitySearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.EntitySearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetEntityTypeSearchResult() *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.EntityTypeSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetEventSearchResult() *AdminSearch_AdminSearch_Nodes_EventSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.EventSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetEvidenceSearchResult() *AdminSearch_AdminSearch_Nodes_EvidenceSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.EvidenceSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetFileSearchResult() *AdminSearch_AdminSearch_Nodes_FileSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.FileSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetGroupSearchResult() *AdminSearch_AdminSearch_Nodes_GroupSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.GroupSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetIntegrationSearchResult() *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.IntegrationSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetInternalPolicySearchResult() *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.InternalPolicySearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetMappedControlSearchResult() *AdminSearch_AdminSearch_Nodes_MappedControlSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.MappedControlSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetNarrativeSearchResult() *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.NarrativeSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetOrgSubscriptionSearchResult() *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.OrgSubscriptionSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSearchResult() *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.OrganizationSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSettingSearchResult() *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.OrganizationSettingSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetPersonalAccessTokenSearchResult() *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.PersonalAccessTokenSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetProcedureSearchResult() *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.ProcedureSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetProgramSearchResult() *AdminSearch_AdminSearch_Nodes_ProgramSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.ProgramSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetRiskSearchResult() *AdminSearch_AdminSearch_Nodes_RiskSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.RiskSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetStandardSearchResult() *AdminSearch_AdminSearch_Nodes_StandardSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.StandardSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetSubcontrolSearchResult() *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.SubcontrolSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetSubscriberSearchResult() *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.SubscriberSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetTaskSearchResult() *AdminSearch_AdminSearch_Nodes_TaskSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.TaskSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetTemplateSearchResult() *AdminSearch_AdminSearch_Nodes_TemplateSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.TemplateSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetUserSearchResult() *AdminSearch_AdminSearch_Nodes_UserSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.UserSearchResult
-}
-func (t *AdminSearch_AdminSearch_Nodes) GetUserSettingSearchResult() *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes{}
-	}
-	return &t.UserSettingSearchResult
+	return t.TotalCount
 }
 
 type AdminSearch_AdminSearch struct {
-	Nodes []*AdminSearch_AdminSearch_Nodes "json:\"nodes\" graphql:\"nodes\""
+	ActionPlans            *AdminSearch_AdminSearch_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	APITokens              *AdminSearch_AdminSearch_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Contacts               *AdminSearch_AdminSearch_Contacts               "json:\"contacts,omitempty\" graphql:\"contacts\""
+	ControlImplementations *AdminSearch_AdminSearch_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+	ControlObjectives      *AdminSearch_AdminSearch_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls               *AdminSearch_AdminSearch_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
+	DocumentData           *AdminSearch_AdminSearch_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
+	Entities               *AdminSearch_AdminSearch_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
+	EntityTypes            *AdminSearch_AdminSearch_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+	Events                 *AdminSearch_AdminSearch_Events                 "json:\"events,omitempty\" graphql:\"events\""
+	Evidences              *AdminSearch_AdminSearch_Evidences              "json:\"evidences,omitempty\" graphql:\"evidences\""
+	Files                  *AdminSearch_AdminSearch_Files                  "json:\"files,omitempty\" graphql:\"files\""
+	Groups                 *AdminSearch_AdminSearch_Groups                 "json:\"groups,omitempty\" graphql:\"groups\""
+	Integrations           *AdminSearch_AdminSearch_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
+	InternalPolicies       *AdminSearch_AdminSearch_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Invites                *AdminSearch_AdminSearch_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
+	MappedControls         *AdminSearch_AdminSearch_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+	Narratives             *AdminSearch_AdminSearch_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
+	OrgSubscriptions       *AdminSearch_AdminSearch_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	OrganizationSettings   *AdminSearch_AdminSearch_OrganizationSettings   "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+	Organizations          *AdminSearch_AdminSearch_Organizations          "json:\"organizations,omitempty\" graphql:\"organizations\""
+	PersonalAccessTokens   *AdminSearch_AdminSearch_PersonalAccessTokens   "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+	Procedures             *AdminSearch_AdminSearch_Procedures             "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Programs               *AdminSearch_AdminSearch_Programs               "json:\"programs,omitempty\" graphql:\"programs\""
+	Risks                  *AdminSearch_AdminSearch_Risks                  "json:\"risks,omitempty\" graphql:\"risks\""
+	Standards              *AdminSearch_AdminSearch_Standards              "json:\"standards,omitempty\" graphql:\"standards\""
+	Subcontrols            *AdminSearch_AdminSearch_Subcontrols            "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subscribers            *AdminSearch_AdminSearch_Subscribers            "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+	Tasks                  *AdminSearch_AdminSearch_Tasks                  "json:\"tasks,omitempty\" graphql:\"tasks\""
+	Templates              *AdminSearch_AdminSearch_Templates              "json:\"templates,omitempty\" graphql:\"templates\""
+	TotalCount             int64                                           "json:\"totalCount\" graphql:\"totalCount\""
+	UserSettings           *AdminSearch_AdminSearch_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+	Users                  *AdminSearch_AdminSearch_Users                  "json:\"users,omitempty\" graphql:\"users\""
 }
 
-func (t *AdminSearch_AdminSearch) GetNodes() []*AdminSearch_AdminSearch_Nodes {
+func (t *AdminSearch_AdminSearch) GetActionPlans() *AdminSearch_AdminSearch_ActionPlans {
 	if t == nil {
 		t = &AdminSearch_AdminSearch{}
 	}
-	return t.Nodes
+	return t.ActionPlans
+}
+func (t *AdminSearch_AdminSearch) GetAPITokens() *AdminSearch_AdminSearch_APITokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.APITokens
+}
+func (t *AdminSearch_AdminSearch) GetContacts() *AdminSearch_AdminSearch_Contacts {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Contacts
+}
+func (t *AdminSearch_AdminSearch) GetControlImplementations() *AdminSearch_AdminSearch_ControlImplementations {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.ControlImplementations
+}
+func (t *AdminSearch_AdminSearch) GetControlObjectives() *AdminSearch_AdminSearch_ControlObjectives {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.ControlObjectives
+}
+func (t *AdminSearch_AdminSearch) GetControls() *AdminSearch_AdminSearch_Controls {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Controls
+}
+func (t *AdminSearch_AdminSearch) GetDocumentData() *AdminSearch_AdminSearch_DocumentData {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.DocumentData
+}
+func (t *AdminSearch_AdminSearch) GetEntities() *AdminSearch_AdminSearch_Entities {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Entities
+}
+func (t *AdminSearch_AdminSearch) GetEntityTypes() *AdminSearch_AdminSearch_EntityTypes {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.EntityTypes
+}
+func (t *AdminSearch_AdminSearch) GetEvents() *AdminSearch_AdminSearch_Events {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Events
+}
+func (t *AdminSearch_AdminSearch) GetEvidences() *AdminSearch_AdminSearch_Evidences {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Evidences
+}
+func (t *AdminSearch_AdminSearch) GetFiles() *AdminSearch_AdminSearch_Files {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Files
+}
+func (t *AdminSearch_AdminSearch) GetGroups() *AdminSearch_AdminSearch_Groups {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Groups
+}
+func (t *AdminSearch_AdminSearch) GetIntegrations() *AdminSearch_AdminSearch_Integrations {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Integrations
+}
+func (t *AdminSearch_AdminSearch) GetInternalPolicies() *AdminSearch_AdminSearch_InternalPolicies {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.InternalPolicies
+}
+func (t *AdminSearch_AdminSearch) GetInvites() *AdminSearch_AdminSearch_Invites {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Invites
+}
+func (t *AdminSearch_AdminSearch) GetMappedControls() *AdminSearch_AdminSearch_MappedControls {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.MappedControls
+}
+func (t *AdminSearch_AdminSearch) GetNarratives() *AdminSearch_AdminSearch_Narratives {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Narratives
+}
+func (t *AdminSearch_AdminSearch) GetOrgSubscriptions() *AdminSearch_AdminSearch_OrgSubscriptions {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.OrgSubscriptions
+}
+func (t *AdminSearch_AdminSearch) GetOrganizationSettings() *AdminSearch_AdminSearch_OrganizationSettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.OrganizationSettings
+}
+func (t *AdminSearch_AdminSearch) GetOrganizations() *AdminSearch_AdminSearch_Organizations {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Organizations
+}
+func (t *AdminSearch_AdminSearch) GetPersonalAccessTokens() *AdminSearch_AdminSearch_PersonalAccessTokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.PersonalAccessTokens
+}
+func (t *AdminSearch_AdminSearch) GetProcedures() *AdminSearch_AdminSearch_Procedures {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Procedures
+}
+func (t *AdminSearch_AdminSearch) GetPrograms() *AdminSearch_AdminSearch_Programs {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Programs
+}
+func (t *AdminSearch_AdminSearch) GetRisks() *AdminSearch_AdminSearch_Risks {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Risks
+}
+func (t *AdminSearch_AdminSearch) GetStandards() *AdminSearch_AdminSearch_Standards {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Standards
+}
+func (t *AdminSearch_AdminSearch) GetSubcontrols() *AdminSearch_AdminSearch_Subcontrols {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Subcontrols
+}
+func (t *AdminSearch_AdminSearch) GetSubscribers() *AdminSearch_AdminSearch_Subscribers {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Subscribers
+}
+func (t *AdminSearch_AdminSearch) GetTasks() *AdminSearch_AdminSearch_Tasks {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Tasks
+}
+func (t *AdminSearch_AdminSearch) GetTemplates() *AdminSearch_AdminSearch_Templates {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Templates
+}
+func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.TotalCount
+}
+func (t *AdminSearch_AdminSearch) GetUserSettings() *AdminSearch_AdminSearch_UserSettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.UserSettings
+}
+func (t *AdminSearch_AdminSearch) GetUsers() *AdminSearch_AdminSearch_Users {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Users
 }
 
 type CreateAPIToken_CreateAPIToken_APIToken struct {
@@ -34163,62 +36040,91 @@ func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organizatio
 	return t.UpdatedBy
 }
 
-type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User struct {
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetFirstName() *string {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetID() string {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User) GetLastName() *string {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members struct {
-	ID   string                                                                                "json:\"id\" graphql:\"id\""
-	Role enums.Role                                                                            "json:\"role\" graphql:\"role\""
-	User CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User "json:\"user\" graphql:\"user\""
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node struct {
+	ID   string                                                                                           "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                                                       "json:\"role\" graphql:\"role\""
+	User CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetID() string {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetRole() *enums.Role {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetUser() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_User {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node) GetUser() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node_User {
 	if t == nil {
-		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges struct {
+	Node *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges) GetNode() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges_Node {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members struct {
+	Edges      []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetEdges() []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members_Edges {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return t.Edges
+}
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members{}
+	}
+	return t.TotalCount
+}
+
 type CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization struct {
-	DisplayName string                                                                              "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                                                              "json:\"id\" graphql:\"id\""
-	Members     []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                                                              "json:\"name\" graphql:\"name\""
-	Setting     *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
+	DisplayName string                                                                            "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                                                            "json:\"id\" graphql:\"id\""
+	Members     CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members  "json:\"members\" graphql:\"members\""
+	Name        string                                                                            "json:\"name\" graphql:\"name\""
+	Setting     *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Setting "json:\"setting,omitempty\" graphql:\"setting\""
 }
 
 func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetDisplayName() string {
@@ -34233,11 +36139,11 @@ func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organizatio
 	}
 	return t.ID
 }
-func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetMembers() []*CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members {
+func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetMembers() *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization_Members {
 	if t == nil {
 		t = &CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateOrganizationWithMembers_CreateOrganizationWithMembers_Organization) GetName() string {
 	if t == nil {
@@ -34346,54 +36252,83 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Children) GetEdges() []*Ge
 	return t.Edges
 }
 
-type GetAllOrganizations_Organizations_Edges_Node_Members_User struct {
+type GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members_User) GetFirstName() *string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members_User) GetID() string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members_User) GetLastName() *string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetAllOrganizations_Organizations_Edges_Node_Members struct {
-	ID   string                                                    "json:\"id\" graphql:\"id\""
-	Role enums.Role                                                "json:\"role\" graphql:\"role\""
-	User GetAllOrganizations_Organizations_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+type GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node struct {
+	ID   string                                                               "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                           "json:\"role\" graphql:\"role\""
+	User GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetID() string {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetRole() *enums.Role {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetUser() *GetAllOrganizations_Organizations_Edges_Node_Members_User {
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetUser() *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetAllOrganizations_Organizations_Edges_Node_Members_Edges struct {
+	Node *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members_Edges) GetNode() *GetAllOrganizations_Organizations_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllOrganizations_Organizations_Edges_Node_Members struct {
+	Edges      []*GetAllOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetEdges() []*GetAllOrganizations_Organizations_Edges_Node_Members_Edges {
 	if t == nil {
 		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
 	}
-	return &t.User
+	return t.Edges
+}
+func (t *GetAllOrganizations_Organizations_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllOrganizations_Organizations_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetAllOrganizations_Organizations_Edges_Node_Setting struct {
@@ -34809,7 +36744,7 @@ type GetAllOrganizations_Organizations_Edges_Node struct {
 	DisplayName              string                                                                   "json:\"displayName\" graphql:\"displayName\""
 	ID                       string                                                                   "json:\"id\" graphql:\"id\""
 	InternalPolicyCreators   []*GetAllOrganizations_Organizations_Edges_Node_InternalPolicyCreators   "json:\"internalPolicyCreators,omitempty\" graphql:\"internalPolicyCreators\""
-	Members                  []*GetAllOrganizations_Organizations_Edges_Node_Members                  "json:\"members,omitempty\" graphql:\"members\""
+	Members                  GetAllOrganizations_Organizations_Edges_Node_Members                     "json:\"members\" graphql:\"members\""
 	Name                     string                                                                   "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetAllOrganizations_Organizations_Edges_Node_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
 	OrgSubscriptions         []*GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -34872,11 +36807,11 @@ func (t *GetAllOrganizations_Organizations_Edges_Node) GetInternalPolicyCreators
 	}
 	return t.InternalPolicyCreators
 }
-func (t *GetAllOrganizations_Organizations_Edges_Node) GetMembers() []*GetAllOrganizations_Organizations_Edges_Node_Members {
+func (t *GetAllOrganizations_Organizations_Edges_Node) GetMembers() *GetAllOrganizations_Organizations_Edges_Node_Members {
 	if t == nil {
 		t = &GetAllOrganizations_Organizations_Edges_Node{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetAllOrganizations_Organizations_Edges_Node) GetName() string {
 	if t == nil {
@@ -35045,54 +36980,83 @@ func (t *GetOrganizationByID_Organization_Children) GetEdges() []*GetOrganizatio
 	return t.Edges
 }
 
-type GetOrganizationByID_Organization_Members_User struct {
+type GetOrganizationByID_Organization_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetOrganizationByID_Organization_Members_User) GetFirstName() *string {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetOrganizationByID_Organization_Members_User{}
+		t = &GetOrganizationByID_Organization_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetOrganizationByID_Organization_Members_User) GetID() string {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetOrganizationByID_Organization_Members_User{}
+		t = &GetOrganizationByID_Organization_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetOrganizationByID_Organization_Members_User) GetLastName() *string {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetOrganizationByID_Organization_Members_User{}
+		t = &GetOrganizationByID_Organization_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetOrganizationByID_Organization_Members struct {
-	ID   string                                        "json:\"id\" graphql:\"id\""
-	Role enums.Role                                    "json:\"role\" graphql:\"role\""
-	User GetOrganizationByID_Organization_Members_User "json:\"user\" graphql:\"user\""
+type GetOrganizationByID_Organization_Members_Edges_Node struct {
+	ID   string                                                   "json:\"id\" graphql:\"id\""
+	Role enums.Role                                               "json:\"role\" graphql:\"role\""
+	User GetOrganizationByID_Organization_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetOrganizationByID_Organization_Members) GetID() string {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetOrganizationByID_Organization_Members{}
+		t = &GetOrganizationByID_Organization_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetOrganizationByID_Organization_Members) GetRole() *enums.Role {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetOrganizationByID_Organization_Members{}
+		t = &GetOrganizationByID_Organization_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetOrganizationByID_Organization_Members) GetUser() *GetOrganizationByID_Organization_Members_User {
+func (t *GetOrganizationByID_Organization_Members_Edges_Node) GetUser() *GetOrganizationByID_Organization_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetOrganizationByID_Organization_Members_Edges struct {
+	Node *GetOrganizationByID_Organization_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetOrganizationByID_Organization_Members_Edges) GetNode() *GetOrganizationByID_Organization_Members_Edges_Node {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetOrganizationByID_Organization_Members struct {
+	Edges      []*GetOrganizationByID_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetOrganizationByID_Organization_Members) GetEdges() []*GetOrganizationByID_Organization_Members_Edges {
 	if t == nil {
 		t = &GetOrganizationByID_Organization_Members{}
 	}
-	return &t.User
+	return t.Edges
+}
+func (t *GetOrganizationByID_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetOrganizationByID_Organization_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetOrganizationByID_Organization_Setting struct {
@@ -35511,7 +37475,7 @@ type GetOrganizationByID_Organization struct {
 	DisplayName              string                                                       "json:\"displayName\" graphql:\"displayName\""
 	ID                       string                                                       "json:\"id\" graphql:\"id\""
 	InternalPolicyCreators   []*GetOrganizationByID_Organization_InternalPolicyCreators   "json:\"internalPolicyCreators,omitempty\" graphql:\"internalPolicyCreators\""
-	Members                  []*GetOrganizationByID_Organization_Members                  "json:\"members,omitempty\" graphql:\"members\""
+	Members                  GetOrganizationByID_Organization_Members                     "json:\"members\" graphql:\"members\""
 	Name                     string                                                       "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetOrganizationByID_Organization_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
 	OrgSubscriptions         []*GetOrganizationByID_Organization_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -35593,11 +37557,11 @@ func (t *GetOrganizationByID_Organization) GetInternalPolicyCreators() []*GetOrg
 	}
 	return t.InternalPolicyCreators
 }
-func (t *GetOrganizationByID_Organization) GetMembers() []*GetOrganizationByID_Organization_Members {
+func (t *GetOrganizationByID_Organization) GetMembers() *GetOrganizationByID_Organization_Members {
 	if t == nil {
 		t = &GetOrganizationByID_Organization{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetOrganizationByID_Organization) GetName() string {
 	if t == nil {
@@ -35750,54 +37714,83 @@ func (t *GetOrganizations_Organizations_Edges_Node_Children) GetEdges() []*GetOr
 	return t.Edges
 }
 
-type GetOrganizations_Organizations_Edges_Node_Members_User struct {
+type GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetOrganizations_Organizations_Edges_Node_Members_User) GetFirstName() *string {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Members_User) GetID() string {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Members_User) GetLastName() *string {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_User{}
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetOrganizations_Organizations_Edges_Node_Members struct {
-	ID   string                                                 "json:\"id\" graphql:\"id\""
-	Role enums.Role                                             "json:\"role\" graphql:\"role\""
-	User GetOrganizations_Organizations_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+type GetOrganizations_Organizations_Edges_Node_Members_Edges_Node struct {
+	ID   string                                                            "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                        "json:\"role\" graphql:\"role\""
+	User GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetOrganizations_Organizations_Edges_Node_Members) GetID() string {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members{}
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Members) GetRole() *enums.Role {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members{}
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Members) GetUser() *GetOrganizations_Organizations_Edges_Node_Members_User {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetUser() *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetOrganizations_Organizations_Edges_Node_Members_Edges struct {
+	Node *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetOrganizations_Organizations_Edges_Node_Members struct {
+	Edges      []*GetOrganizations_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetOrganizations_Organizations_Edges_Node_Members) GetEdges() []*GetOrganizations_Organizations_Edges_Node_Members_Edges {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Members{}
 	}
-	return &t.User
+	return t.Edges
+}
+func (t *GetOrganizations_Organizations_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetOrganizations_Organizations_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetOrganizations_Organizations_Edges_Node_Setting struct {
@@ -36213,7 +38206,7 @@ type GetOrganizations_Organizations_Edges_Node struct {
 	DisplayName              string                                                                "json:\"displayName\" graphql:\"displayName\""
 	ID                       string                                                                "json:\"id\" graphql:\"id\""
 	InternalPolicyCreators   []*GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators   "json:\"internalPolicyCreators,omitempty\" graphql:\"internalPolicyCreators\""
-	Members                  []*GetOrganizations_Organizations_Edges_Node_Members                  "json:\"members,omitempty\" graphql:\"members\""
+	Members                  GetOrganizations_Organizations_Edges_Node_Members                     "json:\"members\" graphql:\"members\""
 	Name                     string                                                                "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*GetOrganizations_Organizations_Edges_Node_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
 	OrgSubscriptions         []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -36276,11 +38269,11 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetInternalPolicyCreators() 
 	}
 	return t.InternalPolicyCreators
 }
-func (t *GetOrganizations_Organizations_Edges_Node) GetMembers() []*GetOrganizations_Organizations_Edges_Node_Members {
+func (t *GetOrganizations_Organizations_Edges_Node) GetMembers() *GetOrganizations_Organizations_Edges_Node_Members {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetOrganizations_Organizations_Edges_Node) GetName() string {
 	if t == nil {
@@ -36388,29 +38381,58 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_AvatarFile) GetPresi
 	return t.PresignedURL
 }
 
-type UpdateOrganization_UpdateOrganization_Organization_Members struct {
+type UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node struct {
 	ID     string     "json:\"id\" graphql:\"id\""
 	Role   enums.Role "json:\"role\" graphql:\"role\""
 	UserID string     "json:\"userID\" graphql:\"userID\""
 }
 
-func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetID() string {
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetRole() *enums.Role {
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetUserID() string {
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_Members_Edges struct {
+	Node *UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_Members struct {
+	Edges      []*UpdateOrganization_UpdateOrganization_Organization_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_Members_Edges {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
 	}
-	return t.UserID
+	return t.Edges
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_Members{}
+	}
+	return t.TotalCount
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_Setting struct {
@@ -36827,7 +38849,7 @@ type UpdateOrganization_UpdateOrganization_Organization struct {
 	DisplayName              string                                                                         "json:\"displayName\" graphql:\"displayName\""
 	ID                       string                                                                         "json:\"id\" graphql:\"id\""
 	InternalPolicyCreators   []*UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators   "json:\"internalPolicyCreators,omitempty\" graphql:\"internalPolicyCreators\""
-	Members                  []*UpdateOrganization_UpdateOrganization_Organization_Members                  "json:\"members,omitempty\" graphql:\"members\""
+	Members                  UpdateOrganization_UpdateOrganization_Organization_Members                     "json:\"members\" graphql:\"members\""
 	Name                     string                                                                         "json:\"name\" graphql:\"name\""
 	NarrativeCreators        []*UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators        "json:\"narrativeCreators,omitempty\" graphql:\"narrativeCreators\""
 	OrgSubscriptions         []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions         "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -36894,11 +38916,11 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetInternalPolicyCr
 	}
 	return t.InternalPolicyCreators
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetMembers() []*UpdateOrganization_UpdateOrganization_Organization_Members {
+func (t *UpdateOrganization_UpdateOrganization_Organization) GetMembers() *UpdateOrganization_UpdateOrganization_Organization_Members {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetName() string {
 	if t == nil {
@@ -49204,122 +51226,325 @@ func (t *GetRiskHistories_RiskHistories) GetEdges() []*GetRiskHistories_RiskHist
 	return t.Edges
 }
 
-type GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens struct {
+type GlobalSearch_Search_APITokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_APITokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_APITokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_APITokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_APITokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_APITokens_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens) GetID() string {
+func (t *GlobalSearch_Search_APITokens_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens{}
+		t = &GlobalSearch_Search_APITokens_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens) GetTags() []string {
+func (t *GlobalSearch_Search_APITokens_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens{}
+		t = &GlobalSearch_Search_APITokens_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_APITokenSearchResult struct {
-	APITokens []*GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+type GlobalSearch_Search_APITokens_Edges struct {
+	Node *GlobalSearch_Search_APITokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_APITokenSearchResult) GetAPITokens() []*GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens {
+func (t *GlobalSearch_Search_APITokens_Edges) GetNode() *GlobalSearch_Search_APITokens_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_APITokenSearchResult{}
+		t = &GlobalSearch_Search_APITokens_Edges{}
 	}
-	return t.APITokens
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans struct {
+type GlobalSearch_Search_APITokens struct {
+	Edges      []*GlobalSearch_Search_APITokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_APITokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_APITokens) GetEdges() []*GlobalSearch_Search_APITokens_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_APITokens) GetPageInfo() *GlobalSearch_Search_APITokens_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_APITokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_APITokens{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_ActionPlans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_ActionPlans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_ActionPlans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_ActionPlans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_ActionPlans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_ActionPlans_Edges_Node struct {
 	Details *string  "json:\"details,omitempty\" graphql:\"details\""
 	ID      string   "json:\"id\" graphql:\"id\""
 	Name    string   "json:\"name\" graphql:\"name\""
 	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() *string {
+func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetID() string {
+func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetName() string {
+func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans) GetTags() []string {
+func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans{}
+		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ActionPlanSearchResult struct {
-	ActionPlans []*GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+type GlobalSearch_Search_ActionPlans_Edges struct {
+	Node *GlobalSearch_Search_ActionPlans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ActionPlanSearchResult) GetActionPlans() []*GlobalSearch_Search_Nodes_ActionPlanSearchResult_ActionPlans {
+func (t *GlobalSearch_Search_ActionPlans_Edges) GetNode() *GlobalSearch_Search_ActionPlans_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ActionPlanSearchResult{}
+		t = &GlobalSearch_Search_ActionPlans_Edges{}
 	}
-	return t.ActionPlans
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ContactSearchResult_Contacts struct {
+type GlobalSearch_Search_ActionPlans struct {
+	Edges      []*GlobalSearch_Search_ActionPlans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_ActionPlans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_ActionPlans) GetEdges() []*GlobalSearch_Search_ActionPlans_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_ActionPlans) GetPageInfo() *GlobalSearch_Search_ActionPlans_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_ActionPlans) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Contacts_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Contacts_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Contacts_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Contacts_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Contacts_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Contacts_Edges_Node struct {
 	Email    *string  "json:\"email,omitempty\" graphql:\"email\""
 	FullName string   "json:\"fullName\" graphql:\"fullName\""
 	ID       string   "json:\"id\" graphql:\"id\""
 	Tags     []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
+func (t *GlobalSearch_Search_Contacts_Edges_Node) GetEmail() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &GlobalSearch_Search_Contacts_Edges_Node{}
 	}
 	return t.Email
 }
-func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetFullName() string {
+func (t *GlobalSearch_Search_Contacts_Edges_Node) GetFullName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &GlobalSearch_Search_Contacts_Edges_Node{}
 	}
 	return t.FullName
 }
-func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetID() string {
+func (t *GlobalSearch_Search_Contacts_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &GlobalSearch_Search_Contacts_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetTags() []string {
+func (t *GlobalSearch_Search_Contacts_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &GlobalSearch_Search_Contacts_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ContactSearchResult struct {
-	Contacts []*GlobalSearch_Search_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+type GlobalSearch_Search_Contacts_Edges struct {
+	Node *GlobalSearch_Search_Contacts_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ContactSearchResult) GetContacts() []*GlobalSearch_Search_Nodes_ContactSearchResult_Contacts {
+func (t *GlobalSearch_Search_Contacts_Edges) GetNode() *GlobalSearch_Search_Contacts_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ContactSearchResult{}
+		t = &GlobalSearch_Search_Contacts_Edges{}
 	}
-	return t.Contacts
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ControlSearchResult_Controls struct {
+type GlobalSearch_Search_Contacts struct {
+	Edges      []*GlobalSearch_Search_Contacts_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Contacts_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Contacts) GetEdges() []*GlobalSearch_Search_Contacts_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Contacts) GetPageInfo() *GlobalSearch_Search_Contacts_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Contacts) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Contacts{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Controls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Controls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Controls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Controls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Controls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Controls_Edges_Node struct {
 	Category         *string  "json:\"category,omitempty\" graphql:\"category\""
 	Description      *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID        string   "json:\"displayID\" graphql:\"displayID\""
@@ -49330,96 +51555,210 @@ type GlobalSearch_Search_Nodes_ControlSearchResult_Controls struct {
 	Tags             []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetCategory() *string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetDescription() *string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetDisplayID() string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetID() string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetMappedCategories() []string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetMappedCategories() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.MappedCategories
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetRefCode() string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetRefCode() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.RefCode
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetSubcategory() *string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult_Controls) GetTags() []string {
+func (t *GlobalSearch_Search_Controls_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult_Controls{}
+		t = &GlobalSearch_Search_Controls_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ControlSearchResult struct {
-	Controls []*GlobalSearch_Search_Nodes_ControlSearchResult_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+type GlobalSearch_Search_Controls_Edges struct {
+	Node *GlobalSearch_Search_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlSearchResult) GetControls() []*GlobalSearch_Search_Nodes_ControlSearchResult_Controls {
+func (t *GlobalSearch_Search_Controls_Edges) GetNode() *GlobalSearch_Search_Controls_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlSearchResult{}
+		t = &GlobalSearch_Search_Controls_Edges{}
 	}
-	return t.Controls
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations struct {
+type GlobalSearch_Search_Controls struct {
+	Edges      []*GlobalSearch_Search_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Controls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Controls) GetEdges() []*GlobalSearch_Search_Controls_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Controls) GetPageInfo() *GlobalSearch_Search_Controls_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Controls{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_ControlImplementations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_ControlImplementations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_ControlImplementations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_ControlImplementations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_ControlImplementations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_ControlImplementations_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations) GetID() string {
+func (t *GlobalSearch_Search_ControlImplementations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &GlobalSearch_Search_ControlImplementations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations) GetTags() []string {
+func (t *GlobalSearch_Search_ControlImplementations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations{}
+		t = &GlobalSearch_Search_ControlImplementations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ControlImplementationSearchResult struct {
-	ControlImplementations []*GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+type GlobalSearch_Search_ControlImplementations_Edges struct {
+	Node *GlobalSearch_Search_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlImplementationSearchResult) GetControlImplementations() []*GlobalSearch_Search_Nodes_ControlImplementationSearchResult_ControlImplementations {
+func (t *GlobalSearch_Search_ControlImplementations_Edges) GetNode() *GlobalSearch_Search_ControlImplementations_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlImplementationSearchResult{}
+		t = &GlobalSearch_Search_ControlImplementations_Edges{}
 	}
-	return t.ControlImplementations
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives struct {
+type GlobalSearch_Search_ControlImplementations struct {
+	Edges      []*GlobalSearch_Search_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_ControlImplementations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_ControlImplementations) GetEdges() []*GlobalSearch_Search_ControlImplementations_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_ControlImplementations) GetPageInfo() *GlobalSearch_Search_ControlImplementations_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_ControlImplementations) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlImplementations{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_ControlObjectives_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_ControlObjectives_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_ControlObjectives_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_ControlObjectives_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_ControlObjectives_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_ControlObjectives_Edges_Node struct {
 	Category    *string  "json:\"category,omitempty\" graphql:\"category\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -49428,84 +51767,198 @@ type GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives st
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetCategory() *string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDisplayID() string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetID() string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetName() string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetSubcategory() *string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetTags() []string {
+func (t *GlobalSearch_Search_ControlObjectives_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ControlObjectiveSearchResult struct {
-	ControlObjectives []*GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+type GlobalSearch_Search_ControlObjectives_Edges struct {
+	Node *GlobalSearch_Search_ControlObjectives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult) GetControlObjectives() []*GlobalSearch_Search_Nodes_ControlObjectiveSearchResult_ControlObjectives {
+func (t *GlobalSearch_Search_ControlObjectives_Edges) GetNode() *GlobalSearch_Search_ControlObjectives_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ControlObjectiveSearchResult{}
+		t = &GlobalSearch_Search_ControlObjectives_Edges{}
 	}
-	return t.ControlObjectives
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData struct {
+type GlobalSearch_Search_ControlObjectives struct {
+	Edges      []*GlobalSearch_Search_ControlObjectives_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_ControlObjectives_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_ControlObjectives) GetEdges() []*GlobalSearch_Search_ControlObjectives_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_ControlObjectives) GetPageInfo() *GlobalSearch_Search_ControlObjectives_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_ControlObjectives) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_ControlObjectives{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_DocumentData_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_DocumentData_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_DocumentData_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_DocumentData_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_DocumentData_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_DocumentData_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData) GetID() string {
+func (t *GlobalSearch_Search_DocumentData_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &GlobalSearch_Search_DocumentData_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData) GetTags() []string {
+func (t *GlobalSearch_Search_DocumentData_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData{}
+		t = &GlobalSearch_Search_DocumentData_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_DocumentDataSearchResult struct {
-	DocumentData []*GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData "json:\"documentData,omitempty\" graphql:\"documentData\""
+type GlobalSearch_Search_DocumentData_Edges struct {
+	Node *GlobalSearch_Search_DocumentData_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult) GetDocumentData() []*GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData {
+func (t *GlobalSearch_Search_DocumentData_Edges) GetNode() *GlobalSearch_Search_DocumentData_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult{}
+		t = &GlobalSearch_Search_DocumentData_Edges{}
 	}
-	return t.DocumentData
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_EntitySearchResult_Entities struct {
+type GlobalSearch_Search_DocumentData struct {
+	Edges      []*GlobalSearch_Search_DocumentData_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_DocumentData_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_DocumentData) GetEdges() []*GlobalSearch_Search_DocumentData_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_DocumentData) GetPageInfo() *GlobalSearch_Search_DocumentData_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_DocumentData) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_DocumentData{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Entities_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Entities_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Entities_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Entities_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Entities_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Entities_Edges_Node struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -49513,179 +51966,464 @@ type GlobalSearch_Search_Nodes_EntitySearchResult_Entities struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetDescription() *string {
+func (t *GlobalSearch_Search_Entities_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &GlobalSearch_Search_Entities_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
+func (t *GlobalSearch_Search_Entities_Edges_Node) GetDisplayName() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &GlobalSearch_Search_Entities_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetID() string {
+func (t *GlobalSearch_Search_Entities_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &GlobalSearch_Search_Entities_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetName() *string {
+func (t *GlobalSearch_Search_Entities_Edges_Node) GetName() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &GlobalSearch_Search_Entities_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetTags() []string {
+func (t *GlobalSearch_Search_Entities_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &GlobalSearch_Search_Entities_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_EntitySearchResult struct {
-	Entities []*GlobalSearch_Search_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
+type GlobalSearch_Search_Entities_Edges struct {
+	Node *GlobalSearch_Search_Entities_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EntitySearchResult) GetEntities() []*GlobalSearch_Search_Nodes_EntitySearchResult_Entities {
+func (t *GlobalSearch_Search_Entities_Edges) GetNode() *GlobalSearch_Search_Entities_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntitySearchResult{}
+		t = &GlobalSearch_Search_Entities_Edges{}
 	}
-	return t.Entities
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes struct {
+type GlobalSearch_Search_Entities struct {
+	Edges      []*GlobalSearch_Search_Entities_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Entities_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Entities) GetEdges() []*GlobalSearch_Search_Entities_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Entities) GetPageInfo() *GlobalSearch_Search_Entities_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Entities) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Entities{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_EntityTypes_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_EntityTypes_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_EntityTypes_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_EntityTypes_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_EntityTypes_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_EntityTypes_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes) GetID() string {
+func (t *GlobalSearch_Search_EntityTypes_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &GlobalSearch_Search_EntityTypes_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes) GetTags() []string {
+func (t *GlobalSearch_Search_EntityTypes_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes{}
+		t = &GlobalSearch_Search_EntityTypes_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_EntityTypeSearchResult struct {
-	EntityTypes []*GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+type GlobalSearch_Search_EntityTypes_Edges struct {
+	Node *GlobalSearch_Search_EntityTypes_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult) GetEntityTypes() []*GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes {
+func (t *GlobalSearch_Search_EntityTypes_Edges) GetNode() *GlobalSearch_Search_EntityTypes_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult{}
+		t = &GlobalSearch_Search_EntityTypes_Edges{}
 	}
-	return t.EntityTypes
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_EventSearchResult_Events struct {
+type GlobalSearch_Search_EntityTypes struct {
+	Edges      []*GlobalSearch_Search_EntityTypes_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_EntityTypes_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_EntityTypes) GetEdges() []*GlobalSearch_Search_EntityTypes_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_EntityTypes) GetPageInfo() *GlobalSearch_Search_EntityTypes_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_EntityTypes) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_EntityTypes{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Events_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Events_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Events_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Events_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Events_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Events_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Events_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Events_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Events_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Events_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EventSearchResult_Events) GetID() string {
+func (t *GlobalSearch_Search_Events_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EventSearchResult_Events{}
+		t = &GlobalSearch_Search_Events_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_EventSearchResult_Events) GetTags() []string {
+func (t *GlobalSearch_Search_Events_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EventSearchResult_Events{}
+		t = &GlobalSearch_Search_Events_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_EventSearchResult struct {
-	Events []*GlobalSearch_Search_Nodes_EventSearchResult_Events "json:\"events,omitempty\" graphql:\"events\""
+type GlobalSearch_Search_Events_Edges struct {
+	Node *GlobalSearch_Search_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EventSearchResult) GetEvents() []*GlobalSearch_Search_Nodes_EventSearchResult_Events {
+func (t *GlobalSearch_Search_Events_Edges) GetNode() *GlobalSearch_Search_Events_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EventSearchResult{}
+		t = &GlobalSearch_Search_Events_Edges{}
 	}
-	return t.Events
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences struct {
+type GlobalSearch_Search_Events struct {
+	Edges      []*GlobalSearch_Search_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Events_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Events) GetEdges() []*GlobalSearch_Search_Events_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Events{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Events) GetPageInfo() *GlobalSearch_Search_Events_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Events{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Events) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Events{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Evidences_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Evidences_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Evidences_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Evidences_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Evidences_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Evidences_Edges_Node struct {
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Name      string   "json:\"name\" graphql:\"name\""
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences) GetDisplayID() string {
+func (t *GlobalSearch_Search_Evidences_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences{}
+		t = &GlobalSearch_Search_Evidences_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences) GetID() string {
+func (t *GlobalSearch_Search_Evidences_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences{}
+		t = &GlobalSearch_Search_Evidences_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences) GetName() string {
+func (t *GlobalSearch_Search_Evidences_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences{}
+		t = &GlobalSearch_Search_Evidences_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences) GetTags() []string {
+func (t *GlobalSearch_Search_Evidences_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences{}
+		t = &GlobalSearch_Search_Evidences_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_EvidenceSearchResult struct {
-	Evidences []*GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences "json:\"evidences,omitempty\" graphql:\"evidences\""
+type GlobalSearch_Search_Evidences_Edges struct {
+	Node *GlobalSearch_Search_Evidences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_EvidenceSearchResult) GetEvidences() []*GlobalSearch_Search_Nodes_EvidenceSearchResult_Evidences {
+func (t *GlobalSearch_Search_Evidences_Edges) GetNode() *GlobalSearch_Search_Evidences_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_EvidenceSearchResult{}
+		t = &GlobalSearch_Search_Evidences_Edges{}
 	}
-	return t.Evidences
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_FileSearchResult_Files struct {
+type GlobalSearch_Search_Evidences struct {
+	Edges      []*GlobalSearch_Search_Evidences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Evidences_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Evidences) GetEdges() []*GlobalSearch_Search_Evidences_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Evidences) GetPageInfo() *GlobalSearch_Search_Evidences_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Evidences) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Evidences{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Files_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Files_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Files_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Files_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Files_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Files_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Files_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Files_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Files_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Files_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_FileSearchResult_Files) GetID() string {
+func (t *GlobalSearch_Search_Files_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_FileSearchResult_Files{}
+		t = &GlobalSearch_Search_Files_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_FileSearchResult_Files) GetTags() []string {
+func (t *GlobalSearch_Search_Files_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_FileSearchResult_Files{}
+		t = &GlobalSearch_Search_Files_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_FileSearchResult struct {
-	Files []*GlobalSearch_Search_Nodes_FileSearchResult_Files "json:\"files,omitempty\" graphql:\"files\""
+type GlobalSearch_Search_Files_Edges struct {
+	Node *GlobalSearch_Search_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_FileSearchResult) GetFiles() []*GlobalSearch_Search_Nodes_FileSearchResult_Files {
+func (t *GlobalSearch_Search_Files_Edges) GetNode() *GlobalSearch_Search_Files_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_FileSearchResult{}
+		t = &GlobalSearch_Search_Files_Edges{}
 	}
-	return t.Files
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_GroupSearchResult_Groups struct {
+type GlobalSearch_Search_Files struct {
+	Edges      []*GlobalSearch_Search_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Files_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Files) GetEdges() []*GlobalSearch_Search_Files_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Files{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Files) GetPageInfo() *GlobalSearch_Search_Files_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Files{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Files) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Files{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Groups_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Groups_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Groups_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Groups_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Groups_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Groups_Edges_Node struct {
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -49693,78 +52431,192 @@ type GlobalSearch_Search_Nodes_GroupSearchResult_Groups struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayID() string {
+func (t *GlobalSearch_Search_Groups_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Groups_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
+func (t *GlobalSearch_Search_Groups_Edges_Node) GetDisplayName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Groups_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetID() string {
+func (t *GlobalSearch_Search_Groups_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Groups_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetName() string {
+func (t *GlobalSearch_Search_Groups_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Groups_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetTags() []string {
+func (t *GlobalSearch_Search_Groups_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Groups_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_GroupSearchResult struct {
-	Groups []*GlobalSearch_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
+type GlobalSearch_Search_Groups_Edges struct {
+	Node *GlobalSearch_Search_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_GroupSearchResult) GetGroups() []*GlobalSearch_Search_Nodes_GroupSearchResult_Groups {
+func (t *GlobalSearch_Search_Groups_Edges) GetNode() *GlobalSearch_Search_Groups_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_GroupSearchResult{}
+		t = &GlobalSearch_Search_Groups_Edges{}
 	}
-	return t.Groups
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations struct {
+type GlobalSearch_Search_Groups struct {
+	Edges      []*GlobalSearch_Search_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Groups_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Groups) GetEdges() []*GlobalSearch_Search_Groups_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Groups) GetPageInfo() *GlobalSearch_Search_Groups_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Groups) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Groups{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Integrations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Integrations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Integrations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Integrations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Integrations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Integrations_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations) GetID() string {
+func (t *GlobalSearch_Search_Integrations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations{}
+		t = &GlobalSearch_Search_Integrations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations) GetTags() []string {
+func (t *GlobalSearch_Search_Integrations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations{}
+		t = &GlobalSearch_Search_Integrations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_IntegrationSearchResult struct {
-	Integrations []*GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
+type GlobalSearch_Search_Integrations_Edges struct {
+	Node *GlobalSearch_Search_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult) GetIntegrations() []*GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations {
+func (t *GlobalSearch_Search_Integrations_Edges) GetNode() *GlobalSearch_Search_Integrations_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult{}
+		t = &GlobalSearch_Search_Integrations_Edges{}
 	}
-	return t.Integrations
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies struct {
+type GlobalSearch_Search_Integrations struct {
+	Edges      []*GlobalSearch_Search_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Integrations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Integrations) GetEdges() []*GlobalSearch_Search_Integrations_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Integrations) GetPageInfo() *GlobalSearch_Search_Integrations_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Integrations) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Integrations{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_InternalPolicies_Edges_Node struct {
 	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
@@ -49772,78 +52624,278 @@ type GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies struc
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() *string {
+func (t *GlobalSearch_Search_InternalPolicies_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetDisplayID() string {
+func (t *GlobalSearch_Search_InternalPolicies_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetID() string {
+func (t *GlobalSearch_Search_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetName() string {
+func (t *GlobalSearch_Search_InternalPolicies_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies) GetTags() []string {
+func (t *GlobalSearch_Search_InternalPolicies_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_InternalPolicySearchResult struct {
-	InternalPolicies []*GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+type GlobalSearch_Search_InternalPolicies_Edges struct {
+	Node *GlobalSearch_Search_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_InternalPolicySearchResult) GetInternalPolicies() []*GlobalSearch_Search_Nodes_InternalPolicySearchResult_InternalPolicies {
+func (t *GlobalSearch_Search_InternalPolicies_Edges) GetNode() *GlobalSearch_Search_InternalPolicies_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_InternalPolicySearchResult{}
+		t = &GlobalSearch_Search_InternalPolicies_Edges{}
 	}
-	return t.InternalPolicies
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls struct {
+type GlobalSearch_Search_InternalPolicies struct {
+	Edges      []*GlobalSearch_Search_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_InternalPolicies) GetEdges() []*GlobalSearch_Search_InternalPolicies_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_InternalPolicies) GetPageInfo() *GlobalSearch_Search_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_InternalPolicies{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Invites_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Invites_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Invites_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Invites_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Invites_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Invites_Edges_Node struct {
+	ID        string "json:\"id\" graphql:\"id\""
+	Recipient string "json:\"recipient\" graphql:\"recipient\""
+}
+
+func (t *GlobalSearch_Search_Invites_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Invites_Edges_Node) GetRecipient() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_Edges_Node{}
+	}
+	return t.Recipient
+}
+
+type GlobalSearch_Search_Invites_Edges struct {
+	Node *GlobalSearch_Search_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Invites_Edges) GetNode() *GlobalSearch_Search_Invites_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Invites struct {
+	Edges      []*GlobalSearch_Search_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Invites_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Invites) GetEdges() []*GlobalSearch_Search_Invites_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Invites) GetPageInfo() *GlobalSearch_Search_Invites_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Invites) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Invites{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_MappedControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_MappedControls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_MappedControls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_MappedControls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_MappedControls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_MappedControls_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls) GetID() string {
+func (t *GlobalSearch_Search_MappedControls_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &GlobalSearch_Search_MappedControls_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls) GetTags() []string {
+func (t *GlobalSearch_Search_MappedControls_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls{}
+		t = &GlobalSearch_Search_MappedControls_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_MappedControlSearchResult struct {
-	MappedControls []*GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+type GlobalSearch_Search_MappedControls_Edges struct {
+	Node *GlobalSearch_Search_MappedControls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_MappedControlSearchResult) GetMappedControls() []*GlobalSearch_Search_Nodes_MappedControlSearchResult_MappedControls {
+func (t *GlobalSearch_Search_MappedControls_Edges) GetNode() *GlobalSearch_Search_MappedControls_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_MappedControlSearchResult{}
+		t = &GlobalSearch_Search_MappedControls_Edges{}
 	}
-	return t.MappedControls
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives struct {
+type GlobalSearch_Search_MappedControls struct {
+	Edges      []*GlobalSearch_Search_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_MappedControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_MappedControls) GetEdges() []*GlobalSearch_Search_MappedControls_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_MappedControls) GetPageInfo() *GlobalSearch_Search_MappedControls_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_MappedControls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_MappedControls{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Narratives_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Narratives_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Narratives_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Narratives_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Narratives_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Narratives_Edges_Node struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -49851,179 +52903,464 @@ type GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetDescription() *string {
+func (t *GlobalSearch_Search_Narratives_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+		t = &GlobalSearch_Search_Narratives_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetDisplayID() string {
+func (t *GlobalSearch_Search_Narratives_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+		t = &GlobalSearch_Search_Narratives_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetID() string {
+func (t *GlobalSearch_Search_Narratives_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+		t = &GlobalSearch_Search_Narratives_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetName() string {
+func (t *GlobalSearch_Search_Narratives_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+		t = &GlobalSearch_Search_Narratives_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives) GetTags() []string {
+func (t *GlobalSearch_Search_Narratives_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives{}
+		t = &GlobalSearch_Search_Narratives_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_NarrativeSearchResult struct {
-	Narratives []*GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives "json:\"narratives,omitempty\" graphql:\"narratives\""
+type GlobalSearch_Search_Narratives_Edges struct {
+	Node *GlobalSearch_Search_Narratives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_NarrativeSearchResult) GetNarratives() []*GlobalSearch_Search_Nodes_NarrativeSearchResult_Narratives {
+func (t *GlobalSearch_Search_Narratives_Edges) GetNode() *GlobalSearch_Search_Narratives_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_NarrativeSearchResult{}
+		t = &GlobalSearch_Search_Narratives_Edges{}
 	}
-	return t.Narratives
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
+type GlobalSearch_Search_Narratives struct {
+	Edges      []*GlobalSearch_Search_Narratives_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Narratives_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Narratives) GetEdges() []*GlobalSearch_Search_Narratives_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Narratives) GetPageInfo() *GlobalSearch_Search_Narratives_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Narratives) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Narratives{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_OrgSubscriptions_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_OrgSubscriptions_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_OrgSubscriptions_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_OrgSubscriptions_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_OrgSubscriptions_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_OrgSubscriptions_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetID() string {
+func (t *GlobalSearch_Search_OrgSubscriptions_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &GlobalSearch_Search_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetTags() []string {
+func (t *GlobalSearch_Search_OrgSubscriptions_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+		t = &GlobalSearch_Search_OrgSubscriptions_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult struct {
-	OrgSubscriptions []*GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+type GlobalSearch_Search_OrgSubscriptions_Edges struct {
+	Node *GlobalSearch_Search_OrgSubscriptions_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult) GetOrgSubscriptions() []*GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions {
+func (t *GlobalSearch_Search_OrgSubscriptions_Edges) GetNode() *GlobalSearch_Search_OrgSubscriptions_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult{}
+		t = &GlobalSearch_Search_OrgSubscriptions_Edges{}
 	}
-	return t.OrgSubscriptions
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
+type GlobalSearch_Search_OrgSubscriptions struct {
+	Edges      []*GlobalSearch_Search_OrgSubscriptions_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_OrgSubscriptions_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_OrgSubscriptions) GetEdges() []*GlobalSearch_Search_OrgSubscriptions_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_OrgSubscriptions) GetPageInfo() *GlobalSearch_Search_OrgSubscriptions_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_OrgSubscriptions) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_OrgSubscriptions{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Organizations_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Organizations_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Organizations_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Organizations_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Organizations_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Organizations_Edges_Node struct {
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Name        string   "json:\"name\" graphql:\"name\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
+func (t *GlobalSearch_Search_Organizations_Edges_Node) GetDisplayName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Organizations_Edges_Node{}
 	}
 	return t.DisplayName
 }
-func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetID() string {
+func (t *GlobalSearch_Search_Organizations_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Organizations_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetName() string {
+func (t *GlobalSearch_Search_Organizations_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Organizations_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
+func (t *GlobalSearch_Search_Organizations_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Organizations_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_OrganizationSearchResult struct {
-	Organizations []*GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+type GlobalSearch_Search_Organizations_Edges struct {
+	Node *GlobalSearch_Search_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult) GetOrganizations() []*GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations {
+func (t *GlobalSearch_Search_Organizations_Edges) GetNode() *GlobalSearch_Search_Organizations_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult{}
+		t = &GlobalSearch_Search_Organizations_Edges{}
 	}
-	return t.Organizations
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
+type GlobalSearch_Search_Organizations struct {
+	Edges      []*GlobalSearch_Search_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Organizations_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Organizations) GetEdges() []*GlobalSearch_Search_Organizations_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Organizations) GetPageInfo() *GlobalSearch_Search_Organizations_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Organizations) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Organizations{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_OrganizationSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_OrganizationSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_OrganizationSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_OrganizationSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_OrganizationSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_OrganizationSettings_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetID() string {
+func (t *GlobalSearch_Search_OrganizationSettings_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &GlobalSearch_Search_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTags() []string {
+func (t *GlobalSearch_Search_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+		t = &GlobalSearch_Search_OrganizationSettings_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_OrganizationSettingSearchResult struct {
-	OrganizationSettings []*GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+type GlobalSearch_Search_OrganizationSettings_Edges struct {
+	Node *GlobalSearch_Search_OrganizationSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult) GetOrganizationSettings() []*GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings {
+func (t *GlobalSearch_Search_OrganizationSettings_Edges) GetNode() *GlobalSearch_Search_OrganizationSettings_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult{}
+		t = &GlobalSearch_Search_OrganizationSettings_Edges{}
 	}
-	return t.OrganizationSettings
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
+type GlobalSearch_Search_OrganizationSettings struct {
+	Edges      []*GlobalSearch_Search_OrganizationSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_OrganizationSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_OrganizationSettings) GetEdges() []*GlobalSearch_Search_OrganizationSettings_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_OrganizationSettings) GetPageInfo() *GlobalSearch_Search_OrganizationSettings_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_OrganizationSettings) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_OrganizationSettings{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_PersonalAccessTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_PersonalAccessTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_PersonalAccessTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_PersonalAccessTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_PersonalAccessTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_PersonalAccessTokens_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetID() string {
+func (t *GlobalSearch_Search_PersonalAccessTokens_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &GlobalSearch_Search_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetTags() []string {
+func (t *GlobalSearch_Search_PersonalAccessTokens_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+		t = &GlobalSearch_Search_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult struct {
-	PersonalAccessTokens []*GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+type GlobalSearch_Search_PersonalAccessTokens_Edges struct {
+	Node *GlobalSearch_Search_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult) GetPersonalAccessTokens() []*GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens {
+func (t *GlobalSearch_Search_PersonalAccessTokens_Edges) GetNode() *GlobalSearch_Search_PersonalAccessTokens_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult{}
+		t = &GlobalSearch_Search_PersonalAccessTokens_Edges{}
 	}
-	return t.PersonalAccessTokens
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures struct {
+type GlobalSearch_Search_PersonalAccessTokens struct {
+	Edges      []*GlobalSearch_Search_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_PersonalAccessTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_PersonalAccessTokens) GetEdges() []*GlobalSearch_Search_PersonalAccessTokens_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_PersonalAccessTokens) GetPageInfo() *GlobalSearch_Search_PersonalAccessTokens_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_PersonalAccessTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_PersonalAccessTokens{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Procedures_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Procedures_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Procedures_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Procedures_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Procedures_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Procedures_Edges_Node struct {
 	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
@@ -50031,49 +53368,106 @@ type GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures struct {
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDetails() *string {
+func (t *GlobalSearch_Search_Procedures_Edges_Node) GetDetails() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+		t = &GlobalSearch_Search_Procedures_Edges_Node{}
 	}
 	return t.Details
 }
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetDisplayID() string {
+func (t *GlobalSearch_Search_Procedures_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+		t = &GlobalSearch_Search_Procedures_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetID() string {
+func (t *GlobalSearch_Search_Procedures_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+		t = &GlobalSearch_Search_Procedures_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetName() string {
+func (t *GlobalSearch_Search_Procedures_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+		t = &GlobalSearch_Search_Procedures_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures) GetTags() []string {
+func (t *GlobalSearch_Search_Procedures_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures{}
+		t = &GlobalSearch_Search_Procedures_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ProcedureSearchResult struct {
-	Procedures []*GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+type GlobalSearch_Search_Procedures_Edges struct {
+	Node *GlobalSearch_Search_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult) GetProcedures() []*GlobalSearch_Search_Nodes_ProcedureSearchResult_Procedures {
+func (t *GlobalSearch_Search_Procedures_Edges) GetNode() *GlobalSearch_Search_Procedures_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProcedureSearchResult{}
+		t = &GlobalSearch_Search_Procedures_Edges{}
 	}
-	return t.Procedures
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_ProgramSearchResult_Programs struct {
+type GlobalSearch_Search_Procedures struct {
+	Edges      []*GlobalSearch_Search_Procedures_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Procedures_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Procedures) GetEdges() []*GlobalSearch_Search_Procedures_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Procedures) GetPageInfo() *GlobalSearch_Search_Procedures_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Procedures) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Procedures{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Programs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Programs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Programs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Programs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Programs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Programs_Edges_Node struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -50081,92 +53475,206 @@ type GlobalSearch_Search_Nodes_ProgramSearchResult_Programs struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetDescription() *string {
+func (t *GlobalSearch_Search_Programs_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+		t = &GlobalSearch_Search_Programs_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetDisplayID() string {
+func (t *GlobalSearch_Search_Programs_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+		t = &GlobalSearch_Search_Programs_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetID() string {
+func (t *GlobalSearch_Search_Programs_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+		t = &GlobalSearch_Search_Programs_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetName() string {
+func (t *GlobalSearch_Search_Programs_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+		t = &GlobalSearch_Search_Programs_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetTags() []string {
+func (t *GlobalSearch_Search_Programs_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+		t = &GlobalSearch_Search_Programs_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_ProgramSearchResult struct {
-	Programs []*GlobalSearch_Search_Nodes_ProgramSearchResult_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+type GlobalSearch_Search_Programs_Edges struct {
+	Node *GlobalSearch_Search_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_ProgramSearchResult) GetPrograms() []*GlobalSearch_Search_Nodes_ProgramSearchResult_Programs {
+func (t *GlobalSearch_Search_Programs_Edges) GetNode() *GlobalSearch_Search_Programs_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_ProgramSearchResult{}
+		t = &GlobalSearch_Search_Programs_Edges{}
 	}
-	return t.Programs
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_RiskSearchResult_Risks struct {
+type GlobalSearch_Search_Programs struct {
+	Edges      []*GlobalSearch_Search_Programs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Programs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Programs) GetEdges() []*GlobalSearch_Search_Programs_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Programs) GetPageInfo() *GlobalSearch_Search_Programs_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Programs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Programs{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Risks_Edges_Node struct {
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Name      string   "json:\"name\" graphql:\"name\""
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetDisplayID() string {
+func (t *GlobalSearch_Search_Risks_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
+		t = &GlobalSearch_Search_Risks_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetID() string {
+func (t *GlobalSearch_Search_Risks_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
+		t = &GlobalSearch_Search_Risks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetName() string {
+func (t *GlobalSearch_Search_Risks_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
+		t = &GlobalSearch_Search_Risks_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult_Risks) GetTags() []string {
+func (t *GlobalSearch_Search_Risks_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult_Risks{}
+		t = &GlobalSearch_Search_Risks_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_RiskSearchResult struct {
-	Risks []*GlobalSearch_Search_Nodes_RiskSearchResult_Risks "json:\"risks,omitempty\" graphql:\"risks\""
+type GlobalSearch_Search_Risks_Edges struct {
+	Node *GlobalSearch_Search_Risks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_RiskSearchResult) GetRisks() []*GlobalSearch_Search_Nodes_RiskSearchResult_Risks {
+func (t *GlobalSearch_Search_Risks_Edges) GetNode() *GlobalSearch_Search_Risks_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_RiskSearchResult{}
+		t = &GlobalSearch_Search_Risks_Edges{}
 	}
-	return t.Risks
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_StandardSearchResult_Standards struct {
+type GlobalSearch_Search_Risks struct {
+	Edges      []*GlobalSearch_Search_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Risks) GetEdges() []*GlobalSearch_Search_Risks_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Risks) GetPageInfo() *GlobalSearch_Search_Risks_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Risks{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Standards_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Standards_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Standards_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Standards_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Standards_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Standards_Edges_Node struct {
 	Domains       []string "json:\"domains,omitempty\" graphql:\"domains\""
 	Framework     *string  "json:\"framework,omitempty\" graphql:\"framework\""
 	GoverningBody *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
@@ -50176,61 +53684,118 @@ type GlobalSearch_Search_Nodes_StandardSearchResult_Standards struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetDomains() []string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetDomains() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.Domains
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetFramework() *string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetFramework() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.Framework
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetGoverningBody() *string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetGoverningBody() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.GoverningBody
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetID() string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetName() string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetShortName() *string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetShortName() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.ShortName
 }
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetTags() []string {
+func (t *GlobalSearch_Search_Standards_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+		t = &GlobalSearch_Search_Standards_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_StandardSearchResult struct {
-	Standards []*GlobalSearch_Search_Nodes_StandardSearchResult_Standards "json:\"standards,omitempty\" graphql:\"standards\""
+type GlobalSearch_Search_Standards_Edges struct {
+	Node *GlobalSearch_Search_Standards_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_StandardSearchResult) GetStandards() []*GlobalSearch_Search_Nodes_StandardSearchResult_Standards {
+func (t *GlobalSearch_Search_Standards_Edges) GetNode() *GlobalSearch_Search_Standards_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_StandardSearchResult{}
+		t = &GlobalSearch_Search_Standards_Edges{}
 	}
-	return t.Standards
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols struct {
+type GlobalSearch_Search_Standards struct {
+	Edges      []*GlobalSearch_Search_Standards_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Standards_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Standards) GetEdges() []*GlobalSearch_Search_Standards_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Standards) GetPageInfo() *GlobalSearch_Search_Standards_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Standards) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Standards{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Subcontrols_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Subcontrols_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Subcontrols_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Subcontrols_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Subcontrols_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Subcontrols_Edges_Node struct {
 	Category         *string  "json:\"category,omitempty\" graphql:\"category\""
 	Description      *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID        string   "json:\"displayID\" graphql:\"displayID\""
@@ -50241,103 +53806,217 @@ type GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	Tags             []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetCategory() *string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetCategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.Category
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetDescription() *string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetDisplayID() string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetID() string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetMappedCategories() []string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetMappedCategories() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.MappedCategories
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetRefCode() string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetRefCode() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.RefCode
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcategory() *string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetSubcategory() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.Subcategory
 }
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetTags() []string {
+func (t *GlobalSearch_Search_Subcontrols_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+		t = &GlobalSearch_Search_Subcontrols_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_SubcontrolSearchResult struct {
-	Subcontrols []*GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+type GlobalSearch_Search_Subcontrols_Edges struct {
+	Node *GlobalSearch_Search_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult) GetSubcontrols() []*GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols {
+func (t *GlobalSearch_Search_Subcontrols_Edges) GetNode() *GlobalSearch_Search_Subcontrols_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult{}
+		t = &GlobalSearch_Search_Subcontrols_Edges{}
 	}
-	return t.Subcontrols
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
+type GlobalSearch_Search_Subcontrols struct {
+	Edges      []*GlobalSearch_Search_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Subcontrols_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Subcontrols) GetEdges() []*GlobalSearch_Search_Subcontrols_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Subcontrols) GetPageInfo() *GlobalSearch_Search_Subcontrols_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Subcontrols) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Subcontrols{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Subscribers_Edges_Node struct {
 	Email string   "json:\"email\" graphql:\"email\""
 	ID    string   "json:\"id\" graphql:\"id\""
 	Tags  []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
+func (t *GlobalSearch_Search_Subscribers_Edges_Node) GetEmail() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &GlobalSearch_Search_Subscribers_Edges_Node{}
 	}
 	return t.Email
 }
-func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
+func (t *GlobalSearch_Search_Subscribers_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &GlobalSearch_Search_Subscribers_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
+func (t *GlobalSearch_Search_Subscribers_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &GlobalSearch_Search_Subscribers_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_SubscriberSearchResult struct {
-	Subscribers []*GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+type GlobalSearch_Search_Subscribers_Edges struct {
+	Node *GlobalSearch_Search_Subscribers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers {
+func (t *GlobalSearch_Search_Subscribers_Edges) GetNode() *GlobalSearch_Search_Subscribers_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult{}
+		t = &GlobalSearch_Search_Subscribers_Edges{}
 	}
-	return t.Subscribers
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_TaskSearchResult_Tasks struct {
+type GlobalSearch_Search_Subscribers struct {
+	Edges      []*GlobalSearch_Search_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Subscribers) GetEdges() []*GlobalSearch_Search_Subscribers_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Subscribers) GetPageInfo() *GlobalSearch_Search_Subscribers_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Subscribers{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Tasks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Tasks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Tasks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Tasks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Tasks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Tasks_Edges_Node struct {
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -50345,386 +54024,585 @@ type GlobalSearch_Search_Nodes_TaskSearchResult_Tasks struct {
 	Title       string   "json:\"title\" graphql:\"title\""
 }
 
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetDescription() *string {
+func (t *GlobalSearch_Search_Tasks_Edges_Node) GetDescription() *string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+		t = &GlobalSearch_Search_Tasks_Edges_Node{}
 	}
 	return t.Description
 }
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetDisplayID() string {
+func (t *GlobalSearch_Search_Tasks_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+		t = &GlobalSearch_Search_Tasks_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetID() string {
+func (t *GlobalSearch_Search_Tasks_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+		t = &GlobalSearch_Search_Tasks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetTags() []string {
+func (t *GlobalSearch_Search_Tasks_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+		t = &GlobalSearch_Search_Tasks_Edges_Node{}
 	}
 	return t.Tags
 }
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetTitle() string {
+func (t *GlobalSearch_Search_Tasks_Edges_Node) GetTitle() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+		t = &GlobalSearch_Search_Tasks_Edges_Node{}
 	}
 	return t.Title
 }
 
-type GlobalSearch_Search_Nodes_TaskSearchResult struct {
-	Tasks []*GlobalSearch_Search_Nodes_TaskSearchResult_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+type GlobalSearch_Search_Tasks_Edges struct {
+	Node *GlobalSearch_Search_Tasks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_TaskSearchResult) GetTasks() []*GlobalSearch_Search_Nodes_TaskSearchResult_Tasks {
+func (t *GlobalSearch_Search_Tasks_Edges) GetNode() *GlobalSearch_Search_Tasks_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TaskSearchResult{}
+		t = &GlobalSearch_Search_Tasks_Edges{}
 	}
-	return t.Tasks
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_TemplateSearchResult_Templates struct {
+type GlobalSearch_Search_Tasks struct {
+	Edges      []*GlobalSearch_Search_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Tasks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Tasks) GetEdges() []*GlobalSearch_Search_Tasks_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Tasks) GetPageInfo() *GlobalSearch_Search_Tasks_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Tasks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Tasks{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Templates_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Templates_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Templates_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Templates_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Templates_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Templates_Edges_Node struct {
 	ID         string         "json:\"id\" graphql:\"id\""
 	Jsonconfig map[string]any "json:\"jsonconfig\" graphql:\"jsonconfig\""
 	Name       string         "json:\"name\" graphql:\"name\""
 	Tags       []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetID() string {
+func (t *GlobalSearch_Search_Templates_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+		t = &GlobalSearch_Search_Templates_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetJsonconfig() map[string]any {
+func (t *GlobalSearch_Search_Templates_Edges_Node) GetJsonconfig() map[string]any {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+		t = &GlobalSearch_Search_Templates_Edges_Node{}
 	}
 	return t.Jsonconfig
 }
-func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetName() string {
+func (t *GlobalSearch_Search_Templates_Edges_Node) GetName() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+		t = &GlobalSearch_Search_Templates_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetTags() []string {
+func (t *GlobalSearch_Search_Templates_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+		t = &GlobalSearch_Search_Templates_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_TemplateSearchResult struct {
-	Templates []*GlobalSearch_Search_Nodes_TemplateSearchResult_Templates "json:\"templates,omitempty\" graphql:\"templates\""
+type GlobalSearch_Search_Templates_Edges struct {
+	Node *GlobalSearch_Search_Templates_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_TemplateSearchResult) GetTemplates() []*GlobalSearch_Search_Nodes_TemplateSearchResult_Templates {
+func (t *GlobalSearch_Search_Templates_Edges) GetNode() *GlobalSearch_Search_Templates_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_TemplateSearchResult{}
+		t = &GlobalSearch_Search_Templates_Edges{}
 	}
-	return t.Templates
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_UserSearchResult_Users struct {
+type GlobalSearch_Search_Templates struct {
+	Edges      []*GlobalSearch_Search_Templates_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Templates_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Templates) GetEdges() []*GlobalSearch_Search_Templates_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Templates) GetPageInfo() *GlobalSearch_Search_Templates_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Templates) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Templates{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Users_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Users_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Users_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Users_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Users_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Users_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Users_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Users_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Users_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Users_Edges_Node struct {
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetDisplayID() string {
+func (t *GlobalSearch_Search_Users_Edges_Node) GetDisplayID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Users_Edges_Node{}
 	}
 	return t.DisplayID
 }
-func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetID() string {
+func (t *GlobalSearch_Search_Users_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Users_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetTags() []string {
+func (t *GlobalSearch_Search_Users_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Users_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_UserSearchResult struct {
-	Users []*GlobalSearch_Search_Nodes_UserSearchResult_Users "json:\"users,omitempty\" graphql:\"users\""
+type GlobalSearch_Search_Users_Edges struct {
+	Node *GlobalSearch_Search_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_UserSearchResult) GetUsers() []*GlobalSearch_Search_Nodes_UserSearchResult_Users {
+func (t *GlobalSearch_Search_Users_Edges) GetNode() *GlobalSearch_Search_Users_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSearchResult{}
+		t = &GlobalSearch_Search_Users_Edges{}
 	}
-	return t.Users
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings struct {
+type GlobalSearch_Search_Users struct {
+	Edges      []*GlobalSearch_Search_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Users_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Users) GetEdges() []*GlobalSearch_Search_Users_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Users{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Users) GetPageInfo() *GlobalSearch_Search_Users_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Users{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Users) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Users{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_UserSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_UserSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_UserSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_UserSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_UserSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_UserSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_UserSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_UserSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_UserSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_UserSettings_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings) GetID() string {
+func (t *GlobalSearch_Search_UserSettings_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &GlobalSearch_Search_UserSettings_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings) GetTags() []string {
+func (t *GlobalSearch_Search_UserSettings_Edges_Node) GetTags() []string {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings{}
+		t = &GlobalSearch_Search_UserSettings_Edges_Node{}
 	}
 	return t.Tags
 }
 
-type GlobalSearch_Search_Nodes_UserSettingSearchResult struct {
-	UserSettings []*GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+type GlobalSearch_Search_UserSettings_Edges struct {
+	Node *GlobalSearch_Search_UserSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult) GetUserSettings() []*GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings {
+func (t *GlobalSearch_Search_UserSettings_Edges) GetNode() *GlobalSearch_Search_UserSettings_Edges_Node {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult{}
+		t = &GlobalSearch_Search_UserSettings_Edges{}
 	}
-	return t.UserSettings
+	return t.Node
 }
 
-type GlobalSearch_Search_Nodes struct {
-	APITokenSearchResult              GlobalSearch_Search_Nodes_APITokenSearchResult              "graphql:\"... on APITokenSearchResult\""
-	ActionPlanSearchResult            GlobalSearch_Search_Nodes_ActionPlanSearchResult            "graphql:\"... on ActionPlanSearchResult\""
-	ContactSearchResult               GlobalSearch_Search_Nodes_ContactSearchResult               "graphql:\"... on ContactSearchResult\""
-	ControlImplementationSearchResult GlobalSearch_Search_Nodes_ControlImplementationSearchResult "graphql:\"... on ControlImplementationSearchResult\""
-	ControlObjectiveSearchResult      GlobalSearch_Search_Nodes_ControlObjectiveSearchResult      "graphql:\"... on ControlObjectiveSearchResult\""
-	ControlSearchResult               GlobalSearch_Search_Nodes_ControlSearchResult               "graphql:\"... on ControlSearchResult\""
-	DocumentDataSearchResult          GlobalSearch_Search_Nodes_DocumentDataSearchResult          "graphql:\"... on DocumentDataSearchResult\""
-	EntitySearchResult                GlobalSearch_Search_Nodes_EntitySearchResult                "graphql:\"... on EntitySearchResult\""
-	EntityTypeSearchResult            GlobalSearch_Search_Nodes_EntityTypeSearchResult            "graphql:\"... on EntityTypeSearchResult\""
-	EventSearchResult                 GlobalSearch_Search_Nodes_EventSearchResult                 "graphql:\"... on EventSearchResult\""
-	EvidenceSearchResult              GlobalSearch_Search_Nodes_EvidenceSearchResult              "graphql:\"... on EvidenceSearchResult\""
-	FileSearchResult                  GlobalSearch_Search_Nodes_FileSearchResult                  "graphql:\"... on FileSearchResult\""
-	GroupSearchResult                 GlobalSearch_Search_Nodes_GroupSearchResult                 "graphql:\"... on GroupSearchResult\""
-	IntegrationSearchResult           GlobalSearch_Search_Nodes_IntegrationSearchResult           "graphql:\"... on IntegrationSearchResult\""
-	InternalPolicySearchResult        GlobalSearch_Search_Nodes_InternalPolicySearchResult        "graphql:\"... on InternalPolicySearchResult\""
-	MappedControlSearchResult         GlobalSearch_Search_Nodes_MappedControlSearchResult         "graphql:\"... on MappedControlSearchResult\""
-	NarrativeSearchResult             GlobalSearch_Search_Nodes_NarrativeSearchResult             "graphql:\"... on NarrativeSearchResult\""
-	OrgSubscriptionSearchResult       GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult       "graphql:\"... on OrgSubscriptionSearchResult\""
-	OrganizationSearchResult          GlobalSearch_Search_Nodes_OrganizationSearchResult          "graphql:\"... on OrganizationSearchResult\""
-	OrganizationSettingSearchResult   GlobalSearch_Search_Nodes_OrganizationSettingSearchResult   "graphql:\"... on OrganizationSettingSearchResult\""
-	PersonalAccessTokenSearchResult   GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult   "graphql:\"... on PersonalAccessTokenSearchResult\""
-	ProcedureSearchResult             GlobalSearch_Search_Nodes_ProcedureSearchResult             "graphql:\"... on ProcedureSearchResult\""
-	ProgramSearchResult               GlobalSearch_Search_Nodes_ProgramSearchResult               "graphql:\"... on ProgramSearchResult\""
-	RiskSearchResult                  GlobalSearch_Search_Nodes_RiskSearchResult                  "graphql:\"... on RiskSearchResult\""
-	StandardSearchResult              GlobalSearch_Search_Nodes_StandardSearchResult              "graphql:\"... on StandardSearchResult\""
-	SubcontrolSearchResult            GlobalSearch_Search_Nodes_SubcontrolSearchResult            "graphql:\"... on SubcontrolSearchResult\""
-	SubscriberSearchResult            GlobalSearch_Search_Nodes_SubscriberSearchResult            "graphql:\"... on SubscriberSearchResult\""
-	TaskSearchResult                  GlobalSearch_Search_Nodes_TaskSearchResult                  "graphql:\"... on TaskSearchResult\""
-	TemplateSearchResult              GlobalSearch_Search_Nodes_TemplateSearchResult              "graphql:\"... on TemplateSearchResult\""
-	UserSearchResult                  GlobalSearch_Search_Nodes_UserSearchResult                  "graphql:\"... on UserSearchResult\""
-	UserSettingSearchResult           GlobalSearch_Search_Nodes_UserSettingSearchResult           "graphql:\"... on UserSettingSearchResult\""
+type GlobalSearch_Search_UserSettings struct {
+	Edges      []*GlobalSearch_Search_UserSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_UserSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
-func (t *GlobalSearch_Search_Nodes) GetAPITokenSearchResult() *GlobalSearch_Search_Nodes_APITokenSearchResult {
+func (t *GlobalSearch_Search_UserSettings) GetEdges() []*GlobalSearch_Search_UserSettings_Edges {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
+		t = &GlobalSearch_Search_UserSettings{}
 	}
-	return &t.APITokenSearchResult
+	return t.Edges
 }
-func (t *GlobalSearch_Search_Nodes) GetActionPlanSearchResult() *GlobalSearch_Search_Nodes_ActionPlanSearchResult {
+func (t *GlobalSearch_Search_UserSettings) GetPageInfo() *GlobalSearch_Search_UserSettings_PageInfo {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
+		t = &GlobalSearch_Search_UserSettings{}
 	}
-	return &t.ActionPlanSearchResult
+	return &t.PageInfo
 }
-func (t *GlobalSearch_Search_Nodes) GetContactSearchResult() *GlobalSearch_Search_Nodes_ContactSearchResult {
+func (t *GlobalSearch_Search_UserSettings) GetTotalCount() int64 {
 	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
+		t = &GlobalSearch_Search_UserSettings{}
 	}
-	return &t.ContactSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetControlImplementationSearchResult() *GlobalSearch_Search_Nodes_ControlImplementationSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.ControlImplementationSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetControlObjectiveSearchResult() *GlobalSearch_Search_Nodes_ControlObjectiveSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.ControlObjectiveSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetControlSearchResult() *GlobalSearch_Search_Nodes_ControlSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.ControlSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetDocumentDataSearchResult() *GlobalSearch_Search_Nodes_DocumentDataSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.DocumentDataSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetEntitySearchResult() *GlobalSearch_Search_Nodes_EntitySearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.EntitySearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetEntityTypeSearchResult() *GlobalSearch_Search_Nodes_EntityTypeSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.EntityTypeSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetEventSearchResult() *GlobalSearch_Search_Nodes_EventSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.EventSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetEvidenceSearchResult() *GlobalSearch_Search_Nodes_EvidenceSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.EvidenceSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetFileSearchResult() *GlobalSearch_Search_Nodes_FileSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.FileSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetGroupSearchResult() *GlobalSearch_Search_Nodes_GroupSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.GroupSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetIntegrationSearchResult() *GlobalSearch_Search_Nodes_IntegrationSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.IntegrationSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetInternalPolicySearchResult() *GlobalSearch_Search_Nodes_InternalPolicySearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.InternalPolicySearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetMappedControlSearchResult() *GlobalSearch_Search_Nodes_MappedControlSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.MappedControlSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetNarrativeSearchResult() *GlobalSearch_Search_Nodes_NarrativeSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.NarrativeSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetOrgSubscriptionSearchResult() *GlobalSearch_Search_Nodes_OrgSubscriptionSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.OrgSubscriptionSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetOrganizationSearchResult() *GlobalSearch_Search_Nodes_OrganizationSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.OrganizationSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetOrganizationSettingSearchResult() *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.OrganizationSettingSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetPersonalAccessTokenSearchResult() *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.PersonalAccessTokenSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetProcedureSearchResult() *GlobalSearch_Search_Nodes_ProcedureSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.ProcedureSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetProgramSearchResult() *GlobalSearch_Search_Nodes_ProgramSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.ProgramSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetRiskSearchResult() *GlobalSearch_Search_Nodes_RiskSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.RiskSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetStandardSearchResult() *GlobalSearch_Search_Nodes_StandardSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.StandardSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetSubcontrolSearchResult() *GlobalSearch_Search_Nodes_SubcontrolSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.SubcontrolSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetSubscriberSearchResult() *GlobalSearch_Search_Nodes_SubscriberSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.SubscriberSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetTaskSearchResult() *GlobalSearch_Search_Nodes_TaskSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.TaskSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetTemplateSearchResult() *GlobalSearch_Search_Nodes_TemplateSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.TemplateSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetUserSearchResult() *GlobalSearch_Search_Nodes_UserSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.UserSearchResult
-}
-func (t *GlobalSearch_Search_Nodes) GetUserSettingSearchResult() *GlobalSearch_Search_Nodes_UserSettingSearchResult {
-	if t == nil {
-		t = &GlobalSearch_Search_Nodes{}
-	}
-	return &t.UserSettingSearchResult
+	return t.TotalCount
 }
 
 type GlobalSearch_Search struct {
-	Nodes []*GlobalSearch_Search_Nodes "json:\"nodes\" graphql:\"nodes\""
+	ActionPlans            *GlobalSearch_Search_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	APITokens              *GlobalSearch_Search_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Contacts               *GlobalSearch_Search_Contacts               "json:\"contacts,omitempty\" graphql:\"contacts\""
+	ControlImplementations *GlobalSearch_Search_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+	ControlObjectives      *GlobalSearch_Search_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls               *GlobalSearch_Search_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
+	DocumentData           *GlobalSearch_Search_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
+	Entities               *GlobalSearch_Search_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
+	EntityTypes            *GlobalSearch_Search_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+	Events                 *GlobalSearch_Search_Events                 "json:\"events,omitempty\" graphql:\"events\""
+	Evidences              *GlobalSearch_Search_Evidences              "json:\"evidences,omitempty\" graphql:\"evidences\""
+	Files                  *GlobalSearch_Search_Files                  "json:\"files,omitempty\" graphql:\"files\""
+	Groups                 *GlobalSearch_Search_Groups                 "json:\"groups,omitempty\" graphql:\"groups\""
+	Integrations           *GlobalSearch_Search_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
+	InternalPolicies       *GlobalSearch_Search_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Invites                *GlobalSearch_Search_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
+	MappedControls         *GlobalSearch_Search_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+	Narratives             *GlobalSearch_Search_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
+	OrgSubscriptions       *GlobalSearch_Search_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	OrganizationSettings   *GlobalSearch_Search_OrganizationSettings   "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+	Organizations          *GlobalSearch_Search_Organizations          "json:\"organizations,omitempty\" graphql:\"organizations\""
+	PersonalAccessTokens   *GlobalSearch_Search_PersonalAccessTokens   "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+	Procedures             *GlobalSearch_Search_Procedures             "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Programs               *GlobalSearch_Search_Programs               "json:\"programs,omitempty\" graphql:\"programs\""
+	Risks                  *GlobalSearch_Search_Risks                  "json:\"risks,omitempty\" graphql:\"risks\""
+	Standards              *GlobalSearch_Search_Standards              "json:\"standards,omitempty\" graphql:\"standards\""
+	Subcontrols            *GlobalSearch_Search_Subcontrols            "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subscribers            *GlobalSearch_Search_Subscribers            "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+	Tasks                  *GlobalSearch_Search_Tasks                  "json:\"tasks,omitempty\" graphql:\"tasks\""
+	Templates              *GlobalSearch_Search_Templates              "json:\"templates,omitempty\" graphql:\"templates\""
+	TotalCount             int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+	UserSettings           *GlobalSearch_Search_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+	Users                  *GlobalSearch_Search_Users                  "json:\"users,omitempty\" graphql:\"users\""
 }
 
-func (t *GlobalSearch_Search) GetNodes() []*GlobalSearch_Search_Nodes {
+func (t *GlobalSearch_Search) GetActionPlans() *GlobalSearch_Search_ActionPlans {
 	if t == nil {
 		t = &GlobalSearch_Search{}
 	}
-	return t.Nodes
+	return t.ActionPlans
+}
+func (t *GlobalSearch_Search) GetAPITokens() *GlobalSearch_Search_APITokens {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.APITokens
+}
+func (t *GlobalSearch_Search) GetContacts() *GlobalSearch_Search_Contacts {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Contacts
+}
+func (t *GlobalSearch_Search) GetControlImplementations() *GlobalSearch_Search_ControlImplementations {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.ControlImplementations
+}
+func (t *GlobalSearch_Search) GetControlObjectives() *GlobalSearch_Search_ControlObjectives {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.ControlObjectives
+}
+func (t *GlobalSearch_Search) GetControls() *GlobalSearch_Search_Controls {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Controls
+}
+func (t *GlobalSearch_Search) GetDocumentData() *GlobalSearch_Search_DocumentData {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.DocumentData
+}
+func (t *GlobalSearch_Search) GetEntities() *GlobalSearch_Search_Entities {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Entities
+}
+func (t *GlobalSearch_Search) GetEntityTypes() *GlobalSearch_Search_EntityTypes {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.EntityTypes
+}
+func (t *GlobalSearch_Search) GetEvents() *GlobalSearch_Search_Events {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Events
+}
+func (t *GlobalSearch_Search) GetEvidences() *GlobalSearch_Search_Evidences {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Evidences
+}
+func (t *GlobalSearch_Search) GetFiles() *GlobalSearch_Search_Files {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Files
+}
+func (t *GlobalSearch_Search) GetGroups() *GlobalSearch_Search_Groups {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Groups
+}
+func (t *GlobalSearch_Search) GetIntegrations() *GlobalSearch_Search_Integrations {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Integrations
+}
+func (t *GlobalSearch_Search) GetInternalPolicies() *GlobalSearch_Search_InternalPolicies {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.InternalPolicies
+}
+func (t *GlobalSearch_Search) GetInvites() *GlobalSearch_Search_Invites {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Invites
+}
+func (t *GlobalSearch_Search) GetMappedControls() *GlobalSearch_Search_MappedControls {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.MappedControls
+}
+func (t *GlobalSearch_Search) GetNarratives() *GlobalSearch_Search_Narratives {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Narratives
+}
+func (t *GlobalSearch_Search) GetOrgSubscriptions() *GlobalSearch_Search_OrgSubscriptions {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.OrgSubscriptions
+}
+func (t *GlobalSearch_Search) GetOrganizationSettings() *GlobalSearch_Search_OrganizationSettings {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.OrganizationSettings
+}
+func (t *GlobalSearch_Search) GetOrganizations() *GlobalSearch_Search_Organizations {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Organizations
+}
+func (t *GlobalSearch_Search) GetPersonalAccessTokens() *GlobalSearch_Search_PersonalAccessTokens {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.PersonalAccessTokens
+}
+func (t *GlobalSearch_Search) GetProcedures() *GlobalSearch_Search_Procedures {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Procedures
+}
+func (t *GlobalSearch_Search) GetPrograms() *GlobalSearch_Search_Programs {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Programs
+}
+func (t *GlobalSearch_Search) GetRisks() *GlobalSearch_Search_Risks {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Risks
+}
+func (t *GlobalSearch_Search) GetStandards() *GlobalSearch_Search_Standards {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Standards
+}
+func (t *GlobalSearch_Search) GetSubcontrols() *GlobalSearch_Search_Subcontrols {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Subcontrols
+}
+func (t *GlobalSearch_Search) GetSubscribers() *GlobalSearch_Search_Subscribers {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Subscribers
+}
+func (t *GlobalSearch_Search) GetTasks() *GlobalSearch_Search_Tasks {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Tasks
+}
+func (t *GlobalSearch_Search) GetTemplates() *GlobalSearch_Search_Templates {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Templates
+}
+func (t *GlobalSearch_Search) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.TotalCount
+}
+func (t *GlobalSearch_Search) GetUserSettings() *GlobalSearch_Search_UserSettings {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.UserSettings
+}
+func (t *GlobalSearch_Search) GetUsers() *GlobalSearch_Search_Users {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Users
 }
 
 type CreateStandard_CreateStandard_Standard_Controls_PageInfo struct {
@@ -57422,14 +61300,69 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task_Assigner) GetLastName() *strin
 	return t.LastName
 }
 
+type UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges struct {
+	Node *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges) GetNode() *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files struct {
+	Edges []*UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files) GetEdges() []*UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Text      string     "json:\"text\" graphql:\"text\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                                             "json:\"displayID\" graphql:\"displayID\""
+	Files     UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                                             "json:\"id\" graphql:\"id\""
+	Text      string                                                             "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node) GetCreatedAt() *time.Time {
@@ -57449,6 +61382,12 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node) GetDispla
 		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node) GetFiles() *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *UpdateTaskComment_UpdateTaskComment_Task_Comments_Edges_Node) GetID() string {
 	if t == nil {
@@ -59747,29 +63686,51 @@ func (t *GetUserByID_User_Setting) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
-type GetUserByID_User_Organizations_Edges_Node_Members struct {
+type GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node struct {
 	ID   string     "json:\"id\" graphql:\"id\""
 	Role enums.Role "json:\"role\" graphql:\"role\""
 }
 
-func (t *GetUserByID_User_Organizations_Edges_Node_Members) GetID() string {
+func (t *GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetUserByID_User_Organizations_Edges_Node_Members{}
+		t = &GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetUserByID_User_Organizations_Edges_Node_Members) GetRole() *enums.Role {
+func (t *GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetUserByID_User_Organizations_Edges_Node_Members{}
+		t = &GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.Role
 }
 
+type GetUserByID_User_Organizations_Edges_Node_Members_Edges struct {
+	Node *GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetUserByID_User_Organizations_Edges_Node_Members_Edges) GetNode() *GetUserByID_User_Organizations_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetUserByID_User_Organizations_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetUserByID_User_Organizations_Edges_Node_Members struct {
+	Edges []*GetUserByID_User_Organizations_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetUserByID_User_Organizations_Edges_Node_Members) GetEdges() []*GetUserByID_User_Organizations_Edges_Node_Members_Edges {
+	if t == nil {
+		t = &GetUserByID_User_Organizations_Edges_Node_Members{}
+	}
+	return t.Edges
+}
+
 type GetUserByID_User_Organizations_Edges_Node struct {
-	ID          string                                               "json:\"id\" graphql:\"id\""
-	Members     []*GetUserByID_User_Organizations_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                               "json:\"name\" graphql:\"name\""
-	PersonalOrg *bool                                                "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	ID          string                                            "json:\"id\" graphql:\"id\""
+	Members     GetUserByID_User_Organizations_Edges_Node_Members "json:\"members\" graphql:\"members\""
+	Name        string                                            "json:\"name\" graphql:\"name\""
+	PersonalOrg *bool                                             "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
 }
 
 func (t *GetUserByID_User_Organizations_Edges_Node) GetID() string {
@@ -59778,11 +63739,11 @@ func (t *GetUserByID_User_Organizations_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetUserByID_User_Organizations_Edges_Node) GetMembers() []*GetUserByID_User_Organizations_Edges_Node_Members {
+func (t *GetUserByID_User_Organizations_Edges_Node) GetMembers() *GetUserByID_User_Organizations_Edges_Node_Members {
 	if t == nil {
 		t = &GetUserByID_User_Organizations_Edges_Node{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetUserByID_User_Organizations_Edges_Node) GetName() string {
 	if t == nil {
@@ -65952,9 +69913,17 @@ func (c *Client) GetActionPlanHistories(ctx context.Context, where *ActionPlanHi
 
 const AdminSearchDocument = `query AdminSearch ($query: String!) {
 	adminSearch(query: $query) {
-		nodes {
-			... on APITokenSearchResult {
-				apiTokens {
+		totalCount
+		apiTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -65965,8 +69934,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					revokedBy
 				}
 			}
-			... on ActionPlanSearchResult {
-				actionPlans {
+		}
+		actionPlans {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -65980,8 +69958,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					source
 				}
 			}
-			... on ContactSearchResult {
-				contacts {
+		}
+		contacts {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -65994,8 +69981,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					address
 				}
 			}
-			... on ControlSearchResult {
-				controls {
+		}
+		controls {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66020,8 +70016,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					standardID
 				}
 			}
-			... on ControlImplementationSearchResult {
-				controlImplementations {
+		}
+		controlImplementations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66029,8 +70034,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					details
 				}
 			}
-			... on ControlObjectiveSearchResult {
-				controlObjectives {
+		}
+		controlObjectives {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66045,8 +70059,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					subcategory
 				}
 			}
-			... on DocumentDataSearchResult {
-				documentData {
+		}
+		documentData {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66055,8 +70078,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					data
 				}
 			}
-			... on EntitySearchResult {
-				entities {
+		}
+		entities {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66069,8 +70101,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 				}
 			}
-			... on EntityTypeSearchResult {
-				entityTypes {
+		}
+		entityTypes {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66078,8 +70119,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					name
 				}
 			}
-			... on EventSearchResult {
-				events {
+		}
+		events {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 					eventID
@@ -66088,8 +70138,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					metadata
 				}
 			}
-			... on EvidenceSearchResult {
-				evidences {
+		}
+		evidences {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66102,8 +70161,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					url
 				}
 			}
-			... on FileSearchResult {
-				files {
+		}
+		files {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66120,8 +70188,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					storagePath
 				}
 			}
-			... on GroupSearchResult {
-				groups {
+		}
+		groups {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66131,8 +70208,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					displayName
 				}
 			}
-			... on IntegrationSearchResult {
-				integrations {
+		}
+		integrations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66141,8 +70227,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					kind
 				}
 			}
-			... on InternalPolicySearchResult {
-				internalPolicies {
+		}
+		internalPolicies {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66156,8 +70251,35 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					delegateID
 				}
 			}
-			... on MappedControlSearchResult {
-				mappedControls {
+		}
+		invites {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					ownerID
+					recipient
+					requestorID
+				}
+			}
+		}
+		mappedControls {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66165,8 +70287,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					relation
 				}
 			}
-			... on NarrativeSearchResult {
-				narratives {
+		}
+		narratives {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66177,8 +70308,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					details
 				}
 			}
-			... on OrgSubscriptionSearchResult {
-				orgSubscriptions {
+		}
+		orgSubscriptions {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66194,8 +70334,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					featureLookupKeys
 				}
 			}
-			... on OrganizationSearchResult {
-				organizations {
+		}
+		organizations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66205,8 +70354,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					avatarLocalFileID
 				}
 			}
-			... on OrganizationSettingSearchResult {
-				organizationSettings {
+		}
+		organizationSettings {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66220,8 +70378,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					allowedEmailDomains
 				}
 			}
-			... on PersonalAccessTokenSearchResult {
-				personalAccessTokens {
+		}
+		personalAccessTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66231,8 +70398,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					revokedBy
 				}
 			}
-			... on ProcedureSearchResult {
-				procedures {
+		}
+		procedures {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66246,8 +70422,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					delegateID
 				}
 			}
-			... on ProgramSearchResult {
-				programs {
+		}
+		programs {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66257,8 +70442,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					description
 				}
 			}
-			... on RiskSearchResult {
-				risks {
+		}
+		risks {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66274,8 +70468,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					delegateID
 				}
 			}
-			... on StandardSearchResult {
-				standards {
+		}
+		standards {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66293,8 +70496,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					version
 				}
 			}
-			... on SubcontrolSearchResult {
-				subcontrols {
+		}
+		subcontrols {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66319,8 +70531,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					controlID
 				}
 			}
-			... on SubscriberSearchResult {
-				subscribers {
+		}
+		subscribers {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66329,8 +70550,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					phoneNumber
 				}
 			}
-			... on TaskSearchResult {
-				tasks {
+		}
+		tasks {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66344,8 +70574,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					assignerID
 				}
 			}
-			... on TemplateSearchResult {
-				templates {
+		}
+		templates {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -66356,8 +70595,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					uischema
 				}
 			}
-			... on UserSearchResult {
-				users {
+		}
+		users {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					displayID
@@ -66371,8 +70619,17 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					sub
 				}
 			}
-			... on UserSettingSearchResult {
-				userSettings {
+		}
+		userSettings {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					deletedBy
 					id
 					tags
@@ -75098,12 +79355,17 @@ const CreateOrganizationWithMembersDocument = `mutation CreateOrganizationWithMe
 				tags
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}
@@ -75178,12 +79440,17 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					}
 				}
 				members {
-					id
-					role
-					user {
-						id
-						firstName
-						lastName
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
 					}
 				}
 				setting {
@@ -75306,12 +79573,17 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			}
 		}
 		members {
-			id
-			role
-			user {
-				id
-				firstName
-				lastName
+			totalCount
+			edges {
+				node {
+					id
+					role
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
 			}
 		}
 		setting {
@@ -75436,12 +79708,17 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					}
 				}
 				members {
-					id
-					role
-					user {
-						id
-						firstName
-						lastName
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
 					}
 				}
 				setting {
@@ -75556,9 +79833,14 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 			}
 			tags
 			members {
-				id
-				role
-				userID
+				totalCount
+				edges {
+					node {
+						id
+						role
+						userID
+					}
+				}
 			}
 			setting {
 				id
@@ -79212,31 +83494,66 @@ func (c *Client) GetRiskHistories(ctx context.Context, where *RiskHistoryWhereIn
 
 const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 	search(query: $query) {
-		nodes {
-			... on APITokenSearchResult {
-				apiTokens {
+		totalCount
+		apiTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on ActionPlanSearchResult {
-				actionPlans {
+		}
+		actionPlans {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					details
 					id
 					name
 					tags
 				}
 			}
-			... on ContactSearchResult {
-				contacts {
+		}
+		contacts {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					email
 					fullName
 					id
 					tags
 				}
 			}
-			... on ControlSearchResult {
-				controls {
+		}
+		controls {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					category
 					description
 					displayID
@@ -79247,14 +83564,32 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on ControlImplementationSearchResult {
-				controlImplementations {
+		}
+		controlImplementations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on ControlObjectiveSearchResult {
-				controlObjectives {
+		}
+		controlObjectives {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					category
 					displayID
 					id
@@ -79263,14 +83598,32 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on DocumentDataSearchResult {
-				documentData {
+		}
+		documentData {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on EntitySearchResult {
-				entities {
+		}
+		entities {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					description
 					displayName
 					id
@@ -79278,34 +83631,79 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on EntityTypeSearchResult {
-				entityTypes {
+		}
+		entityTypes {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on EventSearchResult {
-				events {
+		}
+		events {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on EvidenceSearchResult {
-				evidences {
+		}
+		evidences {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					displayID
 					id
 					name
 					tags
 				}
 			}
-			... on FileSearchResult {
-				files {
+		}
+		files {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on GroupSearchResult {
-				groups {
+		}
+		groups {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					displayID
 					displayName
 					id
@@ -79313,14 +83711,32 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on IntegrationSearchResult {
-				integrations {
+		}
+		integrations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on InternalPolicySearchResult {
-				internalPolicies {
+		}
+		internalPolicies {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					details
 					displayID
 					id
@@ -79328,14 +83744,47 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on MappedControlSearchResult {
-				mappedControls {
+		}
+		invites {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					recipient
+				}
+			}
+		}
+		mappedControls {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on NarrativeSearchResult {
-				narratives {
+		}
+		narratives {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					description
 					displayID
 					id
@@ -79343,34 +83792,79 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on OrgSubscriptionSearchResult {
-				orgSubscriptions {
+		}
+		orgSubscriptions {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on OrganizationSearchResult {
-				organizations {
+		}
+		organizations {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					displayName
 					id
 					name
 					tags
 				}
 			}
-			... on OrganizationSettingSearchResult {
-				organizationSettings {
+		}
+		organizationSettings {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on PersonalAccessTokenSearchResult {
-				personalAccessTokens {
+		}
+		personalAccessTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
 			}
-			... on ProcedureSearchResult {
-				procedures {
+		}
+		procedures {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					details
 					displayID
 					id
@@ -79378,8 +83872,17 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on ProgramSearchResult {
-				programs {
+		}
+		programs {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					description
 					displayID
 					id
@@ -79387,16 +83890,34 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on RiskSearchResult {
-				risks {
+		}
+		risks {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					displayID
 					id
 					name
 					tags
 				}
 			}
-			... on StandardSearchResult {
-				standards {
+		}
+		standards {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					domains
 					framework
 					governingBody
@@ -79406,8 +83927,17 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on SubcontrolSearchResult {
-				subcontrols {
+		}
+		subcontrols {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					category
 					description
 					displayID
@@ -79418,15 +83948,33 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
-			... on SubscriberSearchResult {
-				subscribers {
+		}
+		subscribers {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					email
 					id
 					tags
 				}
 			}
-			... on TaskSearchResult {
-				tasks {
+		}
+		tasks {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					description
 					displayID
 					id
@@ -79434,23 +83982,50 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					title
 				}
 			}
-			... on TemplateSearchResult {
-				templates {
+		}
+		templates {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					jsonconfig
 					name
 					tags
 				}
 			}
-			... on UserSearchResult {
-				users {
+		}
+		users {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					displayID
 					id
 					tags
 				}
 			}
-			... on UserSettingSearchResult {
-				userSettings {
+		}
+		userSettings {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
 					id
 					tags
 				}
@@ -81237,8 +85812,8 @@ func (c *Client) UpdateTask(ctx context.Context, updateTaskID string, input Upda
 	return &res, nil
 }
 
-const UpdateTaskCommentDocument = `mutation UpdateTaskComment ($updateTaskCommentId: ID!, $input: UpdateNoteInput!) {
-	updateTaskComment(id: $updateTaskCommentId, input: $input) {
+const UpdateTaskCommentDocument = `mutation UpdateTaskComment ($updateTaskCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateTaskComment(id: $updateTaskCommentId, input: $input, noteFiles: $noteFiles) {
 		task {
 			assignee {
 				id
@@ -81266,6 +85841,16 @@ const UpdateTaskCommentDocument = `mutation UpdateTaskComment ($updateTaskCommen
 						createdBy
 						updatedAt
 						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
 					}
 				}
 			}
@@ -81282,10 +85867,11 @@ const UpdateTaskCommentDocument = `mutation UpdateTaskComment ($updateTaskCommen
 }
 `
 
-func (c *Client) UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error) {
+func (c *Client) UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error) {
 	vars := map[string]any{
 		"updateTaskCommentId": updateTaskCommentID,
 		"input":               input,
+		"noteFiles":           noteFiles,
 	}
 
 	var res UpdateTaskComment
@@ -82038,8 +86624,12 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 					name
 					personalOrg
 					members {
-						id
-						role
+						edges {
+							node {
+								id
+								role
+							}
+						}
 					}
 				}
 			}
@@ -82106,8 +86696,6 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 		orgMemberships {
 			edges {
 				node {
-					id
-					role
 					id
 					role
 					user {

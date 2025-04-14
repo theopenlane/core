@@ -4,278 +4,799 @@ extend type Query{
     """
     adminAPITokenSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): APITokenSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): APITokenConnection
     """
     Search across ActionPlan objects
     """
     adminActionPlanSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ActionPlanSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ActionPlanConnection
     """
     Search across Contact objects
     """
     adminContactSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ContactSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ContactConnection
     """
     Search across Control objects
     """
     adminControlSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ControlSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ControlConnection
     """
     Search across ControlImplementation objects
     """
     adminControlImplementationSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ControlImplementationSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ControlImplementationConnection
     """
     Search across ControlObjective objects
     """
     adminControlObjectiveSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ControlObjectiveSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ControlObjectiveConnection
     """
     Search across DocumentData objects
     """
     adminDocumentDataSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): DocumentDataSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DocumentDataConnection
     """
     Search across Entity objects
     """
     adminEntitySearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): EntitySearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EntityConnection
     """
     Search across EntityType objects
     """
     adminEntityTypeSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): EntityTypeSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EntityTypeConnection
     """
     Search across Event objects
     """
     adminEventSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): EventSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EventConnection
     """
     Search across Evidence objects
     """
     adminEvidenceSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): EvidenceSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): EvidenceConnection
     """
     Search across File objects
     """
     adminFileSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): FileSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): FileConnection
     """
     Search across Group objects
     """
     adminGroupSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): GroupSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): GroupConnection
     """
     Search across Integration objects
     """
     adminIntegrationSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): IntegrationSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): IntegrationConnection
     """
     Search across InternalPolicy objects
     """
     adminInternalPolicySearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): InternalPolicySearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): InternalPolicyConnection
+    """
+    Search across Invite objects
+    """
+    adminInviteSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): InviteConnection
     """
     Search across MappedControl objects
     """
     adminMappedControlSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): MappedControlSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): MappedControlConnection
     """
     Search across Narrative objects
     """
     adminNarrativeSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): NarrativeSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): NarrativeConnection
     """
     Search across OrgSubscription objects
     """
     adminOrgSubscriptionSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): OrgSubscriptionSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): OrgSubscriptionConnection
     """
     Search across Organization objects
     """
     adminOrganizationSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): OrganizationSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): OrganizationConnection
     """
     Search across OrganizationSetting objects
     """
     adminOrganizationSettingSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): OrganizationSettingSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): OrganizationSettingConnection
     """
     Search across PersonalAccessToken objects
     """
     adminPersonalAccessTokenSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): PersonalAccessTokenSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): PersonalAccessTokenConnection
     """
     Search across Procedure objects
     """
     adminProcedureSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ProcedureSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ProcedureConnection
     """
     Search across Program objects
     """
     adminProgramSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): ProgramSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ProgramConnection
     """
     Search across Risk objects
     """
     adminRiskSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): RiskSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): RiskConnection
     """
     Search across Standard objects
     """
     adminStandardSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): StandardSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): StandardConnection
     """
     Search across Subcontrol objects
     """
     adminSubcontrolSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): SubcontrolSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SubcontrolConnection
     """
     Search across Subscriber objects
     """
     adminSubscriberSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): SubscriberSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SubscriberConnection
     """
     Search across Task objects
     """
     adminTaskSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): TaskSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TaskConnection
     """
     Search across Template objects
     """
     adminTemplateSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): TemplateSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TemplateConnection
     """
     Search across User objects
     """
     adminUserSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): UserSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): UserConnection
     """
     Search across UserSetting objects
     """
     adminUserSettingSearch(
         """
-        Search query
+        Query string to search across objects
         """
         query: String!
-    ): UserSettingSearchResult
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): UserSettingConnection
 }

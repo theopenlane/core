@@ -7,6 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -162,35 +163,34 @@ func totpGenerator(secret string) (string, error) {
 // this is based off the original decrypt function in totp.go
 // but has been modified to work with the test cases
 func decrypt(encryptedTxt string) (string, error) {
+	// Split and parse the version prefix
 	v := strings.Split(encryptedTxt, ":")[0]
 	encryptedTxt = strings.TrimPrefix(encryptedTxt, fmt.Sprintf("%s:", v))
 
 	secret := otpManagerSecret
 
-	key := sha256.New()
-
-	if _, err := key.Write([]byte(secret.Key)); err != nil {
-		return "", err
-	}
-
-	block, err := aes.NewCipher(key.Sum(nil))
-	if err != nil {
-		return "", err
-	}
-
-	if len(encryptedTxt) < aes.BlockSize {
-		return "", err
-	}
+	key := sha256.Sum256([]byte(secret.Key))
 
 	decoded, err := base64.StdEncoding.DecodeString(encryptedTxt)
 	if err != nil {
 		return "", err
 	}
 
-	iv := decoded[:aes.BlockSize]
-	decoded = decoded[aes.BlockSize:]
-	stream := cipher.NewCFBDecrypter(block, iv)
-	stream.XORKeyStream(decoded, decoded)
+	if len(decoded) < aes.BlockSize {
+		return "", errors.New("ciphertext too short") //nolint:err113
+	}
 
-	return string(decoded), nil
+	block, err := aes.NewCipher(key[:])
+	if err != nil {
+		return "", err
+	}
+
+	iv := decoded[:aes.BlockSize]
+	cipherText := decoded[aes.BlockSize:]
+
+	stream := cipher.NewCTR(block, iv)
+	plainText := make([]byte, len(cipherText))
+	stream.XORKeyStream(plainText, cipherText)
+
+	return string(plainText), nil
 }

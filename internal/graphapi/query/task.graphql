@@ -353,8 +353,8 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
   }
 }
 
-mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!) {
-  updateTaskComment(id: $updateTaskCommentId, input: $input) {
+mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+  updateTaskComment(id: $updateTaskCommentId, input: $input, noteFiles: $noteFiles) {
     task {
       assignee {
         id
@@ -382,6 +382,16 @@ mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!) 
             createdBy
             updatedAt
             updatedBy
+            files {
+              edges {
+                node {
+                  id
+                  storagePath
+                  storageScheme
+                  storageVolume
+                }
+              }
+            }
           }
         }
       }

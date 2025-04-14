@@ -5,266 +5,278 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // Search is the resolver for the search field.
-func (r *queryResolver) Search(ctx context.Context, query string) (*model.SearchResultConnection, error) {
+func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.SearchResults, error) {
 	if len(query) < 3 {
 		return nil, ErrSearchQueryTooShort
 	}
 
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
 	var (
 		errors                       []error
-		apitokenResults              []*generated.APIToken
-		actionplanResults            []*generated.ActionPlan
-		contactResults               []*generated.Contact
-		controlResults               []*generated.Control
-		controlimplementationResults []*generated.ControlImplementation
-		controlobjectiveResults      []*generated.ControlObjective
-		documentdataResults          []*generated.DocumentData
-		entityResults                []*generated.Entity
-		entitytypeResults            []*generated.EntityType
-		eventResults                 []*generated.Event
-		evidenceResults              []*generated.Evidence
-		fileResults                  []*generated.File
-		groupResults                 []*generated.Group
-		integrationResults           []*generated.Integration
-		internalpolicyResults        []*generated.InternalPolicy
-		mappedcontrolResults         []*generated.MappedControl
-		narrativeResults             []*generated.Narrative
-		orgsubscriptionResults       []*generated.OrgSubscription
-		organizationResults          []*generated.Organization
-		organizationsettingResults   []*generated.OrganizationSetting
-		personalaccesstokenResults   []*generated.PersonalAccessToken
-		procedureResults             []*generated.Procedure
-		programResults               []*generated.Program
-		riskResults                  []*generated.Risk
-		standardResults              []*generated.Standard
-		subcontrolResults            []*generated.Subcontrol
-		subscriberResults            []*generated.Subscriber
-		taskResults                  []*generated.Task
-		templateResults              []*generated.Template
-		userResults                  []*generated.User
-		usersettingResults           []*generated.UserSetting
+		apitokenResults              *generated.APITokenConnection
+		actionplanResults            *generated.ActionPlanConnection
+		contactResults               *generated.ContactConnection
+		controlResults               *generated.ControlConnection
+		controlimplementationResults *generated.ControlImplementationConnection
+		controlobjectiveResults      *generated.ControlObjectiveConnection
+		documentdataResults          *generated.DocumentDataConnection
+		entityResults                *generated.EntityConnection
+		entitytypeResults            *generated.EntityTypeConnection
+		eventResults                 *generated.EventConnection
+		evidenceResults              *generated.EvidenceConnection
+		fileResults                  *generated.FileConnection
+		groupResults                 *generated.GroupConnection
+		integrationResults           *generated.IntegrationConnection
+		internalpolicyResults        *generated.InternalPolicyConnection
+		inviteResults                *generated.InviteConnection
+		mappedcontrolResults         *generated.MappedControlConnection
+		narrativeResults             *generated.NarrativeConnection
+		orgsubscriptionResults       *generated.OrgSubscriptionConnection
+		organizationResults          *generated.OrganizationConnection
+		organizationsettingResults   *generated.OrganizationSettingConnection
+		personalaccesstokenResults   *generated.PersonalAccessTokenConnection
+		procedureResults             *generated.ProcedureConnection
+		programResults               *generated.ProgramConnection
+		riskResults                  *generated.RiskConnection
+		standardResults              *generated.StandardConnection
+		subcontrolResults            *generated.SubcontrolConnection
+		subscriberResults            *generated.SubscriberConnection
+		taskResults                  *generated.TaskConnection
+		templateResults              *generated.TemplateConnection
+		userResults                  *generated.UserConnection
+		usersettingResults           *generated.UserSettingConnection
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
 		func() {
 			var err error
-			apitokenResults, err = searchAPITokens(ctx, query)
+			apitokenResults, err = searchAPITokens(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			actionplanResults, err = searchActionPlans(ctx, query)
+			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			contactResults, err = searchContacts(ctx, query)
+			contactResults, err = searchContacts(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlResults, err = searchControls(ctx, query)
+			controlResults, err = searchControls(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlimplementationResults, err = searchControlImplementations(ctx, query)
+			controlimplementationResults, err = searchControlImplementations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			controlobjectiveResults, err = searchControlObjectives(ctx, query)
+			controlobjectiveResults, err = searchControlObjectives(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			documentdataResults, err = searchDocumentData(ctx, query)
+			documentdataResults, err = searchDocumentData(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			entityResults, err = searchEntities(ctx, query)
+			entityResults, err = searchEntities(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			entitytypeResults, err = searchEntityTypes(ctx, query)
+			entitytypeResults, err = searchEntityTypes(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			eventResults, err = searchEvents(ctx, query)
+			eventResults, err = searchEvents(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			evidenceResults, err = searchEvidences(ctx, query)
+			evidenceResults, err = searchEvidences(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			fileResults, err = searchFiles(ctx, query)
+			fileResults, err = searchFiles(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			groupResults, err = searchGroups(ctx, query)
+			groupResults, err = searchGroups(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			integrationResults, err = searchIntegrations(ctx, query)
+			integrationResults, err = searchIntegrations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			internalpolicyResults, err = searchInternalPolicies(ctx, query)
+			internalpolicyResults, err = searchInternalPolicies(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			mappedcontrolResults, err = searchMappedControls(ctx, query)
+			inviteResults, err = searchInvites(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			narrativeResults, err = searchNarratives(ctx, query)
+			mappedcontrolResults, err = searchMappedControls(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query)
+			narrativeResults, err = searchNarratives(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			organizationResults, err = searchOrganizations(ctx, query)
+			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			organizationsettingResults, err = searchOrganizationSettings(ctx, query)
+			organizationResults, err = searchOrganizations(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query)
+			organizationsettingResults, err = searchOrganizationSettings(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			procedureResults, err = searchProcedures(ctx, query)
+			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			programResults, err = searchPrograms(ctx, query)
+			procedureResults, err = searchProcedures(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			riskResults, err = searchRisks(ctx, query)
+			programResults, err = searchPrograms(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			standardResults, err = searchStandards(ctx, query)
+			riskResults, err = searchRisks(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			subcontrolResults, err = searchSubcontrols(ctx, query)
+			standardResults, err = searchStandards(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			subscriberResults, err = searchSubscribers(ctx, query)
+			subcontrolResults, err = searchSubcontrols(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			taskResults, err = searchTasks(ctx, query)
+			subscriberResults, err = searchSubscribers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			templateResults, err = searchTemplates(ctx, query)
+			taskResults, err = searchTasks(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			userResults, err = searchUsers(ctx, query)
+			templateResults, err = searchTemplates(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
 		},
 		func() {
 			var err error
-			usersettingResults, err = searchUserSettings(ctx, query)
+			userResults, err = searchUsers(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			usersettingResults, err = searchUserSettings(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -277,600 +289,489 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 	}
 
 	// return the results
-	var nodes []model.SearchResult
-	resultCount := 0
-	if len(apitokenResults) > 0 {
-		nodes = append(nodes, model.APITokenSearchResult{
-			APITokens: apitokenResults,
-		})
-
-		resultCount += len(apitokenResults)
+	res := &model.SearchResults{
+		TotalCount: 0,
 	}
-	if len(actionplanResults) > 0 {
-		nodes = append(nodes, model.ActionPlanSearchResult{
-			ActionPlans: actionplanResults,
-		})
+	if apitokenResults != nil && len(apitokenResults.Edges) > 0 {
+		res.APITokens = apitokenResults
 
-		resultCount += len(actionplanResults)
+		res.TotalCount += apitokenResults.TotalCount
 	}
-	if len(contactResults) > 0 {
-		nodes = append(nodes, model.ContactSearchResult{
-			Contacts: contactResults,
-		})
+	if actionplanResults != nil && len(actionplanResults.Edges) > 0 {
+		res.ActionPlans = actionplanResults
 
-		resultCount += len(contactResults)
+		res.TotalCount += actionplanResults.TotalCount
 	}
-	if len(controlResults) > 0 {
-		nodes = append(nodes, model.ControlSearchResult{
-			Controls: controlResults,
-		})
+	if contactResults != nil && len(contactResults.Edges) > 0 {
+		res.Contacts = contactResults
 
-		resultCount += len(controlResults)
+		res.TotalCount += contactResults.TotalCount
 	}
-	if len(controlimplementationResults) > 0 {
-		nodes = append(nodes, model.ControlImplementationSearchResult{
-			ControlImplementations: controlimplementationResults,
-		})
+	if controlResults != nil && len(controlResults.Edges) > 0 {
+		res.Controls = controlResults
 
-		resultCount += len(controlimplementationResults)
+		res.TotalCount += controlResults.TotalCount
 	}
-	if len(controlobjectiveResults) > 0 {
-		nodes = append(nodes, model.ControlObjectiveSearchResult{
-			ControlObjectives: controlobjectiveResults,
-		})
+	if controlimplementationResults != nil && len(controlimplementationResults.Edges) > 0 {
+		res.ControlImplementations = controlimplementationResults
 
-		resultCount += len(controlobjectiveResults)
+		res.TotalCount += controlimplementationResults.TotalCount
 	}
-	if len(documentdataResults) > 0 {
-		nodes = append(nodes, model.DocumentDataSearchResult{
-			DocumentData: documentdataResults,
-		})
+	if controlobjectiveResults != nil && len(controlobjectiveResults.Edges) > 0 {
+		res.ControlObjectives = controlobjectiveResults
 
-		resultCount += len(documentdataResults)
+		res.TotalCount += controlobjectiveResults.TotalCount
 	}
-	if len(entityResults) > 0 {
-		nodes = append(nodes, model.EntitySearchResult{
-			Entities: entityResults,
-		})
+	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
+		res.DocumentData = documentdataResults
 
-		resultCount += len(entityResults)
+		res.TotalCount += documentdataResults.TotalCount
 	}
-	if len(entitytypeResults) > 0 {
-		nodes = append(nodes, model.EntityTypeSearchResult{
-			EntityTypes: entitytypeResults,
-		})
+	if entityResults != nil && len(entityResults.Edges) > 0 {
+		res.Entities = entityResults
 
-		resultCount += len(entitytypeResults)
+		res.TotalCount += entityResults.TotalCount
 	}
-	if len(eventResults) > 0 {
-		nodes = append(nodes, model.EventSearchResult{
-			Events: eventResults,
-		})
+	if entitytypeResults != nil && len(entitytypeResults.Edges) > 0 {
+		res.EntityTypes = entitytypeResults
 
-		resultCount += len(eventResults)
+		res.TotalCount += entitytypeResults.TotalCount
 	}
-	if len(evidenceResults) > 0 {
-		nodes = append(nodes, model.EvidenceSearchResult{
-			Evidences: evidenceResults,
-		})
+	if eventResults != nil && len(eventResults.Edges) > 0 {
+		res.Events = eventResults
 
-		resultCount += len(evidenceResults)
+		res.TotalCount += eventResults.TotalCount
 	}
-	if len(fileResults) > 0 {
-		nodes = append(nodes, model.FileSearchResult{
-			Files: fileResults,
-		})
+	if evidenceResults != nil && len(evidenceResults.Edges) > 0 {
+		res.Evidences = evidenceResults
 
-		resultCount += len(fileResults)
+		res.TotalCount += evidenceResults.TotalCount
 	}
-	if len(groupResults) > 0 {
-		nodes = append(nodes, model.GroupSearchResult{
-			Groups: groupResults,
-		})
+	if fileResults != nil && len(fileResults.Edges) > 0 {
+		res.Files = fileResults
 
-		resultCount += len(groupResults)
+		res.TotalCount += fileResults.TotalCount
 	}
-	if len(integrationResults) > 0 {
-		nodes = append(nodes, model.IntegrationSearchResult{
-			Integrations: integrationResults,
-		})
+	if groupResults != nil && len(groupResults.Edges) > 0 {
+		res.Groups = groupResults
 
-		resultCount += len(integrationResults)
+		res.TotalCount += groupResults.TotalCount
 	}
-	if len(internalpolicyResults) > 0 {
-		nodes = append(nodes, model.InternalPolicySearchResult{
-			InternalPolicies: internalpolicyResults,
-		})
+	if integrationResults != nil && len(integrationResults.Edges) > 0 {
+		res.Integrations = integrationResults
 
-		resultCount += len(internalpolicyResults)
+		res.TotalCount += integrationResults.TotalCount
 	}
-	if len(mappedcontrolResults) > 0 {
-		nodes = append(nodes, model.MappedControlSearchResult{
-			MappedControls: mappedcontrolResults,
-		})
+	if internalpolicyResults != nil && len(internalpolicyResults.Edges) > 0 {
+		res.InternalPolicies = internalpolicyResults
 
-		resultCount += len(mappedcontrolResults)
+		res.TotalCount += internalpolicyResults.TotalCount
 	}
-	if len(narrativeResults) > 0 {
-		nodes = append(nodes, model.NarrativeSearchResult{
-			Narratives: narrativeResults,
-		})
+	if inviteResults != nil && len(inviteResults.Edges) > 0 {
+		res.Invites = inviteResults
 
-		resultCount += len(narrativeResults)
+		res.TotalCount += inviteResults.TotalCount
 	}
-	if len(orgsubscriptionResults) > 0 {
-		nodes = append(nodes, model.OrgSubscriptionSearchResult{
-			OrgSubscriptions: orgsubscriptionResults,
-		})
+	if mappedcontrolResults != nil && len(mappedcontrolResults.Edges) > 0 {
+		res.MappedControls = mappedcontrolResults
 
-		resultCount += len(orgsubscriptionResults)
+		res.TotalCount += mappedcontrolResults.TotalCount
 	}
-	if len(organizationResults) > 0 {
-		nodes = append(nodes, model.OrganizationSearchResult{
-			Organizations: organizationResults,
-		})
+	if narrativeResults != nil && len(narrativeResults.Edges) > 0 {
+		res.Narratives = narrativeResults
 
-		resultCount += len(organizationResults)
+		res.TotalCount += narrativeResults.TotalCount
 	}
-	if len(organizationsettingResults) > 0 {
-		nodes = append(nodes, model.OrganizationSettingSearchResult{
-			OrganizationSettings: organizationsettingResults,
-		})
+	if orgsubscriptionResults != nil && len(orgsubscriptionResults.Edges) > 0 {
+		res.OrgSubscriptions = orgsubscriptionResults
 
-		resultCount += len(organizationsettingResults)
+		res.TotalCount += orgsubscriptionResults.TotalCount
 	}
-	if len(personalaccesstokenResults) > 0 {
-		nodes = append(nodes, model.PersonalAccessTokenSearchResult{
-			PersonalAccessTokens: personalaccesstokenResults,
-		})
+	if organizationResults != nil && len(organizationResults.Edges) > 0 {
+		res.Organizations = organizationResults
 
-		resultCount += len(personalaccesstokenResults)
+		res.TotalCount += organizationResults.TotalCount
 	}
-	if len(procedureResults) > 0 {
-		nodes = append(nodes, model.ProcedureSearchResult{
-			Procedures: procedureResults,
-		})
+	if organizationsettingResults != nil && len(organizationsettingResults.Edges) > 0 {
+		res.OrganizationSettings = organizationsettingResults
 
-		resultCount += len(procedureResults)
+		res.TotalCount += organizationsettingResults.TotalCount
 	}
-	if len(programResults) > 0 {
-		nodes = append(nodes, model.ProgramSearchResult{
-			Programs: programResults,
-		})
+	if personalaccesstokenResults != nil && len(personalaccesstokenResults.Edges) > 0 {
+		res.PersonalAccessTokens = personalaccesstokenResults
 
-		resultCount += len(programResults)
+		res.TotalCount += personalaccesstokenResults.TotalCount
 	}
-	if len(riskResults) > 0 {
-		nodes = append(nodes, model.RiskSearchResult{
-			Risks: riskResults,
-		})
+	if procedureResults != nil && len(procedureResults.Edges) > 0 {
+		res.Procedures = procedureResults
 
-		resultCount += len(riskResults)
+		res.TotalCount += procedureResults.TotalCount
 	}
-	if len(standardResults) > 0 {
-		nodes = append(nodes, model.StandardSearchResult{
-			Standards: standardResults,
-		})
+	if programResults != nil && len(programResults.Edges) > 0 {
+		res.Programs = programResults
 
-		resultCount += len(standardResults)
+		res.TotalCount += programResults.TotalCount
 	}
-	if len(subcontrolResults) > 0 {
-		nodes = append(nodes, model.SubcontrolSearchResult{
-			Subcontrols: subcontrolResults,
-		})
+	if riskResults != nil && len(riskResults.Edges) > 0 {
+		res.Risks = riskResults
 
-		resultCount += len(subcontrolResults)
+		res.TotalCount += riskResults.TotalCount
 	}
-	if len(subscriberResults) > 0 {
-		nodes = append(nodes, model.SubscriberSearchResult{
-			Subscribers: subscriberResults,
-		})
+	if standardResults != nil && len(standardResults.Edges) > 0 {
+		res.Standards = standardResults
 
-		resultCount += len(subscriberResults)
+		res.TotalCount += standardResults.TotalCount
 	}
-	if len(taskResults) > 0 {
-		nodes = append(nodes, model.TaskSearchResult{
-			Tasks: taskResults,
-		})
+	if subcontrolResults != nil && len(subcontrolResults.Edges) > 0 {
+		res.Subcontrols = subcontrolResults
 
-		resultCount += len(taskResults)
+		res.TotalCount += subcontrolResults.TotalCount
 	}
-	if len(templateResults) > 0 {
-		nodes = append(nodes, model.TemplateSearchResult{
-			Templates: templateResults,
-		})
+	if subscriberResults != nil && len(subscriberResults.Edges) > 0 {
+		res.Subscribers = subscriberResults
 
-		resultCount += len(templateResults)
+		res.TotalCount += subscriberResults.TotalCount
 	}
-	if len(userResults) > 0 {
-		nodes = append(nodes, model.UserSearchResult{
-			Users: userResults,
-		})
+	if taskResults != nil && len(taskResults.Edges) > 0 {
+		res.Tasks = taskResults
 
-		resultCount += len(userResults)
+		res.TotalCount += taskResults.TotalCount
 	}
-	if len(usersettingResults) > 0 {
-		nodes = append(nodes, model.UserSettingSearchResult{
-			UserSettings: usersettingResults,
-		})
+	if templateResults != nil && len(templateResults.Edges) > 0 {
+		res.Templates = templateResults
 
-		resultCount += len(usersettingResults)
+		res.TotalCount += templateResults.TotalCount
+	}
+	if userResults != nil && len(userResults.Edges) > 0 {
+		res.Users = userResults
+
+		res.TotalCount += userResults.TotalCount
+	}
+	if usersettingResults != nil && len(usersettingResults.Edges) > 0 {
+		res.UserSettings = usersettingResults
+
+		res.TotalCount += usersettingResults.TotalCount
 	}
 
-	return &model.SearchResultConnection{
-		TotalCount: resultCount,
-		Nodes:      nodes,
-	}, nil
+	return res, nil
 }
-func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*model.APITokenSearchResult, error) {
-	apitokenResults, err := searchAPITokens(ctx, query)
+func (r *queryResolver) APITokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.APITokenConnection, error) {
+	apitokenResults, err := searchAPITokens(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.APITokenSearchResult{
-		APITokens: apitokenResults,
-	}, nil
+	return apitokenResults, nil
 }
-func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string) (*model.ActionPlanSearchResult, error) {
-	actionplanResults, err := searchActionPlans(ctx, query)
+func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ActionPlanConnection, error) {
+	actionplanResults, err := searchActionPlans(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ActionPlanSearchResult{
-		ActionPlans: actionplanResults,
-	}, nil
+	return actionplanResults, nil
 }
-func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*model.ContactSearchResult, error) {
-	contactResults, err := searchContacts(ctx, query)
+func (r *queryResolver) ContactSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
+	contactResults, err := searchContacts(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ContactSearchResult{
-		Contacts: contactResults,
-	}, nil
+	return contactResults, nil
 }
-func (r *queryResolver) ControlSearch(ctx context.Context, query string) (*model.ControlSearchResult, error) {
-	controlResults, err := searchControls(ctx, query)
+func (r *queryResolver) ControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlConnection, error) {
+	controlResults, err := searchControls(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlSearchResult{
-		Controls: controlResults,
-	}, nil
+	return controlResults, nil
 }
-func (r *queryResolver) ControlImplementationSearch(ctx context.Context, query string) (*model.ControlImplementationSearchResult, error) {
-	controlimplementationResults, err := searchControlImplementations(ctx, query)
+func (r *queryResolver) ControlImplementationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
+	controlimplementationResults, err := searchControlImplementations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlImplementationSearchResult{
-		ControlImplementations: controlimplementationResults,
-	}, nil
+	return controlimplementationResults, nil
 }
-func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string) (*model.ControlObjectiveSearchResult, error) {
-	controlobjectiveResults, err := searchControlObjectives(ctx, query)
+func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
+	controlobjectiveResults, err := searchControlObjectives(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ControlObjectiveSearchResult{
-		ControlObjectives: controlobjectiveResults,
-	}, nil
+	return controlobjectiveResults, nil
 }
-func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*model.DocumentDataSearchResult, error) {
-	documentdataResults, err := searchDocumentData(ctx, query)
+func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
+	documentdataResults, err := searchDocumentData(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.DocumentDataSearchResult{
-		DocumentData: documentdataResults,
-	}, nil
+	return documentdataResults, nil
 }
-func (r *queryResolver) EntitySearch(ctx context.Context, query string) (*model.EntitySearchResult, error) {
-	entityResults, err := searchEntities(ctx, query)
+func (r *queryResolver) EntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
+	entityResults, err := searchEntities(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EntitySearchResult{
-		Entities: entityResults,
-	}, nil
+	return entityResults, nil
 }
-func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string) (*model.EntityTypeSearchResult, error) {
-	entitytypeResults, err := searchEntityTypes(ctx, query)
+func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityTypeConnection, error) {
+	entitytypeResults, err := searchEntityTypes(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EntityTypeSearchResult{
-		EntityTypes: entitytypeResults,
-	}, nil
+	return entitytypeResults, nil
 }
-func (r *queryResolver) EventSearch(ctx context.Context, query string) (*model.EventSearchResult, error) {
-	eventResults, err := searchEvents(ctx, query)
+func (r *queryResolver) EventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EventConnection, error) {
+	eventResults, err := searchEvents(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EventSearchResult{
-		Events: eventResults,
-	}, nil
+	return eventResults, nil
 }
-func (r *queryResolver) EvidenceSearch(ctx context.Context, query string) (*model.EvidenceSearchResult, error) {
-	evidenceResults, err := searchEvidences(ctx, query)
+func (r *queryResolver) EvidenceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EvidenceConnection, error) {
+	evidenceResults, err := searchEvidences(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.EvidenceSearchResult{
-		Evidences: evidenceResults,
-	}, nil
+	return evidenceResults, nil
 }
-func (r *queryResolver) FileSearch(ctx context.Context, query string) (*model.FileSearchResult, error) {
-	fileResults, err := searchFiles(ctx, query)
+func (r *queryResolver) FileSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FileConnection, error) {
+	fileResults, err := searchFiles(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.FileSearchResult{
-		Files: fileResults,
-	}, nil
+	return fileResults, nil
 }
-func (r *queryResolver) GroupSearch(ctx context.Context, query string) (*model.GroupSearchResult, error) {
-	groupResults, err := searchGroups(ctx, query)
+func (r *queryResolver) GroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
+	groupResults, err := searchGroups(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.GroupSearchResult{
-		Groups: groupResults,
-	}, nil
+	return groupResults, nil
 }
-func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*model.IntegrationSearchResult, error) {
-	integrationResults, err := searchIntegrations(ctx, query)
+func (r *queryResolver) IntegrationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
+	integrationResults, err := searchIntegrations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.IntegrationSearchResult{
-		Integrations: integrationResults,
-	}, nil
+	return integrationResults, nil
 }
-func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string) (*model.InternalPolicySearchResult, error) {
-	internalpolicyResults, err := searchInternalPolicies(ctx, query)
+func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
+	internalpolicyResults, err := searchInternalPolicies(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.InternalPolicySearchResult{
-		InternalPolicies: internalpolicyResults,
-	}, nil
+	return internalpolicyResults, nil
 }
-func (r *queryResolver) MappedControlSearch(ctx context.Context, query string) (*model.MappedControlSearchResult, error) {
-	mappedcontrolResults, err := searchMappedControls(ctx, query)
+func (r *queryResolver) InviteSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InviteConnection, error) {
+	inviteResults, err := searchInvites(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.MappedControlSearchResult{
-		MappedControls: mappedcontrolResults,
-	}, nil
+	return inviteResults, nil
 }
-func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*model.NarrativeSearchResult, error) {
-	narrativeResults, err := searchNarratives(ctx, query)
+func (r *queryResolver) MappedControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
+	mappedcontrolResults, err := searchMappedControls(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.NarrativeSearchResult{
-		Narratives: narrativeResults,
-	}, nil
+	return mappedcontrolResults, nil
 }
-func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string) (*model.OrgSubscriptionSearchResult, error) {
-	orgsubscriptionResults, err := searchOrgSubscriptions(ctx, query)
+func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
+	narrativeResults, err := searchNarratives(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrgSubscriptionSearchResult{
-		OrgSubscriptions: orgsubscriptionResults,
-	}, nil
+	return narrativeResults, nil
 }
-func (r *queryResolver) OrganizationSearch(ctx context.Context, query string) (*model.OrganizationSearchResult, error) {
-	organizationResults, err := searchOrganizations(ctx, query)
+func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrgSubscriptionConnection, error) {
+	orgsubscriptionResults, err := searchOrgSubscriptions(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrganizationSearchResult{
-		Organizations: organizationResults,
-	}, nil
+	return orgsubscriptionResults, nil
 }
-func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query string) (*model.OrganizationSettingSearchResult, error) {
-	organizationsettingResults, err := searchOrganizationSettings(ctx, query)
+func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
+	organizationResults, err := searchOrganizations(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.OrganizationSettingSearchResult{
-		OrganizationSettings: organizationsettingResults,
-	}, nil
+	return organizationResults, nil
 }
-func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query string) (*model.PersonalAccessTokenSearchResult, error) {
-	personalaccesstokenResults, err := searchPersonalAccessTokens(ctx, query)
+func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationSettingConnection, error) {
+	organizationsettingResults, err := searchOrganizationSettings(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.PersonalAccessTokenSearchResult{
-		PersonalAccessTokens: personalaccesstokenResults,
-	}, nil
+	return organizationsettingResults, nil
 }
-func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*model.ProcedureSearchResult, error) {
-	procedureResults, err := searchProcedures(ctx, query)
+func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PersonalAccessTokenConnection, error) {
+	personalaccesstokenResults, err := searchPersonalAccessTokens(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ProcedureSearchResult{
-		Procedures: procedureResults,
-	}, nil
+	return personalaccesstokenResults, nil
 }
-func (r *queryResolver) ProgramSearch(ctx context.Context, query string) (*model.ProgramSearchResult, error) {
-	programResults, err := searchPrograms(ctx, query)
+func (r *queryResolver) ProcedureSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
+	procedureResults, err := searchProcedures(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.ProgramSearchResult{
-		Programs: programResults,
-	}, nil
+	return procedureResults, nil
 }
-func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*model.RiskSearchResult, error) {
-	riskResults, err := searchRisks(ctx, query)
+func (r *queryResolver) ProgramSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProgramConnection, error) {
+	programResults, err := searchPrograms(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.RiskSearchResult{
-		Risks: riskResults,
-	}, nil
+	return programResults, nil
 }
-func (r *queryResolver) StandardSearch(ctx context.Context, query string) (*model.StandardSearchResult, error) {
-	standardResults, err := searchStandards(ctx, query)
+func (r *queryResolver) RiskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
+	riskResults, err := searchRisks(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.StandardSearchResult{
-		Standards: standardResults,
-	}, nil
+	return riskResults, nil
 }
-func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string) (*model.SubcontrolSearchResult, error) {
-	subcontrolResults, err := searchSubcontrols(ctx, query)
+func (r *queryResolver) StandardSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
+	standardResults, err := searchStandards(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.SubcontrolSearchResult{
-		Subcontrols: subcontrolResults,
-	}, nil
+	return standardResults, nil
 }
-func (r *queryResolver) SubscriberSearch(ctx context.Context, query string) (*model.SubscriberSearchResult, error) {
-	subscriberResults, err := searchSubscribers(ctx, query)
+func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubcontrolConnection, error) {
+	subcontrolResults, err := searchSubcontrols(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.SubscriberSearchResult{
-		Subscribers: subscriberResults,
-	}, nil
+	return subcontrolResults, nil
 }
-func (r *queryResolver) TaskSearch(ctx context.Context, query string) (*model.TaskSearchResult, error) {
-	taskResults, err := searchTasks(ctx, query)
+func (r *queryResolver) SubscriberSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
+	subscriberResults, err := searchSubscribers(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.TaskSearchResult{
-		Tasks: taskResults,
-	}, nil
+	return subscriberResults, nil
 }
-func (r *queryResolver) TemplateSearch(ctx context.Context, query string) (*model.TemplateSearchResult, error) {
-	templateResults, err := searchTemplates(ctx, query)
+func (r *queryResolver) TaskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TaskConnection, error) {
+	taskResults, err := searchTasks(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.TemplateSearchResult{
-		Templates: templateResults,
-	}, nil
+	return taskResults, nil
 }
-func (r *queryResolver) UserSearch(ctx context.Context, query string) (*model.UserSearchResult, error) {
-	userResults, err := searchUsers(ctx, query)
+func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TemplateConnection, error) {
+	templateResults, err := searchTemplates(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.UserSearchResult{
-		Users: userResults,
-	}, nil
+	return templateResults, nil
 }
-func (r *queryResolver) UserSettingSearch(ctx context.Context, query string) (*model.UserSettingSearchResult, error) {
-	usersettingResults, err := searchUserSettings(ctx, query)
+func (r *queryResolver) UserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
+	userResults, err := searchUsers(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return &model.UserSettingSearchResult{
-		UserSettings: usersettingResults,
-	}, nil
+	return userResults, nil
+}
+func (r *queryResolver) UserSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserSettingConnection, error) {
+	usersettingResults, err := searchUserSettings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return usersettingResults, nil
 }

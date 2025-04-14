@@ -38,6 +38,8 @@ require (
 	github.com/knadh/koanf/providers/file v1.1.2
 	github.com/knadh/koanf/providers/posflag v0.1.0
 	github.com/knadh/koanf/v2 v2.1.2
+	github.com/labstack/echo-contrib v0.17.3
+	github.com/labstack/echo/v4 v4.13.3
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
@@ -46,10 +48,10 @@ require (
 	github.com/nyaruka/phonenumbers v1.6.0
 	github.com/oNaiPs/go-generate-fast v0.3.0
 	github.com/oklog/ulid/v2 v2.1.0
-	github.com/openfga/go-sdk v0.6.5
+	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.13
+	github.com/projectdiscovery/cdncheck v1.1.14
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.17
@@ -69,10 +71,10 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.3
 	github.com/theopenlane/emailtemplates v0.1.4
-	github.com/theopenlane/entx v0.6.1
-	github.com/theopenlane/gqlgen-plugins v0.5.0
+	github.com/theopenlane/entx v0.7.1
+	github.com/theopenlane/gqlgen-plugins v0.6.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.10.1
+	github.com/theopenlane/iam v0.12.0
 	github.com/theopenlane/newman v0.1.4
 	github.com/theopenlane/riverboat v0.0.10
 	github.com/theopenlane/utils v0.4.5
@@ -213,7 +215,7 @@ require (
 	github.com/golangci/revgrep v0.8.0 // indirect
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed // indirect
 	github.com/google/go-github/v30 v30.1.0 // indirect
-	github.com/google/go-github/v70 v70.0.0 // indirect
+	github.com/google/go-github/v71 v71.0.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gordonklaus/ineffassign v0.1.0 // indirect
@@ -512,9 +514,9 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.23
+	github.com/projectdiscovery/wappalyzergo v0.2.24
 	github.com/prometheus/client_model v0.6.1 // indirect
-	github.com/prometheus/common v0.62.0 // indirect
+	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.17.0 // indirect

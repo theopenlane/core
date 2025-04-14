@@ -28,6 +28,10 @@ extend type Mutation{
         New values for the comment
         """
         input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
     ): TaskUpdatePayload!
 }
 

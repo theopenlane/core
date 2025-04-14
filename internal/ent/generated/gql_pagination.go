@@ -391,7 +391,7 @@ func (at *APITokenQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if at, err = pager.applyCursors(at, after, before); err != nil {
@@ -813,7 +813,7 @@ func (ap *ActionPlanQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ap, err = pager.applyCursors(ap, after, before); err != nil {
@@ -1271,7 +1271,7 @@ func (aph *ActionPlanHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if aph, err = pager.applyCursors(aph, after, before); err != nil {
@@ -1765,7 +1765,7 @@ func (c *ContactQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
@@ -2169,7 +2169,7 @@ func (ch *ContactHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ch, err = pager.applyCursors(ch, after, before); err != nil {
@@ -2609,7 +2609,7 @@ func (c *ControlQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
@@ -3031,7 +3031,7 @@ func (ch *ControlHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ch, err = pager.applyCursors(ch, after, before); err != nil {
@@ -3489,7 +3489,7 @@ func (ci *ControlImplementationQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ci, err = pager.applyCursors(ci, after, before); err != nil {
@@ -3875,7 +3875,7 @@ func (cih *ControlImplementationHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if cih, err = pager.applyCursors(cih, after, before); err != nil {
@@ -4297,7 +4297,7 @@ func (co *ControlObjectiveQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if co, err = pager.applyCursors(co, after, before); err != nil {
@@ -4737,7 +4737,7 @@ func (coh *ControlObjectiveHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if coh, err = pager.applyCursors(coh, after, before); err != nil {
@@ -5213,7 +5213,7 @@ func (dd *DocumentDataQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if dd, err = pager.applyCursors(dd, after, before); err != nil {
@@ -5527,7 +5527,7 @@ func (ddh *DocumentDataHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ddh, err = pager.applyCursors(ddh, after, before); err != nil {
@@ -5877,7 +5877,7 @@ func (e *EntityQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if e, err = pager.applyCursors(e, after, before); err != nil {
@@ -6245,7 +6245,7 @@ func (eh *EntityHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if eh, err = pager.applyCursors(eh, after, before); err != nil {
@@ -6649,7 +6649,7 @@ func (et *EntityTypeQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if et, err = pager.applyCursors(et, after, before); err != nil {
@@ -6981,7 +6981,7 @@ func (eth *EntityTypeHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if eth, err = pager.applyCursors(eth, after, before); err != nil {
@@ -7349,7 +7349,7 @@ func (e *EventQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if e, err = pager.applyCursors(e, after, before); err != nil {
@@ -7663,7 +7663,7 @@ func (eh *EventHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if eh, err = pager.applyCursors(eh, after, before); err != nil {
@@ -8013,7 +8013,7 @@ func (e *EvidenceQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if e, err = pager.applyCursors(e, after, before); err != nil {
@@ -8399,7 +8399,7 @@ func (eh *EvidenceHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if eh, err = pager.applyCursors(eh, after, before); err != nil {
@@ -8821,7 +8821,7 @@ func (f *FileQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if f, err = pager.applyCursors(f, after, before); err != nil {
@@ -9135,7 +9135,7 @@ func (fh *FileHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if fh, err = pager.applyCursors(fh, after, before); err != nil {
@@ -9485,7 +9485,7 @@ func (gr *GroupQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gr, err = pager.applyCursors(gr, after, before); err != nil {
@@ -9835,7 +9835,7 @@ func (gh *GroupHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gh, err = pager.applyCursors(gh, after, before); err != nil {
@@ -10221,7 +10221,7 @@ func (gm *GroupMembershipQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gm, err = pager.applyCursors(gm, after, before); err != nil {
@@ -10553,7 +10553,7 @@ func (gmh *GroupMembershipHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gmh, err = pager.applyCursors(gmh, after, before); err != nil {
@@ -10921,7 +10921,7 @@ func (gs *GroupSettingQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gs, err = pager.applyCursors(gs, after, before); err != nil {
@@ -11235,7 +11235,7 @@ func (gsh *GroupSettingHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if gsh, err = pager.applyCursors(gsh, after, before); err != nil {
@@ -11585,7 +11585,7 @@ func (h *HushQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if h, err = pager.applyCursors(h, after, before); err != nil {
@@ -11935,7 +11935,7 @@ func (hh *HushHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if hh, err = pager.applyCursors(hh, after, before); err != nil {
@@ -12321,7 +12321,7 @@ func (i *IntegrationQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if i, err = pager.applyCursors(i, after, before); err != nil {
@@ -12671,7 +12671,7 @@ func (ih *IntegrationHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ih, err = pager.applyCursors(ih, after, before); err != nil {
@@ -13057,7 +13057,7 @@ func (ip *InternalPolicyQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ip, err = pager.applyCursors(ip, after, before); err != nil {
@@ -13461,7 +13461,7 @@ func (iph *InternalPolicyHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if iph, err = pager.applyCursors(iph, after, before); err != nil {
@@ -13901,7 +13901,7 @@ func (i *InviteQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if i, err = pager.applyCursors(i, after, before); err != nil {
@@ -14305,7 +14305,7 @@ func (mc *MappedControlQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if mc, err = pager.applyCursors(mc, after, before); err != nil {
@@ -14637,7 +14637,7 @@ func (mch *MappedControlHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if mch, err = pager.applyCursors(mch, after, before); err != nil {
@@ -15005,7 +15005,7 @@ func (n *NarrativeQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if n, err = pager.applyCursors(n, after, before); err != nil {
@@ -15337,7 +15337,7 @@ func (nh *NarrativeHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if nh, err = pager.applyCursors(nh, after, before); err != nil {
@@ -15705,7 +15705,7 @@ func (n *NoteQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if n, err = pager.applyCursors(n, after, before); err != nil {
@@ -16019,7 +16019,7 @@ func (nh *NoteHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if nh, err = pager.applyCursors(nh, after, before); err != nil {
@@ -16333,7 +16333,7 @@ func (o *OnboardingQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if o, err = pager.applyCursors(o, after, before); err != nil {
@@ -16618,7 +16618,7 @@ func (om *OrgMembershipQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if om, err = pager.applyCursors(om, after, before); err != nil {
@@ -16950,7 +16950,7 @@ func (omh *OrgMembershipHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if omh, err = pager.applyCursors(omh, after, before); err != nil {
@@ -17282,7 +17282,7 @@ func (os *OrgSubscriptionQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if os, err = pager.applyCursors(os, after, before); err != nil {
@@ -17704,7 +17704,7 @@ func (osh *OrgSubscriptionHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if osh, err = pager.applyCursors(osh, after, before); err != nil {
@@ -18162,7 +18162,7 @@ func (o *OrganizationQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if o, err = pager.applyCursors(o, after, before); err != nil {
@@ -18512,7 +18512,7 @@ func (oh *OrganizationHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if oh, err = pager.applyCursors(oh, after, before); err != nil {
@@ -18898,7 +18898,7 @@ func (os *OrganizationSettingQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if os, err = pager.applyCursors(os, after, before); err != nil {
@@ -19212,7 +19212,7 @@ func (osh *OrganizationSettingHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if osh, err = pager.applyCursors(osh, after, before); err != nil {
@@ -19562,7 +19562,7 @@ func (pat *PersonalAccessTokenQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if pat, err = pager.applyCursors(pat, after, before); err != nil {
@@ -19984,7 +19984,7 @@ func (pr *ProcedureQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if pr, err = pager.applyCursors(pr, after, before); err != nil {
@@ -20388,7 +20388,7 @@ func (ph *ProcedureHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ph, err = pager.applyCursors(ph, after, before); err != nil {
@@ -20828,7 +20828,7 @@ func (pr *ProgramQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if pr, err = pager.applyCursors(pr, after, before); err != nil {
@@ -21214,7 +21214,7 @@ func (ph *ProgramHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ph, err = pager.applyCursors(ph, after, before); err != nil {
@@ -21636,7 +21636,7 @@ func (pm *ProgramMembershipQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if pm, err = pager.applyCursors(pm, after, before); err != nil {
@@ -21968,7 +21968,7 @@ func (pmh *ProgramMembershipHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if pmh, err = pager.applyCursors(pmh, after, before); err != nil {
@@ -22336,7 +22336,7 @@ func (r *RiskQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if r, err = pager.applyCursors(r, after, before); err != nil {
@@ -22794,7 +22794,7 @@ func (rh *RiskHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if rh, err = pager.applyCursors(rh, after, before); err != nil {
@@ -23288,7 +23288,7 @@ func (s *StandardQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if s, err = pager.applyCursors(s, after, before); err != nil {
@@ -23728,7 +23728,7 @@ func (sh *StandardHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if sh, err = pager.applyCursors(sh, after, before); err != nil {
@@ -24204,7 +24204,7 @@ func (s *SubcontrolQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if s, err = pager.applyCursors(s, after, before); err != nil {
@@ -24626,7 +24626,7 @@ func (sh *SubcontrolHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if sh, err = pager.applyCursors(sh, after, before); err != nil {
@@ -25084,7 +25084,7 @@ func (s *SubscriberQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if s, err = pager.applyCursors(s, after, before); err != nil {
@@ -25506,7 +25506,7 @@ func (ts *TFASettingQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ts, err = pager.applyCursors(ts, after, before); err != nil {
@@ -25856,7 +25856,7 @@ func (t *TaskQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if t, err = pager.applyCursors(t, after, before); err != nil {
@@ -26260,7 +26260,7 @@ func (th *TaskHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if th, err = pager.applyCursors(th, after, before); err != nil {
@@ -26700,7 +26700,7 @@ func (t *TemplateQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if t, err = pager.applyCursors(t, after, before); err != nil {
@@ -27050,7 +27050,7 @@ func (th *TemplateHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if th, err = pager.applyCursors(th, after, before); err != nil {
@@ -27436,7 +27436,7 @@ func (u *UserQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if u, err = pager.applyCursors(u, after, before); err != nil {
@@ -27804,7 +27804,7 @@ func (uh *UserHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if uh, err = pager.applyCursors(uh, after, before); err != nil {
@@ -28208,7 +28208,7 @@ func (us *UserSettingQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if us, err = pager.applyCursors(us, after, before); err != nil {
@@ -28522,7 +28522,7 @@ func (ush *UserSettingHistoryQuery) Paginate(
 			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
-	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
 	if ush, err = pager.applyCursors(ush, after, before); err != nil {

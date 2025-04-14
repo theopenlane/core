@@ -156,6 +156,10 @@
           "type": "string",
           "description": "Listen sets the listen address to serve the echo server on"
         },
+        "metricsPort": {
+          "type": "string",
+          "description": "MetricsPort sets the port for the metrics endpoint"
+        },
         "shutdownGracePeriod": {
           "type": "integer",
           "description": "ShutdownGracePeriod sets the grace period for in flight requests before shutting down"
