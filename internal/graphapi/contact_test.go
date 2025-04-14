@@ -88,8 +88,8 @@ func (suite *GraphTestSuite) TestQueryContact() {
 func (suite *GraphTestSuite) TestQueryContacts() {
 	t := suite.T()
 
-	_ = (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -138,6 +138,9 @@ func (suite *GraphTestSuite) TestQueryContacts() {
 			assert.Len(t, resp.Contacts.Edges, tc.expectedResults)
 		})
 	}
+
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact1.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact2.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateContact() {
@@ -260,6 +263,8 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 			} else {
 				assert.Equal(t, *tc.request.Status, resp.CreateContact.Contact.Status)
 			}
+
+			(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: resp.CreateContact.Contact.ID}).MustDelete(testUser1.UserCtx, suite)
 		})
 	}
 }
@@ -401,6 +406,8 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 			}
 		})
 	}
+
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteContact() {

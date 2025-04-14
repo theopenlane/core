@@ -107,8 +107,12 @@ func (suite *GraphTestSuite) TestQueryControl() {
 
 			require.Len(t, resp.Control.Programs.Edges, 1)
 			assert.NotEmpty(t, resp.Control.Programs.Edges[0].Node.ID)
+
+			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.Control.ID}).MustDelete(testUser1.UserCtx, suite)
 		})
 	}
+
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestQueryControls() {
@@ -116,8 +120,10 @@ func (suite *GraphTestSuite) TestQueryControls() {
 
 	// create multiple objects to be queried using testUser1
 	controlsToCreate := int64(11)
+	controlIDs := []string{}
 	for range controlsToCreate { // set to 11 to ensure pagination is tested
-		(&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		controlIDs = append(controlIDs, control.ID)
 	}
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -125,7 +131,7 @@ func (suite *GraphTestSuite) TestQueryControls() {
 
 	// add a control for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	(&ControlBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
 
 	testCases := []struct {
 		name            string
@@ -231,6 +237,8 @@ func (suite *GraphTestSuite) TestQueryControls() {
 			}
 		})
 	}
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userCtxAnotherOrg, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateControl() {
@@ -589,8 +597,13 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 				}
 			}
 
+			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.CreateControl.Control.ID}).MustDelete(testUser1.UserCtx, suite)
 		})
 	}
+
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program1.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program2.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
@@ -1110,6 +1123,9 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 		})
 	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteControl() {
