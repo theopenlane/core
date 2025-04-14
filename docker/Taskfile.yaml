@@ -1,5 +1,8 @@
 version: "3"
 
+env:
+  COMPOSE_PROJECT_NAME: openlane
+
 tasks:
   build:
     dir: ..
