@@ -131,7 +131,9 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 
 				if tc.expectedGroups > 0 {
 					assert.Len(t, resp.Search.Groups.Edges, tc.expectedGroups)
-					assert.Equal(t, resp.Search.Groups.TotalCount, int64(12))
+					assert.Equal(t, resp.Search.Groups.TotalCount, int64(numGroups))
+					assert.True(t, resp.Search.Groups.PageInfo.HasNextPage)
+					assert.False(t, resp.Search.Groups.PageInfo.HasPreviousPage)
 				} else {
 					assert.Empty(t, resp.Search.Groups)
 				}

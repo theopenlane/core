@@ -1039,7 +1039,6 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	mutation := n.client.db.Note.Create().
 		SetText(n.Text)
 
-
 	if n.TaskID != "" {
 		mutation.SetTaskID(n.TaskID)
 	}
