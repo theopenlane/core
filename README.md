@@ -30,7 +30,7 @@ We have our sights set on additional features such as:
 - Continuous GRC features
 - Vulnerability Management
 - Source code scanning
-- Interal training programs and tracking mechanisms
+- Internal training programs and tracking mechanisms
 
 ## Features
 
