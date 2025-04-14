@@ -1,8 +1,5 @@
 version: "3"
 
-env:
-  COMPOSE_PROJECT_NAME: openlane
-
 tasks:
   build:
     dir: ..
@@ -25,13 +22,13 @@ tasks:
     desc: brings up the compose environment for the core server
     deps: [build]
     cmds:
-      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose.yml -p core up -d"
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose.yml up -d"
 
   core:down:
     dir: ..
     desc: brings the core compose environment down
     cmds:
-      - "docker compose -p core down"
+      - "docker compose down"
 
   all:up:
     dir: ..
@@ -50,13 +47,13 @@ tasks:
     dir: ..
     desc: brings up the compose environment for redis
     cmds:
-      - "docker compose -f ./docker/docker-compose-redis.yml -p redis up -d"
+      - "docker compose -f ./docker/docker-compose-redis.yml up -d"
 
   redis:down:
     dir: ..
     desc: brings up the compose environment for redis
     cmds:
-      - "docker compose -p redis down"
+      - "docker compose down"
 
   riverboat:
     dir: ..
@@ -67,37 +64,37 @@ tasks:
       RIVERBOAT_TAG:
         sh: "uname=$(uname -m); if [ $uname = 'x86_64' ]; then echo 'amd64-latest'; else echo 'arm64-latest'; fi"
     cmds:
-      - "docker compose -f ./docker/docker-compose-riverboat.yml -p riverboat up -d"
+      - "docker compose -f ./docker/docker-compose-riverboat.yml up -d"
 
   riverboat:down:
     dir: ..
     desc: brings the riverboat compose environment down
     cmds:
-      - docker compose -p riverboat down
+      - docker compose down
 
   postgres:
     dir: ..
     desc: brings up the compose environment for postgres development
     cmds:
-      - "docker compose -f ./docker/docker-compose-pg.yml -p postgres up -d"
+      - "docker compose -f ./docker/docker-compose-pg.yml up -d"
 
   postgres:down:
     dir: ..
     desc: brings the postgres compose environment down
     cmds:
-      - docker compose -p postgres down
+      - docker compose down
 
   fga:
     dir: ..
     desc: brings up the compose environment for openfga development
     cmds:
-      - "docker compose -f ./docker/docker-compose-fga.yml -p fga up -d"
+      - "docker compose -f ./docker/docker-compose-fga.yml up -d"
 
   fga:down:
     dir: ..
     desc: brings the fga compose environment down
     cmds:
-      - docker compose -p fga down
+      - docker compose down
 
   fga:open:
     dir: ..
@@ -117,10 +114,10 @@ tasks:
     dir: ..
     desc: brings up the compose environment for kafka
     cmds:
-      - "docker compose -f ./docker/docker-compose-kafka.yml -p kafka up --build -d"
+      - "docker compose -f ./docker/docker-compose-kafka.yml up --build -d"
 
   kafka:down:
     dir: ..
     desc: brings the kafka compose environment down
     cmds:
-      - docker compose -p kafka down
+      - docker compose down
