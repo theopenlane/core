@@ -258,29 +258,29 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 
 	authType := auth.GetAuthzSubjectType(ctx)
 
+	var inviterName string
+
 	switch authType {
 	case auth.UserSubjectType:
-	// fallthrough
-
-	case auth.ServiceSubjectType:
-		token, err := m.Client().APIToken.Get(ctx, reqID)
+		requestor, err := m.Client().User.Get(ctx, reqID)
 		if err != nil {
 			return err
+
 		}
 
-		reqID = token.CreatedBy
+		inviterName = requestor.FirstName
+
+	case auth.ServiceSubjectType:
+		// default to org name
+		inviterName = org.Name
+
 	default:
 		// should never really get here
 		return ErrInternalServerError
 	}
 
-	requestor, err := m.Client().User.Get(ctx, reqID)
-	if err != nil {
-		return err
-	}
-
 	invite := emailtemplates.InviteTemplateData{
-		InviterName:      requestor.FirstName,
+		InviterName:      inviterName,
 		OrganizationName: org.Name,
 		Role:             string(role),
 	}

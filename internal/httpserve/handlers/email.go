@@ -119,36 +119,3 @@ func (h *Handler) sendPasswordResetSuccessEmail(ctx context.Context, user *User)
 
 	return nil
 }
-
-// sendWelcomeEmail sends an email to a user on sign up to inform them their account has been
-// successfully created and ready for use
-func (h *Handler) sendWelcomeEmail(ctx context.Context, user *User, orgID string) error {
-	org, err := h.getOrgByID(ctx, orgID)
-	if err != nil {
-		return err
-	}
-
-	email, err := h.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-	}, org.Name)
-	if err != nil {
-		log.Error().Err(err).Msg("error creating welcome email")
-
-		return err
-	}
-
-	_, err = h.DBClient.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil)
-	if err != nil {
-		log.Error().Err(err).Msg("error queueing welcome email")
-
-		return err
-	}
-
-	log.Info().Msg("queued email")
-
-	return nil
-}
