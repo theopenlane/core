@@ -263,16 +263,13 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	// fallthrough
 
 	case auth.PATAuthentication:
-
 		token, err := m.Client().PersonalAccessToken.Get(ctx, reqID)
 		if err != nil {
 			return err
 		}
 
 		reqID = token.CreatedBy
-
 	case auth.APITokenAuthentication:
-
 		token, err := m.Client().APIToken.Get(ctx, reqID)
 		if err != nil {
 			return err

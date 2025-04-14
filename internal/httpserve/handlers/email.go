@@ -123,7 +123,6 @@ func (h *Handler) sendPasswordResetSuccessEmail(ctx context.Context, user *User)
 // sendWelcomeEmail sends an email to a user on sign up to inform them their account has been
 // successfully created and ready for use
 func (h *Handler) sendWelcomeEmail(ctx context.Context, user *User, orgID string) error {
-
 	org, err := h.getOrgByID(ctx, orgID)
 	if err != nil {
 		return err
