@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -261,6 +260,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 
 	switch authType {
 	case auth.JWTAuthentication:
+	// fallthrough
 
 	case auth.PATAuthentication:
 
@@ -281,7 +281,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		reqID = token.CreatedBy
 	default:
 		// should never really get here
-		return errors.New("unsupported authentication type")
+		return ErrInternalServerError
 	}
 
 	requestor, err := m.Client().User.Get(ctx, reqID)
