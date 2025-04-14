@@ -40,7 +40,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	// once the the passkey is added to the user's account, they can use it to login
 	// we treat this verify similar to the oauth or basic registration flow
 	// user is created first, no credential method is set / they are unable to login until the credential flow is finished
-	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProvider(webauthnProvider), "")
+	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProviderCredentials, "")
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
