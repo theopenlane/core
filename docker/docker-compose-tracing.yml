@@ -1,7 +1,6 @@
 services:
   jaeger:
     image: jaegertracing/all-in-one:1.60
-    container_name: jaeger
     restart: always
     ports:
       - "16686:16686" #jaeger UI
