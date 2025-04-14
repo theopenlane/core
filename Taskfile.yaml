@@ -34,6 +34,7 @@ env:
   GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
   GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
+  COMPOSE_PROJECT_NAME: openlane
 
 tasks:
   default:
