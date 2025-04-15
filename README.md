@@ -11,10 +11,14 @@
 </div>
 
 This repository houses the core server and orchestration elements which are at
-the heart of the [openlane](https://www.theopenlane.io) cloud service, which is targeted for public beta towards the end of 2024 or early 2025. Our initial featureset includes:
+the heart of the [Openlane](https://www.theopenlane.io) cloud service, which is targeted for public release towards mid-2025 - sign up for our [waitlist](https://console.theopenlane.io/waitlist) to get access! Our initial featureset includes:
 
-- Creation of new programs that include pre-built templates, controls, risks, etc., from standards like SOC2, ISO27001, NIST800-53, and more
-- Automated Task assignments and configurable workflows
+- Creation of new programs that include pre-built templates, controls, risks, etc., for standards like SOC2, ISO27001, NIST800-53, and more
+- Automated Task assignments and configurable workflows with task reminders and escalation
+- Evidence upload, approval processes, and other configurable automation to get you through your audits
+- Robust user and group management with a myriad of RBAC controls / toggles to ensure individuals in your company see what they are supposed to see
+- Multiple authentication methods and organization-level controls for authorized domains (with organization-wide SSO coming soon!)
+- Automated domain scanning with assets and other resources created automatically for your approval
 - Questionnaire creation, customization, and automation for easier internal and external interactions with your staff, auditors, and vendors
 - Notification customizations, channel definitions, comments and histories on all your objects
 - Easy to use documentation editors and storage for Policies and Procedures, or whatever documentation is needed
@@ -24,6 +28,9 @@ We have our sights set on additional features such as:
 - Trust Center and vanity domains
 - Automated Evidence collection
 - Continuous GRC features
+- Vulnerability Management
+- Source code scanning
+- Internal training programs and tracking mechanisms
 
 ## Features
 
