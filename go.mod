@@ -11,7 +11,7 @@ require (
 	entgo.io/ent v0.14.4
 	github.com/99designs/gqlgen v0.17.70
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/Yamashou/gqlgenc v0.31.0
+	github.com/Yamashou/gqlgenc v0.32.0
 	github.com/alicebob/miniredis/v2 v2.34.0
 	github.com/alitto/pond/v2 v2.3.2
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
