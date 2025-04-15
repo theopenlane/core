@@ -140,7 +140,6 @@ func HookOrganization() ent.Hook {
 
 func sendOrgWelcomeEmail(ctx context.Context,
 	m *generated.Organization, dbMutation *generated.OrganizationMutation) error {
-
 	if auth.IsAPITokenAuthentication(ctx) {
 		return nil
 	}
@@ -267,7 +266,6 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org subscriptions")
-
 		return err
 	}
 
