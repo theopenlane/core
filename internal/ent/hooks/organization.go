@@ -87,7 +87,7 @@ func HookOrganization() ent.Hook {
 
 				if orgCreated.PersonalOrg {
 					if err := sendOrgWelcomeEmail(ctx, orgCreated, m); err != nil {
-						return v, err
+						zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
 					}
 				}
 
