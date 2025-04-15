@@ -265,7 +265,6 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		requestor, err := m.Client().User.Get(ctx, reqID)
 		if err != nil {
 			return err
-
 		}
 
 		inviterName = requestor.FirstName
