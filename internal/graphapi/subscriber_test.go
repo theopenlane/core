@@ -146,6 +146,77 @@ func (suite *GraphTestSuite) TestQuerySubscribers() {
 	}
 }
 
+func (suite *GraphTestSuite) TestMutationCreateBulkSubscribers() {
+	t := suite.T()
+
+	testCases := []struct {
+		name    string
+		emails  []string
+		client  *openlaneclient.OpenlaneClient
+		ctx     context.Context
+		wantErr bool
+	}{
+		{
+			name:    "happy path, multiple subscribers",
+			emails:  []string{"e.stark@example.com", "y.stark@example.com"},
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
+		},
+		{
+			name:    "happy path, one subscriber for bulk endpoint",
+			emails:  []string{"rr.stark@example.com"},
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
+		},
+		{
+			name:    "happy path, no provided email",
+			emails:  []string{},
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
+		},
+		{
+			name:    "bad path, invalid emails provided",
+			emails:  []string{"not_a_valid_email"},
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			input := []*openlaneclient.CreateSubscriberInput{}
+
+			for _, v := range tc.emails {
+				input = append(input, &openlaneclient.CreateSubscriberInput{
+					Email: v,
+				})
+			}
+
+			resp, err := tc.client.CreateBulkSubscriber(tc.ctx, input)
+
+			if tc.wantErr {
+				require.Error(t, err)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+
+			for k, v := range tc.emails {
+				assert.Equal(t, strings.ToLower(v), resp.CreateBulkSubscriber.Subscribers[k].Email)
+				assert.False(t, resp.CreateBulkSubscriber.Subscribers[k].Unsubscribed)
+				assert.False(t, resp.CreateBulkSubscriber.Subscribers[k].Active)
+			}
+		})
+	}
+}
+
 func (suite *GraphTestSuite) TestMutationCreateSubscriber_Tokens() {
 	t := suite.T()
 
