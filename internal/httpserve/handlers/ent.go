@@ -194,6 +194,9 @@ func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums
 		return nil, err
 	}
 
+	// set user in the viewer context for the rest of the request
+	ctx = setAuthenticatedContext(ctx, user)
+
 	// Add webauthn to the response
 	user.Edges.Webauthn = user.QueryWebauthn().AllX(ctx)
 

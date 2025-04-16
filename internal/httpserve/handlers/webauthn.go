@@ -49,9 +49,6 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// set webauthn allowed
-	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
-		return h.InternalServerError(ctx, err)
-	}
 
 	user := &provider.User{
 		ID:    entUser.ID,
@@ -143,13 +140,10 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get user from the database
-	entUser, err := h.getUserByID(reqCtx, userID, enums.AuthProvider(webauthnProvider))
+	entUser, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
-
-	// set user in the viewer context for the rest of the request
-	userCtx := setAuthenticatedContext(reqCtx, entUser)
 
 	// follows https://www.w3.org/TR/webauthn/#sctn-registering-a-new-credential
 	response, err := protocol.ParseCredentialCreationResponseBody(ctx.Request().Body)
@@ -183,6 +177,10 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 			return h.BadRequestWithCode(ctx, ErrDeviceAlreadyRegistered, DeviceRegisteredErrCode)
 		}
 
+		return h.InternalServerError(ctx, err)
+	}
+
+	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
