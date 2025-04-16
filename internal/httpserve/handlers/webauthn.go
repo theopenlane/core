@@ -140,7 +140,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get user from the database
-	entUser, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
+	entUser, userCtx, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -261,7 +261,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	// get user from the database
-	entUser, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
+	entUser, reqCtx, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -286,7 +286,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle
 func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHandler {
 	return func(_, userHandle []byte) (user webauthn.User, err error) {
-		u, err := h.getUserByID(ctx, string(userHandle), enums.AuthProvider(webauthnProvider))
+		u, _, err := h.getUserByID(ctx, string(userHandle), enums.AuthProvider(webauthnProvider))
 		if err != nil {
 			return nil, err
 		}

@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -26,6 +28,26 @@ func HookUserSetting() ent.Hook {
 			org, ok := m.DefaultOrgID()
 			if ok && !allowDefaultOrgUpdate(ctx, m, org) {
 				return nil, rout.InvalidField(rout.ErrOrganizationNotFound)
+			}
+
+			userID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user to add to organization")
+
+				return nil, err
+			}
+
+			if m.Op().Is(ent.OpUpdateOne) {
+				// if webauthn is disabled, clean up the passkeys we stored previously
+				if allowed, _ := m.IsWebauthnAllowed(); !allowed {
+
+					_, err := m.Client().Webauthn.Delete().
+						Where(webauthn.OwnerID(userID)).
+						Exec(ctx)
+					if err != nil {
+						return nil, err
+					}
+				}
 			}
 
 			return next.Mutate(ctx, m)
