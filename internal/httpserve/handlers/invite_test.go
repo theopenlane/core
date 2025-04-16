@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
@@ -126,7 +127,8 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
 			// ensure the email jobs are created
-			// there will be two because the first is the invite email and the second is the accepted invite email
+			// there will be three because the first is the invite email and the second is the welcome
+			// and the 3rd one is the accepted email
 			job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 				[]rivertest.ExpectedJob{
 					{
@@ -135,10 +137,35 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 					{
 						Args: jobs.EmailArgs{},
 					},
+					{
+						Args: jobs.EmailArgs{},
+					},
 				})
 			require.NotNil(t, job)
-			assert.Contains(t, string(job[0].EncodedArgs), "Join your team")                       // first email is the invite email
-			assert.Contains(t, string(job[1].EncodedArgs), "You've been added to an organization") // second email is the accepted invite email
+
+			// We cannot determine the order of which they will be processed really especially for job 2 and 3
+			// So just check and make sure they all contain these values at some point
+			expectedSnippets := []string{
+				"We've created a personal Organization just",
+				"Join your team",
+				"You've been added to an organization",
+			}
+
+			found := make(map[string]bool)
+
+			for _, v := range job {
+				for _, snippet := range expectedSnippets {
+					if strings.Contains(string(v.EncodedArgs), snippet) {
+						found[snippet] = true
+					}
+				}
+			}
+
+			assert.Len(t, found, 3)
+
+			for _, snippet := range expectedSnippets {
+				assert.True(t, found[snippet], "expected snippet not found: %s", snippet)
+			}
 		})
 	}
 }

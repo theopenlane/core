@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -84,6 +85,12 @@ func HookOrganization() ent.Hook {
 					return nil, err
 				}
 
+				if orgCreated.PersonalOrg {
+					if err := sendOrgWelcomeEmail(ctx, orgCreated, m); err != nil {
+						zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
+					}
+				}
+
 				// create the admin organization member if not using an API token (which is not associated with a user)
 				// otherwise add the API token for admin access to the newly created organization
 				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
@@ -129,6 +136,48 @@ func HookOrganization() ent.Hook {
 			return v, err
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+func sendOrgWelcomeEmail(ctx context.Context,
+	m *generated.Organization, dbMutation *generated.OrganizationMutation) error {
+	if auth.IsAPITokenAuthentication(ctx) {
+		return nil
+	}
+
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to send welcome email to user")
+
+		return err
+	}
+
+	user, err := dbMutation.Client().User.Get(ctx, userID)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("could not fetch user from the database")
+
+		return err
+	}
+
+	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, m.Name)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating welcome email")
+
+		return err
+	}
+
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
 // HookOrganizationDelete runs on org delete mutations to ensure the org can be deleted
@@ -217,7 +266,6 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org subscriptions")
-
 		return err
 	}
 

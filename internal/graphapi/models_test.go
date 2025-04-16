@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -284,7 +285,13 @@ func randomName(t *testing.T) string {
 	err := gofakeit.Struct(&f)
 	require.NoError(t, err)
 
-	return f.Name + "_" + gofakeit.UUID()
+	var b strings.Builder
+	for _, r := range f.Name {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+		}
+	}
+	return b.String() + "_" + gofakeit.UUID()
 }
 
 // DeleteClient is an interface for deleting entities
