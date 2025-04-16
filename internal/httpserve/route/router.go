@@ -205,7 +205,6 @@ func RegisterRoutes(router *Router) error {
 		registerWebhookHandler,
 		register2faHandler,
 		registerExampleCSVHandler,
-		registerPPROFroutes,
 	}
 
 	if router.LocalFilePath != "" {
