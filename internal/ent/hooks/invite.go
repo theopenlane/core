@@ -256,13 +256,30 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		return err
 	}
 
-	requestor, err := m.Client().User.Get(ctx, reqID)
-	if err != nil {
-		return err
+	authType := auth.GetAuthzSubjectType(ctx)
+
+	var inviterName string
+
+	switch authType {
+	case auth.UserSubjectType:
+		requestor, err := m.Client().User.Get(ctx, reqID)
+		if err != nil {
+			return err
+		}
+
+		inviterName = requestor.FirstName
+
+	case auth.ServiceSubjectType:
+		// default to org name
+		inviterName = org.Name
+
+	default:
+		// should never really get here
+		return ErrInternalServerError
 	}
 
 	invite := emailtemplates.InviteTemplateData{
-		InviterName:      requestor.FirstName,
+		InviterName:      inviterName,
 		OrganizationName: org.Name,
 		Role:             string(role),
 	}

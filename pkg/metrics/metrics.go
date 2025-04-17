@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"net/http/pprof"
 	"strings"
 	"sync"
 
@@ -18,6 +19,19 @@ type Metrics struct {
 	e    *echo.Echo
 	port string
 	reg  *sync.Once
+}
+
+var combinedHandlers = map[string]http.HandlerFunc{
+	"/debug/pprof":           pprof.Index,
+	"/debug/pprof/cmdline":   pprof.Cmdline,
+	"/debug/pprof/profile":   pprof.Profile,
+	"/debug/pprof/symbol":    pprof.Symbol,
+	"/debug/pprof/trace":     pprof.Trace,
+	"/debug/pprof/mutex":     pprof.Index,
+	"/debug/pprof/allocs":    pprof.Index,
+	"/debug/pprof/block":     pprof.Index,
+	"/debug/pprof/goroutine": pprof.Index,
+	"/debug/pprof/heap":      pprof.Index,
 }
 
 // New creates a new Metrics instance
@@ -83,6 +97,11 @@ func New(port string) *Metrics {
 	}))
 
 	m.e.GET("/metrics", echoprometheus.NewHandler())
+
+	// Register pprof handlers
+	for path, handler := range combinedHandlers {
+		m.e.GET(path, echo.WrapHandler(handler))
+	}
 
 	return m
 }
