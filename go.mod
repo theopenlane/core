@@ -512,7 +512,7 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/otp v1.4.0
-	github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126
+	github.com/projectdiscovery/katana v1.1.3-0.20250417080302-295ae677578d
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
 	github.com/projectdiscovery/wappalyzergo v0.2.24
 	github.com/prometheus/client_model v0.6.1 // indirect
