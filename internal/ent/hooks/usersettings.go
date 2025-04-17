@@ -30,17 +30,16 @@ func HookUserSetting() ent.Hook {
 				return nil, rout.InvalidField(rout.ErrOrganizationNotFound)
 			}
 
-			userID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user to add to organization")
-
-				return nil, err
-			}
-
 			if m.Op().Is(ent.OpUpdateOne) {
+				userID, err := auth.GetSubjectIDFromContext(ctx)
+				if err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get authenticated user to update their settings")
+
+					return nil, err
+				}
+
 				// if webauthn is disabled, clean up the passkeys we stored previously
 				if allowed, _ := m.IsWebauthnAllowed(); !allowed {
-
 					_, err := m.Client().Webauthn.Delete().
 						Where(webauthn.OwnerID(userID)).
 						Exec(ctx)

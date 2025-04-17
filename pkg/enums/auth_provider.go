@@ -15,6 +15,8 @@ var (
 	AuthProviderGoogle AuthProvider = "GOOGLE"
 	// Github oauth2 provider for authentication
 	AuthProviderGitHub AuthProvider = "GITHUB"
+	// Webauthn passkey provider for authentication
+	AuthProviderWebauthn AuthProvider = "WEBAUTHN"
 	// AuthProviderInvalid is the default value for the AuthProvider enum
 	AuthProviderInvalid AuthProvider = "INVALID"
 )
@@ -22,7 +24,7 @@ var (
 // Values returns a slice of strings that represents all the possible values of the AuthProvider enum.
 // Possible default values are "CREDENTIALS", "GOOGLE", "GITHUB", and "WEBAUTHN"
 func (AuthProvider) Values() (kinds []string) {
-	for _, s := range []AuthProvider{AuthProviderCredentials, AuthProviderGoogle, AuthProviderGitHub} {
+	for _, s := range []AuthProvider{AuthProviderCredentials, AuthProviderGoogle, AuthProviderGitHub, AuthProviderWebauthn} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -43,6 +45,8 @@ func ToAuthProvider(r string) *AuthProvider {
 		return &AuthProviderGoogle
 	case AuthProviderGitHub.String():
 		return &AuthProviderGitHub
+	case AuthProviderWebauthn.String():
+		return &AuthProviderWebauthn
 	default:
 		return &AuthProviderInvalid
 	}

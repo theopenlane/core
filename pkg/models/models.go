@@ -2,12 +2,14 @@ package models
 
 import (
 	"mime/multipart"
+	"net/mail"
 	"net/textproto"
 	"strings"
 	"time"
 
 	"github.com/go-webauthn/webauthn/protocol"
 
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
@@ -58,10 +60,53 @@ func (r *LoginRequest) Validate() error {
 	return nil
 }
 
+// AvailableAuthTypeReply holds the response to AvailableAuthTypeLoginRequest
+type AvailableAuthTypeReply struct {
+	rout.Reply
+	Methods []enums.AuthProvider `json:"methods,omitempty"`
+}
+
+// AvailableAuthTypeLoginRequest holds the payload for checking the auth types available to a user
+// passkeys? or both passkeys and credentials or just credentials
+type AvailableAuthTypeLoginRequest struct {
+	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
+}
+
+// Validate ensures the required fields are set on the AvailableAuthTypeLoginRequest request
+func (r *AvailableAuthTypeLoginRequest) Validate() error {
+	r.Username = strings.TrimSpace(r.Username)
+
+	if r.Username == "" {
+		return rout.NewMissingRequiredFieldError("username")
+	}
+
+	if _, err := mail.ParseAddress(r.Username); err != nil {
+		return rout.InvalidField("username")
+	}
+
+	return nil
+}
+
 // ExampleLoginSuccessRequest is an example of a successful login request for OpenAPI documentation
 var ExampleLoginSuccessRequest = LoginRequest{
 	Username: "sfunky@theopenlane.io",
 	Password: "mitb!",
+}
+
+// ExampleAvailableAuthTypeRequest is an example of a successful available auth type check for OpenAPI documentation
+var ExampleAvailableAuthTypeRequest = LoginRequest{
+	Username: "sfunky@theopenlane.io",
+}
+
+// ExampleAvailableAuthTypeSuccessResponse is an example of a successful available auth methods check response for OpenAPI documentation
+var ExampleAvailableAuthTypeSuccessResponse = AvailableAuthTypeReply{
+	Reply: rout.Reply{
+		Success: true,
+	},
+	Methods: []enums.AuthProvider{
+		enums.AuthProviderCredentials,
+		enums.AuthProviderWebauthn,
+	},
 }
 
 // ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation

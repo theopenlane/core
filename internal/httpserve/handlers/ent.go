@@ -185,7 +185,6 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string, authProvider
 // getUserByID returns the ent user with the user settings based on the email and auth provider in the request
 func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums.AuthProvider) (
 	*ent.User, context.Context, error) {
-
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
 		Where(user.AuthProviderEQ(authProvider)).
