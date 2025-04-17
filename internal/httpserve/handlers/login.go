@@ -37,7 +37,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
-	if user.Edges.Setting.Status != "ACTIVE" {
+	if user.Edges.Setting.Status != enums.UserStatusActive {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 

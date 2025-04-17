@@ -183,7 +183,8 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string, authProvider
 }
 
 // getUserByID returns the ent user with the user settings based on the email and auth provider in the request
-func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums.AuthProvider) (*ent.User, error) {
+func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums.AuthProvider) (
+	*ent.User, context.Context, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
 		Where(user.AuthProviderEQ(authProvider)).
@@ -191,13 +192,21 @@ func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining user from id")
 
-		return nil, err
+		return nil, ctx, err
 	}
 
-	// Add webauthn to the response
-	user.Edges.Webauthn = user.QueryWebauthn().AllX(ctx)
+	// set user in the viewer context for the rest of the request
+	ctx = setAuthenticatedContext(ctx, user)
 
-	return user, nil
+	// Add webauthn to the response
+	webAuthns, err := user.QueryWebauthn().All(ctx)
+	if err != nil {
+		return user, ctx, err
+	}
+
+	user.Edges.Webauthn = webAuthns
+
+	return user, ctx, nil
 }
 
 // addCredentialToUser adds a new webauthn credential to the user

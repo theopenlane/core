@@ -40,7 +40,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	// once the the passkey is added to the user's account, they can use it to login
 	// we treat this verify similar to the oauth or basic registration flow
 	// user is created first, no credential method is set / they are unable to login until the credential flow is finished
-	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProvider(webauthnProvider), "")
+	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProviderCredentials, "")
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -49,9 +49,6 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// set webauthn allowed
-	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
-		return h.InternalServerError(ctx, err)
-	}
 
 	user := &provider.User{
 		ID:    entUser.ID,
@@ -61,6 +58,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	// options is the object that needs to be returned for the front end to open the creation dialog for the user to create the passkey
 	options, session, err := h.WebAuthn.BeginRegistration(user,
+		webauthn.WithRegistrationRelyingPartyName("Openlane"),
 		webauthn.WithResidentKeyRequirement(protocol.ResidentKeyRequirementRequired),
 		webauthn.WithExclusions(user.CredentialExcludeList()),
 	)
@@ -142,13 +140,10 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get user from the database
-	entUser, err := h.getUserByID(reqCtx, userID, enums.AuthProvider(webauthnProvider))
+	entUser, userCtx, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
-
-	// set user in the viewer context for the rest of the request
-	userCtx := setAuthenticatedContext(reqCtx, entUser)
 
 	// follows https://www.w3.org/TR/webauthn/#sctn-registering-a-new-credential
 	response, err := protocol.ParseCredentialCreationResponseBody(ctx.Request().Body)
@@ -182,6 +177,10 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 			return h.BadRequestWithCode(ctx, ErrDeviceAlreadyRegistered, DeviceRegisteredErrCode)
 		}
 
+		return h.InternalServerError(ctx, err)
+	}
+
+	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
@@ -262,7 +261,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	// get user from the database
-	entUser, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
+	entUser, reqCtx, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -287,7 +286,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle
 func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHandler {
 	return func(_, userHandle []byte) (user webauthn.User, err error) {
-		u, err := h.getUserByID(ctx, string(userHandle), enums.AuthProvider(webauthnProvider))
+		u, _, err := h.getUserByID(ctx, string(userHandle), enums.AuthProviderCredentials)
 		if err != nil {
 			return nil, err
 		}
@@ -304,6 +303,12 @@ func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHand
 				ID:              cred.CredentialID,
 				PublicKey:       cred.PublicKey,
 				AttestationType: cred.AttestationType,
+				Flags: webauthn.CredentialFlags{
+					BackupEligible: cred.BackupEligible,
+					BackupState:    cred.BackupState,
+					UserPresent:    cred.UserPresent,
+					UserVerified:   cred.UserVerified,
+				},
 			}
 
 			for _, t := range cred.Transports {
