@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 
@@ -32,19 +31,15 @@ func HookUserSetting() ent.Hook {
 
 			if m.Op().Is(ent.OpUpdateOne) {
 				userID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get authenticated user to update their settings")
-
-					return nil, err
-				}
-
-				// if webauthn is disabled, clean up the passkeys we stored previously
-				if allowed, _ := m.IsWebauthnAllowed(); !allowed {
-					_, err := m.Client().Webauthn.Delete().
-						Where(webauthn.OwnerID(userID)).
-						Exec(ctx)
-					if err != nil {
-						return nil, err
+				if err == nil && userID != "" {
+					// if webauthn is disabled, clean up the passkey we stored previously
+					if allowed, _ := m.IsWebauthnAllowed(); !allowed {
+						_, err := m.Client().Webauthn.Delete().
+							Where(webauthn.OwnerID(userID)).
+							Exec(ctx)
+						if err != nil {
+							return nil, err
+						}
 					}
 				}
 			}

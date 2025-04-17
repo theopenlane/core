@@ -35,7 +35,7 @@ func registerLoginHandler(router *Router) (err error) {
 // registerAvailableAuthHandler is oriented towards users that would love to use different
 // authentication types to get into their account
 func registerAvailableAuthHandler(router *Router) (err error) {
-	path := "/login/auths"
+	path := "/login/methods"
 	method := http.MethodPost
 	name := "AvailableAuth"
 
