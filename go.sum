@@ -940,8 +940,8 @@ github.com/projectdiscovery/gostruct v0.0.2 h1:s8gP8ApugGM4go1pA+sVlPDXaWqNP5BBD
 github.com/projectdiscovery/gostruct v0.0.2/go.mod h1:H86peL4HKwMXcQQtEa6lmC8FuD9XFt6gkNR0B/Mu5PE=
 github.com/projectdiscovery/hmap v0.0.82 h1:gPFkeD5sbY3uVIxgtgDkzHmXCo/H7cbhRhdLX//+G1A=
 github.com/projectdiscovery/hmap v0.0.82/go.mod h1:8vSfVgZwCRbHitnZPgpsOw8115/mJX/b4B8QKR88Iak=
-github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126 h1:paFUBTeXCbDst8+SA81pNOv5v1J2IN2iDre+ZWvBRS0=
-github.com/projectdiscovery/katana v1.1.3-0.20241206120649-b1550527a126/go.mod h1:1ajTS7kkXXR3eGlHbw3BX+Zp7GimTPtpCRqFieSNu3E=
+github.com/projectdiscovery/katana v1.1.3-0.20250417080302-295ae677578d h1:+oPcjrnNLOjGsX+8grB2EK9aPDWTCDJ/ElG2R5Bd+aw=
+github.com/projectdiscovery/katana v1.1.3-0.20250417080302-295ae677578d/go.mod h1:1ajTS7kkXXR3eGlHbw3BX+Zp7GimTPtpCRqFieSNu3E=
 github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 h1:ZScLodGSezQVwsQDtBSMFp72WDq0nNN+KE/5DHKY5QE=
 github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983/go.mod h1:3G3BRKui7nMuDFAZKR/M2hiOLtaOmyukT20g88qRQjI=
 github.com/projectdiscovery/mapcidr v1.1.34 h1:udr83vQ7oz3kEOwlsU6NC6o08leJzSDQtls1wmXN/kM=
