@@ -13,7 +13,7 @@ tasks:
       SCHEMAS:
         sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
+      - for: { var: SCHEMAS, as: SCHEMA }
         cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
 
   generate:all:history:force:
@@ -22,7 +22,7 @@ tasks:
       SCHEMAS:
         sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
+      - for: { var: SCHEMAS, as: SCHEMA }
         cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
 
   generate:
@@ -161,5 +161,5 @@ tasks:
       MODELS:
         sh: ls -d ../../jsonschema/models/* | cut -f5 -d'/'
     cmds:
-      - for: {var: MODELS, as: MODEL}
+      - for: { var: MODELS, as: MODEL }
         cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"

@@ -261,7 +261,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	// get user from the database
-	entUser, reqCtx, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProvider(webauthnProvider))
+	entUser, reqCtx, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -286,7 +286,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle
 func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHandler {
 	return func(_, userHandle []byte) (user webauthn.User, err error) {
-		u, _, err := h.getUserByID(ctx, string(userHandle), enums.AuthProvider(webauthnProvider))
+		u, _, err := h.getUserByID(ctx, string(userHandle), enums.AuthProviderCredentials)
 		if err != nil {
 			return nil, err
 		}
@@ -303,6 +303,12 @@ func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHand
 				ID:              cred.CredentialID,
 				PublicKey:       cred.PublicKey,
 				AttestationType: cred.AttestationType,
+				Flags: webauthn.CredentialFlags{
+					BackupEligible: cred.BackupEligible,
+					BackupState:    cred.BackupState,
+					UserPresent:    cred.UserPresent,
+					UserVerified:   cred.UserVerified,
+				},
 			}
 
 			for _, t := range cred.Transports {
