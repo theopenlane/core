@@ -31,10 +31,9 @@ func HookUserSetting() ent.Hook {
 
 			if m.Op().Is(ent.OpUpdateOne) {
 				userID, err := auth.GetSubjectIDFromContext(ctx)
-				//  I think the issue here might be for when we need to create a new user
-				//  ( say on sign up, from cli or other places ),
+				//  when we need to create a new user say on sign up, from the cli or other places,
 				//  we do not have a "user in the context" for these instances
-				//  which is why we specifically ignore the err
+				//  which is why we specifically ignore the error here
 				if err == nil && userID != "" {
 					// if webauthn is disabled, clean up the passkey we stored previously
 					if allowed, _ := m.IsWebauthnAllowed(); !allowed {
