@@ -9,9 +9,10 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/utils/passwd"
 )
