@@ -67,7 +67,7 @@ func (h *Handler) BindAvailableAuthTypeHandler() *openapi3.Operation {
 	availableAuthReq.Security = BasicSecurity()
 
 	h.AddRequestBody("AvailableAuthTypeLoginRequest", models.ExampleAvailableAuthTypeRequest, availableAuthReq)
-	h.AddResponse("LoginReply", "success", models.ExampleAvailableAuthTypeSuccessResponse, availableAuthReq, http.StatusOK)
+	h.AddResponse("AvailableAuthTypeReply", "success", models.ExampleAvailableAuthTypeSuccessResponse, availableAuthReq, http.StatusOK)
 	availableAuthReq.AddResponse(http.StatusInternalServerError, internalServerError())
 	availableAuthReq.AddResponse(http.StatusBadRequest, badRequest())
 	availableAuthReq.AddResponse(http.StatusBadRequest, invalidInput())

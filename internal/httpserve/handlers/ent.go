@@ -199,7 +199,12 @@ func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums
 	ctx = setAuthenticatedContext(ctx, user)
 
 	// Add webauthn to the response
-	user.Edges.Webauthn = user.QueryWebauthn().AllX(ctx)
+	webAuthns, err := user.QueryWebauthn().All(ctx)
+	if err != nil {
+		return user, ctx, err
+	}
+
+	user.Edges.Webauthn = webAuthns
 
 	return user, ctx, nil
 }
