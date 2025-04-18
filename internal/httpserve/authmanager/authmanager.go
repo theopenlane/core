@@ -126,7 +126,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	}
 
 	if subscription == nil || !subscription.Active {
-		return false, ErrOrgSubscriptionNotActive
+		return false, nil
 	}
 
 	return true, nil
