@@ -31,25 +31,3 @@ func registerLoginHandler(router *Router) (err error) {
 
 	return nil
 }
-
-// registerAvailableAuthHandler is oriented towards users that would love to use different
-// authentication types to get into their account
-func registerAvailableAuthHandler(router *Router) (err error) {
-	path := "/login/methods"
-	method := http.MethodPost
-	name := "AvailableAuth"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.AvailableAuthTypeHandler(c)
-		},
-	}
-
-	loginOperation := router.Handler.BindAvailableAuthTypeHandler()
-
-	return router.Addv1Route(path, method, loginOperation, route)
-}
