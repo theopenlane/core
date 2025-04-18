@@ -203,14 +203,38 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 
 // BeginWebauthnLogin is the request to begin a webauthn login
 func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
+	var r models.WebauthnLoginRequest
+	if err := ctx.Bind(&r); err != nil {
+		return h.InvalidInput(ctx, err)
+	}
+
 	credential, session, err := h.WebAuthn.BeginDiscoverableLogin()
 	if err != nil {
 		return err
 	}
 
+	// get the user here and add it to the session
+	// so when we complete the passkey verificaton
+	// we can be certain it is the same user
+	// Else you can really just start this sign in process with any random email address
+	// but if you use your passkeys for another account that is valid in the system
+	// it gets you into the account for the passkeys and ignore the random email address you added
+	//
+	// If you start your sign in with "oops@oops.com", the passkey we should validate is only that for oops@oops.com
+	//
+	// Ideally this should be fine if we have nameless passkeys login but if the user selects an email
+	// we need to validate that surely
+	user, err := h.getUserByEmail(ctx.Request().Context(), r.Email, enums.AuthProviderCredentials)
+	if err != nil {
+		// 400 or 500 really but we do not want to return 500 for a simple "user not found" error
+		return h.BadRequest(ctx, err)
+	}
+
 	setSessionMap := map[string]any{}
 	setSessionMap[sessions.WebAuthnKey] = session
 	setSessionMap[sessions.UserTypeKey] = webauthnLogin
+	setSessionMap[sessions.EmailKey] = user.Email
+	setSessionMap[sessions.UserIDKey] = user.ID
 
 	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, setSessionMap, "")
 	if err != nil {
@@ -260,8 +284,17 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	userID := string(response.Response.UserHandle)
+
+	userIDFromCookie := sessionData.(map[string]any)[sessions.UserIDKey]
+
+	// ensure the user is the same as the one who started the login
+	if userIDFromCookie != userID {
+		return h.BadRequest(ctx, err)
+	}
+
 	// get user from the database
-	entUser, reqCtx, err := h.getUserByID(reqCtx, string(response.Response.UserHandle), enums.AuthProviderCredentials)
+	entUser, reqCtx, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}

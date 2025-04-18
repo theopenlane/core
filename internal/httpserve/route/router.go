@@ -198,7 +198,6 @@ func RegisterRoutes(router *Router) error {
 		registerFaviconHandler,
 		registerOpenAPIHandler,
 		registerLoginHandler,
-		registerAvailableAuthHandler,
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
 		registerAccountRolesOrganizationHandler,
