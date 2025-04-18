@@ -32,6 +32,7 @@ func (d *DateTime) Scan(value any) error {
 	}
 
 	*d = DateTime(t)
+
 	return nil
 }
 
@@ -103,5 +104,5 @@ func ToDateTime(s string) (*DateTime, error) {
 		return &dt, nil
 	}
 
-	return nil, fmt.Errorf("invalid date format: %q", s)
+	return nil, ErrInvalidTimeType
 }
