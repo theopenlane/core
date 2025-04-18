@@ -52,6 +52,8 @@ func (ControlObjective) Fields() []ent.Field {
 			Comment("the desired outcome or target of the control objective"),
 		field.String("status").
 			Optional().
+			GoType(enums.ObjectiveStatus("")).
+			Default(enums.ObjectiveActiveStatus.String()).
 			Annotations(
 				entgql.OrderField("status"),
 			).
