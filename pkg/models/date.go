@@ -46,12 +46,12 @@ func (d *DateTime) UnmarshalCSV(s string) error {
 		return nil
 	}
 
-	if t, err := time.Parse(dateLayout, s); err == nil {
+	if t, err := time.Parse(isoDateLayout, s); err == nil {
 		*d = DateTime(t)
 		return nil
 	}
 
-	if t, err := time.Parse(isoDateLayout, s); err == nil {
+	if t, err := time.Parse(dateLayout, s); err == nil {
 		*d = DateTime(t)
 		return nil
 	}
@@ -66,12 +66,12 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 		return ErrUnsupportedDateTimeType
 	}
 
-	if t, err := time.Parse(dateLayout, str); err == nil {
+	if t, err := time.Parse(isoDateLayout, str); err == nil {
 		*d = DateTime(t)
 		return nil
 	}
 
-	if t, err := time.Parse(isoDateLayout, str); err == nil {
+	if t, err := time.Parse(dateLayout, str); err == nil {
 		*d = DateTime(t)
 		return nil
 	}
@@ -82,7 +82,7 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 // MarshalGQL writes the datetime as "YYYY-MM-DD"
 func (d DateTime) MarshalGQL(w io.Writer) {
 	t := time.Time(d)
-	_, _ = io.WriteString(w, fmt.Sprintf("%q", t.Format(dateLayout)))
+	_, _ = io.WriteString(w, fmt.Sprintf("%q", t.Format(isoDateLayout)))
 }
 
 func (d DateTime) String() string {
@@ -94,12 +94,12 @@ func ToDateTime(s string) (*DateTime, error) {
 		return nil, ErrInvalidTimeType
 	}
 
-	if t, err := time.Parse(dateLayout, s); err == nil {
+	if t, err := time.Parse(isoDateLayout, s); err == nil {
 		dt := DateTime(t)
 		return &dt, nil
 	}
 
-	if t, err := time.Parse(isoDateLayout, s); err == nil {
+	if t, err := time.Parse(dateLayout, s); err == nil {
 		dt := DateTime(t)
 		return &dt, nil
 	}
