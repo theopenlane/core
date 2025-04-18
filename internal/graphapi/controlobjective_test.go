@@ -211,7 +211,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 				Category:             lo.ToPtr("Category"),
 				Subcategory:          lo.ToPtr("Subcategory"),
 				DesiredOutcome:       lo.ToPtr("Desired Outcome"),
-				Status:               lo.ToPtr("mitigated"),
+				Status:               &enums.ObjectiveActiveStatus,
 				ControlObjectiveType: lo.ToPtr("operational"),
 				Revision:             lo.ToPtr("v1.0.0"),
 				ProgramIDs:           []string{program1.ID, program2.ID}, // multiple programs
@@ -422,7 +422,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Status:               lo.ToPtr("mitigated"),
+				Status:               &enums.ObjectiveActiveStatus,
 				Tags:                 []string{"tag1", "tag2"},
 				Category:             lo.ToPtr("Category Updated"),
 				Subcategory:          lo.ToPtr("Subcategory Updated"),
@@ -437,7 +437,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "happy path, revision bump",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Status:       lo.ToPtr("open"),
+				Status:       &enums.ObjectiveActiveStatus,
 				RevisionBump: &models.Major,
 			},
 			client: suite.client.api,
@@ -455,7 +455,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControlObjective() {
 		{
 			name: "update not allowed, not permissions in same org",
 			request: openlaneclient.UpdateControlObjectiveInput{
-				Status: lo.ToPtr("testing"),
+				Status: &enums.ObjectiveActiveStatus,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
