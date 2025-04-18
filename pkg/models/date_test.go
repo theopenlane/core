@@ -23,7 +23,7 @@ func TestDateTime_Scan_Invalid(t *testing.T) {
 	var d models.DateTime
 	err := d.Scan("not-a-time")
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "cannot scan type string")
+	assert.Contains(t, err.Error(), "unsupported time format")
 }
 
 func TestDateTime_Value(t *testing.T) {
