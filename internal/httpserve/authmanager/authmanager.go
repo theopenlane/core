@@ -101,11 +101,7 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	return auth, nil
 }
 
-var (
-	// ErrOrgSubscriptionNotActive is the error message when the organization subscription is not active
-	ErrOrgSubscriptionNotActive = errors.New("organization subscription is not active")
-)
-
+// checkActiveSubscription checks if the user has an active subscription for the organization
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
 	// if the entitlement manager is disabled, we can skip the check
 	if a.db.EntitlementManager == nil {
@@ -125,11 +121,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 		return false, err
 	}
 
-	if subscription == nil || !subscription.Active {
-		return false, nil
-	}
-
-	return true, nil
+	return subscription != nil && subscription.Active, nil
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
