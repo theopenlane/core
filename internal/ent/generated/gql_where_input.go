@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -62855,28 +62856,28 @@ type TaskWhereInput struct {
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "due" field predicates.
-	Due       *time.Time  `json:"due,omitempty"`
-	DueNEQ    *time.Time  `json:"dueNEQ,omitempty"`
-	DueIn     []time.Time `json:"dueIn,omitempty"`
-	DueNotIn  []time.Time `json:"dueNotIn,omitempty"`
-	DueGT     *time.Time  `json:"dueGT,omitempty"`
-	DueGTE    *time.Time  `json:"dueGTE,omitempty"`
-	DueLT     *time.Time  `json:"dueLT,omitempty"`
-	DueLTE    *time.Time  `json:"dueLTE,omitempty"`
-	DueIsNil  bool        `json:"dueIsNil,omitempty"`
-	DueNotNil bool        `json:"dueNotNil,omitempty"`
+	Due       *models.DateTime  `json:"due,omitempty"`
+	DueNEQ    *models.DateTime  `json:"dueNEQ,omitempty"`
+	DueIn     []models.DateTime `json:"dueIn,omitempty"`
+	DueNotIn  []models.DateTime `json:"dueNotIn,omitempty"`
+	DueGT     *models.DateTime  `json:"dueGT,omitempty"`
+	DueGTE    *models.DateTime  `json:"dueGTE,omitempty"`
+	DueLT     *models.DateTime  `json:"dueLT,omitempty"`
+	DueLTE    *models.DateTime  `json:"dueLTE,omitempty"`
+	DueIsNil  bool              `json:"dueIsNil,omitempty"`
+	DueNotNil bool              `json:"dueNotNil,omitempty"`
 
 	// "completed" field predicates.
-	Completed       *time.Time  `json:"completed,omitempty"`
-	CompletedNEQ    *time.Time  `json:"completedNEQ,omitempty"`
-	CompletedIn     []time.Time `json:"completedIn,omitempty"`
-	CompletedNotIn  []time.Time `json:"completedNotIn,omitempty"`
-	CompletedGT     *time.Time  `json:"completedGT,omitempty"`
-	CompletedGTE    *time.Time  `json:"completedGTE,omitempty"`
-	CompletedLT     *time.Time  `json:"completedLT,omitempty"`
-	CompletedLTE    *time.Time  `json:"completedLTE,omitempty"`
-	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
-	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
+	Completed       *models.DateTime  `json:"completed,omitempty"`
+	CompletedNEQ    *models.DateTime  `json:"completedNEQ,omitempty"`
+	CompletedIn     []models.DateTime `json:"completedIn,omitempty"`
+	CompletedNotIn  []models.DateTime `json:"completedNotIn,omitempty"`
+	CompletedGT     *models.DateTime  `json:"completedGT,omitempty"`
+	CompletedGTE    *models.DateTime  `json:"completedGTE,omitempty"`
+	CompletedLT     *models.DateTime  `json:"completedLT,omitempty"`
+	CompletedLTE    *models.DateTime  `json:"completedLTE,omitempty"`
+	CompletedIsNil  bool              `json:"completedIsNil,omitempty"`
+	CompletedNotNil bool              `json:"completedNotNil,omitempty"`
 
 	// "assignee_id" field predicates.
 	AssigneeID             *string  `json:"assigneeID,omitempty"`
@@ -64178,28 +64179,28 @@ type TaskHistoryWhereInput struct {
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "due" field predicates.
-	Due       *time.Time  `json:"due,omitempty"`
-	DueNEQ    *time.Time  `json:"dueNEQ,omitempty"`
-	DueIn     []time.Time `json:"dueIn,omitempty"`
-	DueNotIn  []time.Time `json:"dueNotIn,omitempty"`
-	DueGT     *time.Time  `json:"dueGT,omitempty"`
-	DueGTE    *time.Time  `json:"dueGTE,omitempty"`
-	DueLT     *time.Time  `json:"dueLT,omitempty"`
-	DueLTE    *time.Time  `json:"dueLTE,omitempty"`
-	DueIsNil  bool        `json:"dueIsNil,omitempty"`
-	DueNotNil bool        `json:"dueNotNil,omitempty"`
+	Due       *models.DateTime  `json:"due,omitempty"`
+	DueNEQ    *models.DateTime  `json:"dueNEQ,omitempty"`
+	DueIn     []models.DateTime `json:"dueIn,omitempty"`
+	DueNotIn  []models.DateTime `json:"dueNotIn,omitempty"`
+	DueGT     *models.DateTime  `json:"dueGT,omitempty"`
+	DueGTE    *models.DateTime  `json:"dueGTE,omitempty"`
+	DueLT     *models.DateTime  `json:"dueLT,omitempty"`
+	DueLTE    *models.DateTime  `json:"dueLTE,omitempty"`
+	DueIsNil  bool              `json:"dueIsNil,omitempty"`
+	DueNotNil bool              `json:"dueNotNil,omitempty"`
 
 	// "completed" field predicates.
-	Completed       *time.Time  `json:"completed,omitempty"`
-	CompletedNEQ    *time.Time  `json:"completedNEQ,omitempty"`
-	CompletedIn     []time.Time `json:"completedIn,omitempty"`
-	CompletedNotIn  []time.Time `json:"completedNotIn,omitempty"`
-	CompletedGT     *time.Time  `json:"completedGT,omitempty"`
-	CompletedGTE    *time.Time  `json:"completedGTE,omitempty"`
-	CompletedLT     *time.Time  `json:"completedLT,omitempty"`
-	CompletedLTE    *time.Time  `json:"completedLTE,omitempty"`
-	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
-	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
+	Completed       *models.DateTime  `json:"completed,omitempty"`
+	CompletedNEQ    *models.DateTime  `json:"completedNEQ,omitempty"`
+	CompletedIn     []models.DateTime `json:"completedIn,omitempty"`
+	CompletedNotIn  []models.DateTime `json:"completedNotIn,omitempty"`
+	CompletedGT     *models.DateTime  `json:"completedGT,omitempty"`
+	CompletedGTE    *models.DateTime  `json:"completedGTE,omitempty"`
+	CompletedLT     *models.DateTime  `json:"completedLT,omitempty"`
+	CompletedLTE    *models.DateTime  `json:"completedLTE,omitempty"`
+	CompletedIsNil  bool              `json:"completedIsNil,omitempty"`
+	CompletedNotNil bool              `json:"completedNotNil,omitempty"`
 
 	// "assignee_id" field predicates.
 	AssigneeID             *string  `json:"assigneeID,omitempty"`

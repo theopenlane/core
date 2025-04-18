@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -212,15 +213,15 @@ func (thu *TaskHistoryUpdate) ClearCategory() *TaskHistoryUpdate {
 }
 
 // SetDue sets the "due" field.
-func (thu *TaskHistoryUpdate) SetDue(t time.Time) *TaskHistoryUpdate {
-	thu.mutation.SetDue(t)
+func (thu *TaskHistoryUpdate) SetDue(mt models.DateTime) *TaskHistoryUpdate {
+	thu.mutation.SetDue(mt)
 	return thu
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDue(t *time.Time) *TaskHistoryUpdate {
-	if t != nil {
-		thu.SetDue(*t)
+func (thu *TaskHistoryUpdate) SetNillableDue(mt *models.DateTime) *TaskHistoryUpdate {
+	if mt != nil {
+		thu.SetDue(*mt)
 	}
 	return thu
 }
@@ -232,15 +233,15 @@ func (thu *TaskHistoryUpdate) ClearDue() *TaskHistoryUpdate {
 }
 
 // SetCompleted sets the "completed" field.
-func (thu *TaskHistoryUpdate) SetCompleted(t time.Time) *TaskHistoryUpdate {
-	thu.mutation.SetCompleted(t)
+func (thu *TaskHistoryUpdate) SetCompleted(mt models.DateTime) *TaskHistoryUpdate {
+	thu.mutation.SetCompleted(mt)
 	return thu
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableCompleted(t *time.Time) *TaskHistoryUpdate {
-	if t != nil {
-		thu.SetCompleted(*t)
+func (thu *TaskHistoryUpdate) SetNillableCompleted(mt *models.DateTime) *TaskHistoryUpdate {
+	if mt != nil {
+		thu.SetCompleted(*mt)
 	}
 	return thu
 }
@@ -658,15 +659,15 @@ func (thuo *TaskHistoryUpdateOne) ClearCategory() *TaskHistoryUpdateOne {
 }
 
 // SetDue sets the "due" field.
-func (thuo *TaskHistoryUpdateOne) SetDue(t time.Time) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDue(t)
+func (thuo *TaskHistoryUpdateOne) SetDue(mt models.DateTime) *TaskHistoryUpdateOne {
+	thuo.mutation.SetDue(mt)
 	return thuo
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDue(t *time.Time) *TaskHistoryUpdateOne {
-	if t != nil {
-		thuo.SetDue(*t)
+func (thuo *TaskHistoryUpdateOne) SetNillableDue(mt *models.DateTime) *TaskHistoryUpdateOne {
+	if mt != nil {
+		thuo.SetDue(*mt)
 	}
 	return thuo
 }
@@ -678,15 +679,15 @@ func (thuo *TaskHistoryUpdateOne) ClearDue() *TaskHistoryUpdateOne {
 }
 
 // SetCompleted sets the "completed" field.
-func (thuo *TaskHistoryUpdateOne) SetCompleted(t time.Time) *TaskHistoryUpdateOne {
-	thuo.mutation.SetCompleted(t)
+func (thuo *TaskHistoryUpdateOne) SetCompleted(mt models.DateTime) *TaskHistoryUpdateOne {
+	thuo.mutation.SetCompleted(mt)
 	return thuo
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableCompleted(t *time.Time) *TaskHistoryUpdateOne {
-	if t != nil {
-		thuo.SetCompleted(*t)
+func (thuo *TaskHistoryUpdateOne) SetNillableCompleted(mt *models.DateTime) *TaskHistoryUpdateOne {
+	if mt != nil {
+		thuo.SetCompleted(*mt)
 	}
 	return thuo
 }

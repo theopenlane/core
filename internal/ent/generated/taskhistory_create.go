@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -229,29 +230,29 @@ func (thc *TaskHistoryCreate) SetNillableCategory(s *string) *TaskHistoryCreate 
 }
 
 // SetDue sets the "due" field.
-func (thc *TaskHistoryCreate) SetDue(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetDue(t)
+func (thc *TaskHistoryCreate) SetDue(mt models.DateTime) *TaskHistoryCreate {
+	thc.mutation.SetDue(mt)
 	return thc
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDue(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetDue(*t)
+func (thc *TaskHistoryCreate) SetNillableDue(mt *models.DateTime) *TaskHistoryCreate {
+	if mt != nil {
+		thc.SetDue(*mt)
 	}
 	return thc
 }
 
 // SetCompleted sets the "completed" field.
-func (thc *TaskHistoryCreate) SetCompleted(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetCompleted(t)
+func (thc *TaskHistoryCreate) SetCompleted(mt models.DateTime) *TaskHistoryCreate {
+	thc.mutation.SetCompleted(mt)
 	return thc
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCompleted(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetCompleted(*t)
+func (thc *TaskHistoryCreate) SetNillableCompleted(mt *models.DateTime) *TaskHistoryCreate {
+	if mt != nil {
+		thc.SetCompleted(*mt)
 	}
 	return thc
 }
