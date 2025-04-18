@@ -91,7 +91,7 @@ func (d DateTime) String() string {
 
 func ToDateTime(s string) (*DateTime, error) {
 	if s == "" {
-		return nil, nil
+		return nil, ErrInvalidTimeType
 	}
 
 	if t, err := time.Parse(dateLayout, s); err == nil {

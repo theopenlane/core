@@ -119,7 +119,7 @@ func TestToDateTime(t *testing.T) {
 			name:     "empty string input",
 			input:    "",
 			expected: nil,
-			wantErr:  false,
+			wantErr:  true,
 		},
 		{
 			name:     "invalid format",
