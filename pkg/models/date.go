@@ -77,16 +77,3 @@ func (d DateTime) MarshalGQL(w io.Writer) {
 	t := time.Time(d)
 	_, _ = io.WriteString(w, fmt.Sprintf("%q", t.Format(dateLayout)))
 }
-
-func ToModelsDateTime(f DateTime) DateTime {
-	return DateTime(time.Time(f))
-}
-
-func ToModelsDateTimePtr(f *DateTime) *DateTime {
-	if f == nil {
-		return nil
-	}
-
-	t := DateTime(time.Time(*f))
-	return &t
-}

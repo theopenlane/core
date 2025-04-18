@@ -60,7 +60,7 @@ func createValidation() (input openlaneclient.CreateTaskInput, err error) {
 
 	due := cmd.Config.Duration("due")
 	if due != 0 {
-		dueDate := time.Now().Add(due)
+		dueDate := time.Now().Add(due).String()
 		input.Due = &dueDate
 	}
 

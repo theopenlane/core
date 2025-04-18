@@ -89,20 +89,3 @@ func TestDateTime_MarshalGQL(t *testing.T) {
 	d.MarshalGQL(&buf)
 	assert.Equal(t, `"2024-04-18"`, strings.TrimSpace(buf.String()))
 }
-
-func TestToModelsDateTime(t *testing.T) {
-	d := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-	modelDT := models.ToModelsDateTime(models.DateTime(d))
-	assert.Equal(t, models.DateTime(d), modelDT)
-}
-
-func TestToModelsDateTimePtr(t *testing.T) {
-	t1 := models.DateTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
-	ptr := models.ToModelsDateTimePtr(&t1)
-	assert.NotNil(t, ptr)
-	assert.Equal(t, &t1, ptr)
-
-	var nilInput *models.DateTime = nil
-	nilOutput := models.ToModelsDateTimePtr(nilInput)
-	assert.Nil(t, nilOutput)
-}
