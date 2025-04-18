@@ -45,7 +45,7 @@ type ControlObjective struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome string `json:"desired_outcome,omitempty"`
 	// status of the control objective
-	Status string `json:"status,omitempty"`
+	Status enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
@@ -337,7 +337,7 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				co.Status = value.String
+				co.Status = enums.ObjectiveStatus(value.String)
 			}
 		case controlobjective.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -501,7 +501,7 @@ func (co *ControlObjective) String() string {
 	builder.WriteString(co.DesiredOutcome)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(co.Status)
+	builder.WriteString(fmt.Sprintf("%v", co.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", co.Source))

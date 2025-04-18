@@ -10176,21 +10176,12 @@ type ControlObjectiveWhereInput struct {
 	DesiredOutcomeContainsFold *string  `json:"desiredOutcomeContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ObjectiveStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ObjectiveStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ObjectiveStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ObjectiveStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                    `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                    `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -10855,38 +10846,11 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, controlobjective.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, controlobjective.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, controlobjective.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, controlobjective.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, controlobjective.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, controlobjective.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, controlobjective.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, controlobjective.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, controlobjective.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, controlobjective.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, controlobjective.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, controlobjective.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, controlobjective.SourceEQ(*i.Source))
@@ -11507,21 +11471,12 @@ type ControlObjectiveHistoryWhereInput struct {
 	DesiredOutcomeContainsFold *string  `json:"desiredOutcomeContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ObjectiveStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.ObjectiveStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ObjectiveStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ObjectiveStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                    `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                    `json:"statusNotNil,omitempty"`
 
 	// "source" field predicates.
 	Source       *enums.ControlSource  `json:"source,omitempty"`
@@ -12215,38 +12170,11 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, controlobjectivehistory.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, controlobjectivehistory.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, controlobjectivehistory.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, controlobjectivehistory.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.Source != nil {
 		predicates = append(predicates, controlobjectivehistory.SourceEQ(*i.Source))

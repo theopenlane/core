@@ -1321,7 +1321,7 @@ type CreateControlObjectiveInput struct {
 	Revision             *string
 	Name                 string
 	DesiredOutcome       *string
-	Status               *string
+	Status               *enums.ObjectiveStatus
 	Source               *enums.ControlSource
 	ControlObjectiveType *string
 	Category             *string
@@ -1426,7 +1426,7 @@ type UpdateControlObjectiveInput struct {
 	ClearDesiredOutcome       bool
 	DesiredOutcome            *string
 	ClearStatus               bool
-	Status                    *string
+	Status                    *enums.ObjectiveStatus
 	ClearSource               bool
 	Source                    *enums.ControlSource
 	ClearControlObjectiveType bool

@@ -248,6 +248,18 @@ var (
 	DefaultID func() string
 )
 
+const DefaultStatus enums.ObjectiveStatus = "ACTIVE"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.ObjectiveStatus) error {
+	switch s.String() {
+	case "ACTIVE", "ARCHIVED", "DRAFT":
+		return nil
+	default:
+		return fmt.Errorf("controlobjective: invalid enum value for status field: %q", s)
+	}
+}
+
 const DefaultSource enums.ControlSource = "USER_DEFINED"
 
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
@@ -613,6 +625,13 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 	)
 }
+
+var (
+	// enums.ObjectiveStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ObjectiveStatus)(nil)
+	// enums.ObjectiveStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ObjectiveStatus)(nil)
+)
 
 var (
 	// enums.ControlSource must implement graphql.Marshaler.

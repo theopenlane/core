@@ -2452,7 +2452,6 @@ type AdminSearch_AdminSearch_ControlObjectives_Edges_Node struct {
 	Name                 string   "json:\"name\" graphql:\"name\""
 	OwnerID              *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Revision             *string  "json:\"revision,omitempty\" graphql:\"revision\""
-	Status               *string  "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string  "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
@@ -2510,12 +2509,6 @@ func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetRevision() *st
 		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.Revision
-}
-func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetStatus() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
-	}
-	return t.Status
 }
 func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetSubcategory() *string {
 	if t == nil {
@@ -13305,22 +13298,22 @@ func (t *GetControlImplementationHistories_ControlImplementationHistories) GetEd
 }
 
 type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives struct {
-	Category             *string              "json:\"category,omitempty\" graphql:\"category\""
-	ControlObjectiveType *string              "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	CreatedAt            *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DesiredOutcome       *string              "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
-	DisplayID            string               "json:\"displayID\" graphql:\"displayID\""
-	ID                   string               "json:\"id\" graphql:\"id\""
-	Name                 string               "json:\"name\" graphql:\"name\""
-	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
-	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Category             *string                "json:\"category,omitempty\" graphql:\"category\""
+	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
+	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DesiredOutcome       *string                "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
+	DisplayID            string                 "json:\"displayID\" graphql:\"displayID\""
+	ID                   string                 "json:\"id\" graphql:\"id\""
+	Name                 string                 "json:\"name\" graphql:\"name\""
+	OwnerID              *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string                "json:\"revision,omitempty\" graphql:\"revision\""
+	Source               *enums.ControlSource   "json:\"source,omitempty\" graphql:\"source\""
+	Status               *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory          *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCategory() *string {
@@ -13389,7 +13382,7 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.Source
 }
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetStatus() *string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
@@ -13432,22 +13425,22 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective) GetControl
 }
 
 type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives struct {
-	Category             *string              "json:\"category,omitempty\" graphql:\"category\""
-	ControlObjectiveType *string              "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	CreatedAt            *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DesiredOutcome       *string              "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
-	DisplayID            string               "json:\"displayID\" graphql:\"displayID\""
-	ID                   string               "json:\"id\" graphql:\"id\""
-	Name                 string               "json:\"name\" graphql:\"name\""
-	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
-	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Category             *string                "json:\"category,omitempty\" graphql:\"category\""
+	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
+	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DesiredOutcome       *string                "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
+	DisplayID            string                 "json:\"displayID\" graphql:\"displayID\""
+	ID                   string                 "json:\"id\" graphql:\"id\""
+	Name                 string                 "json:\"name\" graphql:\"name\""
+	OwnerID              *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string                "json:\"revision,omitempty\" graphql:\"revision\""
+	Source               *enums.ControlSource   "json:\"source,omitempty\" graphql:\"source\""
+	Status               *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory          *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetCategory() *string {
@@ -13516,7 +13509,7 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.Source
 }
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetStatus() *string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
@@ -13729,7 +13722,7 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	Programs             CreateControlObjective_CreateControlObjective_ControlObjective_Programs         "json:\"programs\" graphql:\"programs\""
 	Revision             *string                                                                         "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                            "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
+	Status               *enums.ObjectiveStatus                                                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                                         "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -13827,7 +13820,7 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetSour
 	}
 	return t.Source
 }
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetStatus() *string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
@@ -14057,7 +14050,7 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	Programs             GetAllControlObjectives_ControlObjectives_Edges_Node_Programs         "json:\"programs\" graphql:\"programs\""
 	Revision             *string                                                               "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                  "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string                                                               "json:\"status,omitempty\" graphql:\"status\""
+	Status               *enums.ObjectiveStatus                                                "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                               "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -14155,7 +14148,7 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetSource() *enum
 	}
 	return t.Source
 }
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetStatus() *string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
@@ -14385,7 +14378,7 @@ type GetControlObjectiveByID_ControlObjective struct {
 	Programs             GetControlObjectiveByID_ControlObjective_Programs         "json:\"programs\" graphql:\"programs\""
 	Revision             *string                                                   "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                      "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string                                                   "json:\"status,omitempty\" graphql:\"status\""
+	Status               *enums.ObjectiveStatus                                    "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -14483,7 +14476,7 @@ func (t *GetControlObjectiveByID_ControlObjective) GetSource() *enums.ControlSou
 	}
 	return t.Source
 }
-func (t *GetControlObjectiveByID_ControlObjective) GetStatus() *string {
+func (t *GetControlObjectiveByID_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
@@ -14691,7 +14684,7 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	Programs             GetControlObjectives_ControlObjectives_Edges_Node_Programs         "json:\"programs\" graphql:\"programs\""
 	Revision             *string                                                            "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                               "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string                                                            "json:\"status,omitempty\" graphql:\"status\""
+	Status               *enums.ObjectiveStatus                                             "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                            "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                           "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -14789,7 +14782,7 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetSource() *enums.C
 	}
 	return t.Source
 }
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetStatus() *string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
@@ -15019,7 +15012,7 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	Programs             UpdateControlObjective_UpdateControlObjective_ControlObjective_Programs         "json:\"programs\" graphql:\"programs\""
 	Revision             *string                                                                         "json:\"revision,omitempty\" graphql:\"revision\""
 	Source               *enums.ControlSource                                                            "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string                                                                         "json:\"status,omitempty\" graphql:\"status\""
+	Status               *enums.ObjectiveStatus                                                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory          *string                                                                         "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	Tags                 []string                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt            *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -15117,7 +15110,7 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetSour
 	}
 	return t.Source
 }
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetStatus() *string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
@@ -15166,25 +15159,25 @@ func (t *UpdateControlObjective_UpdateControlObjective) GetControlObjective() *U
 }
 
 type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
-	Category             *string              "json:\"category,omitempty\" graphql:\"category\""
-	ControlObjectiveType *string              "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	CreatedAt            *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DesiredOutcome       *string              "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
-	DisplayID            string               "json:\"displayID\" graphql:\"displayID\""
-	HistoryTime          time.Time            "json:\"historyTime\" graphql:\"historyTime\""
-	ID                   string               "json:\"id\" graphql:\"id\""
-	Name                 string               "json:\"name\" graphql:\"name\""
-	Operation            history.OpType       "json:\"operation\" graphql:\"operation\""
-	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                  *string              "json:\"ref,omitempty\" graphql:\"ref\""
-	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
-	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Category             *string                "json:\"category,omitempty\" graphql:\"category\""
+	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
+	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DesiredOutcome       *string                "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
+	DisplayID            string                 "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime          time.Time              "json:\"historyTime\" graphql:\"historyTime\""
+	ID                   string                 "json:\"id\" graphql:\"id\""
+	Name                 string                 "json:\"name\" graphql:\"name\""
+	Operation            history.OpType         "json:\"operation\" graphql:\"operation\""
+	OwnerID              *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                  *string                "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision             *string                "json:\"revision,omitempty\" graphql:\"revision\""
+	Source               *enums.ControlSource   "json:\"source,omitempty\" graphql:\"source\""
+	Status               *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory          *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCategory() *string {
@@ -15271,7 +15264,7 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 	}
 	return t.Source
 }
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetStatus() *string {
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
@@ -15325,25 +15318,25 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories) GetEdges() [
 }
 
 type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
-	Category             *string              "json:\"category,omitempty\" graphql:\"category\""
-	ControlObjectiveType *string              "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	CreatedAt            *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DesiredOutcome       *string              "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
-	DisplayID            string               "json:\"displayID\" graphql:\"displayID\""
-	HistoryTime          time.Time            "json:\"historyTime\" graphql:\"historyTime\""
-	ID                   string               "json:\"id\" graphql:\"id\""
-	Name                 string               "json:\"name\" graphql:\"name\""
-	Operation            history.OpType       "json:\"operation\" graphql:\"operation\""
-	OwnerID              *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                  *string              "json:\"ref,omitempty\" graphql:\"ref\""
-	Revision             *string              "json:\"revision,omitempty\" graphql:\"revision\""
-	Source               *enums.ControlSource "json:\"source,omitempty\" graphql:\"source\""
-	Status               *string              "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory          *string              "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Tags                 []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Category             *string                "json:\"category,omitempty\" graphql:\"category\""
+	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
+	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DesiredOutcome       *string                "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
+	DisplayID            string                 "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime          time.Time              "json:\"historyTime\" graphql:\"historyTime\""
+	ID                   string                 "json:\"id\" graphql:\"id\""
+	Name                 string                 "json:\"name\" graphql:\"name\""
+	Operation            history.OpType         "json:\"operation\" graphql:\"operation\""
+	OwnerID              *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                  *string                "json:\"ref,omitempty\" graphql:\"ref\""
+	Revision             *string                "json:\"revision,omitempty\" graphql:\"revision\""
+	Source               *enums.ControlSource   "json:\"source,omitempty\" graphql:\"source\""
+	Status               *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory          *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetCategory() *string {
@@ -15430,7 +15423,7 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetS
 	}
 	return t.Source
 }
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetStatus() *string {
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
@@ -70053,7 +70046,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					desiredOutcome
-					status
 					controlObjectiveType
 					category
 					subcategory

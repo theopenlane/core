@@ -130,6 +130,18 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultStatus enums.ObjectiveStatus = "ACTIVE"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.ObjectiveStatus) error {
+	switch s.String() {
+	case "ACTIVE", "ARCHIVED", "DRAFT":
+		return nil
+	default:
+		return fmt.Errorf("controlobjectivehistory: invalid enum value for status field: %q", s)
+	}
+}
+
 const DefaultSource enums.ControlSource = "USER_DEFINED"
 
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
@@ -250,6 +262,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.ObjectiveStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ObjectiveStatus)(nil)
+	// enums.ObjectiveStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ObjectiveStatus)(nil)
 )
 
 var (

@@ -131,11 +131,6 @@ func DesiredOutcome(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldDesiredOutcome, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldStatus, v))
-}
-
 // ControlObjectiveType applies equality check predicate on the "control_objective_type" field. It's identical to ControlObjectiveTypeEQ.
 func ControlObjectiveType(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldControlObjectiveType, v))
@@ -1027,58 +1022,33 @@ func DesiredOutcomeContainsFold(v string) predicate.ControlObjectiveHistory {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v enums.ObjectiveStatus) predicate.ControlObjectiveHistory {
+	vc := v
+	return predicate.ControlObjectiveHistory(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v enums.ObjectiveStatus) predicate.ControlObjectiveHistory {
+	vc := v
+	return predicate.ControlObjectiveHistory(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...enums.ObjectiveStatus) predicate.ControlObjectiveHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlObjectiveHistory(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldHasSuffix(FieldStatus, v))
+func StatusNotIn(vs ...enums.ObjectiveStatus) predicate.ControlObjectiveHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlObjectiveHistory(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusIsNil applies the IsNil predicate on the "status" field.
@@ -1089,16 +1059,6 @@ func StatusIsNil() predicate.ControlObjectiveHistory {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.ControlObjectiveHistory {
-	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // SourceEQ applies the EQ predicate on the "source" field.

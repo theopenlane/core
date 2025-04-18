@@ -51,7 +51,7 @@ type ControlObjectiveHistory struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome string `json:"desired_outcome,omitempty"`
 	// status of the control objective
-	Status string `json:"status,omitempty"`
+	Status enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
@@ -193,7 +193,7 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				coh.Status = value.String
+				coh.Status = enums.ObjectiveStatus(value.String)
 			}
 		case controlobjectivehistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -301,7 +301,7 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString(coh.DesiredOutcome)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(coh.Status)
+	builder.WriteString(fmt.Sprintf("%v", coh.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", coh.Source))

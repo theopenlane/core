@@ -30314,7 +30314,7 @@ type ControlObjective implements Node {
   """
   status of the control objective
   """
-  status: String
+  status: ControlObjectiveObjectiveStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -30701,7 +30701,7 @@ type ControlObjectiveHistory implements Node {
   """
   status of the control objective
   """
-  status: String
+  status: ControlObjectiveHistoryObjectiveStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -30757,6 +30757,14 @@ type ControlObjectiveHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+ControlObjectiveHistoryObjectiveStatus is enum for the field status
+"""
+enum ControlObjectiveHistoryObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+  ACTIVE
+  ARCHIVED
+  DRAFT
 }
 """
 ControlObjectiveHistoryOpType is enum for the field operation
@@ -31032,21 +31040,12 @@ input ControlObjectiveHistoryWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: ControlObjectiveHistoryObjectiveStatus
+  statusNEQ: ControlObjectiveHistoryObjectiveStatus
+  statusIn: [ControlObjectiveHistoryObjectiveStatus!]
+  statusNotIn: [ControlObjectiveHistoryObjectiveStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -31110,6 +31109,14 @@ input ControlObjectiveHistoryWhereInput {
   subcategoryNotNil: Boolean
   subcategoryEqualFold: String
   subcategoryContainsFold: String
+}
+"""
+ControlObjectiveObjectiveStatus is enum for the field status
+"""
+enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+  ACTIVE
+  ARCHIVED
+  DRAFT
 }
 """
 Ordering options for ControlObjective connections
@@ -31341,21 +31348,12 @@ input ControlObjectiveWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: ControlObjectiveObjectiveStatus
+  statusNEQ: ControlObjectiveObjectiveStatus
+  statusIn: [ControlObjectiveObjectiveStatus!]
+  statusNotIn: [ControlObjectiveObjectiveStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   source field predicates
   """
@@ -32257,7 +32255,7 @@ input CreateControlObjectiveInput {
   """
   status of the control objective
   """
-  status: String
+  status: ControlObjectiveObjectiveStatus
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -61433,7 +61431,7 @@ input UpdateControlObjectiveInput {
   """
   status of the control objective
   """
-  status: String
+  status: ControlObjectiveObjectiveStatus
   clearStatus: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.

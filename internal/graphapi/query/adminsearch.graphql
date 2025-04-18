@@ -140,7 +140,6 @@ query AdminSearch($query: String!) {
           ownerID
           name
           desiredOutcome
-          status
           controlObjectiveType
           category
           subcategory

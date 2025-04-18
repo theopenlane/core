@@ -188,15 +188,15 @@ func (cou *ControlObjectiveUpdate) ClearDesiredOutcome() *ControlObjectiveUpdate
 }
 
 // SetStatus sets the "status" field.
-func (cou *ControlObjectiveUpdate) SetStatus(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetStatus(s)
+func (cou *ControlObjectiveUpdate) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveUpdate {
+	cou.mutation.SetStatus(es)
 	return cou
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableStatus(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetStatus(*s)
+func (cou *ControlObjectiveUpdate) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveUpdate {
+	if es != nil {
+		cou.SetStatus(*es)
 	}
 	return cou
 }
@@ -778,6 +778,11 @@ func (cou *ControlObjectiveUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
 		}
 	}
+	if v, ok := cou.mutation.Status(); ok {
+		if err := controlobjective.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.status": %w`, err)}
+		}
+	}
 	if v, ok := cou.mutation.Source(); ok {
 		if err := controlobjective.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.source": %w`, err)}
@@ -861,10 +866,10 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cou.mutation.Status(); ok {
-		_spec.SetField(controlobjective.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)
 	}
 	if cou.mutation.StatusCleared() {
-		_spec.ClearField(controlobjective.FieldStatus, field.TypeString)
+		_spec.ClearField(controlobjective.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cou.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeEnum, value)
@@ -1635,15 +1640,15 @@ func (couo *ControlObjectiveUpdateOne) ClearDesiredOutcome() *ControlObjectiveUp
 }
 
 // SetStatus sets the "status" field.
-func (couo *ControlObjectiveUpdateOne) SetStatus(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetStatus(s)
+func (couo *ControlObjectiveUpdateOne) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveUpdateOne {
+	couo.mutation.SetStatus(es)
 	return couo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableStatus(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetStatus(*s)
+func (couo *ControlObjectiveUpdateOne) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveUpdateOne {
+	if es != nil {
+		couo.SetStatus(*es)
 	}
 	return couo
 }
@@ -2238,6 +2243,11 @@ func (couo *ControlObjectiveUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
 		}
 	}
+	if v, ok := couo.mutation.Status(); ok {
+		if err := controlobjective.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.status": %w`, err)}
+		}
+	}
 	if v, ok := couo.mutation.Source(); ok {
 		if err := controlobjective.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.source": %w`, err)}
@@ -2338,10 +2348,10 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := couo.mutation.Status(); ok {
-		_spec.SetField(controlobjective.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)
 	}
 	if couo.mutation.StatusCleared() {
-		_spec.ClearField(controlobjective.FieldStatus, field.TypeString)
+		_spec.ClearField(controlobjective.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := couo.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeEnum, value)
