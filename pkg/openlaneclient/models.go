@@ -2798,7 +2798,7 @@ type ControlObjective struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
 	// status of the control objective
-	Status *string `json:"status,omitempty"`
+	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
@@ -2887,7 +2887,7 @@ type ControlObjectiveHistory struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
 	// status of the control objective
-	Status *string `json:"status,omitempty"`
+	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
@@ -3131,21 +3131,12 @@ type ControlObjectiveHistoryWhereInput struct {
 	DesiredOutcomeEqualFold    *string  `json:"desiredOutcomeEqualFold,omitempty"`
 	DesiredOutcomeContainsFold *string  `json:"desiredOutcomeContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ObjectiveStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ObjectiveStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ObjectiveStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ObjectiveStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                   `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                   `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -3392,21 +3383,12 @@ type ControlObjectiveWhereInput struct {
 	DesiredOutcomeEqualFold    *string  `json:"desiredOutcomeEqualFold,omitempty"`
 	DesiredOutcomeContainsFold *string  `json:"desiredOutcomeContainsFold,omitempty"`
 	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.ObjectiveStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ObjectiveStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ObjectiveStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ObjectiveStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                   `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                   `json:"statusNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -4059,7 +4041,7 @@ type CreateControlObjectiveInput struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
 	// status of the control objective
-	Status *string `json:"status,omitempty"`
+	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
@@ -21952,8 +21934,8 @@ type UpdateControlObjectiveInput struct {
 	DesiredOutcome      *string `json:"desiredOutcome,omitempty"`
 	ClearDesiredOutcome *bool   `json:"clearDesiredOutcome,omitempty"`
 	// status of the control objective
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
+	Status      *enums.ObjectiveStatus `json:"status,omitempty"`
+	ClearStatus *bool                  `json:"clearStatus,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`

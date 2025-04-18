@@ -178,15 +178,15 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearDesiredOutcome() *ControlObjecti
 }
 
 // SetStatus sets the "status" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetStatus(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetStatus(s)
+func (cohu *ControlObjectiveHistoryUpdate) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetStatus(es)
 	return cohu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableStatus(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetStatus(*s)
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveHistoryUpdate {
+	if es != nil {
+		cohu.SetStatus(*es)
 	}
 	return cohu
 }
@@ -320,6 +320,11 @@ func (cohu *ControlObjectiveHistoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cohu *ControlObjectiveHistoryUpdate) check() error {
+	if v, ok := cohu.mutation.Status(); ok {
+		if err := controlobjectivehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := cohu.mutation.Source(); ok {
 		if err := controlobjectivehistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.source": %w`, err)}
@@ -409,10 +414,10 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Status(); ok {
-		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if cohu.mutation.StatusCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cohu.mutation.Source(); ok {
 		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeEnum, value)
@@ -607,15 +612,15 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDesiredOutcome() *ControlObj
 }
 
 // SetStatus sets the "status" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetStatus(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetStatus(s)
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetStatus(es)
 	return cohuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableStatus(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetStatus(*s)
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveHistoryUpdateOne {
+	if es != nil {
+		cohuo.SetStatus(*es)
 	}
 	return cohuo
 }
@@ -762,6 +767,11 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cohuo *ControlObjectiveHistoryUpdateOne) check() error {
+	if v, ok := cohuo.mutation.Status(); ok {
+		if err := controlobjectivehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := cohuo.mutation.Source(); ok {
 		if err := controlobjectivehistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.source": %w`, err)}
@@ -868,10 +878,10 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Status(); ok {
-		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if cohuo.mutation.StatusCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeString)
+		_spec.ClearField(controlobjectivehistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := cohuo.mutation.Source(); ok {
 		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeEnum, value)

@@ -177,15 +177,15 @@ func (coc *ControlObjectiveCreate) SetNillableDesiredOutcome(s *string) *Control
 }
 
 // SetStatus sets the "status" field.
-func (coc *ControlObjectiveCreate) SetStatus(s string) *ControlObjectiveCreate {
-	coc.mutation.SetStatus(s)
+func (coc *ControlObjectiveCreate) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveCreate {
+	coc.mutation.SetStatus(es)
 	return coc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableStatus(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetStatus(*s)
+func (coc *ControlObjectiveCreate) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveCreate {
+	if es != nil {
+		coc.SetStatus(*es)
 	}
 	return coc
 }
@@ -504,6 +504,10 @@ func (coc *ControlObjectiveCreate) defaults() error {
 		v := controlobjective.DefaultRevision
 		coc.mutation.SetRevision(v)
 	}
+	if _, ok := coc.mutation.Status(); !ok {
+		v := controlobjective.DefaultStatus
+		coc.mutation.SetStatus(v)
+	}
 	if _, ok := coc.mutation.Source(); !ok {
 		v := controlobjective.DefaultSource
 		coc.mutation.SetSource(v)
@@ -544,6 +548,11 @@ func (coc *ControlObjectiveCreate) check() error {
 	if v, ok := coc.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if v, ok := coc.mutation.Status(); ok {
+		if err := controlobjective.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.status": %w`, err)}
 		}
 	}
 	if v, ok := coc.mutation.Source(); ok {
@@ -632,7 +641,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_node.DesiredOutcome = value
 	}
 	if value, ok := coc.mutation.Status(); ok {
-		_spec.SetField(controlobjective.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := coc.mutation.Source(); ok {

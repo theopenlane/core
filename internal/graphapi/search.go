@@ -333,7 +333,6 @@ func adminSearchControlObjectives(ctx context.Context, query string, after *entg
 				controlobjective.OwnerIDContainsFold(query),              // search by OwnerID
 				controlobjective.NameContainsFold(query),                 // search by Name
 				controlobjective.DesiredOutcomeContainsFold(query),       // search by DesiredOutcome
-				controlobjective.StatusContainsFold(query),               // search by Status
 				controlobjective.ControlObjectiveTypeContainsFold(query), // search by ControlObjectiveType
 				controlobjective.CategoryContainsFold(query),             // search by Category
 				controlobjective.SubcategoryContainsFold(query),          // search by Subcategory

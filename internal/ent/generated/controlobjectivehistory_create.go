@@ -201,15 +201,15 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableDesiredOutcome(s *string) 
 }
 
 // SetStatus sets the "status" field.
-func (cohc *ControlObjectiveHistoryCreate) SetStatus(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetStatus(s)
+func (cohc *ControlObjectiveHistoryCreate) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetStatus(es)
 	return cohc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableStatus(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetStatus(*s)
+func (cohc *ControlObjectiveHistoryCreate) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveHistoryCreate {
+	if es != nil {
+		cohc.SetStatus(*es)
 	}
 	return cohc
 }
@@ -339,6 +339,10 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 		v := controlobjectivehistory.DefaultRevision
 		cohc.mutation.SetRevision(v)
 	}
+	if _, ok := cohc.mutation.Status(); !ok {
+		v := controlobjectivehistory.DefaultStatus
+		cohc.mutation.SetStatus(v)
+	}
 	if _, ok := cohc.mutation.Source(); !ok {
 		v := controlobjectivehistory.DefaultSource
 		cohc.mutation.SetSource(v)
@@ -367,6 +371,11 @@ func (cohc *ControlObjectiveHistoryCreate) check() error {
 	}
 	if _, ok := cohc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjectiveHistory.name"`)}
+	}
+	if v, ok := cohc.mutation.Status(); ok {
+		if err := controlobjectivehistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjectiveHistory.status": %w`, err)}
+		}
 	}
 	if v, ok := cohc.mutation.Source(); ok {
 		if err := controlobjectivehistory.SourceValidator(v); err != nil {
@@ -470,7 +479,7 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_node.DesiredOutcome = value
 	}
 	if value, ok := cohc.mutation.Status(); ok {
-		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := cohc.mutation.Source(); ok {
