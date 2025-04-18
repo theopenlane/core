@@ -87,7 +87,7 @@ func TestDateTime_MarshalGQL(t *testing.T) {
 	d := models.DateTime(time.Date(2024, 4, 18, 14, 0, 0, 0, time.UTC))
 	var buf bytes.Buffer
 	d.MarshalGQL(&buf)
-	assert.Equal(t, `"2024-04-18"`, strings.TrimSpace(buf.String()))
+	assert.Equal(t, `"2024-04-18T14:00:00Z"`, strings.TrimSpace(buf.String()))
 }
 
 func TestToDateTime(t *testing.T) {
