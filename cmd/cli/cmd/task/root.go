@@ -104,7 +104,7 @@ func tableOutput(out []openlaneclient.Task) {
 
 		var dueDate string
 		if i.Due != nil {
-			dueDate = *i.Due
+			dueDate = i.Due.String()
 		}
 
 		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)

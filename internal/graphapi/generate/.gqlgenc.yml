@@ -38,6 +38,8 @@ models:
   VersionBump:
     model:
       - github.com/theopenlane/core/pkg/models.VersionBump
+  DateTime:
+    model: github.com/theopenlane/core/pkg/models.DateTime
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

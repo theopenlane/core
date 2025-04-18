@@ -89,3 +89,61 @@ func TestDateTime_MarshalGQL(t *testing.T) {
 	d.MarshalGQL(&buf)
 	assert.Equal(t, `"2024-04-18"`, strings.TrimSpace(buf.String()))
 }
+
+func TestToDateTime(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected *time.Time
+		wantErr  bool
+	}{
+		{
+			name:  "valid date format YYYY-MM-DD",
+			input: "2024-04-18",
+			expected: func() *time.Time {
+				t := time.Date(2024, 4, 18, 0, 0, 0, 0, time.UTC)
+				return &t
+			}(),
+			wantErr: false,
+		},
+		{
+			name:  "valid date format RFC3339",
+			input: "2024-04-18T12:30:00Z",
+			expected: func() *time.Time {
+				t := time.Date(2024, 4, 18, 12, 30, 0, 0, time.UTC)
+				return &t
+			}(),
+			wantErr: false,
+		},
+		{
+			name:     "empty string input",
+			input:    "",
+			expected: nil,
+			wantErr:  false,
+		},
+		{
+			name:     "invalid format",
+			input:    "18-04-2024",
+			expected: nil,
+			wantErr:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := models.ToDateTime(tt.input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Nil(t, result)
+			} else {
+				assert.NoError(t, err)
+				if tt.expected == nil {
+					assert.Nil(t, result)
+				} else {
+					assert.NotNil(t, result)
+					assert.Equal(t, *tt.expected, time.Time(*result))
+				}
+			}
+		})
+	}
+}

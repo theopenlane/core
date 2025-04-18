@@ -59305,13 +59305,13 @@ type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
 	Assigner    *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                             "json:\"category,omitempty\" graphql:\"category\""
 	Comments    CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                                             "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                                    "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                                             "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                                              "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                                             "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                                    "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                              "json:\"id\" graphql:\"id\""
 	Status      enums.TaskStatus                                    "json:\"status\" graphql:\"status\""
 	Tags        []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -59344,7 +59344,7 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetComments() *CreateBulkCSV
 	}
 	return &t.Comments
 }
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCompleted() *string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
@@ -59380,7 +59380,7 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDue() *string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDue() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
 	}
@@ -59564,13 +59564,13 @@ type CreateBulkTask_CreateBulkTask_Tasks struct {
 	Assigner    *CreateBulkTask_CreateBulkTask_Tasks_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                       "json:\"category,omitempty\" graphql:\"category\""
 	Comments    CreateBulkTask_CreateBulkTask_Tasks_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                                       "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                              "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                                       "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                                        "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                                       "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                              "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                        "json:\"id\" graphql:\"id\""
 	Status      enums.TaskStatus                              "json:\"status\" graphql:\"status\""
 	Tags        []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
@@ -59603,7 +59603,7 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetComments() *CreateBulkTask_Crea
 	}
 	return &t.Comments
 }
-func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCompleted() *string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
@@ -59639,7 +59639,7 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDue() *string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDue() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks{}
 	}
@@ -59823,13 +59823,13 @@ type CreateTask_CreateTask_Task struct {
 	Assigner    *CreateTask_CreateTask_Task_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                              "json:\"category,omitempty\" graphql:\"category\""
 	Comments    CreateTask_CreateTask_Task_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                              "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                     "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                              "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                               "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                              "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                     "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                               "json:\"id\" graphql:\"id\""
 	OwnerID     *string                              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
@@ -59863,7 +59863,7 @@ func (t *CreateTask_CreateTask_Task) GetComments() *CreateTask_CreateTask_Task_C
 	}
 	return &t.Comments
 }
-func (t *CreateTask_CreateTask_Task) GetCompleted() *string {
+func (t *CreateTask_CreateTask_Task) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
 	}
@@ -59899,7 +59899,7 @@ func (t *CreateTask_CreateTask_Task) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *CreateTask_CreateTask_Task) GetDue() *string {
+func (t *CreateTask_CreateTask_Task) GetDue() *models.DateTime {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task{}
 	}
@@ -60179,13 +60179,13 @@ type GetAllTasks_Tasks_Edges_Node struct {
 	Assigner    *GetAllTasks_Tasks_Edges_Node_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                "json:\"category,omitempty\" graphql:\"category\""
 	Comments    GetAllTasks_Tasks_Edges_Node_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                                "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                       "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                                "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                                 "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                                "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                       "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
 	Owner       *GetAllTasks_Tasks_Edges_Node_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
 	Status      enums.TaskStatus                       "json:\"status\" graphql:\"status\""
@@ -60219,7 +60219,7 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetComments() *GetAllTasks_Tasks_Edges_No
 	}
 	return &t.Comments
 }
-func (t *GetAllTasks_Tasks_Edges_Node) GetCompleted() *string {
+func (t *GetAllTasks_Tasks_Edges_Node) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
@@ -60255,7 +60255,7 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *GetAllTasks_Tasks_Edges_Node) GetDue() *string {
+func (t *GetAllTasks_Tasks_Edges_Node) GetDue() *models.DateTime {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
@@ -60535,13 +60535,13 @@ type GetTaskByID_Task struct {
 	Assigner    *GetTaskByID_Task_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                    "json:\"category,omitempty\" graphql:\"category\""
 	Comments    GetTaskByID_Task_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                    "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime           "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                    "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                    "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                     "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                    "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime           "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                     "json:\"id\" graphql:\"id\""
 	Owner       *GetTaskByID_Task_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
 	Status      enums.TaskStatus           "json:\"status\" graphql:\"status\""
@@ -60575,7 +60575,7 @@ func (t *GetTaskByID_Task) GetComments() *GetTaskByID_Task_Comments {
 	}
 	return &t.Comments
 }
-func (t *GetTaskByID_Task) GetCompleted() *string {
+func (t *GetTaskByID_Task) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
@@ -60611,7 +60611,7 @@ func (t *GetTaskByID_Task) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *GetTaskByID_Task) GetDue() *string {
+func (t *GetTaskByID_Task) GetDue() *models.DateTime {
 	if t == nil {
 		t = &GetTaskByID_Task{}
 	}
@@ -60851,13 +60851,13 @@ type GetTasks_Tasks_Edges_Node struct {
 	Assigner    *GetTasks_Tasks_Edges_Node_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                             "json:\"category,omitempty\" graphql:\"category\""
 	Comments    GetTasks_Tasks_Edges_Node_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                             "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                    "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                             "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                             "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                              "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                             "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                    "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                              "json:\"id\" graphql:\"id\""
 	Status      enums.TaskStatus                    "json:\"status\" graphql:\"status\""
 	Tags        []string                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -60890,7 +60890,7 @@ func (t *GetTasks_Tasks_Edges_Node) GetComments() *GetTasks_Tasks_Edges_Node_Com
 	}
 	return &t.Comments
 }
-func (t *GetTasks_Tasks_Edges_Node) GetCompleted() *string {
+func (t *GetTasks_Tasks_Edges_Node) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
@@ -60926,7 +60926,7 @@ func (t *GetTasks_Tasks_Edges_Node) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *GetTasks_Tasks_Edges_Node) GetDue() *string {
+func (t *GetTasks_Tasks_Edges_Node) GetDue() *models.DateTime {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node{}
 	}
@@ -61121,13 +61121,13 @@ type UpdateTask_UpdateTask_Task struct {
 	Assigner    *UpdateTask_UpdateTask_Task_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                              "json:\"category,omitempty\" graphql:\"category\""
 	Comments    UpdateTask_UpdateTask_Task_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                              "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                     "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                              "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                               "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                              "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                     "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                               "json:\"id\" graphql:\"id\""
 	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
 	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -61160,7 +61160,7 @@ func (t *UpdateTask_UpdateTask_Task) GetComments() *UpdateTask_UpdateTask_Task_C
 	}
 	return &t.Comments
 }
-func (t *UpdateTask_UpdateTask_Task) GetCompleted() *string {
+func (t *UpdateTask_UpdateTask_Task) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
@@ -61196,7 +61196,7 @@ func (t *UpdateTask_UpdateTask_Task) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *UpdateTask_UpdateTask_Task) GetDue() *string {
+func (t *UpdateTask_UpdateTask_Task) GetDue() *models.DateTime {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task{}
 	}
@@ -61441,13 +61441,13 @@ type UpdateTaskComment_UpdateTaskComment_Task struct {
 	Assigner    *UpdateTaskComment_UpdateTaskComment_Task_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
 	Category    *string                                            "json:\"category,omitempty\" graphql:\"category\""
 	Comments    UpdateTaskComment_UpdateTaskComment_Task_Comments  "json:\"comments\" graphql:\"comments\""
-	Completed   *string                                            "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime                                   "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                            "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string                                            "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string                                             "json:\"displayID\" graphql:\"displayID\""
-	Due         *string                                            "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime                                   "json:\"due,omitempty\" graphql:\"due\""
 	ID          string                                             "json:\"id\" graphql:\"id\""
 	Status      enums.TaskStatus                                   "json:\"status\" graphql:\"status\""
 	Tags        []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -61480,7 +61480,7 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task) GetComments() *UpdateTaskComm
 	}
 	return &t.Comments
 }
-func (t *UpdateTaskComment_UpdateTaskComment_Task) GetCompleted() *string {
+func (t *UpdateTaskComment_UpdateTaskComment_Task) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &UpdateTaskComment_UpdateTaskComment_Task{}
 	}
@@ -61516,7 +61516,7 @@ func (t *UpdateTaskComment_UpdateTaskComment_Task) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
-func (t *UpdateTaskComment_UpdateTaskComment_Task) GetDue() *string {
+func (t *UpdateTaskComment_UpdateTaskComment_Task) GetDue() *models.DateTime {
 	if t == nil {
 		t = &UpdateTaskComment_UpdateTaskComment_Task{}
 	}
@@ -61571,12 +61571,12 @@ func (t *UpdateTaskComment_UpdateTaskComment) GetTask() *UpdateTaskComment_Updat
 }
 
 type GetAllTaskHistories_TaskHistories_Edges_Node struct {
-	Completed   *string          "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string          "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string          "json:\"details,omitempty\" graphql:\"details\""
-	Due         *string          "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime "json:\"due,omitempty\" graphql:\"due\""
 	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string           "json:\"id\" graphql:\"id\""
 	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
@@ -61588,7 +61588,7 @@ type GetAllTaskHistories_TaskHistories_Edges_Node struct {
 	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCompleted() *string {
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
 	}
@@ -61618,7 +61618,7 @@ func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDetails() *string {
 	}
 	return t.Details
 }
-func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDue() *string {
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDue() *models.DateTime {
 	if t == nil {
 		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
 	}
@@ -61702,12 +61702,12 @@ func (t *GetAllTaskHistories_TaskHistories) GetEdges() []*GetAllTaskHistories_Ta
 }
 
 type GetTaskHistories_TaskHistories_Edges_Node struct {
-	Completed   *string          "json:\"completed,omitempty\" graphql:\"completed\""
+	Completed   *models.DateTime "json:\"completed,omitempty\" graphql:\"completed\""
 	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string          "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string          "json:\"details,omitempty\" graphql:\"details\""
-	Due         *string          "json:\"due,omitempty\" graphql:\"due\""
+	Due         *models.DateTime "json:\"due,omitempty\" graphql:\"due\""
 	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string           "json:\"id\" graphql:\"id\""
 	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
@@ -61719,7 +61719,7 @@ type GetTaskHistories_TaskHistories_Edges_Node struct {
 	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCompleted() *string {
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCompleted() *models.DateTime {
 	if t == nil {
 		t = &GetTaskHistories_TaskHistories_Edges_Node{}
 	}
@@ -61749,7 +61749,7 @@ func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDetails() *string {
 	}
 	return t.Details
 }
-func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDue() *string {
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDue() *models.DateTime {
 	if t == nil {
 		t = &GetTaskHistories_TaskHistories_Edges_Node{}
 	}
