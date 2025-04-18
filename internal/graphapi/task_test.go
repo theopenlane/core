@@ -126,9 +126,6 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 func (suite *GraphTestSuite) TestMutationCreateTask() {
 	t := suite.T()
 
-	dueDate, err := time.Parse(time.RFC3339, time.Now().Add(time.Hour*24).Format(time.RFC3339))
-	require.NoError(t, err)
-
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateTaskInput
@@ -152,7 +149,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Status:      &enums.TaskStatusInProgress,
 				Category:    lo.ToPtr("evidence upload"),
 				Details:     lo.ToPtr("do all the things for the thing"),
-				Due:         lo.ToPtr(models.DateTime(dueDate)),
+				Due:         lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
 				AssigneeID:  &viewOnlyUser.ID, // assign the task to another user
 			},
 			client: suite.client.api,
