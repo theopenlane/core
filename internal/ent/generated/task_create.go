@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // TaskCreate is the builder for creating a Task entity.
@@ -205,29 +206,29 @@ func (tc *TaskCreate) SetNillableCategory(s *string) *TaskCreate {
 }
 
 // SetDue sets the "due" field.
-func (tc *TaskCreate) SetDue(t time.Time) *TaskCreate {
-	tc.mutation.SetDue(t)
+func (tc *TaskCreate) SetDue(mt models.DateTime) *TaskCreate {
+	tc.mutation.SetDue(mt)
 	return tc
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDue(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetDue(*t)
+func (tc *TaskCreate) SetNillableDue(mt *models.DateTime) *TaskCreate {
+	if mt != nil {
+		tc.SetDue(*mt)
 	}
 	return tc
 }
 
 // SetCompleted sets the "completed" field.
-func (tc *TaskCreate) SetCompleted(t time.Time) *TaskCreate {
-	tc.mutation.SetCompleted(t)
+func (tc *TaskCreate) SetCompleted(mt models.DateTime) *TaskCreate {
+	tc.mutation.SetCompleted(mt)
 	return tc
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCompleted(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetCompleted(*t)
+func (tc *TaskCreate) SetNillableCompleted(mt *models.DateTime) *TaskCreate {
+	if mt != nil {
+		tc.SetCompleted(*mt)
 	}
 	return tc
 }

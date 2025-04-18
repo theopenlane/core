@@ -7597,8 +7597,8 @@ type CreateTaskInput struct {
 	Details             *string
 	Status              *enums.TaskStatus
 	Category            *string
-	Due                 *time.Time
-	Completed           *time.Time
+	Due                 *models.DateTime
+	Completed           *models.DateTime
 	OwnerID             *string
 	AssignerID          *string
 	AssigneeID          *string
@@ -7695,9 +7695,9 @@ type UpdateTaskInput struct {
 	ClearCategory             bool
 	Category                  *string
 	ClearDue                  bool
-	Due                       *time.Time
+	Due                       *models.DateTime
 	ClearCompleted            bool
-	Completed                 *time.Time
+	Completed                 *models.DateTime
 	ClearAssigner             bool
 	AssignerID                *string
 	ClearAssignee             bool

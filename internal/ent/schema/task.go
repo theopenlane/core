@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -70,12 +71,14 @@ func (Task) Fields() []ent.Field {
 			).
 			Optional(),
 		field.Time("due").
+			GoType(models.DateTime{}).
 			Comment("the due date of the task").
 			Annotations(
 				entgql.OrderField("due"),
 			).
 			Optional(),
 		field.Time("completed").
+			GoType(models.DateTime{}).
 			Comment("the completion date of the task").
 			Annotations(
 				entgql.OrderField("completed"),

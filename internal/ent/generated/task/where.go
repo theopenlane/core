@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -129,12 +130,12 @@ func Category(v string) predicate.Task {
 }
 
 // Due applies equality check predicate on the "due" field. It's identical to DueEQ.
-func Due(v time.Time) predicate.Task {
+func Due(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDue, v))
 }
 
 // Completed applies equality check predicate on the "completed" field. It's identical to CompletedEQ.
-func Completed(v time.Time) predicate.Task {
+func Completed(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldCompleted, v))
 }
 
@@ -994,42 +995,42 @@ func CategoryContainsFold(v string) predicate.Task {
 }
 
 // DueEQ applies the EQ predicate on the "due" field.
-func DueEQ(v time.Time) predicate.Task {
+func DueEQ(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDue, v))
 }
 
 // DueNEQ applies the NEQ predicate on the "due" field.
-func DueNEQ(v time.Time) predicate.Task {
+func DueNEQ(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldDue, v))
 }
 
 // DueIn applies the In predicate on the "due" field.
-func DueIn(vs ...time.Time) predicate.Task {
+func DueIn(vs ...models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldDue, vs...))
 }
 
 // DueNotIn applies the NotIn predicate on the "due" field.
-func DueNotIn(vs ...time.Time) predicate.Task {
+func DueNotIn(vs ...models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldDue, vs...))
 }
 
 // DueGT applies the GT predicate on the "due" field.
-func DueGT(v time.Time) predicate.Task {
+func DueGT(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldDue, v))
 }
 
 // DueGTE applies the GTE predicate on the "due" field.
-func DueGTE(v time.Time) predicate.Task {
+func DueGTE(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldDue, v))
 }
 
 // DueLT applies the LT predicate on the "due" field.
-func DueLT(v time.Time) predicate.Task {
+func DueLT(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldDue, v))
 }
 
 // DueLTE applies the LTE predicate on the "due" field.
-func DueLTE(v time.Time) predicate.Task {
+func DueLTE(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldDue, v))
 }
 
@@ -1044,42 +1045,42 @@ func DueNotNil() predicate.Task {
 }
 
 // CompletedEQ applies the EQ predicate on the "completed" field.
-func CompletedEQ(v time.Time) predicate.Task {
+func CompletedEQ(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldCompleted, v))
 }
 
 // CompletedNEQ applies the NEQ predicate on the "completed" field.
-func CompletedNEQ(v time.Time) predicate.Task {
+func CompletedNEQ(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldCompleted, v))
 }
 
 // CompletedIn applies the In predicate on the "completed" field.
-func CompletedIn(vs ...time.Time) predicate.Task {
+func CompletedIn(vs ...models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldCompleted, vs...))
 }
 
 // CompletedNotIn applies the NotIn predicate on the "completed" field.
-func CompletedNotIn(vs ...time.Time) predicate.Task {
+func CompletedNotIn(vs ...models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldCompleted, vs...))
 }
 
 // CompletedGT applies the GT predicate on the "completed" field.
-func CompletedGT(v time.Time) predicate.Task {
+func CompletedGT(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldCompleted, v))
 }
 
 // CompletedGTE applies the GTE predicate on the "completed" field.
-func CompletedGTE(v time.Time) predicate.Task {
+func CompletedGTE(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldCompleted, v))
 }
 
 // CompletedLT applies the LT predicate on the "completed" field.
-func CompletedLT(v time.Time) predicate.Task {
+func CompletedLT(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldCompleted, v))
 }
 
 // CompletedLTE applies the LTE predicate on the "completed" field.
-func CompletedLTE(v time.Time) predicate.Task {
+func CompletedLTE(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldCompleted, v))
 }
 

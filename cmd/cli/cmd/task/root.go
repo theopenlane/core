@@ -3,7 +3,6 @@ package task
 import (
 	"encoding/json"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 
@@ -105,7 +104,7 @@ func tableOutput(out []openlaneclient.Task) {
 
 		var dueDate string
 		if i.Due != nil {
-			dueDate = i.Due.Format(time.RFC3339)
+			dueDate = i.Due.String()
 		}
 
 		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)

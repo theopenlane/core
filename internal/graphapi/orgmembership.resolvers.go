@@ -33,14 +33,6 @@ func (r *mutationResolver) CreateBulkOrgMembership(ctx context.Context, input []
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
 	return r.bulkCreateOrgMembership(ctx, input)
 }
 
@@ -55,14 +47,6 @@ func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input
 
 	if len(data) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.bulkCreateOrgMembership(ctx, data)

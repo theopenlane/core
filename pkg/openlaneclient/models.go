@@ -4804,21 +4804,21 @@ type CreateTaskInput struct {
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	Category *string `json:"category,omitempty"`
 	// the due date of the task
-	Due *time.Time `json:"due,omitempty"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed           *time.Time `json:"completed,omitempty"`
-	OwnerID             *string    `json:"ownerID,omitempty"`
-	AssignerID          *string    `json:"assignerID,omitempty"`
-	AssigneeID          *string    `json:"assigneeID,omitempty"`
-	CommentIDs          []string   `json:"commentIDs,omitempty"`
-	GroupIDs            []string   `json:"groupIDs,omitempty"`
-	InternalPolicyIDs   []string   `json:"internalPolicyIDs,omitempty"`
-	ProcedureIDs        []string   `json:"procedureIDs,omitempty"`
-	ControlIDs          []string   `json:"controlIDs,omitempty"`
-	SubcontrolIDs       []string   `json:"subcontrolIDs,omitempty"`
-	ControlObjectiveIDs []string   `json:"controlObjectiveIDs,omitempty"`
-	ProgramIDs          []string   `json:"programIDs,omitempty"`
-	EvidenceIDs         []string   `json:"evidenceIDs,omitempty"`
+	Completed           *models.DateTime `json:"completed,omitempty"`
+	OwnerID             *string          `json:"ownerID,omitempty"`
+	AssignerID          *string          `json:"assignerID,omitempty"`
+	AssigneeID          *string          `json:"assigneeID,omitempty"`
+	CommentIDs          []string         `json:"commentIDs,omitempty"`
+	GroupIDs            []string         `json:"groupIDs,omitempty"`
+	InternalPolicyIDs   []string         `json:"internalPolicyIDs,omitempty"`
+	ProcedureIDs        []string         `json:"procedureIDs,omitempty"`
+	ControlIDs          []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs       []string         `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs []string         `json:"controlObjectiveIDs,omitempty"`
+	ProgramIDs          []string         `json:"programIDs,omitempty"`
+	EvidenceIDs         []string         `json:"evidenceIDs,omitempty"`
 }
 
 // CreateTemplateInput is used for create Template object.
@@ -20461,9 +20461,9 @@ type Task struct {
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	Category *string `json:"category,omitempty"`
 	// the due date of the task
-	Due *time.Time `json:"due,omitempty"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed *time.Time `json:"completed,omitempty"`
+	Completed *models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
@@ -20548,9 +20548,9 @@ type TaskHistory struct {
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	Category *string `json:"category,omitempty"`
 	// the due date of the task
-	Due *time.Time `json:"due,omitempty"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed *time.Time `json:"completed,omitempty"`
+	Completed *models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
@@ -20811,27 +20811,27 @@ type TaskHistoryWhereInput struct {
 	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// due field predicates
-	Due       *time.Time   `json:"due,omitempty"`
-	DueNeq    *time.Time   `json:"dueNEQ,omitempty"`
-	DueIn     []*time.Time `json:"dueIn,omitempty"`
-	DueNotIn  []*time.Time `json:"dueNotIn,omitempty"`
-	DueGt     *time.Time   `json:"dueGT,omitempty"`
-	DueGte    *time.Time   `json:"dueGTE,omitempty"`
-	DueLt     *time.Time   `json:"dueLT,omitempty"`
-	DueLte    *time.Time   `json:"dueLTE,omitempty"`
-	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
-	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	Due       *models.DateTime   `json:"due,omitempty"`
+	DueNeq    *models.DateTime   `json:"dueNEQ,omitempty"`
+	DueIn     []*models.DateTime `json:"dueIn,omitempty"`
+	DueNotIn  []*models.DateTime `json:"dueNotIn,omitempty"`
+	DueGt     *models.DateTime   `json:"dueGT,omitempty"`
+	DueGte    *models.DateTime   `json:"dueGTE,omitempty"`
+	DueLt     *models.DateTime   `json:"dueLT,omitempty"`
+	DueLte    *models.DateTime   `json:"dueLTE,omitempty"`
+	DueIsNil  *bool              `json:"dueIsNil,omitempty"`
+	DueNotNil *bool              `json:"dueNotNil,omitempty"`
 	// completed field predicates
-	Completed       *time.Time   `json:"completed,omitempty"`
-	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
-	CompletedIn     []*time.Time `json:"completedIn,omitempty"`
-	CompletedNotIn  []*time.Time `json:"completedNotIn,omitempty"`
-	CompletedGt     *time.Time   `json:"completedGT,omitempty"`
-	CompletedGte    *time.Time   `json:"completedGTE,omitempty"`
-	CompletedLt     *time.Time   `json:"completedLT,omitempty"`
-	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
-	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
-	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	Completed       *models.DateTime   `json:"completed,omitempty"`
+	CompletedNeq    *models.DateTime   `json:"completedNEQ,omitempty"`
+	CompletedIn     []*models.DateTime `json:"completedIn,omitempty"`
+	CompletedNotIn  []*models.DateTime `json:"completedNotIn,omitempty"`
+	CompletedGt     *models.DateTime   `json:"completedGT,omitempty"`
+	CompletedGte    *models.DateTime   `json:"completedGTE,omitempty"`
+	CompletedLt     *models.DateTime   `json:"completedLT,omitempty"`
+	CompletedLte    *models.DateTime   `json:"completedLTE,omitempty"`
+	CompletedIsNil  *bool              `json:"completedIsNil,omitempty"`
+	CompletedNotNil *bool              `json:"completedNotNil,omitempty"`
 	// assignee_id field predicates
 	AssigneeID             *string  `json:"assigneeID,omitempty"`
 	AssigneeIdneq          *string  `json:"assigneeIDNEQ,omitempty"`
@@ -21076,27 +21076,27 @@ type TaskWhereInput struct {
 	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// due field predicates
-	Due       *time.Time   `json:"due,omitempty"`
-	DueNeq    *time.Time   `json:"dueNEQ,omitempty"`
-	DueIn     []*time.Time `json:"dueIn,omitempty"`
-	DueNotIn  []*time.Time `json:"dueNotIn,omitempty"`
-	DueGt     *time.Time   `json:"dueGT,omitempty"`
-	DueGte    *time.Time   `json:"dueGTE,omitempty"`
-	DueLt     *time.Time   `json:"dueLT,omitempty"`
-	DueLte    *time.Time   `json:"dueLTE,omitempty"`
-	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
-	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	Due       *models.DateTime   `json:"due,omitempty"`
+	DueNeq    *models.DateTime   `json:"dueNEQ,omitempty"`
+	DueIn     []*models.DateTime `json:"dueIn,omitempty"`
+	DueNotIn  []*models.DateTime `json:"dueNotIn,omitempty"`
+	DueGt     *models.DateTime   `json:"dueGT,omitempty"`
+	DueGte    *models.DateTime   `json:"dueGTE,omitempty"`
+	DueLt     *models.DateTime   `json:"dueLT,omitempty"`
+	DueLte    *models.DateTime   `json:"dueLTE,omitempty"`
+	DueIsNil  *bool              `json:"dueIsNil,omitempty"`
+	DueNotNil *bool              `json:"dueNotNil,omitempty"`
 	// completed field predicates
-	Completed       *time.Time   `json:"completed,omitempty"`
-	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
-	CompletedIn     []*time.Time `json:"completedIn,omitempty"`
-	CompletedNotIn  []*time.Time `json:"completedNotIn,omitempty"`
-	CompletedGt     *time.Time   `json:"completedGT,omitempty"`
-	CompletedGte    *time.Time   `json:"completedGTE,omitempty"`
-	CompletedLt     *time.Time   `json:"completedLT,omitempty"`
-	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
-	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
-	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	Completed       *models.DateTime   `json:"completed,omitempty"`
+	CompletedNeq    *models.DateTime   `json:"completedNEQ,omitempty"`
+	CompletedIn     []*models.DateTime `json:"completedIn,omitempty"`
+	CompletedNotIn  []*models.DateTime `json:"completedNotIn,omitempty"`
+	CompletedGt     *models.DateTime   `json:"completedGT,omitempty"`
+	CompletedGte    *models.DateTime   `json:"completedGTE,omitempty"`
+	CompletedLt     *models.DateTime   `json:"completedLT,omitempty"`
+	CompletedLte    *models.DateTime   `json:"completedLTE,omitempty"`
+	CompletedIsNil  *bool              `json:"completedIsNil,omitempty"`
+	CompletedNotNil *bool              `json:"completedNotNil,omitempty"`
 	// assignee_id field predicates
 	AssigneeID             *string  `json:"assigneeID,omitempty"`
 	AssigneeIdneq          *string  `json:"assigneeIDNEQ,omitempty"`
@@ -23196,10 +23196,10 @@ type UpdateTaskInput struct {
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`
 	// the due date of the task
-	Due      *time.Time `json:"due,omitempty"`
-	ClearDue *bool      `json:"clearDue,omitempty"`
+	Due      *models.DateTime `json:"due,omitempty"`
+	ClearDue *bool            `json:"clearDue,omitempty"`
 	// the completion date of the task
-	Completed                 *time.Time       `json:"completed,omitempty"`
+	Completed                 *models.DateTime `json:"completed,omitempty"`
 	ClearCompleted            *bool            `json:"clearCompleted,omitempty"`
 	AssignerID                *string          `json:"assignerID,omitempty"`
 	ClearAssigner             *bool            `json:"clearAssigner,omitempty"`

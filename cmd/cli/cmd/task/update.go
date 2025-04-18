@@ -2,12 +2,12 @@ package task
 
 import (
 	"context"
-	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -66,10 +66,13 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 		input.AssigneeID = &assignee
 	}
 
-	due := cmd.Config.Duration("due")
-	if due != 0 {
-		dueDate := time.Now().Add(due)
-		input.Due = &dueDate
+	due := cmd.Config.String("due")
+	if due != "" {
+		var err error
+		input.Due, err = models.ToDateTime(due)
+		if err != nil {
+			return "", input, err
+		}
 	}
 
 	group := cmd.Config.String("add-group")

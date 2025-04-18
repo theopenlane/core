@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -55,9 +56,9 @@ type TaskHistory struct {
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	Category string `json:"category,omitempty"`
 	// the due date of the task
-	Due time.Time `json:"due,omitempty"`
+	Due models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed time.Time `json:"completed,omitempty"`
+	Completed models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID string `json:"assignee_id,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
@@ -74,9 +75,11 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case taskhistory.FieldDue, taskhistory.FieldCompleted:
+			values[i] = new(models.DateTime)
 		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
 			values[i] = new(sql.NullString)
-		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
+		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -204,16 +207,16 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				th.Category = value.String
 			}
 		case taskhistory.FieldDue:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*models.DateTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due", values[i])
-			} else if value.Valid {
-				th.Due = value.Time
+			} else if value != nil {
+				th.Due = *value
 			}
 		case taskhistory.FieldCompleted:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*models.DateTime); !ok {
 				return fmt.Errorf("unexpected type %T for field completed", values[i])
-			} else if value.Valid {
-				th.Completed = value.Time
+			} else if value != nil {
+				th.Completed = *value
 			}
 		case taskhistory.FieldAssigneeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -315,10 +318,10 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(th.Category)
 	builder.WriteString(", ")
 	builder.WriteString("due=")
-	builder.WriteString(th.Due.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", th.Due))
 	builder.WriteString(", ")
 	builder.WriteString("completed=")
-	builder.WriteString(th.Completed.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", th.Completed))
 	builder.WriteString(", ")
 	builder.WriteString("assignee_id=")
 	builder.WriteString(th.AssigneeID)

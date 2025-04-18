@@ -33377,11 +33377,11 @@ input CreateTaskInput {
   """
   the due date of the task
   """
-  due: Time
+  due: DateTime
   """
   the completion date of the task
   """
-  completed: Time
+  completed: DateTime
   ownerID: ID
   assignerID: ID
   assigneeID: ID
@@ -59186,11 +59186,11 @@ type Task implements Node {
   """
   the due date of the task
   """
-  due: Time
+  due: DateTime
   """
   the completion date of the task
   """
-  completed: Time
+  completed: DateTime
   """
   the id of the user who was assigned the task
   """
@@ -59558,11 +59558,11 @@ type TaskHistory implements Node {
   """
   the due date of the task
   """
-  due: Time
+  due: DateTime
   """
   the completion date of the task
   """
-  completed: Time
+  completed: DateTime
   """
   the id of the user who was assigned the task
   """
@@ -59909,27 +59909,27 @@ input TaskHistoryWhereInput {
   """
   due field predicates
   """
-  due: Time
-  dueNEQ: Time
-  dueIn: [Time!]
-  dueNotIn: [Time!]
-  dueGT: Time
-  dueGTE: Time
-  dueLT: Time
-  dueLTE: Time
+  due: DateTime
+  dueNEQ: DateTime
+  dueIn: [DateTime!]
+  dueNotIn: [DateTime!]
+  dueGT: DateTime
+  dueGTE: DateTime
+  dueLT: DateTime
+  dueLTE: DateTime
   dueIsNil: Boolean
   dueNotNil: Boolean
   """
   completed field predicates
   """
-  completed: Time
-  completedNEQ: Time
-  completedIn: [Time!]
-  completedNotIn: [Time!]
-  completedGT: Time
-  completedGTE: Time
-  completedLT: Time
-  completedLTE: Time
+  completed: DateTime
+  completedNEQ: DateTime
+  completedIn: [DateTime!]
+  completedNotIn: [DateTime!]
+  completedGT: DateTime
+  completedGTE: DateTime
+  completedLT: DateTime
+  completedLTE: DateTime
   completedIsNil: Boolean
   completedNotNil: Boolean
   """
@@ -60232,27 +60232,27 @@ input TaskWhereInput {
   """
   due field predicates
   """
-  due: Time
-  dueNEQ: Time
-  dueIn: [Time!]
-  dueNotIn: [Time!]
-  dueGT: Time
-  dueGTE: Time
-  dueLT: Time
-  dueLTE: Time
+  due: DateTime
+  dueNEQ: DateTime
+  dueIn: [DateTime!]
+  dueNotIn: [DateTime!]
+  dueGT: DateTime
+  dueGTE: DateTime
+  dueLT: DateTime
+  dueLTE: DateTime
   dueIsNil: Boolean
   dueNotNil: Boolean
   """
   completed field predicates
   """
-  completed: Time
-  completedNEQ: Time
-  completedIn: [Time!]
-  completedNotIn: [Time!]
-  completedGT: Time
-  completedGTE: Time
-  completedLT: Time
-  completedLTE: Time
+  completed: DateTime
+  completedNEQ: DateTime
+  completedIn: [DateTime!]
+  completedNotIn: [DateTime!]
+  completedGT: DateTime
+  completedGTE: DateTime
+  completedLT: DateTime
+  completedLTE: DateTime
   completedIsNil: Boolean
   completedNotNil: Boolean
   """
@@ -63040,12 +63040,12 @@ input UpdateTaskInput {
   """
   the due date of the task
   """
-  due: Time
+  due: DateTime
   clearDue: Boolean
   """
   the completion date of the task
   """
-  completed: Time
+  completed: DateTime
   clearCompleted: Boolean
   assignerID: ID
   clearAssigner: Boolean
@@ -67790,7 +67790,12 @@ scalar ImplementationGuidance
 """
 VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
 """
-scalar VersionBump`, BuiltIn: false},
+scalar VersionBump
+"""
+DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z ) 
+"""
+scalar DateTime
+`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects

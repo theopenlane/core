@@ -60,6 +60,16 @@ func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenla
 	return v
 }
 
+func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
+	var res models.DateTime
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
 	var res models.ExampleEvidence
 	err := res.UnmarshalGQL(v)
@@ -222,6 +232,68 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalODateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
+	var res models.DateTime
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]models.DateTime, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []models.DateTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.DateTime)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
