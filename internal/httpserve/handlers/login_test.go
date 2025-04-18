@@ -20,6 +20,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -61,6 +62,11 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		confirmedUser: false,
 	})
 
+	userWithInactiveDefaultOrg := suite.userBuilderWithInput(ctx, &userInput{
+		password:      validPassword,
+		confirmedUser: true,
+	})
+
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
 		generated.CreateOrganizationSettingInput{
 			AllowedEmailDomains: []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
@@ -80,10 +86,24 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).SaveX(allowCtx)
+		SetDefaultOrgID(org.ID).ExecX(allowCtx)
 
 	suite.db.UserSetting.UpdateOneID(invalidConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).SaveX(allowCtx)
+		SetDefaultOrgID(org.ID).ExecX(allowCtx)
+
+	// update the user settings to have the default org set to an inactive subscription
+	suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(userWithInactiveDefaultOrg.OrganizationID)).
+		SetActive(false).ExecX(allowCtx)
+
+	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
+
+	// setup mock entitlements client
+	entitlements, err := suite.mockStripeClient()
+	require.NoError(t, err)
+
+	suite.h.DBClient.EntitlementManager = entitlements
+	suite.h.Entitlements = entitlements
 
 	testCases := []struct {
 		name           string
@@ -113,6 +133,13 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
+		},
+		{
+			name:           "inactive org, switch to personal org",
+			username:       userWithInactiveDefaultOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  userWithInactiveDefaultOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",
