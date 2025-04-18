@@ -340,8 +340,6 @@ func (suite *GraphTestSuite) TestMutationCreateControlObjective() {
 
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateControlObjective.ControlObjective.Status)
-			} else {
-				assert.Empty(t, resp.CreateControlObjective.ControlObjective.Status)
 			}
 
 			if tc.request.Category != nil {

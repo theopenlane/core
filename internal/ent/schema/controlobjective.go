@@ -53,7 +53,7 @@ func (ControlObjective) Fields() []ent.Field {
 		field.Enum("status").
 			Optional().
 			GoType(enums.ObjectiveStatus("")).
-			Default(enums.ObjectiveActiveStatus.String()).
+			Default(enums.ObjectiveDraftStatus.String()).
 			Annotations(
 				entgql.OrderField("status"),
 			).
