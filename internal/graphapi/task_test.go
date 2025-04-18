@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -125,6 +126,9 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 func (suite *GraphTestSuite) TestMutationCreateTask() {
 	t := suite.T()
 
+	dueDate, err := time.Parse(time.RFC3339, time.Now().Add(time.Hour*24).Format(time.RFC3339))
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateTaskInput
@@ -148,7 +152,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Status:      &enums.TaskStatusInProgress,
 				Category:    lo.ToPtr("evidence upload"),
 				Details:     lo.ToPtr("do all the things for the thing"),
-				Due:         lo.ToPtr(time.Now().Add(time.Hour * 24)),
+				Due:         lo.ToPtr(models.DateTime(dueDate)),
 				AssigneeID:  &viewOnlyUser.ID, // assign the task to another user
 			},
 			client: suite.client.api,
@@ -240,7 +244,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			if tc.request.Due == nil {
 				assert.Empty(t, resp.CreateTask.Task.Due)
 			} else {
-				assert.WithinDuration(t, *tc.request.Due, *resp.CreateTask.Task.Due, 10*time.Second)
+				assert.WithinDuration(t, time.Time(*tc.request.Due), time.Time(*resp.CreateTask.Task.Due), 10*time.Second)
 			}
 
 			// when using an API token, the assigner is not set

@@ -717,7 +717,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	if !c.Due.IsZero() {
-		taskCreate.SetDue(c.Due)
+		taskCreate.SetDue(models.DateTime(c.Due))
 	}
 
 	if c.GroupID != "" {
