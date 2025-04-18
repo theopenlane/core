@@ -487,6 +487,19 @@ type WebauthnRegistrationResponse struct {
 	AuthData
 }
 
+// WebauthnLoginRequest is the request to begin a webauthn login
+type WebauthnLoginRequest struct {
+	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
+}
+
+func (r *WebauthnLoginRequest) Validate() error {
+	if r.Email == "" {
+		return rout.NewMissingRequiredFieldError("email")
+	}
+
+	return nil
+}
+
 // WebauthnBeginLoginResponse is the response to begin a webauthn login
 // this includes the credential assertion options and the session token
 type WebauthnBeginLoginResponse struct {
