@@ -236,7 +236,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 	setSessionMap[sessions.EmailKey] = user.Email
 	setSessionMap[sessions.UserIDKey] = user.ID
 
-	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, setSessionMap, "")
+	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, setSessionMap, user.ID)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
