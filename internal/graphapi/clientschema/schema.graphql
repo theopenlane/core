@@ -22334,6 +22334,7 @@ input OrgMembershipWhereInput {
 	roleNotIn: [OrgMembershipRole!]
 	organizationID: String
 	userID: String
+	hasUserWith: [UserWhereInput!]
 }
 type OrgSubscription implements Node {
 	id: ID!

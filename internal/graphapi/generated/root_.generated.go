@@ -67154,6 +67154,10 @@ type OrgMembershipBulkCreatePayload {
     Created orgMemberships
     """
     orgMemberships: [OrgMembership!]
+}
+
+extend input OrgMembershipWhereInput {
+  hasUserWith: [UserWhereInput!]
 }`, BuiltIn: false},
 	{Name: "../schema/orgsubscription.graphql", Input: `extend type Query {
     """
