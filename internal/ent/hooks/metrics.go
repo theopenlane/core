@@ -49,11 +49,23 @@ func initOpsDuration() *prometheus.HistogramVec {
 	)
 }
 
+// initOpsTotalDuration creates a collector for total duration counter
+func initOpsTotalDuration() *prometheus.CounterVec {
+	return promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "ent_operation_total_duration_seconds",
+			Help: "Total time in seconds per operation type and mutation",
+		},
+		entLabels,
+	)
+}
+
 // initialize the collectors, prometheus will register them automatically
 var (
 	opsProcessedTotal = initOpsProcessedTotal()
 	opsProcessedError = initOpsProcessedError()
 	opsDuration       = initOpsDuration()
+	opsTotalDuration  = initOpsTotalDuration()
 )
 
 // MetricsHook inits the collectors with count total at beginning, error on mutation error and a duration after the mutation
@@ -75,6 +87,7 @@ func MetricsHook() ent.Hook {
 
 			duration := time.Since(start)
 			opsDuration.With(labels).Observe(duration.Seconds())
+			opsTotalDuration.With(labels).Add(duration.Seconds())
 
 			return v, err
 		})

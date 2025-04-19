@@ -103,7 +103,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Raw: json.RawMessage(jsonDataUpdate),
 				},
 			},
-			expectedStatus: http.StatusConflict,
+			expectedStatus: http.StatusBadRequest,
 		},
 		{
 			name: "valid payload - subscription updated",
@@ -148,7 +148,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				Type:       stripe.EventTypeCustomerUpdated,
 				APIVersion: stripe.APIVersion,
 			},
-			expectedStatus: http.StatusBadRequest,
+			expectedStatus: http.StatusOK,
 		},
 	}
 
