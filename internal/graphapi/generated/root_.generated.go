@@ -67792,7 +67792,7 @@ VersionBump allows a revision to automatically be bumped based on "Major", "Mino
 """
 scalar VersionBump
 """
-DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )
+DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z ) 
 """
 scalar DateTime
 `, BuiltIn: false},
