@@ -9,6 +9,7 @@ import (
 	"slices"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/webhook"
@@ -46,13 +47,49 @@ var supportedEventTypes = map[stripe.EventType]bool{
 	stripe.EventTypeCustomerUpdated: false,
 }
 
+var (
+	webhookReceivedCounter = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "webhook_received_total",
+			Help: "Total number of webhooks received",
+		},
+		[]string{"event_type"},
+	)
+
+	webhookProcessingLatency = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "webhook_processing_latency_seconds",
+			Help:    "Latency of webhook processing in seconds",
+			Buckets: prometheus.DefBuckets,
+		},
+		[]string{"event_type"},
+	)
+
+	webhookResponseCounter = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "webhook_response_total",
+			Help: "Total number of webhook responses grouped by event type and status code",
+		},
+		[]string{"event_type", "status_code"},
+	)
+)
+
+func init() {
+	prometheus.MustRegister(webhookReceivedCounter)
+	prometheus.MustRegister(webhookProcessingLatency)
+	prometheus.MustRegister(webhookResponseCounter)
+}
+
 // WebhookReceiverHandler handles incoming stripe webhook events for the supported event types
 func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
+	startTime := time.Now()
+
 	req := ctx.Request()
 	res := ctx.Response()
 
 	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, maxBodyBytes))
 	if err != nil {
+		webhookResponseCounter.WithLabelValues("payload_exceeded", "500").Inc()
 		log.Error().Err(err).Msg("failed to read request body")
 
 		return h.InternalServerError(ctx, err)
@@ -60,15 +97,19 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
 	if err != nil {
+		webhookResponseCounter.WithLabelValues("event_signature_failure", "400").Inc()
 		log.Error().Err(err).Msg("failed to construct event")
 
-		return ctx.String(http.StatusConflict, fmt.Errorf("error verifying webhook signature. Error: %w", err).Error())
+		return h.BadRequest(ctx, err)
 	}
 
+	webhookReceivedCounter.WithLabelValues(string(event.Type)).Inc()
+
 	if !supportedEventTypes[event.Type] {
+		webhookResponseCounter.WithLabelValues(string(event.Type)+"_discarded", "200").Inc()
 		log.Debug().Str("event_type", string(event.Type)).Msg("unsupported event type")
 
-		return h.BadRequest(ctx, ErrUnsupportedEventType)
+		return h.Success(ctx, "unsupported event type")
 	}
 
 	newCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
@@ -76,6 +117,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
+		webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 		log.Error().Err(err).Msg("failed to check for event ID")
 
 		return h.InternalServerError(ctx, err)
@@ -84,6 +126,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	if !exists {
 		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: &event.ID})
 		if err != nil {
+			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			log.Error().Err(err).Msg("failed to create event")
 
 			return h.InternalServerError(ctx, err)
@@ -92,11 +135,16 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		log.Debug().Msgf("internal event: %v", meowevent)
 
 		if err = h.HandleEvent(newCtx, &event); err != nil {
+			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			log.Error().Err(err).Msg("failed to handle event")
 
 			return h.InternalServerError(ctx, err)
 		}
 	}
+
+	duration := time.Since(startTime).Seconds()
+	webhookProcessingLatency.WithLabelValues(string(event.Type)).Observe(duration)
+	webhookResponseCounter.WithLabelValues(string(event.Type)+"_processed", "200").Inc()
 
 	return h.Success(ctx, nil)
 }
@@ -144,14 +192,6 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 		}
 
 		return h.handleSubscriptionPaused(c, subscription)
-	// TODO: add support for these events so details like billing address can be updated
-	// case stripe.EventTypeCustomerUpdated:
-	// customer, err := unmarshalEventData[stripe.Customer](e)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// return h.handleCustomerUpdated(c, customer)
 	default:
 		log.Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
 
@@ -301,7 +341,7 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
 	}
 
-	if slices.Equal(orgSubscription.Features, stripeOrgSubscription.Features) {
+	if !slices.Equal(orgSubscription.Features, stripeOrgSubscription.Features) {
 		mutation.SetFeatures(stripeOrgSubscription.Features)
 
 		changed = true
@@ -318,7 +358,11 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 	}
 
 	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
-		stripeOrgSubscription.ProductPrice.Amount /= 100 // nolint:mnd // convert to dollars from cents
+		productPriceCopy := stripeOrgSubscription.ProductPrice
+
+		productPriceCopy.Amount /= 100 // convert to dollars from cents
+
+		mutation.SetProductPrice(productPriceCopy)
 
 		mutation.SetProductPrice(stripeOrgSubscription.ProductPrice)
 
@@ -327,15 +371,15 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("price", orgSubscription.ProductPrice.String()).Msgf("product price changed")
 	}
 
-	if stripeOrgSubscription.ExpiresAt != nil && orgSubscription.ExpiresAt != stripeOrgSubscription.ExpiresAt {
-		mutation.SetExpiresAt(*stripeOrgSubscription.ExpiresAt)
+	if stripeOrgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
+		mutation.SetTrialExpiresAt(*stripeOrgSubscription.TrialExpiresAt)
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", stripeOrgSubscription.ExpiresAt.String()).Msg("subscription expiration changed")
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
 	}
 
-	if slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
+	if !slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
 		mutation.SetFeatureLookupKeys(stripeOrgSubscription.FeatureLookupKeys)
 
 		changed = true
@@ -364,7 +408,11 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
+		if orgSubscription.PaymentMethodAdded != nil {
+			log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
+		} else {
+			log.Debug().Str("subscription_id", orgSubscription.ID).Msg("payment method added changed but was previously nil")
+		}
 	}
 
 	if orgSubscription.Active != stripeOrgSubscription.Active {
@@ -376,13 +424,15 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 	}
 
 	if changed {
-		// Save the updated OrgSubscription
+		// Collect all changes and execute the mutation once
 		err = mutation.Exec(ctx)
 		if err != nil {
 			log.Error().Err(err).Msg("failed to update OrgSubscription")
 
 			return nil, err
 		}
+
+		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
 	}
 
 	return &orgSubscription.OwnerID, nil

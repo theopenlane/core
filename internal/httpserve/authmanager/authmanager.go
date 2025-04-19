@@ -2,11 +2,11 @@ package authmanager
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
@@ -101,11 +101,17 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	return auth, nil
 }
 
-// checkActiveSubscription checks if the user has an active subscription for the organization
+// checkActiveSubscription checks if the organization has an active subscription
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
 	// if the entitlement manager is disabled, we can skip the check
 	if a.db.EntitlementManager == nil {
 		return true, nil
+	}
+
+	if orgID == "" {
+		log.Debug().Msg("organization ID is required to check for active subscription")
+
+		return false, nil
 	}
 
 	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
@@ -118,6 +124,8 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 
 	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
 	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
+
 		return false, err
 	}
 
@@ -211,13 +219,6 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 
 	return session, nil
 }
-
-var (
-	// ErrSubscriptionNotFound is the error message when the subscription is not found
-	ErrSubscriptionNotFound = errors.New("subscription not found")
-	// ErrSubscriptionNotActive is the error message when the subscription is not active
-	ErrSubscriptionNotActive = errors.New("subscription not active")
-)
 
 // authCheck checks if the user has access to the target organization before issuing a new session and claims
 // if the user does not have access to the target organization, the user's default org is used (or falls back)

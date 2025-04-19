@@ -207,6 +207,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 		RedisClient:   db.SessionConfig.RedisClient,
 		SessionConfig: db.SessionConfig,
 		AuthManager:   as,
+		Entitlements:  db.EntitlementManager,
 	}
 
 	return h
