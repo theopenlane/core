@@ -376,7 +376,7 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.ExpiresAt.String()).Msg("subscription trial expiration changed")
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
 	}
 
 	if !slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
