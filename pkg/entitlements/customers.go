@@ -217,6 +217,7 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 	if err != nil {
 		status = "error"
 	}
+
 	stripeRequestCounter.WithLabelValues("customers", status).Inc()
 	stripeRequestDuration.WithLabelValues("customers", status).Observe(duration)
 
