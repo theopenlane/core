@@ -101,3 +101,7 @@ type OrgMembershipBulkCreatePayload {
     """
     orgMemberships: [OrgMembership!]
 }
+
+extend input OrgMembershipWhereInput {
+  hasUserWith: [UserWhereInput!]
+}

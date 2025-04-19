@@ -13454,12 +13454,13 @@ type OrgMembershipWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// role field predicates
-	Role           *enums.Role  `json:"role,omitempty"`
-	RoleNeq        *enums.Role  `json:"roleNEQ,omitempty"`
-	RoleIn         []enums.Role `json:"roleIn,omitempty"`
-	RoleNotIn      []enums.Role `json:"roleNotIn,omitempty"`
-	OrganizationID *string      `json:"organizationID,omitempty"`
-	UserID         *string      `json:"userID,omitempty"`
+	Role           *enums.Role       `json:"role,omitempty"`
+	RoleNeq        *enums.Role       `json:"roleNEQ,omitempty"`
+	RoleIn         []enums.Role      `json:"roleIn,omitempty"`
+	RoleNotIn      []enums.Role      `json:"roleNotIn,omitempty"`
+	OrganizationID *string           `json:"organizationID,omitempty"`
+	UserID         *string           `json:"userID,omitempty"`
+	HasUserWith    []*UserWhereInput `json:"hasUserWith,omitempty"`
 }
 
 type OrgSubscription struct {
