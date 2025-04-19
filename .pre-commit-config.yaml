@@ -8,7 +8,7 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: jsonschema/api-docs.md
+        exclude: jsonschema/api-docs.md|internal/graphapi/generated/.+\.go
       - id: detect-private-key
   - repo: https://github.com/google/yamlfmt
     rev: v0.15.0
