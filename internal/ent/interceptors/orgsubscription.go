@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )
 
+// InterceptorSubscriptionURL is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
 func InterceptorSubscriptionURL() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.OrgSubscriptionFunc(func(ctx context.Context, q *generated.OrgSubscriptionQuery) (generated.Value, error) {
@@ -75,21 +76,21 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 	// create a billing portal session
 	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create billing portal session")
+		zerolog.Ctx(ctx).Err(err).Msg("failed to create update subscription billing portal session type")
 
 		return err
 	}
 
 	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create billing portal session")
+		zerolog.Ctx(ctx).Err(err).Msg("failed to create cancel subscription billing portal session type")
 
 		return err
 	}
 
-	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeSubscriptionID)
+	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeCustomerID)
 	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create billing portal session")
+		zerolog.Ctx(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
 
 		return err
 	}
