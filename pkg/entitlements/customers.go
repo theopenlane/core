@@ -17,6 +17,7 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 		return nil, err
 	}
 
+	start := time.Now()
 	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
 		Email: &c.Email,
 		Name:  &c.OrganizationID,
@@ -35,6 +36,16 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 			"organization_subscription_id": c.OrganizationSubscriptionID,
 		},
 	})
+	duration := time.Since(start).Seconds()
+
+	status := "success"
+	if err != nil {
+		status = "error"
+	}
+
+	stripeRequestCounter.WithLabelValues("customers", status).Inc()
+	stripeRequestDuration.WithLabelValues("customers", status).Observe(duration)
+
 	if err != nil {
 		return nil, err
 	}
@@ -193,14 +204,22 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 		return nil, ErrCustomerIDRequired
 	}
 
+	start := time.Now()
 	customer, err := sc.Client.Customers.Get(customerID, &stripe.CustomerParams{
 		Params: stripe.Params{
 			Context: ctx,
 			Expand:  []*string{stripe.String("tax"), stripe.String("subscriptions")},
 		},
 	})
+	duration := time.Since(start).Seconds()
 
-	// if the customer is not found, return a specific error, otherwise surface the failed lookup
+	status := "success"
+	if err != nil {
+		status = "error"
+	}
+	stripeRequestCounter.WithLabelValues("customers", status).Inc()
+	stripeRequestDuration.WithLabelValues("customers", status).Observe(duration)
+
 	if err != nil {
 		if stripeErr, ok := err.(*stripe.Error); ok {
 			if stripeErr.Code == stripe.ErrorCodeMissing {

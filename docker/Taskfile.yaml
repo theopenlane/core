@@ -110,14 +110,8 @@ tasks:
       - task: fga
       - task: fga:open
 
-  kafka:
+  metrics:
     dir: ..
-    desc: brings up the compose environment for kafka
+    desc: brings up the compose environment for redis
     cmds:
-      - "docker compose -f ./docker/docker-compose-kafka.yml up --build -d"
-
-  kafka:down:
-    dir: ..
-    desc: brings the kafka compose environment down
-    cmds:
-      - docker compose down
+      - "docker compose -f ./docker/docker-compose-prometheus.yml up -d"

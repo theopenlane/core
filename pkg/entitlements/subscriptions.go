@@ -1,13 +1,27 @@
 package entitlements
 
 import (
+	"time"
+
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 )
 
 // CreateSubscription creates a new subscription
 func (sc *StripeClient) CreateSubscription(params *stripe.SubscriptionParams) (*stripe.Subscription, error) {
+	start := time.Now()
 	subscription, err := sc.Client.Subscriptions.New(params)
+
+	duration := time.Since(start).Seconds()
+
+	status := "success"
+	if err != nil {
+		status = "error"
+	}
+
+	stripeRequestCounter.WithLabelValues("subscriptions", status).Inc()
+	stripeRequestDuration.WithLabelValues("subscriptions", status).Observe(duration)
+
 	if err != nil {
 		return nil, err
 	}
@@ -39,11 +53,24 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 
 // GetSubscriptionByID gets a subscription by ID
 func (sc *StripeClient) GetSubscriptionByID(id string) (*stripe.Subscription, error) {
+	start := time.Now()
+
 	subscription, err := sc.Client.Subscriptions.Get(id, &stripe.SubscriptionParams{
 		Params: stripe.Params{
 			Expand: []*string{stripe.String("customer")},
 		},
 	})
+
+	duration := time.Since(start).Seconds()
+
+	status := "success"
+	if err != nil {
+		status = "error"
+	}
+
+	stripeRequestCounter.WithLabelValues("subscriptions", status).Inc()
+	stripeRequestDuration.WithLabelValues("subscriptions", status).Observe(duration)
+
 	if err != nil {
 		return nil, err
 	}
