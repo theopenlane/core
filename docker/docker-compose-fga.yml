@@ -30,6 +30,7 @@ services:
       - --check-query-cache-enabled
       - --metrics-enabled
       - --datastore-metrics-enabled
+      - --metrics-enable-rpc-histograms
       - --authn-method=preshared
       - --authn-preshared-keys="QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
     healthcheck:

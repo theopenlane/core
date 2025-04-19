@@ -4,7 +4,7 @@
 /bin/openfga migrate
 
 # run the openfga service in the background
-OPENFGA_LOG_FORMAT=json OPENFGA_PLAYGROUND_ENABLED=true /bin/openfga run --experimentals check-query-cache --check-query-cache-enabled &
+OPENFGA_LOG_FORMAT=json OPENFGA_PLAYGROUND_ENABLED=true OPENFGA_METRICS_ENABLE_RPC_HISTOGRAMS=true /bin/openfga run --experimentals check-query-cache --check-query-cache-enabled &
 
 FGACHECK=1
 while [ $FGACHECK -ne 0 ]; do

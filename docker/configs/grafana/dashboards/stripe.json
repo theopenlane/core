@@ -1,0 +1,36 @@
+{
+  "dashboard": {
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Stripe API Request Count by Type",
+        "targets": [
+          {
+            "expr": "sum by (type) (stripe_requests_total)",
+            "legendFormat": "{{type}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Stripe API Request Duration by Type",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(stripe_request_duration_seconds_bucket[5m])) by (le, type))",
+            "legendFormat": "{{type}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Total Stripe API Requests",
+        "targets": [
+          {
+            "expr": "sum(stripe_requests_total)",
+            "legendFormat": "Total Requests"
+          }
+        ]
+      }
+    ]
+  }
+}

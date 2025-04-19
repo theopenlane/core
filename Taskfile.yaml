@@ -188,6 +188,7 @@ tasks:
       - task: compose:redis
       - task: compose:fga
       - task: compose:riverboat
+      - task: compose:metrics
       - task: run-api
 
   run-api:
