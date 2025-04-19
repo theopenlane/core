@@ -2,7 +2,6 @@ package authmanager
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -102,11 +101,6 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	return auth, nil
 }
 
-var (
-	// ErrOrganizationIDRequired is the error message when the organization ID is required
-	ErrOrganizationIDRequired = errors.New("organization ID is required")
-)
-
 // checkActiveSubscription checks if the organization has an active subscription
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
 	// if the entitlement manager is disabled, we can skip the check
@@ -117,7 +111,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	if orgID == "" {
 		log.Debug().Msg("organization ID is required to check for active subscription")
 
-		return false, ErrOrganizationIDRequired
+		return false, nil
 	}
 
 	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
