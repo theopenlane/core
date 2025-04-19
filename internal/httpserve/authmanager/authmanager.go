@@ -122,7 +122,7 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
-	subscription, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
 
