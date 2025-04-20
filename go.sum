@@ -133,8 +133,8 @@ github.com/alingse/asasalint v0.0.11 h1:SFwnQXJ49Kx/1GghOFz1XGqHYKp21Kq1nHad/0WQ
 github.com/alingse/asasalint v0.0.11/go.mod h1:nCaoMhw7a9kSJObvQyVzNTPBDbNpdocqrSP7t/cW5+I=
 github.com/alingse/nilnesserr v0.1.2 h1:Yf8Iwm3z2hUUrP4muWfW83DF4nE3r1xZ26fGWUKCZlo=
 github.com/alingse/nilnesserr v0.1.2/go.mod h1:1xJPrXonEtX7wyTq8Dytns5P2hNzoWymVUIaKm4HNFg=
-github.com/alitto/pond/v2 v2.3.3 h1:HoHTt3CFIe7H0+UB42FALyGxODi64Ixl+LIhOHhDKTo=
-github.com/alitto/pond/v2 v2.3.3/go.mod h1:xkjYEgQ05RSpWdfSd1nM3OVv7TBhLdy7rMp3+2Nq+yE=
+github.com/alitto/pond/v2 v2.3.4 h1:hR0bqAwJiI2chu3cLN4gVyNC7rc5mj/l5wg0710nxsY=
+github.com/alitto/pond/v2 v2.3.4/go.mod h1:xkjYEgQ05RSpWdfSd1nM3OVv7TBhLdy7rMp3+2Nq+yE=
 github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 h1:bvNMNQO63//z+xNgfBlViaCIJKLlCJ6/fmUseuG0wVQ=
 github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883/go.mod h1:rCTlJbsFo29Kk6CurOXKm700vrz8f0KW0JNfpkRJY/8=
 github.com/andybalholm/brotli v1.0.1/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
