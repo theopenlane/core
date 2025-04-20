@@ -922,8 +922,8 @@ github.com/pressly/goose/v3 v3.24.2 h1:c/ie0Gm8rnIVKvnDQ/scHErv46jrDv9b4I0WRcFJz
 github.com/pressly/goose/v3 v3.24.2/go.mod h1:kjefwFB0eR4w30Td2Gj2Mznyw94vSP+2jJYkOVNbD1k=
 github.com/projectdiscovery/blackrock v0.0.1 h1:lHQqhaaEFjgf5WkuItbpeCZv2DUIE45k0VbGJyft6LQ=
 github.com/projectdiscovery/blackrock v0.0.1/go.mod h1:ANUtjDfaVrqB453bzToU+YB4cUbvBRpLvEwoWIwlTss=
-github.com/projectdiscovery/cdncheck v1.1.14 h1:CUeDkHkGavLUQ61UyJptSkchmGg5KwJI9bzsItsy3Q0=
-github.com/projectdiscovery/cdncheck v1.1.14/go.mod h1:dFEGsG0qAJY0AaRr2N1BY0OtZiTxS4kYeT5+OkF8t1U=
+github.com/projectdiscovery/cdncheck v1.1.15 h1:rRs3LW2MP7V8QeONVRYce6RhDcWp83O+AWmt+QQ4mBM=
+github.com/projectdiscovery/cdncheck v1.1.15/go.mod h1:dFEGsG0qAJY0AaRr2N1BY0OtZiTxS4kYeT5+OkF8t1U=
 github.com/projectdiscovery/chaos-client v0.5.2 h1:dN+7GXEypsJAbCD//dBcUxzAEAEH1fjc/7Rf4F/RiNU=
 github.com/projectdiscovery/chaos-client v0.5.2/go.mod h1:KnoJ/NJPhll42uaqlDga6oafFfNw5l2XI2ajRijtDuU=
 github.com/projectdiscovery/dnsx v1.2.2 h1:ZjUov0GOyrS8ERlKAAhk+AOkqzaYHBzCP0qZfO+6Ihg=
@@ -956,10 +956,10 @@ github.com/projectdiscovery/retryablehttp-go v1.0.102 h1:OgVbzGzFq1a82D/kVoooPSg
 github.com/projectdiscovery/retryablehttp-go v1.0.102/go.mod h1:hDyw8H3GOeA0XjpdTdS4JF7qflojp6PAZ9t6vCFFbCU=
 github.com/projectdiscovery/subfinder/v2 v2.7.0 h1:BSl9+DElwmWiSU9XIlpKtJ548DQ2O9GiHs8xvp00RX0=
 github.com/projectdiscovery/subfinder/v2 v2.7.0/go.mod h1:14GxCxYOATyhP1zwG+MjmlrUFhgMuBMZkiO4j3TA9Z0=
-github.com/projectdiscovery/utils v0.4.17 h1:LATr3L0t+xNt+hLReQjEf66RpuALPk2vV9YV341XkNQ=
-github.com/projectdiscovery/utils v0.4.17/go.mod h1:y5gnpQn802iEWqf0djTRNskJlS62P5eqe1VS1+ah0tk=
-github.com/projectdiscovery/wappalyzergo v0.2.24 h1:Y2PitvgdyRq1z/q4zmSvXCah1zJesisAEj9Ru1CtI+A=
-github.com/projectdiscovery/wappalyzergo v0.2.24/go.mod h1:F8X79ljvmvrG+EIxdxWS9VbdkVTsQupHYz+kXlp8O0o=
+github.com/projectdiscovery/utils v0.4.18 h1:cSjMOLXI5gAajfA6KV+0iQG4dGx2IHWLQyND/Snvw7k=
+github.com/projectdiscovery/utils v0.4.18/go.mod h1:y5gnpQn802iEWqf0djTRNskJlS62P5eqe1VS1+ah0tk=
+github.com/projectdiscovery/wappalyzergo v0.2.25 h1:K56XmuMrEBowlu2WqSFJDkUju8DBACRKDJ8JUQrqpDk=
+github.com/projectdiscovery/wappalyzergo v0.2.25/go.mod h1:F8X79ljvmvrG+EIxdxWS9VbdkVTsQupHYz+kXlp8O0o=
 github.com/prometheus/client_golang v1.22.0 h1:rb93p9lokFEsctTys46VnV1kLCDpVZ0a/Y92Vm0Zc6Q=
 github.com/prometheus/client_golang v1.22.0/go.mod h1:R7ljNsLXhuQXYZYtw6GAE9AZg8Y7vEW5scdCXrWRXC0=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
