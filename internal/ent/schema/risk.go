@@ -119,6 +119,7 @@ func (Risk) Fields() []ent.Field {
 func (r Risk) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(r, Control{}),
+		defaultEdgeFromWithPagination(r, Subcontrol{}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
 		defaultEdgeToWithPagination(r, ActionPlan{}),
