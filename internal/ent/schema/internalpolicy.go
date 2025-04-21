@@ -46,11 +46,13 @@ func (i InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, ControlObjective{}),
 		defaultEdgeToWithPagination(i, Control{}),
+		defaultEdgeToWithPagination(i, Subcontrol{}),
 		defaultEdgeToWithPagination(i, Procedure{}),
 		defaultEdgeToWithPagination(i, Narrative{}),
 		defaultEdgeToWithPagination(i, Task{}),
-		defaultEdgeFromWithPagination(i, Program{}),
 		defaultEdgeToWithPagination(i, Risk{}),
+
+		defaultEdgeFromWithPagination(i, Program{}),
 	}
 }
 

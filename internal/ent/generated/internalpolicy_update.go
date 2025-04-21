@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -421,6 +422,21 @@ func (ipu *InternalPolicyUpdate) AddControls(c ...*Control) *InternalPolicyUpdat
 	return ipu.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ipu *InternalPolicyUpdate) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddSubcontrolIDs(ids...)
+	return ipu
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ipu *InternalPolicyUpdate) AddSubcontrols(s ...*Subcontrol) *InternalPolicyUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ipu.AddSubcontrolIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (ipu *InternalPolicyUpdate) AddProcedureIDs(ids ...string) *InternalPolicyUpdate {
 	ipu.mutation.AddProcedureIDs(ids...)
@@ -466,21 +482,6 @@ func (ipu *InternalPolicyUpdate) AddTasks(t ...*Task) *InternalPolicyUpdate {
 	return ipu.AddTaskIDs(ids...)
 }
 
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipu *InternalPolicyUpdate) AddProgramIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddProgramIDs(ids...)
-	return ipu
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ipu.AddProgramIDs(ids...)
-}
-
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (ipu *InternalPolicyUpdate) AddRiskIDs(ids ...string) *InternalPolicyUpdate {
 	ipu.mutation.AddRiskIDs(ids...)
@@ -494,6 +495,21 @@ func (ipu *InternalPolicyUpdate) AddRisks(r ...*Risk) *InternalPolicyUpdate {
 		ids[i] = r[i].ID
 	}
 	return ipu.AddRiskIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (ipu *InternalPolicyUpdate) AddProgramIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddProgramIDs(ids...)
+	return ipu
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipu.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -603,6 +619,27 @@ func (ipu *InternalPolicyUpdate) RemoveControls(c ...*Control) *InternalPolicyUp
 	return ipu.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ipu *InternalPolicyUpdate) ClearSubcontrols() *InternalPolicyUpdate {
+	ipu.mutation.ClearSubcontrols()
+	return ipu
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveSubcontrolIDs(ids...)
+	return ipu
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ipu *InternalPolicyUpdate) RemoveSubcontrols(s ...*Subcontrol) *InternalPolicyUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ipu.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
 func (ipu *InternalPolicyUpdate) ClearProcedures() *InternalPolicyUpdate {
 	ipu.mutation.ClearProcedures()
@@ -666,27 +703,6 @@ func (ipu *InternalPolicyUpdate) RemoveTasks(t ...*Task) *InternalPolicyUpdate {
 	return ipu.RemoveTaskIDs(ids...)
 }
 
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (ipu *InternalPolicyUpdate) ClearPrograms() *InternalPolicyUpdate {
-	ipu.mutation.ClearPrograms()
-	return ipu
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveProgramIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveProgramIDs(ids...)
-	return ipu
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ipu.RemoveProgramIDs(ids...)
-}
-
 // ClearRisks clears all "risks" edges to the Risk entity.
 func (ipu *InternalPolicyUpdate) ClearRisks() *InternalPolicyUpdate {
 	ipu.mutation.ClearRisks()
@@ -706,6 +722,27 @@ func (ipu *InternalPolicyUpdate) RemoveRisks(r ...*Risk) *InternalPolicyUpdate {
 		ids[i] = r[i].ID
 	}
 	return ipu.RemoveRiskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (ipu *InternalPolicyUpdate) ClearPrograms() *InternalPolicyUpdate {
+	ipu.mutation.ClearPrograms()
+	return ipu
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveProgramIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveProgramIDs(ids...)
+	return ipu
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1123,30 +1160,30 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Control
+		edge.Schema = ipu.schemaConfig.InternalPolicyControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ipu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Control
+		edge.Schema = ipu.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1154,16 +1191,64 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if nodes := ipu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Control
+		edge.Schema = ipu.schemaConfig.InternalPolicyControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ipu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1219,30 +1304,30 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Narrative
+		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipu.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipu.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Narrative
+		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1250,16 +1335,16 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if nodes := ipu.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.Narrative
+		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1313,54 +1398,6 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipu.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if ipu.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1404,6 +1441,54 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1812,6 +1897,21 @@ func (ipuo *InternalPolicyUpdateOne) AddControls(c ...*Control) *InternalPolicyU
 	return ipuo.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddSubcontrolIDs(ids...)
+	return ipuo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ipuo *InternalPolicyUpdateOne) AddSubcontrols(s ...*Subcontrol) *InternalPolicyUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ipuo.AddSubcontrolIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (ipuo *InternalPolicyUpdateOne) AddProcedureIDs(ids ...string) *InternalPolicyUpdateOne {
 	ipuo.mutation.AddProcedureIDs(ids...)
@@ -1857,21 +1957,6 @@ func (ipuo *InternalPolicyUpdateOne) AddTasks(t ...*Task) *InternalPolicyUpdateO
 	return ipuo.AddTaskIDs(ids...)
 }
 
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddProgramIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddProgramIDs(ids...)
-	return ipuo
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ipuo.AddProgramIDs(ids...)
-}
-
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (ipuo *InternalPolicyUpdateOne) AddRiskIDs(ids ...string) *InternalPolicyUpdateOne {
 	ipuo.mutation.AddRiskIDs(ids...)
@@ -1885,6 +1970,21 @@ func (ipuo *InternalPolicyUpdateOne) AddRisks(r ...*Risk) *InternalPolicyUpdateO
 		ids[i] = r[i].ID
 	}
 	return ipuo.AddRiskIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddProgramIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddProgramIDs(ids...)
+	return ipuo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipuo.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -1994,6 +2094,27 @@ func (ipuo *InternalPolicyUpdateOne) RemoveControls(c ...*Control) *InternalPoli
 	return ipuo.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ipuo *InternalPolicyUpdateOne) ClearSubcontrols() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearSubcontrols()
+	return ipuo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveSubcontrolIDs(ids...)
+	return ipuo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *InternalPolicyUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ipuo.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
 func (ipuo *InternalPolicyUpdateOne) ClearProcedures() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearProcedures()
@@ -2057,27 +2178,6 @@ func (ipuo *InternalPolicyUpdateOne) RemoveTasks(t ...*Task) *InternalPolicyUpda
 	return ipuo.RemoveTaskIDs(ids...)
 }
 
-// ClearPrograms clears all "programs" edges to the Program entity.
-func (ipuo *InternalPolicyUpdateOne) ClearPrograms() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearPrograms()
-	return ipuo
-}
-
-// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveProgramIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveProgramIDs(ids...)
-	return ipuo
-}
-
-// RemovePrograms removes "programs" edges to Program entities.
-func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ipuo.RemoveProgramIDs(ids...)
-}
-
 // ClearRisks clears all "risks" edges to the Risk entity.
 func (ipuo *InternalPolicyUpdateOne) ClearRisks() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearRisks()
@@ -2097,6 +2197,27 @@ func (ipuo *InternalPolicyUpdateOne) RemoveRisks(r ...*Risk) *InternalPolicyUpda
 		ids[i] = r[i].ID
 	}
 	return ipuo.RemoveRiskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (ipuo *InternalPolicyUpdateOne) ClearPrograms() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearPrograms()
+	return ipuo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveProgramIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveProgramIDs(ids...)
+	return ipuo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPolicyUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -2544,30 +2665,30 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Control
+		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ipuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Control
+		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2575,16 +2696,64 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if nodes := ipuo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Control
+		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ipuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2640,30 +2809,30 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Narrative
+		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ipuo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipuo.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Narrative
+		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2671,16 +2840,16 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if nodes := ipuo.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.Narrative
+		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2734,54 +2903,6 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipuo.mutation.ProgramsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if ipuo.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2825,6 +2946,54 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipuo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

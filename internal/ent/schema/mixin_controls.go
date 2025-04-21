@@ -46,7 +46,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, Risk{}),
 		defaultEdgeToWithPagination(c, ActionPlan{}),
 		defaultEdgeToWithPagination(c, Procedure{}),
-		defaultEdgeToWithPagination(c, InternalPolicy{}),
+		defaultEdgeFromWithPagination(c, InternalPolicy{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: MappedControl{},

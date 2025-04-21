@@ -70,16 +70,18 @@ const (
 	EdgeControlObjectives = "control_objectives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
 	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
 	EdgeNarratives = "narratives"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
-	// EdgePrograms holds the string denoting the programs edge name in mutations.
-	EdgePrograms = "programs"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -118,40 +120,41 @@ const (
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
 	ControlObjectivesInverseTable = "control_objectives"
-	// ControlsTable is the table that holds the controls relation/edge.
-	ControlsTable = "controls"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "internal_policy_controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// ControlsColumn is the table column denoting the controls relation/edge.
-	ControlsColumn = "internal_policy_controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "internal_policy_subcontrols"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 	// ProceduresTable is the table that holds the procedures relation/edge. The primary key declared below.
 	ProceduresTable = "internal_policy_procedures"
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
-	// NarrativesTable is the table that holds the narratives relation/edge.
-	NarrativesTable = "narratives"
+	// NarrativesTable is the table that holds the narratives relation/edge. The primary key declared below.
+	NarrativesTable = "internal_policy_narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativesInverseTable = "narratives"
-	// NarrativesColumn is the table column denoting the narratives relation/edge.
-	NarrativesColumn = "internal_policy_narratives"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "internal_policy_tasks"
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
-	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "program_internal_policies"
-	// ProgramsInverseTable is the table name for the Program entity.
-	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramsInverseTable = "programs"
 	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
 	RisksTable = "internal_policy_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "program_internal_policies"
+	// ProgramsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramsInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -178,13 +181,6 @@ var Columns = []string{
 	FieldDelegateID,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"control_internal_policies",
-	"subcontrol_internal_policies",
-}
-
 var (
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
@@ -195,29 +191,33 @@ var (
 	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
 	// primary key for the control_objectives relation (M2M).
 	ControlObjectivesPrimaryKey = []string{"internal_policy_id", "control_objective_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"internal_policy_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"internal_policy_id", "subcontrol_id"}
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"internal_policy_id", "procedure_id"}
+	// NarrativesPrimaryKey and NarrativesColumn2 are the table columns denoting the
+	// primary key for the narratives relation (M2M).
+	NarrativesPrimaryKey = []string{"internal_policy_id", "narrative_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"internal_policy_id", "task_id"}
-	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
-	// primary key for the programs relation (M2M).
-	ProgramsPrimaryKey = []string{"program_id", "internal_policy_id"}
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"internal_policy_id", "risk_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"program_id", "internal_policy_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -458,6 +458,20 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProceduresCount orders the results by procedures count.
 func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -500,20 +514,6 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByProgramsCount orders the results by programs count.
-func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
-	}
-}
-
-// ByPrograms orders the results by programs terms.
-func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByRisksCount orders the results by risks count.
 func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -525,6 +525,20 @@ func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
+	}
+}
+
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -573,7 +587,14 @@ func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
+	)
+}
+func newSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newProceduresStep() *sqlgraph.Step {
@@ -587,7 +608,7 @@ func newNarrativesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
 	)
 }
 func newTasksStep() *sqlgraph.Step {
@@ -597,18 +618,18 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 	)
 }
-func newProgramsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
-	)
-}
 func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
+	)
+}
+func newProgramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
 

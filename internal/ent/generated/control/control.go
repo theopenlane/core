@@ -151,13 +151,11 @@ const (
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
-	// InternalPoliciesTable is the table that holds the internal_policies relation/edge.
-	InternalPoliciesTable = "internal_policies"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_controls"
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// InternalPoliciesColumn is the table column denoting the internal_policies relation/edge.
-	InternalPoliciesColumn = "control_internal_policies"
 	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
 	MappedControlsTable = "mapped_control_controls"
 	// MappedControlsInverseTable is the table name for the MappedControl entity.
@@ -259,12 +257,6 @@ var Columns = []string{
 	FieldStandardID,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"internal_policy_controls",
-}
-
 var (
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
@@ -287,6 +279,9 @@ var (
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"control_id", "procedure_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "control_id"}
 	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
 	// primary key for the mapped_controls relation (M2M).
 	MappedControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
@@ -311,11 +306,6 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -788,7 +778,7 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
 func newMappedControlsStep() *sqlgraph.Step {

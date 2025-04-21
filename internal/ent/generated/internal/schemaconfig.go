@@ -76,7 +76,10 @@ type SchemaConfig struct {
 	InternalPolicyBlockedGroups      string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyEditors            string // InternalPolicy-editors->Group table.
 	InternalPolicyControlObjectives  string // InternalPolicy-control_objectives->ControlObjective table.
+	InternalPolicyControls           string // InternalPolicy-controls->Control table.
+	InternalPolicySubcontrols        string // InternalPolicy-subcontrols->Subcontrol table.
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
+	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks              string // InternalPolicy-risks->Risk table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
@@ -114,6 +117,7 @@ type SchemaConfig struct {
 	Procedure                        string // Procedure table.
 	ProcedureBlockedGroups           string // Procedure-blocked_groups->Group table.
 	ProcedureEditors                 string // Procedure-editors->Group table.
+	ProcedureNarratives              string // Procedure-narratives->Narrative table.
 	ProcedureRisks                   string // Procedure-risks->Risk table.
 	ProcedureTasks                   string // Procedure-tasks->Task table.
 	ProcedureHistory                 string // ProcedureHistory table.
@@ -146,6 +150,7 @@ type SchemaConfig struct {
 	SubcontrolControlObjectives      string // Subcontrol-control_objectives->ControlObjective table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
 	SubcontrolRisks                  string // Subcontrol-risks->Risk table.
+	SubcontrolProcedures             string // Subcontrol-procedures->Procedure table.
 	SubcontrolControlImplementations string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.

@@ -4350,11 +4350,12 @@ type CreateInternalPolicyInput struct {
 	DelegateID          *string          `json:"delegateID,omitempty"`
 	ControlObjectiveIDs []string         `json:"controlObjectiveIDs,omitempty"`
 	ControlIDs          []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs       []string         `json:"subcontrolIDs,omitempty"`
 	ProcedureIDs        []string         `json:"procedureIDs,omitempty"`
 	NarrativeIDs        []string         `json:"narrativeIDs,omitempty"`
 	TaskIDs             []string         `json:"taskIDs,omitempty"`
-	ProgramIDs          []string         `json:"programIDs,omitempty"`
 	RiskIDs             []string         `json:"riskIDs,omitempty"`
+	ProgramIDs          []string         `json:"programIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -4403,13 +4404,15 @@ type CreateNarrativeInput struct {
 	// the description of the narrative
 	Description *string `json:"description,omitempty"`
 	// text data for the narrative document
-	Details         *string  `json:"details,omitempty"`
-	OwnerID         *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string `json:"editorIDs,omitempty"`
-	ViewerIDs       []string `json:"viewerIDs,omitempty"`
-	SatisfyIDs      []string `json:"satisfyIDs,omitempty"`
-	ProgramIDs      []string `json:"programIDs,omitempty"`
+	Details           *string  `json:"details,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string `json:"editorIDs,omitempty"`
+	ViewerIDs         []string `json:"viewerIDs,omitempty"`
+	SatisfyIDs        []string `json:"satisfyIDs,omitempty"`
+	ProgramIDs        []string `json:"programIDs,omitempty"`
+	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
+	ProcedureIDs      []string `json:"procedureIDs,omitempty"`
 }
 
 // CreateNoteInput is used for create Note object.
@@ -4583,6 +4586,7 @@ type CreateProcedureInput struct {
 	ApproverID        *string          `json:"approverID,omitempty"`
 	DelegateID        *string          `json:"delegateID,omitempty"`
 	ControlIDs        []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs     []string         `json:"subcontrolIDs,omitempty"`
 	InternalPolicyIDs []string         `json:"internalPolicyIDs,omitempty"`
 	ProgramIDs        []string         `json:"programIDs,omitempty"`
 	NarrativeIDs      []string         `json:"narrativeIDs,omitempty"`
@@ -10639,11 +10643,12 @@ type InternalPolicy struct {
 	Delegate          *Group                      `json:"delegate,omitempty,omitzero"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Controls          *ControlConnection          `json:"controls"`
+	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
 	Procedures        *ProcedureConnection        `json:"procedures"`
 	Narratives        *NarrativeConnection        `json:"narratives"`
 	Tasks             *TaskConnection             `json:"tasks"`
-	Programs          *ProgramConnection          `json:"programs"`
 	Risks             *RiskConnection             `json:"risks"`
+	Programs          *ProgramConnection          `json:"programs"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -11322,6 +11327,9 @@ type InternalPolicyWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// procedures edge predicates
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
@@ -11331,12 +11339,12 @@ type InternalPolicyWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
-	// programs edge predicates
-	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
-	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 }
 
 type Invite struct {
@@ -12044,9 +12052,11 @@ type Narrative struct {
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty,omitzero"`
 	// provides view access to the risk to members of the group
-	Viewers   []*Group           `json:"viewers,omitempty,omitzero"`
-	Satisfies *ControlConnection `json:"satisfies"`
-	Programs  *ProgramConnection `json:"programs"`
+	Viewers          []*Group                  `json:"viewers,omitempty,omitzero"`
+	Satisfies        *ControlConnection        `json:"satisfies"`
+	Programs         *ProgramConnection        `json:"programs"`
+	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
+	Procedures       *ProcedureConnection      `json:"procedures"`
 }
 
 func (Narrative) IsNode() {}
@@ -12552,6 +12562,12 @@ type NarrativeWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// procedures edge predicates
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 }
 
 type Note struct {
@@ -15743,6 +15759,7 @@ type Procedure struct {
 	// temporary delegates for the procedure, used for temporary approval
 	Delegate         *Group                    `json:"delegate,omitempty,omitzero"`
 	Controls         *ControlConnection        `json:"controls"`
+	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
 	Programs         *ProgramConnection        `json:"programs"`
 	Narratives       *NarrativeConnection      `json:"narratives"`
@@ -16423,6 +16440,9 @@ type ProcedureWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
@@ -22475,6 +22495,9 @@ type UpdateInternalPolicyInput struct {
 	AddControlIDs             []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs          []string            `json:"removeControlIDs,omitempty"`
 	ClearControls             *bool               `json:"clearControls,omitempty"`
+	AddSubcontrolIDs          []string            `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs       []string            `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols          *bool               `json:"clearSubcontrols,omitempty"`
 	AddProcedureIDs           []string            `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs        []string            `json:"removeProcedureIDs,omitempty"`
 	ClearProcedures           *bool               `json:"clearProcedures,omitempty"`
@@ -22484,12 +22507,12 @@ type UpdateInternalPolicyInput struct {
 	AddTaskIDs                []string            `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs             []string            `json:"removeTaskIDs,omitempty"`
 	ClearTasks                *bool               `json:"clearTasks,omitempty"`
-	AddProgramIDs             []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool               `json:"clearPrograms,omitempty"`
 	AddRiskIDs                []string            `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs             []string            `json:"removeRiskIDs,omitempty"`
 	ClearRisks                *bool               `json:"clearRisks,omitempty"`
+	AddProgramIDs             []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool               `json:"clearPrograms,omitempty"`
 	RevisionBump              *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -22545,23 +22568,29 @@ type UpdateNarrativeInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// text data for the narrative document
-	Details               *string  `json:"details,omitempty"`
-	ClearDetails          *bool    `json:"clearDetails,omitempty"`
-	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors          *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs          []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs       []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers          *bool    `json:"clearViewers,omitempty"`
-	AddSatisfyIDs         []string `json:"addSatisfyIDs,omitempty"`
-	RemoveSatisfyIDs      []string `json:"removeSatisfyIDs,omitempty"`
-	ClearSatisfies        *bool    `json:"clearSatisfies,omitempty"`
-	AddProgramIDs         []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs      []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms         *bool    `json:"clearPrograms,omitempty"`
+	Details                 *string  `json:"details,omitempty"`
+	ClearDetails            *bool    `json:"clearDetails,omitempty"`
+	AddBlockedGroupIDs      []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs            []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs         []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers            *bool    `json:"clearViewers,omitempty"`
+	AddSatisfyIDs           []string `json:"addSatisfyIDs,omitempty"`
+	RemoveSatisfyIDs        []string `json:"removeSatisfyIDs,omitempty"`
+	ClearSatisfies          *bool    `json:"clearSatisfies,omitempty"`
+	AddProgramIDs           []string `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool    `json:"clearPrograms,omitempty"`
+	AddInternalPolicyIDs    []string `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool    `json:"clearInternalPolicies,omitempty"`
+	AddProcedureIDs         []string `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs      []string `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures         *bool    `json:"clearProcedures,omitempty"`
 }
 
 // UpdateNoteInput is used for update Note object.
@@ -22843,6 +22872,9 @@ type UpdateProcedureInput struct {
 	AddControlIDs           []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs        []string            `json:"removeControlIDs,omitempty"`
 	ClearControls           *bool               `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string            `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string            `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool               `json:"clearSubcontrols,omitempty"`
 	AddInternalPolicyIDs    []string            `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs []string            `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies   *bool               `json:"clearInternalPolicies,omitempty"`

@@ -103,6 +103,10 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Narrative_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Narrative_procedures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Narrative", field.Name)
 		},
@@ -187,6 +191,10 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Narrative_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Narrative_procedures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Narrative", field.Name)
 		},
@@ -315,6 +323,10 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Narrative_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Narrative_procedures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Narrative", field.Name)
 		},

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -361,6 +362,21 @@ func (ipc *InternalPolicyCreate) AddControls(c ...*Control) *InternalPolicyCreat
 	return ipc.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ipc *InternalPolicyCreate) AddSubcontrolIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddSubcontrolIDs(ids...)
+	return ipc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ipc *InternalPolicyCreate) AddSubcontrols(s ...*Subcontrol) *InternalPolicyCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ipc.AddSubcontrolIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (ipc *InternalPolicyCreate) AddProcedureIDs(ids ...string) *InternalPolicyCreate {
 	ipc.mutation.AddProcedureIDs(ids...)
@@ -406,21 +422,6 @@ func (ipc *InternalPolicyCreate) AddTasks(t ...*Task) *InternalPolicyCreate {
 	return ipc.AddTaskIDs(ids...)
 }
 
-// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipc *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddProgramIDs(ids...)
-	return ipc
-}
-
-// AddPrograms adds the "programs" edges to the Program entity.
-func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ipc.AddProgramIDs(ids...)
-}
-
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (ipc *InternalPolicyCreate) AddRiskIDs(ids ...string) *InternalPolicyCreate {
 	ipc.mutation.AddRiskIDs(ids...)
@@ -434,6 +435,21 @@ func (ipc *InternalPolicyCreate) AddRisks(r ...*Risk) *InternalPolicyCreate {
 		ids[i] = r[i].ID
 	}
 	return ipc.AddRiskIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (ipc *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddProgramIDs(ids...)
+	return ipc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -766,16 +782,33 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	}
 	if nodes := ipc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.Control
+		edge.Schema = ipc.schemaConfig.InternalPolicyControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -800,16 +833,16 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	}
 	if nodes := ipc.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.Narrative
+		edge.Schema = ipc.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -832,23 +865,6 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ProgramsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipc.schemaConfig.ProgramInternalPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := ipc.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -861,6 +877,23 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

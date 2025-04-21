@@ -1466,30 +1466,30 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Procedure
+		edge.Schema = su.schemaConfig.SubcontrolProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := su.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !su.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Procedure
+		edge.Schema = su.schemaConfig.SubcontrolProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1497,16 +1497,16 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := su.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Procedure
+		edge.Schema = su.schemaConfig.SubcontrolProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1514,30 +1514,30 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.InternalPolicy
+		edge.Schema = su.schemaConfig.InternalPolicySubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := su.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !su.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.InternalPolicy
+		edge.Schema = su.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1545,16 +1545,16 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := su.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.InternalPolicy
+		edge.Schema = su.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3223,30 +3223,30 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if suo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Procedure
+		edge.Schema = suo.schemaConfig.SubcontrolProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := suo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !suo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Procedure
+		edge.Schema = suo.schemaConfig.SubcontrolProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3254,16 +3254,16 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if nodes := suo.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Procedure
+		edge.Schema = suo.schemaConfig.SubcontrolProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3271,30 +3271,30 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if suo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.InternalPolicy
+		edge.Schema = suo.schemaConfig.InternalPolicySubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := suo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !suo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.InternalPolicy
+		edge.Schema = suo.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3302,16 +3302,16 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if nodes := suo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.InternalPolicy
+		edge.Schema = suo.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
