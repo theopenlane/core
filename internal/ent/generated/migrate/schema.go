@@ -3456,7 +3456,7 @@ var (
 		{Name: "credential_id", Type: field.TypeBytes, Unique: true, Nullable: true},
 		{Name: "public_key", Type: field.TypeBytes, Nullable: true},
 		{Name: "attestation_type", Type: field.TypeString, Nullable: true},
-		{Name: "aaguid", Type: field.TypeBytes, Unique: true},
+		{Name: "aaguid", Type: field.TypeBytes},
 		{Name: "sign_count", Type: field.TypeInt32},
 		{Name: "transports", Type: field.TypeJSON},
 		{Name: "backup_eligible", Type: field.TypeBool, Default: false},
