@@ -36,6 +36,14 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 // CreateBulkSubscriber is the resolver for the createBulkSubscriber field.
 func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateSubscriber(ctx, input)
 }
 
@@ -46,6 +54,14 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.bulkCreateSubscriber(ctx, data)
