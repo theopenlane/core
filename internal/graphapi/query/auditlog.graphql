@@ -1,0 +1,14 @@
+query AuditLogs {
+  auditLogs {
+    edges {
+      node {
+        id
+        table
+        time
+        operation
+        changes
+        updatedBy
+      }
+    }
+  }
+}
