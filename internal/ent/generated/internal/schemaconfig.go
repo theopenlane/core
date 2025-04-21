@@ -78,6 +78,7 @@ type SchemaConfig struct {
 	InternalPolicyControlObjectives  string // InternalPolicy-control_objectives->ControlObjective table.
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
 	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
+	InternalPolicyRisks              string // InternalPolicy-risks->Risk table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
@@ -144,6 +145,7 @@ type SchemaConfig struct {
 	Subcontrol                       string // Subcontrol table.
 	SubcontrolControlObjectives      string // Subcontrol-control_objectives->ControlObjective table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
+	SubcontrolRisks                  string // Subcontrol-risks->Risk table.
 	SubcontrolControlImplementations string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.

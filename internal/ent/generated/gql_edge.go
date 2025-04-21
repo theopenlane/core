@@ -2183,6 +2183,27 @@ func (ip *InternalPolicy) Programs(
 	return ip.QueryPrograms().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (ip *InternalPolicy) Risks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RiskOrder, where *RiskWhereInput,
+) (*RiskConnection, error) {
+	opts := []RiskPaginateOption{
+		WithRiskOrder(orderBy),
+		WithRiskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := ip.Edges.totalCount[11][alias]
+	if nodes, err := ip.NamedRisks(alias); err == nil || hasTotalCount {
+		pager, err := newRiskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RiskConnection{Edges: []*RiskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return ip.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (i *Invite) Owner(ctx context.Context) (*Organization, error) {
 	result, err := i.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -3918,6 +3939,27 @@ func (r *Risk) Controls(
 	return r.QueryControls().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (r *Risk) Subcontrols(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
+) (*SubcontrolConnection, error) {
+	opts := []SubcontrolPaginateOption{
+		WithSubcontrolOrder(orderBy),
+		WithSubcontrolFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := r.Edges.totalCount[5][alias]
+	if nodes, err := r.NamedSubcontrols(alias); err == nil || hasTotalCount {
+		pager, err := newSubcontrolPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubcontrolConnection{Edges: []*SubcontrolEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return r.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (r *Risk) Procedures(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProcedureOrder, where *ProcedureWhereInput,
 ) (*ProcedureConnection, error) {
@@ -3926,7 +3968,7 @@ func (r *Risk) Procedures(
 		WithProcedureFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := r.Edges.totalCount[5][alias]
+	totalCount, hasTotalCount := r.Edges.totalCount[6][alias]
 	if nodes, err := r.NamedProcedures(alias); err == nil || hasTotalCount {
 		pager, err := newProcedurePager(opts, last != nil)
 		if err != nil {
@@ -3939,6 +3981,27 @@ func (r *Risk) Procedures(
 	return r.QueryProcedures().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (r *Risk) InternalPolicies(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*InternalPolicyOrder, where *InternalPolicyWhereInput,
+) (*InternalPolicyConnection, error) {
+	opts := []InternalPolicyPaginateOption{
+		WithInternalPolicyOrder(orderBy),
+		WithInternalPolicyFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := r.Edges.totalCount[7][alias]
+	if nodes, err := r.NamedInternalPolicies(alias); err == nil || hasTotalCount {
+		pager, err := newInternalPolicyPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &InternalPolicyConnection{Edges: []*InternalPolicyEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return r.QueryInternalPolicies().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (r *Risk) Programs(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProgramOrder, where *ProgramWhereInput,
 ) (*ProgramConnection, error) {
@@ -3947,7 +4010,7 @@ func (r *Risk) Programs(
 		WithProgramFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := r.Edges.totalCount[6][alias]
+	totalCount, hasTotalCount := r.Edges.totalCount[8][alias]
 	if nodes, err := r.NamedPrograms(alias); err == nil || hasTotalCount {
 		pager, err := newProgramPager(opts, last != nil)
 		if err != nil {
@@ -3968,7 +4031,7 @@ func (r *Risk) ActionPlans(
 		WithActionPlanFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := r.Edges.totalCount[7][alias]
+	totalCount, hasTotalCount := r.Edges.totalCount[9][alias]
 	if nodes, err := r.NamedActionPlans(alias); err == nil || hasTotalCount {
 		pager, err := newActionPlanPager(opts, last != nil)
 		if err != nil {

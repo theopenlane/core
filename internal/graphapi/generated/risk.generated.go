@@ -119,8 +119,12 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Risk_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Risk_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
 			case "actionPlans":
@@ -229,8 +233,12 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Risk_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Risk_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
 			case "actionPlans":
@@ -383,8 +391,12 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Risk_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Risk_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
 			case "actionPlans":

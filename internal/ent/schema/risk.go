@@ -121,6 +121,7 @@ func (r Risk) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(r, Control{}),
 		defaultEdgeFromWithPagination(r, Subcontrol{}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
+		defaultEdgeFromWithPagination(r, InternalPolicy{}),
 		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
 		defaultEdgeToWithPagination(r, ActionPlan{}),
 		uniqueEdgeTo(&edgeDefinition{

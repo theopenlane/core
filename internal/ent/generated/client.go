@@ -8345,6 +8345,25 @@ func (c *InternalPolicyClient) QueryPrograms(ip *InternalPolicy) *ProgramQuery {
 	return query
 }
 
+// QueryRisks queries the risks edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryRisks(ip *InternalPolicy) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.RisksTable, internalpolicy.RisksPrimaryKey...),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.InternalPolicyRisks
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *InternalPolicyClient) Hooks() []Hook {
 	hooks := c.hooks.InternalPolicy
@@ -13857,6 +13876,25 @@ func (c *RiskClient) QueryControls(r *Risk) *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols queries the subcontrols edge of a Risk.
+func (c *RiskClient) QuerySubcontrols(r *Risk) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.SubcontrolsTable, risk.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolRisks
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProcedures queries the procedures edge of a Risk.
 func (c *RiskClient) QueryProcedures(r *Risk) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
@@ -13870,6 +13908,25 @@ func (c *RiskClient) QueryProcedures(r *Risk) *ProcedureQuery {
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureRisks
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies queries the internal_policies edge of a Risk.
+func (c *RiskClient) QueryInternalPolicies(r *Risk) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.InternalPoliciesTable, risk.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyRisks
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -14612,11 +14669,11 @@ func (c *SubcontrolClient) QueryRisks(s *Subcontrol) *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.RisksTable, subcontrol.RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.RisksTable, subcontrol.RisksPrimaryKey...),
 		)
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.SubcontrolRisks
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}

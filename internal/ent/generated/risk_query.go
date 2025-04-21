@@ -16,11 +16,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -28,30 +30,34 @@ import (
 // RiskQuery is the builder for querying Risk entities.
 type RiskQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []risk.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.Risk
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withControls           *ControlQuery
-	withProcedures         *ProcedureQuery
-	withPrograms           *ProgramQuery
-	withActionPlans        *ActionPlanQuery
-	withStakeholder        *GroupQuery
-	withDelegate           *GroupQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*Risk) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedControls      map[string]*ControlQuery
-	withNamedProcedures    map[string]*ProcedureQuery
-	withNamedPrograms      map[string]*ProgramQuery
-	withNamedActionPlans   map[string]*ActionPlanQuery
+	ctx                       *QueryContext
+	order                     []risk.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.Risk
+	withOwner                 *OrganizationQuery
+	withBlockedGroups         *GroupQuery
+	withEditors               *GroupQuery
+	withViewers               *GroupQuery
+	withControls              *ControlQuery
+	withSubcontrols           *SubcontrolQuery
+	withProcedures            *ProcedureQuery
+	withInternalPolicies      *InternalPolicyQuery
+	withPrograms              *ProgramQuery
+	withActionPlans           *ActionPlanQuery
+	withStakeholder           *GroupQuery
+	withDelegate              *GroupQuery
+	withFKs                   bool
+	loadTotal                 []func(context.Context, []*Risk) error
+	modifiers                 []func(*sql.Selector)
+	withNamedBlockedGroups    map[string]*GroupQuery
+	withNamedEditors          map[string]*GroupQuery
+	withNamedViewers          map[string]*GroupQuery
+	withNamedControls         map[string]*ControlQuery
+	withNamedSubcontrols      map[string]*SubcontrolQuery
+	withNamedProcedures       map[string]*ProcedureQuery
+	withNamedInternalPolicies map[string]*InternalPolicyQuery
+	withNamedPrograms         map[string]*ProgramQuery
+	withNamedActionPlans      map[string]*ActionPlanQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -213,6 +219,31 @@ func (rq *RiskQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (rq *RiskQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.SubcontrolsTable, risk.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolRisks
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryProcedures chains the current query on the "procedures" edge.
 func (rq *RiskQuery) QueryProcedures() *ProcedureQuery {
 	query := (&ProcedureClient{config: rq.config}).Query()
@@ -232,6 +263,31 @@ func (rq *RiskQuery) QueryProcedures() *ProcedureQuery {
 		schemaConfig := rq.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureRisks
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (rq *RiskQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.InternalPoliciesTable, risk.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyRisks
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -525,21 +581,23 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		return nil
 	}
 	return &RiskQuery{
-		config:            rq.config,
-		ctx:               rq.ctx.Clone(),
-		order:             append([]risk.OrderOption{}, rq.order...),
-		inters:            append([]Interceptor{}, rq.inters...),
-		predicates:        append([]predicate.Risk{}, rq.predicates...),
-		withOwner:         rq.withOwner.Clone(),
-		withBlockedGroups: rq.withBlockedGroups.Clone(),
-		withEditors:       rq.withEditors.Clone(),
-		withViewers:       rq.withViewers.Clone(),
-		withControls:      rq.withControls.Clone(),
-		withProcedures:    rq.withProcedures.Clone(),
-		withPrograms:      rq.withPrograms.Clone(),
-		withActionPlans:   rq.withActionPlans.Clone(),
-		withStakeholder:   rq.withStakeholder.Clone(),
-		withDelegate:      rq.withDelegate.Clone(),
+		config:               rq.config,
+		ctx:                  rq.ctx.Clone(),
+		order:                append([]risk.OrderOption{}, rq.order...),
+		inters:               append([]Interceptor{}, rq.inters...),
+		predicates:           append([]predicate.Risk{}, rq.predicates...),
+		withOwner:            rq.withOwner.Clone(),
+		withBlockedGroups:    rq.withBlockedGroups.Clone(),
+		withEditors:          rq.withEditors.Clone(),
+		withViewers:          rq.withViewers.Clone(),
+		withControls:         rq.withControls.Clone(),
+		withSubcontrols:      rq.withSubcontrols.Clone(),
+		withProcedures:       rq.withProcedures.Clone(),
+		withInternalPolicies: rq.withInternalPolicies.Clone(),
+		withPrograms:         rq.withPrograms.Clone(),
+		withActionPlans:      rq.withActionPlans.Clone(),
+		withStakeholder:      rq.withStakeholder.Clone(),
+		withDelegate:         rq.withDelegate.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -602,6 +660,17 @@ func (rq *RiskQuery) WithControls(opts ...func(*ControlQuery)) *RiskQuery {
 	return rq
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *RiskQuery {
+	query := (&SubcontrolClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withSubcontrols = query
+	return rq
+}
+
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
 func (rq *RiskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *RiskQuery {
@@ -610,6 +679,17 @@ func (rq *RiskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *RiskQuery {
 		opt(query)
 	}
 	rq.withProcedures = query
+	return rq
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *RiskQuery {
+	query := (&InternalPolicyClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withInternalPolicies = query
 	return rq
 }
 
@@ -742,13 +822,15 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [12]bool{
 			rq.withOwner != nil,
 			rq.withBlockedGroups != nil,
 			rq.withEditors != nil,
 			rq.withViewers != nil,
 			rq.withControls != nil,
+			rq.withSubcontrols != nil,
 			rq.withProcedures != nil,
+			rq.withInternalPolicies != nil,
 			rq.withPrograms != nil,
 			rq.withActionPlans != nil,
 			rq.withStakeholder != nil,
@@ -815,10 +897,24 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := rq.withSubcontrols; query != nil {
+		if err := rq.loadSubcontrols(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *Risk, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := rq.withProcedures; query != nil {
 		if err := rq.loadProcedures(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Procedures = []*Procedure{} },
 			func(n *Risk, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withInternalPolicies; query != nil {
+		if err := rq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Risk) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Risk, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -876,10 +972,24 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	for name, query := range rq.withNamedSubcontrols {
+		if err := rq.loadSubcontrols(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedSubcontrols(name) },
+			func(n *Risk, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range rq.withNamedProcedures {
 		if err := rq.loadProcedures(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedProcedures(name) },
 			func(n *Risk, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedInternalPolicies {
+		if err := rq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedInternalPolicies(name) },
+			func(n *Risk, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1182,6 +1292,68 @@ func (rq *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	return nil
 }
+func (rq *RiskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.SubcontrolsTable)
+		joinT.Schema(rq.schemaConfig.SubcontrolRisks)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(risk.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (rq *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
@@ -1237,6 +1409,68 @@ func (rq *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, 
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "procedures" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.InternalPoliciesTable)
+		joinT.Schema(rq.schemaConfig.InternalPolicyRisks)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(risk.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1590,6 +1824,20 @@ func (rq *RiskQuery) WithNamedControls(name string, opts ...func(*ControlQuery))
 	return rq
 }
 
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *RiskQuery {
+	query := (&SubcontrolClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedSubcontrols == nil {
+		rq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	rq.withNamedSubcontrols[name] = query
+	return rq
+}
+
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (rq *RiskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *RiskQuery {
@@ -1601,6 +1849,20 @@ func (rq *RiskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQue
 		rq.withNamedProcedures = make(map[string]*ProcedureQuery)
 	}
 	rq.withNamedProcedures[name] = query
+	return rq
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *RiskQuery {
+	query := (&InternalPolicyClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedInternalPolicies == nil {
+		rq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	rq.withNamedInternalPolicies[name] = query
 	return rq
 }
 

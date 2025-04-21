@@ -4053,6 +4053,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Risk",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5325,6 +5337,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"procedures",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5335,6 +5359,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Risk",
 		"Procedure",
+	)
+	graph.MustAddE(
+		"internal_policies",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"InternalPolicy",
 	)
 	graph.MustAddE(
 		"programs",
@@ -5459,10 +5495,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.RisksTable,
-			Columns: []string{subcontrol.RisksColumn},
+			Columns: subcontrol.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Subcontrol",
@@ -12243,6 +12279,20 @@ func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) 
 	})))
 }
 
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *InternalPolicyFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (iphq *InternalPolicyHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	iphq.predicates = append(iphq.predicates, pred)
@@ -16772,6 +16822,20 @@ func (f *RiskFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *RiskFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasProcedures applies a predicate to check if query has an edge procedures.
 func (f *RiskFilter) WhereHasProcedures() {
 	f.Where(entql.HasEdge("procedures"))
@@ -16780,6 +16844,20 @@ func (f *RiskFilter) WhereHasProcedures() {
 // WhereHasProceduresWith applies a predicate to check if query has an edge procedures with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
 	f.Where(entql.HasEdgeWith("procedures", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *RiskFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
+}
+
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -67,7 +67,6 @@ type Risk struct {
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
-	subcontrol_risks        *string
 	selectValues            sql.SelectValues
 }
 
@@ -83,8 +82,12 @@ type RiskEdges struct {
 	Viewers []*Group `json:"viewers,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
@@ -95,17 +98,19 @@ type RiskEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [12]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedControls      map[string][]*Control
-	namedProcedures    map[string][]*Procedure
-	namedPrograms      map[string][]*Program
-	namedActionPlans   map[string][]*ActionPlan
+	namedBlockedGroups    map[string][]*Group
+	namedEditors          map[string][]*Group
+	namedViewers          map[string][]*Group
+	namedControls         map[string][]*Control
+	namedSubcontrols      map[string][]*Subcontrol
+	namedProcedures       map[string][]*Procedure
+	namedInternalPolicies map[string][]*InternalPolicy
+	namedPrograms         map[string][]*Program
+	namedActionPlans      map[string][]*ActionPlan
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -155,19 +160,37 @@ func (e RiskEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[5] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
 }
 
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[7] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -176,7 +199,7 @@ func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -187,7 +210,7 @@ func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 	if e.Stakeholder != nil {
 		return e.Stakeholder, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "stakeholder"}
@@ -198,7 +221,7 @@ func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 func (e RiskEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -218,8 +241,6 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[1]: // subcontrol_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -377,13 +398,6 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 				r.control_objective_risks = new(string)
 				*r.control_objective_risks = value.String
 			}
-		case risk.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_risks", values[i])
-			} else if value.Valid {
-				r.subcontrol_risks = new(string)
-				*r.subcontrol_risks = value.String
-			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -422,9 +436,19 @@ func (r *Risk) QueryControls() *ControlQuery {
 	return NewRiskClient(r.config).QueryControls(r)
 }
 
+// QuerySubcontrols queries the "subcontrols" edge of the Risk entity.
+func (r *Risk) QuerySubcontrols() *SubcontrolQuery {
+	return NewRiskClient(r.config).QuerySubcontrols(r)
+}
+
 // QueryProcedures queries the "procedures" edge of the Risk entity.
 func (r *Risk) QueryProcedures() *ProcedureQuery {
 	return NewRiskClient(r.config).QueryProcedures(r)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the Risk entity.
+func (r *Risk) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewRiskClient(r.config).QueryInternalPolicies(r)
 }
 
 // QueryPrograms queries the "programs" edge of the Risk entity.
@@ -632,6 +656,30 @@ func (r *Risk) appendNamedControls(name string, edges ...*Control) {
 	}
 }
 
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if r.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if r.Edges.namedSubcontrols == nil {
+		r.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		r.Edges.namedSubcontrols[name] = append(r.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (r *Risk) NamedProcedures(name string) ([]*Procedure, error) {
@@ -653,6 +701,30 @@ func (r *Risk) appendNamedProcedures(name string, edges ...*Procedure) {
 		r.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
 		r.Edges.namedProcedures[name] = append(r.Edges.namedProcedures[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if r.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if r.Edges.namedInternalPolicies == nil {
+		r.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		r.Edges.namedInternalPolicies[name] = append(r.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
