@@ -15,10 +15,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -429,6 +431,21 @@ func (ru *RiskUpdate) AddControls(c ...*Control) *RiskUpdate {
 	return ru.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ru *RiskUpdate) AddSubcontrolIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddSubcontrolIDs(ids...)
+	return ru
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ru *RiskUpdate) AddSubcontrols(s ...*Subcontrol) *RiskUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.AddSubcontrolIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (ru *RiskUpdate) AddProcedureIDs(ids ...string) *RiskUpdate {
 	ru.mutation.AddProcedureIDs(ids...)
@@ -442,6 +459,21 @@ func (ru *RiskUpdate) AddProcedures(p ...*Procedure) *RiskUpdate {
 		ids[i] = p[i].ID
 	}
 	return ru.AddProcedureIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (ru *RiskUpdate) AddInternalPolicyIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddInternalPolicyIDs(ids...)
+	return ru
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (ru *RiskUpdate) AddInternalPolicies(i ...*InternalPolicy) *RiskUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ru.AddInternalPolicyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -573,6 +605,27 @@ func (ru *RiskUpdate) RemoveControls(c ...*Control) *RiskUpdate {
 	return ru.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ru *RiskUpdate) ClearSubcontrols() *RiskUpdate {
+	ru.mutation.ClearSubcontrols()
+	return ru
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ru *RiskUpdate) RemoveSubcontrolIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveSubcontrolIDs(ids...)
+	return ru
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ru *RiskUpdate) RemoveSubcontrols(s ...*Subcontrol) *RiskUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
 func (ru *RiskUpdate) ClearProcedures() *RiskUpdate {
 	ru.mutation.ClearProcedures()
@@ -592,6 +645,27 @@ func (ru *RiskUpdate) RemoveProcedures(p ...*Procedure) *RiskUpdate {
 		ids[i] = p[i].ID
 	}
 	return ru.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (ru *RiskUpdate) ClearInternalPolicies() *RiskUpdate {
+	ru.mutation.ClearInternalPolicies()
+	return ru
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (ru *RiskUpdate) RemoveInternalPolicyIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveInternalPolicyIDs(ids...)
+	return ru
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (ru *RiskUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *RiskUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ru.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -1026,6 +1100,54 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ru.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ru.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1069,6 +1191,54 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = ru.schemaConfig.ProcedureRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.InternalPolicyRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ru.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1647,6 +1817,21 @@ func (ruo *RiskUpdateOne) AddControls(c ...*Control) *RiskUpdateOne {
 	return ruo.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (ruo *RiskUpdateOne) AddSubcontrolIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddSubcontrolIDs(ids...)
+	return ruo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (ruo *RiskUpdateOne) AddSubcontrols(s ...*Subcontrol) *RiskUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.AddSubcontrolIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (ruo *RiskUpdateOne) AddProcedureIDs(ids ...string) *RiskUpdateOne {
 	ruo.mutation.AddProcedureIDs(ids...)
@@ -1660,6 +1845,21 @@ func (ruo *RiskUpdateOne) AddProcedures(p ...*Procedure) *RiskUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return ruo.AddProcedureIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (ruo *RiskUpdateOne) AddInternalPolicyIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddInternalPolicyIDs(ids...)
+	return ruo
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (ruo *RiskUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *RiskUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ruo.AddInternalPolicyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -1791,6 +1991,27 @@ func (ruo *RiskUpdateOne) RemoveControls(c ...*Control) *RiskUpdateOne {
 	return ruo.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (ruo *RiskUpdateOne) ClearSubcontrols() *RiskUpdateOne {
+	ruo.mutation.ClearSubcontrols()
+	return ruo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (ruo *RiskUpdateOne) RemoveSubcontrolIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveSubcontrolIDs(ids...)
+	return ruo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (ruo *RiskUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *RiskUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
 func (ruo *RiskUpdateOne) ClearProcedures() *RiskUpdateOne {
 	ruo.mutation.ClearProcedures()
@@ -1810,6 +2031,27 @@ func (ruo *RiskUpdateOne) RemoveProcedures(p ...*Procedure) *RiskUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return ruo.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (ruo *RiskUpdateOne) ClearInternalPolicies() *RiskUpdateOne {
+	ruo.mutation.ClearInternalPolicies()
+	return ruo
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (ruo *RiskUpdateOne) RemoveInternalPolicyIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveInternalPolicyIDs(ids...)
+	return ruo
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (ruo *RiskUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *RiskUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ruo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -2274,6 +2516,54 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ruo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ruo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.SubcontrolsTable,
+			Columns: risk.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ruo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2317,6 +2607,54 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			},
 		}
 		edge.Schema = ruo.schemaConfig.ProcedureRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ruo.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.InternalPoliciesTable,
+			Columns: risk.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

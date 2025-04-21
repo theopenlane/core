@@ -1527,6 +1527,7 @@ type ComplexityRoot struct {
 		ReviewDue         func(childComplexity int) int
 		ReviewFrequency   func(childComplexity int) int
 		Revision          func(childComplexity int) int
+		Risks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status            func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -2912,38 +2913,40 @@ type ComplexityRoot struct {
 	}
 
 	Risk struct {
-		ActionPlans   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		BlockedGroups func(childComplexity int) int
-		BusinessCosts func(childComplexity int) int
-		Category      func(childComplexity int) int
-		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Delegate      func(childComplexity int) int
-		DelegateID    func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
-		Details       func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		Editors       func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Impact        func(childComplexity int) int
-		Likelihood    func(childComplexity int) int
-		Mitigation    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Procedures    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Programs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskType      func(childComplexity int) int
-		Score         func(childComplexity int) int
-		Stakeholder   func(childComplexity int) int
-		StakeholderID func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Viewers       func(childComplexity int) int
+		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		BlockedGroups    func(childComplexity int) int
+		BusinessCosts    func(childComplexity int) int
+		Category         func(childComplexity int) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Delegate         func(childComplexity int) int
+		DelegateID       func(childComplexity int) int
+		DeletedAt        func(childComplexity int) int
+		DeletedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Editors          func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Impact           func(childComplexity int) int
+		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Likelihood       func(childComplexity int) int
+		Mitigation       func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskType         func(childComplexity int) int
+		Score            func(childComplexity int) int
+		Stakeholder      func(childComplexity int) int
+		StakeholderID    func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int) int
 	}
 
 	RiskBulkCreatePayload struct {
@@ -10818,6 +10821,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.Revision(childComplexity), true
+
+	case "InternalPolicy.risks":
+		if e.complexity.InternalPolicy.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "InternalPolicy.status":
 		if e.complexity.InternalPolicy.Status == nil {
@@ -20195,6 +20210,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Impact(childComplexity), true
 
+	case "Risk.internalPolicies":
+		if e.complexity.Risk.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
 	case "Risk.likelihood":
 		if e.complexity.Risk.Likelihood == nil {
 			break
@@ -20288,6 +20315,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Status(childComplexity), true
+
+	case "Risk.subcontrols":
+		if e.complexity.Risk.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Risk.tags":
 		if e.complexity.Risk.Tags == nil {
@@ -32691,6 +32730,7 @@ input CreateInternalPolicyInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  riskIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -33150,7 +33190,9 @@ input CreateRiskInput {
   editorIDs: [ID!]
   viewerIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   procedureIDs: [ID!]
+  internalPolicyIDs: [ID!]
   programIDs: [ID!]
   actionPlanIDs: [ID!]
   stakeholderID: ID
@@ -41956,6 +41998,37 @@ type InternalPolicy implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
 }
 """
 A connection to a list of items.
@@ -42853,6 +42926,11 @@ input InternalPolicyWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -54936,6 +55014,37 @@ type Risk implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -54967,6 +55076,37 @@ type Risk implements Node {
     """
     where: ProcedureWhereInput
   ): ProcedureConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56011,10 +56151,20 @@ input RiskWhereInput {
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
   """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
   procedures edge predicates
   """
   hasProcedures: Boolean
   hasProceduresWith: [ProcedureWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   programs edge predicates
   """
@@ -62095,6 +62245,9 @@ input UpdateInternalPolicyInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -62722,9 +62875,15 @@ input UpdateRiskInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedures: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean

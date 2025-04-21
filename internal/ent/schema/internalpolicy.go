@@ -50,6 +50,7 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Narrative{}),
 		defaultEdgeToWithPagination(i, Task{}),
 		defaultEdgeFromWithPagination(i, Program{}),
+		defaultEdgeToWithPagination(i, Risk{}),
 	}
 }
 

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -480,6 +481,21 @@ func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdat
 	return ipu.AddProgramIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (ipu *InternalPolicyUpdate) AddRiskIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddRiskIDs(ids...)
+	return ipu
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (ipu *InternalPolicyUpdate) AddRisks(r ...*Risk) *InternalPolicyUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ipu.AddRiskIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
@@ -669,6 +685,27 @@ func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUp
 		ids[i] = p[i].ID
 	}
 	return ipu.RemoveProgramIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (ipu *InternalPolicyUpdate) ClearRisks() *InternalPolicyUpdate {
+	ipu.mutation.ClearRisks()
+	return ipu
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveRiskIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveRiskIDs(ids...)
+	return ipu
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (ipu *InternalPolicyUpdate) RemoveRisks(r ...*Risk) *InternalPolicyUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ipu.RemoveRiskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1324,6 +1361,54 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ipu.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ipu.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = ipu.schemaConfig.InternalPolicy
 	ctx = internal.NewSchemaConfigContext(ctx, ipu.schemaConfig)
 	_spec.AddModifiers(ipu.modifiers...)
@@ -1787,6 +1872,21 @@ func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyU
 	return ipuo.AddProgramIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddRiskIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddRiskIDs(ids...)
+	return ipuo
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (ipuo *InternalPolicyUpdateOne) AddRisks(r ...*Risk) *InternalPolicyUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ipuo.AddRiskIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
@@ -1976,6 +2076,27 @@ func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPoli
 		ids[i] = p[i].ID
 	}
 	return ipuo.RemoveProgramIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (ipuo *InternalPolicyUpdateOne) ClearRisks() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearRisks()
+	return ipuo
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveRiskIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveRiskIDs(ids...)
+	return ipuo
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveRisks(r ...*Risk) *InternalPolicyUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ipuo.RemoveRiskIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -2656,6 +2777,54 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ipuo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.RisksTable,
+			Columns: internalpolicy.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

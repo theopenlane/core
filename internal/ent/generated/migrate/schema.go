@@ -2662,7 +2662,6 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "stakeholder_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_risks", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2692,12 +2691,6 @@ var (
 				Symbol:     "risks_groups_delegate",
 				Columns:    []*schema.Column{RisksColumns[22]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_subcontrols_risks",
-				Columns:    []*schema.Column{RisksColumns[23]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4386,6 +4379,31 @@ var (
 			},
 		},
 	}
+	// InternalPolicyRisksColumns holds the columns for the "internal_policy_risks" table.
+	InternalPolicyRisksColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// InternalPolicyRisksTable holds the schema information for the "internal_policy_risks" table.
+	InternalPolicyRisksTable = &schema.Table{
+		Name:       "internal_policy_risks",
+		Columns:    InternalPolicyRisksColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyRisksColumns[0], InternalPolicyRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_risks_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyRisksColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_risks_risk_id",
+				Columns:    []*schema.Column{InternalPolicyRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InviteEventsColumns holds the columns for the "invite_events" table.
 	InviteEventsColumns = []*schema.Column{
 		{Name: "invite_id", Type: field.TypeString},
@@ -5286,6 +5304,31 @@ var (
 			},
 		},
 	}
+	// SubcontrolRisksColumns holds the columns for the "subcontrol_risks" table.
+	SubcontrolRisksColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// SubcontrolRisksTable holds the schema information for the "subcontrol_risks" table.
+	SubcontrolRisksTable = &schema.Table{
+		Name:       "subcontrol_risks",
+		Columns:    SubcontrolRisksColumns,
+		PrimaryKey: []*schema.Column{SubcontrolRisksColumns[0], SubcontrolRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_risks_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolRisksColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_risks_risk_id",
+				Columns:    []*schema.Column{SubcontrolRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolControlImplementationsColumns holds the columns for the "subcontrol_control_implementations" table.
 	SubcontrolControlImplementationsColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -5601,6 +5644,7 @@ var (
 		InternalPolicyControlObjectivesTable,
 		InternalPolicyProceduresTable,
 		InternalPolicyTasksTable,
+		InternalPolicyRisksTable,
 		InviteEventsTable,
 		MappedControlControlsTable,
 		MappedControlSubcontrolsTable,
@@ -5637,6 +5681,7 @@ var (
 		RiskActionPlansTable,
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
+		SubcontrolRisksTable,
 		SubcontrolControlImplementationsTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
@@ -5806,7 +5851,6 @@ func init() {
 	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	RisksTable.ForeignKeys[2].RefTable = GroupsTable
 	RisksTable.ForeignKeys[3].RefTable = GroupsTable
-	RisksTable.ForeignKeys[4].RefTable = SubcontrolsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
@@ -5917,6 +5961,8 @@ func init() {
 	InternalPolicyProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	InternalPolicyTasksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
+	InternalPolicyRisksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	MappedControlControlsTable.ForeignKeys[0].RefTable = MappedControlsTable
@@ -5989,6 +6035,8 @@ func init() {
 	SubcontrolControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
+	SubcontrolRisksTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolRisksTable.ForeignKeys[1].RefTable = RisksTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable

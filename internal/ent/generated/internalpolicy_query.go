@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -45,6 +46,7 @@ type InternalPolicyQuery struct {
 	withNarratives             *NarrativeQuery
 	withTasks                  *TaskQuery
 	withPrograms               *ProgramQuery
+	withRisks                  *RiskQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*InternalPolicy) error
 	modifiers                  []func(*sql.Selector)
@@ -56,6 +58,7 @@ type InternalPolicyQuery struct {
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedTasks             map[string]*TaskQuery
 	withNamedPrograms          map[string]*ProgramQuery
+	withNamedRisks             map[string]*RiskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -367,6 +370,31 @@ func (ipq *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryRisks chains the current query on the "risks" edge.
+func (ipq *InternalPolicyQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.RisksTable, internalpolicy.RisksPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.InternalPolicyRisks
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first InternalPolicy entity from the query.
 // Returns a *NotFoundError when no InternalPolicy was found.
 func (ipq *InternalPolicyQuery) First(ctx context.Context) (*InternalPolicy, error) {
@@ -570,6 +598,7 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withNarratives:        ipq.withNarratives.Clone(),
 		withTasks:             ipq.withTasks.Clone(),
 		withPrograms:          ipq.withPrograms.Clone(),
+		withRisks:             ipq.withRisks.Clone(),
 		// clone intermediate query.
 		sql:       ipq.sql.Clone(),
 		path:      ipq.path,
@@ -698,6 +727,17 @@ func (ipq *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *Inter
 	return ipq
 }
 
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithRisks(opts ...func(*RiskQuery)) *InternalPolicyQuery {
+	query := (&RiskClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withRisks = query
+	return ipq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -783,7 +823,7 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		nodes       = []*InternalPolicy{}
 		withFKs     = ipq.withFKs
 		_spec       = ipq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			ipq.withOwner != nil,
 			ipq.withBlockedGroups != nil,
 			ipq.withEditors != nil,
@@ -795,6 +835,7 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			ipq.withNarratives != nil,
 			ipq.withTasks != nil,
 			ipq.withPrograms != nil,
+			ipq.withRisks != nil,
 		}
 	)
 	if withFKs {
@@ -899,6 +940,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	if query := ipq.withRisks; query != nil {
+		if err := ipq.loadRisks(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Risks = []*Risk{} },
+			func(n *InternalPolicy, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ipq.withNamedBlockedGroups {
 		if err := ipq.loadBlockedGroups(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedBlockedGroups(name) },
@@ -952,6 +1000,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		if err := ipq.loadPrograms(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedPrograms(name) },
 			func(n *InternalPolicy, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ipq.withNamedRisks {
+		if err := ipq.loadRisks(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedRisks(name) },
+			func(n *InternalPolicy, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1484,6 +1539,68 @@ func (ipq *InternalPolicyQuery) loadPrograms(ctx context.Context, query *Program
 	}
 	return nil
 }
+func (ipq *InternalPolicyQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Risk)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.RisksTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyRisks)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(internalpolicy.RisksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.RisksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.RisksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (ipq *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ipq.querySpec()
@@ -1701,6 +1818,20 @@ func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*Pro
 		ipq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	ipq.withNamedPrograms[name] = query
+	return ipq
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *InternalPolicyQuery {
+	query := (&RiskClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedRisks == nil {
+		ipq.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	ipq.withNamedRisks[name] = query
 	return ipq
 }
 

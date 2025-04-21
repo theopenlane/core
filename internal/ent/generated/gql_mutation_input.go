@@ -3807,6 +3807,7 @@ type CreateInternalPolicyInput struct {
 	NarrativeIDs        []string
 	TaskIDs             []string
 	ProgramIDs          []string
+	RiskIDs             []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -3869,6 +3870,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -3927,6 +3931,9 @@ type UpdateInternalPolicyInput struct {
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
+	ClearRisks                bool
+	AddRiskIDs                []string
+	RemoveRiskIDs             []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -4074,6 +4081,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
 	}
 }
 
@@ -6439,27 +6455,29 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 
 // CreateRiskInput represents a mutation input for creating risks.
 type CreateRiskInput struct {
-	Tags            []string
-	Name            string
-	Status          *enums.RiskStatus
-	RiskType        *string
-	Category        *string
-	Impact          *enums.RiskImpact
-	Likelihood      *enums.RiskLikelihood
-	Score           *int
-	Mitigation      *string
-	Details         *string
-	BusinessCosts   *string
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	ViewerIDs       []string
-	ControlIDs      []string
-	ProcedureIDs    []string
-	ProgramIDs      []string
-	ActionPlanIDs   []string
-	StakeholderID   *string
-	DelegateID      *string
+	Tags              []string
+	Name              string
+	Status            *enums.RiskStatus
+	RiskType          *string
+	Category          *string
+	Impact            *enums.RiskImpact
+	Likelihood        *enums.RiskLikelihood
+	Score             *int
+	Mitigation        *string
+	Details           *string
+	BusinessCosts     *string
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	ViewerIDs         []string
+	ControlIDs        []string
+	SubcontrolIDs     []string
+	ProcedureIDs      []string
+	InternalPolicyIDs []string
+	ProgramIDs        []string
+	ActionPlanIDs     []string
+	StakeholderID     *string
+	DelegateID        *string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -6510,8 +6528,14 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -6535,53 +6559,59 @@ func (c *RiskCreate) SetInput(i CreateRiskInput) *RiskCreate {
 
 // UpdateRiskInput represents a mutation input for updating risks.
 type UpdateRiskInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	Name                  *string
-	ClearStatus           bool
-	Status                *enums.RiskStatus
-	ClearRiskType         bool
-	RiskType              *string
-	ClearCategory         bool
-	Category              *string
-	ClearImpact           bool
-	Impact                *enums.RiskImpact
-	ClearLikelihood       bool
-	Likelihood            *enums.RiskLikelihood
-	ClearScore            bool
-	Score                 *int
-	ClearMitigation       bool
-	Mitigation            *string
-	ClearDetails          bool
-	Details               *string
-	ClearBusinessCosts    bool
-	BusinessCosts         *string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearControls         bool
-	AddControlIDs         []string
-	RemoveControlIDs      []string
-	ClearProcedures       bool
-	AddProcedureIDs       []string
-	RemoveProcedureIDs    []string
-	ClearPrograms         bool
-	AddProgramIDs         []string
-	RemoveProgramIDs      []string
-	ClearActionPlans      bool
-	AddActionPlanIDs      []string
-	RemoveActionPlanIDs   []string
-	ClearStakeholder      bool
-	StakeholderID         *string
-	ClearDelegate         bool
-	DelegateID            *string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	Name                    *string
+	ClearStatus             bool
+	Status                  *enums.RiskStatus
+	ClearRiskType           bool
+	RiskType                *string
+	ClearCategory           bool
+	Category                *string
+	ClearImpact             bool
+	Impact                  *enums.RiskImpact
+	ClearLikelihood         bool
+	Likelihood              *enums.RiskLikelihood
+	ClearScore              bool
+	Score                   *int
+	ClearMitigation         bool
+	Mitigation              *string
+	ClearDetails            bool
+	Details                 *string
+	ClearBusinessCosts      bool
+	BusinessCosts           *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
+	ClearControls           bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+	ClearSubcontrols        bool
+	AddSubcontrolIDs        []string
+	RemoveSubcontrolIDs     []string
+	ClearProcedures         bool
+	AddProcedureIDs         []string
+	RemoveProcedureIDs      []string
+	ClearInternalPolicies   bool
+	AddInternalPolicyIDs    []string
+	RemoveInternalPolicyIDs []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
+	ClearActionPlans        bool
+	AddActionPlanIDs        []string
+	RemoveActionPlanIDs     []string
+	ClearStakeholder        bool
+	StakeholderID           *string
+	ClearDelegate           bool
+	DelegateID              *string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -6688,6 +6718,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
 	}
@@ -6696,6 +6735,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
