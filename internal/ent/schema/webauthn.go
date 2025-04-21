@@ -47,7 +47,6 @@ func (Webauthn) Fields() []ent.Field {
 			Optional(),
 		field.Bytes("aaguid").
 			Comment("The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought").
-			Unique().
 			Immutable(),
 		field.Int32("sign_count").
 			Comment("SignCount -Upon a new login operation, the Relying Party compares the stored signature counter value with the new signCount value returned in the assertions authenticator data. If this new signCount value is less than or equal to the stored value, a cloned authenticator may exist, or the authenticator may be malfunctioning"),
