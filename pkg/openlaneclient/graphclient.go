@@ -31,6 +31,7 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
+	AuditLogs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
@@ -7047,6 +7048,74 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 		t = &UpdateAPIToken_UpdateAPIToken{}
 	}
 	return &t.APIToken
+}
+
+type AuditLogs_AuditLogs_Edges_Node struct {
+	Changes   []string   "json:\"changes,omitempty\" graphql:\"changes\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Operation *string    "json:\"operation,omitempty\" graphql:\"operation\""
+	Table     *string    "json:\"table,omitempty\" graphql:\"table\""
+	Time      *time.Time "json:\"time,omitempty\" graphql:\"time\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *AuditLogs_AuditLogs_Edges_Node) GetChanges() []string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.Changes
+}
+func (t *AuditLogs_AuditLogs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AuditLogs_AuditLogs_Edges_Node) GetOperation() *string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.Operation
+}
+func (t *AuditLogs_AuditLogs_Edges_Node) GetTable() *string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.Table
+}
+func (t *AuditLogs_AuditLogs_Edges_Node) GetTime() *time.Time {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.Time
+}
+func (t *AuditLogs_AuditLogs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type AuditLogs_AuditLogs_Edges struct {
+	Node *AuditLogs_AuditLogs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AuditLogs_AuditLogs_Edges) GetNode() *AuditLogs_AuditLogs_Edges_Node {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_Edges{}
+	}
+	return t.Node
+}
+
+type AuditLogs_AuditLogs struct {
+	Edges []*AuditLogs_AuditLogs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *AuditLogs_AuditLogs) GetEdges() []*AuditLogs_AuditLogs_Edges {
+	if t == nil {
+		t = &AuditLogs_AuditLogs{}
+	}
+	return t.Edges
 }
 
 type CreateBulkContact_CreateBulkContact_Contacts struct {
@@ -65918,6 +65987,17 @@ func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
 	return &t.UpdateAPIToken
 }
 
+type AuditLogs struct {
+	AuditLogs AuditLogs_AuditLogs "json:\"auditLogs\" graphql:\"auditLogs\""
+}
+
+func (t *AuditLogs) GetAuditLogs() *AuditLogs_AuditLogs {
+	if t == nil {
+		t = &AuditLogs{}
+	}
+	return &t.AuditLogs
+}
+
 type CreateBulkContact struct {
 	CreateBulkContact CreateBulkContact_CreateBulkContact "json:\"createBulkContact\" graphql:\"createBulkContact\""
 }
@@ -70878,6 +70958,37 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 
 	var res UpdateAPIToken
 	if err := c.Client.Post(ctx, "UpdateAPIToken", UpdateAPITokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const AuditLogsDocument = `query AuditLogs {
+	auditLogs {
+		edges {
+			node {
+				id
+				table
+				time
+				operation
+				changes
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) AuditLogs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error) {
+	vars := map[string]any{}
+
+	var res AuditLogs
+	if err := c.Client.Post(ctx, "AuditLogs", AuditLogsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -87165,6 +87276,7 @@ var DocumentOperationNames = map[string]string{
 	GetAPITokenByIDDocument:                      "GetAPITokenByID",
 	GetAPITokensDocument:                         "GetAPITokens",
 	UpdateAPITokenDocument:                       "UpdateAPIToken",
+	AuditLogsDocument:                            "AuditLogs",
 	CreateBulkContactDocument:                    "CreateBulkContact",
 	CreateBulkCSVContactDocument:                 "CreateBulkCSVContact",
 	CreateContactDocument:                        "CreateContact",
