@@ -63,7 +63,6 @@ type Procedure struct {
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
-	subcontrol_procedures        *string
 	selectValues                 sql.SelectValues
 }
 
@@ -81,6 +80,8 @@ type ProcedureEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// InternalPolicies holds the value of the internal_policies edge.
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -93,13 +94,14 @@ type ProcedureEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
 	namedControls         map[string][]*Control
+	namedSubcontrols      map[string][]*Subcontrol
 	namedInternalPolicies map[string][]*InternalPolicy
 	namedPrograms         map[string][]*Program
 	namedNarratives       map[string][]*Narrative
@@ -167,10 +169,19 @@ func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[6] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -179,7 +190,7 @@ func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -188,7 +199,7 @@ func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -197,7 +208,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -206,7 +217,7 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -226,8 +237,6 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case procedure.ForeignKeys[0]: // control_objective_procedures
-			values[i] = new(sql.NullString)
-		case procedure.ForeignKeys[1]: // subcontrol_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -373,13 +382,6 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				pr.control_objective_procedures = new(string)
 				*pr.control_objective_procedures = value.String
 			}
-		case procedure.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_procedures", values[i])
-			} else if value.Valid {
-				pr.subcontrol_procedures = new(string)
-				*pr.subcontrol_procedures = value.String
-			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -421,6 +423,11 @@ func (pr *Procedure) QueryDelegate() *GroupQuery {
 // QueryControls queries the "controls" edge of the Procedure entity.
 func (pr *Procedure) QueryControls() *ControlQuery {
 	return NewProcedureClient(pr.config).QueryControls(pr)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the Procedure entity.
+func (pr *Procedure) QuerySubcontrols() *SubcontrolQuery {
+	return NewProcedureClient(pr.config).QuerySubcontrols(pr)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Procedure entity.
@@ -600,6 +607,30 @@ func (pr *Procedure) appendNamedControls(name string, edges ...*Control) {
 		pr.Edges.namedControls[name] = []*Control{}
 	} else {
 		pr.Edges.namedControls[name] = append(pr.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Procedure) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if pr.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Procedure) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if pr.Edges.namedSubcontrols == nil {
+		pr.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		pr.Edges.namedSubcontrols[name] = append(pr.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

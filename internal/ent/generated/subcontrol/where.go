@@ -1782,11 +1782,11 @@ func HasProcedures() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProceduresTable, ProceduresPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.SubcontrolProcedures
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1797,7 +1797,7 @@ func HasProceduresWith(preds ...predicate.Procedure) predicate.Subcontrol {
 		step := newProceduresStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.SubcontrolProcedures
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1811,11 +1811,11 @@ func HasInternalPolicies() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1826,7 +1826,7 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Subcon
 		step := newInternalPoliciesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

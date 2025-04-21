@@ -61,10 +61,8 @@ type InternalPolicy struct {
 	DelegateID string `json:"delegate_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
-	Edges                        InternalPolicyEdges `json:"edges"`
-	control_internal_policies    *string
-	subcontrol_internal_policies *string
-	selectValues                 sql.SelectValues
+	Edges        InternalPolicyEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // InternalPolicyEdges holds the relations/edges for other nodes in the graph.
@@ -83,31 +81,34 @@ type InternalPolicyEdges struct {
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
-	// Programs holds the value of the programs edge.
-	Programs []*Program `json:"programs,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
 	namedControlObjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
+	namedSubcontrols       map[string][]*Subcontrol
 	namedProcedures        map[string][]*Procedure
 	namedNarratives        map[string][]*Narrative
 	namedTasks             map[string][]*Task
-	namedPrograms          map[string][]*Program
 	namedRisks             map[string][]*Risk
+	namedPrograms          map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -179,10 +180,19 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[7] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -191,7 +201,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -200,19 +210,10 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
-}
-
-// ProgramsOrErr returns the Programs value or an error if the edge
-// was not loaded in eager-loading.
-func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
-		return e.Programs, nil
-	}
-	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // RisksOrErr returns the Risks value or an error if the edge
@@ -222,6 +223,15 @@ func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
+}
+
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[12] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -237,10 +247,6 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
-		case internalpolicy.ForeignKeys[0]: // control_internal_policies
-			values[i] = new(sql.NullString)
-		case internalpolicy.ForeignKeys[1]: // subcontrol_internal_policies
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -378,20 +384,6 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.DelegateID = value.String
 			}
-		case internalpolicy.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_internal_policies", values[i])
-			} else if value.Valid {
-				ip.control_internal_policies = new(string)
-				*ip.control_internal_policies = value.String
-			}
-		case internalpolicy.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_internal_policies", values[i])
-			} else if value.Valid {
-				ip.subcontrol_internal_policies = new(string)
-				*ip.subcontrol_internal_policies = value.String
-			}
 		default:
 			ip.selectValues.Set(columns[i], values[i])
 		}
@@ -440,6 +432,11 @@ func (ip *InternalPolicy) QueryControls() *ControlQuery {
 	return NewInternalPolicyClient(ip.config).QueryControls(ip)
 }
 
+// QuerySubcontrols queries the "subcontrols" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QuerySubcontrols() *SubcontrolQuery {
+	return NewInternalPolicyClient(ip.config).QuerySubcontrols(ip)
+}
+
 // QueryProcedures queries the "procedures" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryProcedures() *ProcedureQuery {
 	return NewInternalPolicyClient(ip.config).QueryProcedures(ip)
@@ -455,14 +452,14 @@ func (ip *InternalPolicy) QueryTasks() *TaskQuery {
 	return NewInternalPolicyClient(ip.config).QueryTasks(ip)
 }
 
-// QueryPrograms queries the "programs" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryPrograms() *ProgramQuery {
-	return NewInternalPolicyClient(ip.config).QueryPrograms(ip)
-}
-
 // QueryRisks queries the "risks" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryRisks() *RiskQuery {
 	return NewInternalPolicyClient(ip.config).QueryRisks(ip)
+}
+
+// QueryPrograms queries the "programs" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryPrograms() *ProgramQuery {
+	return NewInternalPolicyClient(ip.config).QueryPrograms(ip)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -644,6 +641,30 @@ func (ip *InternalPolicy) appendNamedControls(name string, edges ...*Control) {
 	}
 }
 
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if ip.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if ip.Edges.namedSubcontrols == nil {
+		ip.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		ip.Edges.namedSubcontrols[name] = append(ip.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (ip *InternalPolicy) NamedProcedures(name string) ([]*Procedure, error) {
@@ -716,30 +737,6 @@ func (ip *InternalPolicy) appendNamedTasks(name string, edges ...*Task) {
 	}
 }
 
-// NamedPrograms returns the Programs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedPrograms(name string) ([]*Program, error) {
-	if ip.Edges.namedPrograms == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := ip.Edges.namedPrograms[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (ip *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
-	if ip.Edges.namedPrograms == nil {
-		ip.Edges.namedPrograms = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		ip.Edges.namedPrograms[name] = []*Program{}
-	} else {
-		ip.Edges.namedPrograms[name] = append(ip.Edges.namedPrograms[name], edges...)
-	}
-}
-
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (ip *InternalPolicy) NamedRisks(name string) ([]*Risk, error) {
@@ -761,6 +758,30 @@ func (ip *InternalPolicy) appendNamedRisks(name string, edges ...*Risk) {
 		ip.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		ip.Edges.namedRisks[name] = append(ip.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedPrograms(name string) ([]*Program, error) {
+	if ip.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
+	if ip.Edges.namedPrograms == nil {
+		ip.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		ip.Edges.namedPrograms[name] = append(ip.Edges.namedPrograms[name], edges...)
 	}
 }
 

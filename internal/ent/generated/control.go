@@ -83,9 +83,8 @@ type Control struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
-	Edges                    ControlEdges `json:"edges"`
-	internal_policy_controls *string
-	selectValues             sql.SelectValues
+	Edges        ControlEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -341,8 +340,6 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case control.ForeignKeys[0]: // internal_policy_controls
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -553,13 +550,6 @@ func (c *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
 			} else if value.Valid {
 				c.StandardID = value.String
-			}
-		case control.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field internal_policy_controls", values[i])
-			} else if value.Valid {
-				c.internal_policy_controls = new(string)
-				*c.internal_policy_controls = value.String
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])

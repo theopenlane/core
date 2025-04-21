@@ -1529,6 +1529,7 @@ type ComplexityRoot struct {
 		Revision          func(childComplexity int) int
 		Risks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status            func(childComplexity int) int
+		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags              func(childComplexity int) int
 		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt         func(childComplexity int) int
@@ -1894,25 +1895,27 @@ type ComplexityRoot struct {
 	}
 
 	Narrative struct {
-		BlockedGroups func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Details       func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		Editors       func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Programs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Satisfies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Viewers       func(childComplexity int) int
+		BlockedGroups    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DeletedAt        func(childComplexity int) int
+		DeletedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Editors          func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Satisfies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int) int
 	}
 
 	NarrativeBulkCreatePayload struct {
@@ -2487,6 +2490,7 @@ type ComplexityRoot struct {
 		Revision         func(childComplexity int) int
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status           func(childComplexity int) int
+		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags             func(childComplexity int) int
 		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
@@ -10841,6 +10845,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Status(childComplexity), true
 
+	case "InternalPolicy.subcontrols":
+		if e.complexity.InternalPolicy.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
 	case "InternalPolicy.tags":
 		if e.complexity.InternalPolicy.Tags == nil {
 			break
@@ -13778,6 +13794,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Narrative.ID(childComplexity), true
 
+	case "Narrative.internalPolicies":
+		if e.complexity.Narrative.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Narrative_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
 	case "Narrative.name":
 		if e.complexity.Narrative.Name == nil {
 			break
@@ -13798,6 +13826,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Narrative.OwnerID(childComplexity), true
+
+	case "Narrative.procedures":
+		if e.complexity.Narrative.Procedures == nil {
+			break
+		}
+
+		args, err := ec.field_Narrative_procedures_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Narrative.programs":
 		if e.complexity.Narrative.Programs == nil {
@@ -16776,6 +16816,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.Status(childComplexity), true
+
+	case "Procedure.subcontrols":
+		if e.complexity.Procedure.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Procedure.tags":
 		if e.complexity.Procedure.Tags == nil {
@@ -32726,11 +32778,12 @@ input CreateInternalPolicyInput {
   delegateID: ID
   controlObjectiveIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   procedureIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
-  programIDs: [ID!]
   riskIDs: [ID!]
+  programIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -32808,6 +32861,8 @@ input CreateNarrativeInput {
   viewerIDs: [ID!]
   satisfyIDs: [ID!]
   programIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
 }
 """
 CreateNoteInput is used for create Note object.
@@ -33063,6 +33118,7 @@ input CreateProcedureInput {
   approverID: ID
   delegateID: ID
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
   programIDs: [ID!]
   narrativeIDs: [ID!]
@@ -41874,6 +41930,37 @@ type InternalPolicy implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41967,37 +42054,6 @@ type InternalPolicy implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  programs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Programs returned from the connection.
-    """
-    orderBy: [ProgramOrder!]
-
-    """
-    Filtering options for Programs returned from the connection.
-    """
-    where: ProgramWhereInput
-  ): ProgramConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42029,6 +42085,37 @@ type InternalPolicy implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -42907,6 +42994,11 @@ input InternalPolicyWhereInput {
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
   """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
   procedures edge predicates
   """
   hasProcedures: Boolean
@@ -42922,15 +43014,15 @@ input InternalPolicyWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
   risks edge predicates
   """
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -43962,6 +44054,68 @@ type Narrative implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
 }
 """
 A connection to a list of items.
@@ -44576,6 +44730,16 @@ input NarrativeWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
 }
 """
 An object with an ID.
@@ -49821,6 +49985,37 @@ type Procedure implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -50848,6 +51043,11 @@ input ProcedureWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -62233,6 +62433,9 @@ input UpdateInternalPolicyInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedures: Boolean
@@ -62242,12 +62445,12 @@ input UpdateInternalPolicyInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -62342,6 +62545,12 @@ input UpdateNarrativeInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
 }
 """
 UpdateNoteInput is used for update Note object.
@@ -62686,6 +62895,9 @@ input UpdateProcedureInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean

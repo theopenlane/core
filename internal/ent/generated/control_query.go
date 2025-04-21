@@ -60,7 +60,6 @@ type ControlQuery struct {
 	withPrograms                    *ProgramQuery
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
-	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -303,11 +302,11 @@ func (cq *ControlQuery) QueryInternalPolicies() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, control.InternalPoliciesTable, control.InternalPoliciesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.InternalPoliciesTable, control.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyControls
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1099,7 +1098,6 @@ func (cq *ControlQuery) prepareQuery(ctx context.Context) error {
 func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Control, error) {
 	var (
 		nodes       = []*Control{}
-		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
 		loadedTypes = [19]bool{
 			cq.withEvidence != nil,
@@ -1123,9 +1121,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withSubcontrols != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, control.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Control).scanValues(nil, columns)
 	}
@@ -1830,33 +1825,64 @@ func (cq *ControlQuery) loadProcedures(ctx context.Context, query *ProcedureQuer
 	return nil
 }
 func (cq *ControlQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Control, init func(*Control), assign func(*Control, *InternalPolicy)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Control)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(control.InternalPoliciesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.InternalPoliciesTable)
+		joinT.Schema(cq.schemaConfig.InternalPolicyControls)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(control.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.control_internal_policies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "control_internal_policies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "control_internal_policies" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

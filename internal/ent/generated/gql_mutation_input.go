@@ -3803,11 +3803,12 @@ type CreateInternalPolicyInput struct {
 	DelegateID          *string
 	ControlObjectiveIDs []string
 	ControlIDs          []string
+	SubcontrolIDs       []string
 	ProcedureIDs        []string
 	NarrativeIDs        []string
 	TaskIDs             []string
-	ProgramIDs          []string
 	RiskIDs             []string
+	ProgramIDs          []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -3858,6 +3859,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
@@ -3867,11 +3871,11 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
+	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
 	}
 }
 
@@ -3919,6 +3923,9 @@ type UpdateInternalPolicyInput struct {
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
+	ClearSubcontrols          bool
+	AddSubcontrolIDs          []string
+	RemoveSubcontrolIDs       []string
 	ClearProcedures           bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
@@ -3928,12 +3935,12 @@ type UpdateInternalPolicyInput struct {
 	ClearTasks                bool
 	AddTaskIDs                []string
 	RemoveTaskIDs             []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
 	ClearRisks                bool
 	AddRiskIDs                []string
 	RemoveRiskIDs             []string
+	ClearPrograms             bool
+	AddProgramIDs             []string
+	RemoveProgramIDs          []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -4046,6 +4053,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
 	}
@@ -4073,15 +4089,6 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
 	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
-	}
 	if i.ClearRisks {
 		m.ClearRisks()
 	}
@@ -4090,6 +4097,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
 	}
 }
 
@@ -4317,16 +4333,18 @@ func (c *MappedControlUpdateOne) SetInput(i UpdateMappedControlInput) *MappedCon
 
 // CreateNarrativeInput represents a mutation input for creating narratives.
 type CreateNarrativeInput struct {
-	Tags            []string
-	Name            string
-	Description     *string
-	Details         *string
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	ViewerIDs       []string
-	SatisfyIDs      []string
-	ProgramIDs      []string
+	Tags              []string
+	Name              string
+	Description       *string
+	Details           *string
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	ViewerIDs         []string
+	SatisfyIDs        []string
+	ProgramIDs        []string
+	InternalPolicyIDs []string
+	ProcedureIDs      []string
 }
 
 // Mutate applies the CreateNarrativeInput on the NarrativeMutation builder.
@@ -4359,6 +4377,12 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateNarrativeInput on the NarrativeCreate builder.
@@ -4369,29 +4393,35 @@ func (c *NarrativeCreate) SetInput(i CreateNarrativeInput) *NarrativeCreate {
 
 // UpdateNarrativeInput represents a mutation input for updating narratives.
 type UpdateNarrativeInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	Name                  *string
-	ClearDescription      bool
-	Description           *string
-	ClearDetails          bool
-	Details               *string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearSatisfies        bool
-	AddSatisfyIDs         []string
-	RemoveSatisfyIDs      []string
-	ClearPrograms         bool
-	AddProgramIDs         []string
-	RemoveProgramIDs      []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	Name                    *string
+	ClearDescription        bool
+	Description             *string
+	ClearDetails            bool
+	Details                 *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
+	ClearSatisfies          bool
+	AddSatisfyIDs           []string
+	RemoveSatisfyIDs        []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
+	ClearInternalPolicies   bool
+	AddInternalPolicyIDs    []string
+	RemoveInternalPolicyIDs []string
+	ClearProcedures         bool
+	AddProcedureIDs         []string
+	RemoveProcedureIDs      []string
 }
 
 // Mutate applies the UpdateNarrativeInput on the NarrativeMutation builder.
@@ -4464,6 +4494,24 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
 	}
 }
 
@@ -5744,6 +5792,7 @@ type CreateProcedureInput struct {
 	ApproverID        *string
 	DelegateID        *string
 	ControlIDs        []string
+	SubcontrolIDs     []string
 	InternalPolicyIDs []string
 	ProgramIDs        []string
 	NarrativeIDs      []string
@@ -5795,6 +5844,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
 	}
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
@@ -5854,6 +5906,9 @@ type UpdateProcedureInput struct {
 	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
+	ClearSubcontrols        bool
+	AddSubcontrolIDs        []string
+	RemoveSubcontrolIDs     []string
 	ClearInternalPolicies   bool
 	AddInternalPolicyIDs    []string
 	RemoveInternalPolicyIDs []string
@@ -5971,6 +6026,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 	if i.ClearInternalPolicies {
 		m.ClearInternalPolicies()

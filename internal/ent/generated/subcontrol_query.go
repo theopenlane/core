@@ -266,11 +266,11 @@ func (sq *SubcontrolQuery) QueryProcedures() *ProcedureQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
 			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ProceduresTable, subcontrol.ProceduresColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ProceduresTable, subcontrol.ProceduresPrimaryKey...),
 		)
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.SubcontrolProcedures
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -291,11 +291,11 @@ func (sq *SubcontrolQuery) QueryInternalPolicies() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.InternalPoliciesTable, subcontrol.InternalPoliciesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.InternalPoliciesTable, subcontrol.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1434,64 +1434,126 @@ func (sq *SubcontrolQuery) loadActionPlans(ctx context.Context, query *ActionPla
 	return nil
 }
 func (sq *SubcontrolQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Procedure)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Subcontrol)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Procedure(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(subcontrol.ProceduresColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.ProceduresTable)
+		joinT.Schema(sq.schemaConfig.SubcontrolProcedures)
+		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(subcontrol.ProceduresPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.ProceduresPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.ProceduresPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Procedure](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.subcontrol_procedures
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "subcontrol_procedures" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_procedures" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "procedures" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (sq *SubcontrolQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *InternalPolicy)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Subcontrol)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(subcontrol.InternalPoliciesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.InternalPoliciesTable)
+		joinT.Schema(sq.schemaConfig.InternalPolicySubcontrols)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(subcontrol.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.subcontrol_internal_policies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "subcontrol_internal_policies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_internal_policies" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
