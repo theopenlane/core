@@ -53,6 +53,8 @@ type User struct {
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// the time the user was last seen
 	LastSeen *time.Time `json:"last_seen,omitempty"`
+	// the last auth provider used to login
+	LastLoginProvider enums.AuthProvider `json:"last_login_provider,omitempty"`
 	// user password hash
 	Password *string `json:"-"`
 	// the Subject of the user JWT
@@ -314,7 +316,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldTags:
 			values[i] = new([]byte)
-		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldDisplayID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
+		case user.FieldID, user.FieldCreatedBy, user.FieldUpdatedBy, user.FieldDeletedBy, user.FieldDisplayID, user.FieldEmail, user.FieldFirstName, user.FieldLastName, user.FieldDisplayName, user.FieldAvatarRemoteURL, user.FieldAvatarLocalFileID, user.FieldLastLoginProvider, user.FieldPassword, user.FieldSub, user.FieldAuthProvider, user.FieldRole:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldDeletedAt, user.FieldAvatarUpdatedAt, user.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -440,6 +442,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.LastSeen = new(time.Time)
 				*u.LastSeen = value.Time
+			}
+		case user.FieldLastLoginProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field last_login_provider", values[i])
+			} else if value.Valid {
+				u.LastLoginProvider = enums.AuthProvider(value.String)
 			}
 		case user.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -652,6 +660,9 @@ func (u *User) String() string {
 		builder.WriteString("last_seen=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("last_login_provider=")
+	builder.WriteString(fmt.Sprintf("%v", u.LastLoginProvider))
 	builder.WriteString(", ")
 	builder.WriteString("password=<sensitive>")
 	builder.WriteString(", ")

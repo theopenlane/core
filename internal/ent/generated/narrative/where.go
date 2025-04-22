@@ -1036,6 +1036,64 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Narrative {
 	})
 }
 
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := newInternalPoliciesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProcedures applies the HasEdge predicate on the "procedures" edge.
+func HasProcedures() predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureNarratives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProceduresWith applies the HasEdge predicate on the "procedures" edge with a given conditions (other predicates).
+func HasProceduresWith(preds ...predicate.Procedure) predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := newProceduresStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureNarratives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Narrative) predicate.Narrative {
 	return predicate.Narrative(sql.AndPredicates(predicates...))

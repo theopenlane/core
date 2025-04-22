@@ -140,20 +140,16 @@ const (
 	ActionPlansInverseTable = "action_plans"
 	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
 	ActionPlansColumn = "subcontrol_action_plans"
-	// ProceduresTable is the table that holds the procedures relation/edge.
-	ProceduresTable = "procedures"
+	// ProceduresTable is the table that holds the procedures relation/edge. The primary key declared below.
+	ProceduresTable = "subcontrol_procedures"
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
-	// ProceduresColumn is the table column denoting the procedures relation/edge.
-	ProceduresColumn = "subcontrol_procedures"
-	// InternalPoliciesTable is the table that holds the internal_policies relation/edge.
-	InternalPoliciesTable = "internal_policies"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_subcontrols"
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// InternalPoliciesColumn is the table column denoting the internal_policies relation/edge.
-	InternalPoliciesColumn = "subcontrol_internal_policies"
 	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
 	MappedControlsTable = "mapped_control_subcontrols"
 	// MappedControlsInverseTable is the table name for the MappedControl entity.
@@ -248,6 +244,12 @@ var (
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"subcontrol_id", "risk_id"}
+	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
+	// primary key for the procedures relation (M2M).
+	ProceduresPrimaryKey = []string{"subcontrol_id", "procedure_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "subcontrol_id"}
 	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
 	// primary key for the mapped_controls relation (M2M).
 	MappedControlsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
@@ -662,14 +664,14 @@ func newProceduresStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProceduresInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProceduresTable, ProceduresPrimaryKey...),
 	)
 }
 func newInternalPoliciesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
 func newMappedControlsStep() *sqlgraph.Step {

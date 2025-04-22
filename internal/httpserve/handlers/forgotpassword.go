@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -35,7 +34,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	entUser, err := h.getUserByEmail(reqCtx, in.Email, enums.AuthProviderCredentials)
+	entUser, err := h.getUserByEmail(reqCtx, in.Email)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// return a 200 response even if user is not found to avoid

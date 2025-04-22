@@ -8306,6 +8306,10 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableLastSeen(&lastSeen)
 	}
 
+	if lastLoginProvider, exists := m.LastLoginProvider(); exists {
+		create = create.SetLastLoginProvider(lastLoginProvider)
+	}
+
 	if password, exists := m.Password(); exists {
 		create = create.SetNillablePassword(&password)
 	}
@@ -8448,6 +8452,12 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableLastSeen(user.LastSeen)
 		}
 
+		if lastLoginProvider, exists := m.LastLoginProvider(); exists {
+			create = create.SetLastLoginProvider(lastLoginProvider)
+		} else {
+			create = create.SetLastLoginProvider(user.LastLoginProvider)
+		}
+
 		if password, exists := m.Password(); exists {
 			create = create.SetNillablePassword(&password)
 		} else {
@@ -8520,6 +8530,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableAvatarLocalFileID(user.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(user.AvatarUpdatedAt).
 			SetNillableLastSeen(user.LastSeen).
+			SetLastLoginProvider(user.LastLoginProvider).
 			SetNillablePassword(user.Password).
 			SetSub(user.Sub).
 			SetAuthProvider(user.AuthProvider).

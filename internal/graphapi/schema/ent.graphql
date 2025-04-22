@@ -6597,11 +6597,12 @@ input CreateInternalPolicyInput {
   delegateID: ID
   controlObjectiveIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   procedureIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
-  programIDs: [ID!]
   riskIDs: [ID!]
+  programIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -6679,6 +6680,8 @@ input CreateNarrativeInput {
   viewerIDs: [ID!]
   satisfyIDs: [ID!]
   programIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
 }
 """
 CreateNoteInput is used for create Note object.
@@ -6934,6 +6937,7 @@ input CreateProcedureInput {
   approverID: ID
   delegateID: ID
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
   programIDs: [ID!]
   narrativeIDs: [ID!]
@@ -7369,6 +7373,10 @@ input CreateUserInput {
   the time the user was last seen
   """
   lastSeen: Time
+  """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
   """
   user password hash
   """
@@ -15745,6 +15753,37 @@ type InternalPolicy implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -15838,37 +15877,6 @@ type InternalPolicy implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  programs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Programs returned from the connection.
-    """
-    orderBy: [ProgramOrder!]
-
-    """
-    Filtering options for Programs returned from the connection.
-    """
-    where: ProgramWhereInput
-  ): ProgramConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -15900,6 +15908,37 @@ type InternalPolicy implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
 }
 """
 A connection to a list of items.
@@ -16778,6 +16817,11 @@ input InternalPolicyWhereInput {
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
   """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
   procedures edge predicates
   """
   hasProcedures: Boolean
@@ -16793,15 +16837,15 @@ input InternalPolicyWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
   risks edge predicates
   """
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -17833,6 +17877,68 @@ type Narrative implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
 }
 """
 A connection to a list of items.
@@ -18447,6 +18553,16 @@ input NarrativeWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
 }
 """
 An object with an ID.
@@ -23692,6 +23808,37 @@ type Procedure implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -24719,6 +24866,11 @@ input ProcedureWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -36104,6 +36256,9 @@ input UpdateInternalPolicyInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedures: Boolean
@@ -36113,12 +36268,12 @@ input UpdateInternalPolicyInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -36213,6 +36368,12 @@ input UpdateNarrativeInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
 }
 """
 UpdateNoteInput is used for update Note object.
@@ -36557,6 +36718,9 @@ input UpdateProcedureInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
@@ -37187,6 +37351,11 @@ input UpdateUserInput {
   lastSeen: Time
   clearLastSeen: Boolean
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
+  clearLastLoginProvider: Boolean
+  """
   user password hash
   """
   password: String
@@ -37341,6 +37510,10 @@ type User implements Node {
   the time the user was last seen
   """
   lastSeen: Time
+  """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
   """
   the Subject of the user JWT
   """
@@ -37731,7 +37904,7 @@ type User implements Node {
   programMemberships: [ProgramMembership!]
 }
 """
-UserAuthProvider is enum for the field auth_provider
+UserAuthProvider is enum for the field last_login_provider
 """
 enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -37812,6 +37985,10 @@ type UserHistory implements Node {
   """
   lastSeen: Time
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  """
   the Subject of the user JWT
   """
   sub: String
@@ -37825,7 +38002,7 @@ type UserHistory implements Node {
   role: UserHistoryRole
 }
 """
-UserHistoryAuthProvider is enum for the field auth_provider
+UserHistoryAuthProvider is enum for the field last_login_provider
 """
 enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -38198,6 +38375,15 @@ input UserHistoryWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  lastLoginProviderNEQ: UserHistoryAuthProvider
+  lastLoginProviderIn: [UserHistoryAuthProvider!]
+  lastLoginProviderNotIn: [UserHistoryAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """
@@ -39206,6 +39392,15 @@ input UserWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserAuthProvider
+  lastLoginProviderNEQ: UserAuthProvider
+  lastLoginProviderIn: [UserAuthProvider!]
+  lastLoginProviderNotIn: [UserAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """

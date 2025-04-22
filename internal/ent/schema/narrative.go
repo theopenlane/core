@@ -68,6 +68,8 @@ func (n Narrative) Edges() []ent.Edge {
 			comment:    "which controls are satisfied by the narrative",
 		}),
 		defaultEdgeFromWithPagination(n, Program{}),
+		defaultEdgeFromWithPagination(n, InternalPolicy{}),
+		defaultEdgeFromWithPagination(n, Procedure{}),
 	}
 }
 

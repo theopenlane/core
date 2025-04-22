@@ -120,6 +120,10 @@ func (User) Fields() []ent.Field {
 			UpdateDefault(time.Now).
 			Optional().
 			Nillable(),
+		field.Enum("last_login_provider").
+			Comment("the last auth provider used to login").
+			Optional().
+			GoType(enums.AuthProvider("")),
 		field.String("password").
 			Comment("user password hash").
 			Nillable().

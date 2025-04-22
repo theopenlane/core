@@ -119,16 +119,18 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
 			case "narratives":
 				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
 			case "tasks":
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -229,16 +231,18 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
 			case "narratives":
 				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
 			case "tasks":
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -383,16 +387,18 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
 			case "procedures":
 				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
 			case "narratives":
 				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
 			case "tasks":
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},

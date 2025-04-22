@@ -994,16 +994,16 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	}
 	if nodes := cc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   control.InternalPoliciesTable,
-			Columns: []string{control.InternalPoliciesColumn},
+			Columns: control.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.InternalPolicy
+		edge.Schema = cc.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

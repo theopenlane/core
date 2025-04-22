@@ -31055,6 +31055,10 @@ type InternalPolicyWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
+	// "subcontrols" edge predicates.
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+
 	// "procedures" edge predicates.
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
@@ -31067,13 +31071,13 @@ type InternalPolicyWhereInput struct {
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 
-	// "programs" edge predicates.
-	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
-	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-
 	// "risks" edge predicates.
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+
+	// "programs" edge predicates.
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -31955,6 +31959,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		}
 		predicates = append(predicates, internalpolicy.HasControlsWith(with...))
 	}
+	if i.HasSubcontrols != nil {
+		p := internalpolicy.HasSubcontrols()
+		if !*i.HasSubcontrols {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		for _, w := range i.HasSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasSubcontrolsWith(with...))
+	}
 	if i.HasProcedures != nil {
 		p := internalpolicy.HasProcedures()
 		if !*i.HasProcedures {
@@ -32009,24 +32031,6 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		}
 		predicates = append(predicates, internalpolicy.HasTasksWith(with...))
 	}
-	if i.HasPrograms != nil {
-		p := internalpolicy.HasPrograms()
-		if !*i.HasPrograms {
-			p = internalpolicy.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProgramsWith) > 0 {
-		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
-		for _, w := range i.HasProgramsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, internalpolicy.HasProgramsWith(with...))
-	}
 	if i.HasRisks != nil {
 		p := internalpolicy.HasRisks()
 		if !*i.HasRisks {
@@ -32044,6 +32048,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasRisksWith(with...))
+	}
+	if i.HasPrograms != nil {
+		p := internalpolicy.HasPrograms()
+		if !*i.HasPrograms {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		for _, w := range i.HasProgramsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasProgramsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -35487,6 +35509,14 @@ type NarrativeWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+
+	// "procedures" edge predicates.
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36136,6 +36166,42 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, narrative.HasProgramsWith(with...))
+	}
+	if i.HasInternalPolicies != nil {
+		p := narrative.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
+			p = narrative.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		for _, w := range i.HasInternalPoliciesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, narrative.HasInternalPoliciesWith(with...))
+	}
+	if i.HasProcedures != nil {
+		p := narrative.HasProcedures()
+		if !*i.HasProcedures {
+			p = narrative.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProceduresWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		for _, w := range i.HasProceduresWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProceduresWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, narrative.HasProceduresWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -47675,6 +47741,10 @@ type ProcedureWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
+	// "subcontrols" edge predicates.
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+
 	// "internal_policies" edge predicates.
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
@@ -48556,6 +48626,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasControlsWith(with...))
+	}
+	if i.HasSubcontrols != nil {
+		p := procedure.HasSubcontrols()
+		if !*i.HasSubcontrols {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		for _, w := range i.HasSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasSubcontrolsWith(with...))
 	}
 	if i.HasInternalPolicies != nil {
 		p := procedure.HasInternalPolicies()
@@ -66772,6 +66860,14 @@ type UserWhereInput struct {
 	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
 
+	// "last_login_provider" field predicates.
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNEQ    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  bool                 `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil bool                 `json:"lastLoginProviderNotNil,omitempty"`
+
 	// "password" field predicates.
 	Password             *string  `json:"password,omitempty"`
 	PasswordNEQ          *string  `json:"passwordNEQ,omitempty"`
@@ -67568,6 +67664,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.LastSeenNotNil {
 		predicates = append(predicates, user.LastSeenNotNil())
 	}
+	if i.LastLoginProvider != nil {
+		predicates = append(predicates, user.LastLoginProviderEQ(*i.LastLoginProvider))
+	}
+	if i.LastLoginProviderNEQ != nil {
+		predicates = append(predicates, user.LastLoginProviderNEQ(*i.LastLoginProviderNEQ))
+	}
+	if len(i.LastLoginProviderIn) > 0 {
+		predicates = append(predicates, user.LastLoginProviderIn(i.LastLoginProviderIn...))
+	}
+	if len(i.LastLoginProviderNotIn) > 0 {
+		predicates = append(predicates, user.LastLoginProviderNotIn(i.LastLoginProviderNotIn...))
+	}
+	if i.LastLoginProviderIsNil {
+		predicates = append(predicates, user.LastLoginProviderIsNil())
+	}
+	if i.LastLoginProviderNotNil {
+		predicates = append(predicates, user.LastLoginProviderNotNil())
+	}
 	if i.Password != nil {
 		predicates = append(predicates, user.PasswordEQ(*i.Password))
 	}
@@ -68262,6 +68376,14 @@ type UserHistoryWhereInput struct {
 	LastSeenLTE    *time.Time  `json:"lastSeenLTE,omitempty"`
 	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
+
+	// "last_login_provider" field predicates.
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNEQ    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  bool                 `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil bool                 `json:"lastLoginProviderNotNil,omitempty"`
 
 	// "password" field predicates.
 	Password             *string  `json:"password,omitempty"`
@@ -69075,6 +69197,24 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	}
 	if i.LastSeenNotNil {
 		predicates = append(predicates, userhistory.LastSeenNotNil())
+	}
+	if i.LastLoginProvider != nil {
+		predicates = append(predicates, userhistory.LastLoginProviderEQ(*i.LastLoginProvider))
+	}
+	if i.LastLoginProviderNEQ != nil {
+		predicates = append(predicates, userhistory.LastLoginProviderNEQ(*i.LastLoginProviderNEQ))
+	}
+	if len(i.LastLoginProviderIn) > 0 {
+		predicates = append(predicates, userhistory.LastLoginProviderIn(i.LastLoginProviderIn...))
+	}
+	if len(i.LastLoginProviderNotIn) > 0 {
+		predicates = append(predicates, userhistory.LastLoginProviderNotIn(i.LastLoginProviderNotIn...))
+	}
+	if i.LastLoginProviderIsNil {
+		predicates = append(predicates, userhistory.LastLoginProviderIsNil())
+	}
+	if i.LastLoginProviderNotNil {
+		predicates = append(predicates, userhistory.LastLoginProviderNotNil())
 	}
 	if i.Password != nil {
 		predicates = append(predicates, userhistory.PasswordEQ(*i.Password))

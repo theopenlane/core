@@ -58,6 +58,8 @@ type UserHistory struct {
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// the time the user was last seen
 	LastSeen *time.Time `json:"last_seen,omitempty"`
+	// the last auth provider used to login
+	LastLoginProvider enums.AuthProvider `json:"last_login_provider,omitempty"`
 	// user password hash
 	Password *string `json:"-"`
 	// the Subject of the user JWT
@@ -78,7 +80,7 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldDisplayID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldDisplayID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFileID, userhistory.FieldLastLoginProvider, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt, userhistory.FieldDeletedAt, userhistory.FieldAvatarUpdatedAt, userhistory.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -223,6 +225,12 @@ func (uh *UserHistory) assignValues(columns []string, values []any) error {
 				uh.LastSeen = new(time.Time)
 				*uh.LastSeen = value.Time
 			}
+		case userhistory.FieldLastLoginProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field last_login_provider", values[i])
+			} else if value.Valid {
+				uh.LastLoginProvider = enums.AuthProvider(value.String)
+			}
 		case userhistory.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
@@ -348,6 +356,9 @@ func (uh *UserHistory) String() string {
 		builder.WriteString("last_seen=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("last_login_provider=")
+	builder.WriteString(fmt.Sprintf("%v", uh.LastLoginProvider))
 	builder.WriteString(", ")
 	builder.WriteString("password=<sensitive>")
 	builder.WriteString(", ")

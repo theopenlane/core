@@ -1437,6 +1437,35 @@ func HasControlsWith(preds ...predicate.Control) predicate.Procedure {
 	})
 }
 
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolProcedures
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolProcedures
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
 func HasInternalPolicies() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
@@ -1500,11 +1529,11 @@ func HasNarratives() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, NarrativesTable, NarrativesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1515,7 +1544,7 @@ func HasNarrativesWith(preds ...predicate.Narrative) predicate.Procedure {
 		step := newNarrativesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

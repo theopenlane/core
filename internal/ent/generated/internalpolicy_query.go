@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -42,23 +43,24 @@ type InternalPolicyQuery struct {
 	withDelegate               *GroupQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
+	withSubcontrols            *SubcontrolQuery
 	withProcedures             *ProcedureQuery
 	withNarratives             *NarrativeQuery
 	withTasks                  *TaskQuery
-	withPrograms               *ProgramQuery
 	withRisks                  *RiskQuery
-	withFKs                    bool
+	withPrograms               *ProgramQuery
 	loadTotal                  []func(context.Context, []*InternalPolicy) error
 	modifiers                  []func(*sql.Selector)
 	withNamedBlockedGroups     map[string]*GroupQuery
 	withNamedEditors           map[string]*GroupQuery
 	withNamedControlObjectives map[string]*ControlObjectiveQuery
 	withNamedControls          map[string]*ControlQuery
+	withNamedSubcontrols       map[string]*SubcontrolQuery
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedTasks             map[string]*TaskQuery
-	withNamedPrograms          map[string]*ProgramQuery
 	withNamedRisks             map[string]*RiskQuery
+	withNamedPrograms          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,11 +261,36 @@ func (ipq *InternalPolicyQuery) QueryControls() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.ControlsTable, internalpolicy.ControlsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.ControlsTable, internalpolicy.ControlsPrimaryKey...),
 		)
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.InternalPolicyControls
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (ipq *InternalPolicyQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.SubcontrolsTable, internalpolicy.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -309,11 +336,11 @@ func (ipq *InternalPolicyQuery) QueryNarratives() *NarrativeQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
 			sqlgraph.To(narrative.Table, narrative.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.NarrativesTable, internalpolicy.NarrativesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.NarrativesTable, internalpolicy.NarrativesPrimaryKey...),
 		)
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -345,31 +372,6 @@ func (ipq *InternalPolicyQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
-// QueryPrograms chains the current query on the "programs" edge.
-func (ipq *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: ipq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ipq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := ipq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ProgramsTable, internalpolicy.ProgramsPrimaryKey...),
-		)
-		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
-		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryRisks chains the current query on the "risks" edge.
 func (ipq *InternalPolicyQuery) QueryRisks() *RiskQuery {
 	query := (&RiskClient{config: ipq.config}).Query()
@@ -389,6 +391,31 @@ func (ipq *InternalPolicyQuery) QueryRisks() *RiskQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.InternalPolicyRisks
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPrograms chains the current query on the "programs" edge.
+func (ipq *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ProgramsTable, internalpolicy.ProgramsPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -594,11 +621,12 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withDelegate:          ipq.withDelegate.Clone(),
 		withControlObjectives: ipq.withControlObjectives.Clone(),
 		withControls:          ipq.withControls.Clone(),
+		withSubcontrols:       ipq.withSubcontrols.Clone(),
 		withProcedures:        ipq.withProcedures.Clone(),
 		withNarratives:        ipq.withNarratives.Clone(),
 		withTasks:             ipq.withTasks.Clone(),
-		withPrograms:          ipq.withPrograms.Clone(),
 		withRisks:             ipq.withRisks.Clone(),
+		withPrograms:          ipq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       ipq.sql.Clone(),
 		path:      ipq.path,
@@ -683,6 +711,17 @@ func (ipq *InternalPolicyQuery) WithControls(opts ...func(*ControlQuery)) *Inter
 	return ipq
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *InternalPolicyQuery {
+	query := (&SubcontrolClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withSubcontrols = query
+	return ipq
+}
+
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
 func (ipq *InternalPolicyQuery) WithProcedures(opts ...func(*ProcedureQuery)) *InternalPolicyQuery {
@@ -716,17 +755,6 @@ func (ipq *InternalPolicyQuery) WithTasks(opts ...func(*TaskQuery)) *InternalPol
 	return ipq
 }
 
-// WithPrograms tells the query-builder to eager-load the nodes that are connected to
-// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *InternalPolicyQuery {
-	query := (&ProgramClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	ipq.withPrograms = query
-	return ipq
-}
-
 // WithRisks tells the query-builder to eager-load the nodes that are connected to
 // the "risks" edge. The optional arguments are used to configure the query builder of the edge.
 func (ipq *InternalPolicyQuery) WithRisks(opts ...func(*RiskQuery)) *InternalPolicyQuery {
@@ -735,6 +763,17 @@ func (ipq *InternalPolicyQuery) WithRisks(opts ...func(*RiskQuery)) *InternalPol
 		opt(query)
 	}
 	ipq.withRisks = query
+	return ipq
+}
+
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *InternalPolicyQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withPrograms = query
 	return ipq
 }
 
@@ -821,9 +860,8 @@ func (ipq *InternalPolicyQuery) prepareQuery(ctx context.Context) error {
 func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*InternalPolicy, error) {
 	var (
 		nodes       = []*InternalPolicy{}
-		withFKs     = ipq.withFKs
 		_spec       = ipq.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [13]bool{
 			ipq.withOwner != nil,
 			ipq.withBlockedGroups != nil,
 			ipq.withEditors != nil,
@@ -831,16 +869,14 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			ipq.withDelegate != nil,
 			ipq.withControlObjectives != nil,
 			ipq.withControls != nil,
+			ipq.withSubcontrols != nil,
 			ipq.withProcedures != nil,
 			ipq.withNarratives != nil,
 			ipq.withTasks != nil,
-			ipq.withPrograms != nil,
 			ipq.withRisks != nil,
+			ipq.withPrograms != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicy.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*InternalPolicy).scanValues(nil, columns)
 	}
@@ -912,6 +948,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	if query := ipq.withSubcontrols; query != nil {
+		if err := ipq.loadSubcontrols(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *InternalPolicy, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := ipq.withProcedures; query != nil {
 		if err := ipq.loadProcedures(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Procedures = []*Procedure{} },
@@ -933,17 +976,17 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
-	if query := ipq.withPrograms; query != nil {
-		if err := ipq.loadPrograms(ctx, query, nodes,
-			func(n *InternalPolicy) { n.Edges.Programs = []*Program{} },
-			func(n *InternalPolicy, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := ipq.withRisks; query != nil {
 		if err := ipq.loadRisks(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Risks = []*Risk{} },
 			func(n *InternalPolicy, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withPrograms; query != nil {
+		if err := ipq.loadPrograms(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Programs = []*Program{} },
+			func(n *InternalPolicy, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -975,6 +1018,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	for name, query := range ipq.withNamedSubcontrols {
+		if err := ipq.loadSubcontrols(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedSubcontrols(name) },
+			func(n *InternalPolicy, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ipq.withNamedProcedures {
 		if err := ipq.loadProcedures(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedProcedures(name) },
@@ -996,17 +1046,17 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
-	for name, query := range ipq.withNamedPrograms {
-		if err := ipq.loadPrograms(ctx, query, nodes,
-			func(n *InternalPolicy) { n.appendNamedPrograms(name) },
-			func(n *InternalPolicy, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range ipq.withNamedRisks {
 		if err := ipq.loadRisks(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedRisks(name) },
 			func(n *InternalPolicy, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ipq.withNamedPrograms {
+		if err := ipq.loadPrograms(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedPrograms(name) },
+			func(n *InternalPolicy, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1292,33 +1342,126 @@ func (ipq *InternalPolicyQuery) loadControlObjectives(ctx context.Context, query
 	return nil
 }
 func (ipq *InternalPolicyQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Control)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*InternalPolicy)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Control(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(internalpolicy.ControlsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.ControlsTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyControls)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(internalpolicy.ControlsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.ControlsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.ControlsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.internal_policy_controls
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "internal_policy_controls" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_controls" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.SubcontrolsTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicySubcontrols)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(internalpolicy.SubcontrolsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.SubcontrolsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.SubcontrolsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -1385,33 +1528,64 @@ func (ipq *InternalPolicyQuery) loadProcedures(ctx context.Context, query *Proce
 	return nil
 }
 func (ipq *InternalPolicyQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Narrative)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*InternalPolicy)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Narrative(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(internalpolicy.NarrativesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.NarrativesTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyNarratives)
+		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(internalpolicy.NarrativesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.NarrativesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.NarrativesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Narrative](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.internal_policy_narratives
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "internal_policy_narratives" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_narratives" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "narratives" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -1477,68 +1651,6 @@ func (ipq *InternalPolicyQuery) loadTasks(ctx context.Context, query *TaskQuery,
 	}
 	return nil
 }
-func (ipq *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*InternalPolicy)
-	nids := make(map[string]map[*InternalPolicy]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(internalpolicy.ProgramsTable)
-		joinT.Schema(ipq.schemaConfig.ProgramInternalPolicies)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(internalpolicy.ProgramsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(internalpolicy.ProgramsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(internalpolicy.ProgramsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (ipq *InternalPolicyQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*InternalPolicy)
@@ -1594,6 +1706,68 @@ func (ipq *InternalPolicyQuery) loadRisks(ctx context.Context, query *RiskQuery,
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.ProgramsTable)
+		joinT.Schema(ipq.schemaConfig.ProgramInternalPolicies)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(internalpolicy.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1765,6 +1939,20 @@ func (ipq *InternalPolicyQuery) WithNamedControls(name string, opts ...func(*Con
 	return ipq
 }
 
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *InternalPolicyQuery {
+	query := (&SubcontrolClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedSubcontrols == nil {
+		ipq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	ipq.withNamedSubcontrols[name] = query
+	return ipq
+}
+
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (ipq *InternalPolicyQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *InternalPolicyQuery {
@@ -1807,20 +1995,6 @@ func (ipq *InternalPolicyQuery) WithNamedTasks(name string, opts ...func(*TaskQu
 	return ipq
 }
 
-// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *InternalPolicyQuery {
-	query := (&ProgramClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if ipq.withNamedPrograms == nil {
-		ipq.withNamedPrograms = make(map[string]*ProgramQuery)
-	}
-	ipq.withNamedPrograms[name] = query
-	return ipq
-}
-
 // WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (ipq *InternalPolicyQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *InternalPolicyQuery {
@@ -1832,6 +2006,20 @@ func (ipq *InternalPolicyQuery) WithNamedRisks(name string, opts ...func(*RiskQu
 		ipq.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	ipq.withNamedRisks[name] = query
+	return ipq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *InternalPolicyQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedPrograms == nil {
+		ipq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	ipq.withNamedPrograms[name] = query
 	return ipq
 }
 

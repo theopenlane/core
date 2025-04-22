@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -343,6 +344,21 @@ func (pc *ProcedureCreate) AddControls(c ...*Control) *ProcedureCreate {
 		ids[i] = c[i].ID
 	}
 	return pc.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (pc *ProcedureCreate) AddSubcontrolIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddSubcontrolIDs(ids...)
+	return pc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (pc *ProcedureCreate) AddSubcontrols(s ...*Subcontrol) *ProcedureCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return pc.AddSubcontrolIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
@@ -748,6 +764,23 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := pc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.SubcontrolsTable,
+			Columns: procedure.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.SubcontrolProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -784,16 +817,16 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	}
 	if nodes := pc.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   procedure.NarrativesTable,
-			Columns: []string{procedure.NarrativesColumn},
+			Columns: procedure.NarrativesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.Narrative
+		edge.Schema = pc.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -43,6 +43,13 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	// set user to verified
+	if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
+		log.Error().Err(err).Msg("unable to set email as verified")
+
+		return h.InternalServerError(ctx, err)
+	}
+
 	// create claims for verified user
 	auth, err := h.AuthManager.GenerateOauthAuthSession(ctx.Request().Context(), ctx.Response().Writer, user, in)
 	if err != nil {

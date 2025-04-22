@@ -1276,6 +1276,46 @@ func LastSeenNotNil() predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNotNull(FieldLastSeen))
 }
 
+// LastLoginProviderEQ applies the EQ predicate on the "last_login_provider" field.
+func LastLoginProviderEQ(v enums.AuthProvider) predicate.UserHistory {
+	vc := v
+	return predicate.UserHistory(sql.FieldEQ(FieldLastLoginProvider, vc))
+}
+
+// LastLoginProviderNEQ applies the NEQ predicate on the "last_login_provider" field.
+func LastLoginProviderNEQ(v enums.AuthProvider) predicate.UserHistory {
+	vc := v
+	return predicate.UserHistory(sql.FieldNEQ(FieldLastLoginProvider, vc))
+}
+
+// LastLoginProviderIn applies the In predicate on the "last_login_provider" field.
+func LastLoginProviderIn(vs ...enums.AuthProvider) predicate.UserHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.UserHistory(sql.FieldIn(FieldLastLoginProvider, v...))
+}
+
+// LastLoginProviderNotIn applies the NotIn predicate on the "last_login_provider" field.
+func LastLoginProviderNotIn(vs ...enums.AuthProvider) predicate.UserHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.UserHistory(sql.FieldNotIn(FieldLastLoginProvider, v...))
+}
+
+// LastLoginProviderIsNil applies the IsNil predicate on the "last_login_provider" field.
+func LastLoginProviderIsNil() predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldIsNull(FieldLastLoginProvider))
+}
+
+// LastLoginProviderNotNil applies the NotNil predicate on the "last_login_provider" field.
+func LastLoginProviderNotNil() predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldNotNull(FieldLastLoginProvider))
+}
+
 // PasswordEQ applies the EQ predicate on the "password" field.
 func PasswordEQ(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldPassword, v))

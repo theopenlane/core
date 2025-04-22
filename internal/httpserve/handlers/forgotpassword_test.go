@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -43,6 +45,8 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 		SetEmail("asandler@theopenlane.io").
 		SetPassword(validPassword).
 		SetSetting(userSetting).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SaveX(ctx)
 
 	var mitb = "mitb@theopenlane.io"

@@ -95,9 +95,13 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	// make sure its not the same password as current
-	valid, err := passwd.VerifyDerivedKey(*entUser.Password, in.Password)
-	if err != nil || valid {
-		return h.BadRequest(ctx, ErrNonUniquePassword)
+	// a user that previously authenticated with oauth and resets their password
+	// won't have a password originally so this will be nil
+	if entUser.Password != nil {
+		valid, err := passwd.VerifyDerivedKey(*entUser.Password, in.Password)
+		if err != nil || valid {
+			return h.BadRequest(ctx, ErrNonUniquePassword)
+		}
 	}
 
 	// set context for remaining request based on logged in user

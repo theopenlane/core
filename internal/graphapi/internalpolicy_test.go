@@ -153,6 +153,11 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// edges to add
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateInternalPolicyInput
@@ -184,10 +189,52 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, with control edges",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:          "Releasing a new version",
+				Status:        &enums.DocumentDraft,
+				PolicyType:    lo.ToPtr("sop"),
+				Revision:      lo.ToPtr("v1.1.0"),
+				Details:       lo.ToPtr("do stuff"),
+				ControlIDs:    []string{control.ID},
+				SubcontrolIDs: []string{subcontrol.ID},
+				TaskIDs:       []string{task.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "happy path, add editor group",
 			request: openlaneclient.CreateInternalPolicyInput{
 				Name:      "Test Policy",
 				EditorIDs: []string{testUser1.GroupID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, add same task to another policy",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:    "Test Policy",
+				TaskIDs: []string{task.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, add same control to another policy",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:       "Test Policy",
+				ControlIDs: []string{control.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, add same sub control to another policy",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:          "Test Policy",
+				SubcontrolIDs: []string{subcontrol.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -341,6 +388,11 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
 
+	// edges to add
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateInternalPolicyInput
@@ -360,9 +412,12 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateInternalPolicyInput{
-				Status:       &enums.DocumentPublished,
-				Details:      lo.ToPtr("Updated details"),
-				RevisionBump: &models.Major,
+				Status:           &enums.DocumentPublished,
+				Details:          lo.ToPtr("Updated details"),
+				RevisionBump:     &models.Major,
+				AddControlIDs:    []string{control.ID},
+				AddSubcontrolIDs: []string{subcontrol.ID},
+				AddTaskIDs:       []string{task.ID},
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

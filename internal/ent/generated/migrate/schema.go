@@ -268,7 +268,6 @@ var (
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
-		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -291,20 +290,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_internal_policies_controls",
-				Columns:    []*schema.Column{ControlsColumns[28]},
-				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "controls_organizations_controls",
-				Columns:    []*schema.Column{ControlsColumns[29]},
+				Columns:    []*schema.Column{ControlsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[30]},
+				Columns:    []*schema.Column{ControlsColumns[29]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -318,12 +311,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[29]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[28]},
 			},
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[25]},
+				Columns: []*schema.Column{ControlsColumns[29], ControlsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -1507,11 +1500,9 @@ var (
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
-		{Name: "control_internal_policies", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_internal_policies", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
 	InternalPoliciesTable = &schema.Table{
@@ -1520,33 +1511,21 @@ var (
 		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "internal_policies_controls_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
-				RefColumns: []*schema.Column{ControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "internal_policies_groups_approver",
-				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_groups_delegate",
-				Columns:    []*schema.Column{InternalPoliciesColumns[19]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[20]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "internal_policies_subcontrols_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[21]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1559,7 +1538,7 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[20]},
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[19]},
 			},
 		},
 	}
@@ -1720,9 +1699,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "control_objective_narratives", Type: field.TypeString, Nullable: true},
-		{Name: "internal_policy_narratives", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "procedure_narratives", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_narratives", Type: field.TypeString, Nullable: true},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
@@ -1738,26 +1715,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "narratives_internal_policies_narratives",
-				Columns:    []*schema.Column{NarrativesColumns[13]},
-				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "narratives_organizations_narratives",
-				Columns:    []*schema.Column{NarrativesColumns[14]},
+				Columns:    []*schema.Column{NarrativesColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "narratives_procedures_narratives",
-				Columns:    []*schema.Column{NarrativesColumns[15]},
-				RefColumns: []*schema.Column{ProceduresColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "narratives_subcontrols_narratives",
-				Columns:    []*schema.Column{NarrativesColumns[16]},
+				Columns:    []*schema.Column{NarrativesColumns[14]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1771,7 +1736,7 @@ var (
 			{
 				Name:    "narrative_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NarrativesColumns[7], NarrativesColumns[14]},
+				Columns: []*schema.Column{NarrativesColumns[7], NarrativesColumns[13]},
 			},
 		},
 	}
@@ -2378,7 +2343,6 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_procedures", Type: field.TypeString, Nullable: true},
 	}
 	// ProceduresTable holds the schema information for the "procedures" table.
 	ProceduresTable = &schema.Table{
@@ -2408,12 +2372,6 @@ var (
 				Symbol:     "procedures_groups_delegate",
 				Columns:    []*schema.Column{ProceduresColumns[20]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "procedures_subcontrols_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[21]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3279,6 +3237,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
@@ -3293,7 +3252,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "users_files_avatar_file",
-				Columns:    []*schema.Column{UsersColumns[20]},
+				Columns:    []*schema.Column{UsersColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3336,6 +3295,7 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
@@ -4329,6 +4289,56 @@ var (
 			},
 		},
 	}
+	// InternalPolicyControlsColumns holds the columns for the "internal_policy_controls" table.
+	InternalPolicyControlsColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// InternalPolicyControlsTable holds the schema information for the "internal_policy_controls" table.
+	InternalPolicyControlsTable = &schema.Table{
+		Name:       "internal_policy_controls",
+		Columns:    InternalPolicyControlsColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyControlsColumns[0], InternalPolicyControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_controls_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyControlsColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_controls_control_id",
+				Columns:    []*schema.Column{InternalPolicyControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicySubcontrolsColumns holds the columns for the "internal_policy_subcontrols" table.
+	InternalPolicySubcontrolsColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// InternalPolicySubcontrolsTable holds the schema information for the "internal_policy_subcontrols" table.
+	InternalPolicySubcontrolsTable = &schema.Table{
+		Name:       "internal_policy_subcontrols",
+		Columns:    InternalPolicySubcontrolsColumns,
+		PrimaryKey: []*schema.Column{InternalPolicySubcontrolsColumns[0], InternalPolicySubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_subcontrols_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicySubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{InternalPolicySubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InternalPolicyProceduresColumns holds the columns for the "internal_policy_procedures" table.
 	InternalPolicyProceduresColumns = []*schema.Column{
 		{Name: "internal_policy_id", Type: field.TypeString},
@@ -4350,6 +4360,31 @@ var (
 				Symbol:     "internal_policy_procedures_procedure_id",
 				Columns:    []*schema.Column{InternalPolicyProceduresColumns[1]},
 				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyNarrativesColumns holds the columns for the "internal_policy_narratives" table.
+	InternalPolicyNarrativesColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// InternalPolicyNarrativesTable holds the schema information for the "internal_policy_narratives" table.
+	InternalPolicyNarrativesTable = &schema.Table{
+		Name:       "internal_policy_narratives",
+		Columns:    InternalPolicyNarrativesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyNarrativesColumns[0], InternalPolicyNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_narratives_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyNarrativesColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_narratives_narrative_id",
+				Columns:    []*schema.Column{InternalPolicyNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -4775,6 +4810,31 @@ var (
 				Symbol:     "procedure_editors_group_id",
 				Columns:    []*schema.Column{ProcedureEditorsColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProcedureNarrativesColumns holds the columns for the "procedure_narratives" table.
+	ProcedureNarrativesColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// ProcedureNarrativesTable holds the schema information for the "procedure_narratives" table.
+	ProcedureNarrativesTable = &schema.Table{
+		Name:       "procedure_narratives",
+		Columns:    ProcedureNarrativesColumns,
+		PrimaryKey: []*schema.Column{ProcedureNarrativesColumns[0], ProcedureNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_narratives_procedure_id",
+				Columns:    []*schema.Column{ProcedureNarrativesColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_narratives_narrative_id",
+				Columns:    []*schema.Column{ProcedureNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5329,6 +5389,31 @@ var (
 			},
 		},
 	}
+	// SubcontrolProceduresColumns holds the columns for the "subcontrol_procedures" table.
+	SubcontrolProceduresColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "procedure_id", Type: field.TypeString},
+	}
+	// SubcontrolProceduresTable holds the schema information for the "subcontrol_procedures" table.
+	SubcontrolProceduresTable = &schema.Table{
+		Name:       "subcontrol_procedures",
+		Columns:    SubcontrolProceduresColumns,
+		PrimaryKey: []*schema.Column{SubcontrolProceduresColumns[0], SubcontrolProceduresColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_procedures_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolProceduresColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_procedures_procedure_id",
+				Columns:    []*schema.Column{SubcontrolProceduresColumns[1]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolControlImplementationsColumns holds the columns for the "subcontrol_control_implementations" table.
 	SubcontrolControlImplementationsColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -5642,7 +5727,10 @@ var (
 		InternalPolicyBlockedGroupsTable,
 		InternalPolicyEditorsTable,
 		InternalPolicyControlObjectivesTable,
+		InternalPolicyControlsTable,
+		InternalPolicySubcontrolsTable,
 		InternalPolicyProceduresTable,
+		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
 		InviteEventsTable,
@@ -5660,6 +5748,7 @@ var (
 		PersonalAccessTokenEventsTable,
 		ProcedureBlockedGroupsTable,
 		ProcedureEditorsTable,
+		ProcedureNarrativesTable,
 		ProcedureRisksTable,
 		ProcedureTasksTable,
 		ProgramBlockedGroupsTable,
@@ -5682,6 +5771,7 @@ var (
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
 		SubcontrolRisksTable,
+		SubcontrolProceduresTable,
 		SubcontrolControlImplementationsTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
@@ -5708,9 +5798,8 @@ func init() {
 	}
 	ControlsTable.ForeignKeys[0].RefTable = GroupsTable
 	ControlsTable.ForeignKeys[1].RefTable = GroupsTable
-	ControlsTable.ForeignKeys[2].RefTable = InternalPoliciesTable
-	ControlsTable.ForeignKeys[3].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[4].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[3].RefTable = StandardsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -5781,11 +5870,9 @@ func init() {
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
-	InternalPoliciesTable.ForeignKeys[0].RefTable = ControlsTable
+	InternalPoliciesTable.ForeignKeys[0].RefTable = GroupsTable
 	InternalPoliciesTable.ForeignKeys[1].RefTable = GroupsTable
-	InternalPoliciesTable.ForeignKeys[2].RefTable = GroupsTable
-	InternalPoliciesTable.ForeignKeys[3].RefTable = OrganizationsTable
-	InternalPoliciesTable.ForeignKeys[4].RefTable = SubcontrolsTable
+	InternalPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
@@ -5794,10 +5881,8 @@ func init() {
 		Table: "mapped_control_history",
 	}
 	NarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	NarrativesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
-	NarrativesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	NarrativesTable.ForeignKeys[3].RefTable = ProceduresTable
-	NarrativesTable.ForeignKeys[4].RefTable = SubcontrolsTable
+	NarrativesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	NarrativesTable.ForeignKeys[2].RefTable = SubcontrolsTable
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
@@ -5833,7 +5918,6 @@ func init() {
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ProceduresTable.ForeignKeys[2].RefTable = GroupsTable
 	ProceduresTable.ForeignKeys[3].RefTable = GroupsTable
-	ProceduresTable.ForeignKeys[4].RefTable = SubcontrolsTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
@@ -5957,8 +6041,14 @@ func init() {
 	InternalPolicyEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	InternalPolicyControlObjectivesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	InternalPolicyControlsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	InternalPolicySubcontrolsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicySubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	InternalPolicyProceduresTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
+	InternalPolicyNarrativesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	InternalPolicyTasksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
 	InternalPolicyRisksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
@@ -5993,6 +6083,8 @@ func init() {
 	ProcedureBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ProcedureEditorsTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProcedureNarrativesTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProcedureRisksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProcedureTasksTable.ForeignKeys[0].RefTable = ProceduresTable
@@ -6037,6 +6129,8 @@ func init() {
 	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubcontrolRisksTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolRisksTable.ForeignKeys[1].RefTable = RisksTable
+	SubcontrolProceduresTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable

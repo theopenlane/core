@@ -903,16 +903,16 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	}
 	if nodes := sc.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Procedure
+		edge.Schema = sc.schemaConfig.SubcontrolProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -920,16 +920,16 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	}
 	if nodes := sc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.InternalPolicy
+		edge.Schema = sc.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

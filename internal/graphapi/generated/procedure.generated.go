@@ -117,6 +117,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Procedure_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
 			case "programs":
@@ -225,6 +227,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Procedure_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
 			case "programs":
@@ -377,6 +381,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegate(ctx, field)
 			case "controls":
 				return ec.fieldContext_Procedure_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Procedure_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
 			case "programs":

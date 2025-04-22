@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -90,6 +91,8 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 				SetEmail(tc.email).
 				SetPassword(validPassword).
 				SetSetting(userSetting).
+				SetLastLoginProvider(enums.AuthProviderCredentials).
+				SetLastSeen(time.Now()).
 				SaveX(ctx)
 
 			user := handlers.User{
