@@ -2470,6 +2470,9 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 	if !reflect.DeepEqual(uh.LastSeen, new.LastSeen) {
 		changes = append(changes, NewChange(userhistory.FieldLastSeen, uh.LastSeen, new.LastSeen))
 	}
+	if !reflect.DeepEqual(uh.LastLoginProvider, new.LastLoginProvider) {
+		changes = append(changes, NewChange(userhistory.FieldLastLoginProvider, uh.LastLoginProvider, new.LastLoginProvider))
+	}
 	if !reflect.DeepEqual(uh.Password, new.Password) {
 		changes = append(changes, NewChange(userhistory.FieldPassword, uh.Password, new.Password))
 	}

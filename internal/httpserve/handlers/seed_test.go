@@ -2,11 +2,13 @@ package handlers_test
 
 import (
 	"context"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -68,7 +70,9 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	builder := suite.db.User.Create().
 		SetEmail(email).
 		SetFirstName(gofakeit.FirstName()).
-		SetLastName(gofakeit.LastName())
+		SetLastName(gofakeit.LastName()).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now())
 
 	if input != nil && input.password != "" {
 		builder.SetPassword(input.password)

@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
@@ -16,6 +17,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -40,6 +42,8 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		SetEmail("bsanderson@theopenlane.io").
 		SetPassword(validPassword).
 		SetSetting(userSetting).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SaveX(ctx)
 
 	// create user in the database
@@ -53,6 +57,8 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		SetEmail("dabraham@theopenlane.io").
 		SetPassword(validPassword).
 		SetSetting(userSetting2).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SaveX(ctx)
 
 	testCases := []struct {

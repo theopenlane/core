@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -34,10 +35,11 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 
 	// create user
 	input := generated.CreateUserInput{
-		FirstName: &in.FirstName,
-		LastName:  &in.LastName,
-		Email:     in.Email,
-		Password:  &in.Password,
+		FirstName:         &in.FirstName,
+		LastName:          &in.LastName,
+		Email:             in.Email,
+		Password:          &in.Password,
+		LastLoginProvider: &enums.AuthProviderCredentials,
 	}
 
 	// set viewer context

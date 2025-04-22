@@ -272,6 +272,26 @@ func (uu *UserUpdate) ClearLastSeen() *UserUpdate {
 	return uu
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uu *UserUpdate) SetLastLoginProvider(ep enums.AuthProvider) *UserUpdate {
+	uu.mutation.SetLastLoginProvider(ep)
+	return uu
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserUpdate {
+	if ep != nil {
+		uu.SetLastLoginProvider(*ep)
+	}
+	return uu
+}
+
+// ClearLastLoginProvider clears the value of the "last_login_provider" field.
+func (uu *UserUpdate) ClearLastLoginProvider() *UserUpdate {
+	uu.mutation.ClearLastLoginProvider()
+	return uu
+}
+
 // SetPassword sets the "password" field.
 func (uu *UserUpdate) SetPassword(s string) *UserUpdate {
 	uu.mutation.SetPassword(s)
@@ -1088,6 +1108,11 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := uu.mutation.LastLoginProvider(); ok {
+		if err := user.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "User.last_login_provider": %w`, err)}
+		}
+	}
 	if v, ok := uu.mutation.AuthProvider(); ok {
 		if err := user.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "User.auth_provider": %w`, err)}
@@ -1198,6 +1223,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.LastSeenCleared() {
 		_spec.ClearField(user.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := uu.mutation.LastLoginProvider(); ok {
+		_spec.SetField(user.FieldLastLoginProvider, field.TypeEnum, value)
+	}
+	if uu.mutation.LastLoginProviderCleared() {
+		_spec.ClearField(user.FieldLastLoginProvider, field.TypeEnum)
 	}
 	if value, ok := uu.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
@@ -2407,6 +2438,26 @@ func (uuo *UserUpdateOne) ClearLastSeen() *UserUpdateOne {
 	return uuo
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uuo *UserUpdateOne) SetLastLoginProvider(ep enums.AuthProvider) *UserUpdateOne {
+	uuo.mutation.SetLastLoginProvider(ep)
+	return uuo
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserUpdateOne {
+	if ep != nil {
+		uuo.SetLastLoginProvider(*ep)
+	}
+	return uuo
+}
+
+// ClearLastLoginProvider clears the value of the "last_login_provider" field.
+func (uuo *UserUpdateOne) ClearLastLoginProvider() *UserUpdateOne {
+	uuo.mutation.ClearLastLoginProvider()
+	return uuo
+}
+
 // SetPassword sets the "password" field.
 func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
 	uuo.mutation.SetPassword(s)
@@ -3236,6 +3287,11 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := uuo.mutation.LastLoginProvider(); ok {
+		if err := user.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "User.last_login_provider": %w`, err)}
+		}
+	}
 	if v, ok := uuo.mutation.AuthProvider(); ok {
 		if err := user.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "User.auth_provider": %w`, err)}
@@ -3363,6 +3419,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.LastSeenCleared() {
 		_spec.ClearField(user.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := uuo.mutation.LastLoginProvider(); ok {
+		_spec.SetField(user.FieldLastLoginProvider, field.TypeEnum, value)
+	}
+	if uuo.mutation.LastLoginProviderCleared() {
+		_spec.ClearField(user.FieldLastLoginProvider, field.TypeEnum)
 	}
 	if value, ok := uuo.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)

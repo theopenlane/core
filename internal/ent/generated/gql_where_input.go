@@ -66860,6 +66860,14 @@ type UserWhereInput struct {
 	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
 
+	// "last_login_provider" field predicates.
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNEQ    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  bool                 `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil bool                 `json:"lastLoginProviderNotNil,omitempty"`
+
 	// "password" field predicates.
 	Password             *string  `json:"password,omitempty"`
 	PasswordNEQ          *string  `json:"passwordNEQ,omitempty"`
@@ -67656,6 +67664,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.LastSeenNotNil {
 		predicates = append(predicates, user.LastSeenNotNil())
 	}
+	if i.LastLoginProvider != nil {
+		predicates = append(predicates, user.LastLoginProviderEQ(*i.LastLoginProvider))
+	}
+	if i.LastLoginProviderNEQ != nil {
+		predicates = append(predicates, user.LastLoginProviderNEQ(*i.LastLoginProviderNEQ))
+	}
+	if len(i.LastLoginProviderIn) > 0 {
+		predicates = append(predicates, user.LastLoginProviderIn(i.LastLoginProviderIn...))
+	}
+	if len(i.LastLoginProviderNotIn) > 0 {
+		predicates = append(predicates, user.LastLoginProviderNotIn(i.LastLoginProviderNotIn...))
+	}
+	if i.LastLoginProviderIsNil {
+		predicates = append(predicates, user.LastLoginProviderIsNil())
+	}
+	if i.LastLoginProviderNotNil {
+		predicates = append(predicates, user.LastLoginProviderNotNil())
+	}
 	if i.Password != nil {
 		predicates = append(predicates, user.PasswordEQ(*i.Password))
 	}
@@ -68350,6 +68376,14 @@ type UserHistoryWhereInput struct {
 	LastSeenLTE    *time.Time  `json:"lastSeenLTE,omitempty"`
 	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
+
+	// "last_login_provider" field predicates.
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNEQ    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  bool                 `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil bool                 `json:"lastLoginProviderNotNil,omitempty"`
 
 	// "password" field predicates.
 	Password             *string  `json:"password,omitempty"`
@@ -69163,6 +69197,24 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	}
 	if i.LastSeenNotNil {
 		predicates = append(predicates, userhistory.LastSeenNotNil())
+	}
+	if i.LastLoginProvider != nil {
+		predicates = append(predicates, userhistory.LastLoginProviderEQ(*i.LastLoginProvider))
+	}
+	if i.LastLoginProviderNEQ != nil {
+		predicates = append(predicates, userhistory.LastLoginProviderNEQ(*i.LastLoginProviderNEQ))
+	}
+	if len(i.LastLoginProviderIn) > 0 {
+		predicates = append(predicates, userhistory.LastLoginProviderIn(i.LastLoginProviderIn...))
+	}
+	if len(i.LastLoginProviderNotIn) > 0 {
+		predicates = append(predicates, userhistory.LastLoginProviderNotIn(i.LastLoginProviderNotIn...))
+	}
+	if i.LastLoginProviderIsNil {
+		predicates = append(predicates, userhistory.LastLoginProviderIsNil())
+	}
+	if i.LastLoginProviderNotNil {
+		predicates = append(predicates, userhistory.LastLoginProviderNotNil())
 	}
 	if i.Password != nil {
 		predicates = append(predicates, userhistory.PasswordEQ(*i.Password))

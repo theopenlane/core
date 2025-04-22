@@ -140,7 +140,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get user from the database
-	entUser, userCtx, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
+	entUser, userCtx, err := h.getUserByID(reqCtx, userID)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -224,7 +224,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 	//
 	// Ideally this should be fine if we have nameless passkeys login but if the user selects an email
 	// we need to validate that surely
-	user, err := h.getUserByEmail(ctx.Request().Context(), r.Email, enums.AuthProviderCredentials)
+	user, err := h.getUserByEmail(ctx.Request().Context(), r.Email)
 	if err != nil {
 		// 400 or 500 really but we do not want to return 500 for a simple "user not found" error
 		return h.BadRequest(ctx, err)
@@ -294,7 +294,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	// get user from the database
-	entUser, reqCtx, err := h.getUserByID(reqCtx, userID, enums.AuthProviderCredentials)
+	entUser, reqCtx, err := h.getUserByID(reqCtx, userID)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -303,6 +303,13 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
+
+		return h.InternalServerError(ctx, err)
+	}
+
+	// set the last seen for the user
+	if err := h.updateUserLastSeen(reqCtx, userID, enums.AuthProviderCredentials); err != nil {
+		log.Error().Err(err).Msg("unable to update last seen")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -319,7 +326,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle
 func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHandler {
 	return func(_, userHandle []byte) (user webauthn.User, err error) {
-		u, _, err := h.getUserByID(ctx, string(userHandle), enums.AuthProviderCredentials)
+		u, _, err := h.getUserByID(ctx, string(userHandle))
 		if err != nil {
 			return nil, err
 		}

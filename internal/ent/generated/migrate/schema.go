@@ -3237,6 +3237,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
@@ -3251,7 +3252,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "users_files_avatar_file",
-				Columns:    []*schema.Column{UsersColumns[20]},
+				Columns:    []*schema.Column{UsersColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3294,6 +3295,7 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},

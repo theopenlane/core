@@ -56,6 +56,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldLastSeen holds the string denoting the last_seen field in the database.
 	FieldLastSeen = "last_seen"
+	// FieldLastLoginProvider holds the string denoting the last_login_provider field in the database.
+	FieldLastLoginProvider = "last_login_provider"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
 	// FieldSub holds the string denoting the sub field in the database.
@@ -90,6 +92,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldLastSeen,
+	FieldLastLoginProvider,
 	FieldPassword,
 	FieldSub,
 	FieldAuthProvider,
@@ -140,6 +143,16 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("userhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// LastLoginProviderValidator is a validator for the "last_login_provider" field enum values. It is called by the builders before save.
+func LastLoginProviderValidator(llp enums.AuthProvider) error {
+	switch llp.String() {
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+		return nil
+	default:
+		return fmt.Errorf("userhistory: invalid enum value for last_login_provider field: %q", llp)
 	}
 }
 
@@ -265,6 +278,11 @@ func ByLastSeen(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastSeen, opts...).ToFunc()
 }
 
+// ByLastLoginProvider orders the results by the last_login_provider field.
+func ByLastLoginProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginProvider, opts...).ToFunc()
+}
+
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
@@ -290,6 +308,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.AuthProvider must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.AuthProvider)(nil)
+	// enums.AuthProvider must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.AuthProvider)(nil)
 )
 
 var (
