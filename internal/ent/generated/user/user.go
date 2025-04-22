@@ -50,6 +50,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldLastSeen holds the string denoting the last_seen field in the database.
 	FieldLastSeen = "last_seen"
+	// FieldLastLoginProvider holds the string denoting the last_login_provider field in the database.
+	FieldLastLoginProvider = "last_login_provider"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
 	// FieldSub holds the string denoting the sub field in the database.
@@ -240,6 +242,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldLastSeen,
+	FieldLastLoginProvider,
 	FieldPassword,
 	FieldSub,
 	FieldAuthProvider,
@@ -315,6 +318,16 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+// LastLoginProviderValidator is a validator for the "last_login_provider" field enum values. It is called by the builders before save.
+func LastLoginProviderValidator(llp enums.AuthProvider) error {
+	switch llp.String() {
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for last_login_provider field: %q", llp)
+	}
+}
 
 const DefaultAuthProvider enums.AuthProvider = "CREDENTIALS"
 
@@ -421,6 +434,11 @@ func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLastSeen orders the results by the last_seen field.
 func ByLastSeen(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastSeen, opts...).ToFunc()
+}
+
+// ByLastLoginProvider orders the results by the last_login_provider field.
+func ByLastLoginProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginProvider, opts...).ToFunc()
 }
 
 // ByPassword orders the results by the password field.
@@ -827,6 +845,13 @@ func newProgramMembershipsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, true, ProgramMembershipsTable, ProgramMembershipsColumn),
 	)
 }
+
+var (
+	// enums.AuthProvider must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.AuthProvider)(nil)
+	// enums.AuthProvider must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.AuthProvider)(nil)
+)
 
 var (
 	// enums.AuthProvider must implement graphql.Marshaler.

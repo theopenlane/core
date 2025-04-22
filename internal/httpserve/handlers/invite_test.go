@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
@@ -39,6 +40,8 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		SetFirstName("Groot").
 		SetLastName("JustGroot").
 		SetAuthProvider(enums.AuthProviderGoogle).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SaveX(ctx)
 
 	userSetting, err := recipient.Setting(ctx)

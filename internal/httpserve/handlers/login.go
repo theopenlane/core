@@ -32,7 +32,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// check user in the database, username == email and ensure only one record is returned
-	user, err := h.getUserByEmail(reqCtx, in.Username, enums.AuthProviderCredentials)
+	user, err := h.getUserByEmail(reqCtx, in.Username)
 	if err != nil {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
@@ -62,7 +62,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
-	if err := h.updateUserLastSeen(userCtx, user.ID); err != nil {
+	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
 		log.Error().Err(err).Msg("unable to update last seen")
 
 		return h.InternalServerError(ctx, err)

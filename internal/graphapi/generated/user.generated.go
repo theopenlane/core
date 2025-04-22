@@ -99,6 +99,8 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
 			case "lastSeen":
 				return ec.fieldContext_User_lastSeen(ctx, field)
+			case "lastLoginProvider":
+				return ec.fieldContext_User_lastLoginProvider(ctx, field)
 			case "sub":
 				return ec.fieldContext_User_sub(ctx, field)
 			case "authProvider":
@@ -217,6 +219,8 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
 			case "lastSeen":
 				return ec.fieldContext_User_lastSeen(ctx, field)
+			case "lastLoginProvider":
+				return ec.fieldContext_User_lastLoginProvider(ctx, field)
 			case "sub":
 				return ec.fieldContext_User_sub(ctx, field)
 			case "authProvider":
@@ -379,6 +383,8 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
 			case "lastSeen":
 				return ec.fieldContext_User_lastSeen(ctx, field)
+			case "lastLoginProvider":
+				return ec.fieldContext_User_lastLoginProvider(ctx, field)
 			case "sub":
 				return ec.fieldContext_User_sub(ctx, field)
 			case "authProvider":

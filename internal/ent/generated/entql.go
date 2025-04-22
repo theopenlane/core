@@ -2252,6 +2252,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
 			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
 			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
+			user.FieldLastLoginProvider: {Type: field.TypeEnum, Column: user.FieldLastLoginProvider},
 			user.FieldPassword:          {Type: field.TypeString, Column: user.FieldPassword},
 			user.FieldSub:               {Type: field.TypeString, Column: user.FieldSub},
 			user.FieldAuthProvider:      {Type: field.TypeEnum, Column: user.FieldAuthProvider},
@@ -2288,6 +2289,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
 			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
 			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
+			userhistory.FieldLastLoginProvider: {Type: field.TypeEnum, Column: userhistory.FieldLastLoginProvider},
 			userhistory.FieldPassword:          {Type: field.TypeString, Column: userhistory.FieldPassword},
 			userhistory.FieldSub:               {Type: field.TypeString, Column: userhistory.FieldSub},
 			userhistory.FieldAuthProvider:      {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
@@ -2603,10 +2605,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"internal_policies",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   control.InternalPoliciesTable,
-			Columns: []string{control.InternalPoliciesColumn},
+			Columns: control.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 		},
 		"Control",
@@ -3995,14 +3997,26 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.ControlsTable,
-			Columns: []string{internalpolicy.ControlsColumn},
+			Columns: internalpolicy.ControlsPrimaryKey,
 			Bidi:    false,
 		},
 		"InternalPolicy",
 		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.SubcontrolsTable,
+			Columns: internalpolicy.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Subcontrol",
 	)
 	graph.MustAddE(
 		"procedures",
@@ -4019,10 +4033,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"narratives",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   internalpolicy.NarrativesTable,
-			Columns: []string{internalpolicy.NarrativesColumn},
+			Columns: internalpolicy.NarrativesPrimaryKey,
 			Bidi:    false,
 		},
 		"InternalPolicy",
@@ -4041,18 +4055,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
-		"programs",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   internalpolicy.ProgramsTable,
-			Columns: internalpolicy.ProgramsPrimaryKey,
-			Bidi:    false,
-		},
-		"InternalPolicy",
-		"Program",
-	)
-	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4063,6 +4065,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"InternalPolicy",
 		"Risk",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Program",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4183,6 +4197,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Narrative",
 		"Program",
+	)
+	graph.MustAddE(
+		"internal_policies",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.InternalPoliciesTable,
+			Columns: narrative.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+		},
+		"Narrative",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
+		"procedures",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProceduresTable,
+			Columns: narrative.ProceduresPrimaryKey,
+			Bidi:    false,
+		},
+		"Narrative",
+		"Procedure",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4965,6 +5003,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.SubcontrolsTable,
+			Columns: procedure.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"Procedure",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4991,10 +5041,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"narratives",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   procedure.NarrativesTable,
-			Columns: []string{procedure.NarrativesColumn},
+			Columns: procedure.NarrativesPrimaryKey,
 			Bidi:    false,
 		},
 		"Procedure",
@@ -5519,10 +5569,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"procedures",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   subcontrol.ProceduresTable,
-			Columns: []string{subcontrol.ProceduresColumn},
+			Columns: subcontrol.ProceduresPrimaryKey,
 			Bidi:    false,
 		},
 		"Subcontrol",
@@ -5531,10 +5581,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"internal_policies",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   subcontrol.InternalPoliciesTable,
-			Columns: []string{subcontrol.InternalPoliciesColumn},
+			Columns: subcontrol.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 		},
 		"Subcontrol",
@@ -12223,6 +12273,20 @@ func (f *InternalPolicyFilter) WhereHasControlsWith(preds ...predicate.Control) 
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *InternalPolicyFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasProcedures applies a predicate to check if query has an edge procedures.
 func (f *InternalPolicyFilter) WhereHasProcedures() {
 	f.Where(entql.HasEdge("procedures"))
@@ -12265,20 +12329,6 @@ func (f *InternalPolicyFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	})))
 }
 
-// WhereHasPrograms applies a predicate to check if query has an edge programs.
-func (f *InternalPolicyFilter) WhereHasPrograms() {
-	f.Where(entql.HasEdge("programs"))
-}
-
-// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
-func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) {
-	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasRisks applies a predicate to check if query has an edge risks.
 func (f *InternalPolicyFilter) WhereHasRisks() {
 	f.Where(entql.HasEdge("risks"))
@@ -12287,6 +12337,20 @@ func (f *InternalPolicyFilter) WhereHasRisks() {
 // WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
 func (f *InternalPolicyFilter) WhereHasRisksWith(preds ...predicate.Risk) {
 	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *InternalPolicyFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12977,6 +13041,34 @@ func (f *NarrativeFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *NarrativeFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *NarrativeFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
+}
+
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedures applies a predicate to check if query has an edge procedures.
+func (f *NarrativeFilter) WhereHasProcedures() {
+	f.Where(entql.HasEdge("procedures"))
+}
+
+// WhereHasProceduresWith applies a predicate to check if query has an edge procedures with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedures", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15637,6 +15729,20 @@ func (f *ProcedureFilter) WhereHasControls() {
 // WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
 func (f *ProcedureFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *ProcedureFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -19121,6 +19227,11 @@ func (f *UserFilter) WhereLastSeen(p entql.TimeP) {
 	f.Where(p.Field(user.FieldLastSeen))
 }
 
+// WhereLastLoginProvider applies the entql string predicate on the last_login_provider field.
+func (f *UserFilter) WhereLastLoginProvider(p entql.StringP) {
+	f.Where(p.Field(user.FieldLastLoginProvider))
+}
+
 // WherePassword applies the entql string predicate on the password field.
 func (f *UserFilter) WherePassword(p entql.StringP) {
 	f.Where(p.Field(user.FieldPassword))
@@ -19540,6 +19651,11 @@ func (f *UserHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 // WhereLastSeen applies the entql time.Time predicate on the last_seen field.
 func (f *UserHistoryFilter) WhereLastSeen(p entql.TimeP) {
 	f.Where(p.Field(userhistory.FieldLastSeen))
+}
+
+// WhereLastLoginProvider applies the entql string predicate on the last_login_provider field.
+func (f *UserHistoryFilter) WhereLastLoginProvider(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldLastLoginProvider))
 }
 
 // WherePassword applies the entql string predicate on the password field.

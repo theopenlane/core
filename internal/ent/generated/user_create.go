@@ -230,6 +230,20 @@ func (uc *UserCreate) SetNillableLastSeen(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uc *UserCreate) SetLastLoginProvider(ep enums.AuthProvider) *UserCreate {
+	uc.mutation.SetLastLoginProvider(ep)
+	return uc
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserCreate {
+	if ep != nil {
+		uc.SetLastLoginProvider(*ep)
+	}
+	return uc
+}
+
 // SetPassword sets the "password" field.
 func (uc *UserCreate) SetPassword(s string) *UserCreate {
 	uc.mutation.SetPassword(s)
@@ -706,6 +720,11 @@ func (uc *UserCreate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "User.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := uc.mutation.LastLoginProvider(); ok {
+		if err := user.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "User.last_login_provider": %w`, err)}
+		}
+	}
 	if _, ok := uc.mutation.AuthProvider(); !ok {
 		return &ValidationError{Name: "auth_provider", err: errors.New(`generated: missing required field "User.auth_provider"`)}
 	}
@@ -817,6 +836,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.LastSeen(); ok {
 		_spec.SetField(user.FieldLastSeen, field.TypeTime, value)
 		_node.LastSeen = &value
+	}
+	if value, ok := uc.mutation.LastLoginProvider(); ok {
+		_spec.SetField(user.FieldLastLoginProvider, field.TypeEnum, value)
+		_node.LastLoginProvider = value
 	}
 	if value, ok := uc.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)

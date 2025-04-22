@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 )
 
@@ -260,6 +262,36 @@ func (nc *NarrativeCreate) AddPrograms(p ...*Program) *NarrativeCreate {
 		ids[i] = p[i].ID
 	}
 	return nc.AddProgramIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (nc *NarrativeCreate) AddInternalPolicyIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddInternalPolicyIDs(ids...)
+	return nc
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (nc *NarrativeCreate) AddInternalPolicies(i ...*InternalPolicy) *NarrativeCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return nc.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (nc *NarrativeCreate) AddProcedureIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddProcedureIDs(ids...)
+	return nc
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (nc *NarrativeCreate) AddProcedures(p ...*Procedure) *NarrativeCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nc.AddProcedureIDs(ids...)
 }
 
 // Mutation returns the NarrativeMutation object of the builder.
@@ -528,6 +560,40 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = nc.schemaConfig.ProgramNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.InternalPoliciesTable,
+			Columns: narrative.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.InternalPolicyNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProceduresTable,
+			Columns: narrative.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -20,12 +20,13 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
-// updateUserLastSeen updates the last seen timestamp of the user
-func (h *Handler) updateUserLastSeen(ctx context.Context, id string) error {
+// updateUserLastSeen updates the last seen timestamp of the user and login method used
+func (h *Handler) updateUserLastSeen(ctx context.Context, id string, authProvider enums.AuthProvider) error {
 	if err := transaction.FromContext(ctx).
 		User.
 		UpdateOneID(id).
 		SetLastSeen(time.Now()).
+		SetLastLoginProvider(authProvider).
 		Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error updating user last seen")
 
@@ -167,11 +168,10 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 	return user, nil
 }
 
-// getUserByEmail returns the ent user with the user settings based on the email and auth provider in the request
-func (h *Handler) getUserByEmail(ctx context.Context, email string, authProvider enums.AuthProvider) (*ent.User, error) {
+// getUserByEmail returns the ent user with the user settings based on the email in the request
+func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.Email(email)).
-		Where(user.AuthProviderEQ(authProvider)).
 		Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining user from email")
@@ -182,12 +182,11 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string, authProvider
 	return user, nil
 }
 
-// getUserByID returns the ent user with the user settings based on the email and auth provider in the request
-func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums.AuthProvider) (
+// getUserByID returns the ent user with the user settings based on the email in the request
+func (h *Handler) getUserByID(ctx context.Context, id string) (
 	*ent.User, context.Context, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
-		Where(user.AuthProviderEQ(authProvider)).
 		Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining user from id")
@@ -400,7 +399,7 @@ func (h *Handler) updateUserPassword(ctx context.Context, id string, password st
 // if the user already exists, update last seen
 func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, provider enums.AuthProvider, image string) (*ent.User, error) {
 	// check if users exists
-	entUser, err := h.getUserByEmail(ctx, email, provider)
+	entUser, err := h.getUserByEmail(ctx, email)
 	if err != nil {
 		// if the user is not found, create now
 		if ent.IsNotFound(err) {
@@ -423,11 +422,14 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 	}
 
 	// update last seen of user
-	if err := h.updateUserLastSeen(ctx, entUser.ID); err != nil {
+	if err := h.updateUserLastSeen(ctx, entUser.ID, provider); err != nil {
 		log.Error().Err(err).Msg("error updating user last seen")
 
 		return nil, err
 	}
+
+	// update the return
+	entUser.LastLoginProvider = provider
 
 	// update user avatar
 	if err := h.updateUserAvatar(ctx, entUser, image); err != nil {
@@ -447,6 +449,7 @@ func createUserInput(name, email string, provider enums.AuthProvider, image stri
 	input := parseName(name)
 	input.Email = email
 	input.AuthProvider = &provider
+	input.LastLoginProvider = &provider
 	input.LastSeen = &lastSeen
 
 	if image != "" {

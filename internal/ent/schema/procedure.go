@@ -45,6 +45,7 @@ func (Procedure) Fields() []ent.Field {
 func (p Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(p, Control{}),
+		defaultEdgeFromWithPagination(p, Subcontrol{}),
 		defaultEdgeFromWithPagination(p, InternalPolicy{}),
 		defaultEdgeFromWithPagination(p, Program{}),
 		defaultEdgeToWithPagination(p, Narrative{}),

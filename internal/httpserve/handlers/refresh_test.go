@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/testutils"
 )
@@ -62,6 +63,8 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 		SetPassword(validPassword).
 		SetSetting(userSetting).
 		SetID(userID).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SetSub(userID). // this is required to parse the refresh token
 		SaveX(ec)
 

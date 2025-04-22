@@ -248,6 +248,20 @@ func (uhc *UserHistoryCreate) SetNillableLastSeen(t *time.Time) *UserHistoryCrea
 	return uhc
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uhc *UserHistoryCreate) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryCreate {
+	uhc.mutation.SetLastLoginProvider(ep)
+	return uhc
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryCreate {
+	if ep != nil {
+		uhc.SetLastLoginProvider(*ep)
+	}
+	return uhc
+}
+
 // SetPassword sets the "password" field.
 func (uhc *UserHistoryCreate) SetPassword(s string) *UserHistoryCreate {
 	uhc.mutation.SetPassword(s)
@@ -409,6 +423,11 @@ func (uhc *UserHistoryCreate) check() error {
 	if _, ok := uhc.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "UserHistory.display_name"`)}
 	}
+	if v, ok := uhc.mutation.LastLoginProvider(); ok {
+		if err := userhistory.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
+		}
+	}
 	if _, ok := uhc.mutation.AuthProvider(); !ok {
 		return &ValidationError{Name: "auth_provider", err: errors.New(`generated: missing required field "UserHistory.auth_provider"`)}
 	}
@@ -533,6 +552,10 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 	if value, ok := uhc.mutation.LastSeen(); ok {
 		_spec.SetField(userhistory.FieldLastSeen, field.TypeTime, value)
 		_node.LastSeen = &value
+	}
+	if value, ok := uhc.mutation.LastLoginProvider(); ok {
+		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
+		_node.LastLoginProvider = value
 	}
 	if value, ok := uhc.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
