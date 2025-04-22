@@ -8147,6 +8147,7 @@ type CreateUserInput struct {
 	AvatarRemoteURL           *string
 	AvatarUpdatedAt           *time.Time
 	LastSeen                  *time.Time
+	LastLoginProvider         *enums.AuthProvider
 	Password                  *string
 	Sub                       *string
 	AuthProvider              *enums.AuthProvider
@@ -8190,6 +8191,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.LastSeen; v != nil {
 		m.SetLastSeen(*v)
+	}
+	if v := i.LastLoginProvider; v != nil {
+		m.SetLastLoginProvider(*v)
 	}
 	if v := i.Password; v != nil {
 		m.SetPassword(*v)
@@ -8274,6 +8278,8 @@ type UpdateUserInput struct {
 	AvatarUpdatedAt                 *time.Time
 	ClearLastSeen                   bool
 	LastSeen                        *time.Time
+	ClearLastLoginProvider          bool
+	LastLoginProvider               *enums.AuthProvider
 	ClearPassword                   bool
 	Password                        *string
 	ClearSub                        bool
@@ -8374,6 +8380,12 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.LastSeen; v != nil {
 		m.SetLastSeen(*v)
+	}
+	if i.ClearLastLoginProvider {
+		m.ClearLastLoginProvider()
+	}
+	if v := i.LastLoginProvider; v != nil {
+		m.SetLastLoginProvider(*v)
 	}
 	if i.ClearPassword {
 		m.ClearPassword()

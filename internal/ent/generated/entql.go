@@ -2252,6 +2252,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
 			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
 			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
+			user.FieldLastLoginProvider: {Type: field.TypeEnum, Column: user.FieldLastLoginProvider},
 			user.FieldPassword:          {Type: field.TypeString, Column: user.FieldPassword},
 			user.FieldSub:               {Type: field.TypeString, Column: user.FieldSub},
 			user.FieldAuthProvider:      {Type: field.TypeEnum, Column: user.FieldAuthProvider},
@@ -2288,6 +2289,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
 			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
 			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
+			userhistory.FieldLastLoginProvider: {Type: field.TypeEnum, Column: userhistory.FieldLastLoginProvider},
 			userhistory.FieldPassword:          {Type: field.TypeString, Column: userhistory.FieldPassword},
 			userhistory.FieldSub:               {Type: field.TypeString, Column: userhistory.FieldSub},
 			userhistory.FieldAuthProvider:      {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
@@ -19225,6 +19227,11 @@ func (f *UserFilter) WhereLastSeen(p entql.TimeP) {
 	f.Where(p.Field(user.FieldLastSeen))
 }
 
+// WhereLastLoginProvider applies the entql string predicate on the last_login_provider field.
+func (f *UserFilter) WhereLastLoginProvider(p entql.StringP) {
+	f.Where(p.Field(user.FieldLastLoginProvider))
+}
+
 // WherePassword applies the entql string predicate on the password field.
 func (f *UserFilter) WherePassword(p entql.StringP) {
 	f.Where(p.Field(user.FieldPassword))
@@ -19644,6 +19651,11 @@ func (f *UserHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 // WhereLastSeen applies the entql time.Time predicate on the last_seen field.
 func (f *UserHistoryFilter) WhereLastSeen(p entql.TimeP) {
 	f.Where(p.Field(userhistory.FieldLastSeen))
+}
+
+// WhereLastLoginProvider applies the entql string predicate on the last_login_provider field.
+func (f *UserHistoryFilter) WhereLastLoginProvider(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldLastLoginProvider))
 }
 
 // WherePassword applies the entql string predicate on the password field.

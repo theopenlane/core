@@ -3556,6 +3556,7 @@ type ComplexityRoot struct {
 		GroupMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Groups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                   func(childComplexity int) int
+		LastLoginProvider    func(childComplexity int) int
 		LastName             func(childComplexity int) int
 		LastSeen             func(childComplexity int) int
 		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
@@ -3611,6 +3612,7 @@ type ComplexityRoot struct {
 		FirstName         func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
+		LastLoginProvider func(childComplexity int) int
 		LastName          func(childComplexity int) int
 		LastSeen          func(childComplexity int) int
 		Operation         func(childComplexity int) int
@@ -23470,6 +23472,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ID(childComplexity), true
 
+	case "User.lastLoginProvider":
+		if e.complexity.User.LastLoginProvider == nil {
+			break
+		}
+
+		return e.complexity.User.LastLoginProvider(childComplexity), true
+
 	case "User.lastName":
 		if e.complexity.User.LastName == nil {
 			break
@@ -23753,6 +23762,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserHistory.ID(childComplexity), true
+
+	case "UserHistory.lastLoginProvider":
+		if e.complexity.UserHistory.LastLoginProvider == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.LastLoginProvider(childComplexity), true
 
 	case "UserHistory.lastName":
 		if e.complexity.UserHistory.LastName == nil {
@@ -33554,6 +33570,10 @@ input CreateUserInput {
   the time the user was last seen
   """
   lastSeen: Time
+  """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
   """
   user password hash
   """
@@ -63528,6 +63548,11 @@ input UpdateUserInput {
   lastSeen: Time
   clearLastSeen: Boolean
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
+  clearLastLoginProvider: Boolean
+  """
   user password hash
   """
   password: String
@@ -63682,6 +63707,10 @@ type User implements Node {
   the time the user was last seen
   """
   lastSeen: Time
+  """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
   """
   the Subject of the user JWT
   """
@@ -64072,7 +64101,7 @@ type User implements Node {
   programMemberships: [ProgramMembership!]
 }
 """
-UserAuthProvider is enum for the field auth_provider
+UserAuthProvider is enum for the field last_login_provider
 """
 enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -64153,6 +64182,10 @@ type UserHistory implements Node {
   """
   lastSeen: Time
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  """
   the Subject of the user JWT
   """
   sub: String
@@ -64166,7 +64199,7 @@ type UserHistory implements Node {
   role: UserHistoryRole
 }
 """
-UserHistoryAuthProvider is enum for the field auth_provider
+UserHistoryAuthProvider is enum for the field last_login_provider
 """
 enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -64539,6 +64572,15 @@ input UserHistoryWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  lastLoginProviderNEQ: UserHistoryAuthProvider
+  lastLoginProviderIn: [UserHistoryAuthProvider!]
+  lastLoginProviderNotIn: [UserHistoryAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """
@@ -65547,6 +65589,15 @@ input UserWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserAuthProvider
+  lastLoginProviderNEQ: UserAuthProvider
+  lastLoginProviderIn: [UserAuthProvider!]
+  lastLoginProviderNotIn: [UserAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """

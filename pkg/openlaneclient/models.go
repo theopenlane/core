@@ -4865,6 +4865,8 @@ type CreateUserInput struct {
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the time the user was last seen
 	LastSeen *time.Time `json:"lastSeen,omitempty"`
+	// the last auth provider used to login
+	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty"`
 	// user password hash
 	Password *string `json:"password,omitempty"`
 	// the Subject of the user JWT
@@ -23346,6 +23348,9 @@ type UpdateUserInput struct {
 	// the time the user was last seen
 	LastSeen      *time.Time `json:"lastSeen,omitempty"`
 	ClearLastSeen *bool      `json:"clearLastSeen,omitempty"`
+	// the last auth provider used to login
+	LastLoginProvider      *enums.AuthProvider `json:"lastLoginProvider,omitempty"`
+	ClearLastLoginProvider *bool               `json:"clearLastLoginProvider,omitempty"`
 	// user password hash
 	Password      *string `json:"password,omitempty"`
 	ClearPassword *bool   `json:"clearPassword,omitempty"`
@@ -23463,6 +23468,8 @@ type User struct {
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
 	// the time the user was last seen
 	LastSeen *time.Time `json:"lastSeen,omitempty,omitzero"`
+	// the last auth provider used to login
+	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty,omitzero"`
 	// the Subject of the user JWT
 	Sub *string `json:"sub,omitempty,omitzero"`
 	// auth provider used to register the account
@@ -23553,6 +23560,8 @@ type UserHistory struct {
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
 	// the time the user was last seen
 	LastSeen *time.Time `json:"lastSeen,omitempty,omitzero"`
+	// the last auth provider used to login
+	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty,omitzero"`
 	// the Subject of the user JWT
 	Sub *string `json:"sub,omitempty,omitzero"`
 	// auth provider used to register the account
@@ -23845,6 +23854,13 @@ type UserHistoryWhereInput struct {
 	LastSeenLte    *time.Time   `json:"lastSeenLTE,omitempty"`
 	LastSeenIsNil  *bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil *bool        `json:"lastSeenNotNil,omitempty"`
+	// last_login_provider field predicates
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNeq    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  *bool                `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil *bool                `json:"lastLoginProviderNotNil,omitempty"`
 	// sub field predicates
 	Sub             *string  `json:"sub,omitempty"`
 	SubNeq          *string  `json:"subNEQ,omitempty"`
@@ -24607,6 +24623,13 @@ type UserWhereInput struct {
 	LastSeenLte    *time.Time   `json:"lastSeenLTE,omitempty"`
 	LastSeenIsNil  *bool        `json:"lastSeenIsNil,omitempty"`
 	LastSeenNotNil *bool        `json:"lastSeenNotNil,omitempty"`
+	// last_login_provider field predicates
+	LastLoginProvider       *enums.AuthProvider  `json:"lastLoginProvider,omitempty"`
+	LastLoginProviderNeq    *enums.AuthProvider  `json:"lastLoginProviderNEQ,omitempty"`
+	LastLoginProviderIn     []enums.AuthProvider `json:"lastLoginProviderIn,omitempty"`
+	LastLoginProviderNotIn  []enums.AuthProvider `json:"lastLoginProviderNotIn,omitempty"`
+	LastLoginProviderIsNil  *bool                `json:"lastLoginProviderIsNil,omitempty"`
+	LastLoginProviderNotNil *bool                `json:"lastLoginProviderNotNil,omitempty"`
 	// sub field predicates
 	Sub             *string  `json:"sub,omitempty"`
 	SubNeq          *string  `json:"subNEQ,omitempty"`

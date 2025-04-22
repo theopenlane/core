@@ -7374,6 +7374,10 @@ input CreateUserInput {
   """
   lastSeen: Time
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
+  """
   user password hash
   """
   password: String
@@ -37347,6 +37351,11 @@ input UpdateUserInput {
   lastSeen: Time
   clearLastSeen: Boolean
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
+  clearLastLoginProvider: Boolean
+  """
   user password hash
   """
   password: String
@@ -37501,6 +37510,10 @@ type User implements Node {
   the time the user was last seen
   """
   lastSeen: Time
+  """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserAuthProvider
   """
   the Subject of the user JWT
   """
@@ -37891,7 +37904,7 @@ type User implements Node {
   programMemberships: [ProgramMembership!]
 }
 """
-UserAuthProvider is enum for the field auth_provider
+UserAuthProvider is enum for the field last_login_provider
 """
 enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -37972,6 +37985,10 @@ type UserHistory implements Node {
   """
   lastSeen: Time
   """
+  the last auth provider used to login
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  """
   the Subject of the user JWT
   """
   sub: String
@@ -37985,7 +38002,7 @@ type UserHistory implements Node {
   role: UserHistoryRole
 }
 """
-UserHistoryAuthProvider is enum for the field auth_provider
+UserHistoryAuthProvider is enum for the field last_login_provider
 """
 enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
   CREDENTIALS
@@ -38358,6 +38375,15 @@ input UserHistoryWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserHistoryAuthProvider
+  lastLoginProviderNEQ: UserHistoryAuthProvider
+  lastLoginProviderIn: [UserHistoryAuthProvider!]
+  lastLoginProviderNotIn: [UserHistoryAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """
@@ -39366,6 +39392,15 @@ input UserWhereInput {
   lastSeenLTE: Time
   lastSeenIsNil: Boolean
   lastSeenNotNil: Boolean
+  """
+  last_login_provider field predicates
+  """
+  lastLoginProvider: UserAuthProvider
+  lastLoginProviderNEQ: UserAuthProvider
+  lastLoginProviderIn: [UserAuthProvider!]
+  lastLoginProviderNotIn: [UserAuthProvider!]
+  lastLoginProviderIsNil: Boolean
+  lastLoginProviderNotNil: Boolean
   """
   sub field predicates
   """

@@ -413,6 +413,8 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 		SetLastName(u.LastName).
 		SetEmail(u.Email).
 		SetPassword(u.Password).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
 		SetSetting(userSetting).
 		Save(ctx)
 	require.NoError(t, err)

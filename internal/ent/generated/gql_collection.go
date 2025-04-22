@@ -30223,6 +30223,11 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, user.FieldLastSeen)
 				fieldSeen[user.FieldLastSeen] = struct{}{}
 			}
+		case "lastLoginProvider":
+			if _, ok := fieldSeen[user.FieldLastLoginProvider]; !ok {
+				selectedFields = append(selectedFields, user.FieldLastLoginProvider)
+				fieldSeen[user.FieldLastLoginProvider] = struct{}{}
+			}
 		case "sub":
 			if _, ok := fieldSeen[user.FieldSub]; !ok {
 				selectedFields = append(selectedFields, user.FieldSub)
@@ -30422,6 +30427,11 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[userhistory.FieldLastSeen]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldLastSeen)
 				fieldSeen[userhistory.FieldLastSeen] = struct{}{}
+			}
+		case "lastLoginProvider":
+			if _, ok := fieldSeen[userhistory.FieldLastLoginProvider]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldLastLoginProvider)
+				fieldSeen[userhistory.FieldLastLoginProvider] = struct{}{}
 			}
 		case "sub":
 			if _, ok := fieldSeen[userhistory.FieldSub]; !ok {

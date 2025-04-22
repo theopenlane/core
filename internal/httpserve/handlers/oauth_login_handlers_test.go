@@ -51,17 +51,17 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "https://example.com/images/photo.jpg",
 			},
 			want: &ent.User{
-				FirstName:       "Wanda",
-				LastName:        "Maximoff",
-				Email:           "wmaximoff@marvel.com",
-				AuthProvider:    enums.AuthProviderGitHub,
-				AvatarRemoteURL: lo.ToPtr("https://example.com/images/photo.jpg"),
+				FirstName:         "Wanda",
+				LastName:          "Maximoff",
+				Email:             "wmaximoff@marvel.com",
+				AuthProvider:      enums.AuthProviderGitHub,
+				LastLoginProvider: enums.AuthProviderGitHub,
+				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
 			},
 			writes: true,
 		},
 		{
-			// TODO (sfunk): allow this to pass by associating the user with an oauth login instead
-			name: "happy path, same email, different provider, this will fail today",
+			name: "happy path, same email, different provider, should not fail",
 			args: args{
 				name:     "Wanda Maximoff",
 				email:    "wmaximoff@marvel.com",
@@ -69,14 +69,15 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "https://example.com/images/photo.jpg",
 			},
 			want: &ent.User{
-				FirstName:       "Wanda",
-				LastName:        "Maximoff",
-				Email:           "wmaximoff@marvel.com",
-				AuthProvider:    enums.AuthProviderGoogle,
-				AvatarRemoteURL: lo.ToPtr("https://example.com/images/photo.jpg"),
+				FirstName:         "Wanda",
+				LastName:          "Maximoff",
+				Email:             "wmaximoff@marvel.com",
+				AuthProvider:      enums.AuthProviderGitHub,
+				LastLoginProvider: enums.AuthProviderGoogle,
+				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
 			},
-			writes:  false,
-			wantErr: true,
+			writes:  true,
+			wantErr: false,
 		},
 		{
 			name: "user already exists, should not fail, just update last seen",
@@ -87,11 +88,12 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "https://example.com/images/photo.jpg",
 			},
 			want: &ent.User{
-				FirstName:       "Wanda",
-				LastName:        "Maximoff",
-				Email:           "wmaximoff@marvel.com",
-				AuthProvider:    enums.AuthProviderGitHub,
-				AvatarRemoteURL: lo.ToPtr("https://example.com/images/photo.jpg"),
+				FirstName:         "Wanda",
+				LastName:          "Maximoff",
+				Email:             "wmaximoff@marvel.com",
+				AuthProvider:      enums.AuthProviderGitHub,
+				LastLoginProvider: enums.AuthProviderGitHub,
+				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
 			},
 			writes: false,
 		},
@@ -104,10 +106,11 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "",
 			},
 			want: &ent.User{
-				FirstName:    "Wand",
-				LastName:     "Maxim",
-				Email:        "wmaximoff1@marvel.com",
-				AuthProvider: enums.AuthProviderGitHub,
+				FirstName:         "Wand",
+				LastName:          "Maxim",
+				Email:             "wmaximoff1@marvel.com",
+				AuthProvider:      enums.AuthProviderGitHub,
+				LastLoginProvider: enums.AuthProviderGitHub,
 			},
 			writes: true,
 		},
@@ -120,10 +123,11 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "",
 			},
 			want: &ent.User{
-				FirstName:    "Wand",
-				LastName:     "Maxim",
-				Email:        "wmaximoff1@marvel.com",
-				AuthProvider: enums.AuthProviderGitHub,
+				FirstName:         "Wand",
+				LastName:          "Maxim",
+				Email:             "wmaximoff1@marvel.com",
+				AuthProvider:      enums.AuthProviderGitHub,
+				LastLoginProvider: enums.AuthProviderGitHub,
 			},
 			writes: false,
 		},
@@ -159,6 +163,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			assert.Equal(t, tt.want.LastName, got.LastName)
 			assert.Equal(t, tt.want.Email, got.Email)
 			assert.Equal(t, tt.want.AuthProvider, got.AuthProvider)
+			assert.Equal(t, tt.want.LastLoginProvider, got.LastLoginProvider)
 			assert.WithinDuration(t, now, *got.LastSeen, time.Second*5)
 
 			if tt.args.image == "" {

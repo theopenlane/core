@@ -12,7 +12,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -36,7 +35,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	}
 
 	// email verifications only come to users that were created with username/password logins
-	entUser, err := h.getUserByEmail(ctxWithToken, in.Email, enums.AuthProviderCredentials)
+	entUser, err := h.getUserByEmail(ctxWithToken, in.Email)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// return a 200 response even if user is not found to avoid

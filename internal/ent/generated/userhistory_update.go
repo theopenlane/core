@@ -255,6 +255,26 @@ func (uhu *UserHistoryUpdate) ClearLastSeen() *UserHistoryUpdate {
 	return uhu
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uhu *UserHistoryUpdate) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryUpdate {
+	uhu.mutation.SetLastLoginProvider(ep)
+	return uhu
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uhu *UserHistoryUpdate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryUpdate {
+	if ep != nil {
+		uhu.SetLastLoginProvider(*ep)
+	}
+	return uhu
+}
+
+// ClearLastLoginProvider clears the value of the "last_login_provider" field.
+func (uhu *UserHistoryUpdate) ClearLastLoginProvider() *UserHistoryUpdate {
+	uhu.mutation.ClearLastLoginProvider()
+	return uhu
+}
+
 // SetPassword sets the "password" field.
 func (uhu *UserHistoryUpdate) SetPassword(s string) *UserHistoryUpdate {
 	uhu.mutation.SetPassword(s)
@@ -380,6 +400,11 @@ func (uhu *UserHistoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (uhu *UserHistoryUpdate) check() error {
+	if v, ok := uhu.mutation.LastLoginProvider(); ok {
+		if err := userhistory.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
+		}
+	}
 	if v, ok := uhu.mutation.AuthProvider(); ok {
 		if err := userhistory.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.auth_provider": %w`, err)}
@@ -496,6 +521,12 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uhu.mutation.LastSeenCleared() {
 		_spec.ClearField(userhistory.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := uhu.mutation.LastLoginProvider(); ok {
+		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
+	}
+	if uhu.mutation.LastLoginProviderCleared() {
+		_spec.ClearField(userhistory.FieldLastLoginProvider, field.TypeEnum)
 	}
 	if value, ok := uhu.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
@@ -764,6 +795,26 @@ func (uhuo *UserHistoryUpdateOne) ClearLastSeen() *UserHistoryUpdateOne {
 	return uhuo
 }
 
+// SetLastLoginProvider sets the "last_login_provider" field.
+func (uhuo *UserHistoryUpdateOne) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryUpdateOne {
+	uhuo.mutation.SetLastLoginProvider(ep)
+	return uhuo
+}
+
+// SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
+func (uhuo *UserHistoryUpdateOne) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryUpdateOne {
+	if ep != nil {
+		uhuo.SetLastLoginProvider(*ep)
+	}
+	return uhuo
+}
+
+// ClearLastLoginProvider clears the value of the "last_login_provider" field.
+func (uhuo *UserHistoryUpdateOne) ClearLastLoginProvider() *UserHistoryUpdateOne {
+	uhuo.mutation.ClearLastLoginProvider()
+	return uhuo
+}
+
 // SetPassword sets the "password" field.
 func (uhuo *UserHistoryUpdateOne) SetPassword(s string) *UserHistoryUpdateOne {
 	uhuo.mutation.SetPassword(s)
@@ -902,6 +953,11 @@ func (uhuo *UserHistoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (uhuo *UserHistoryUpdateOne) check() error {
+	if v, ok := uhuo.mutation.LastLoginProvider(); ok {
+		if err := userhistory.LastLoginProviderValidator(v); err != nil {
+			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
+		}
+	}
 	if v, ok := uhuo.mutation.AuthProvider(); ok {
 		if err := userhistory.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.auth_provider": %w`, err)}
@@ -1035,6 +1091,12 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	}
 	if uhuo.mutation.LastSeenCleared() {
 		_spec.ClearField(userhistory.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := uhuo.mutation.LastLoginProvider(); ok {
+		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
+	}
+	if uhuo.mutation.LastLoginProviderCleared() {
+		_spec.ClearField(userhistory.FieldLastLoginProvider, field.TypeEnum)
 	}
 	if value, ok := uhuo.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
