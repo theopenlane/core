@@ -37,6 +37,12 @@ tasks:
     cmds:
       - go run ../../pkg/gencmd/generate/main.go generate --read-only
 
+  generate:enum:
+    desc: generates a new enum
+    interactive: true
+    cmds:
+      - go run ../../pkg/genenum/cmd/main.go
+
   org:create:
     desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
     aliases: [createorg]
