@@ -69,7 +69,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/theopenlane/beacon v0.1.1
 	github.com/theopenlane/echo-prometheus v0.1.0
-	github.com/theopenlane/echox v0.2.3
+	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.1.4
 	github.com/theopenlane/entx v0.7.2
 	github.com/theopenlane/gqlgen-plugins v0.6.0
@@ -78,7 +78,7 @@ require (
 	github.com/theopenlane/newman v0.1.4
 	github.com/theopenlane/riverboat v0.0.10
 	github.com/theopenlane/utils v0.4.5
-	github.com/vektah/gqlparser/v2 v2.5.25
+	github.com/vektah/gqlparser/v2 v2.5.26
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.41.0
@@ -114,6 +114,7 @@ require (
 	github.com/Mzack9999/go-http-digest-auth-client v0.6.1-0.20220414142836-eb8883508809 // indirect
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1 // indirect
 	github.com/PuerkitoBio/goquery v1.10.3 // indirect
+	github.com/STARRY-S/zip v0.2.1 // indirect
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.1 // indirect
 	github.com/akrylysov/pogreb v0.10.2 // indirect
@@ -149,6 +150,9 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.8.1 // indirect
+	github.com/bodgit/plumbing v1.3.0 // indirect
+	github.com/bodgit/sevenzip v1.6.0 // indirect
+	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/bombsimon/wsl/v4 v4.6.0 // indirect
 	github.com/breml/bidichk v0.3.2 // indirect
 	github.com/breml/errchkjson v0.4.0 // indirect
@@ -180,7 +184,7 @@ require (
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
 	github.com/docker/docker v28.0.4+incompatible // indirect
-	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
+	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/ebitengine/purego v0.8.2 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
@@ -260,7 +264,7 @@ require (
 	github.com/matoous/godox v1.1.0 // indirect
 	github.com/matryer/moq v0.5.3 // indirect
 	github.com/mgechev/revive v1.7.0 // indirect
-	github.com/mholt/archiver/v3 v3.5.1 // indirect
+	github.com/mholt/archives v0.1.0 // indirect
 	github.com/minio/selfupdate v0.6.1-0.20230907112617-f11e74f84ca7 // indirect
 	github.com/mjibson/esc v0.2.0 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
@@ -279,7 +283,7 @@ require (
 	github.com/nishanths/exhaustive v0.12.0 // indirect
 	github.com/nishanths/predeclared v0.2.2 // indirect
 	github.com/nunnatsa/ginkgolinter v0.19.1 // indirect
-	github.com/nwaples/rardecode v1.1.3 // indirect
+	github.com/nwaples/rardecode/v2 v2.0.0-beta.4.0.20241112120701-034e449c6e78 // indirect
 	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
 	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
@@ -287,17 +291,17 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
-	github.com/projectdiscovery/dsl v0.3.18 // indirect
-	github.com/projectdiscovery/fastdialer v0.3.0 // indirect
-	github.com/projectdiscovery/gologger v1.1.47 // indirect
+	github.com/projectdiscovery/dsl v0.4.1 // indirect
+	github.com/projectdiscovery/fastdialer v0.4.0 // indirect
+	github.com/projectdiscovery/gologger v1.1.54 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.82 // indirect
+	github.com/projectdiscovery/hmap v0.0.87 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
-	github.com/projectdiscovery/networkpolicy v0.1.7 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.75 // indirect
-	github.com/projectdiscovery/retryabledns v1.0.94 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.102 // indirect
+	github.com/projectdiscovery/networkpolicy v0.1.12 // indirect
+	github.com/projectdiscovery/ratelimit v0.0.79 // indirect
+	github.com/projectdiscovery/retryabledns v1.0.98 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.109 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.4 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -324,6 +328,7 @@ require (
 	github.com/sivchari/tenv v1.12.1 // indirect
 	github.com/smacker/go-tree-sitter v0.0.0-20240827094217-dd81d9e9be82 // indirect
 	github.com/sonatard/noctx v0.1.0 // indirect
+	github.com/sorairolake/lzip-go v0.3.5 // indirect
 	github.com/sourcegraph/go-diff v0.7.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/ssgreg/nlreturn/v2 v2.2.1 // indirect
@@ -333,6 +338,7 @@ require (
 	github.com/testcontainers/testcontainers-go v0.36.0 // indirect
 	github.com/testcontainers/testcontainers-go/modules/openfga v0.36.0 // indirect
 	github.com/tetafro/godot v1.5.0 // indirect
+	github.com/therootcompany/xz v1.0.1 // indirect
 	github.com/tidwall/btree v1.7.0 // indirect
 	github.com/tidwall/buntdb v1.3.2 // indirect
 	github.com/tidwall/grect v0.1.4 // indirect
@@ -352,7 +358,6 @@ require (
 	github.com/uudashr/iface v1.3.1 // indirect
 	github.com/weppos/publicsuffix-go v0.40.3-0.20250127173806-e489a31678ca // indirect
 	github.com/xen0n/gosmopolitan v1.2.2 // indirect
-	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yagipy/maintidx v1.0.0 // indirect
 	github.com/yeya24/promlinter v0.3.0 // indirect
@@ -378,6 +383,7 @@ require (
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.uber.org/automaxprocs v1.6.0 // indirect
 	go.uber.org/mock v0.5.0 // indirect
+	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250305212735-054e65f0b394 // indirect
 	gonum.org/v1/gonum v0.15.1 // indirect
 	gopkg.in/VividCortex/ewma.v1 v1.1.1 // indirect
@@ -512,7 +518,7 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/otp v1.4.0
-	github.com/projectdiscovery/katana v1.1.3-0.20250417080302-295ae677578d
+	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.7.0
 	github.com/projectdiscovery/wappalyzergo v0.2.25
 	github.com/prometheus/client_model v0.6.1 // indirect
