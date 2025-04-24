@@ -148,26 +148,6 @@ func (tu *TaskUpdate) SetNillableTitle(s *string) *TaskUpdate {
 	return tu
 }
 
-// SetDescription sets the "description" field.
-func (tu *TaskUpdate) SetDescription(s string) *TaskUpdate {
-	tu.mutation.SetDescription(s)
-	return tu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableDescription(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetDescription(*s)
-	}
-	return tu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (tu *TaskUpdate) ClearDescription() *TaskUpdate {
-	tu.mutation.ClearDescription()
-	return tu
-}
-
 // SetDetails sets the "details" field.
 func (tu *TaskUpdate) SetDetails(s string) *TaskUpdate {
 	tu.mutation.SetDetails(s)
@@ -771,12 +751,6 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := tu.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := tu.mutation.Description(); ok {
-		_spec.SetField(task.FieldDescription, field.TypeString, value)
-	}
-	if tu.mutation.DescriptionCleared() {
-		_spec.ClearField(task.FieldDescription, field.TypeString)
 	}
 	if value, ok := tu.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)
@@ -1427,26 +1401,6 @@ func (tuo *TaskUpdateOne) SetNillableTitle(s *string) *TaskUpdateOne {
 	return tuo
 }
 
-// SetDescription sets the "description" field.
-func (tuo *TaskUpdateOne) SetDescription(s string) *TaskUpdateOne {
-	tuo.mutation.SetDescription(s)
-	return tuo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableDescription(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetDescription(*s)
-	}
-	return tuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (tuo *TaskUpdateOne) ClearDescription() *TaskUpdateOne {
-	tuo.mutation.ClearDescription()
-	return tuo
-}
-
 // SetDetails sets the "details" field.
 func (tuo *TaskUpdateOne) SetDetails(s string) *TaskUpdateOne {
 	tuo.mutation.SetDetails(s)
@@ -2080,12 +2034,6 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if value, ok := tuo.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := tuo.mutation.Description(); ok {
-		_spec.SetField(task.FieldDescription, field.TypeString, value)
-	}
-	if tuo.mutation.DescriptionCleared() {
-		_spec.ClearField(task.FieldDescription, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)

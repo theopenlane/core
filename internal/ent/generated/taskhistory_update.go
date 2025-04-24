@@ -138,26 +138,6 @@ func (thu *TaskHistoryUpdate) SetNillableTitle(s *string) *TaskHistoryUpdate {
 	return thu
 }
 
-// SetDescription sets the "description" field.
-func (thu *TaskHistoryUpdate) SetDescription(s string) *TaskHistoryUpdate {
-	thu.mutation.SetDescription(s)
-	return thu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDescription(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetDescription(*s)
-	}
-	return thu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (thu *TaskHistoryUpdate) ClearDescription() *TaskHistoryUpdate {
-	thu.mutation.ClearDescription()
-	return thu
-}
-
 // SetDetails sets the "details" field.
 func (thu *TaskHistoryUpdate) SetDetails(s string) *TaskHistoryUpdate {
 	thu.mutation.SetDetails(s)
@@ -411,12 +391,6 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := thu.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := thu.mutation.Description(); ok {
-		_spec.SetField(taskhistory.FieldDescription, field.TypeString, value)
-	}
-	if thu.mutation.DescriptionCleared() {
-		_spec.ClearField(taskhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := thu.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
 	}
@@ -581,26 +555,6 @@ func (thuo *TaskHistoryUpdateOne) SetNillableTitle(s *string) *TaskHistoryUpdate
 	if s != nil {
 		thuo.SetTitle(*s)
 	}
-	return thuo
-}
-
-// SetDescription sets the "description" field.
-func (thuo *TaskHistoryUpdateOne) SetDescription(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDescription(s)
-	return thuo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDescription(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetDescription(*s)
-	}
-	return thuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (thuo *TaskHistoryUpdateOne) ClearDescription() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearDescription()
 	return thuo
 }
 
@@ -886,12 +840,6 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 	}
 	if value, ok := thuo.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := thuo.mutation.Description(); ok {
-		_spec.SetField(taskhistory.FieldDescription, field.TypeString, value)
-	}
-	if thuo.mutation.DescriptionCleared() {
-		_spec.ClearField(taskhistory.FieldDescription, field.TypeString)
 	}
 	if value, ok := thuo.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)

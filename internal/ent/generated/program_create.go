@@ -181,6 +181,34 @@ func (pc *ProgramCreate) SetNillableStatus(es *enums.ProgramStatus) *ProgramCrea
 	return pc
 }
 
+// SetProgramType sets the "program_type" field.
+func (pc *ProgramCreate) SetProgramType(et enums.ProgramType) *ProgramCreate {
+	pc.mutation.SetProgramType(et)
+	return pc
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramCreate {
+	if et != nil {
+		pc.SetProgramType(*et)
+	}
+	return pc
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (pc *ProgramCreate) SetFrameworkName(s string) *ProgramCreate {
+	pc.mutation.SetFrameworkName(s)
+	return pc
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableFrameworkName(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetFrameworkName(*s)
+	}
+	return pc
+}
+
 // SetStartDate sets the "start_date" field.
 func (pc *ProgramCreate) SetStartDate(t time.Time) *ProgramCreate {
 	pc.mutation.SetStartDate(t)
@@ -584,6 +612,10 @@ func (pc *ProgramCreate) defaults() error {
 		v := program.DefaultStatus
 		pc.mutation.SetStatus(v)
 	}
+	if _, ok := pc.mutation.ProgramType(); !ok {
+		v := program.DefaultProgramType
+		pc.mutation.SetProgramType(v)
+	}
 	if _, ok := pc.mutation.AuditorReady(); !ok {
 		v := program.DefaultAuditorReady
 		pc.mutation.SetAuditorReady(v)
@@ -635,6 +667,14 @@ func (pc *ProgramCreate) check() error {
 	if v, ok := pc.mutation.Status(); ok {
 		if err := program.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
+		}
+	}
+	if _, ok := pc.mutation.ProgramType(); !ok {
+		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "Program.program_type"`)}
+	}
+	if v, ok := pc.mutation.ProgramType(); ok {
+		if err := program.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
 	if _, ok := pc.mutation.AuditorReady(); !ok {
@@ -725,6 +765,14 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := pc.mutation.ProgramType(); ok {
+		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
+		_node.ProgramType = value
+	}
+	if value, ok := pc.mutation.FrameworkName(); ok {
+		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
+		_node.FrameworkName = value
 	}
 	if value, ok := pc.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)

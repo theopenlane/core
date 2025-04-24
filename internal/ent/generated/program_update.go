@@ -207,6 +207,40 @@ func (pu *ProgramUpdate) SetNillableStatus(es *enums.ProgramStatus) *ProgramUpda
 	return pu
 }
 
+// SetProgramType sets the "program_type" field.
+func (pu *ProgramUpdate) SetProgramType(et enums.ProgramType) *ProgramUpdate {
+	pu.mutation.SetProgramType(et)
+	return pu
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableProgramType(et *enums.ProgramType) *ProgramUpdate {
+	if et != nil {
+		pu.SetProgramType(*et)
+	}
+	return pu
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (pu *ProgramUpdate) SetFrameworkName(s string) *ProgramUpdate {
+	pu.mutation.SetFrameworkName(s)
+	return pu
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableFrameworkName(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetFrameworkName(*s)
+	}
+	return pu
+}
+
+// ClearFrameworkName clears the value of the "framework_name" field.
+func (pu *ProgramUpdate) ClearFrameworkName() *ProgramUpdate {
+	pu.mutation.ClearFrameworkName()
+	return pu
+}
+
 // SetStartDate sets the "start_date" field.
 func (pu *ProgramUpdate) SetStartDate(t time.Time) *ProgramUpdate {
 	pu.mutation.SetStartDate(t)
@@ -976,6 +1010,11 @@ func (pu *ProgramUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.ProgramType(); ok {
+		if err := program.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1049,6 +1088,15 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := pu.mutation.ProgramType(); ok {
+		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
+	}
+	if value, ok := pu.mutation.FrameworkName(); ok {
+		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
+	}
+	if pu.mutation.FrameworkNameCleared() {
+		_spec.ClearField(program.FieldFrameworkName, field.TypeString)
 	}
 	if value, ok := pu.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)
@@ -2121,6 +2169,40 @@ func (puo *ProgramUpdateOne) SetNillableStatus(es *enums.ProgramStatus) *Program
 	return puo
 }
 
+// SetProgramType sets the "program_type" field.
+func (puo *ProgramUpdateOne) SetProgramType(et enums.ProgramType) *ProgramUpdateOne {
+	puo.mutation.SetProgramType(et)
+	return puo
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableProgramType(et *enums.ProgramType) *ProgramUpdateOne {
+	if et != nil {
+		puo.SetProgramType(*et)
+	}
+	return puo
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (puo *ProgramUpdateOne) SetFrameworkName(s string) *ProgramUpdateOne {
+	puo.mutation.SetFrameworkName(s)
+	return puo
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableFrameworkName(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetFrameworkName(*s)
+	}
+	return puo
+}
+
+// ClearFrameworkName clears the value of the "framework_name" field.
+func (puo *ProgramUpdateOne) ClearFrameworkName() *ProgramUpdateOne {
+	puo.mutation.ClearFrameworkName()
+	return puo
+}
+
 // SetStartDate sets the "start_date" field.
 func (puo *ProgramUpdateOne) SetStartDate(t time.Time) *ProgramUpdateOne {
 	puo.mutation.SetStartDate(t)
@@ -2903,6 +2985,11 @@ func (puo *ProgramUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.ProgramType(); ok {
+		if err := program.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2993,6 +3080,15 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if value, ok := puo.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := puo.mutation.ProgramType(); ok {
+		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
+	}
+	if value, ok := puo.mutation.FrameworkName(); ok {
+		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
+	}
+	if puo.mutation.FrameworkNameCleared() {
+		_spec.ClearField(program.FieldFrameworkName, field.TypeString)
 	}
 	if value, ok := puo.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)

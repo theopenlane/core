@@ -42,8 +42,6 @@ type Task struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
-	// the description of the task
-	Description string `json:"description,omitempty"`
 	// the details of the task
 	Details string `json:"details,omitempty"`
 	// the status of the task
@@ -230,7 +228,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case task.FieldDue, task.FieldCompleted:
 			values[i] = new(models.DateTime)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTitle, task.FieldDescription, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -316,12 +314,6 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				t.Title = value.String
-			}
-		case task.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				t.Description = value.String
 			}
 		case task.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -490,9 +482,6 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(t.Title)
-	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(t.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(t.Details)

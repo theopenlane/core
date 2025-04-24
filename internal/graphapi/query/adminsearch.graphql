@@ -526,6 +526,7 @@ query AdminSearch($query: String!) {
           ownerID
           name
           description
+          frameworkName
         }
       }
     }
@@ -653,7 +654,6 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           title
-          description
           details
           category
           assigneeID

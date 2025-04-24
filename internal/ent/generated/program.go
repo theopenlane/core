@@ -44,6 +44,10 @@ type Program struct {
 	Description string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"program_type,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName string `json:"framework_name,omitempty"`
 	// the start date of the period
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
@@ -296,7 +300,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -394,6 +398,18 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				pr.Status = enums.ProgramStatus(value.String)
+			}
+		case program.FieldProgramType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_type", values[i])
+			} else if value.Valid {
+				pr.ProgramType = enums.ProgramType(value.String)
+			}
+		case program.FieldFrameworkName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field framework_name", values[i])
+			} else if value.Valid {
+				pr.FrameworkName = value.String
 			}
 		case program.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -586,6 +602,12 @@ func (pr *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Status))
+	builder.WriteString(", ")
+	builder.WriteString("program_type=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ProgramType))
+	builder.WriteString(", ")
+	builder.WriteString("framework_name=")
+	builder.WriteString(pr.FrameworkName)
 	builder.WriteString(", ")
 	builder.WriteString("start_date=")
 	builder.WriteString(pr.StartDate.Format(time.ANSIC))

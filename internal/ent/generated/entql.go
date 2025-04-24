@@ -1728,6 +1728,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldName:                 {Type: field.TypeString, Column: program.FieldName},
 			program.FieldDescription:          {Type: field.TypeString, Column: program.FieldDescription},
 			program.FieldStatus:               {Type: field.TypeEnum, Column: program.FieldStatus},
+			program.FieldProgramType:          {Type: field.TypeEnum, Column: program.FieldProgramType},
+			program.FieldFrameworkName:        {Type: field.TypeString, Column: program.FieldFrameworkName},
 			program.FieldStartDate:            {Type: field.TypeTime, Column: program.FieldStartDate},
 			program.FieldEndDate:              {Type: field.TypeTime, Column: program.FieldEndDate},
 			program.FieldAuditorReady:         {Type: field.TypeBool, Column: program.FieldAuditorReady},
@@ -1761,6 +1763,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldName:                 {Type: field.TypeString, Column: programhistory.FieldName},
 			programhistory.FieldDescription:          {Type: field.TypeString, Column: programhistory.FieldDescription},
 			programhistory.FieldStatus:               {Type: field.TypeEnum, Column: programhistory.FieldStatus},
+			programhistory.FieldProgramType:          {Type: field.TypeEnum, Column: programhistory.FieldProgramType},
+			programhistory.FieldFrameworkName:        {Type: field.TypeString, Column: programhistory.FieldFrameworkName},
 			programhistory.FieldStartDate:            {Type: field.TypeTime, Column: programhistory.FieldStartDate},
 			programhistory.FieldEndDate:              {Type: field.TypeTime, Column: programhistory.FieldEndDate},
 			programhistory.FieldAuditorReady:         {Type: field.TypeBool, Column: programhistory.FieldAuditorReady},
@@ -2116,24 +2120,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Task",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			task.FieldCreatedAt:   {Type: field.TypeTime, Column: task.FieldCreatedAt},
-			task.FieldUpdatedAt:   {Type: field.TypeTime, Column: task.FieldUpdatedAt},
-			task.FieldCreatedBy:   {Type: field.TypeString, Column: task.FieldCreatedBy},
-			task.FieldUpdatedBy:   {Type: field.TypeString, Column: task.FieldUpdatedBy},
-			task.FieldDeletedAt:   {Type: field.TypeTime, Column: task.FieldDeletedAt},
-			task.FieldDeletedBy:   {Type: field.TypeString, Column: task.FieldDeletedBy},
-			task.FieldDisplayID:   {Type: field.TypeString, Column: task.FieldDisplayID},
-			task.FieldTags:        {Type: field.TypeJSON, Column: task.FieldTags},
-			task.FieldOwnerID:     {Type: field.TypeString, Column: task.FieldOwnerID},
-			task.FieldTitle:       {Type: field.TypeString, Column: task.FieldTitle},
-			task.FieldDescription: {Type: field.TypeString, Column: task.FieldDescription},
-			task.FieldDetails:     {Type: field.TypeString, Column: task.FieldDetails},
-			task.FieldStatus:      {Type: field.TypeEnum, Column: task.FieldStatus},
-			task.FieldCategory:    {Type: field.TypeString, Column: task.FieldCategory},
-			task.FieldDue:         {Type: field.TypeTime, Column: task.FieldDue},
-			task.FieldCompleted:   {Type: field.TypeTime, Column: task.FieldCompleted},
-			task.FieldAssigneeID:  {Type: field.TypeString, Column: task.FieldAssigneeID},
-			task.FieldAssignerID:  {Type: field.TypeString, Column: task.FieldAssignerID},
+			task.FieldCreatedAt:  {Type: field.TypeTime, Column: task.FieldCreatedAt},
+			task.FieldUpdatedAt:  {Type: field.TypeTime, Column: task.FieldUpdatedAt},
+			task.FieldCreatedBy:  {Type: field.TypeString, Column: task.FieldCreatedBy},
+			task.FieldUpdatedBy:  {Type: field.TypeString, Column: task.FieldUpdatedBy},
+			task.FieldDeletedAt:  {Type: field.TypeTime, Column: task.FieldDeletedAt},
+			task.FieldDeletedBy:  {Type: field.TypeString, Column: task.FieldDeletedBy},
+			task.FieldDisplayID:  {Type: field.TypeString, Column: task.FieldDisplayID},
+			task.FieldTags:       {Type: field.TypeJSON, Column: task.FieldTags},
+			task.FieldOwnerID:    {Type: field.TypeString, Column: task.FieldOwnerID},
+			task.FieldTitle:      {Type: field.TypeString, Column: task.FieldTitle},
+			task.FieldDetails:    {Type: field.TypeString, Column: task.FieldDetails},
+			task.FieldStatus:     {Type: field.TypeEnum, Column: task.FieldStatus},
+			task.FieldCategory:   {Type: field.TypeString, Column: task.FieldCategory},
+			task.FieldDue:        {Type: field.TypeTime, Column: task.FieldDue},
+			task.FieldCompleted:  {Type: field.TypeTime, Column: task.FieldCompleted},
+			task.FieldAssigneeID: {Type: field.TypeString, Column: task.FieldAssigneeID},
+			task.FieldAssignerID: {Type: field.TypeString, Column: task.FieldAssignerID},
 		},
 	}
 	graph.Nodes[69] = &sqlgraph.Node{
@@ -2160,7 +2163,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldTags:        {Type: field.TypeJSON, Column: taskhistory.FieldTags},
 			taskhistory.FieldOwnerID:     {Type: field.TypeString, Column: taskhistory.FieldOwnerID},
 			taskhistory.FieldTitle:       {Type: field.TypeString, Column: taskhistory.FieldTitle},
-			taskhistory.FieldDescription: {Type: field.TypeString, Column: taskhistory.FieldDescription},
 			taskhistory.FieldDetails:     {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldStatus:      {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
 			taskhistory.FieldCategory:    {Type: field.TypeString, Column: taskhistory.FieldCategory},
@@ -16069,6 +16071,16 @@ func (f *ProgramFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(program.FieldStatus))
 }
 
+// WhereProgramType applies the entql string predicate on the program_type field.
+func (f *ProgramFilter) WhereProgramType(p entql.StringP) {
+	f.Where(p.Field(program.FieldProgramType))
+}
+
+// WhereFrameworkName applies the entql string predicate on the framework_name field.
+func (f *ProgramFilter) WhereFrameworkName(p entql.StringP) {
+	f.Where(p.Field(program.FieldFrameworkName))
+}
+
 // WhereStartDate applies the entql time.Time predicate on the start_date field.
 func (f *ProgramFilter) WhereStartDate(p entql.TimeP) {
 	f.Where(p.Field(program.FieldStartDate))
@@ -16459,6 +16471,16 @@ func (f *ProgramHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ProgramHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldStatus))
+}
+
+// WhereProgramType applies the entql string predicate on the program_type field.
+func (f *ProgramHistoryFilter) WhereProgramType(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldProgramType))
+}
+
+// WhereFrameworkName applies the entql string predicate on the framework_name field.
+func (f *ProgramHistoryFilter) WhereFrameworkName(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldFrameworkName))
 }
 
 // WhereStartDate applies the entql time.Time predicate on the start_date field.
@@ -18487,11 +18509,6 @@ func (f *TaskFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(task.FieldTitle))
 }
 
-// WhereDescription applies the entql string predicate on the description field.
-func (f *TaskFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(task.FieldDescription))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *TaskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(task.FieldDetails))
@@ -18798,11 +18815,6 @@ func (f *TaskHistoryFilter) WhereOwnerID(p entql.StringP) {
 // WhereTitle applies the entql string predicate on the title field.
 func (f *TaskHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldTitle))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *TaskHistoryFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldDescription))
 }
 
 // WhereDetails applies the entql string predicate on the details field.

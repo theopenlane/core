@@ -1068,9 +1068,10 @@ func adminSearchPrograms(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
-				program.OwnerIDContainsFold(query),     // search by OwnerID
-				program.NameContainsFold(query),        // search by Name
-				program.DescriptionContainsFold(query), // search by Description
+				program.OwnerIDContainsFold(query),       // search by OwnerID
+				program.NameContainsFold(query),          // search by Name
+				program.DescriptionContainsFold(query),   // search by Description
+				program.FrameworkNameContainsFold(query), // search by FrameworkName
 			),
 		)
 
@@ -1302,12 +1303,11 @@ func searchTasks(ctx context.Context, query string, after *entgql.Cursor[string]
 	request := withTransactionalMutation(ctx).Task.Query().
 		Where(
 			task.Or(
-				task.DescriptionContainsFold(query), // search by Description
-				task.DisplayID(query),               // search equal to DisplayID
-				task.ID(query),                      // search equal to ID
+				task.DisplayID(query), // search equal to DisplayID
+				task.ID(query),        // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				task.TitleContainsFold(query), // search by Title
 			),
@@ -1328,13 +1328,12 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
-				task.OwnerIDContainsFold(query),     // search by OwnerID
-				task.TitleContainsFold(query),       // search by Title
-				task.DescriptionContainsFold(query), // search by Description
-				task.DetailsContainsFold(query),     // search by Details
-				task.CategoryContainsFold(query),    // search by Category
-				task.AssigneeIDContainsFold(query),  // search by AssigneeID
-				task.AssignerIDContainsFold(query),  // search by AssignerID
+				task.OwnerIDContainsFold(query),    // search by OwnerID
+				task.TitleContainsFold(query),      // search by Title
+				task.DetailsContainsFold(query),    // search by Details
+				task.CategoryContainsFold(query),   // search by Category
+				task.AssigneeIDContainsFold(query), // search by AssigneeID
+				task.AssignerIDContainsFold(query), // search by AssignerID
 			),
 		)
 

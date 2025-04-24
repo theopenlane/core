@@ -38,8 +38,6 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -163,7 +161,6 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldTitle,
-	FieldDescription,
 	FieldDetails,
 	FieldStatus,
 	FieldCategory,
@@ -300,11 +297,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
 // ByDetails orders the results by the details field.

@@ -50071,6 +50071,29 @@ type ProgramWhereInput struct {
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
 
+	// "program_type" field predicates.
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNEQ   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+
+	// "framework_name" field predicates.
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNEQ          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGT           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGTE          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLT           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLTE          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        bool     `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       bool     `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
+
 	// "start_date" field predicates.
 	StartDate       *time.Time  `json:"startDate,omitempty"`
 	StartDateNEQ    *time.Time  `json:"startDateNEQ,omitempty"`
@@ -50685,6 +50708,63 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, program.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.ProgramType != nil {
+		predicates = append(predicates, program.ProgramTypeEQ(*i.ProgramType))
+	}
+	if i.ProgramTypeNEQ != nil {
+		predicates = append(predicates, program.ProgramTypeNEQ(*i.ProgramTypeNEQ))
+	}
+	if len(i.ProgramTypeIn) > 0 {
+		predicates = append(predicates, program.ProgramTypeIn(i.ProgramTypeIn...))
+	}
+	if len(i.ProgramTypeNotIn) > 0 {
+		predicates = append(predicates, program.ProgramTypeNotIn(i.ProgramTypeNotIn...))
+	}
+	if i.FrameworkName != nil {
+		predicates = append(predicates, program.FrameworkNameEQ(*i.FrameworkName))
+	}
+	if i.FrameworkNameNEQ != nil {
+		predicates = append(predicates, program.FrameworkNameNEQ(*i.FrameworkNameNEQ))
+	}
+	if len(i.FrameworkNameIn) > 0 {
+		predicates = append(predicates, program.FrameworkNameIn(i.FrameworkNameIn...))
+	}
+	if len(i.FrameworkNameNotIn) > 0 {
+		predicates = append(predicates, program.FrameworkNameNotIn(i.FrameworkNameNotIn...))
+	}
+	if i.FrameworkNameGT != nil {
+		predicates = append(predicates, program.FrameworkNameGT(*i.FrameworkNameGT))
+	}
+	if i.FrameworkNameGTE != nil {
+		predicates = append(predicates, program.FrameworkNameGTE(*i.FrameworkNameGTE))
+	}
+	if i.FrameworkNameLT != nil {
+		predicates = append(predicates, program.FrameworkNameLT(*i.FrameworkNameLT))
+	}
+	if i.FrameworkNameLTE != nil {
+		predicates = append(predicates, program.FrameworkNameLTE(*i.FrameworkNameLTE))
+	}
+	if i.FrameworkNameContains != nil {
+		predicates = append(predicates, program.FrameworkNameContains(*i.FrameworkNameContains))
+	}
+	if i.FrameworkNameHasPrefix != nil {
+		predicates = append(predicates, program.FrameworkNameHasPrefix(*i.FrameworkNameHasPrefix))
+	}
+	if i.FrameworkNameHasSuffix != nil {
+		predicates = append(predicates, program.FrameworkNameHasSuffix(*i.FrameworkNameHasSuffix))
+	}
+	if i.FrameworkNameIsNil {
+		predicates = append(predicates, program.FrameworkNameIsNil())
+	}
+	if i.FrameworkNameNotNil {
+		predicates = append(predicates, program.FrameworkNameNotNil())
+	}
+	if i.FrameworkNameEqualFold != nil {
+		predicates = append(predicates, program.FrameworkNameEqualFold(*i.FrameworkNameEqualFold))
+	}
+	if i.FrameworkNameContainsFold != nil {
+		predicates = append(predicates, program.FrameworkNameContainsFold(*i.FrameworkNameContainsFold))
 	}
 	if i.StartDate != nil {
 		predicates = append(predicates, program.StartDateEQ(*i.StartDate))
@@ -51307,6 +51387,29 @@ type ProgramHistoryWhereInput struct {
 	StatusNEQ   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
+
+	// "program_type" field predicates.
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNEQ   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+
+	// "framework_name" field predicates.
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNEQ          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGT           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGTE          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLT           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLTE          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        bool     `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       bool     `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
 
 	// "start_date" field predicates.
 	StartDate       *time.Time  `json:"startDate,omitempty"`
@@ -51931,6 +52034,63 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, programhistory.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.ProgramType != nil {
+		predicates = append(predicates, programhistory.ProgramTypeEQ(*i.ProgramType))
+	}
+	if i.ProgramTypeNEQ != nil {
+		predicates = append(predicates, programhistory.ProgramTypeNEQ(*i.ProgramTypeNEQ))
+	}
+	if len(i.ProgramTypeIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramTypeIn(i.ProgramTypeIn...))
+	}
+	if len(i.ProgramTypeNotIn) > 0 {
+		predicates = append(predicates, programhistory.ProgramTypeNotIn(i.ProgramTypeNotIn...))
+	}
+	if i.FrameworkName != nil {
+		predicates = append(predicates, programhistory.FrameworkNameEQ(*i.FrameworkName))
+	}
+	if i.FrameworkNameNEQ != nil {
+		predicates = append(predicates, programhistory.FrameworkNameNEQ(*i.FrameworkNameNEQ))
+	}
+	if len(i.FrameworkNameIn) > 0 {
+		predicates = append(predicates, programhistory.FrameworkNameIn(i.FrameworkNameIn...))
+	}
+	if len(i.FrameworkNameNotIn) > 0 {
+		predicates = append(predicates, programhistory.FrameworkNameNotIn(i.FrameworkNameNotIn...))
+	}
+	if i.FrameworkNameGT != nil {
+		predicates = append(predicates, programhistory.FrameworkNameGT(*i.FrameworkNameGT))
+	}
+	if i.FrameworkNameGTE != nil {
+		predicates = append(predicates, programhistory.FrameworkNameGTE(*i.FrameworkNameGTE))
+	}
+	if i.FrameworkNameLT != nil {
+		predicates = append(predicates, programhistory.FrameworkNameLT(*i.FrameworkNameLT))
+	}
+	if i.FrameworkNameLTE != nil {
+		predicates = append(predicates, programhistory.FrameworkNameLTE(*i.FrameworkNameLTE))
+	}
+	if i.FrameworkNameContains != nil {
+		predicates = append(predicates, programhistory.FrameworkNameContains(*i.FrameworkNameContains))
+	}
+	if i.FrameworkNameHasPrefix != nil {
+		predicates = append(predicates, programhistory.FrameworkNameHasPrefix(*i.FrameworkNameHasPrefix))
+	}
+	if i.FrameworkNameHasSuffix != nil {
+		predicates = append(predicates, programhistory.FrameworkNameHasSuffix(*i.FrameworkNameHasSuffix))
+	}
+	if i.FrameworkNameIsNil {
+		predicates = append(predicates, programhistory.FrameworkNameIsNil())
+	}
+	if i.FrameworkNameNotNil {
+		predicates = append(predicates, programhistory.FrameworkNameNotNil())
+	}
+	if i.FrameworkNameEqualFold != nil {
+		predicates = append(predicates, programhistory.FrameworkNameEqualFold(*i.FrameworkNameEqualFold))
+	}
+	if i.FrameworkNameContainsFold != nil {
+		predicates = append(predicates, programhistory.FrameworkNameContainsFold(*i.FrameworkNameContainsFold))
 	}
 	if i.StartDate != nil {
 		predicates = append(predicates, programhistory.StartDateEQ(*i.StartDate))
@@ -62880,23 +63040,6 @@ type TaskWhereInput struct {
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 
-	// "description" field predicates.
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-
 	// "details" field predicates.
 	Details             *string  `json:"details,omitempty"`
 	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
@@ -63492,51 +63635,6 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, task.TitleContainsFold(*i.TitleContainsFold))
-	}
-	if i.Description != nil {
-		predicates = append(predicates, task.DescriptionEQ(*i.Description))
-	}
-	if i.DescriptionNEQ != nil {
-		predicates = append(predicates, task.DescriptionNEQ(*i.DescriptionNEQ))
-	}
-	if len(i.DescriptionIn) > 0 {
-		predicates = append(predicates, task.DescriptionIn(i.DescriptionIn...))
-	}
-	if len(i.DescriptionNotIn) > 0 {
-		predicates = append(predicates, task.DescriptionNotIn(i.DescriptionNotIn...))
-	}
-	if i.DescriptionGT != nil {
-		predicates = append(predicates, task.DescriptionGT(*i.DescriptionGT))
-	}
-	if i.DescriptionGTE != nil {
-		predicates = append(predicates, task.DescriptionGTE(*i.DescriptionGTE))
-	}
-	if i.DescriptionLT != nil {
-		predicates = append(predicates, task.DescriptionLT(*i.DescriptionLT))
-	}
-	if i.DescriptionLTE != nil {
-		predicates = append(predicates, task.DescriptionLTE(*i.DescriptionLTE))
-	}
-	if i.DescriptionContains != nil {
-		predicates = append(predicates, task.DescriptionContains(*i.DescriptionContains))
-	}
-	if i.DescriptionHasPrefix != nil {
-		predicates = append(predicates, task.DescriptionHasPrefix(*i.DescriptionHasPrefix))
-	}
-	if i.DescriptionHasSuffix != nil {
-		predicates = append(predicates, task.DescriptionHasSuffix(*i.DescriptionHasSuffix))
-	}
-	if i.DescriptionIsNil {
-		predicates = append(predicates, task.DescriptionIsNil())
-	}
-	if i.DescriptionNotNil {
-		predicates = append(predicates, task.DescriptionNotNil())
-	}
-	if i.DescriptionEqualFold != nil {
-		predicates = append(predicates, task.DescriptionEqualFold(*i.DescriptionEqualFold))
-	}
-	if i.DescriptionContainsFold != nil {
-		predicates = append(predicates, task.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 	if i.Details != nil {
 		predicates = append(predicates, task.DetailsEQ(*i.Details))
@@ -64203,23 +64301,6 @@ type TaskHistoryWhereInput struct {
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 
-	// "description" field predicates.
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-
 	// "details" field predicates.
 	Details             *string  `json:"details,omitempty"`
 	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
@@ -64848,51 +64929,6 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, taskhistory.TitleContainsFold(*i.TitleContainsFold))
-	}
-	if i.Description != nil {
-		predicates = append(predicates, taskhistory.DescriptionEQ(*i.Description))
-	}
-	if i.DescriptionNEQ != nil {
-		predicates = append(predicates, taskhistory.DescriptionNEQ(*i.DescriptionNEQ))
-	}
-	if len(i.DescriptionIn) > 0 {
-		predicates = append(predicates, taskhistory.DescriptionIn(i.DescriptionIn...))
-	}
-	if len(i.DescriptionNotIn) > 0 {
-		predicates = append(predicates, taskhistory.DescriptionNotIn(i.DescriptionNotIn...))
-	}
-	if i.DescriptionGT != nil {
-		predicates = append(predicates, taskhistory.DescriptionGT(*i.DescriptionGT))
-	}
-	if i.DescriptionGTE != nil {
-		predicates = append(predicates, taskhistory.DescriptionGTE(*i.DescriptionGTE))
-	}
-	if i.DescriptionLT != nil {
-		predicates = append(predicates, taskhistory.DescriptionLT(*i.DescriptionLT))
-	}
-	if i.DescriptionLTE != nil {
-		predicates = append(predicates, taskhistory.DescriptionLTE(*i.DescriptionLTE))
-	}
-	if i.DescriptionContains != nil {
-		predicates = append(predicates, taskhistory.DescriptionContains(*i.DescriptionContains))
-	}
-	if i.DescriptionHasPrefix != nil {
-		predicates = append(predicates, taskhistory.DescriptionHasPrefix(*i.DescriptionHasPrefix))
-	}
-	if i.DescriptionHasSuffix != nil {
-		predicates = append(predicates, taskhistory.DescriptionHasSuffix(*i.DescriptionHasSuffix))
-	}
-	if i.DescriptionIsNil {
-		predicates = append(predicates, taskhistory.DescriptionIsNil())
-	}
-	if i.DescriptionNotNil {
-		predicates = append(predicates, taskhistory.DescriptionNotNil())
-	}
-	if i.DescriptionEqualFold != nil {
-		predicates = append(predicates, taskhistory.DescriptionEqualFold(*i.DescriptionEqualFold))
-	}
-	if i.DescriptionContainsFold != nil {
-		predicates = append(predicates, taskhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 	if i.Details != nil {
 		predicates = append(predicates, taskhistory.DetailsEQ(*i.Details))

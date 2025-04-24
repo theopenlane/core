@@ -200,6 +200,34 @@ func (phc *ProgramHistoryCreate) SetNillableStatus(es *enums.ProgramStatus) *Pro
 	return phc
 }
 
+// SetProgramType sets the "program_type" field.
+func (phc *ProgramHistoryCreate) SetProgramType(et enums.ProgramType) *ProgramHistoryCreate {
+	phc.mutation.SetProgramType(et)
+	return phc
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryCreate {
+	if et != nil {
+		phc.SetProgramType(*et)
+	}
+	return phc
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (phc *ProgramHistoryCreate) SetFrameworkName(s string) *ProgramHistoryCreate {
+	phc.mutation.SetFrameworkName(s)
+	return phc
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableFrameworkName(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetFrameworkName(*s)
+	}
+	return phc
+}
+
 // SetStartDate sets the "start_date" field.
 func (phc *ProgramHistoryCreate) SetStartDate(t time.Time) *ProgramHistoryCreate {
 	phc.mutation.SetStartDate(t)
@@ -339,6 +367,10 @@ func (phc *ProgramHistoryCreate) defaults() {
 		v := programhistory.DefaultStatus
 		phc.mutation.SetStatus(v)
 	}
+	if _, ok := phc.mutation.ProgramType(); !ok {
+		v := programhistory.DefaultProgramType
+		phc.mutation.SetProgramType(v)
+	}
 	if _, ok := phc.mutation.AuditorReady(); !ok {
 		v := programhistory.DefaultAuditorReady
 		phc.mutation.SetAuditorReady(v)
@@ -382,6 +414,14 @@ func (phc *ProgramHistoryCreate) check() error {
 	if v, ok := phc.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
+		}
+	}
+	if _, ok := phc.mutation.ProgramType(); !ok {
+		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "ProgramHistory.program_type"`)}
+	}
+	if v, ok := phc.mutation.ProgramType(); ok {
+		if err := programhistory.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
 	}
 	if _, ok := phc.mutation.AuditorReady(); !ok {
@@ -488,6 +528,14 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := phc.mutation.ProgramType(); ok {
+		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
+		_node.ProgramType = value
+	}
+	if value, ok := phc.mutation.FrameworkName(); ok {
+		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
+		_node.FrameworkName = value
 	}
 	if value, ok := phc.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)

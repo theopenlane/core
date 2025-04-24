@@ -481,7 +481,6 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
-          description
           displayID
           id
           tags

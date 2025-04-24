@@ -4605,6 +4605,10 @@ type CreateProgramInput struct {
 	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType *enums.ProgramType `json:"programType,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
@@ -4803,8 +4807,6 @@ type CreateTaskInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty"`
 	// the details of the task
 	Details *string `json:"details,omitempty"`
 	// the status of the task
@@ -16482,6 +16484,10 @@ type Program struct {
 	Description *string `json:"description,omitempty,omitzero"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"programType"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
 	// the end date of the period
@@ -16576,6 +16582,10 @@ type ProgramHistory struct {
 	Description *string `json:"description,omitempty,omitzero"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"programType"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
 	// the end date of the period
@@ -16809,6 +16819,27 @@ type ProgramHistoryWhereInput struct {
 	StatusNeq   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
+	// program_type field predicates
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNeq   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+	// framework_name field predicates
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNeq          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGt           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGte          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLt           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLte          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        *bool    `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       *bool    `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
 	// start_date field predicates
 	StartDate       *time.Time   `json:"startDate,omitempty"`
 	StartDateNeq    *time.Time   `json:"startDateNEQ,omitempty"`
@@ -17400,6 +17431,27 @@ type ProgramWhereInput struct {
 	StatusNeq   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
+	// program_type field predicates
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNeq   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+	// framework_name field predicates
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNeq          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGt           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGte          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLt           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLte          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        *bool    `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       *bool    `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
 	// start_date field predicates
 	StartDate       *time.Time   `json:"startDate,omitempty"`
 	StartDateNeq    *time.Time   `json:"startDateNEQ,omitempty"`
@@ -20491,8 +20543,6 @@ type Task struct {
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty,omitzero"`
 	// the details of the task
 	Details *string `json:"details,omitempty,omitzero"`
 	// the status of the task
@@ -20578,8 +20628,6 @@ type TaskHistory struct {
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty,omitzero"`
 	// the details of the task
 	Details *string `json:"details,omitempty,omitzero"`
 	// the status of the task
@@ -20796,22 +20844,6 @@ type TaskHistoryWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -21061,22 +21093,6 @@ type TaskWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -22909,6 +22925,11 @@ type UpdateProgramInput struct {
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType *enums.ProgramType `json:"programType,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName      *string `json:"frameworkName,omitempty"`
+	ClearFrameworkName *bool   `json:"clearFrameworkName,omitempty"`
 	// the start date of the period
 	StartDate      *time.Time `json:"startDate,omitempty"`
 	ClearStartDate *bool      `json:"clearStartDate,omitempty"`
@@ -23244,9 +23265,6 @@ type UpdateTaskInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the title of the task
 	Title *string `json:"title,omitempty"`
-	// the description of the task
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the details of the task
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -28024,12 +28042,14 @@ func (e ProcedureOrderField) MarshalJSON() ([]byte, error) {
 type ProgramHistoryOrderField string
 
 const (
-	ProgramHistoryOrderFieldCreatedAt ProgramHistoryOrderField = "created_at"
-	ProgramHistoryOrderFieldUpdatedAt ProgramHistoryOrderField = "updated_at"
-	ProgramHistoryOrderFieldName      ProgramHistoryOrderField = "name"
-	ProgramHistoryOrderFieldStatus    ProgramHistoryOrderField = "STATUS"
-	ProgramHistoryOrderFieldStartDate ProgramHistoryOrderField = "start_date"
-	ProgramHistoryOrderFieldEndDate   ProgramHistoryOrderField = "end_date"
+	ProgramHistoryOrderFieldCreatedAt   ProgramHistoryOrderField = "created_at"
+	ProgramHistoryOrderFieldUpdatedAt   ProgramHistoryOrderField = "updated_at"
+	ProgramHistoryOrderFieldName        ProgramHistoryOrderField = "name"
+	ProgramHistoryOrderFieldStatus      ProgramHistoryOrderField = "STATUS"
+	ProgramHistoryOrderFieldProgramType ProgramHistoryOrderField = "PROGRAM_TYPE"
+	ProgramHistoryOrderFieldFramework   ProgramHistoryOrderField = "framework"
+	ProgramHistoryOrderFieldStartDate   ProgramHistoryOrderField = "start_date"
+	ProgramHistoryOrderFieldEndDate     ProgramHistoryOrderField = "end_date"
 )
 
 var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
@@ -28037,13 +28057,15 @@ var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
 	ProgramHistoryOrderFieldUpdatedAt,
 	ProgramHistoryOrderFieldName,
 	ProgramHistoryOrderFieldStatus,
+	ProgramHistoryOrderFieldProgramType,
+	ProgramHistoryOrderFieldFramework,
 	ProgramHistoryOrderFieldStartDate,
 	ProgramHistoryOrderFieldEndDate,
 }
 
 func (e ProgramHistoryOrderField) IsValid() bool {
 	switch e {
-	case ProgramHistoryOrderFieldCreatedAt, ProgramHistoryOrderFieldUpdatedAt, ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
+	case ProgramHistoryOrderFieldCreatedAt, ProgramHistoryOrderFieldUpdatedAt, ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldProgramType, ProgramHistoryOrderFieldFramework, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
 		return true
 	}
 	return false
@@ -28204,12 +28226,14 @@ func (e ProgramMembershipOrderField) MarshalJSON() ([]byte, error) {
 type ProgramOrderField string
 
 const (
-	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
-	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
-	ProgramOrderFieldName      ProgramOrderField = "name"
-	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
-	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
-	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
+	ProgramOrderFieldCreatedAt   ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt   ProgramOrderField = "updated_at"
+	ProgramOrderFieldName        ProgramOrderField = "name"
+	ProgramOrderFieldStatus      ProgramOrderField = "STATUS"
+	ProgramOrderFieldProgramType ProgramOrderField = "PROGRAM_TYPE"
+	ProgramOrderFieldFramework   ProgramOrderField = "framework"
+	ProgramOrderFieldStartDate   ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate     ProgramOrderField = "end_date"
 )
 
 var AllProgramOrderField = []ProgramOrderField{
@@ -28217,13 +28241,15 @@ var AllProgramOrderField = []ProgramOrderField{
 	ProgramOrderFieldUpdatedAt,
 	ProgramOrderFieldName,
 	ProgramOrderFieldStatus,
+	ProgramOrderFieldProgramType,
+	ProgramOrderFieldFramework,
 	ProgramOrderFieldStartDate,
 	ProgramOrderFieldEndDate,
 }
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldProgramType, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
 		return true
 	}
 	return false

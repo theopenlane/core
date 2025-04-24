@@ -149,20 +149,6 @@ func (tc *TaskCreate) SetTitle(s string) *TaskCreate {
 	return tc
 }
 
-// SetDescription sets the "description" field.
-func (tc *TaskCreate) SetDescription(s string) *TaskCreate {
-	tc.mutation.SetDescription(s)
-	return tc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDescription(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetDescription(*s)
-	}
-	return tc
-}
-
 // SetDetails sets the "details" field.
 func (tc *TaskCreate) SetDetails(s string) *TaskCreate {
 	tc.mutation.SetDetails(s)
@@ -596,10 +582,6 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := tc.mutation.Description(); ok {
-		_spec.SetField(task.FieldDescription, field.TypeString, value)
-		_node.Description = value
 	}
 	if value, ok := tc.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)
