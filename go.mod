@@ -67,6 +67,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/stoewer/go-strcase v1.3.0
 	github.com/stretchr/testify v1.10.0
+	github.com/stripe/stripe-go/v81 v81.4.0
 	github.com/theopenlane/beacon v0.1.1
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.3
@@ -536,7 +537,7 @@ require (
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.20.1 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
-	github.com/stripe/stripe-go/v81 v81.4.0
+	github.com/stripe/stripe-go/v82 v82.0.0
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/theopenlane/dbx v0.1.3 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
