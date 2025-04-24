@@ -192,6 +192,8 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			request: openlaneclient.CreateProgramInput{
 				Name:                 "mitb program",
 				Description:          lo.ToPtr("being the best"),
+				ProgramType:          &enums.ProgramTypeFramework,
+				FrameworkName:        lo.ToPtr("SOC 2"),
 				Status:               &enums.ProgramStatusInProgress,
 				StartDate:            &startDate,
 				EndDate:              &endDate,
@@ -238,6 +240,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			request: openlaneclient.CreateProgramInput{
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
+				ProgramType: &enums.ProgramTypeGapAnalysis,
 				OwnerID:     &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
@@ -328,6 +331,18 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 				assert.Empty(t, resp.CreateProgram.Program.Description)
 			} else {
 				assert.Equal(t, tc.request.Description, resp.CreateProgram.Program.Description)
+			}
+
+			if tc.request.ProgramType == nil {
+				assert.Equal(t, enums.ProgramTypeFramework, resp.CreateProgram.Program.ProgramType)
+			} else {
+				assert.Equal(t, *tc.request.ProgramType, resp.CreateProgram.Program.ProgramType)
+			}
+
+			if tc.request.FrameworkName == nil {
+				assert.Empty(t, resp.CreateProgram.Program.FrameworkName)
+			} else {
+				assert.Equal(t, tc.request.FrameworkName, resp.CreateProgram.Program.FrameworkName)
 			}
 
 			if tc.request.Status == nil {
@@ -484,6 +499,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			name: "happy path, update field",
 			request: openlaneclient.UpdateProgramInput{
 				Description:  lo.ToPtr("new description"),
+				ProgramType:  &enums.ProgramTypeRiskAssessment,
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for the subsequent tests
 				AddViewerIDs: []string{viewerGroup.ID},    // add the group to the viewer groups and ensure the user has access to the program
 			},
@@ -494,6 +510,8 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			name: "happy path, update multiple fields using pat",
 			request: openlaneclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
+				ProgramType:          &enums.ProgramTypeFramework,
+				FrameworkName:        lo.ToPtr("SOC 2"),
 				EndDate:              lo.ToPtr(time.Now().AddDate(0, 0, 30)),
 				AuditorReady:         lo.ToPtr(true),
 				AuditorWriteComments: lo.ToPtr(true),
@@ -629,6 +647,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, resp.UpdateProgram.Program.Status)
+			}
+
+			if tc.request.ProgramType != nil {
+				assert.Equal(t, *tc.request.ProgramType, resp.UpdateProgram.Program.ProgramType)
+			}
+
+			if tc.request.FrameworkName != nil {
+				assert.Equal(t, tc.request.FrameworkName, resp.UpdateProgram.Program.FrameworkName)
 			}
 
 			if tc.request.StartDate != nil {

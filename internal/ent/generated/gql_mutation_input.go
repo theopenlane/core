@@ -6101,6 +6101,8 @@ type CreateProgramInput struct {
 	Name                 string
 	Description          *string
 	Status               *enums.ProgramStatus
+	ProgramType          *enums.ProgramType
+	FrameworkName        *string
 	StartDate            *time.Time
 	EndDate              *time.Time
 	AuditorReady         *bool
@@ -6135,6 +6137,12 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ProgramType; v != nil {
+		m.SetProgramType(*v)
+	}
+	if v := i.FrameworkName; v != nil {
+		m.SetFrameworkName(*v)
 	}
 	if v := i.StartDate; v != nil {
 		m.SetStartDate(*v)
@@ -6216,6 +6224,9 @@ type UpdateProgramInput struct {
 	ClearDescription          bool
 	Description               *string
 	Status                    *enums.ProgramStatus
+	ProgramType               *enums.ProgramType
+	ClearFrameworkName        bool
+	FrameworkName             *string
 	ClearStartDate            bool
 	StartDate                 *time.Time
 	ClearEndDate              bool
@@ -6294,6 +6305,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ProgramType; v != nil {
+		m.SetProgramType(*v)
+	}
+	if i.ClearFrameworkName {
+		m.ClearFrameworkName()
+	}
+	if v := i.FrameworkName; v != nil {
+		m.SetFrameworkName(*v)
 	}
 	if i.ClearStartDate {
 		m.ClearStartDate()
@@ -7705,7 +7725,6 @@ func (c *TFASettingUpdateOne) SetInput(i UpdateTFASettingInput) *TFASettingUpdat
 type CreateTaskInput struct {
 	Tags                []string
 	Title               string
-	Description         *string
 	Details             *string
 	Status              *enums.TaskStatus
 	Category            *string
@@ -7731,9 +7750,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 		m.SetTags(v)
 	}
 	m.SetTitle(i.Title)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
 	}
@@ -7799,8 +7815,6 @@ type UpdateTaskInput struct {
 	Tags                      []string
 	AppendTags                []string
 	Title                     *string
-	ClearDescription          bool
-	Description               *string
 	ClearDetails              bool
 	Details                   *string
 	Status                    *enums.TaskStatus
@@ -7856,12 +7870,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()

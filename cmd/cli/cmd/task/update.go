@@ -27,7 +27,7 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("title", "t", "", "title of the task")
-	updateCmd.Flags().StringP("description", "d", "", "description of the task")
+	updateCmd.Flags().StringP("details", "d", "", "details of the task")
 	updateCmd.Flags().StringP("status", "s", "", "status of the task")
 	updateCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	updateCmd.Flags().Duration("due", 0, "time until due date of the task")
@@ -51,9 +51,9 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 		input.Title = &title
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	status := cmd.Config.String("status")

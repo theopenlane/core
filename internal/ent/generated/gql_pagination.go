@@ -20909,6 +20909,34 @@ var (
 			}
 		},
 	}
+	// ProgramOrderFieldProgramType orders Program by program_type.
+	ProgramOrderFieldProgramType = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.ProgramType, nil
+		},
+		column: program.FieldProgramType,
+		toTerm: program.ByProgramType,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.ProgramType,
+			}
+		},
+	}
+	// ProgramOrderFieldFrameworkName orders Program by framework_name.
+	ProgramOrderFieldFrameworkName = &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.FrameworkName, nil
+		},
+		column: program.FieldFrameworkName,
+		toTerm: program.ByFrameworkName,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.FrameworkName,
+			}
+		},
+	}
 	// ProgramOrderFieldStartDate orders Program by start_date.
 	ProgramOrderFieldStartDate = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
@@ -20951,6 +20979,10 @@ func (f ProgramOrderField) String() string {
 		str = "name"
 	case ProgramOrderFieldStatus.column:
 		str = "STATUS"
+	case ProgramOrderFieldProgramType.column:
+		str = "PROGRAM_TYPE"
+	case ProgramOrderFieldFrameworkName.column:
+		str = "framework"
 	case ProgramOrderFieldStartDate.column:
 		str = "start_date"
 	case ProgramOrderFieldEndDate.column:
@@ -20979,6 +21011,10 @@ func (f *ProgramOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramOrderFieldName
 	case "STATUS":
 		*f = *ProgramOrderFieldStatus
+	case "PROGRAM_TYPE":
+		*f = *ProgramOrderFieldProgramType
+	case "framework":
+		*f = *ProgramOrderFieldFrameworkName
 	case "start_date":
 		*f = *ProgramOrderFieldStartDate
 	case "end_date":
@@ -21295,6 +21331,34 @@ var (
 			}
 		},
 	}
+	// ProgramHistoryOrderFieldProgramType orders ProgramHistory by program_type.
+	ProgramHistoryOrderFieldProgramType = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.ProgramType, nil
+		},
+		column: programhistory.FieldProgramType,
+		toTerm: programhistory.ByProgramType,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.ProgramType,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldFrameworkName orders ProgramHistory by framework_name.
+	ProgramHistoryOrderFieldFrameworkName = &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.FrameworkName, nil
+		},
+		column: programhistory.FieldFrameworkName,
+		toTerm: programhistory.ByFrameworkName,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    ph.ID,
+				Value: ph.FrameworkName,
+			}
+		},
+	}
 	// ProgramHistoryOrderFieldStartDate orders ProgramHistory by start_date.
 	ProgramHistoryOrderFieldStartDate = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
@@ -21337,6 +21401,10 @@ func (f ProgramHistoryOrderField) String() string {
 		str = "name"
 	case ProgramHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case ProgramHistoryOrderFieldProgramType.column:
+		str = "PROGRAM_TYPE"
+	case ProgramHistoryOrderFieldFrameworkName.column:
+		str = "framework"
 	case ProgramHistoryOrderFieldStartDate.column:
 		str = "start_date"
 	case ProgramHistoryOrderFieldEndDate.column:
@@ -21365,6 +21433,10 @@ func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramHistoryOrderFieldName
 	case "STATUS":
 		*f = *ProgramHistoryOrderFieldStatus
+	case "PROGRAM_TYPE":
+		*f = *ProgramHistoryOrderFieldProgramType
+	case "framework":
+		*f = *ProgramHistoryOrderFieldFrameworkName
 	case "start_date":
 		*f = *ProgramHistoryOrderFieldStartDate
 	case "end_date":

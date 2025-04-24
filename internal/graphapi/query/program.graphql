@@ -7,6 +7,8 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -30,6 +32,8 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -67,6 +71,8 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       name
       id
       displayID
+      programType
+      frameworkName
       members {
         edges {
           node {
@@ -130,6 +136,8 @@ mutation CreateProgram($input: CreateProgramInput!) {
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -198,6 +206,8 @@ mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
       name
       id
       displayID
+      programType
+      frameworkName
       members {
         edges {
           node {
@@ -230,6 +240,8 @@ query GetAllPrograms {
         createdAt
         createdBy
         description
+        programType
+        frameworkName
         endDate
         id
         displayID
@@ -313,6 +325,8 @@ query GetProgramByID($programId: ID!) {
     createdAt
     createdBy
     description
+    programType
+    frameworkName
     endDate
     id
     displayID
@@ -396,6 +410,8 @@ query GetPrograms($where: ProgramWhereInput) {
         createdAt
         createdBy
         description
+        programType
+        frameworkName
         endDate
         id
         displayID
@@ -480,6 +496,8 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       name

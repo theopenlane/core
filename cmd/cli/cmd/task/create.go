@@ -27,7 +27,7 @@ func init() {
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("title", "t", "", "title of the task")
-	createCmd.Flags().StringP("description", "d", "", "description of the task")
+	createCmd.Flags().StringP("details", "d", "", "details of the task")
 	createCmd.Flags().StringP("status", "s", "", "status of the task")
 	createCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	createCmd.Flags().String("due", "", "time until due date of the task")
@@ -43,9 +43,9 @@ func createValidation() (input openlaneclient.CreateTaskInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("task title")
 	}
 
-	description := cmd.Config.String("description")
-	if description != "" {
-		input.Description = &description
+	details := cmd.Config.String("details")
+	if details != "" {
+		input.Details = &details
 	}
 
 	status := cmd.Config.String("status")

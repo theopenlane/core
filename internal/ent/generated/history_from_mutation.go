@@ -6258,6 +6258,14 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if programType, exists := m.ProgramType(); exists {
+		create = create.SetProgramType(programType)
+	}
+
+	if frameworkName, exists := m.FrameworkName(); exists {
+		create = create.SetFrameworkName(frameworkName)
+	}
+
 	if startDate, exists := m.StartDate(); exists {
 		create = create.SetStartDate(startDate)
 	}
@@ -6380,6 +6388,18 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(program.Status)
 		}
 
+		if programType, exists := m.ProgramType(); exists {
+			create = create.SetProgramType(programType)
+		} else {
+			create = create.SetProgramType(program.ProgramType)
+		}
+
+		if frameworkName, exists := m.FrameworkName(); exists {
+			create = create.SetFrameworkName(frameworkName)
+		} else {
+			create = create.SetFrameworkName(program.FrameworkName)
+		}
+
 		if startDate, exists := m.StartDate(); exists {
 			create = create.SetStartDate(startDate)
 		} else {
@@ -6454,6 +6474,8 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(program.Name).
 			SetDescription(program.Description).
 			SetStatus(program.Status).
+			SetProgramType(program.ProgramType).
+			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
 			SetAuditorReady(program.AuditorReady).
@@ -7769,10 +7791,6 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTitle(title)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -7891,12 +7909,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTitle(task.Title)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(task.Description)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -7981,7 +7993,6 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(task.Tags).
 			SetOwnerID(task.OwnerID).
 			SetTitle(task.Title).
-			SetDescription(task.Description).
 			SetDetails(task.Details).
 			SetStatus(task.Status).
 			SetCategory(task.Category).

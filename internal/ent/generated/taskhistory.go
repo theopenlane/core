@@ -47,8 +47,6 @@ type TaskHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
-	// the description of the task
-	Description string `json:"description,omitempty"`
 	// the details of the task
 	Details string `json:"details,omitempty"`
 	// the status of the task
@@ -77,7 +75,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(models.DateTime)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -181,12 +179,6 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				th.Title = value.String
-			}
-		case taskhistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				th.Description = value.String
 			}
 		case taskhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -304,9 +296,6 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(th.Title)
-	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(th.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(th.Details)

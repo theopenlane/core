@@ -62,6 +62,19 @@ func (Program) Fields() []ent.Field {
 				entgql.OrderField("STATUS"),
 			).
 			Default(enums.ProgramStatusNotStarted.String()),
+		field.Enum("program_type").
+			Comment("the type of the program").
+			GoType(enums.ProgramType("")).
+			Annotations(
+				entgql.OrderField("PROGRAM_TYPE"),
+			).
+			Default(enums.ProgramTypeFramework.String()),
+		field.String("framework_name").
+			Comment("the short name of the compliance standard the program is based on, only used for framework type programs").
+			Optional().
+			Annotations(
+				entgql.OrderField("framework"),
+			),
 		field.Time("start_date").
 			Comment("the start date of the period").
 			Annotations(

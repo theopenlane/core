@@ -191,6 +191,40 @@ func (phu *ProgramHistoryUpdate) SetNillableStatus(es *enums.ProgramStatus) *Pro
 	return phu
 }
 
+// SetProgramType sets the "program_type" field.
+func (phu *ProgramHistoryUpdate) SetProgramType(et enums.ProgramType) *ProgramHistoryUpdate {
+	phu.mutation.SetProgramType(et)
+	return phu
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryUpdate {
+	if et != nil {
+		phu.SetProgramType(*et)
+	}
+	return phu
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (phu *ProgramHistoryUpdate) SetFrameworkName(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetFrameworkName(s)
+	return phu
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableFrameworkName(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetFrameworkName(*s)
+	}
+	return phu
+}
+
+// ClearFrameworkName clears the value of the "framework_name" field.
+func (phu *ProgramHistoryUpdate) ClearFrameworkName() *ProgramHistoryUpdate {
+	phu.mutation.ClearFrameworkName()
+	return phu
+}
+
 // SetStartDate sets the "start_date" field.
 func (phu *ProgramHistoryUpdate) SetStartDate(t time.Time) *ProgramHistoryUpdate {
 	phu.mutation.SetStartDate(t)
@@ -321,6 +355,11 @@ func (phu *ProgramHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := phu.mutation.ProgramType(); ok {
+		if err := programhistory.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -403,6 +442,15 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := phu.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := phu.mutation.ProgramType(); ok {
+		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
+	}
+	if value, ok := phu.mutation.FrameworkName(); ok {
+		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
+	}
+	if phu.mutation.FrameworkNameCleared() {
+		_spec.ClearField(programhistory.FieldFrameworkName, field.TypeString)
 	}
 	if value, ok := phu.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)
@@ -607,6 +655,40 @@ func (phuo *ProgramHistoryUpdateOne) SetNillableStatus(es *enums.ProgramStatus) 
 	return phuo
 }
 
+// SetProgramType sets the "program_type" field.
+func (phuo *ProgramHistoryUpdateOne) SetProgramType(et enums.ProgramType) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetProgramType(et)
+	return phuo
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryUpdateOne {
+	if et != nil {
+		phuo.SetProgramType(*et)
+	}
+	return phuo
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (phuo *ProgramHistoryUpdateOne) SetFrameworkName(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetFrameworkName(s)
+	return phuo
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableFrameworkName(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetFrameworkName(*s)
+	}
+	return phuo
+}
+
+// ClearFrameworkName clears the value of the "framework_name" field.
+func (phuo *ProgramHistoryUpdateOne) ClearFrameworkName() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearFrameworkName()
+	return phuo
+}
+
 // SetStartDate sets the "start_date" field.
 func (phuo *ProgramHistoryUpdateOne) SetStartDate(t time.Time) *ProgramHistoryUpdateOne {
 	phuo.mutation.SetStartDate(t)
@@ -750,6 +832,11 @@ func (phuo *ProgramHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := phuo.mutation.ProgramType(); ok {
+		if err := programhistory.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -849,6 +936,15 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	}
 	if value, ok := phuo.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := phuo.mutation.ProgramType(); ok {
+		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
+	}
+	if value, ok := phuo.mutation.FrameworkName(); ok {
+		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
+	}
+	if phuo.mutation.FrameworkNameCleared() {
+		_spec.ClearField(programhistory.FieldFrameworkName, field.TypeString)
 	}
 	if value, ok := phuo.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)

@@ -7271,6 +7271,14 @@ input CreateProgramInput {
 	"""
 	status: ProgramProgramStatus
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -7584,10 +7592,6 @@ input CreateTaskInput {
 	the title of the task
 	"""
 	title: String!
-	"""
-	the description of the task
-	"""
-	description: String
 	"""
 	the details of the task
 	"""
@@ -27810,6 +27814,14 @@ type Program implements Node {
 	"""
 	status: ProgramProgramStatus!
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType!
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -28370,6 +28382,14 @@ type ProgramHistory implements Node {
 	"""
 	status: ProgramHistoryProgramStatus!
 	"""
+	the type of the program
+	"""
+	programType: ProgramHistoryProgramType!
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -28449,6 +28469,8 @@ enum ProgramHistoryOrderField {
 	updated_at
 	name
 	STATUS
+	PROGRAM_TYPE
+	framework
 	start_date
 	end_date
 }
@@ -28461,6 +28483,15 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pk
 	READY_FOR_AUDITOR
 	COMPLETED
 	ACTION_REQUIRED
+}
+"""
+ProgramHistoryProgramType is enum for the field program_type
+"""
+enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+	FRAMEWORK
+	GAP_ANALYSIS
+	RISK_ASSESSMENT
+	OTHER
 }
 """
 ProgramHistoryWhereInput is used for filtering ProgramHistory objects.
@@ -28687,6 +28718,31 @@ input ProgramHistoryWhereInput {
 	statusNEQ: ProgramHistoryProgramStatus
 	statusIn: [ProgramHistoryProgramStatus!]
 	statusNotIn: [ProgramHistoryProgramStatus!]
+	"""
+	program_type field predicates
+	"""
+	programType: ProgramHistoryProgramType
+	programTypeNEQ: ProgramHistoryProgramType
+	programTypeIn: [ProgramHistoryProgramType!]
+	programTypeNotIn: [ProgramHistoryProgramType!]
+	"""
+	framework_name field predicates
+	"""
+	frameworkName: String
+	frameworkNameNEQ: String
+	frameworkNameIn: [String!]
+	frameworkNameNotIn: [String!]
+	frameworkNameGT: String
+	frameworkNameGTE: String
+	frameworkNameLT: String
+	frameworkNameLTE: String
+	frameworkNameContains: String
+	frameworkNameHasPrefix: String
+	frameworkNameHasSuffix: String
+	frameworkNameIsNil: Boolean
+	frameworkNameNotNil: Boolean
+	frameworkNameEqualFold: String
+	frameworkNameContainsFold: String
 	"""
 	start_date field predicates
 	"""
@@ -29253,6 +29309,8 @@ enum ProgramOrderField {
 	updated_at
 	name
 	STATUS
+	PROGRAM_TYPE
+	framework
 	start_date
 	end_date
 }
@@ -29265,6 +29323,15 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 	READY_FOR_AUDITOR
 	COMPLETED
 	ACTION_REQUIRED
+}
+"""
+ProgramProgramType is enum for the field program_type
+"""
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+	FRAMEWORK
+	GAP_ANALYSIS
+	RISK_ASSESSMENT
+	OTHER
 }
 """
 Return response for updateProgram mutation
@@ -29464,6 +29531,31 @@ input ProgramWhereInput {
 	statusNEQ: ProgramProgramStatus
 	statusIn: [ProgramProgramStatus!]
 	statusNotIn: [ProgramProgramStatus!]
+	"""
+	program_type field predicates
+	"""
+	programType: ProgramProgramType
+	programTypeNEQ: ProgramProgramType
+	programTypeIn: [ProgramProgramType!]
+	programTypeNotIn: [ProgramProgramType!]
+	"""
+	framework_name field predicates
+	"""
+	frameworkName: String
+	frameworkNameNEQ: String
+	frameworkNameIn: [String!]
+	frameworkNameNotIn: [String!]
+	frameworkNameGT: String
+	frameworkNameGTE: String
+	frameworkNameLT: String
+	frameworkNameLTE: String
+	frameworkNameContains: String
+	frameworkNameHasPrefix: String
+	frameworkNameHasSuffix: String
+	frameworkNameIsNil: Boolean
+	frameworkNameNotNil: Boolean
+	frameworkNameEqualFold: String
+	frameworkNameContainsFold: String
 	"""
 	start_date field predicates
 	"""
@@ -38803,10 +38895,6 @@ type Task implements Node {
 	"""
 	title: String!
 	"""
-	the description of the task
-	"""
-	description: String
-	"""
 	the details of the task
 	"""
 	details: String
@@ -39202,10 +39290,6 @@ type TaskHistory implements Node {
 	"""
 	title: String!
 	"""
-	the description of the task
-	"""
-	description: String
-	"""
 	the details of the task
 	"""
 	details: String
@@ -39507,24 +39591,6 @@ input TaskHistoryWhereInput {
 	titleHasSuffix: String
 	titleEqualFold: String
 	titleContainsFold: String
-	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
 	"""
 	details field predicates
 	"""
@@ -39839,24 +39905,6 @@ input TaskWhereInput {
 	titleHasSuffix: String
 	titleEqualFold: String
 	titleContainsFold: String
-	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
 	"""
 	details field predicates
 	"""
@@ -42312,6 +42360,15 @@ input UpdateProgramInput {
 	"""
 	status: ProgramProgramStatus
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	clearFrameworkName: Boolean
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -42769,11 +42826,6 @@ input UpdateTaskInput {
 	the title of the task
 	"""
 	title: String
-	"""
-	the description of the task
-	"""
-	description: String
-	clearDescription: Boolean
 	"""
 	the details of the task
 	"""

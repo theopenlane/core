@@ -126,6 +126,11 @@ func Description(v string) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// FrameworkName applies equality check predicate on the "framework_name" field. It's identical to FrameworkNameEQ.
+func FrameworkName(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFrameworkName, v))
+}
+
 // StartDate applies equality check predicate on the "start_date" field. It's identical to StartDateEQ.
 func StartDate(v time.Time) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldStartDate, v))
@@ -979,6 +984,111 @@ func StatusNotIn(vs ...enums.ProgramStatus) predicate.ProgramHistory {
 		v[i] = vs[i]
 	}
 	return predicate.ProgramHistory(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// ProgramTypeEQ applies the EQ predicate on the "program_type" field.
+func ProgramTypeEQ(v enums.ProgramType) predicate.ProgramHistory {
+	vc := v
+	return predicate.ProgramHistory(sql.FieldEQ(FieldProgramType, vc))
+}
+
+// ProgramTypeNEQ applies the NEQ predicate on the "program_type" field.
+func ProgramTypeNEQ(v enums.ProgramType) predicate.ProgramHistory {
+	vc := v
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldProgramType, vc))
+}
+
+// ProgramTypeIn applies the In predicate on the "program_type" field.
+func ProgramTypeIn(vs ...enums.ProgramType) predicate.ProgramHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProgramHistory(sql.FieldIn(FieldProgramType, v...))
+}
+
+// ProgramTypeNotIn applies the NotIn predicate on the "program_type" field.
+func ProgramTypeNotIn(vs ...enums.ProgramType) predicate.ProgramHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldProgramType, v...))
+}
+
+// FrameworkNameEQ applies the EQ predicate on the "framework_name" field.
+func FrameworkNameEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFrameworkName, v))
+}
+
+// FrameworkNameNEQ applies the NEQ predicate on the "framework_name" field.
+func FrameworkNameNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldFrameworkName, v))
+}
+
+// FrameworkNameIn applies the In predicate on the "framework_name" field.
+func FrameworkNameIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldFrameworkName, vs...))
+}
+
+// FrameworkNameNotIn applies the NotIn predicate on the "framework_name" field.
+func FrameworkNameNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldFrameworkName, vs...))
+}
+
+// FrameworkNameGT applies the GT predicate on the "framework_name" field.
+func FrameworkNameGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldFrameworkName, v))
+}
+
+// FrameworkNameGTE applies the GTE predicate on the "framework_name" field.
+func FrameworkNameGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldFrameworkName, v))
+}
+
+// FrameworkNameLT applies the LT predicate on the "framework_name" field.
+func FrameworkNameLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldFrameworkName, v))
+}
+
+// FrameworkNameLTE applies the LTE predicate on the "framework_name" field.
+func FrameworkNameLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldFrameworkName, v))
+}
+
+// FrameworkNameContains applies the Contains predicate on the "framework_name" field.
+func FrameworkNameContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldFrameworkName, v))
+}
+
+// FrameworkNameHasPrefix applies the HasPrefix predicate on the "framework_name" field.
+func FrameworkNameHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldFrameworkName, v))
+}
+
+// FrameworkNameHasSuffix applies the HasSuffix predicate on the "framework_name" field.
+func FrameworkNameHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldFrameworkName, v))
+}
+
+// FrameworkNameIsNil applies the IsNil predicate on the "framework_name" field.
+func FrameworkNameIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldFrameworkName))
+}
+
+// FrameworkNameNotNil applies the NotNil predicate on the "framework_name" field.
+func FrameworkNameNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldFrameworkName))
+}
+
+// FrameworkNameEqualFold applies the EqualFold predicate on the "framework_name" field.
+func FrameworkNameEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldFrameworkName, v))
+}
+
+// FrameworkNameContainsFold applies the ContainsFold predicate on the "framework_name" field.
+func FrameworkNameContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldFrameworkName, v))
 }
 
 // StartDateEQ applies the EQ predicate on the "start_date" field.

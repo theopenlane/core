@@ -1879,6 +1879,12 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.Status, new.Status) {
 		changes = append(changes, NewChange(programhistory.FieldStatus, ph.Status, new.Status))
 	}
+	if !reflect.DeepEqual(ph.ProgramType, new.ProgramType) {
+		changes = append(changes, NewChange(programhistory.FieldProgramType, ph.ProgramType, new.ProgramType))
+	}
+	if !reflect.DeepEqual(ph.FrameworkName, new.FrameworkName) {
+		changes = append(changes, NewChange(programhistory.FieldFrameworkName, ph.FrameworkName, new.FrameworkName))
+	}
 	if !reflect.DeepEqual(ph.StartDate, new.StartDate) {
 		changes = append(changes, NewChange(programhistory.FieldStartDate, ph.StartDate, new.StartDate))
 	}
@@ -2304,9 +2310,6 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	}
 	if !reflect.DeepEqual(th.Title, new.Title) {
 		changes = append(changes, NewChange(taskhistory.FieldTitle, th.Title, new.Title))
-	}
-	if !reflect.DeepEqual(th.Description, new.Description) {
-		changes = append(changes, NewChange(taskhistory.FieldDescription, th.Description, new.Description))
 	}
 	if !reflect.DeepEqual(th.Details, new.Details) {
 		changes = append(changes, NewChange(taskhistory.FieldDetails, th.Details, new.Details))
