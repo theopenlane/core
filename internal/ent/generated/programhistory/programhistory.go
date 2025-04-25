@@ -62,6 +62,12 @@ const (
 	FieldAuditorWriteComments = "auditor_write_comments"
 	// FieldAuditorReadComments holds the string denoting the auditor_read_comments field in the database.
 	FieldAuditorReadComments = "auditor_read_comments"
+	// FieldAuditFirm holds the string denoting the audit_firm field in the database.
+	FieldAuditFirm = "audit_firm"
+	// FieldAuditor holds the string denoting the auditor field in the database.
+	FieldAuditor = "auditor"
+	// FieldAuditorEmail holds the string denoting the auditor_email field in the database.
+	FieldAuditorEmail = "auditor_email"
 	// Table holds the table name of the programhistory in the database.
 	Table = "program_history"
 )
@@ -91,6 +97,9 @@ var Columns = []string{
 	FieldAuditorReady,
 	FieldAuditorWriteComments,
 	FieldAuditorReadComments,
+	FieldAuditFirm,
+	FieldAuditor,
+	FieldAuditorEmail,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -275,6 +284,21 @@ func ByAuditorWriteComments(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorReadComments orders the results by the auditor_read_comments field.
 func ByAuditorReadComments(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorReadComments, opts...).ToFunc()
+}
+
+// ByAuditFirm orders the results by the audit_firm field.
+func ByAuditFirm(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditFirm, opts...).ToFunc()
+}
+
+// ByAuditor orders the results by the auditor field.
+func ByAuditor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditor, opts...).ToFunc()
+}
+
+// ByAuditorEmail orders the results by the auditor_email field.
+func ByAuditorEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditorEmail, opts...).ToFunc()
 }
 
 var (

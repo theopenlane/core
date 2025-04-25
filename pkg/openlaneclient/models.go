@@ -4618,7 +4618,13 @@ type CreateProgramInput struct {
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
-	AuditorReadComments *bool    `json:"auditorReadComments,omitempty"`
+	AuditorReadComments *bool `json:"auditorReadComments,omitempty"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail        *string  `json:"auditorEmail,omitempty"`
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string `json:"editorIDs,omitempty"`
@@ -16497,8 +16503,14 @@ type Program struct {
 	// can the auditor write comments
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
-	AuditorReadComments bool          `json:"auditorReadComments"`
-	Owner               *Organization `json:"owner,omitempty,omitzero"`
+	AuditorReadComments bool `json:"auditorReadComments"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty,omitzero"`
+	// the email of the auditor conducting the audit
+	AuditorEmail *string       `json:"auditorEmail,omitempty,omitzero"`
+	Owner        *Organization `json:"owner,omitempty,omitzero"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
 	// provides edit access to the risk to members of the group
@@ -16596,6 +16608,12 @@ type ProgramHistory struct {
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditorReadComments"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty,omitzero"`
+	// the email of the auditor conducting the audit
+	AuditorEmail *string `json:"auditorEmail,omitempty,omitzero"`
 }
 
 func (ProgramHistory) IsNode() {}
@@ -16871,6 +16889,54 @@ type ProgramHistoryWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
+	// audit_firm field predicates
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNeq          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGt           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGte          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLt           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLte          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        *bool    `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       *bool    `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+	// auditor field predicates
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNeq          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGt           *string  `json:"auditorGT,omitempty"`
+	AuditorGte          *string  `json:"auditorGTE,omitempty"`
+	AuditorLt           *string  `json:"auditorLT,omitempty"`
+	AuditorLte          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        *bool    `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       *bool    `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+	// auditor_email field predicates
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNeq          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGt           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGte          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLt           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLte          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        *bool    `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 }
 
 type ProgramMembership struct {
@@ -17483,6 +17549,54 @@ type ProgramWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
+	// audit_firm field predicates
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNeq          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGt           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGte          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLt           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLte          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        *bool    `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       *bool    `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+	// auditor field predicates
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNeq          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGt           *string  `json:"auditorGT,omitempty"`
+	AuditorGte          *string  `json:"auditorGTE,omitempty"`
+	AuditorLt           *string  `json:"auditorLT,omitempty"`
+	AuditorLte          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        *bool    `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       *bool    `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+	// auditor_email field predicates
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNeq          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGt           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGte          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLt           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLte          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        *bool    `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -22941,7 +23055,16 @@ type UpdateProgramInput struct {
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
-	AuditorReadComments       *bool                           `json:"auditorReadComments,omitempty"`
+	AuditorReadComments *bool `json:"auditorReadComments,omitempty"`
+	// the name of the audit firm conducting the audit
+	AuditFirm      *string `json:"auditFirm,omitempty"`
+	ClearAuditFirm *bool   `json:"clearAuditFirm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor      *string `json:"auditor,omitempty"`
+	ClearAuditor *bool   `json:"clearAuditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail              *string                         `json:"auditorEmail,omitempty"`
+	ClearAuditorEmail         *bool                           `json:"clearAuditorEmail,omitempty"`
 	OwnerID                   *string                         `json:"ownerID,omitempty"`
 	ClearOwner                *bool                           `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string                        `json:"addBlockedGroupIDs,omitempty"`

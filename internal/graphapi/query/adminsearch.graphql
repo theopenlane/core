@@ -527,6 +527,9 @@ query AdminSearch($query: String!) {
           name
           description
           frameworkName
+          auditFirm
+          auditor
+          auditorEmail
         }
       }
     }

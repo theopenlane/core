@@ -23224,6 +23224,21 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldAuditorReadComments)
 				fieldSeen[program.FieldAuditorReadComments] = struct{}{}
 			}
+		case "auditFirm":
+			if _, ok := fieldSeen[program.FieldAuditFirm]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditFirm)
+				fieldSeen[program.FieldAuditFirm] = struct{}{}
+			}
+		case "auditor":
+			if _, ok := fieldSeen[program.FieldAuditor]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditor)
+				fieldSeen[program.FieldAuditor] = struct{}{}
+			}
+		case "auditorEmail":
+			if _, ok := fieldSeen[program.FieldAuditorEmail]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditorEmail)
+				fieldSeen[program.FieldAuditorEmail] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -23423,6 +23438,21 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldAuditorReadComments]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldAuditorReadComments)
 				fieldSeen[programhistory.FieldAuditorReadComments] = struct{}{}
+			}
+		case "auditFirm":
+			if _, ok := fieldSeen[programhistory.FieldAuditFirm]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditFirm)
+				fieldSeen[programhistory.FieldAuditFirm] = struct{}{}
+			}
+		case "auditor":
+			if _, ok := fieldSeen[programhistory.FieldAuditor]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditor)
+				fieldSeen[programhistory.FieldAuditor] = struct{}{}
+			}
+		case "auditorEmail":
+			if _, ok := fieldSeen[programhistory.FieldAuditorEmail]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditorEmail)
+				fieldSeen[programhistory.FieldAuditorEmail] = struct{}{}
 			}
 		case "id":
 		case "__typename":

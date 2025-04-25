@@ -1072,6 +1072,9 @@ func adminSearchPrograms(ctx context.Context, query string, after *entgql.Cursor
 				program.NameContainsFold(query),          // search by Name
 				program.DescriptionContainsFold(query),   // search by Description
 				program.FrameworkNameContainsFold(query), // search by FrameworkName
+				program.AuditFirmContainsFold(query),     // search by AuditFirm
+				program.AuditorContainsFold(query),       // search by Auditor
+				program.AuditorEmailContainsFold(query),  // search by AuditorEmail
 			),
 		)
 

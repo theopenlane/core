@@ -200,6 +200,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 				AuditorReady:         lo.ToPtr(false),
 				AuditorWriteComments: lo.ToPtr(true),
 				AuditorReadComments:  lo.ToPtr(true),
+				AuditFirm:            lo.ToPtr("Meow Audit, LLC."),
+				Auditor:              lo.ToPtr("Meowz Meow"),
+				AuditorEmail:         lo.ToPtr("m@meow-audit.com"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -291,6 +294,16 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
+		{
+			name: "invalid auditor email",
+			request: openlaneclient.CreateProgramInput{
+				Name:         "mitb program",
+				AuditorEmail: lo.ToPtr("invalid email"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "validator failed for field",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -379,6 +392,24 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 				assert.False(t, resp.CreateProgram.Program.AuditorReadComments)
 			} else {
 				assert.Equal(t, *tc.request.AuditorReadComments, resp.CreateProgram.Program.AuditorReadComments)
+			}
+
+			if tc.request.AuditFirm == nil {
+				assert.Empty(t, resp.CreateProgram.Program.AuditFirm)
+			} else {
+				assert.Equal(t, tc.request.AuditFirm, resp.CreateProgram.Program.AuditFirm)
+			}
+
+			if tc.request.Auditor == nil {
+				assert.Empty(t, resp.CreateProgram.Program.Auditor)
+			} else {
+				assert.Equal(t, tc.request.Auditor, resp.CreateProgram.Program.Auditor)
+			}
+
+			if tc.request.AuditorEmail == nil {
+				assert.Empty(t, resp.CreateProgram.Program.AuditorEmail)
+			} else {
+				assert.Equal(t, tc.request.AuditorEmail, resp.CreateProgram.Program.AuditorEmail)
 			}
 
 			// check edges
@@ -512,6 +543,9 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				Status:               &enums.ProgramStatusReadyForAuditor,
 				ProgramType:          &enums.ProgramTypeFramework,
 				FrameworkName:        lo.ToPtr("SOC 2"),
+				AuditFirm:            lo.ToPtr("Meow Audit, LLC."),
+				Auditor:              lo.ToPtr("Meowz Meow"),
+				AuditorEmail:         lo.ToPtr("m@meow-audit.com"),
 				EndDate:              lo.ToPtr(time.Now().AddDate(0, 0, 30)),
 				AuditorReady:         lo.ToPtr(true),
 				AuditorWriteComments: lo.ToPtr(true),
@@ -675,6 +709,18 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 			if tc.request.AuditorReadComments != nil {
 				assert.Equal(t, *tc.request.AuditorReadComments, resp.UpdateProgram.Program.AuditorReadComments)
+			}
+
+			if tc.request.AuditFirm != nil {
+				assert.Equal(t, tc.request.AuditFirm, resp.UpdateProgram.Program.AuditFirm)
+			}
+
+			if tc.request.Auditor != nil {
+				assert.Equal(t, tc.request.Auditor, resp.UpdateProgram.Program.Auditor)
+			}
+
+			if tc.request.AuditorEmail != nil {
+				assert.Equal(t, tc.request.AuditorEmail, resp.UpdateProgram.Program.AuditorEmail)
 			}
 
 			// check edges

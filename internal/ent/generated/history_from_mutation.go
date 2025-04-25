@@ -6286,6 +6286,18 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetAuditorReadComments(auditorReadComments)
 	}
 
+	if auditFirm, exists := m.AuditFirm(); exists {
+		create = create.SetAuditFirm(auditFirm)
+	}
+
+	if auditor, exists := m.Auditor(); exists {
+		create = create.SetAuditor(auditor)
+	}
+
+	if auditorEmail, exists := m.AuditorEmail(); exists {
+		create = create.SetAuditorEmail(auditorEmail)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6430,6 +6442,24 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAuditorReadComments(program.AuditorReadComments)
 		}
 
+		if auditFirm, exists := m.AuditFirm(); exists {
+			create = create.SetAuditFirm(auditFirm)
+		} else {
+			create = create.SetAuditFirm(program.AuditFirm)
+		}
+
+		if auditor, exists := m.Auditor(); exists {
+			create = create.SetAuditor(auditor)
+		} else {
+			create = create.SetAuditor(program.Auditor)
+		}
+
+		if auditorEmail, exists := m.AuditorEmail(); exists {
+			create = create.SetAuditorEmail(auditorEmail)
+		} else {
+			create = create.SetAuditorEmail(program.AuditorEmail)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6481,6 +6511,9 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).
+			SetAuditFirm(program.AuditFirm).
+			SetAuditor(program.Auditor).
+			SetAuditorEmail(program.AuditorEmail).
 			Save(ctx)
 		if err != nil {
 			return err

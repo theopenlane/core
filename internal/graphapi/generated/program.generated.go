@@ -105,6 +105,12 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
+			case "auditFirm":
+				return ec.fieldContext_Program_auditFirm(ctx, field)
+			case "auditor":
+				return ec.fieldContext_Program_auditor(ctx, field)
+			case "auditorEmail":
+				return ec.fieldContext_Program_auditorEmail(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -227,6 +233,12 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
+			case "auditFirm":
+				return ec.fieldContext_Program_auditFirm(ctx, field)
+			case "auditor":
+				return ec.fieldContext_Program_auditor(ctx, field)
+			case "auditorEmail":
+				return ec.fieldContext_Program_auditorEmail(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -393,6 +405,12 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
+			case "auditFirm":
+				return ec.fieldContext_Program_auditFirm(ctx, field)
+			case "auditor":
+				return ec.fieldContext_Program_auditor(ctx, field)
+			case "auditorEmail":
+				return ec.fieldContext_Program_auditorEmail(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":

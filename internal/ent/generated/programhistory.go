@@ -64,7 +64,13 @@ type ProgramHistory struct {
 	AuditorWriteComments bool `json:"auditor_write_comments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditor_read_comments,omitempty"`
-	selectValues        sql.SelectValues
+	// the name of the audit firm conducting the audit
+	AuditFirm string `json:"audit_firm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor string `json:"auditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail string `json:"auditor_email,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -78,7 +84,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldProgramType, programhistory.FieldFrameworkName:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldProgramType, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -237,6 +243,24 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.AuditorReadComments = value.Bool
 			}
+		case programhistory.FieldAuditFirm:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field audit_firm", values[i])
+			} else if value.Valid {
+				ph.AuditFirm = value.String
+			}
+		case programhistory.FieldAuditor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor", values[i])
+			} else if value.Valid {
+				ph.Auditor = value.String
+			}
+		case programhistory.FieldAuditorEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_email", values[i])
+			} else if value.Valid {
+				ph.AuditorEmail = value.String
+			}
 		default:
 			ph.selectValues.Set(columns[i], values[i])
 		}
@@ -338,6 +362,15 @@ func (ph *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auditor_read_comments=")
 	builder.WriteString(fmt.Sprintf("%v", ph.AuditorReadComments))
+	builder.WriteString(", ")
+	builder.WriteString("audit_firm=")
+	builder.WriteString(ph.AuditFirm)
+	builder.WriteString(", ")
+	builder.WriteString("auditor=")
+	builder.WriteString(ph.Auditor)
+	builder.WriteString(", ")
+	builder.WriteString("auditor_email=")
+	builder.WriteString(ph.AuditorEmail)
 	builder.WriteByte(')')
 	return builder.String()
 }

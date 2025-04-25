@@ -3127,6 +3127,10 @@ func init() {
 	programDescAuditorReadComments := programFields[9].Descriptor()
 	// program.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	program.DefaultAuditorReadComments = programDescAuditorReadComments.Default.(bool)
+	// programDescAuditorEmail is the schema descriptor for auditor_email field.
+	programDescAuditorEmail := programFields[12].Descriptor()
+	// program.AuditorEmailValidator is a validator for the "auditor_email" field. It is called by the builders before save.
+	program.AuditorEmailValidator = programDescAuditorEmail.Validators[0].(func(string) error)
 	// programDescID is the schema descriptor for id field.
 	programDescID := programMixinFields2[0].Descriptor()
 	// program.DefaultID holds the default value on creation for the id field.

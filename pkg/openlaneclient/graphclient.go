@@ -4811,6 +4811,9 @@ func (t *AdminSearch_AdminSearch_Programs_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Programs_Edges_Node struct {
+	AuditFirm     *string  "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor       *string  "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail  *string  "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description   *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
@@ -4821,6 +4824,24 @@ type AdminSearch_AdminSearch_Programs_Edges_Node struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetAuditFirm() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
+	}
+	return t.AuditFirm
+}
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetAuditor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
+	}
+	return t.Auditor
+}
+func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetAuditorEmail() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
+	}
+	return t.AuditorEmail
+}
 func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
@@ -44198,6 +44219,9 @@ func (t *GetProcedureHistories_ProcedureHistories) GetEdges() []*GetProcedureHis
 }
 
 type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
+	AuditFirm            *string             "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string             "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string             "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -44218,6 +44242,24 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditFirm() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.AuditFirm
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditor() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.Auditor
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorEmail() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.AuditorEmail
+}
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
@@ -44339,6 +44381,9 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram) GetPrograms() []*CreateBulkC
 }
 
 type CreateBulkProgram_CreateBulkProgram_Programs struct {
+	AuditFirm            *string             "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string             "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string             "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -44359,6 +44404,24 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditFirm() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.AuditFirm
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditor() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.Auditor
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorEmail() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.AuditorEmail
+}
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
@@ -44817,6 +44880,9 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetEdges() []*C
 }
 
 type CreateFullProgram_CreateFullProgram_Program struct {
+	AuditFirm        *string                                                      "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor          *string                                                      "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail     *string                                                      "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	Controls         CreateFullProgram_CreateFullProgram_Program_Controls         "json:\"controls\" graphql:\"controls\""
 	DisplayID        string                                                       "json:\"displayID\" graphql:\"displayID\""
 	FrameworkName    *string                                                      "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
@@ -44829,6 +44895,24 @@ type CreateFullProgram_CreateFullProgram_Program struct {
 	Risks            CreateFullProgram_CreateFullProgram_Program_Risks            "json:\"risks\" graphql:\"risks\""
 }
 
+func (t *CreateFullProgram_CreateFullProgram_Program) GetAuditFirm() *string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.AuditFirm
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetAuditor() *string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Auditor
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetAuditorEmail() *string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.AuditorEmail
+}
 func (t *CreateFullProgram_CreateFullProgram_Program) GetControls() *CreateFullProgram_CreateFullProgram_Program_Controls {
 	if t == nil {
 		t = &CreateFullProgram_CreateFullProgram_Program{}
@@ -45176,6 +45260,9 @@ func (t *CreateProgram_CreateProgram_Program_BlockedGroups) GetName() string {
 }
 
 type CreateProgram_CreateProgram_Program struct {
+	AuditFirm            *string                                              "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string                                              "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string                                              "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                                                 "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                 "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                                                 "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -45201,6 +45288,24 @@ type CreateProgram_CreateProgram_Program struct {
 	Viewers              []*CreateProgram_CreateProgram_Program_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
+func (t *CreateProgram_CreateProgram_Program) GetAuditFirm() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.AuditFirm
+}
+func (t *CreateProgram_CreateProgram_Program) GetAuditor() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Auditor
+}
+func (t *CreateProgram_CreateProgram_Program) GetAuditorEmail() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.AuditorEmail
+}
 func (t *CreateProgram_CreateProgram_Program) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program{}
@@ -45417,6 +45522,9 @@ func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members) GetE
 }
 
 type CreateProgramWithMembers_CreateProgramWithMembers_Program struct {
+	AuditFirm     *string                                                           "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor       *string                                                           "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail  *string                                                           "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	DisplayID     string                                                            "json:\"displayID\" graphql:\"displayID\""
 	FrameworkName *string                                                           "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID            string                                                            "json:\"id\" graphql:\"id\""
@@ -45425,6 +45533,24 @@ type CreateProgramWithMembers_CreateProgramWithMembers_Program struct {
 	ProgramType   enums.ProgramType                                                 "json:\"programType\" graphql:\"programType\""
 }
 
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetAuditFirm() *string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.AuditFirm
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetAuditor() *string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.Auditor
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetAuditorEmail() *string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.AuditorEmail
+}
 func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetDisplayID() string {
 	if t == nil {
 		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
@@ -45824,6 +45950,9 @@ func (t *GetAllPrograms_Programs_Edges_Node_Members) GetEdges() []*GetAllProgram
 }
 
 type GetAllPrograms_Programs_Edges_Node struct {
+	AuditFirm            *string                                             "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string                                             "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string                                             "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                                                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                                                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -45850,6 +45979,24 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	Viewers              []*GetAllPrograms_Programs_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditFirm() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditFirm
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditor() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Auditor
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorEmail() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorEmail
+}
 func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node{}
@@ -46357,6 +46504,9 @@ func (t *GetProgramByID_Program_Members) GetEdges() []*GetProgramByID_Program_Me
 }
 
 type GetProgramByID_Program struct {
+	AuditFirm            *string                                 "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string                                 "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string                                 "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                                    "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                    "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                                    "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -46383,6 +46533,24 @@ type GetProgramByID_Program struct {
 	Viewers              []*GetProgramByID_Program_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
+func (t *GetProgramByID_Program) GetAuditFirm() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.AuditFirm
+}
+func (t *GetProgramByID_Program) GetAuditor() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Auditor
+}
+func (t *GetProgramByID_Program) GetAuditorEmail() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.AuditorEmail
+}
 func (t *GetProgramByID_Program) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &GetProgramByID_Program{}
@@ -46868,6 +47036,9 @@ func (t *GetPrograms_Programs_Edges_Node_Members) GetEdges() []*GetPrograms_Prog
 }
 
 type GetPrograms_Programs_Edges_Node struct {
+	AuditFirm            *string                                          "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string                                          "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string                                          "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                                             "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                             "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                                             "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -46894,6 +47065,24 @@ type GetPrograms_Programs_Edges_Node struct {
 	Viewers              []*GetPrograms_Programs_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
+func (t *GetPrograms_Programs_Edges_Node) GetAuditFirm() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditFirm
+}
+func (t *GetPrograms_Programs_Edges_Node) GetAuditor() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Auditor
+}
+func (t *GetPrograms_Programs_Edges_Node) GetAuditorEmail() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorEmail
+}
 func (t *GetPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node{}
@@ -47401,6 +47590,9 @@ func (t *UpdateProgram_UpdateProgram_Program_Members) GetEdges() []*UpdateProgra
 }
 
 type UpdateProgram_UpdateProgram_Program struct {
+	AuditFirm            *string                                              "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
+	Auditor              *string                                              "json:\"auditor,omitempty\" graphql:\"auditor\""
+	AuditorEmail         *string                                              "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
 	AuditorReadComments  bool                                                 "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                                                 "json:\"auditorReady\" graphql:\"auditorReady\""
 	AuditorWriteComments bool                                                 "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
@@ -47426,6 +47618,24 @@ type UpdateProgram_UpdateProgram_Program struct {
 	Viewers              []*UpdateProgram_UpdateProgram_Program_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
 }
 
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditFirm() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.AuditFirm
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditor() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Auditor
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditorEmail() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.AuditorEmail
+}
 func (t *UpdateProgram_UpdateProgram_Program) GetAuditorReadComments() bool {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program{}
@@ -70562,6 +70772,9 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					name
 					description
 					frameworkName
+					auditFirm
+					auditor
+					auditorEmail
 				}
 			}
 		}
@@ -81687,6 +81900,9 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			auditorReadComments
 			auditorReady
 			auditorWriteComments
+			auditFirm
+			auditor
+			auditorEmail
 			createdAt
 			createdBy
 			description
@@ -81730,6 +81946,9 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			auditorReadComments
 			auditorReady
 			auditorWriteComments
+			auditFirm
+			auditor
+			auditorEmail
 			createdAt
 			createdBy
 			description
@@ -81810,6 +82029,9 @@ const CreateFullProgramDocument = `mutation CreateFullProgram ($input: CreateFul
 			displayID
 			programType
 			frameworkName
+			auditFirm
+			auditor
+			auditorEmail
 			members {
 				edges {
 					node {
@@ -81888,6 +82110,9 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			auditorReadComments
 			auditorReady
 			auditorWriteComments
+			auditFirm
+			auditor
+			auditorEmail
 			createdAt
 			createdBy
 			description
@@ -81981,6 +82206,9 @@ const CreateProgramWithMembersDocument = `mutation CreateProgramWithMembers ($in
 			displayID
 			programType
 			frameworkName
+			auditFirm
+			auditor
+			auditorEmail
 			members {
 				edges {
 					node {
@@ -82046,6 +82274,9 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				auditorReadComments
 				auditorReady
 				auditorWriteComments
+				auditFirm
+				auditor
+				auditorEmail
 				createdAt
 				createdBy
 				description
@@ -82147,6 +82378,9 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		auditorReadComments
 		auditorReady
 		auditorWriteComments
+		auditFirm
+		auditor
+		auditorEmail
 		createdAt
 		createdBy
 		description
@@ -82250,6 +82484,9 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				auditorReadComments
 				auditorReady
 				auditorWriteComments
+				auditFirm
+				auditor
+				auditorEmail
 				createdAt
 				createdBy
 				description
@@ -82354,6 +82591,9 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			auditorReadComments
 			auditorReady
 			auditorWriteComments
+			auditFirm
+			auditor
+			auditorEmail
 			createdAt
 			createdBy
 			description

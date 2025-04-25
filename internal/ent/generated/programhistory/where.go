@@ -156,6 +156,21 @@ func AuditorReadComments(v bool) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorReadComments, v))
 }
 
+// AuditFirm applies equality check predicate on the "audit_firm" field. It's identical to AuditFirmEQ.
+func AuditFirm(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditFirm, v))
+}
+
+// Auditor applies equality check predicate on the "auditor" field. It's identical to AuditorEQ.
+func Auditor(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditor, v))
+}
+
+// AuditorEmail applies equality check predicate on the "auditor_email" field. It's identical to AuditorEmailEQ.
+func AuditorEmail(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorEmail, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1219,6 +1234,231 @@ func AuditorReadCommentsEQ(v bool) predicate.ProgramHistory {
 // AuditorReadCommentsNEQ applies the NEQ predicate on the "auditor_read_comments" field.
 func AuditorReadCommentsNEQ(v bool) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldNEQ(FieldAuditorReadComments, v))
+}
+
+// AuditFirmEQ applies the EQ predicate on the "audit_firm" field.
+func AuditFirmEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditFirm, v))
+}
+
+// AuditFirmNEQ applies the NEQ predicate on the "audit_firm" field.
+func AuditFirmNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldAuditFirm, v))
+}
+
+// AuditFirmIn applies the In predicate on the "audit_firm" field.
+func AuditFirmIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldAuditFirm, vs...))
+}
+
+// AuditFirmNotIn applies the NotIn predicate on the "audit_firm" field.
+func AuditFirmNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldAuditFirm, vs...))
+}
+
+// AuditFirmGT applies the GT predicate on the "audit_firm" field.
+func AuditFirmGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldAuditFirm, v))
+}
+
+// AuditFirmGTE applies the GTE predicate on the "audit_firm" field.
+func AuditFirmGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldAuditFirm, v))
+}
+
+// AuditFirmLT applies the LT predicate on the "audit_firm" field.
+func AuditFirmLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldAuditFirm, v))
+}
+
+// AuditFirmLTE applies the LTE predicate on the "audit_firm" field.
+func AuditFirmLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldAuditFirm, v))
+}
+
+// AuditFirmContains applies the Contains predicate on the "audit_firm" field.
+func AuditFirmContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldAuditFirm, v))
+}
+
+// AuditFirmHasPrefix applies the HasPrefix predicate on the "audit_firm" field.
+func AuditFirmHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldAuditFirm, v))
+}
+
+// AuditFirmHasSuffix applies the HasSuffix predicate on the "audit_firm" field.
+func AuditFirmHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldAuditFirm, v))
+}
+
+// AuditFirmIsNil applies the IsNil predicate on the "audit_firm" field.
+func AuditFirmIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldAuditFirm))
+}
+
+// AuditFirmNotNil applies the NotNil predicate on the "audit_firm" field.
+func AuditFirmNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldAuditFirm))
+}
+
+// AuditFirmEqualFold applies the EqualFold predicate on the "audit_firm" field.
+func AuditFirmEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldAuditFirm, v))
+}
+
+// AuditFirmContainsFold applies the ContainsFold predicate on the "audit_firm" field.
+func AuditFirmContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldAuditFirm, v))
+}
+
+// AuditorEQ applies the EQ predicate on the "auditor" field.
+func AuditorEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditor, v))
+}
+
+// AuditorNEQ applies the NEQ predicate on the "auditor" field.
+func AuditorNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldAuditor, v))
+}
+
+// AuditorIn applies the In predicate on the "auditor" field.
+func AuditorIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldAuditor, vs...))
+}
+
+// AuditorNotIn applies the NotIn predicate on the "auditor" field.
+func AuditorNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldAuditor, vs...))
+}
+
+// AuditorGT applies the GT predicate on the "auditor" field.
+func AuditorGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldAuditor, v))
+}
+
+// AuditorGTE applies the GTE predicate on the "auditor" field.
+func AuditorGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldAuditor, v))
+}
+
+// AuditorLT applies the LT predicate on the "auditor" field.
+func AuditorLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldAuditor, v))
+}
+
+// AuditorLTE applies the LTE predicate on the "auditor" field.
+func AuditorLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldAuditor, v))
+}
+
+// AuditorContains applies the Contains predicate on the "auditor" field.
+func AuditorContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldAuditor, v))
+}
+
+// AuditorHasPrefix applies the HasPrefix predicate on the "auditor" field.
+func AuditorHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldAuditor, v))
+}
+
+// AuditorHasSuffix applies the HasSuffix predicate on the "auditor" field.
+func AuditorHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldAuditor, v))
+}
+
+// AuditorIsNil applies the IsNil predicate on the "auditor" field.
+func AuditorIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldAuditor))
+}
+
+// AuditorNotNil applies the NotNil predicate on the "auditor" field.
+func AuditorNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldAuditor))
+}
+
+// AuditorEqualFold applies the EqualFold predicate on the "auditor" field.
+func AuditorEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldAuditor, v))
+}
+
+// AuditorContainsFold applies the ContainsFold predicate on the "auditor" field.
+func AuditorContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldAuditor, v))
+}
+
+// AuditorEmailEQ applies the EQ predicate on the "auditor_email" field.
+func AuditorEmailEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorEmail, v))
+}
+
+// AuditorEmailNEQ applies the NEQ predicate on the "auditor_email" field.
+func AuditorEmailNEQ(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldAuditorEmail, v))
+}
+
+// AuditorEmailIn applies the In predicate on the "auditor_email" field.
+func AuditorEmailIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldAuditorEmail, vs...))
+}
+
+// AuditorEmailNotIn applies the NotIn predicate on the "auditor_email" field.
+func AuditorEmailNotIn(vs ...string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldAuditorEmail, vs...))
+}
+
+// AuditorEmailGT applies the GT predicate on the "auditor_email" field.
+func AuditorEmailGT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldAuditorEmail, v))
+}
+
+// AuditorEmailGTE applies the GTE predicate on the "auditor_email" field.
+func AuditorEmailGTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldAuditorEmail, v))
+}
+
+// AuditorEmailLT applies the LT predicate on the "auditor_email" field.
+func AuditorEmailLT(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldAuditorEmail, v))
+}
+
+// AuditorEmailLTE applies the LTE predicate on the "auditor_email" field.
+func AuditorEmailLTE(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldAuditorEmail, v))
+}
+
+// AuditorEmailContains applies the Contains predicate on the "auditor_email" field.
+func AuditorEmailContains(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContains(FieldAuditorEmail, v))
+}
+
+// AuditorEmailHasPrefix applies the HasPrefix predicate on the "auditor_email" field.
+func AuditorEmailHasPrefix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldAuditorEmail, v))
+}
+
+// AuditorEmailHasSuffix applies the HasSuffix predicate on the "auditor_email" field.
+func AuditorEmailHasSuffix(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldAuditorEmail, v))
+}
+
+// AuditorEmailIsNil applies the IsNil predicate on the "auditor_email" field.
+func AuditorEmailIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldAuditorEmail))
+}
+
+// AuditorEmailNotNil applies the NotNil predicate on the "auditor_email" field.
+func AuditorEmailNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldAuditorEmail))
+}
+
+// AuditorEmailEqualFold applies the EqualFold predicate on the "auditor_email" field.
+func AuditorEmailEqualFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEqualFold(FieldAuditorEmail, v))
+}
+
+// AuditorEmailContainsFold applies the ContainsFold predicate on the "auditor_email" field.
+func AuditorEmailContainsFold(v string) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldContainsFold(FieldAuditorEmail, v))
 }
 
 // And groups predicates with the AND operator between them.
