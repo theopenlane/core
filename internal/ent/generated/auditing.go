@@ -1900,6 +1900,15 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.AuditorReadComments, new.AuditorReadComments) {
 		changes = append(changes, NewChange(programhistory.FieldAuditorReadComments, ph.AuditorReadComments, new.AuditorReadComments))
 	}
+	if !reflect.DeepEqual(ph.AuditFirm, new.AuditFirm) {
+		changes = append(changes, NewChange(programhistory.FieldAuditFirm, ph.AuditFirm, new.AuditFirm))
+	}
+	if !reflect.DeepEqual(ph.Auditor, new.Auditor) {
+		changes = append(changes, NewChange(programhistory.FieldAuditor, ph.Auditor, new.Auditor))
+	}
+	if !reflect.DeepEqual(ph.AuditorEmail, new.AuditorEmail) {
+		changes = append(changes, NewChange(programhistory.FieldAuditorEmail, ph.AuditorEmail, new.AuditorEmail))
+	}
 	return changes
 }
 

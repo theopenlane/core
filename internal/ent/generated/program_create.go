@@ -279,6 +279,48 @@ func (pc *ProgramCreate) SetNillableAuditorReadComments(b *bool) *ProgramCreate 
 	return pc
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (pc *ProgramCreate) SetAuditFirm(s string) *ProgramCreate {
+	pc.mutation.SetAuditFirm(s)
+	return pc
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditFirm(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditFirm(*s)
+	}
+	return pc
+}
+
+// SetAuditor sets the "auditor" field.
+func (pc *ProgramCreate) SetAuditor(s string) *ProgramCreate {
+	pc.mutation.SetAuditor(s)
+	return pc
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditor(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditor(*s)
+	}
+	return pc
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (pc *ProgramCreate) SetAuditorEmail(s string) *ProgramCreate {
+	pc.mutation.SetAuditorEmail(s)
+	return pc
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditorEmail(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditorEmail(*s)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProgramCreate) SetID(s string) *ProgramCreate {
 	pc.mutation.SetID(s)
@@ -686,6 +728,11 @@ func (pc *ProgramCreate) check() error {
 	if _, ok := pc.mutation.AuditorReadComments(); !ok {
 		return &ValidationError{Name: "auditor_read_comments", err: errors.New(`generated: missing required field "Program.auditor_read_comments"`)}
 	}
+	if v, ok := pc.mutation.AuditorEmail(); ok {
+		if err := program.AuditorEmailValidator(v); err != nil {
+			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -793,6 +840,18 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
+	}
+	if value, ok := pc.mutation.AuditFirm(); ok {
+		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
+		_node.AuditFirm = value
+	}
+	if value, ok := pc.mutation.Auditor(); ok {
+		_spec.SetField(program.FieldAuditor, field.TypeString, value)
+		_node.Auditor = value
+	}
+	if value, ok := pc.mutation.AuditorEmail(); ok {
+		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
+		_node.AuditorEmail = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

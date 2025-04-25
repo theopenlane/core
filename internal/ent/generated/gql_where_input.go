@@ -50130,6 +50130,57 @@ type ProgramWhereInput struct {
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNEQ *bool `json:"auditorReadCommentsNEQ,omitempty"`
 
+	// "audit_firm" field predicates.
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNEQ          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGT           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGTE          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLT           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLTE          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        bool     `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       bool     `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+
+	// "auditor" field predicates.
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNEQ          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGT           *string  `json:"auditorGT,omitempty"`
+	AuditorGTE          *string  `json:"auditorGTE,omitempty"`
+	AuditorLT           *string  `json:"auditorLT,omitempty"`
+	AuditorLTE          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        bool     `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       bool     `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+
+	// "auditor_email" field predicates.
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNEQ          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGT           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGTE          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLT           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLTE          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        bool     `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       bool     `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -50844,6 +50895,141 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	if i.AuditorReadCommentsNEQ != nil {
 		predicates = append(predicates, program.AuditorReadCommentsNEQ(*i.AuditorReadCommentsNEQ))
 	}
+	if i.AuditFirm != nil {
+		predicates = append(predicates, program.AuditFirmEQ(*i.AuditFirm))
+	}
+	if i.AuditFirmNEQ != nil {
+		predicates = append(predicates, program.AuditFirmNEQ(*i.AuditFirmNEQ))
+	}
+	if len(i.AuditFirmIn) > 0 {
+		predicates = append(predicates, program.AuditFirmIn(i.AuditFirmIn...))
+	}
+	if len(i.AuditFirmNotIn) > 0 {
+		predicates = append(predicates, program.AuditFirmNotIn(i.AuditFirmNotIn...))
+	}
+	if i.AuditFirmGT != nil {
+		predicates = append(predicates, program.AuditFirmGT(*i.AuditFirmGT))
+	}
+	if i.AuditFirmGTE != nil {
+		predicates = append(predicates, program.AuditFirmGTE(*i.AuditFirmGTE))
+	}
+	if i.AuditFirmLT != nil {
+		predicates = append(predicates, program.AuditFirmLT(*i.AuditFirmLT))
+	}
+	if i.AuditFirmLTE != nil {
+		predicates = append(predicates, program.AuditFirmLTE(*i.AuditFirmLTE))
+	}
+	if i.AuditFirmContains != nil {
+		predicates = append(predicates, program.AuditFirmContains(*i.AuditFirmContains))
+	}
+	if i.AuditFirmHasPrefix != nil {
+		predicates = append(predicates, program.AuditFirmHasPrefix(*i.AuditFirmHasPrefix))
+	}
+	if i.AuditFirmHasSuffix != nil {
+		predicates = append(predicates, program.AuditFirmHasSuffix(*i.AuditFirmHasSuffix))
+	}
+	if i.AuditFirmIsNil {
+		predicates = append(predicates, program.AuditFirmIsNil())
+	}
+	if i.AuditFirmNotNil {
+		predicates = append(predicates, program.AuditFirmNotNil())
+	}
+	if i.AuditFirmEqualFold != nil {
+		predicates = append(predicates, program.AuditFirmEqualFold(*i.AuditFirmEqualFold))
+	}
+	if i.AuditFirmContainsFold != nil {
+		predicates = append(predicates, program.AuditFirmContainsFold(*i.AuditFirmContainsFold))
+	}
+	if i.Auditor != nil {
+		predicates = append(predicates, program.AuditorEQ(*i.Auditor))
+	}
+	if i.AuditorNEQ != nil {
+		predicates = append(predicates, program.AuditorNEQ(*i.AuditorNEQ))
+	}
+	if len(i.AuditorIn) > 0 {
+		predicates = append(predicates, program.AuditorIn(i.AuditorIn...))
+	}
+	if len(i.AuditorNotIn) > 0 {
+		predicates = append(predicates, program.AuditorNotIn(i.AuditorNotIn...))
+	}
+	if i.AuditorGT != nil {
+		predicates = append(predicates, program.AuditorGT(*i.AuditorGT))
+	}
+	if i.AuditorGTE != nil {
+		predicates = append(predicates, program.AuditorGTE(*i.AuditorGTE))
+	}
+	if i.AuditorLT != nil {
+		predicates = append(predicates, program.AuditorLT(*i.AuditorLT))
+	}
+	if i.AuditorLTE != nil {
+		predicates = append(predicates, program.AuditorLTE(*i.AuditorLTE))
+	}
+	if i.AuditorContains != nil {
+		predicates = append(predicates, program.AuditorContains(*i.AuditorContains))
+	}
+	if i.AuditorHasPrefix != nil {
+		predicates = append(predicates, program.AuditorHasPrefix(*i.AuditorHasPrefix))
+	}
+	if i.AuditorHasSuffix != nil {
+		predicates = append(predicates, program.AuditorHasSuffix(*i.AuditorHasSuffix))
+	}
+	if i.AuditorIsNil {
+		predicates = append(predicates, program.AuditorIsNil())
+	}
+	if i.AuditorNotNil {
+		predicates = append(predicates, program.AuditorNotNil())
+	}
+	if i.AuditorEqualFold != nil {
+		predicates = append(predicates, program.AuditorEqualFold(*i.AuditorEqualFold))
+	}
+	if i.AuditorContainsFold != nil {
+		predicates = append(predicates, program.AuditorContainsFold(*i.AuditorContainsFold))
+	}
+	if i.AuditorEmail != nil {
+		predicates = append(predicates, program.AuditorEmailEQ(*i.AuditorEmail))
+	}
+	if i.AuditorEmailNEQ != nil {
+		predicates = append(predicates, program.AuditorEmailNEQ(*i.AuditorEmailNEQ))
+	}
+	if len(i.AuditorEmailIn) > 0 {
+		predicates = append(predicates, program.AuditorEmailIn(i.AuditorEmailIn...))
+	}
+	if len(i.AuditorEmailNotIn) > 0 {
+		predicates = append(predicates, program.AuditorEmailNotIn(i.AuditorEmailNotIn...))
+	}
+	if i.AuditorEmailGT != nil {
+		predicates = append(predicates, program.AuditorEmailGT(*i.AuditorEmailGT))
+	}
+	if i.AuditorEmailGTE != nil {
+		predicates = append(predicates, program.AuditorEmailGTE(*i.AuditorEmailGTE))
+	}
+	if i.AuditorEmailLT != nil {
+		predicates = append(predicates, program.AuditorEmailLT(*i.AuditorEmailLT))
+	}
+	if i.AuditorEmailLTE != nil {
+		predicates = append(predicates, program.AuditorEmailLTE(*i.AuditorEmailLTE))
+	}
+	if i.AuditorEmailContains != nil {
+		predicates = append(predicates, program.AuditorEmailContains(*i.AuditorEmailContains))
+	}
+	if i.AuditorEmailHasPrefix != nil {
+		predicates = append(predicates, program.AuditorEmailHasPrefix(*i.AuditorEmailHasPrefix))
+	}
+	if i.AuditorEmailHasSuffix != nil {
+		predicates = append(predicates, program.AuditorEmailHasSuffix(*i.AuditorEmailHasSuffix))
+	}
+	if i.AuditorEmailIsNil {
+		predicates = append(predicates, program.AuditorEmailIsNil())
+	}
+	if i.AuditorEmailNotNil {
+		predicates = append(predicates, program.AuditorEmailNotNil())
+	}
+	if i.AuditorEmailEqualFold != nil {
+		predicates = append(predicates, program.AuditorEmailEqualFold(*i.AuditorEmailEqualFold))
+	}
+	if i.AuditorEmailContainsFold != nil {
+		predicates = append(predicates, program.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := program.HasOwner()
@@ -51446,6 +51632,57 @@ type ProgramHistoryWhereInput struct {
 	// "auditor_read_comments" field predicates.
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNEQ *bool `json:"auditorReadCommentsNEQ,omitempty"`
+
+	// "audit_firm" field predicates.
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNEQ          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGT           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGTE          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLT           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLTE          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        bool     `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       bool     `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+
+	// "auditor" field predicates.
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNEQ          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGT           *string  `json:"auditorGT,omitempty"`
+	AuditorGTE          *string  `json:"auditorGTE,omitempty"`
+	AuditorLT           *string  `json:"auditorLT,omitempty"`
+	AuditorLTE          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        bool     `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       bool     `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+
+	// "auditor_email" field predicates.
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNEQ          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGT           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGTE          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLT           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLTE          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        bool     `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       bool     `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -52169,6 +52406,141 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.AuditorReadCommentsNEQ != nil {
 		predicates = append(predicates, programhistory.AuditorReadCommentsNEQ(*i.AuditorReadCommentsNEQ))
+	}
+	if i.AuditFirm != nil {
+		predicates = append(predicates, programhistory.AuditFirmEQ(*i.AuditFirm))
+	}
+	if i.AuditFirmNEQ != nil {
+		predicates = append(predicates, programhistory.AuditFirmNEQ(*i.AuditFirmNEQ))
+	}
+	if len(i.AuditFirmIn) > 0 {
+		predicates = append(predicates, programhistory.AuditFirmIn(i.AuditFirmIn...))
+	}
+	if len(i.AuditFirmNotIn) > 0 {
+		predicates = append(predicates, programhistory.AuditFirmNotIn(i.AuditFirmNotIn...))
+	}
+	if i.AuditFirmGT != nil {
+		predicates = append(predicates, programhistory.AuditFirmGT(*i.AuditFirmGT))
+	}
+	if i.AuditFirmGTE != nil {
+		predicates = append(predicates, programhistory.AuditFirmGTE(*i.AuditFirmGTE))
+	}
+	if i.AuditFirmLT != nil {
+		predicates = append(predicates, programhistory.AuditFirmLT(*i.AuditFirmLT))
+	}
+	if i.AuditFirmLTE != nil {
+		predicates = append(predicates, programhistory.AuditFirmLTE(*i.AuditFirmLTE))
+	}
+	if i.AuditFirmContains != nil {
+		predicates = append(predicates, programhistory.AuditFirmContains(*i.AuditFirmContains))
+	}
+	if i.AuditFirmHasPrefix != nil {
+		predicates = append(predicates, programhistory.AuditFirmHasPrefix(*i.AuditFirmHasPrefix))
+	}
+	if i.AuditFirmHasSuffix != nil {
+		predicates = append(predicates, programhistory.AuditFirmHasSuffix(*i.AuditFirmHasSuffix))
+	}
+	if i.AuditFirmIsNil {
+		predicates = append(predicates, programhistory.AuditFirmIsNil())
+	}
+	if i.AuditFirmNotNil {
+		predicates = append(predicates, programhistory.AuditFirmNotNil())
+	}
+	if i.AuditFirmEqualFold != nil {
+		predicates = append(predicates, programhistory.AuditFirmEqualFold(*i.AuditFirmEqualFold))
+	}
+	if i.AuditFirmContainsFold != nil {
+		predicates = append(predicates, programhistory.AuditFirmContainsFold(*i.AuditFirmContainsFold))
+	}
+	if i.Auditor != nil {
+		predicates = append(predicates, programhistory.AuditorEQ(*i.Auditor))
+	}
+	if i.AuditorNEQ != nil {
+		predicates = append(predicates, programhistory.AuditorNEQ(*i.AuditorNEQ))
+	}
+	if len(i.AuditorIn) > 0 {
+		predicates = append(predicates, programhistory.AuditorIn(i.AuditorIn...))
+	}
+	if len(i.AuditorNotIn) > 0 {
+		predicates = append(predicates, programhistory.AuditorNotIn(i.AuditorNotIn...))
+	}
+	if i.AuditorGT != nil {
+		predicates = append(predicates, programhistory.AuditorGT(*i.AuditorGT))
+	}
+	if i.AuditorGTE != nil {
+		predicates = append(predicates, programhistory.AuditorGTE(*i.AuditorGTE))
+	}
+	if i.AuditorLT != nil {
+		predicates = append(predicates, programhistory.AuditorLT(*i.AuditorLT))
+	}
+	if i.AuditorLTE != nil {
+		predicates = append(predicates, programhistory.AuditorLTE(*i.AuditorLTE))
+	}
+	if i.AuditorContains != nil {
+		predicates = append(predicates, programhistory.AuditorContains(*i.AuditorContains))
+	}
+	if i.AuditorHasPrefix != nil {
+		predicates = append(predicates, programhistory.AuditorHasPrefix(*i.AuditorHasPrefix))
+	}
+	if i.AuditorHasSuffix != nil {
+		predicates = append(predicates, programhistory.AuditorHasSuffix(*i.AuditorHasSuffix))
+	}
+	if i.AuditorIsNil {
+		predicates = append(predicates, programhistory.AuditorIsNil())
+	}
+	if i.AuditorNotNil {
+		predicates = append(predicates, programhistory.AuditorNotNil())
+	}
+	if i.AuditorEqualFold != nil {
+		predicates = append(predicates, programhistory.AuditorEqualFold(*i.AuditorEqualFold))
+	}
+	if i.AuditorContainsFold != nil {
+		predicates = append(predicates, programhistory.AuditorContainsFold(*i.AuditorContainsFold))
+	}
+	if i.AuditorEmail != nil {
+		predicates = append(predicates, programhistory.AuditorEmailEQ(*i.AuditorEmail))
+	}
+	if i.AuditorEmailNEQ != nil {
+		predicates = append(predicates, programhistory.AuditorEmailNEQ(*i.AuditorEmailNEQ))
+	}
+	if len(i.AuditorEmailIn) > 0 {
+		predicates = append(predicates, programhistory.AuditorEmailIn(i.AuditorEmailIn...))
+	}
+	if len(i.AuditorEmailNotIn) > 0 {
+		predicates = append(predicates, programhistory.AuditorEmailNotIn(i.AuditorEmailNotIn...))
+	}
+	if i.AuditorEmailGT != nil {
+		predicates = append(predicates, programhistory.AuditorEmailGT(*i.AuditorEmailGT))
+	}
+	if i.AuditorEmailGTE != nil {
+		predicates = append(predicates, programhistory.AuditorEmailGTE(*i.AuditorEmailGTE))
+	}
+	if i.AuditorEmailLT != nil {
+		predicates = append(predicates, programhistory.AuditorEmailLT(*i.AuditorEmailLT))
+	}
+	if i.AuditorEmailLTE != nil {
+		predicates = append(predicates, programhistory.AuditorEmailLTE(*i.AuditorEmailLTE))
+	}
+	if i.AuditorEmailContains != nil {
+		predicates = append(predicates, programhistory.AuditorEmailContains(*i.AuditorEmailContains))
+	}
+	if i.AuditorEmailHasPrefix != nil {
+		predicates = append(predicates, programhistory.AuditorEmailHasPrefix(*i.AuditorEmailHasPrefix))
+	}
+	if i.AuditorEmailHasSuffix != nil {
+		predicates = append(predicates, programhistory.AuditorEmailHasSuffix(*i.AuditorEmailHasSuffix))
+	}
+	if i.AuditorEmailIsNil {
+		predicates = append(predicates, programhistory.AuditorEmailIsNil())
+	}
+	if i.AuditorEmailNotNil {
+		predicates = append(predicates, programhistory.AuditorEmailNotNil())
+	}
+	if i.AuditorEmailEqualFold != nil {
+		predicates = append(predicates, programhistory.AuditorEmailEqualFold(*i.AuditorEmailEqualFold))
+	}
+	if i.AuditorEmailContainsFold != nil {
+		predicates = append(predicates, programhistory.AuditorEmailContainsFold(*i.AuditorEmailContainsFold))
 	}
 
 	switch len(predicates) {

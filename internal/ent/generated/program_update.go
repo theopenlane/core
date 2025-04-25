@@ -323,6 +323,66 @@ func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate 
 	return pu
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (pu *ProgramUpdate) SetAuditFirm(s string) *ProgramUpdate {
+	pu.mutation.SetAuditFirm(s)
+	return pu
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableAuditFirm(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetAuditFirm(*s)
+	}
+	return pu
+}
+
+// ClearAuditFirm clears the value of the "audit_firm" field.
+func (pu *ProgramUpdate) ClearAuditFirm() *ProgramUpdate {
+	pu.mutation.ClearAuditFirm()
+	return pu
+}
+
+// SetAuditor sets the "auditor" field.
+func (pu *ProgramUpdate) SetAuditor(s string) *ProgramUpdate {
+	pu.mutation.SetAuditor(s)
+	return pu
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableAuditor(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetAuditor(*s)
+	}
+	return pu
+}
+
+// ClearAuditor clears the value of the "auditor" field.
+func (pu *ProgramUpdate) ClearAuditor() *ProgramUpdate {
+	pu.mutation.ClearAuditor()
+	return pu
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (pu *ProgramUpdate) SetAuditorEmail(s string) *ProgramUpdate {
+	pu.mutation.SetAuditorEmail(s)
+	return pu
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableAuditorEmail(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetAuditorEmail(*s)
+	}
+	return pu
+}
+
+// ClearAuditorEmail clears the value of the "auditor_email" field.
+func (pu *ProgramUpdate) ClearAuditorEmail() *ProgramUpdate {
+	pu.mutation.ClearAuditorEmail()
+	return pu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProgramUpdate) SetOwner(o *Organization) *ProgramUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -1015,6 +1075,11 @@ func (pu *ProgramUpdate) check() error {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.AuditorEmail(); ok {
+		if err := program.AuditorEmailValidator(v); err != nil {
+			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1118,6 +1183,24 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if value, ok := pu.mutation.AuditFirm(); ok {
+		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
+	}
+	if pu.mutation.AuditFirmCleared() {
+		_spec.ClearField(program.FieldAuditFirm, field.TypeString)
+	}
+	if value, ok := pu.mutation.Auditor(); ok {
+		_spec.SetField(program.FieldAuditor, field.TypeString, value)
+	}
+	if pu.mutation.AuditorCleared() {
+		_spec.ClearField(program.FieldAuditor, field.TypeString)
+	}
+	if value, ok := pu.mutation.AuditorEmail(); ok {
+		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
+	}
+	if pu.mutation.AuditorEmailCleared() {
+		_spec.ClearField(program.FieldAuditorEmail, field.TypeString)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2285,6 +2368,66 @@ func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpd
 	return puo
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (puo *ProgramUpdateOne) SetAuditFirm(s string) *ProgramUpdateOne {
+	puo.mutation.SetAuditFirm(s)
+	return puo
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableAuditFirm(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetAuditFirm(*s)
+	}
+	return puo
+}
+
+// ClearAuditFirm clears the value of the "audit_firm" field.
+func (puo *ProgramUpdateOne) ClearAuditFirm() *ProgramUpdateOne {
+	puo.mutation.ClearAuditFirm()
+	return puo
+}
+
+// SetAuditor sets the "auditor" field.
+func (puo *ProgramUpdateOne) SetAuditor(s string) *ProgramUpdateOne {
+	puo.mutation.SetAuditor(s)
+	return puo
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableAuditor(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetAuditor(*s)
+	}
+	return puo
+}
+
+// ClearAuditor clears the value of the "auditor" field.
+func (puo *ProgramUpdateOne) ClearAuditor() *ProgramUpdateOne {
+	puo.mutation.ClearAuditor()
+	return puo
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (puo *ProgramUpdateOne) SetAuditorEmail(s string) *ProgramUpdateOne {
+	puo.mutation.SetAuditorEmail(s)
+	return puo
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableAuditorEmail(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetAuditorEmail(*s)
+	}
+	return puo
+}
+
+// ClearAuditorEmail clears the value of the "auditor_email" field.
+func (puo *ProgramUpdateOne) ClearAuditorEmail() *ProgramUpdateOne {
+	puo.mutation.ClearAuditorEmail()
+	return puo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProgramUpdateOne) SetOwner(o *Organization) *ProgramUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -2990,6 +3133,11 @@ func (puo *ProgramUpdateOne) check() error {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.AuditorEmail(); ok {
+		if err := program.AuditorEmailValidator(v); err != nil {
+			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3110,6 +3258,24 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if value, ok := puo.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if value, ok := puo.mutation.AuditFirm(); ok {
+		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
+	}
+	if puo.mutation.AuditFirmCleared() {
+		_spec.ClearField(program.FieldAuditFirm, field.TypeString)
+	}
+	if value, ok := puo.mutation.Auditor(); ok {
+		_spec.SetField(program.FieldAuditor, field.TypeString, value)
+	}
+	if puo.mutation.AuditorCleared() {
+		_spec.ClearField(program.FieldAuditor, field.TypeString)
+	}
+	if value, ok := puo.mutation.AuditorEmail(); ok {
+		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
+	}
+	if puo.mutation.AuditorEmailCleared() {
+		_spec.ClearField(program.FieldAuditorEmail, field.TypeString)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

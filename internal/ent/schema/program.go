@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"net/mail"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -96,6 +98,19 @@ func (Program) Fields() []ent.Field {
 		field.Bool("auditor_read_comments").
 			Comment("can the auditor read comments").
 			Default(false),
+		field.String("audit_firm").
+			Comment("the name of the audit firm conducting the audit").
+			Optional(),
+		field.String("auditor").
+			Comment("the full name of the auditor conducting the audit").
+			Optional(),
+		field.String("auditor_email").
+			Comment("the email of the auditor conducting the audit").
+			Validate(func(email string) error {
+				_, err := mail.ParseAddress(email)
+				return err
+			}).
+			Optional(),
 	}
 }
 

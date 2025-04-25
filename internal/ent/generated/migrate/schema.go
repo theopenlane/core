@@ -2448,6 +2448,9 @@ var (
 		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
+		{Name: "audit_firm", Type: field.TypeString, Nullable: true},
+		{Name: "auditor", Type: field.TypeString, Nullable: true},
+		{Name: "auditor_email", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
@@ -2458,7 +2461,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "programs_organizations_programs",
-				Columns:    []*schema.Column{ProgramsColumns[19]},
+				Columns:    []*schema.Column{ProgramsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2472,7 +2475,7 @@ var (
 			{
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[19]},
+				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[22]},
 			},
 		},
 	}
@@ -2501,6 +2504,9 @@ var (
 		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
+		{Name: "audit_firm", Type: field.TypeString, Nullable: true},
+		{Name: "auditor", Type: field.TypeString, Nullable: true},
+		{Name: "auditor_email", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramHistoryTable holds the schema information for the "program_history" table.
 	ProgramHistoryTable = &schema.Table{

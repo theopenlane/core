@@ -307,6 +307,66 @@ func (phu *ProgramHistoryUpdate) SetNillableAuditorReadComments(b *bool) *Progra
 	return phu
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (phu *ProgramHistoryUpdate) SetAuditFirm(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetAuditFirm(s)
+	return phu
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableAuditFirm(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetAuditFirm(*s)
+	}
+	return phu
+}
+
+// ClearAuditFirm clears the value of the "audit_firm" field.
+func (phu *ProgramHistoryUpdate) ClearAuditFirm() *ProgramHistoryUpdate {
+	phu.mutation.ClearAuditFirm()
+	return phu
+}
+
+// SetAuditor sets the "auditor" field.
+func (phu *ProgramHistoryUpdate) SetAuditor(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetAuditor(s)
+	return phu
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableAuditor(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetAuditor(*s)
+	}
+	return phu
+}
+
+// ClearAuditor clears the value of the "auditor" field.
+func (phu *ProgramHistoryUpdate) ClearAuditor() *ProgramHistoryUpdate {
+	phu.mutation.ClearAuditor()
+	return phu
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (phu *ProgramHistoryUpdate) SetAuditorEmail(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetAuditorEmail(s)
+	return phu
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableAuditorEmail(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetAuditorEmail(*s)
+	}
+	return phu
+}
+
+// ClearAuditorEmail clears the value of the "auditor_email" field.
+func (phu *ProgramHistoryUpdate) ClearAuditorEmail() *ProgramHistoryUpdate {
+	phu.mutation.ClearAuditorEmail()
+	return phu
+}
+
 // Mutation returns the ProgramHistoryMutation object of the builder.
 func (phu *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
 	return phu.mutation
@@ -472,6 +532,24 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := phu.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if value, ok := phu.mutation.AuditFirm(); ok {
+		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
+	}
+	if phu.mutation.AuditFirmCleared() {
+		_spec.ClearField(programhistory.FieldAuditFirm, field.TypeString)
+	}
+	if value, ok := phu.mutation.Auditor(); ok {
+		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
+	}
+	if phu.mutation.AuditorCleared() {
+		_spec.ClearField(programhistory.FieldAuditor, field.TypeString)
+	}
+	if value, ok := phu.mutation.AuditorEmail(); ok {
+		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
+	}
+	if phu.mutation.AuditorEmailCleared() {
+		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProgramHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -771,6 +849,66 @@ func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorReadComments(b *bool) *Pr
 	return phuo
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (phuo *ProgramHistoryUpdateOne) SetAuditFirm(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetAuditFirm(s)
+	return phuo
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableAuditFirm(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetAuditFirm(*s)
+	}
+	return phuo
+}
+
+// ClearAuditFirm clears the value of the "audit_firm" field.
+func (phuo *ProgramHistoryUpdateOne) ClearAuditFirm() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearAuditFirm()
+	return phuo
+}
+
+// SetAuditor sets the "auditor" field.
+func (phuo *ProgramHistoryUpdateOne) SetAuditor(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetAuditor(s)
+	return phuo
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableAuditor(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetAuditor(*s)
+	}
+	return phuo
+}
+
+// ClearAuditor clears the value of the "auditor" field.
+func (phuo *ProgramHistoryUpdateOne) ClearAuditor() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearAuditor()
+	return phuo
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (phuo *ProgramHistoryUpdateOne) SetAuditorEmail(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetAuditorEmail(s)
+	return phuo
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorEmail(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetAuditorEmail(*s)
+	}
+	return phuo
+}
+
+// ClearAuditorEmail clears the value of the "auditor_email" field.
+func (phuo *ProgramHistoryUpdateOne) ClearAuditorEmail() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearAuditorEmail()
+	return phuo
+}
+
 // Mutation returns the ProgramHistoryMutation object of the builder.
 func (phuo *ProgramHistoryUpdateOne) Mutation() *ProgramHistoryMutation {
 	return phuo.mutation
@@ -966,6 +1104,24 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	}
 	if value, ok := phuo.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if value, ok := phuo.mutation.AuditFirm(); ok {
+		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
+	}
+	if phuo.mutation.AuditFirmCleared() {
+		_spec.ClearField(programhistory.FieldAuditFirm, field.TypeString)
+	}
+	if value, ok := phuo.mutation.Auditor(); ok {
+		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
+	}
+	if phuo.mutation.AuditorCleared() {
+		_spec.ClearField(programhistory.FieldAuditor, field.TypeString)
+	}
+	if value, ok := phuo.mutation.AuditorEmail(); ok {
+		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
+	}
+	if phuo.mutation.AuditorEmailCleared() {
+		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProgramHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

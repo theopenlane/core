@@ -2563,6 +2563,9 @@ type ComplexityRoot struct {
 
 	Program struct {
 		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AuditFirm            func(childComplexity int) int
+		Auditor              func(childComplexity int) int
+		AuditorEmail         func(childComplexity int) int
 		AuditorReadComments  func(childComplexity int) int
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
@@ -2626,6 +2629,9 @@ type ComplexityRoot struct {
 	}
 
 	ProgramHistory struct {
+		AuditFirm            func(childComplexity int) int
+		Auditor              func(childComplexity int) int
+		AuditorEmail         func(childComplexity int) int
 		AuditorReadComments  func(childComplexity int) int
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
@@ -17137,6 +17143,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Program.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Program.auditFirm":
+		if e.complexity.Program.AuditFirm == nil {
+			break
+		}
+
+		return e.complexity.Program.AuditFirm(childComplexity), true
+
+	case "Program.auditor":
+		if e.complexity.Program.Auditor == nil {
+			break
+		}
+
+		return e.complexity.Program.Auditor(childComplexity), true
+
+	case "Program.auditorEmail":
+		if e.complexity.Program.AuditorEmail == nil {
+			break
+		}
+
+		return e.complexity.Program.AuditorEmail(childComplexity), true
+
 	case "Program.auditorReadComments":
 		if e.complexity.Program.AuditorReadComments == nil {
 			break
@@ -17516,6 +17543,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramEdge.Node(childComplexity), true
+
+	case "ProgramHistory.auditFirm":
+		if e.complexity.ProgramHistory.AuditFirm == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.AuditFirm(childComplexity), true
+
+	case "ProgramHistory.auditor":
+		if e.complexity.ProgramHistory.Auditor == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.Auditor(childComplexity), true
+
+	case "ProgramHistory.auditorEmail":
+		if e.complexity.ProgramHistory.AuditorEmail == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.AuditorEmail(childComplexity), true
 
 	case "ProgramHistory.auditorReadComments":
 		if e.complexity.ProgramHistory.AuditorReadComments == nil {
@@ -33206,6 +33254,18 @@ input CreateProgramInput {
   can the auditor read comments
   """
   auditorReadComments: Boolean
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -51174,6 +51234,18 @@ type Program implements Node {
   can the auditor read comments
   """
   auditorReadComments: Boolean!
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -51715,6 +51787,18 @@ type ProgramHistory implements Node {
   can the auditor read comments
   """
   auditorReadComments: Boolean!
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
 }
 """
 A connection to a list of items.
@@ -52090,6 +52174,60 @@ input ProgramHistoryWhereInput {
   """
   auditorReadComments: Boolean
   auditorReadCommentsNEQ: Boolean
+  """
+  audit_firm field predicates
+  """
+  auditFirm: String
+  auditFirmNEQ: String
+  auditFirmIn: [String!]
+  auditFirmNotIn: [String!]
+  auditFirmGT: String
+  auditFirmGTE: String
+  auditFirmLT: String
+  auditFirmLTE: String
+  auditFirmContains: String
+  auditFirmHasPrefix: String
+  auditFirmHasSuffix: String
+  auditFirmIsNil: Boolean
+  auditFirmNotNil: Boolean
+  auditFirmEqualFold: String
+  auditFirmContainsFold: String
+  """
+  auditor field predicates
+  """
+  auditor: String
+  auditorNEQ: String
+  auditorIn: [String!]
+  auditorNotIn: [String!]
+  auditorGT: String
+  auditorGTE: String
+  auditorLT: String
+  auditorLTE: String
+  auditorContains: String
+  auditorHasPrefix: String
+  auditorHasSuffix: String
+  auditorIsNil: Boolean
+  auditorNotNil: Boolean
+  auditorEqualFold: String
+  auditorContainsFold: String
+  """
+  auditor_email field predicates
+  """
+  auditorEmail: String
+  auditorEmailNEQ: String
+  auditorEmailIn: [String!]
+  auditorEmailNotIn: [String!]
+  auditorEmailGT: String
+  auditorEmailGTE: String
+  auditorEmailLT: String
+  auditorEmailLTE: String
+  auditorEmailContains: String
+  auditorEmailHasPrefix: String
+  auditorEmailHasSuffix: String
+  auditorEmailIsNil: Boolean
+  auditorEmailNotNil: Boolean
+  auditorEmailEqualFold: String
+  auditorEmailContainsFold: String
 }
 type ProgramMembership implements Node {
   id: ID!
@@ -52856,6 +52994,60 @@ input ProgramWhereInput {
   """
   auditorReadComments: Boolean
   auditorReadCommentsNEQ: Boolean
+  """
+  audit_firm field predicates
+  """
+  auditFirm: String
+  auditFirmNEQ: String
+  auditFirmIn: [String!]
+  auditFirmNotIn: [String!]
+  auditFirmGT: String
+  auditFirmGTE: String
+  auditFirmLT: String
+  auditFirmLTE: String
+  auditFirmContains: String
+  auditFirmHasPrefix: String
+  auditFirmHasSuffix: String
+  auditFirmIsNil: Boolean
+  auditFirmNotNil: Boolean
+  auditFirmEqualFold: String
+  auditFirmContainsFold: String
+  """
+  auditor field predicates
+  """
+  auditor: String
+  auditorNEQ: String
+  auditorIn: [String!]
+  auditorNotIn: [String!]
+  auditorGT: String
+  auditorGTE: String
+  auditorLT: String
+  auditorLTE: String
+  auditorContains: String
+  auditorHasPrefix: String
+  auditorHasSuffix: String
+  auditorIsNil: Boolean
+  auditorNotNil: Boolean
+  auditorEqualFold: String
+  auditorContainsFold: String
+  """
+  auditor_email field predicates
+  """
+  auditorEmail: String
+  auditorEmailNEQ: String
+  auditorEmailIn: [String!]
+  auditorEmailNotIn: [String!]
+  auditorEmailGT: String
+  auditorEmailGTE: String
+  auditorEmailLT: String
+  auditorEmailLTE: String
+  auditorEmailContains: String
+  auditorEmailHasPrefix: String
+  auditorEmailHasSuffix: String
+  auditorEmailIsNil: Boolean
+  auditorEmailNotNil: Boolean
+  auditorEmailEqualFold: String
+  auditorEmailContainsFold: String
   """
   owner edge predicates
   """
@@ -63053,6 +63245,21 @@ input UpdateProgramInput {
   can the auditor read comments
   """
   auditorReadComments: Boolean
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  clearAuditFirm: Boolean
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  clearAuditor: Boolean
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
+  clearAuditorEmail: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]

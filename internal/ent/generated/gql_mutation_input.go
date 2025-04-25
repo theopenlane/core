@@ -6108,6 +6108,9 @@ type CreateProgramInput struct {
 	AuditorReady         *bool
 	AuditorWriteComments *bool
 	AuditorReadComments  *bool
+	AuditFirm            *string
+	Auditor              *string
+	AuditorEmail         *string
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
@@ -6158,6 +6161,15 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
+	}
+	if v := i.AuditFirm; v != nil {
+		m.SetAuditFirm(*v)
+	}
+	if v := i.Auditor; v != nil {
+		m.SetAuditor(*v)
+	}
+	if v := i.AuditorEmail; v != nil {
+		m.SetAuditorEmail(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6234,6 +6246,12 @@ type UpdateProgramInput struct {
 	AuditorReady              *bool
 	AuditorWriteComments      *bool
 	AuditorReadComments       *bool
+	ClearAuditFirm            bool
+	AuditFirm                 *string
+	ClearAuditor              bool
+	Auditor                   *string
+	ClearAuditorEmail         bool
+	AuditorEmail              *string
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearBlockedGroups        bool
@@ -6335,6 +6353,24 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
+	}
+	if i.ClearAuditFirm {
+		m.ClearAuditFirm()
+	}
+	if v := i.AuditFirm; v != nil {
+		m.SetAuditFirm(*v)
+	}
+	if i.ClearAuditor {
+		m.ClearAuditor()
+	}
+	if v := i.Auditor; v != nil {
+		m.SetAuditor(*v)
+	}
+	if i.ClearAuditorEmail {
+		m.ClearAuditorEmail()
+	}
+	if v := i.AuditorEmail; v != nil {
+		m.SetAuditorEmail(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

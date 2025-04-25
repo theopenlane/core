@@ -298,6 +298,48 @@ func (phc *ProgramHistoryCreate) SetNillableAuditorReadComments(b *bool) *Progra
 	return phc
 }
 
+// SetAuditFirm sets the "audit_firm" field.
+func (phc *ProgramHistoryCreate) SetAuditFirm(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditFirm(s)
+	return phc
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditFirm(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditFirm(*s)
+	}
+	return phc
+}
+
+// SetAuditor sets the "auditor" field.
+func (phc *ProgramHistoryCreate) SetAuditor(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditor(s)
+	return phc
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditor(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditor(*s)
+	}
+	return phc
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (phc *ProgramHistoryCreate) SetAuditorEmail(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditorEmail(s)
+	return phc
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditorEmail(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditorEmail(*s)
+	}
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProgramHistoryCreate) SetID(s string) *ProgramHistoryCreate {
 	phc.mutation.SetID(s)
@@ -556,6 +598,18 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
+	}
+	if value, ok := phc.mutation.AuditFirm(); ok {
+		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
+		_node.AuditFirm = value
+	}
+	if value, ok := phc.mutation.Auditor(); ok {
+		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
+		_node.Auditor = value
+	}
+	if value, ok := phc.mutation.AuditorEmail(); ok {
+		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
+		_node.AuditorEmail = value
 	}
 	return _node, _spec
 }

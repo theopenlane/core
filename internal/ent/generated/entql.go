@@ -1735,6 +1735,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldAuditorReady:         {Type: field.TypeBool, Column: program.FieldAuditorReady},
 			program.FieldAuditorWriteComments: {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
 			program.FieldAuditorReadComments:  {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
+			program.FieldAuditFirm:            {Type: field.TypeString, Column: program.FieldAuditFirm},
+			program.FieldAuditor:              {Type: field.TypeString, Column: program.FieldAuditor},
+			program.FieldAuditorEmail:         {Type: field.TypeString, Column: program.FieldAuditorEmail},
 		},
 	}
 	graph.Nodes[57] = &sqlgraph.Node{
@@ -1770,6 +1773,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldAuditorReady:         {Type: field.TypeBool, Column: programhistory.FieldAuditorReady},
 			programhistory.FieldAuditorWriteComments: {Type: field.TypeBool, Column: programhistory.FieldAuditorWriteComments},
 			programhistory.FieldAuditorReadComments:  {Type: field.TypeBool, Column: programhistory.FieldAuditorReadComments},
+			programhistory.FieldAuditFirm:            {Type: field.TypeString, Column: programhistory.FieldAuditFirm},
+			programhistory.FieldAuditor:              {Type: field.TypeString, Column: programhistory.FieldAuditor},
+			programhistory.FieldAuditorEmail:         {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -16106,6 +16112,21 @@ func (f *ProgramFilter) WhereAuditorReadComments(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReadComments))
 }
 
+// WhereAuditFirm applies the entql string predicate on the audit_firm field.
+func (f *ProgramFilter) WhereAuditFirm(p entql.StringP) {
+	f.Where(p.Field(program.FieldAuditFirm))
+}
+
+// WhereAuditor applies the entql string predicate on the auditor field.
+func (f *ProgramFilter) WhereAuditor(p entql.StringP) {
+	f.Where(p.Field(program.FieldAuditor))
+}
+
+// WhereAuditorEmail applies the entql string predicate on the auditor_email field.
+func (f *ProgramFilter) WhereAuditorEmail(p entql.StringP) {
+	f.Where(p.Field(program.FieldAuditorEmail))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ProgramFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -16506,6 +16527,21 @@ func (f *ProgramHistoryFilter) WhereAuditorWriteComments(p entql.BoolP) {
 // WhereAuditorReadComments applies the entql bool predicate on the auditor_read_comments field.
 func (f *ProgramHistoryFilter) WhereAuditorReadComments(p entql.BoolP) {
 	f.Where(p.Field(programhistory.FieldAuditorReadComments))
+}
+
+// WhereAuditFirm applies the entql string predicate on the audit_firm field.
+func (f *ProgramHistoryFilter) WhereAuditFirm(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldAuditFirm))
+}
+
+// WhereAuditor applies the entql string predicate on the auditor field.
+func (f *ProgramHistoryFilter) WhereAuditor(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldAuditor))
+}
+
+// WhereAuditorEmail applies the entql string predicate on the auditor_email field.
+func (f *ProgramHistoryFilter) WhereAuditorEmail(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldAuditorEmail))
 }
 
 // addPredicate implements the predicateAdder interface.
