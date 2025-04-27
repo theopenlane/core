@@ -16479,15 +16479,15 @@ func (c *UserClient) QueryOrganizations(u *User) *OrganizationQuery {
 	return query
 }
 
-// QueryWebauthn queries the webauthn edge of a User.
-func (c *UserClient) QueryWebauthn(u *User) *WebauthnQuery {
+// QueryWebauthns queries the webauthns edge of a User.
+func (c *UserClient) QueryWebauthns(u *User) *WebauthnQuery {
 	query := (&WebauthnClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(webauthn.Table, webauthn.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.WebauthnTable, user.WebauthnColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.WebauthnsTable, user.WebauthnsColumn),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Webauthn

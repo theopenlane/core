@@ -54,6 +54,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		templateResults              *generated.TemplateConnection
 		userResults                  *generated.UserConnection
 		usersettingResults           *generated.UserSettingConnection
+		webauthnResults              *generated.WebauthnConnection
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
@@ -281,6 +282,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 				errors = append(errors, err)
 			}
 		},
+		func() {
+			var err error
+			webauthnResults, err = searchWebauthns(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
 	})
 
 	// log the errors for debugging
@@ -451,6 +459,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.UserSettings = usersettingResults
 
 		res.TotalCount += usersettingResults.TotalCount
+	}
+	if webauthnResults != nil && len(webauthnResults.Edges) > 0 {
+		res.Webauthns = webauthnResults
+
+		res.TotalCount += webauthnResults.TotalCount
 	}
 
 	return res, nil
@@ -774,4 +787,14 @@ func (r *queryResolver) UserSettingSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return usersettingResults, nil
+}
+func (r *queryResolver) WebauthnSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
+	webauthnResults, err := searchWebauthns(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return webauthnResults, nil
 }

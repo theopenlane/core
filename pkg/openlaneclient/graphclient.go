@@ -357,6 +357,14 @@ type OpenlaneGraphClient interface {
 	UpdateUserSetting(ctx context.Context, updateUserSettingID string, input UpdateUserSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUserSetting, error)
 	GetAllUserSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUserSettingHistories, error)
 	GetUserSettingHistories(ctx context.Context, where *UserSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUserSettingHistories, error)
+	CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVWebauthn, error)
+	CreateBulkWebauthn(ctx context.Context, input []*CreateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkWebauthn, error)
+	CreateWebauthn(ctx context.Context, input CreateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*CreateWebauthn, error)
+	DeleteWebauthn(ctx context.Context, deleteWebauthnID string, interceptors ...clientv2.RequestInterceptor) (*DeleteWebauthn, error)
+	GetAllWebauthns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllWebauthns, error)
+	GetWebauthnByID(ctx context.Context, webauthnID string, interceptors ...clientv2.RequestInterceptor) (*GetWebauthnByID, error)
+	GetWebauthns(ctx context.Context, first *int64, last *int64, where *WebauthnWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetWebauthns, error)
+	UpdateWebauthn(ctx context.Context, updateWebauthnID string, input UpdateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*UpdateWebauthn, error)
 }
 
 type Client struct {
@@ -6105,6 +6113,92 @@ func (t *AdminSearch_AdminSearch_UserSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_Webauthns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Webauthns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Webauthns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Webauthns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Webauthns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Webauthns_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_Webauthns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Webauthns_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_Webauthns_Edges struct {
+	Node *AdminSearch_AdminSearch_Webauthns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Webauthns_Edges) GetNode() *AdminSearch_AdminSearch_Webauthns_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Webauthns struct {
+	Edges      []*AdminSearch_AdminSearch_Webauthns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Webauthns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Webauthns) GetEdges() []*AdminSearch_AdminSearch_Webauthns_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Webauthns) GetPageInfo() *AdminSearch_AdminSearch_Webauthns_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Webauthns) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Webauthns{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch struct {
 	ActionPlans            *AdminSearch_AdminSearch_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
 	APITokens              *AdminSearch_AdminSearch_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
@@ -6139,6 +6233,7 @@ type AdminSearch_AdminSearch struct {
 	TotalCount             int64                                           "json:\"totalCount\" graphql:\"totalCount\""
 	UserSettings           *AdminSearch_AdminSearch_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                  *AdminSearch_AdminSearch_Users                  "json:\"users,omitempty\" graphql:\"users\""
+	Webauthns              *AdminSearch_AdminSearch_Webauthns              "json:\"webauthns,omitempty\" graphql:\"webauthns\""
 }
 
 func (t *AdminSearch_AdminSearch) GetActionPlans() *AdminSearch_AdminSearch_ActionPlans {
@@ -6338,6 +6433,12 @@ func (t *AdminSearch_AdminSearch) GetUsers() *AdminSearch_AdminSearch_Users {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Users
+}
+func (t *AdminSearch_AdminSearch) GetWebauthns() *AdminSearch_AdminSearch_Webauthns {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Webauthns
 }
 
 type CreateAPIToken_CreateAPIToken_APIToken struct {
@@ -54432,6 +54533,92 @@ func (t *GlobalSearch_Search_UserSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Webauthns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Webauthns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Webauthns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Webauthns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Webauthns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Webauthns_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Webauthns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Webauthns_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Webauthns_Edges struct {
+	Node *GlobalSearch_Search_Webauthns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Webauthns_Edges) GetNode() *GlobalSearch_Search_Webauthns_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Webauthns struct {
+	Edges      []*GlobalSearch_Search_Webauthns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Webauthns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Webauthns) GetEdges() []*GlobalSearch_Search_Webauthns_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Webauthns) GetPageInfo() *GlobalSearch_Search_Webauthns_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Webauthns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Webauthns{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search struct {
 	ActionPlans            *GlobalSearch_Search_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
 	APITokens              *GlobalSearch_Search_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
@@ -54466,6 +54653,7 @@ type GlobalSearch_Search struct {
 	TotalCount             int64                                       "json:\"totalCount\" graphql:\"totalCount\""
 	UserSettings           *GlobalSearch_Search_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                  *GlobalSearch_Search_Users                  "json:\"users,omitempty\" graphql:\"users\""
+	Webauthns              *GlobalSearch_Search_Webauthns              "json:\"webauthns,omitempty\" graphql:\"webauthns\""
 }
 
 func (t *GlobalSearch_Search) GetActionPlans() *GlobalSearch_Search_ActionPlans {
@@ -54665,6 +54853,12 @@ func (t *GlobalSearch_Search) GetUsers() *GlobalSearch_Search_Users {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Users
+}
+func (t *GlobalSearch_Search) GetWebauthns() *GlobalSearch_Search_Webauthns {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Webauthns
 }
 
 type CreateStandard_CreateStandard_Standard_Controls_PageInfo struct {
@@ -65800,6 +65994,617 @@ func (t *GetUserSettingHistories_UserSettingHistories) GetEdges() []*GetUserSett
 	return t.Edges
 }
 
+type CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetBackupEligible() bool {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.BackupEligible
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetBackupState() bool {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.BackupState
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVWebauthn_CreateBulkCSVWebauthn struct {
+	Webauthns []*CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns "json:\"webauthns,omitempty\" graphql:\"webauthns\""
+}
+
+func (t *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn) GetWebauthns() []*CreateBulkCSVWebauthn_CreateBulkCSVWebauthn_Webauthns {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn_CreateBulkCSVWebauthn{}
+	}
+	return t.Webauthns
+}
+
+type CreateBulkWebauthn_CreateBulkWebauthn_Webauthns struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetBackupEligible() bool {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.BackupEligible
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetBackupState() bool {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.BackupState
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetID() string {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.ID
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkWebauthn_CreateBulkWebauthn_Webauthns) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn_Webauthns{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkWebauthn_CreateBulkWebauthn struct {
+	Webauthns []*CreateBulkWebauthn_CreateBulkWebauthn_Webauthns "json:\"webauthns,omitempty\" graphql:\"webauthns\""
+}
+
+func (t *CreateBulkWebauthn_CreateBulkWebauthn) GetWebauthns() []*CreateBulkWebauthn_CreateBulkWebauthn_Webauthns {
+	if t == nil {
+		t = &CreateBulkWebauthn_CreateBulkWebauthn{}
+	}
+	return t.Webauthns
+}
+
+type CreateWebauthn_CreateWebauthn_Webauthn struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetBackupEligible() bool {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.BackupEligible
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetBackupState() bool {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.BackupState
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetID() string {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.ID
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetTags() []string {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.Tags
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateWebauthn_CreateWebauthn_Webauthn) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn_Webauthn{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateWebauthn_CreateWebauthn struct {
+	Webauthn CreateWebauthn_CreateWebauthn_Webauthn "json:\"webauthn\" graphql:\"webauthn\""
+}
+
+func (t *CreateWebauthn_CreateWebauthn) GetWebauthn() *CreateWebauthn_CreateWebauthn_Webauthn {
+	if t == nil {
+		t = &CreateWebauthn_CreateWebauthn{}
+	}
+	return &t.Webauthn
+}
+
+type DeleteWebauthn_DeleteWebauthn struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteWebauthn_DeleteWebauthn) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteWebauthn_DeleteWebauthn{}
+	}
+	return t.DeletedID
+}
+
+type GetAllWebauthns_Webauthns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllWebauthns_Webauthns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllWebauthns_Webauthns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllWebauthns_Webauthns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllWebauthns_Webauthns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllWebauthns_Webauthns_Edges_Node struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetBackupEligible() bool {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.BackupEligible
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetBackupState() bool {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.BackupState
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllWebauthns_Webauthns_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllWebauthns_Webauthns_Edges struct {
+	Node *GetAllWebauthns_Webauthns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllWebauthns_Webauthns_Edges) GetNode() *GetAllWebauthns_Webauthns_Edges_Node {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllWebauthns_Webauthns struct {
+	Edges      []*GetAllWebauthns_Webauthns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllWebauthns_Webauthns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllWebauthns_Webauthns) GetEdges() []*GetAllWebauthns_Webauthns_Edges {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns{}
+	}
+	return t.Edges
+}
+func (t *GetAllWebauthns_Webauthns) GetPageInfo() *GetAllWebauthns_Webauthns_PageInfo {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllWebauthns_Webauthns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllWebauthns_Webauthns{}
+	}
+	return t.TotalCount
+}
+
+type GetWebauthnByID_Webauthn struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetWebauthnByID_Webauthn) GetBackupEligible() bool {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.BackupEligible
+}
+func (t *GetWebauthnByID_Webauthn) GetBackupState() bool {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.BackupState
+}
+func (t *GetWebauthnByID_Webauthn) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.CreatedAt
+}
+func (t *GetWebauthnByID_Webauthn) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.CreatedBy
+}
+func (t *GetWebauthnByID_Webauthn) GetID() string {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.ID
+}
+func (t *GetWebauthnByID_Webauthn) GetTags() []string {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.Tags
+}
+func (t *GetWebauthnByID_Webauthn) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetWebauthnByID_Webauthn) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetWebauthnByID_Webauthn{}
+	}
+	return t.UpdatedBy
+}
+
+type GetWebauthns_Webauthns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetWebauthns_Webauthns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetWebauthns_Webauthns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetWebauthns_Webauthns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetWebauthns_Webauthns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetWebauthns_Webauthns_Edges_Node struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetWebauthns_Webauthns_Edges_Node) GetBackupEligible() bool {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.BackupEligible
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetBackupState() bool {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.BackupState
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetWebauthns_Webauthns_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetWebauthns_Webauthns_Edges struct {
+	Node *GetWebauthns_Webauthns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetWebauthns_Webauthns_Edges) GetNode() *GetWebauthns_Webauthns_Edges_Node {
+	if t == nil {
+		t = &GetWebauthns_Webauthns_Edges{}
+	}
+	return t.Node
+}
+
+type GetWebauthns_Webauthns struct {
+	Edges      []*GetWebauthns_Webauthns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetWebauthns_Webauthns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetWebauthns_Webauthns) GetEdges() []*GetWebauthns_Webauthns_Edges {
+	if t == nil {
+		t = &GetWebauthns_Webauthns{}
+	}
+	return t.Edges
+}
+func (t *GetWebauthns_Webauthns) GetPageInfo() *GetWebauthns_Webauthns_PageInfo {
+	if t == nil {
+		t = &GetWebauthns_Webauthns{}
+	}
+	return &t.PageInfo
+}
+func (t *GetWebauthns_Webauthns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetWebauthns_Webauthns{}
+	}
+	return t.TotalCount
+}
+
+type UpdateWebauthn_UpdateWebauthn_Webauthn struct {
+	BackupEligible bool       "json:\"backupEligible\" graphql:\"backupEligible\""
+	BackupState    bool       "json:\"backupState\" graphql:\"backupState\""
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetBackupEligible() bool {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.BackupEligible
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetBackupState() bool {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.BackupState
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetID() string {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.ID
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetTags() []string {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.Tags
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateWebauthn_UpdateWebauthn_Webauthn) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn_Webauthn{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateWebauthn_UpdateWebauthn struct {
+	Webauthn UpdateWebauthn_UpdateWebauthn_Webauthn "json:\"webauthn\" graphql:\"webauthn\""
+}
+
+func (t *UpdateWebauthn_UpdateWebauthn) GetWebauthn() *UpdateWebauthn_UpdateWebauthn_Webauthn {
+	if t == nil {
+		t = &UpdateWebauthn_UpdateWebauthn{}
+	}
+	return &t.Webauthn
+}
+
 type CreateBulkCSVActionPlan struct {
 	CreateBulkCSVActionPlan CreateBulkCSVActionPlan_CreateBulkCSVActionPlan "json:\"createBulkCSVActionPlan\" graphql:\"createBulkCSVActionPlan\""
 }
@@ -69573,6 +70378,94 @@ func (t *GetUserSettingHistories) GetUserSettingHistories() *GetUserSettingHisto
 	return &t.UserSettingHistories
 }
 
+type CreateBulkCSVWebauthn struct {
+	CreateBulkCSVWebauthn CreateBulkCSVWebauthn_CreateBulkCSVWebauthn "json:\"createBulkCSVWebauthn\" graphql:\"createBulkCSVWebauthn\""
+}
+
+func (t *CreateBulkCSVWebauthn) GetCreateBulkCSVWebauthn() *CreateBulkCSVWebauthn_CreateBulkCSVWebauthn {
+	if t == nil {
+		t = &CreateBulkCSVWebauthn{}
+	}
+	return &t.CreateBulkCSVWebauthn
+}
+
+type CreateBulkWebauthn struct {
+	CreateBulkWebauthn CreateBulkWebauthn_CreateBulkWebauthn "json:\"createBulkWebauthn\" graphql:\"createBulkWebauthn\""
+}
+
+func (t *CreateBulkWebauthn) GetCreateBulkWebauthn() *CreateBulkWebauthn_CreateBulkWebauthn {
+	if t == nil {
+		t = &CreateBulkWebauthn{}
+	}
+	return &t.CreateBulkWebauthn
+}
+
+type CreateWebauthn struct {
+	CreateWebauthn CreateWebauthn_CreateWebauthn "json:\"createWebauthn\" graphql:\"createWebauthn\""
+}
+
+func (t *CreateWebauthn) GetCreateWebauthn() *CreateWebauthn_CreateWebauthn {
+	if t == nil {
+		t = &CreateWebauthn{}
+	}
+	return &t.CreateWebauthn
+}
+
+type DeleteWebauthn struct {
+	DeleteWebauthn DeleteWebauthn_DeleteWebauthn "json:\"deleteWebauthn\" graphql:\"deleteWebauthn\""
+}
+
+func (t *DeleteWebauthn) GetDeleteWebauthn() *DeleteWebauthn_DeleteWebauthn {
+	if t == nil {
+		t = &DeleteWebauthn{}
+	}
+	return &t.DeleteWebauthn
+}
+
+type GetAllWebauthns struct {
+	Webauthns GetAllWebauthns_Webauthns "json:\"webauthns\" graphql:\"webauthns\""
+}
+
+func (t *GetAllWebauthns) GetWebauthns() *GetAllWebauthns_Webauthns {
+	if t == nil {
+		t = &GetAllWebauthns{}
+	}
+	return &t.Webauthns
+}
+
+type GetWebauthnByID struct {
+	Webauthn GetWebauthnByID_Webauthn "json:\"webauthn\" graphql:\"webauthn\""
+}
+
+func (t *GetWebauthnByID) GetWebauthn() *GetWebauthnByID_Webauthn {
+	if t == nil {
+		t = &GetWebauthnByID{}
+	}
+	return &t.Webauthn
+}
+
+type GetWebauthns struct {
+	Webauthns GetWebauthns_Webauthns "json:\"webauthns\" graphql:\"webauthns\""
+}
+
+func (t *GetWebauthns) GetWebauthns() *GetWebauthns_Webauthns {
+	if t == nil {
+		t = &GetWebauthns{}
+	}
+	return &t.Webauthns
+}
+
+type UpdateWebauthn struct {
+	UpdateWebauthn UpdateWebauthn_UpdateWebauthn "json:\"updateWebauthn\" graphql:\"updateWebauthn\""
+}
+
+func (t *UpdateWebauthn) GetUpdateWebauthn() *UpdateWebauthn_UpdateWebauthn {
+	if t == nil {
+		t = &UpdateWebauthn{}
+	}
+	return &t.UpdateWebauthn
+}
+
 const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($input: Upload!) {
 	createBulkCSVActionPlan(input: $input) {
 		actionPlans {
@@ -70706,6 +71599,21 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					tags
 					userID
+				}
+			}
+		}
+		webauthns {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
 				}
 			}
 		}
@@ -84134,6 +85042,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		webauthns {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 	}
 }
 `
@@ -87258,6 +88181,278 @@ func (c *Client) GetUserSettingHistories(ctx context.Context, where *UserSetting
 	return &res, nil
 }
 
+const CreateBulkCSVWebauthnDocument = `mutation CreateBulkCSVWebauthn ($input: Upload!) {
+	createBulkCSVWebauthn(input: $input) {
+		webauthns {
+			backupEligible
+			backupState
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVWebauthn, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVWebauthn
+	if err := c.Client.Post(ctx, "CreateBulkCSVWebauthn", CreateBulkCSVWebauthnDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkWebauthnDocument = `mutation CreateBulkWebauthn ($input: [CreateWebauthnInput!]) {
+	createBulkWebauthn(input: $input) {
+		webauthns {
+			backupEligible
+			backupState
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkWebauthn(ctx context.Context, input []*CreateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkWebauthn, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkWebauthn
+	if err := c.Client.Post(ctx, "CreateBulkWebauthn", CreateBulkWebauthnDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateWebauthnDocument = `mutation CreateWebauthn ($input: CreateWebauthnInput!) {
+	createWebauthn(input: $input) {
+		webauthn {
+			backupEligible
+			backupState
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateWebauthn(ctx context.Context, input CreateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*CreateWebauthn, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateWebauthn
+	if err := c.Client.Post(ctx, "CreateWebauthn", CreateWebauthnDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteWebauthnDocument = `mutation DeleteWebauthn ($deleteWebauthnId: ID!) {
+	deleteWebauthn(id: $deleteWebauthnId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteWebauthn(ctx context.Context, deleteWebauthnID string, interceptors ...clientv2.RequestInterceptor) (*DeleteWebauthn, error) {
+	vars := map[string]any{
+		"deleteWebauthnId": deleteWebauthnID,
+	}
+
+	var res DeleteWebauthn
+	if err := c.Client.Post(ctx, "DeleteWebauthn", DeleteWebauthnDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllWebauthnsDocument = `query GetAllWebauthns {
+	webauthns {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				backupEligible
+				backupState
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllWebauthns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllWebauthns, error) {
+	vars := map[string]any{}
+
+	var res GetAllWebauthns
+	if err := c.Client.Post(ctx, "GetAllWebauthns", GetAllWebauthnsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetWebauthnByIDDocument = `query GetWebauthnByID ($webauthnId: ID!) {
+	webauthn(id: $webauthnId) {
+		backupEligible
+		backupState
+		createdAt
+		createdBy
+		id
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetWebauthnByID(ctx context.Context, webauthnID string, interceptors ...clientv2.RequestInterceptor) (*GetWebauthnByID, error) {
+	vars := map[string]any{
+		"webauthnId": webauthnID,
+	}
+
+	var res GetWebauthnByID
+	if err := c.Client.Post(ctx, "GetWebauthnByID", GetWebauthnByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetWebauthnsDocument = `query GetWebauthns ($first: Int, $last: Int, $where: WebauthnWhereInput) {
+	webauthns(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				backupEligible
+				backupState
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetWebauthns(ctx context.Context, first *int64, last *int64, where *WebauthnWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetWebauthns, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetWebauthns
+	if err := c.Client.Post(ctx, "GetWebauthns", GetWebauthnsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateWebauthnDocument = `mutation UpdateWebauthn ($updateWebauthnId: ID!, $input: UpdateWebauthnInput!) {
+	updateWebauthn(id: $updateWebauthnId, input: $input) {
+		webauthn {
+			backupEligible
+			backupState
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateWebauthn(ctx context.Context, updateWebauthnID string, input UpdateWebauthnInput, interceptors ...clientv2.RequestInterceptor) (*UpdateWebauthn, error) {
+	vars := map[string]any{
+		"updateWebauthnId": updateWebauthnID,
+		"input":            input,
+	}
+
+	var res UpdateWebauthn
+	if err := c.Client.Post(ctx, "UpdateWebauthn", UpdateWebauthnDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 var DocumentOperationNames = map[string]string{
 	CreateBulkCSVActionPlanDocument:              "CreateBulkCSVActionPlan",
 	CreateBulkActionPlanDocument:                 "CreateBulkActionPlan",
@@ -87602,4 +88797,12 @@ var DocumentOperationNames = map[string]string{
 	UpdateUserSettingDocument:                    "UpdateUserSetting",
 	GetAllUserSettingHistoriesDocument:           "GetAllUserSettingHistories",
 	GetUserSettingHistoriesDocument:              "GetUserSettingHistories",
+	CreateBulkCSVWebauthnDocument:                "CreateBulkCSVWebauthn",
+	CreateBulkWebauthnDocument:                   "CreateBulkWebauthn",
+	CreateWebauthnDocument:                       "CreateWebauthn",
+	DeleteWebauthnDocument:                       "DeleteWebauthn",
+	GetAllWebauthnsDocument:                      "GetAllWebauthns",
+	GetWebauthnByIDDocument:                      "GetWebauthnByID",
+	GetWebauthnsDocument:                         "GetWebauthns",
+	UpdateWebauthnDocument:                       "UpdateWebauthn",
 }

@@ -467,14 +467,14 @@ func (uu *UserUpdate) AddOrganizations(o ...*Organization) *UserUpdate {
 	return uu.AddOrganizationIDs(ids...)
 }
 
-// AddWebauthnIDs adds the "webauthn" edge to the Webauthn entity by IDs.
+// AddWebauthnIDs adds the "webauthns" edge to the Webauthn entity by IDs.
 func (uu *UserUpdate) AddWebauthnIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddWebauthnIDs(ids...)
 	return uu
 }
 
-// AddWebauthn adds the "webauthn" edges to the Webauthn entity.
-func (uu *UserUpdate) AddWebauthn(w ...*Webauthn) *UserUpdate {
+// AddWebauthns adds the "webauthns" edges to the Webauthn entity.
+func (uu *UserUpdate) AddWebauthns(w ...*Webauthn) *UserUpdate {
 	ids := make([]string, len(w))
 	for i := range w {
 		ids[i] = w[i].ID
@@ -788,20 +788,20 @@ func (uu *UserUpdate) RemoveOrganizations(o ...*Organization) *UserUpdate {
 	return uu.RemoveOrganizationIDs(ids...)
 }
 
-// ClearWebauthn clears all "webauthn" edges to the Webauthn entity.
-func (uu *UserUpdate) ClearWebauthn() *UserUpdate {
-	uu.mutation.ClearWebauthn()
+// ClearWebauthns clears all "webauthns" edges to the Webauthn entity.
+func (uu *UserUpdate) ClearWebauthns() *UserUpdate {
+	uu.mutation.ClearWebauthns()
 	return uu
 }
 
-// RemoveWebauthnIDs removes the "webauthn" edge to Webauthn entities by IDs.
+// RemoveWebauthnIDs removes the "webauthns" edge to Webauthn entities by IDs.
 func (uu *UserUpdate) RemoveWebauthnIDs(ids ...string) *UserUpdate {
 	uu.mutation.RemoveWebauthnIDs(ids...)
 	return uu
 }
 
-// RemoveWebauthn removes "webauthn" edges to Webauthn entities.
-func (uu *UserUpdate) RemoveWebauthn(w ...*Webauthn) *UserUpdate {
+// RemoveWebauthns removes "webauthns" edges to Webauthn entities.
+func (uu *UserUpdate) RemoveWebauthns(w ...*Webauthn) *UserUpdate {
 	ids := make([]string, len(w))
 	for i := range w {
 		ids[i] = w[i].ID
@@ -1612,12 +1612,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.WebauthnCleared() {
+	if uu.mutation.WebauthnsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),
@@ -1626,12 +1626,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = uu.schemaConfig.Webauthn
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RemovedWebauthnIDs(); len(nodes) > 0 && !uu.mutation.WebauthnCleared() {
+	if nodes := uu.mutation.RemovedWebauthnsIDs(); len(nodes) > 0 && !uu.mutation.WebauthnsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),
@@ -1643,12 +1643,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.WebauthnIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.WebauthnsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),
@@ -2633,14 +2633,14 @@ func (uuo *UserUpdateOne) AddOrganizations(o ...*Organization) *UserUpdateOne {
 	return uuo.AddOrganizationIDs(ids...)
 }
 
-// AddWebauthnIDs adds the "webauthn" edge to the Webauthn entity by IDs.
+// AddWebauthnIDs adds the "webauthns" edge to the Webauthn entity by IDs.
 func (uuo *UserUpdateOne) AddWebauthnIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddWebauthnIDs(ids...)
 	return uuo
 }
 
-// AddWebauthn adds the "webauthn" edges to the Webauthn entity.
-func (uuo *UserUpdateOne) AddWebauthn(w ...*Webauthn) *UserUpdateOne {
+// AddWebauthns adds the "webauthns" edges to the Webauthn entity.
+func (uuo *UserUpdateOne) AddWebauthns(w ...*Webauthn) *UserUpdateOne {
 	ids := make([]string, len(w))
 	for i := range w {
 		ids[i] = w[i].ID
@@ -2954,20 +2954,20 @@ func (uuo *UserUpdateOne) RemoveOrganizations(o ...*Organization) *UserUpdateOne
 	return uuo.RemoveOrganizationIDs(ids...)
 }
 
-// ClearWebauthn clears all "webauthn" edges to the Webauthn entity.
-func (uuo *UserUpdateOne) ClearWebauthn() *UserUpdateOne {
-	uuo.mutation.ClearWebauthn()
+// ClearWebauthns clears all "webauthns" edges to the Webauthn entity.
+func (uuo *UserUpdateOne) ClearWebauthns() *UserUpdateOne {
+	uuo.mutation.ClearWebauthns()
 	return uuo
 }
 
-// RemoveWebauthnIDs removes the "webauthn" edge to Webauthn entities by IDs.
+// RemoveWebauthnIDs removes the "webauthns" edge to Webauthn entities by IDs.
 func (uuo *UserUpdateOne) RemoveWebauthnIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.RemoveWebauthnIDs(ids...)
 	return uuo
 }
 
-// RemoveWebauthn removes "webauthn" edges to Webauthn entities.
-func (uuo *UserUpdateOne) RemoveWebauthn(w ...*Webauthn) *UserUpdateOne {
+// RemoveWebauthns removes "webauthns" edges to Webauthn entities.
+func (uuo *UserUpdateOne) RemoveWebauthns(w ...*Webauthn) *UserUpdateOne {
 	ids := make([]string, len(w))
 	for i := range w {
 		ids[i] = w[i].ID
@@ -3808,12 +3808,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.WebauthnCleared() {
+	if uuo.mutation.WebauthnsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),
@@ -3822,12 +3822,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge.Schema = uuo.schemaConfig.Webauthn
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RemovedWebauthnIDs(); len(nodes) > 0 && !uuo.mutation.WebauthnCleared() {
+	if nodes := uuo.mutation.RemovedWebauthnsIDs(); len(nodes) > 0 && !uuo.mutation.WebauthnsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),
@@ -3839,12 +3839,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.WebauthnIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.WebauthnsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),

@@ -3425,7 +3425,7 @@ var (
 		PrimaryKey: []*schema.Column{WebauthnsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "webauthns_users_webauthn",
+				Symbol:     "webauthns_users_webauthns",
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,

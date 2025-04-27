@@ -88,6 +88,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -28649,5 +28650,319 @@ func (ush *UserSettingHistory) ToEdge(order *UserSettingHistoryOrder) *UserSetti
 	return &UserSettingHistoryEdge{
 		Node:   ush,
 		Cursor: order.Field.toCursor(ush),
+	}
+}
+
+// WebauthnEdge is the edge representation of Webauthn.
+type WebauthnEdge struct {
+	Node   *Webauthn `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// WebauthnConnection is the connection containing edges to Webauthn.
+type WebauthnConnection struct {
+	Edges      []*WebauthnEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *WebauthnConnection) build(nodes []*Webauthn, pager *webauthnPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Webauthn
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Webauthn {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Webauthn {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WebauthnEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WebauthnEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WebauthnPaginateOption enables pagination customization.
+type WebauthnPaginateOption func(*webauthnPager) error
+
+// WithWebauthnOrder configures pagination ordering.
+func WithWebauthnOrder(order *WebauthnOrder) WebauthnPaginateOption {
+	if order == nil {
+		order = DefaultWebauthnOrder
+	}
+	o := *order
+	return func(pager *webauthnPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWebauthnOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWebauthnFilter configures pagination filter.
+func WithWebauthnFilter(filter func(*WebauthnQuery) (*WebauthnQuery, error)) WebauthnPaginateOption {
+	return func(pager *webauthnPager) error {
+		if filter == nil {
+			return errors.New("WebauthnQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type webauthnPager struct {
+	reverse bool
+	order   *WebauthnOrder
+	filter  func(*WebauthnQuery) (*WebauthnQuery, error)
+}
+
+func newWebauthnPager(opts []WebauthnPaginateOption, reverse bool) (*webauthnPager, error) {
+	pager := &webauthnPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWebauthnOrder
+	}
+	return pager, nil
+}
+
+func (p *webauthnPager) applyFilter(query *WebauthnQuery) (*WebauthnQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *webauthnPager) toCursor(w *Webauthn) Cursor {
+	return p.order.Field.toCursor(w)
+}
+
+func (p *webauthnPager) applyCursors(query *WebauthnQuery, after, before *Cursor) (*WebauthnQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWebauthnOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *webauthnPager) applyOrder(query *WebauthnQuery) *WebauthnQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWebauthnOrder.Field {
+		query = query.Order(DefaultWebauthnOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *webauthnPager) orderExpr(query *WebauthnQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWebauthnOrder.Field {
+			b.Comma().Ident(DefaultWebauthnOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Webauthn.
+func (w *WebauthnQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WebauthnPaginateOption,
+) (*WebauthnConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWebauthnPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if w, err = pager.applyFilter(w); err != nil {
+		return nil, err
+	}
+	conn := &WebauthnConnection{Edges: []*WebauthnEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := w.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if w, err = pager.applyCursors(w, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		w.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := w.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	w = pager.applyOrder(w)
+	nodes, err := w.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WebauthnOrderFieldCreatedAt orders Webauthn by created_at.
+	WebauthnOrderFieldCreatedAt = &WebauthnOrderField{
+		Value: func(w *Webauthn) (ent.Value, error) {
+			return w.CreatedAt, nil
+		},
+		column: webauthn.FieldCreatedAt,
+		toTerm: webauthn.ByCreatedAt,
+		toCursor: func(w *Webauthn) Cursor {
+			return Cursor{
+				ID:    w.ID,
+				Value: w.CreatedAt,
+			}
+		},
+	}
+	// WebauthnOrderFieldUpdatedAt orders Webauthn by updated_at.
+	WebauthnOrderFieldUpdatedAt = &WebauthnOrderField{
+		Value: func(w *Webauthn) (ent.Value, error) {
+			return w.UpdatedAt, nil
+		},
+		column: webauthn.FieldUpdatedAt,
+		toTerm: webauthn.ByUpdatedAt,
+		toCursor: func(w *Webauthn) Cursor {
+			return Cursor{
+				ID:    w.ID,
+				Value: w.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WebauthnOrderField) String() string {
+	var str string
+	switch f.column {
+	case WebauthnOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WebauthnOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WebauthnOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WebauthnOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WebauthnOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WebauthnOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WebauthnOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WebauthnOrderField", str)
+	}
+	return nil
+}
+
+// WebauthnOrderField defines the ordering field of Webauthn.
+type WebauthnOrderField struct {
+	// Value extracts the ordering value from the given Webauthn.
+	Value    func(*Webauthn) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) webauthn.OrderOption
+	toCursor func(*Webauthn) Cursor
+}
+
+// WebauthnOrder defines the ordering of Webauthn.
+type WebauthnOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *WebauthnOrderField `json:"field"`
+}
+
+// DefaultWebauthnOrder is the default ordering of Webauthn.
+var DefaultWebauthnOrder = &WebauthnOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WebauthnOrderField{
+		Value: func(w *Webauthn) (ent.Value, error) {
+			return w.ID, nil
+		},
+		column: webauthn.FieldID,
+		toTerm: webauthn.ByID,
+		toCursor: func(w *Webauthn) Cursor {
+			return Cursor{ID: w.ID}
+		},
+	},
+}
+
+// ToEdge converts Webauthn into WebauthnEdge.
+func (w *Webauthn) ToEdge(order *WebauthnOrder) *WebauthnEdge {
+	if order == nil {
+		order = DefaultWebauthnOrder
+	}
+	return &WebauthnEdge{
+		Node:   w,
+		Cursor: order.Field.toCursor(w),
 	}
 }

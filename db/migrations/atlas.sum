@@ -1,6 +1,7 @@
-h1:GeXZf72aWyIzJFtok8hTDuiyDvhJuZMYQDPGaH3Etko=
+h1:eeEiVJVqILnUz8HHc/hrpiG2Zx+1kSJ0Jy3GNkuA+Eo=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
 20250421202316_policy_edges.sql h1:2iKPA/aa9IP/flY8ld71Cdo9Hz2+Da+t/1PABHHCIYE=
 20250422051412_user_last_login_provider.sql h1:HY7UvEagoFBCV+WnU2TRee2xMUdOE4r8wJMKGmf7h8w=
+20250427231549_multiple_passkeys.sql h1:69Der97huQy/y9h/yYjIfwbYYdMSY+eK2l4lP1Cy5j4=

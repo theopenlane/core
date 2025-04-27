@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -27,24 +26,6 @@ func HookUserSetting() ent.Hook {
 			org, ok := m.DefaultOrgID()
 			if ok && !allowDefaultOrgUpdate(ctx, m, org) {
 				return nil, rout.InvalidField(rout.ErrOrganizationNotFound)
-			}
-
-			if m.Op().Is(ent.OpUpdateOne) {
-				userID, err := auth.GetSubjectIDFromContext(ctx)
-				//  when we need to create a new user say on sign up, from the cli or other places,
-				//  we do not have a "user in the context" for these instances
-				//  which is why we specifically ignore the error here
-				if err == nil && userID != "" {
-					// if webauthn is disabled, clean up the passkey we stored previously
-					if allowed, _ := m.IsWebauthnAllowed(); !allowed {
-						_, err := m.Client().Webauthn.Delete().
-							Where(webauthn.OwnerID(userID)).
-							Exec(ctx)
-						if err != nil {
-							return nil, err
-						}
-					}
-				}
 			}
 
 			return next.Mutate(ctx, m)

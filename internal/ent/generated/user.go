@@ -85,8 +85,8 @@ type UserEdges struct {
 	Groups []*Group `json:"groups,omitempty"`
 	// Organizations holds the value of the organizations edge.
 	Organizations []*Organization `json:"organizations,omitempty"`
-	// Webauthn holds the value of the webauthn edge.
-	Webauthn []*Webauthn `json:"webauthn,omitempty"`
+	// Webauthns holds the value of the webauthns edge.
+	Webauthns []*Webauthn `json:"webauthns,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// AvatarFile holds the value of the avatar_file edge.
@@ -113,7 +113,7 @@ type UserEdges struct {
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -121,7 +121,7 @@ type UserEdges struct {
 	namedPasswordResetTokens     map[string][]*PasswordResetToken
 	namedGroups                  map[string][]*Group
 	namedOrganizations           map[string][]*Organization
-	namedWebauthn                map[string][]*Webauthn
+	namedWebauthns               map[string][]*Webauthn
 	namedFiles                   map[string][]*File
 	namedEvents                  map[string][]*Event
 	namedActionPlans             map[string][]*ActionPlan
@@ -199,13 +199,13 @@ func (e UserEdges) OrganizationsOrErr() ([]*Organization, error) {
 	return nil, &NotLoadedError{edge: "organizations"}
 }
 
-// WebauthnOrErr returns the Webauthn value or an error if the edge
+// WebauthnsOrErr returns the Webauthns value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) WebauthnOrErr() ([]*Webauthn, error) {
+func (e UserEdges) WebauthnsOrErr() ([]*Webauthn, error) {
 	if e.loadedTypes[7] {
-		return e.Webauthn, nil
+		return e.Webauthns, nil
 	}
-	return nil, &NotLoadedError{edge: "webauthn"}
+	return nil, &NotLoadedError{edge: "webauthns"}
 }
 
 // FilesOrErr returns the Files value or an error if the edge
@@ -522,9 +522,9 @@ func (u *User) QueryOrganizations() *OrganizationQuery {
 	return NewUserClient(u.config).QueryOrganizations(u)
 }
 
-// QueryWebauthn queries the "webauthn" edge of the User entity.
-func (u *User) QueryWebauthn() *WebauthnQuery {
-	return NewUserClient(u.config).QueryWebauthn(u)
+// QueryWebauthns queries the "webauthns" edge of the User entity.
+func (u *User) QueryWebauthns() *WebauthnQuery {
+	return NewUserClient(u.config).QueryWebauthns(u)
 }
 
 // QueryFiles queries the "files" edge of the User entity.
@@ -822,27 +822,27 @@ func (u *User) appendNamedOrganizations(name string, edges ...*Organization) {
 	}
 }
 
-// NamedWebauthn returns the Webauthn named value or an error if the edge was not
+// NamedWebauthns returns the Webauthns named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedWebauthn(name string) ([]*Webauthn, error) {
-	if u.Edges.namedWebauthn == nil {
+func (u *User) NamedWebauthns(name string) ([]*Webauthn, error) {
+	if u.Edges.namedWebauthns == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedWebauthn[name]
+	nodes, ok := u.Edges.namedWebauthns[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedWebauthn(name string, edges ...*Webauthn) {
-	if u.Edges.namedWebauthn == nil {
-		u.Edges.namedWebauthn = make(map[string][]*Webauthn)
+func (u *User) appendNamedWebauthns(name string, edges ...*Webauthn) {
+	if u.Edges.namedWebauthns == nil {
+		u.Edges.namedWebauthns = make(map[string][]*Webauthn)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedWebauthn[name] = []*Webauthn{}
+		u.Edges.namedWebauthns[name] = []*Webauthn{}
 	} else {
-		u.Edges.namedWebauthn[name] = append(u.Edges.namedWebauthn[name], edges...)
+		u.Edges.namedWebauthns[name] = append(u.Edges.namedWebauthns[name], edges...)
 	}
 }
 

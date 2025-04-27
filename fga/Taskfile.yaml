@@ -6,7 +6,7 @@ vars:
   SYSTEM_OBJECT: "system:openlane_core"
   SYSTEM_ADMIN_RELATION: "system_admin"
   STORE_ID:
-    sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
+    # sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
 
 tasks:
   create:

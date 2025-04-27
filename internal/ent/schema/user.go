@@ -194,8 +194,7 @@ func (u User) Edges() []ent.Edge {
 
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         u,
-			name:               Webauthn{}.Name(),
-			t:                  Webauthn.Type,
+			edgeSchema:         Webauthn{},
 			cascadeDeleteOwner: true,
 		}),
 

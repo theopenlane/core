@@ -5963,12 +5963,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"webauthn",
+		"webauthns",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -19350,14 +19350,14 @@ func (f *UserFilter) WhereHasOrganizationsWith(preds ...predicate.Organization) 
 	})))
 }
 
-// WhereHasWebauthn applies a predicate to check if query has an edge webauthn.
-func (f *UserFilter) WhereHasWebauthn() {
-	f.Where(entql.HasEdge("webauthn"))
+// WhereHasWebauthns applies a predicate to check if query has an edge webauthns.
+func (f *UserFilter) WhereHasWebauthns() {
+	f.Where(entql.HasEdge("webauthns"))
 }
 
-// WhereHasWebauthnWith applies a predicate to check if query has an edge webauthn with a given conditions (other predicates).
-func (f *UserFilter) WhereHasWebauthnWith(preds ...predicate.Webauthn) {
-	f.Where(entql.HasEdgeWith("webauthn", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasWebauthnsWith applies a predicate to check if query has an edge webauthns with a given conditions (other predicates).
+func (f *UserFilter) WhereHasWebauthnsWith(preds ...predicate.Webauthn) {
+	f.Where(entql.HasEdgeWith("webauthns", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -1696,6 +1696,55 @@ func (ec *executionContext) fieldContext_SearchResults_userSettings(_ context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_webauthns(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_webauthns(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Webauthns, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.WebauthnConnection)
+	fc.Result = res
+	return ec.marshalOWebauthnConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_webauthns(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_WebauthnConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_WebauthnConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_WebauthnConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type WebauthnConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -1793,6 +1842,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_users(ctx, field, obj)
 		case "userSettings":
 			out.Values[i] = ec._SearchResults_userSettings(ctx, field, obj)
+		case "webauthns":
+			out.Values[i] = ec._SearchResults_webauthns(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

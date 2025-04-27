@@ -198,12 +198,12 @@ func (h *Handler) getUserByID(ctx context.Context, id string) (
 	ctx = setAuthenticatedContext(ctx, user)
 
 	// Add webauthn to the response
-	webAuthns, err := user.QueryWebauthn().All(ctx)
+	webAuthns, err := user.QueryWebauthns().All(ctx)
 	if err != nil {
 		return user, ctx, err
 	}
 
-	user.Edges.Webauthn = webAuthns
+	user.Edges.Webauthns = webAuthns
 
 	return user, ctx, nil
 }

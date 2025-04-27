@@ -1596,12 +1596,12 @@ func HasOrganizationsWith(preds ...predicate.Organization) predicate.User {
 	})
 }
 
-// HasWebauthn applies the HasEdge predicate on the "webauthn" edge.
-func HasWebauthn() predicate.User {
+// HasWebauthns applies the HasEdge predicate on the "webauthns" edge.
+func HasWebauthns() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, WebauthnTable, WebauthnColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, WebauthnsTable, WebauthnsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Webauthn
@@ -1610,10 +1610,10 @@ func HasWebauthn() predicate.User {
 	})
 }
 
-// HasWebauthnWith applies the HasEdge predicate on the "webauthn" edge with a given conditions (other predicates).
-func HasWebauthnWith(preds ...predicate.Webauthn) predicate.User {
+// HasWebauthnsWith applies the HasEdge predicate on the "webauthns" edge with a given conditions (other predicates).
+func HasWebauthnsWith(preds ...predicate.Webauthn) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		step := newWebauthnStep()
+		step := newWebauthnsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Webauthn
 		step.Edge.Schema = schemaConfig.Webauthn

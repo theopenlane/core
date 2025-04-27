@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up webauthn by ID
+    """
+     webauthn(
+        """
+        ID of the webauthn
+        """
+        id: ID!
+    ):  Webauthn!
+}
+
+extend type Mutation{
+    """
+    Create a new webauthn
+    """
+    createWebauthn(
+        """
+        values of the webauthn
+        """
+        input: CreateWebauthnInput!
+    ): WebauthnCreatePayload!
+    """
+    Create multiple new webauthns
+    """
+    createBulkWebauthn(
+        """
+        values of the webauthn
+        """
+        input: [CreateWebauthnInput!]
+    ): WebauthnBulkCreatePayload!
+    """
+    Create multiple new webauthns via file upload
+    """
+    createBulkCSVWebauthn(
+        """
+        csv file containing values of the webauthn
+        """
+        input: Upload!
+    ): WebauthnBulkCreatePayload!
+    """
+    Update an existing webauthn
+    """
+    updateWebauthn(
+        """
+        ID of the webauthn
+        """
+        id: ID!
+        """
+        New values for the webauthn
+        """
+        input: UpdateWebauthnInput!
+    ): WebauthnUpdatePayload!
+    """
+    Delete an existing webauthn
+    """
+    deleteWebauthn(
+        """
+        ID of the webauthn
+        """
+        id: ID!
+    ): WebauthnDeletePayload!
+}
+
+"""
+Return response for createWebauthn mutation
+"""
+type WebauthnCreatePayload {
+    """
+    Created webauthn
+    """
+    webauthn: Webauthn!
+}
+
+"""
+Return response for updateWebauthn mutation
+"""
+type WebauthnUpdatePayload {
+    """
+    Updated webauthn
+    """
+    webauthn: Webauthn!
+}
+
+"""
+Return response for deleteWebauthn mutation
+"""
+type WebauthnDeletePayload {
+    """
+    Deleted webauthn ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWebauthn mutation
+"""
+type WebauthnBulkCreatePayload {
+    """
+    Created webauthns
+    """
+    webauthns: [Webauthn!]
+}

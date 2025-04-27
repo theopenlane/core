@@ -8306,7 +8306,7 @@ type UpdateUserInput struct {
 	ClearOrganizations              bool
 	AddOrganizationIDs              []string
 	RemoveOrganizationIDs           []string
-	ClearWebauthn                   bool
+	ClearWebauthns                  bool
 	AddWebauthnIDs                  []string
 	RemoveWebauthnIDs               []string
 	ClearFiles                      bool
@@ -8465,8 +8465,8 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveOrganizationIDs; len(v) > 0 {
 		m.RemoveOrganizationIDs(v...)
 	}
-	if i.ClearWebauthn {
-		m.ClearWebauthn()
+	if i.ClearWebauthns {
+		m.ClearWebauthns()
 	}
 	if v := i.AddWebauthnIDs; len(v) > 0 {
 		m.AddWebauthnIDs(v...)
@@ -8715,6 +8715,56 @@ func (c *UserSettingUpdate) SetInput(i UpdateUserSettingInput) *UserSettingUpdat
 
 // SetInput applies the change-set in the UpdateUserSettingInput on the UserSettingUpdateOne builder.
 func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWebauthnInput represents a mutation input for creating webauthns.
+type CreateWebauthnInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateWebauthnInput on the WebauthnMutation builder.
+func (i *CreateWebauthnInput) Mutate(m *WebauthnMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateWebauthnInput on the WebauthnCreate builder.
+func (c *WebauthnCreate) SetInput(i CreateWebauthnInput) *WebauthnCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWebauthnInput represents a mutation input for updating webauthns.
+type UpdateWebauthnInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateWebauthnInput on the WebauthnMutation builder.
+func (i *UpdateWebauthnInput) Mutate(m *WebauthnMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWebauthnInput on the WebauthnUpdate builder.
+func (c *WebauthnUpdate) SetInput(i UpdateWebauthnInput) *WebauthnUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWebauthnInput on the WebauthnUpdateOne builder.
+func (c *WebauthnUpdateOne) SetInput(i UpdateWebauthnInput) *WebauthnUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
