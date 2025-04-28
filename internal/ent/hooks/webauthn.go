@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
+// HookWebauthDelete runs on passkey delete mutations to ensure
+// that we update the user's settings if needed
 func HookWebauthDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
