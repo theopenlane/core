@@ -7,31 +7,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
-
-// CreateWebauthn is the resolver for the createWebauthn field.
-func (r *mutationResolver) CreateWebauthn(ctx context.Context, input generated.CreateWebauthnInput) (*model.WebauthnCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkWebauthn is the resolver for the createBulkWebauthn field.
-func (r *mutationResolver) CreateBulkWebauthn(ctx context.Context, input []*generated.CreateWebauthnInput) (*model.WebauthnBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkCSVWebauthn is the resolver for the createBulkCSVWebauthn field.
-func (r *mutationResolver) CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload) (*model.WebauthnBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// UpdateWebauthn is the resolver for the updateWebauthn field.
-func (r *mutationResolver) UpdateWebauthn(ctx context.Context, id string, input generated.UpdateWebauthnInput) (*model.WebauthnUpdatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
 
 // DeleteWebauthn is the resolver for the deleteWebauthn field.
 func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error) {
@@ -48,7 +26,26 @@ func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*mode
 	}, nil
 }
 
-// Webauthn is the resolver for the webauthn field.
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *mutationResolver) CreateWebauthn(ctx context.Context, input generated.CreateWebauthnInput) (*model.WebauthnCreatePayload, error) {
+	return nil, rout.ErrPermissionDenied
+}
+func (r *mutationResolver) CreateBulkWebauthn(ctx context.Context, input []*generated.CreateWebauthnInput) (*model.WebauthnBulkCreatePayload, error) {
+	return nil, rout.ErrPermissionDenied
+}
+func (r *mutationResolver) CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload) (*model.WebauthnBulkCreatePayload, error) {
+	return nil, rout.ErrPermissionDenied
+}
+func (r *mutationResolver) UpdateWebauthn(ctx context.Context, id string, input generated.UpdateWebauthnInput) (*model.WebauthnUpdatePayload, error) {
+	return nil, rout.ErrPermissionDenied
+}
 func (r *queryResolver) Webauthn(ctx context.Context, id string) (*generated.Webauthn, error) {
 	return nil, rout.ErrPermissionDenied
 }
+*/

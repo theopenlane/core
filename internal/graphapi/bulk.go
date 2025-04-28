@@ -578,22 +578,3 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 		UserSettings: res,
 	}, nil
 }
-
-// bulkCreateWebauthn uses the CreateBulk function to create multiple Webauthn entities
-func (r *mutationResolver) bulkCreateWebauthn(ctx context.Context, input []*generated.CreateWebauthnInput) (*model.WebauthnBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WebauthnCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Webauthn.Create().SetInput(*data)
-	}
-
-	res, err := c.Webauthn.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "webauthn"})
-	}
-
-	// return response
-	return &model.WebauthnBulkCreatePayload{
-		Webauthns: res,
-	}, nil
-}

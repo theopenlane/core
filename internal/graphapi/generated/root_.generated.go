@@ -1750,7 +1750,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVTask                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTemplate              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVUserSetting           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWebauthn              func(childComplexity int, input graphql.Upload) int
 		CreateBulkContact                  func(childComplexity int, input []*generated.CreateContactInput) int
 		CreateBulkControl                  func(childComplexity int, input []*generated.CreateControlInput) int
 		CreateBulkControlImplementation    func(childComplexity int, input []*generated.CreateControlImplementationInput) int
@@ -1779,7 +1778,6 @@ type ComplexityRoot struct {
 		CreateBulkTask                     func(childComplexity int, input []*generated.CreateTaskInput) int
 		CreateBulkTemplate                 func(childComplexity int, input []*generated.CreateTemplateInput) int
 		CreateBulkUserSetting              func(childComplexity int, input []*generated.CreateUserSettingInput) int
-		CreateBulkWebauthn                 func(childComplexity int, input []*generated.CreateWebauthnInput) int
 		CreateContact                      func(childComplexity int, input generated.CreateContactInput) int
 		CreateControl                      func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation        func(childComplexity int, input generated.CreateControlImplementationInput) int
@@ -1822,7 +1820,6 @@ type ComplexityRoot struct {
 		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
-		CreateWebauthn                     func(childComplexity int, input generated.CreateWebauthnInput) int
 		DeleteAPIToken                     func(childComplexity int, id string) int
 		DeleteActionPlan                   func(childComplexity int, id string) int
 		DeleteContact                      func(childComplexity int, id string) int
@@ -1896,7 +1893,6 @@ type ComplexityRoot struct {
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
-		UpdateWebauthn                     func(childComplexity int, id string, input generated.UpdateWebauthnInput) int
 	}
 
 	Narrative struct {
@@ -2930,7 +2926,6 @@ type ComplexityRoot struct {
 		UserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		UserSettings                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
 		Users                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		Webauthn                         func(childComplexity int, id string) int
 		WebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Webauthns                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
 	}
@@ -3749,18 +3744,10 @@ type ComplexityRoot struct {
 		UpdatedBy      func(childComplexity int) int
 	}
 
-	WebauthnBulkCreatePayload struct {
-		Webauthns func(childComplexity int) int
-	}
-
 	WebauthnConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	WebauthnCreatePayload struct {
-		Webauthn func(childComplexity int) int
 	}
 
 	WebauthnDeletePayload struct {
@@ -3770,10 +3757,6 @@ type ComplexityRoot struct {
 	WebauthnEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	WebauthnUpdatePayload struct {
-		Webauthn func(childComplexity int) int
 	}
 }
 
@@ -12081,18 +12064,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVWebauthn":
-		if e.complexity.Mutation.CreateBulkCSVWebauthn == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVWebauthn_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVWebauthn(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkContact":
 		if e.complexity.Mutation.CreateBulkContact == nil {
 			break
@@ -12428,18 +12399,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkUserSetting(childComplexity, args["input"].([]*generated.CreateUserSettingInput)), true
-
-	case "Mutation.createBulkWebauthn":
-		if e.complexity.Mutation.CreateBulkWebauthn == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkWebauthn_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkWebauthn(childComplexity, args["input"].([]*generated.CreateWebauthnInput)), true
 
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
@@ -12944,18 +12903,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateUserSetting(childComplexity, args["input"].(generated.CreateUserSettingInput)), true
-
-	case "Mutation.createWebauthn":
-		if e.complexity.Mutation.CreateWebauthn == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createWebauthn_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateWebauthn(childComplexity, args["input"].(generated.CreateWebauthnInput)), true
 
 	case "Mutation.deleteAPIToken":
 		if e.complexity.Mutation.DeleteAPIToken == nil {
@@ -13832,18 +13779,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateUserSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateUserSettingInput)), true
-
-	case "Mutation.updateWebauthn":
-		if e.complexity.Mutation.UpdateWebauthn == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateWebauthn_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateWebauthn(childComplexity, args["id"].(string), args["input"].(generated.UpdateWebauthnInput)), true
 
 	case "Narrative.blockedGroups":
 		if e.complexity.Narrative.BlockedGroups == nil {
@@ -20343,18 +20278,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
-	case "Query.webauthn":
-		if e.complexity.Query.Webauthn == nil {
-			break
-		}
-
-		args, err := ec.field_Query_webauthn_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Webauthn(childComplexity, args["id"].(string)), true
-
 	case "Query.webauthnSearch":
 		if e.complexity.Query.WebauthnSearch == nil {
 			break
@@ -24549,13 +24472,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Webauthn.UpdatedBy(childComplexity), true
 
-	case "WebauthnBulkCreatePayload.webauthns":
-		if e.complexity.WebauthnBulkCreatePayload.Webauthns == nil {
-			break
-		}
-
-		return e.complexity.WebauthnBulkCreatePayload.Webauthns(childComplexity), true
-
 	case "WebauthnConnection.edges":
 		if e.complexity.WebauthnConnection.Edges == nil {
 			break
@@ -24577,13 +24493,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WebauthnConnection.TotalCount(childComplexity), true
 
-	case "WebauthnCreatePayload.webauthn":
-		if e.complexity.WebauthnCreatePayload.Webauthn == nil {
-			break
-		}
-
-		return e.complexity.WebauthnCreatePayload.Webauthn(childComplexity), true
-
 	case "WebauthnDeletePayload.deletedID":
 		if e.complexity.WebauthnDeletePayload.DeletedID == nil {
 			break
@@ -24604,13 +24513,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WebauthnEdge.Node(childComplexity), true
-
-	case "WebauthnUpdatePayload.webauthn":
-		if e.complexity.WebauthnUpdatePayload.Webauthn == nil {
-			break
-		}
-
-		return e.complexity.WebauthnUpdatePayload.Webauthn(childComplexity), true
 
 	}
 	return 0, false
@@ -70742,59 +70644,7 @@ type UserSettingBulkCreatePayload {
     """
     userSettings: [UserSetting!]
 }`, BuiltIn: false},
-	{Name: "../schema/webauthn.graphql", Input: `extend type Query {
-    """
-    Look up webauthn by ID
-    """
-     webauthn(
-        """
-        ID of the webauthn
-        """
-        id: ID!
-    ):  Webauthn!
-}
-
-extend type Mutation{
-    """
-    Create a new webauthn
-    """
-    createWebauthn(
-        """
-        values of the webauthn
-        """
-        input: CreateWebauthnInput!
-    ): WebauthnCreatePayload!
-    """
-    Create multiple new webauthns
-    """
-    createBulkWebauthn(
-        """
-        values of the webauthn
-        """
-        input: [CreateWebauthnInput!]
-    ): WebauthnBulkCreatePayload!
-    """
-    Create multiple new webauthns via file upload
-    """
-    createBulkCSVWebauthn(
-        """
-        csv file containing values of the webauthn
-        """
-        input: Upload!
-    ): WebauthnBulkCreatePayload!
-    """
-    Update an existing webauthn
-    """
-    updateWebauthn(
-        """
-        ID of the webauthn
-        """
-        id: ID!
-        """
-        New values for the webauthn
-        """
-        input: UpdateWebauthnInput!
-    ): WebauthnUpdatePayload!
+	{Name: "../schema/webauthn.graphql", Input: `extend type Mutation{
     """
     Delete an existing webauthn
     """
@@ -70807,26 +70657,6 @@ extend type Mutation{
 }
 
 """
-Return response for createWebauthn mutation
-"""
-type WebauthnCreatePayload {
-    """
-    Created webauthn
-    """
-    webauthn: Webauthn!
-}
-
-"""
-Return response for updateWebauthn mutation
-"""
-type WebauthnUpdatePayload {
-    """
-    Updated webauthn
-    """
-    webauthn: Webauthn!
-}
-
-"""
 Return response for deleteWebauthn mutation
 """
 type WebauthnDeletePayload {
@@ -70835,15 +70665,6 @@ type WebauthnDeletePayload {
     """
     deletedID: ID!
 }
-
-"""
-Return response for createBulkWebauthn mutation
-"""
-type WebauthnBulkCreatePayload {
-    """
-    Created webauthns
-    """
-    webauthns: [Webauthn!]
-}`, BuiltIn: false},
+`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

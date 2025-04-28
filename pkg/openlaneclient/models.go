@@ -24874,12 +24874,6 @@ type Webauthn struct {
 
 func (Webauthn) IsNode() {}
 
-// Return response for createBulkWebauthn mutation
-type WebauthnBulkCreatePayload struct {
-	// Created webauthns
-	Webauthns []*Webauthn `json:"webauthns,omitempty,omitzero"`
-}
-
 // A connection to a list of items.
 type WebauthnConnection struct {
 	// A list of edges.
@@ -24888,12 +24882,6 @@ type WebauthnConnection struct {
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
-}
-
-// Return response for createWebauthn mutation
-type WebauthnCreatePayload struct {
-	// Created webauthn
-	Webauthn *Webauthn `json:"webauthn"`
 }
 
 // Return response for deleteWebauthn mutation
@@ -24916,12 +24904,6 @@ type WebauthnOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order Webauthns.
 	Field WebauthnOrderField `json:"field"`
-}
-
-// Return response for updateWebauthn mutation
-type WebauthnUpdatePayload struct {
-	// Updated webauthn
-	Webauthn *Webauthn `json:"webauthn"`
 }
 
 // WebauthnWhereInput is used for filtering Webauthn objects.
