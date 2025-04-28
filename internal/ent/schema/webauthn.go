@@ -124,7 +124,9 @@ func (Webauthn) Annotations() []schema.Annotation {
 		entx.FieldAdminSearchable(true),
 
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
+
+		entgql.Skip(entgql.SkipMutationCreateInput |
+			entgql.SkipMutationUpdateInput),
 
 		history.Annotations{
 			Exclude: true,
