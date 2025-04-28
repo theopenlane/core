@@ -9,26 +9,21 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/iam/auth"
 )
 
 func HookWebauthDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
-			deletedID, ok := m.ID()
-			if !ok {
-				return nil, ErrInternalServerError
-			}
 
-			passkey, err := m.Client().Webauthn.Get(ctx, deletedID)
+			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("could not fetch webauthn to delete")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("could not fetch authenticated user")
 
 				return nil, err
 			}
 
 			count, err := m.Client().Webauthn.Query().
-				Where(webauthn.OwnerID(passkey.OwnerID)).
 				Count(ctx)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("could not get count of webauthns")
@@ -38,7 +33,7 @@ func HookWebauthDelete() ent.Hook {
 
 			// 1 since this tx is not complete yet
 			if count == 1 {
-				_, err := m.Client().UserSetting.Update().Where(usersetting.UserID(passkey.OwnerID)).
+				_, err := m.Client().UserSetting.Update().Where(usersetting.UserID(userID)).
 					SetIsWebauthnAllowed(false).
 					Save(ctx)
 				if err != nil {
