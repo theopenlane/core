@@ -33,9 +33,9 @@ func HookWebauthDelete() ent.Hook {
 
 			// 1 since this tx is not complete yet
 			if count == 1 {
-				_, err := m.Client().UserSetting.Update().Where(usersetting.UserID(userID)).
+				err = m.Client().UserSetting.Update().Where(usersetting.UserID(userID)).
 					SetIsWebauthnAllowed(false).
-					Save(ctx)
+					Exec(ctx)
 				if err != nil {
 					zerolog.Ctx(ctx).Error().Err(err).Msg("could not disable webauthn from user")
 
