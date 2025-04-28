@@ -66,6 +66,11 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 		return ErrUnsupportedDateTimeType
 	}
 
+	if str == "" {
+		*d = DateTime{}
+		return nil
+	}
+
 	if t, err := time.Parse(isoDateLayout, str); err == nil {
 		*d = DateTime(t)
 		return nil
@@ -82,11 +87,25 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 // MarshalGQL writes the datetime as "YYYY-MM-DD"
 func (d DateTime) MarshalGQL(w io.Writer) {
 	t := time.Time(d)
-	_, _ = io.WriteString(w, fmt.Sprintf("%q", t.Format(isoDateLayout)))
+	if t.IsZero() {
+		_, _ = io.WriteString(w, `""`)
+		return
+	}
+
+	formatted := fmt.Sprintf("%q", t.Format(isoDateLayout))
+	_, _ = io.WriteString(w, formatted)
 }
 
+// String formats the given datetime into a human readable version
 func (d DateTime) String() string {
-	return time.Time(d).Format(isoDateLayout)
+	t := time.Time(d)
+	if t.IsZero() {
+		return ""
+	}
+
+	formatted := t.Format(isoDateLayout)
+
+	return formatted
 }
 
 func ToDateTime(s string) (*DateTime, error) {
