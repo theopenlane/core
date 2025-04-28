@@ -51,7 +51,7 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.15
+	github.com/projectdiscovery/cdncheck v1.1.16
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.18
@@ -61,7 +61,7 @@ require (
 	github.com/riverqueue/river v0.20.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.2
 	github.com/rs/zerolog v1.34.0
-	github.com/samber/lo v1.49.1
+	github.com/samber/lo v1.50.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
 	github.com/sebdah/goldie/v2 v2.5.5
 	github.com/spf13/cobra v1.9.1
@@ -308,7 +308,7 @@ require (
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/raeperd/recvcheck v0.2.0 // indirect
-	github.com/refraction-networking/utls v1.6.7 // indirect
+	github.com/refraction-networking/utls v1.7.0 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
@@ -519,8 +519,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3
-	github.com/projectdiscovery/subfinder/v2 v2.7.0
-	github.com/projectdiscovery/wappalyzergo v0.2.25
+	github.com/projectdiscovery/subfinder/v2 v2.7.1
+	github.com/projectdiscovery/wappalyzergo v0.2.26
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
