@@ -48,12 +48,27 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	// set context for remaining request based on logged in user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
-	// set webauthn allowed
+	webAuthns, err := entUser.QueryWebauthns().All(userCtx)
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	var credentials = make([]webauthn.Credential, 0, len(webAuthns))
+
+	for _, credential := range webAuthns {
+		credentials = append(credentials, webauthn.Credential{
+			ID:              credential.CredentialID,
+			PublicKey:       credential.PublicKey,
+			AttestationType: credential.AttestationType,
+		})
+	}
 
 	user := &provider.User{
 		ID:    entUser.ID,
 		Email: entUser.Email,
 		Name:  entUser.FirstName + " " + entUser.LastName,
+		// set excluded passkeys
+		WebauthnCredentials: credentials,
 	}
 
 	// options is the object that needs to be returned for the front end to open the creation dialog for the user to create the passkey
