@@ -2568,6 +2568,9 @@ type ComplexityRoot struct {
 
 	Program struct {
 		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AuditFirm            func(childComplexity int) int
+		Auditor              func(childComplexity int) int
+		AuditorEmail         func(childComplexity int) int
 		AuditorReadComments  func(childComplexity int) int
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
@@ -2584,6 +2587,7 @@ type ComplexityRoot struct {
 		EndDate              func(childComplexity int) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		FrameworkName        func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		InternalPolicies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Members              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
@@ -2593,6 +2597,7 @@ type ComplexityRoot struct {
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Procedures           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramType          func(childComplexity int) int
 		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
@@ -2629,6 +2634,9 @@ type ComplexityRoot struct {
 	}
 
 	ProgramHistory struct {
+		AuditFirm            func(childComplexity int) int
+		Auditor              func(childComplexity int) int
+		AuditorEmail         func(childComplexity int) int
 		AuditorReadComments  func(childComplexity int) int
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
@@ -2639,11 +2647,13 @@ type ComplexityRoot struct {
 		Description          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		EndDate              func(childComplexity int) int
+		FrameworkName        func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		ProgramType          func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
@@ -3383,7 +3393,6 @@ type ComplexityRoot struct {
 		CreatedBy         func(childComplexity int) int
 		DeletedAt         func(childComplexity int) int
 		DeletedBy         func(childComplexity int) int
-		Description       func(childComplexity int) int
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		Due               func(childComplexity int) int
@@ -3435,7 +3444,6 @@ type ComplexityRoot struct {
 		CreatedBy   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
 		DeletedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
 		Details     func(childComplexity int) int
 		DisplayID   func(childComplexity int) int
 		Due         func(childComplexity int) int
@@ -17246,6 +17254,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Program.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Program.auditFirm":
+		if e.complexity.Program.AuditFirm == nil {
+			break
+		}
+
+		return e.complexity.Program.AuditFirm(childComplexity), true
+
+	case "Program.auditor":
+		if e.complexity.Program.Auditor == nil {
+			break
+		}
+
+		return e.complexity.Program.Auditor(childComplexity), true
+
+	case "Program.auditorEmail":
+		if e.complexity.Program.AuditorEmail == nil {
+			break
+		}
+
+		return e.complexity.Program.AuditorEmail(childComplexity), true
+
 	case "Program.auditorReadComments":
 		if e.complexity.Program.AuditorReadComments == nil {
 			break
@@ -17378,6 +17407,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Program.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "Program.frameworkName":
+		if e.complexity.Program.FrameworkName == nil {
+			break
+		}
+
+		return e.complexity.Program.FrameworkName(childComplexity), true
+
 	case "Program.id":
 		if e.complexity.Program.ID == nil {
 			break
@@ -17465,6 +17501,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
+
+	case "Program.programType":
+		if e.complexity.Program.ProgramType == nil {
+			break
+		}
+
+		return e.complexity.Program.ProgramType(childComplexity), true
 
 	case "Program.risks":
 		if e.complexity.Program.Risks == nil {
@@ -17612,6 +17655,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramEdge.Node(childComplexity), true
 
+	case "ProgramHistory.auditFirm":
+		if e.complexity.ProgramHistory.AuditFirm == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.AuditFirm(childComplexity), true
+
+	case "ProgramHistory.auditor":
+		if e.complexity.ProgramHistory.Auditor == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.Auditor(childComplexity), true
+
+	case "ProgramHistory.auditorEmail":
+		if e.complexity.ProgramHistory.AuditorEmail == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.AuditorEmail(childComplexity), true
+
 	case "ProgramHistory.auditorReadComments":
 		if e.complexity.ProgramHistory.AuditorReadComments == nil {
 			break
@@ -17682,6 +17746,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramHistory.EndDate(childComplexity), true
 
+	case "ProgramHistory.frameworkName":
+		if e.complexity.ProgramHistory.FrameworkName == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.FrameworkName(childComplexity), true
+
 	case "ProgramHistory.historyTime":
 		if e.complexity.ProgramHistory.HistoryTime == nil {
 			break
@@ -17716,6 +17787,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramHistory.OwnerID(childComplexity), true
+
+	case "ProgramHistory.programType":
+		if e.complexity.ProgramHistory.ProgramType == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.ProgramType(childComplexity), true
 
 	case "ProgramHistory.ref":
 		if e.complexity.ProgramHistory.Ref == nil {
@@ -22702,13 +22780,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.DeletedBy(childComplexity), true
 
-	case "Task.description":
-		if e.complexity.Task.Description == nil {
-			break
-		}
-
-		return e.complexity.Task.Description(childComplexity), true
-
 	case "Task.details":
 		if e.complexity.Task.Details == nil {
 			break
@@ -22969,13 +23040,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.DeletedBy(childComplexity), true
-
-	case "TaskHistory.description":
-		if e.complexity.TaskHistory.Description == nil {
-			break
-		}
-
-		return e.complexity.TaskHistory.Description(childComplexity), true
 
 	case "TaskHistory.details":
 		if e.complexity.TaskHistory.Details == nil {
@@ -33503,6 +33567,14 @@ input CreateProgramInput {
   """
   status: ProgramProgramStatus
   """
+  the type of the program
+  """
+  programType: ProgramProgramType
+  """
+  the short name of the compliance standard the program is based on, only used for framework type programs
+  """
+  frameworkName: String
+  """
   the start date of the period
   """
   startDate: Time
@@ -33522,6 +33594,18 @@ input CreateProgramInput {
   can the auditor read comments
   """
   auditorReadComments: Boolean
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -33812,10 +33896,6 @@ input CreateTaskInput {
   the title of the task
   """
   title: String!
-  """
-  the description of the task
-  """
-  description: String
   """
   the details of the task
   """
@@ -51477,6 +51557,14 @@ type Program implements Node {
   """
   status: ProgramProgramStatus!
   """
+  the type of the program
+  """
+  programType: ProgramProgramType!
+  """
+  the short name of the compliance standard the program is based on, only used for framework type programs
+  """
+  frameworkName: String
+  """
   the start date of the period
   """
   startDate: Time
@@ -51496,6 +51584,18 @@ type Program implements Node {
   can the auditor read comments
   """
   auditorReadComments: Boolean!
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -52010,6 +52110,14 @@ type ProgramHistory implements Node {
   """
   status: ProgramHistoryProgramStatus!
   """
+  the type of the program
+  """
+  programType: ProgramHistoryProgramType!
+  """
+  the short name of the compliance standard the program is based on, only used for framework type programs
+  """
+  frameworkName: String
+  """
   the start date of the period
   """
   startDate: Time
@@ -52029,6 +52137,18 @@ type ProgramHistory implements Node {
   can the auditor read comments
   """
   auditorReadComments: Boolean!
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
 }
 """
 A connection to a list of items.
@@ -52089,6 +52209,8 @@ enum ProgramHistoryOrderField {
   updated_at
   name
   STATUS
+  PROGRAM_TYPE
+  framework
   start_date
   end_date
 }
@@ -52101,6 +52223,15 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pk
   READY_FOR_AUDITOR
   COMPLETED
   ACTION_REQUIRED
+}
+"""
+ProgramHistoryProgramType is enum for the field program_type
+"""
+enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+  FRAMEWORK
+  GAP_ANALYSIS
+  RISK_ASSESSMENT
+  OTHER
 }
 """
 ProgramHistoryWhereInput is used for filtering ProgramHistory objects.
@@ -52328,6 +52459,31 @@ input ProgramHistoryWhereInput {
   statusIn: [ProgramHistoryProgramStatus!]
   statusNotIn: [ProgramHistoryProgramStatus!]
   """
+  program_type field predicates
+  """
+  programType: ProgramHistoryProgramType
+  programTypeNEQ: ProgramHistoryProgramType
+  programTypeIn: [ProgramHistoryProgramType!]
+  programTypeNotIn: [ProgramHistoryProgramType!]
+  """
+  framework_name field predicates
+  """
+  frameworkName: String
+  frameworkNameNEQ: String
+  frameworkNameIn: [String!]
+  frameworkNameNotIn: [String!]
+  frameworkNameGT: String
+  frameworkNameGTE: String
+  frameworkNameLT: String
+  frameworkNameLTE: String
+  frameworkNameContains: String
+  frameworkNameHasPrefix: String
+  frameworkNameHasSuffix: String
+  frameworkNameIsNil: Boolean
+  frameworkNameNotNil: Boolean
+  frameworkNameEqualFold: String
+  frameworkNameContainsFold: String
+  """
   start_date field predicates
   """
   startDate: Time
@@ -52368,6 +52524,60 @@ input ProgramHistoryWhereInput {
   """
   auditorReadComments: Boolean
   auditorReadCommentsNEQ: Boolean
+  """
+  audit_firm field predicates
+  """
+  auditFirm: String
+  auditFirmNEQ: String
+  auditFirmIn: [String!]
+  auditFirmNotIn: [String!]
+  auditFirmGT: String
+  auditFirmGTE: String
+  auditFirmLT: String
+  auditFirmLTE: String
+  auditFirmContains: String
+  auditFirmHasPrefix: String
+  auditFirmHasSuffix: String
+  auditFirmIsNil: Boolean
+  auditFirmNotNil: Boolean
+  auditFirmEqualFold: String
+  auditFirmContainsFold: String
+  """
+  auditor field predicates
+  """
+  auditor: String
+  auditorNEQ: String
+  auditorIn: [String!]
+  auditorNotIn: [String!]
+  auditorGT: String
+  auditorGTE: String
+  auditorLT: String
+  auditorLTE: String
+  auditorContains: String
+  auditorHasPrefix: String
+  auditorHasSuffix: String
+  auditorIsNil: Boolean
+  auditorNotNil: Boolean
+  auditorEqualFold: String
+  auditorContainsFold: String
+  """
+  auditor_email field predicates
+  """
+  auditorEmail: String
+  auditorEmailNEQ: String
+  auditorEmailIn: [String!]
+  auditorEmailNotIn: [String!]
+  auditorEmailGT: String
+  auditorEmailGTE: String
+  auditorEmailLT: String
+  auditorEmailLTE: String
+  auditorEmailContains: String
+  auditorEmailHasPrefix: String
+  auditorEmailHasSuffix: String
+  auditorEmailIsNil: Boolean
+  auditorEmailNotNil: Boolean
+  auditorEmailEqualFold: String
+  auditorEmailContainsFold: String
 }
 type ProgramMembership implements Node {
   id: ID!
@@ -52855,6 +53065,8 @@ enum ProgramOrderField {
   updated_at
   name
   STATUS
+  PROGRAM_TYPE
+  framework
   start_date
   end_date
 }
@@ -52867,6 +53079,15 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
   READY_FOR_AUDITOR
   COMPLETED
   ACTION_REQUIRED
+}
+"""
+ProgramProgramType is enum for the field program_type
+"""
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+  FRAMEWORK
+  GAP_ANALYSIS
+  RISK_ASSESSMENT
+  OTHER
 }
 """
 ProgramWhereInput is used for filtering Program objects.
@@ -53058,6 +53279,31 @@ input ProgramWhereInput {
   statusIn: [ProgramProgramStatus!]
   statusNotIn: [ProgramProgramStatus!]
   """
+  program_type field predicates
+  """
+  programType: ProgramProgramType
+  programTypeNEQ: ProgramProgramType
+  programTypeIn: [ProgramProgramType!]
+  programTypeNotIn: [ProgramProgramType!]
+  """
+  framework_name field predicates
+  """
+  frameworkName: String
+  frameworkNameNEQ: String
+  frameworkNameIn: [String!]
+  frameworkNameNotIn: [String!]
+  frameworkNameGT: String
+  frameworkNameGTE: String
+  frameworkNameLT: String
+  frameworkNameLTE: String
+  frameworkNameContains: String
+  frameworkNameHasPrefix: String
+  frameworkNameHasSuffix: String
+  frameworkNameIsNil: Boolean
+  frameworkNameNotNil: Boolean
+  frameworkNameEqualFold: String
+  frameworkNameContainsFold: String
+  """
   start_date field predicates
   """
   startDate: Time
@@ -53098,6 +53344,60 @@ input ProgramWhereInput {
   """
   auditorReadComments: Boolean
   auditorReadCommentsNEQ: Boolean
+  """
+  audit_firm field predicates
+  """
+  auditFirm: String
+  auditFirmNEQ: String
+  auditFirmIn: [String!]
+  auditFirmNotIn: [String!]
+  auditFirmGT: String
+  auditFirmGTE: String
+  auditFirmLT: String
+  auditFirmLTE: String
+  auditFirmContains: String
+  auditFirmHasPrefix: String
+  auditFirmHasSuffix: String
+  auditFirmIsNil: Boolean
+  auditFirmNotNil: Boolean
+  auditFirmEqualFold: String
+  auditFirmContainsFold: String
+  """
+  auditor field predicates
+  """
+  auditor: String
+  auditorNEQ: String
+  auditorIn: [String!]
+  auditorNotIn: [String!]
+  auditorGT: String
+  auditorGTE: String
+  auditorLT: String
+  auditorLTE: String
+  auditorContains: String
+  auditorHasPrefix: String
+  auditorHasSuffix: String
+  auditorIsNil: Boolean
+  auditorNotNil: Boolean
+  auditorEqualFold: String
+  auditorContainsFold: String
+  """
+  auditor_email field predicates
+  """
+  auditorEmail: String
+  auditorEmailNEQ: String
+  auditorEmailIn: [String!]
+  auditorEmailNotIn: [String!]
+  auditorEmailGT: String
+  auditorEmailGTE: String
+  auditorEmailLT: String
+  auditorEmailLTE: String
+  auditorEmailContains: String
+  auditorEmailHasPrefix: String
+  auditorEmailHasSuffix: String
+  auditorEmailIsNil: Boolean
+  auditorEmailNotNil: Boolean
+  auditorEmailEqualFold: String
+  auditorEmailContainsFold: String
   """
   owner edge predicates
   """
@@ -59919,10 +60219,6 @@ type Task implements Node {
   """
   title: String!
   """
-  the description of the task
-  """
-  description: String
-  """
   the details of the task
   """
   details: String
@@ -60291,10 +60587,6 @@ type TaskHistory implements Node {
   """
   title: String!
   """
-  the description of the task
-  """
-  description: String
-  """
   the details of the task
   """
   details: String
@@ -60596,24 +60888,6 @@ input TaskHistoryWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
   """
   details field predicates
   """
@@ -60919,24 +61193,6 @@ input TaskWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
   """
   details field predicates
   """
@@ -63340,6 +63596,15 @@ input UpdateProgramInput {
   """
   status: ProgramProgramStatus
   """
+  the type of the program
+  """
+  programType: ProgramProgramType
+  """
+  the short name of the compliance standard the program is based on, only used for framework type programs
+  """
+  frameworkName: String
+  clearFrameworkName: Boolean
+  """
   the start date of the period
   """
   startDate: Time
@@ -63361,6 +63626,21 @@ input UpdateProgramInput {
   can the auditor read comments
   """
   auditorReadComments: Boolean
+  """
+  the name of the audit firm conducting the audit
+  """
+  auditFirm: String
+  clearAuditFirm: Boolean
+  """
+  the full name of the auditor conducting the audit
+  """
+  auditor: String
+  clearAuditor: Boolean
+  """
+  the email of the auditor conducting the audit
+  """
+  auditorEmail: String
+  clearAuditorEmail: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -63790,11 +64070,6 @@ input UpdateTaskInput {
   the title of the task
   """
   title: String
-  """
-  the description of the task
-  """
-  description: String
-  clearDescription: Boolean
   """
   the details of the task
   """

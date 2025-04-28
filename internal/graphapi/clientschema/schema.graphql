@@ -7272,6 +7272,14 @@ input CreateProgramInput {
 	"""
 	status: ProgramProgramStatus
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -7291,6 +7299,18 @@ input CreateProgramInput {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean
+	"""
+	the name of the audit firm conducting the audit
+	"""
+	auditFirm: String
+	"""
+	the full name of the auditor conducting the audit
+	"""
+	auditor: String
+	"""
+	the email of the auditor conducting the audit
+	"""
+	auditorEmail: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -7585,10 +7605,6 @@ input CreateTaskInput {
 	the title of the task
 	"""
 	title: String!
-	"""
-	the description of the task
-	"""
-	description: String
 	"""
 	the details of the task
 	"""
@@ -27871,6 +27887,14 @@ type Program implements Node {
 	"""
 	status: ProgramProgramStatus!
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType!
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -27890,6 +27914,18 @@ type Program implements Node {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean!
+	"""
+	the name of the audit firm conducting the audit
+	"""
+	auditFirm: String
+	"""
+	the full name of the auditor conducting the audit
+	"""
+	auditor: String
+	"""
+	the email of the auditor conducting the audit
+	"""
+	auditorEmail: String
 	owner: Organization
 	"""
 	groups that are blocked from viewing or editing the risk
@@ -28431,6 +28467,14 @@ type ProgramHistory implements Node {
 	"""
 	status: ProgramHistoryProgramStatus!
 	"""
+	the type of the program
+	"""
+	programType: ProgramHistoryProgramType!
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -28450,6 +28494,18 @@ type ProgramHistory implements Node {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean!
+	"""
+	the name of the audit firm conducting the audit
+	"""
+	auditFirm: String
+	"""
+	the full name of the auditor conducting the audit
+	"""
+	auditor: String
+	"""
+	the email of the auditor conducting the audit
+	"""
+	auditorEmail: String
 }
 """
 A connection to a list of items.
@@ -28510,6 +28566,8 @@ enum ProgramHistoryOrderField {
 	updated_at
 	name
 	STATUS
+	PROGRAM_TYPE
+	framework
 	start_date
 	end_date
 }
@@ -28522,6 +28580,15 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pk
 	READY_FOR_AUDITOR
 	COMPLETED
 	ACTION_REQUIRED
+}
+"""
+ProgramHistoryProgramType is enum for the field program_type
+"""
+enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+	FRAMEWORK
+	GAP_ANALYSIS
+	RISK_ASSESSMENT
+	OTHER
 }
 """
 ProgramHistoryWhereInput is used for filtering ProgramHistory objects.
@@ -28749,6 +28816,31 @@ input ProgramHistoryWhereInput {
 	statusIn: [ProgramHistoryProgramStatus!]
 	statusNotIn: [ProgramHistoryProgramStatus!]
 	"""
+	program_type field predicates
+	"""
+	programType: ProgramHistoryProgramType
+	programTypeNEQ: ProgramHistoryProgramType
+	programTypeIn: [ProgramHistoryProgramType!]
+	programTypeNotIn: [ProgramHistoryProgramType!]
+	"""
+	framework_name field predicates
+	"""
+	frameworkName: String
+	frameworkNameNEQ: String
+	frameworkNameIn: [String!]
+	frameworkNameNotIn: [String!]
+	frameworkNameGT: String
+	frameworkNameGTE: String
+	frameworkNameLT: String
+	frameworkNameLTE: String
+	frameworkNameContains: String
+	frameworkNameHasPrefix: String
+	frameworkNameHasSuffix: String
+	frameworkNameIsNil: Boolean
+	frameworkNameNotNil: Boolean
+	frameworkNameEqualFold: String
+	frameworkNameContainsFold: String
+	"""
 	start_date field predicates
 	"""
 	startDate: Time
@@ -28789,6 +28881,60 @@ input ProgramHistoryWhereInput {
 	"""
 	auditorReadComments: Boolean
 	auditorReadCommentsNEQ: Boolean
+	"""
+	audit_firm field predicates
+	"""
+	auditFirm: String
+	auditFirmNEQ: String
+	auditFirmIn: [String!]
+	auditFirmNotIn: [String!]
+	auditFirmGT: String
+	auditFirmGTE: String
+	auditFirmLT: String
+	auditFirmLTE: String
+	auditFirmContains: String
+	auditFirmHasPrefix: String
+	auditFirmHasSuffix: String
+	auditFirmIsNil: Boolean
+	auditFirmNotNil: Boolean
+	auditFirmEqualFold: String
+	auditFirmContainsFold: String
+	"""
+	auditor field predicates
+	"""
+	auditor: String
+	auditorNEQ: String
+	auditorIn: [String!]
+	auditorNotIn: [String!]
+	auditorGT: String
+	auditorGTE: String
+	auditorLT: String
+	auditorLTE: String
+	auditorContains: String
+	auditorHasPrefix: String
+	auditorHasSuffix: String
+	auditorIsNil: Boolean
+	auditorNotNil: Boolean
+	auditorEqualFold: String
+	auditorContainsFold: String
+	"""
+	auditor_email field predicates
+	"""
+	auditorEmail: String
+	auditorEmailNEQ: String
+	auditorEmailIn: [String!]
+	auditorEmailNotIn: [String!]
+	auditorEmailGT: String
+	auditorEmailGTE: String
+	auditorEmailLT: String
+	auditorEmailLTE: String
+	auditorEmailContains: String
+	auditorEmailHasPrefix: String
+	auditorEmailHasSuffix: String
+	auditorEmailIsNil: Boolean
+	auditorEmailNotNil: Boolean
+	auditorEmailEqualFold: String
+	auditorEmailContainsFold: String
 }
 type ProgramMembership implements Node {
 	id: ID!
@@ -29314,6 +29460,8 @@ enum ProgramOrderField {
 	updated_at
 	name
 	STATUS
+	PROGRAM_TYPE
+	framework
 	start_date
 	end_date
 }
@@ -29326,6 +29474,15 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 	READY_FOR_AUDITOR
 	COMPLETED
 	ACTION_REQUIRED
+}
+"""
+ProgramProgramType is enum for the field program_type
+"""
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+	FRAMEWORK
+	GAP_ANALYSIS
+	RISK_ASSESSMENT
+	OTHER
 }
 """
 Return response for updateProgram mutation
@@ -29526,6 +29683,31 @@ input ProgramWhereInput {
 	statusIn: [ProgramProgramStatus!]
 	statusNotIn: [ProgramProgramStatus!]
 	"""
+	program_type field predicates
+	"""
+	programType: ProgramProgramType
+	programTypeNEQ: ProgramProgramType
+	programTypeIn: [ProgramProgramType!]
+	programTypeNotIn: [ProgramProgramType!]
+	"""
+	framework_name field predicates
+	"""
+	frameworkName: String
+	frameworkNameNEQ: String
+	frameworkNameIn: [String!]
+	frameworkNameNotIn: [String!]
+	frameworkNameGT: String
+	frameworkNameGTE: String
+	frameworkNameLT: String
+	frameworkNameLTE: String
+	frameworkNameContains: String
+	frameworkNameHasPrefix: String
+	frameworkNameHasSuffix: String
+	frameworkNameIsNil: Boolean
+	frameworkNameNotNil: Boolean
+	frameworkNameEqualFold: String
+	frameworkNameContainsFold: String
+	"""
 	start_date field predicates
 	"""
 	startDate: Time
@@ -29566,6 +29748,60 @@ input ProgramWhereInput {
 	"""
 	auditorReadComments: Boolean
 	auditorReadCommentsNEQ: Boolean
+	"""
+	audit_firm field predicates
+	"""
+	auditFirm: String
+	auditFirmNEQ: String
+	auditFirmIn: [String!]
+	auditFirmNotIn: [String!]
+	auditFirmGT: String
+	auditFirmGTE: String
+	auditFirmLT: String
+	auditFirmLTE: String
+	auditFirmContains: String
+	auditFirmHasPrefix: String
+	auditFirmHasSuffix: String
+	auditFirmIsNil: Boolean
+	auditFirmNotNil: Boolean
+	auditFirmEqualFold: String
+	auditFirmContainsFold: String
+	"""
+	auditor field predicates
+	"""
+	auditor: String
+	auditorNEQ: String
+	auditorIn: [String!]
+	auditorNotIn: [String!]
+	auditorGT: String
+	auditorGTE: String
+	auditorLT: String
+	auditorLTE: String
+	auditorContains: String
+	auditorHasPrefix: String
+	auditorHasSuffix: String
+	auditorIsNil: Boolean
+	auditorNotNil: Boolean
+	auditorEqualFold: String
+	auditorContainsFold: String
+	"""
+	auditor_email field predicates
+	"""
+	auditorEmail: String
+	auditorEmailNEQ: String
+	auditorEmailIn: [String!]
+	auditorEmailNotIn: [String!]
+	auditorEmailGT: String
+	auditorEmailGTE: String
+	auditorEmailLT: String
+	auditorEmailLTE: String
+	auditorEmailContains: String
+	auditorEmailHasPrefix: String
+	auditorEmailHasSuffix: String
+	auditorEmailIsNil: Boolean
+	auditorEmailNotNil: Boolean
+	auditorEmailEqualFold: String
+	auditorEmailContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -38963,10 +39199,6 @@ type Task implements Node {
 	"""
 	title: String!
 	"""
-	the description of the task
-	"""
-	description: String
-	"""
 	the details of the task
 	"""
 	details: String
@@ -39362,10 +39594,6 @@ type TaskHistory implements Node {
 	"""
 	title: String!
 	"""
-	the description of the task
-	"""
-	description: String
-	"""
 	the details of the task
 	"""
 	details: String
@@ -39667,24 +39895,6 @@ input TaskHistoryWhereInput {
 	titleHasSuffix: String
 	titleEqualFold: String
 	titleContainsFold: String
-	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
 	"""
 	details field predicates
 	"""
@@ -39999,24 +40209,6 @@ input TaskWhereInput {
 	titleHasSuffix: String
 	titleEqualFold: String
 	titleContainsFold: String
-	"""
-	description field predicates
-	"""
-	description: String
-	descriptionNEQ: String
-	descriptionIn: [String!]
-	descriptionNotIn: [String!]
-	descriptionGT: String
-	descriptionGTE: String
-	descriptionLT: String
-	descriptionLTE: String
-	descriptionContains: String
-	descriptionHasPrefix: String
-	descriptionHasSuffix: String
-	descriptionIsNil: Boolean
-	descriptionNotNil: Boolean
-	descriptionEqualFold: String
-	descriptionContainsFold: String
 	"""
 	details field predicates
 	"""
@@ -42472,6 +42664,15 @@ input UpdateProgramInput {
 	"""
 	status: ProgramProgramStatus
 	"""
+	the type of the program
+	"""
+	programType: ProgramProgramType
+	"""
+	the short name of the compliance standard the program is based on, only used for framework type programs
+	"""
+	frameworkName: String
+	clearFrameworkName: Boolean
+	"""
 	the start date of the period
 	"""
 	startDate: Time
@@ -42493,6 +42694,21 @@ input UpdateProgramInput {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean
+	"""
+	the name of the audit firm conducting the audit
+	"""
+	auditFirm: String
+	clearAuditFirm: Boolean
+	"""
+	the full name of the auditor conducting the audit
+	"""
+	auditor: String
+	clearAuditor: Boolean
+	"""
+	the email of the auditor conducting the audit
+	"""
+	auditorEmail: String
+	clearAuditorEmail: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -42929,11 +43145,6 @@ input UpdateTaskInput {
 	the title of the task
 	"""
 	title: String
-	"""
-	the description of the task
-	"""
-	description: String
-	clearDescription: Boolean
 	"""
 	the details of the task
 	"""

@@ -68,7 +68,7 @@ func (suite *GraphTestSuite) TestQueryTask() {
 
 			assert.Equal(t, tc.queryID, resp.Task.ID)
 			assert.NotEmpty(t, resp.Task.Title)
-			assert.NotEmpty(t, resp.Task.Description)
+			assert.NotEmpty(t, resp.Task.Details)
 			assert.NotEmpty(t, resp.Task.Status)
 		})
 	}
@@ -144,13 +144,12 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateTaskInput{
-				Title:       "test-task",
-				Description: lo.ToPtr("test description"),
-				Status:      &enums.TaskStatusInProgress,
-				Category:    lo.ToPtr("evidence upload"),
-				Details:     lo.ToPtr("do all the things for the thing"),
-				Due:         lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
-				AssigneeID:  &viewOnlyUser.ID, // assign the task to another user
+				Title:      "test-task",
+				Details:    lo.ToPtr("test details of the task"),
+				Status:     &enums.TaskStatusInProgress,
+				Category:   lo.ToPtr("evidence upload"),
+				Due:        lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
+				AssigneeID: &viewOnlyUser.ID, // assign the task to another user
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -185,7 +184,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 		{
 			name: "missing title, but display name provided",
 			request: openlaneclient.CreateTaskInput{
-				Description: lo.ToPtr("makin' a list, checkin' it twice"),
+				Details: lo.ToPtr("makin' a list, checkin' it twice"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -214,10 +213,10 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 
 			assert.NotNil(t, resp.CreateTask.Task.OwnerID)
 
-			if tc.request.Description == nil {
-				assert.Empty(t, resp.CreateTask.Task.Description)
+			if tc.request.Details == nil {
+				assert.Empty(t, resp.CreateTask.Task.Details)
 			} else {
-				assert.Equal(t, tc.request.Description, resp.CreateTask.Task.Description)
+				assert.Equal(t, tc.request.Details, resp.CreateTask.Task.Details)
 			}
 
 			if tc.request.Status == nil {
@@ -310,10 +309,10 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 		expectedErr          string
 	}{
 		{
-			name: "happy path, update description",
+			name: "happy path, update details",
 			request: &openlaneclient.UpdateTaskInput{
-				Description: lo.ToPtr(("makin' a list, checkin' it twice")),
-				AssigneeID:  &adminUser.ID,
+				Details:    lo.ToPtr(("makin' a list, checkin' it twice")),
+				AssigneeID: &adminUser.ID,
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -481,8 +480,8 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			if tc.request != nil {
 				require.NotNil(t, resp)
 
-				if tc.request.Description != nil {
-					assert.Equal(t, *tc.request.Description, *resp.UpdateTask.Task.Description)
+				if tc.request.Details != nil {
+					assert.Equal(t, *tc.request.Details, *resp.UpdateTask.Task.Details)
 				}
 
 				if tc.request.Status != nil {

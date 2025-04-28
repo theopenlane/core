@@ -48,12 +48,6 @@ func (Task) Fields() []ent.Field {
 				entgql.OrderField("title"),
 			).
 			NotEmpty(),
-		field.String("description").
-			Annotations(
-				entx.FieldSearchable(),
-			).
-			Comment("the description of the task").
-			Optional(),
 		field.Text("details").
 			Comment("the details of the task").
 			Optional(),

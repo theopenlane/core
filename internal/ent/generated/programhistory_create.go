@@ -200,6 +200,34 @@ func (phc *ProgramHistoryCreate) SetNillableStatus(es *enums.ProgramStatus) *Pro
 	return phc
 }
 
+// SetProgramType sets the "program_type" field.
+func (phc *ProgramHistoryCreate) SetProgramType(et enums.ProgramType) *ProgramHistoryCreate {
+	phc.mutation.SetProgramType(et)
+	return phc
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryCreate {
+	if et != nil {
+		phc.SetProgramType(*et)
+	}
+	return phc
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (phc *ProgramHistoryCreate) SetFrameworkName(s string) *ProgramHistoryCreate {
+	phc.mutation.SetFrameworkName(s)
+	return phc
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableFrameworkName(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetFrameworkName(*s)
+	}
+	return phc
+}
+
 // SetStartDate sets the "start_date" field.
 func (phc *ProgramHistoryCreate) SetStartDate(t time.Time) *ProgramHistoryCreate {
 	phc.mutation.SetStartDate(t)
@@ -266,6 +294,48 @@ func (phc *ProgramHistoryCreate) SetAuditorReadComments(b bool) *ProgramHistoryC
 func (phc *ProgramHistoryCreate) SetNillableAuditorReadComments(b *bool) *ProgramHistoryCreate {
 	if b != nil {
 		phc.SetAuditorReadComments(*b)
+	}
+	return phc
+}
+
+// SetAuditFirm sets the "audit_firm" field.
+func (phc *ProgramHistoryCreate) SetAuditFirm(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditFirm(s)
+	return phc
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditFirm(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditFirm(*s)
+	}
+	return phc
+}
+
+// SetAuditor sets the "auditor" field.
+func (phc *ProgramHistoryCreate) SetAuditor(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditor(s)
+	return phc
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditor(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditor(*s)
+	}
+	return phc
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (phc *ProgramHistoryCreate) SetAuditorEmail(s string) *ProgramHistoryCreate {
+	phc.mutation.SetAuditorEmail(s)
+	return phc
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableAuditorEmail(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetAuditorEmail(*s)
 	}
 	return phc
 }
@@ -339,6 +409,10 @@ func (phc *ProgramHistoryCreate) defaults() {
 		v := programhistory.DefaultStatus
 		phc.mutation.SetStatus(v)
 	}
+	if _, ok := phc.mutation.ProgramType(); !ok {
+		v := programhistory.DefaultProgramType
+		phc.mutation.SetProgramType(v)
+	}
 	if _, ok := phc.mutation.AuditorReady(); !ok {
 		v := programhistory.DefaultAuditorReady
 		phc.mutation.SetAuditorReady(v)
@@ -382,6 +456,14 @@ func (phc *ProgramHistoryCreate) check() error {
 	if v, ok := phc.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
+		}
+	}
+	if _, ok := phc.mutation.ProgramType(); !ok {
+		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "ProgramHistory.program_type"`)}
+	}
+	if v, ok := phc.mutation.ProgramType(); ok {
+		if err := programhistory.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
 	}
 	if _, ok := phc.mutation.AuditorReady(); !ok {
@@ -489,6 +571,14 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := phc.mutation.ProgramType(); ok {
+		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
+		_node.ProgramType = value
+	}
+	if value, ok := phc.mutation.FrameworkName(); ok {
+		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
+		_node.FrameworkName = value
+	}
 	if value, ok := phc.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)
 		_node.StartDate = value
@@ -508,6 +598,18 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
+	}
+	if value, ok := phc.mutation.AuditFirm(); ok {
+		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
+		_node.AuditFirm = value
+	}
+	if value, ok := phc.mutation.Auditor(); ok {
+		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
+		_node.Auditor = value
+	}
+	if value, ok := phc.mutation.AuditorEmail(); ok {
+		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
+		_node.AuditorEmail = value
 	}
 	return _node, _spec
 }

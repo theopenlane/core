@@ -23190,6 +23190,16 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldStatus)
 				fieldSeen[program.FieldStatus] = struct{}{}
 			}
+		case "programType":
+			if _, ok := fieldSeen[program.FieldProgramType]; !ok {
+				selectedFields = append(selectedFields, program.FieldProgramType)
+				fieldSeen[program.FieldProgramType] = struct{}{}
+			}
+		case "frameworkName":
+			if _, ok := fieldSeen[program.FieldFrameworkName]; !ok {
+				selectedFields = append(selectedFields, program.FieldFrameworkName)
+				fieldSeen[program.FieldFrameworkName] = struct{}{}
+			}
 		case "startDate":
 			if _, ok := fieldSeen[program.FieldStartDate]; !ok {
 				selectedFields = append(selectedFields, program.FieldStartDate)
@@ -23214,6 +23224,21 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[program.FieldAuditorReadComments]; !ok {
 				selectedFields = append(selectedFields, program.FieldAuditorReadComments)
 				fieldSeen[program.FieldAuditorReadComments] = struct{}{}
+			}
+		case "auditFirm":
+			if _, ok := fieldSeen[program.FieldAuditFirm]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditFirm)
+				fieldSeen[program.FieldAuditFirm] = struct{}{}
+			}
+		case "auditor":
+			if _, ok := fieldSeen[program.FieldAuditor]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditor)
+				fieldSeen[program.FieldAuditor] = struct{}{}
+			}
+		case "auditorEmail":
+			if _, ok := fieldSeen[program.FieldAuditorEmail]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditorEmail)
+				fieldSeen[program.FieldAuditorEmail] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -23380,6 +23405,16 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldStatus)
 				fieldSeen[programhistory.FieldStatus] = struct{}{}
 			}
+		case "programType":
+			if _, ok := fieldSeen[programhistory.FieldProgramType]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldProgramType)
+				fieldSeen[programhistory.FieldProgramType] = struct{}{}
+			}
+		case "frameworkName":
+			if _, ok := fieldSeen[programhistory.FieldFrameworkName]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldFrameworkName)
+				fieldSeen[programhistory.FieldFrameworkName] = struct{}{}
+			}
 		case "startDate":
 			if _, ok := fieldSeen[programhistory.FieldStartDate]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldStartDate)
@@ -23404,6 +23439,21 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldAuditorReadComments]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldAuditorReadComments)
 				fieldSeen[programhistory.FieldAuditorReadComments] = struct{}{}
+			}
+		case "auditFirm":
+			if _, ok := fieldSeen[programhistory.FieldAuditFirm]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditFirm)
+				fieldSeen[programhistory.FieldAuditFirm] = struct{}{}
+			}
+		case "auditor":
+			if _, ok := fieldSeen[programhistory.FieldAuditor]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditor)
+				fieldSeen[programhistory.FieldAuditor] = struct{}{}
+			}
+		case "auditorEmail":
+			if _, ok := fieldSeen[programhistory.FieldAuditorEmail]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditorEmail)
+				fieldSeen[programhistory.FieldAuditorEmail] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -28169,11 +28219,6 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, task.FieldTitle)
 				fieldSeen[task.FieldTitle] = struct{}{}
 			}
-		case "description":
-			if _, ok := fieldSeen[task.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, task.FieldDescription)
-				fieldSeen[task.FieldDescription] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[task.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, task.FieldDetails)
@@ -28363,11 +28408,6 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldTitle)
 				fieldSeen[taskhistory.FieldTitle] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[taskhistory.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldDescription)
-				fieldSeen[taskhistory.FieldDescription] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[taskhistory.FieldDetails]; !ok {

@@ -173,20 +173,6 @@ func (thc *TaskHistoryCreate) SetTitle(s string) *TaskHistoryCreate {
 	return thc
 }
 
-// SetDescription sets the "description" field.
-func (thc *TaskHistoryCreate) SetDescription(s string) *TaskHistoryCreate {
-	thc.mutation.SetDescription(s)
-	return thc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDescription(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetDescription(*s)
-	}
-	return thc
-}
-
 // SetDetails sets the "details" field.
 func (thc *TaskHistoryCreate) SetDetails(s string) *TaskHistoryCreate {
 	thc.mutation.SetDetails(s)
@@ -474,10 +460,6 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := thc.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := thc.mutation.Description(); ok {
-		_spec.SetField(taskhistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
 	}
 	if value, ok := thc.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)

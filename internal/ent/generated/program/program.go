@@ -42,6 +42,10 @@ const (
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldProgramType holds the string denoting the program_type field in the database.
+	FieldProgramType = "program_type"
+	// FieldFrameworkName holds the string denoting the framework_name field in the database.
+	FieldFrameworkName = "framework_name"
 	// FieldStartDate holds the string denoting the start_date field in the database.
 	FieldStartDate = "start_date"
 	// FieldEndDate holds the string denoting the end_date field in the database.
@@ -52,6 +56,12 @@ const (
 	FieldAuditorWriteComments = "auditor_write_comments"
 	// FieldAuditorReadComments holds the string denoting the auditor_read_comments field in the database.
 	FieldAuditorReadComments = "auditor_read_comments"
+	// FieldAuditFirm holds the string denoting the audit_firm field in the database.
+	FieldAuditFirm = "audit_firm"
+	// FieldAuditor holds the string denoting the auditor field in the database.
+	FieldAuditor = "auditor"
+	// FieldAuditorEmail holds the string denoting the auditor_email field in the database.
+	FieldAuditorEmail = "auditor_email"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -205,11 +215,16 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldStatus,
+	FieldProgramType,
+	FieldFrameworkName,
 	FieldStartDate,
 	FieldEndDate,
 	FieldAuditorReady,
 	FieldAuditorWriteComments,
 	FieldAuditorReadComments,
+	FieldAuditFirm,
+	FieldAuditor,
+	FieldAuditorEmail,
 }
 
 var (
@@ -296,6 +311,8 @@ var (
 	DefaultAuditorWriteComments bool
 	// DefaultAuditorReadComments holds the default value on creation for the "auditor_read_comments" field.
 	DefaultAuditorReadComments bool
+	// AuditorEmailValidator is a validator for the "auditor_email" field. It is called by the builders before save.
+	AuditorEmailValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -309,6 +326,18 @@ func StatusValidator(s enums.ProgramStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("program: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultProgramType enums.ProgramType = "FRAMEWORK"
+
+// ProgramTypeValidator is a validator for the "program_type" field enum values. It is called by the builders before save.
+func ProgramTypeValidator(pt enums.ProgramType) error {
+	switch pt.String() {
+	case "FRAMEWORK", "GAP_ANALYSIS", "RISK_ASSESSMENT", "OTHER":
+		return nil
+	default:
+		return fmt.Errorf("program: invalid enum value for program_type field: %q", pt)
 	}
 }
 
@@ -375,6 +404,16 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByProgramType orders the results by the program_type field.
+func ByProgramType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProgramType, opts...).ToFunc()
+}
+
+// ByFrameworkName orders the results by the framework_name field.
+func ByFrameworkName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFrameworkName, opts...).ToFunc()
+}
+
 // ByStartDate orders the results by the start_date field.
 func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStartDate, opts...).ToFunc()
@@ -398,6 +437,21 @@ func ByAuditorWriteComments(opts ...sql.OrderTermOption) OrderOption {
 // ByAuditorReadComments orders the results by the auditor_read_comments field.
 func ByAuditorReadComments(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuditorReadComments, opts...).ToFunc()
+}
+
+// ByAuditFirm orders the results by the audit_firm field.
+func ByAuditFirm(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditFirm, opts...).ToFunc()
+}
+
+// ByAuditor orders the results by the auditor field.
+func ByAuditor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditor, opts...).ToFunc()
+}
+
+// ByAuditorEmail orders the results by the auditor_email field.
+func ByAuditorEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditorEmail, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -776,4 +830,11 @@ var (
 	_ graphql.Marshaler = (*enums.ProgramStatus)(nil)
 	// enums.ProgramStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ProgramStatus)(nil)
+)
+
+var (
+	// enums.ProgramType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ProgramType)(nil)
+	// enums.ProgramType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ProgramType)(nil)
 )

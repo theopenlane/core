@@ -181,6 +181,34 @@ func (pc *ProgramCreate) SetNillableStatus(es *enums.ProgramStatus) *ProgramCrea
 	return pc
 }
 
+// SetProgramType sets the "program_type" field.
+func (pc *ProgramCreate) SetProgramType(et enums.ProgramType) *ProgramCreate {
+	pc.mutation.SetProgramType(et)
+	return pc
+}
+
+// SetNillableProgramType sets the "program_type" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramCreate {
+	if et != nil {
+		pc.SetProgramType(*et)
+	}
+	return pc
+}
+
+// SetFrameworkName sets the "framework_name" field.
+func (pc *ProgramCreate) SetFrameworkName(s string) *ProgramCreate {
+	pc.mutation.SetFrameworkName(s)
+	return pc
+}
+
+// SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableFrameworkName(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetFrameworkName(*s)
+	}
+	return pc
+}
+
 // SetStartDate sets the "start_date" field.
 func (pc *ProgramCreate) SetStartDate(t time.Time) *ProgramCreate {
 	pc.mutation.SetStartDate(t)
@@ -247,6 +275,48 @@ func (pc *ProgramCreate) SetAuditorReadComments(b bool) *ProgramCreate {
 func (pc *ProgramCreate) SetNillableAuditorReadComments(b *bool) *ProgramCreate {
 	if b != nil {
 		pc.SetAuditorReadComments(*b)
+	}
+	return pc
+}
+
+// SetAuditFirm sets the "audit_firm" field.
+func (pc *ProgramCreate) SetAuditFirm(s string) *ProgramCreate {
+	pc.mutation.SetAuditFirm(s)
+	return pc
+}
+
+// SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditFirm(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditFirm(*s)
+	}
+	return pc
+}
+
+// SetAuditor sets the "auditor" field.
+func (pc *ProgramCreate) SetAuditor(s string) *ProgramCreate {
+	pc.mutation.SetAuditor(s)
+	return pc
+}
+
+// SetNillableAuditor sets the "auditor" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditor(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditor(*s)
+	}
+	return pc
+}
+
+// SetAuditorEmail sets the "auditor_email" field.
+func (pc *ProgramCreate) SetAuditorEmail(s string) *ProgramCreate {
+	pc.mutation.SetAuditorEmail(s)
+	return pc
+}
+
+// SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableAuditorEmail(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetAuditorEmail(*s)
 	}
 	return pc
 }
@@ -584,6 +654,10 @@ func (pc *ProgramCreate) defaults() error {
 		v := program.DefaultStatus
 		pc.mutation.SetStatus(v)
 	}
+	if _, ok := pc.mutation.ProgramType(); !ok {
+		v := program.DefaultProgramType
+		pc.mutation.SetProgramType(v)
+	}
 	if _, ok := pc.mutation.AuditorReady(); !ok {
 		v := program.DefaultAuditorReady
 		pc.mutation.SetAuditorReady(v)
@@ -637,6 +711,14 @@ func (pc *ProgramCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
+	if _, ok := pc.mutation.ProgramType(); !ok {
+		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "Program.program_type"`)}
+	}
+	if v, ok := pc.mutation.ProgramType(); ok {
+		if err := program.ProgramTypeValidator(v); err != nil {
+			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
+		}
+	}
 	if _, ok := pc.mutation.AuditorReady(); !ok {
 		return &ValidationError{Name: "auditor_ready", err: errors.New(`generated: missing required field "Program.auditor_ready"`)}
 	}
@@ -645,6 +727,11 @@ func (pc *ProgramCreate) check() error {
 	}
 	if _, ok := pc.mutation.AuditorReadComments(); !ok {
 		return &ValidationError{Name: "auditor_read_comments", err: errors.New(`generated: missing required field "Program.auditor_read_comments"`)}
+	}
+	if v, ok := pc.mutation.AuditorEmail(); ok {
+		if err := program.AuditorEmailValidator(v); err != nil {
+			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -726,6 +813,14 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := pc.mutation.ProgramType(); ok {
+		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
+		_node.ProgramType = value
+	}
+	if value, ok := pc.mutation.FrameworkName(); ok {
+		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
+		_node.FrameworkName = value
+	}
 	if value, ok := pc.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)
 		_node.StartDate = value
@@ -745,6 +840,18 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
+	}
+	if value, ok := pc.mutation.AuditFirm(); ok {
+		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
+		_node.AuditFirm = value
+	}
+	if value, ok := pc.mutation.Auditor(); ok {
+		_spec.SetField(program.FieldAuditor, field.TypeString, value)
+		_node.Auditor = value
+	}
+	if value, ok := pc.mutation.AuditorEmail(); ok {
+		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
+		_node.AuditorEmail = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

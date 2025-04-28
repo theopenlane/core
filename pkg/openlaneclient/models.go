@@ -4605,6 +4605,10 @@ type CreateProgramInput struct {
 	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType *enums.ProgramType `json:"programType,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
@@ -4614,7 +4618,13 @@ type CreateProgramInput struct {
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
-	AuditorReadComments *bool    `json:"auditorReadComments,omitempty"`
+	AuditorReadComments *bool `json:"auditorReadComments,omitempty"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail        *string  `json:"auditorEmail,omitempty"`
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string `json:"editorIDs,omitempty"`
@@ -4803,8 +4813,6 @@ type CreateTaskInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty"`
 	// the details of the task
 	Details *string `json:"details,omitempty"`
 	// the status of the task
@@ -16489,6 +16497,10 @@ type Program struct {
 	Description *string `json:"description,omitempty,omitzero"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"programType"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
 	// the end date of the period
@@ -16498,8 +16510,14 @@ type Program struct {
 	// can the auditor write comments
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
-	AuditorReadComments bool          `json:"auditorReadComments"`
-	Owner               *Organization `json:"owner,omitempty,omitzero"`
+	AuditorReadComments bool `json:"auditorReadComments"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty,omitzero"`
+	// the email of the auditor conducting the audit
+	AuditorEmail *string       `json:"auditorEmail,omitempty,omitzero"`
+	Owner        *Organization `json:"owner,omitempty,omitzero"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
 	// provides edit access to the risk to members of the group
@@ -16583,6 +16601,10 @@ type ProgramHistory struct {
 	Description *string `json:"description,omitempty,omitzero"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"programType"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
 	// the start date of the period
 	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
 	// the end date of the period
@@ -16593,6 +16615,12 @@ type ProgramHistory struct {
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditorReadComments"`
+	// the name of the audit firm conducting the audit
+	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	// the full name of the auditor conducting the audit
+	Auditor *string `json:"auditor,omitempty,omitzero"`
+	// the email of the auditor conducting the audit
+	AuditorEmail *string `json:"auditorEmail,omitempty,omitzero"`
 }
 
 func (ProgramHistory) IsNode() {}
@@ -16816,6 +16844,27 @@ type ProgramHistoryWhereInput struct {
 	StatusNeq   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
+	// program_type field predicates
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNeq   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+	// framework_name field predicates
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNeq          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGt           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGte          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLt           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLte          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        *bool    `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       *bool    `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
 	// start_date field predicates
 	StartDate       *time.Time   `json:"startDate,omitempty"`
 	StartDateNeq    *time.Time   `json:"startDateNEQ,omitempty"`
@@ -16847,6 +16896,54 @@ type ProgramHistoryWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
+	// audit_firm field predicates
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNeq          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGt           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGte          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLt           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLte          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        *bool    `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       *bool    `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+	// auditor field predicates
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNeq          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGt           *string  `json:"auditorGT,omitempty"`
+	AuditorGte          *string  `json:"auditorGTE,omitempty"`
+	AuditorLt           *string  `json:"auditorLT,omitempty"`
+	AuditorLte          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        *bool    `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       *bool    `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+	// auditor_email field predicates
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNeq          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGt           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGte          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLt           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLte          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        *bool    `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 }
 
 type ProgramMembership struct {
@@ -17407,6 +17504,27 @@ type ProgramWhereInput struct {
 	StatusNeq   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
+	// program_type field predicates
+	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
+	ProgramTypeNeq   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
+	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
+	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
+	// framework_name field predicates
+	FrameworkName             *string  `json:"frameworkName,omitempty"`
+	FrameworkNameNeq          *string  `json:"frameworkNameNEQ,omitempty"`
+	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
+	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
+	FrameworkNameGt           *string  `json:"frameworkNameGT,omitempty"`
+	FrameworkNameGte          *string  `json:"frameworkNameGTE,omitempty"`
+	FrameworkNameLt           *string  `json:"frameworkNameLT,omitempty"`
+	FrameworkNameLte          *string  `json:"frameworkNameLTE,omitempty"`
+	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
+	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
+	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
+	FrameworkNameIsNil        *bool    `json:"frameworkNameIsNil,omitempty"`
+	FrameworkNameNotNil       *bool    `json:"frameworkNameNotNil,omitempty"`
+	FrameworkNameEqualFold    *string  `json:"frameworkNameEqualFold,omitempty"`
+	FrameworkNameContainsFold *string  `json:"frameworkNameContainsFold,omitempty"`
 	// start_date field predicates
 	StartDate       *time.Time   `json:"startDate,omitempty"`
 	StartDateNeq    *time.Time   `json:"startDateNEQ,omitempty"`
@@ -17438,6 +17556,54 @@ type ProgramWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
+	// audit_firm field predicates
+	AuditFirm             *string  `json:"auditFirm,omitempty"`
+	AuditFirmNeq          *string  `json:"auditFirmNEQ,omitempty"`
+	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
+	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
+	AuditFirmGt           *string  `json:"auditFirmGT,omitempty"`
+	AuditFirmGte          *string  `json:"auditFirmGTE,omitempty"`
+	AuditFirmLt           *string  `json:"auditFirmLT,omitempty"`
+	AuditFirmLte          *string  `json:"auditFirmLTE,omitempty"`
+	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
+	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
+	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
+	AuditFirmIsNil        *bool    `json:"auditFirmIsNil,omitempty"`
+	AuditFirmNotNil       *bool    `json:"auditFirmNotNil,omitempty"`
+	AuditFirmEqualFold    *string  `json:"auditFirmEqualFold,omitempty"`
+	AuditFirmContainsFold *string  `json:"auditFirmContainsFold,omitempty"`
+	// auditor field predicates
+	Auditor             *string  `json:"auditor,omitempty"`
+	AuditorNeq          *string  `json:"auditorNEQ,omitempty"`
+	AuditorIn           []string `json:"auditorIn,omitempty"`
+	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
+	AuditorGt           *string  `json:"auditorGT,omitempty"`
+	AuditorGte          *string  `json:"auditorGTE,omitempty"`
+	AuditorLt           *string  `json:"auditorLT,omitempty"`
+	AuditorLte          *string  `json:"auditorLTE,omitempty"`
+	AuditorContains     *string  `json:"auditorContains,omitempty"`
+	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
+	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
+	AuditorIsNil        *bool    `json:"auditorIsNil,omitempty"`
+	AuditorNotNil       *bool    `json:"auditorNotNil,omitempty"`
+	AuditorEqualFold    *string  `json:"auditorEqualFold,omitempty"`
+	AuditorContainsFold *string  `json:"auditorContainsFold,omitempty"`
+	// auditor_email field predicates
+	AuditorEmail             *string  `json:"auditorEmail,omitempty"`
+	AuditorEmailNeq          *string  `json:"auditorEmailNEQ,omitempty"`
+	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
+	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
+	AuditorEmailGt           *string  `json:"auditorEmailGT,omitempty"`
+	AuditorEmailGte          *string  `json:"auditorEmailGTE,omitempty"`
+	AuditorEmailLt           *string  `json:"auditorEmailLT,omitempty"`
+	AuditorEmailLte          *string  `json:"auditorEmailLTE,omitempty"`
+	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
+	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
+	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
+	AuditorEmailIsNil        *bool    `json:"auditorEmailIsNil,omitempty"`
+	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
+	AuditorEmailEqualFold    *string  `json:"auditorEmailEqualFold,omitempty"`
+	AuditorEmailContainsFold *string  `json:"auditorEmailContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -20499,8 +20665,6 @@ type Task struct {
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty,omitzero"`
 	// the details of the task
 	Details *string `json:"details,omitempty,omitzero"`
 	// the status of the task
@@ -20586,8 +20750,6 @@ type TaskHistory struct {
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
-	// the description of the task
-	Description *string `json:"description,omitempty,omitzero"`
 	// the details of the task
 	Details *string `json:"details,omitempty,omitzero"`
 	// the status of the task
@@ -20804,22 +20966,6 @@ type TaskHistoryWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -21069,22 +21215,6 @@ type TaskWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-	// description field predicates
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -22917,6 +23047,11 @@ type UpdateProgramInput struct {
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType *enums.ProgramType `json:"programType,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName      *string `json:"frameworkName,omitempty"`
+	ClearFrameworkName *bool   `json:"clearFrameworkName,omitempty"`
 	// the start date of the period
 	StartDate      *time.Time `json:"startDate,omitempty"`
 	ClearStartDate *bool      `json:"clearStartDate,omitempty"`
@@ -22928,7 +23063,16 @@ type UpdateProgramInput struct {
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
-	AuditorReadComments       *bool                           `json:"auditorReadComments,omitempty"`
+	AuditorReadComments *bool `json:"auditorReadComments,omitempty"`
+	// the name of the audit firm conducting the audit
+	AuditFirm      *string `json:"auditFirm,omitempty"`
+	ClearAuditFirm *bool   `json:"clearAuditFirm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor      *string `json:"auditor,omitempty"`
+	ClearAuditor *bool   `json:"clearAuditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail              *string                         `json:"auditorEmail,omitempty"`
+	ClearAuditorEmail         *bool                           `json:"clearAuditorEmail,omitempty"`
 	OwnerID                   *string                         `json:"ownerID,omitempty"`
 	ClearOwner                *bool                           `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string                        `json:"addBlockedGroupIDs,omitempty"`
@@ -23252,9 +23396,6 @@ type UpdateTaskInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the title of the task
 	Title *string `json:"title,omitempty"`
-	// the description of the task
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the details of the task
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -28190,12 +28331,14 @@ func (e ProcedureOrderField) MarshalJSON() ([]byte, error) {
 type ProgramHistoryOrderField string
 
 const (
-	ProgramHistoryOrderFieldCreatedAt ProgramHistoryOrderField = "created_at"
-	ProgramHistoryOrderFieldUpdatedAt ProgramHistoryOrderField = "updated_at"
-	ProgramHistoryOrderFieldName      ProgramHistoryOrderField = "name"
-	ProgramHistoryOrderFieldStatus    ProgramHistoryOrderField = "STATUS"
-	ProgramHistoryOrderFieldStartDate ProgramHistoryOrderField = "start_date"
-	ProgramHistoryOrderFieldEndDate   ProgramHistoryOrderField = "end_date"
+	ProgramHistoryOrderFieldCreatedAt   ProgramHistoryOrderField = "created_at"
+	ProgramHistoryOrderFieldUpdatedAt   ProgramHistoryOrderField = "updated_at"
+	ProgramHistoryOrderFieldName        ProgramHistoryOrderField = "name"
+	ProgramHistoryOrderFieldStatus      ProgramHistoryOrderField = "STATUS"
+	ProgramHistoryOrderFieldProgramType ProgramHistoryOrderField = "PROGRAM_TYPE"
+	ProgramHistoryOrderFieldFramework   ProgramHistoryOrderField = "framework"
+	ProgramHistoryOrderFieldStartDate   ProgramHistoryOrderField = "start_date"
+	ProgramHistoryOrderFieldEndDate     ProgramHistoryOrderField = "end_date"
 )
 
 var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
@@ -28203,13 +28346,15 @@ var AllProgramHistoryOrderField = []ProgramHistoryOrderField{
 	ProgramHistoryOrderFieldUpdatedAt,
 	ProgramHistoryOrderFieldName,
 	ProgramHistoryOrderFieldStatus,
+	ProgramHistoryOrderFieldProgramType,
+	ProgramHistoryOrderFieldFramework,
 	ProgramHistoryOrderFieldStartDate,
 	ProgramHistoryOrderFieldEndDate,
 }
 
 func (e ProgramHistoryOrderField) IsValid() bool {
 	switch e {
-	case ProgramHistoryOrderFieldCreatedAt, ProgramHistoryOrderFieldUpdatedAt, ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
+	case ProgramHistoryOrderFieldCreatedAt, ProgramHistoryOrderFieldUpdatedAt, ProgramHistoryOrderFieldName, ProgramHistoryOrderFieldStatus, ProgramHistoryOrderFieldProgramType, ProgramHistoryOrderFieldFramework, ProgramHistoryOrderFieldStartDate, ProgramHistoryOrderFieldEndDate:
 		return true
 	}
 	return false
@@ -28370,12 +28515,14 @@ func (e ProgramMembershipOrderField) MarshalJSON() ([]byte, error) {
 type ProgramOrderField string
 
 const (
-	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
-	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
-	ProgramOrderFieldName      ProgramOrderField = "name"
-	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
-	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
-	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
+	ProgramOrderFieldCreatedAt   ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt   ProgramOrderField = "updated_at"
+	ProgramOrderFieldName        ProgramOrderField = "name"
+	ProgramOrderFieldStatus      ProgramOrderField = "STATUS"
+	ProgramOrderFieldProgramType ProgramOrderField = "PROGRAM_TYPE"
+	ProgramOrderFieldFramework   ProgramOrderField = "framework"
+	ProgramOrderFieldStartDate   ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate     ProgramOrderField = "end_date"
 )
 
 var AllProgramOrderField = []ProgramOrderField{
@@ -28383,13 +28530,15 @@ var AllProgramOrderField = []ProgramOrderField{
 	ProgramOrderFieldUpdatedAt,
 	ProgramOrderFieldName,
 	ProgramOrderFieldStatus,
+	ProgramOrderFieldProgramType,
+	ProgramOrderFieldFramework,
 	ProgramOrderFieldStartDate,
 	ProgramOrderFieldEndDate,
 }
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldProgramType, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
 		return true
 	}
 	return false

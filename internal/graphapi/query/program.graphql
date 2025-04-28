@@ -4,9 +4,14 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       auditorReadComments
       auditorReady
       auditorWriteComments
+      auditFirm
+      auditor
+      auditorEmail
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -27,9 +32,14 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       auditorReadComments
       auditorReady
       auditorWriteComments
+      auditFirm
+      auditor
+      auditorEmail
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -67,6 +77,11 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       name
       id
       displayID
+      programType
+      frameworkName
+      auditFirm
+      auditor
+      auditorEmail
       members {
         edges {
           node {
@@ -127,9 +142,14 @@ mutation CreateProgram($input: CreateProgramInput!) {
       auditorReadComments
       auditorReady
       auditorWriteComments
+      auditFirm
+      auditor
+      auditorEmail
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       displayID
@@ -198,6 +218,11 @@ mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
       name
       id
       displayID
+      programType
+      frameworkName
+      auditFirm
+      auditor
+      auditorEmail
       members {
         edges {
           node {
@@ -227,9 +252,14 @@ query GetAllPrograms {
         auditorReadComments
         auditorReady
         auditorWriteComments
+        auditFirm
+        auditor
+        auditorEmail
         createdAt
         createdBy
         description
+        programType
+        frameworkName
         endDate
         id
         displayID
@@ -310,9 +340,14 @@ query GetProgramByID($programId: ID!) {
     auditorReadComments
     auditorReady
     auditorWriteComments
+    auditFirm
+    auditor
+    auditorEmail
     createdAt
     createdBy
     description
+    programType
+    frameworkName
     endDate
     id
     displayID
@@ -393,9 +428,14 @@ query GetPrograms($where: ProgramWhereInput) {
         auditorReadComments
         auditorReady
         auditorWriteComments
+        auditFirm
+        auditor
+        auditorEmail
         createdAt
         createdBy
         description
+        programType
+        frameworkName
         endDate
         id
         displayID
@@ -477,9 +517,14 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       auditorReadComments
       auditorReady
       auditorWriteComments
+      auditFirm
+      auditor
+      auditorEmail
       createdAt
       createdBy
       description
+      programType
+      frameworkName
       endDate
       id
       name

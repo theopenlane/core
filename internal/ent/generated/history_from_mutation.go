@@ -6258,6 +6258,14 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if programType, exists := m.ProgramType(); exists {
+		create = create.SetProgramType(programType)
+	}
+
+	if frameworkName, exists := m.FrameworkName(); exists {
+		create = create.SetFrameworkName(frameworkName)
+	}
+
 	if startDate, exists := m.StartDate(); exists {
 		create = create.SetStartDate(startDate)
 	}
@@ -6276,6 +6284,18 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if auditorReadComments, exists := m.AuditorReadComments(); exists {
 		create = create.SetAuditorReadComments(auditorReadComments)
+	}
+
+	if auditFirm, exists := m.AuditFirm(); exists {
+		create = create.SetAuditFirm(auditFirm)
+	}
+
+	if auditor, exists := m.Auditor(); exists {
+		create = create.SetAuditor(auditor)
+	}
+
+	if auditorEmail, exists := m.AuditorEmail(); exists {
+		create = create.SetAuditorEmail(auditorEmail)
 	}
 
 	_, err := create.Save(ctx)
@@ -6380,6 +6400,18 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(program.Status)
 		}
 
+		if programType, exists := m.ProgramType(); exists {
+			create = create.SetProgramType(programType)
+		} else {
+			create = create.SetProgramType(program.ProgramType)
+		}
+
+		if frameworkName, exists := m.FrameworkName(); exists {
+			create = create.SetFrameworkName(frameworkName)
+		} else {
+			create = create.SetFrameworkName(program.FrameworkName)
+		}
+
 		if startDate, exists := m.StartDate(); exists {
 			create = create.SetStartDate(startDate)
 		} else {
@@ -6408,6 +6440,24 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetAuditorReadComments(auditorReadComments)
 		} else {
 			create = create.SetAuditorReadComments(program.AuditorReadComments)
+		}
+
+		if auditFirm, exists := m.AuditFirm(); exists {
+			create = create.SetAuditFirm(auditFirm)
+		} else {
+			create = create.SetAuditFirm(program.AuditFirm)
+		}
+
+		if auditor, exists := m.Auditor(); exists {
+			create = create.SetAuditor(auditor)
+		} else {
+			create = create.SetAuditor(program.Auditor)
+		}
+
+		if auditorEmail, exists := m.AuditorEmail(); exists {
+			create = create.SetAuditorEmail(auditorEmail)
+		} else {
+			create = create.SetAuditorEmail(program.AuditorEmail)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6454,11 +6504,16 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(program.Name).
 			SetDescription(program.Description).
 			SetStatus(program.Status).
+			SetProgramType(program.ProgramType).
+			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).
+			SetAuditFirm(program.AuditFirm).
+			SetAuditor(program.Auditor).
+			SetAuditorEmail(program.AuditorEmail).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7769,10 +7824,6 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTitle(title)
 	}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -7891,12 +7942,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTitle(task.Title)
 		}
 
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(task.Description)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -7981,7 +8026,6 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(task.Tags).
 			SetOwnerID(task.OwnerID).
 			SetTitle(task.Title).
-			SetDescription(task.Description).
 			SetDetails(task.Details).
 			SetStatus(task.Status).
 			SetCategory(task.Category).

@@ -87,8 +87,6 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Task_description(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":
@@ -195,8 +193,6 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Task_description(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":
@@ -347,8 +343,6 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_ownerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Task_description(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
 			case "status":

@@ -44,6 +44,10 @@ type Program struct {
 	Description string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status,omitempty"`
+	// the type of the program
+	ProgramType enums.ProgramType `json:"program_type,omitempty"`
+	// the short name of the compliance standard the program is based on, only used for framework type programs
+	FrameworkName string `json:"framework_name,omitempty"`
 	// the start date of the period
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
@@ -54,6 +58,12 @@ type Program struct {
 	AuditorWriteComments bool `json:"auditor_write_comments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditor_read_comments,omitempty"`
+	// the name of the audit firm conducting the audit
+	AuditFirm string `json:"audit_firm,omitempty"`
+	// the full name of the auditor conducting the audit
+	Auditor string `json:"auditor,omitempty"`
+	// the email of the auditor conducting the audit
+	AuditorEmail string `json:"auditor_email,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges        ProgramEdges `json:"edges"`
@@ -296,7 +306,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -395,6 +405,18 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.Status = enums.ProgramStatus(value.String)
 			}
+		case program.FieldProgramType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_type", values[i])
+			} else if value.Valid {
+				pr.ProgramType = enums.ProgramType(value.String)
+			}
+		case program.FieldFrameworkName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field framework_name", values[i])
+			} else if value.Valid {
+				pr.FrameworkName = value.String
+			}
 		case program.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_date", values[i])
@@ -424,6 +446,24 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field auditor_read_comments", values[i])
 			} else if value.Valid {
 				pr.AuditorReadComments = value.Bool
+			}
+		case program.FieldAuditFirm:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field audit_firm", values[i])
+			} else if value.Valid {
+				pr.AuditFirm = value.String
+			}
+		case program.FieldAuditor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor", values[i])
+			} else if value.Valid {
+				pr.Auditor = value.String
+			}
+		case program.FieldAuditorEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_email", values[i])
+			} else if value.Valid {
+				pr.AuditorEmail = value.String
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -587,6 +627,12 @@ func (pr *Program) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Status))
 	builder.WriteString(", ")
+	builder.WriteString("program_type=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ProgramType))
+	builder.WriteString(", ")
+	builder.WriteString("framework_name=")
+	builder.WriteString(pr.FrameworkName)
+	builder.WriteString(", ")
 	builder.WriteString("start_date=")
 	builder.WriteString(pr.StartDate.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -601,6 +647,15 @@ func (pr *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auditor_read_comments=")
 	builder.WriteString(fmt.Sprintf("%v", pr.AuditorReadComments))
+	builder.WriteString(", ")
+	builder.WriteString("audit_firm=")
+	builder.WriteString(pr.AuditFirm)
+	builder.WriteString(", ")
+	builder.WriteString("auditor=")
+	builder.WriteString(pr.Auditor)
+	builder.WriteString(", ")
+	builder.WriteString("auditor_email=")
+	builder.WriteString(pr.AuditorEmail)
 	builder.WriteByte(')')
 	return builder.String()
 }

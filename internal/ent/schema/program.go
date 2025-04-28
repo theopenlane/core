@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"net/mail"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -62,6 +64,19 @@ func (Program) Fields() []ent.Field {
 				entgql.OrderField("STATUS"),
 			).
 			Default(enums.ProgramStatusNotStarted.String()),
+		field.Enum("program_type").
+			Comment("the type of the program").
+			GoType(enums.ProgramType("")).
+			Annotations(
+				entgql.OrderField("PROGRAM_TYPE"),
+			).
+			Default(enums.ProgramTypeFramework.String()),
+		field.String("framework_name").
+			Comment("the short name of the compliance standard the program is based on, only used for framework type programs").
+			Optional().
+			Annotations(
+				entgql.OrderField("framework"),
+			),
 		field.Time("start_date").
 			Comment("the start date of the period").
 			Annotations(
@@ -83,6 +98,19 @@ func (Program) Fields() []ent.Field {
 		field.Bool("auditor_read_comments").
 			Comment("can the auditor read comments").
 			Default(false),
+		field.String("audit_firm").
+			Comment("the name of the audit firm conducting the audit").
+			Optional(),
+		field.String("auditor").
+			Comment("the full name of the auditor conducting the audit").
+			Optional(),
+		field.String("auditor_email").
+			Comment("the email of the auditor conducting the audit").
+			Validate(func(email string) error {
+				_, err := mail.ParseAddress(email)
+				return err
+			}).
+			Optional(),
 	}
 }
 

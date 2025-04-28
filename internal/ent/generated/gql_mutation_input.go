@@ -6101,11 +6101,16 @@ type CreateProgramInput struct {
 	Name                 string
 	Description          *string
 	Status               *enums.ProgramStatus
+	ProgramType          *enums.ProgramType
+	FrameworkName        *string
 	StartDate            *time.Time
 	EndDate              *time.Time
 	AuditorReady         *bool
 	AuditorWriteComments *bool
 	AuditorReadComments  *bool
+	AuditFirm            *string
+	Auditor              *string
+	AuditorEmail         *string
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
@@ -6136,6 +6141,12 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if v := i.ProgramType; v != nil {
+		m.SetProgramType(*v)
+	}
+	if v := i.FrameworkName; v != nil {
+		m.SetFrameworkName(*v)
+	}
 	if v := i.StartDate; v != nil {
 		m.SetStartDate(*v)
 	}
@@ -6150,6 +6161,15 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
+	}
+	if v := i.AuditFirm; v != nil {
+		m.SetAuditFirm(*v)
+	}
+	if v := i.Auditor; v != nil {
+		m.SetAuditor(*v)
+	}
+	if v := i.AuditorEmail; v != nil {
+		m.SetAuditorEmail(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6216,6 +6236,9 @@ type UpdateProgramInput struct {
 	ClearDescription          bool
 	Description               *string
 	Status                    *enums.ProgramStatus
+	ProgramType               *enums.ProgramType
+	ClearFrameworkName        bool
+	FrameworkName             *string
 	ClearStartDate            bool
 	StartDate                 *time.Time
 	ClearEndDate              bool
@@ -6223,6 +6246,12 @@ type UpdateProgramInput struct {
 	AuditorReady              *bool
 	AuditorWriteComments      *bool
 	AuditorReadComments       *bool
+	ClearAuditFirm            bool
+	AuditFirm                 *string
+	ClearAuditor              bool
+	Auditor                   *string
+	ClearAuditorEmail         bool
+	AuditorEmail              *string
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearBlockedGroups        bool
@@ -6295,6 +6324,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	if v := i.ProgramType; v != nil {
+		m.SetProgramType(*v)
+	}
+	if i.ClearFrameworkName {
+		m.ClearFrameworkName()
+	}
+	if v := i.FrameworkName; v != nil {
+		m.SetFrameworkName(*v)
+	}
 	if i.ClearStartDate {
 		m.ClearStartDate()
 	}
@@ -6315,6 +6353,24 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
+	}
+	if i.ClearAuditFirm {
+		m.ClearAuditFirm()
+	}
+	if v := i.AuditFirm; v != nil {
+		m.SetAuditFirm(*v)
+	}
+	if i.ClearAuditor {
+		m.ClearAuditor()
+	}
+	if v := i.Auditor; v != nil {
+		m.SetAuditor(*v)
+	}
+	if i.ClearAuditorEmail {
+		m.ClearAuditorEmail()
+	}
+	if v := i.AuditorEmail; v != nil {
+		m.SetAuditorEmail(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -7705,7 +7761,6 @@ func (c *TFASettingUpdateOne) SetInput(i UpdateTFASettingInput) *TFASettingUpdat
 type CreateTaskInput struct {
 	Tags                []string
 	Title               string
-	Description         *string
 	Details             *string
 	Status              *enums.TaskStatus
 	Category            *string
@@ -7731,9 +7786,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 		m.SetTags(v)
 	}
 	m.SetTitle(i.Title)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
 	}
@@ -7799,8 +7851,6 @@ type UpdateTaskInput struct {
 	Tags                      []string
 	AppendTags                []string
 	Title                     *string
-	ClearDescription          bool
-	Description               *string
 	ClearDetails              bool
 	Details                   *string
 	Status                    *enums.TaskStatus
@@ -7856,12 +7906,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()

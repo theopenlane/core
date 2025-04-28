@@ -94,7 +94,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Task) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Description", "Details", "Category", "Assignee", "Assigner", "Status", "Due")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Details", "Category", "Assignee", "Assigner", "Status", "Due")
 
 	for _, i := range out {
 		assignee := ""
@@ -107,7 +107,7 @@ func tableOutput(out []openlaneclient.Task) {
 			dueDate = i.Due.String()
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Description, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)
+		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)
 
 		if i.Comments != nil {
 			writer.AddRow("----------------------------------------")

@@ -149,12 +149,12 @@ type TaskBuilder struct {
 	client *client
 
 	// Fields
-	Title       string
-	Description string
-	Status      enums.TaskStatus
-	AssigneeID  string
-	Due         time.Time
-	GroupID     string
+	Title      string
+	Details    string
+	Status     enums.TaskStatus
+	AssigneeID string
+	Due        time.Time
+	GroupID    string
 }
 
 type ProgramBuilder struct {
@@ -723,13 +723,13 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		c.Title = gofakeit.AppName()
 	}
 
-	if c.Description == "" {
-		c.Description = gofakeit.HipsterSentence(5)
+	if c.Details == "" {
+		c.Details = gofakeit.HipsterSentence(5)
 	}
 
 	taskCreate := c.client.db.Task.Create().
 		SetTitle(c.Title).
-		SetDescription(c.Description)
+		SetDetails(c.Details)
 
 	if c.Status != "" {
 		taskCreate.SetStatus(c.Status)

@@ -118,6 +118,11 @@ func Description(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldDescription, v))
 }
 
+// FrameworkName applies equality check predicate on the "framework_name" field. It's identical to FrameworkNameEQ.
+func FrameworkName(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFrameworkName, v))
+}
+
 // StartDate applies equality check predicate on the "start_date" field. It's identical to StartDateEQ.
 func StartDate(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldStartDate, v))
@@ -141,6 +146,21 @@ func AuditorWriteComments(v bool) predicate.Program {
 // AuditorReadComments applies equality check predicate on the "auditor_read_comments" field. It's identical to AuditorReadCommentsEQ.
 func AuditorReadComments(v bool) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldAuditorReadComments, v))
+}
+
+// AuditFirm applies equality check predicate on the "audit_firm" field. It's identical to AuditFirmEQ.
+func AuditFirm(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditFirm, v))
+}
+
+// Auditor applies equality check predicate on the "auditor" field. It's identical to AuditorEQ.
+func Auditor(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditor, v))
+}
+
+// AuditorEmail applies equality check predicate on the "auditor_email" field. It's identical to AuditorEmailEQ.
+func AuditorEmail(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditorEmail, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -838,6 +858,111 @@ func StatusNotIn(vs ...enums.ProgramStatus) predicate.Program {
 	return predicate.Program(sql.FieldNotIn(FieldStatus, v...))
 }
 
+// ProgramTypeEQ applies the EQ predicate on the "program_type" field.
+func ProgramTypeEQ(v enums.ProgramType) predicate.Program {
+	vc := v
+	return predicate.Program(sql.FieldEQ(FieldProgramType, vc))
+}
+
+// ProgramTypeNEQ applies the NEQ predicate on the "program_type" field.
+func ProgramTypeNEQ(v enums.ProgramType) predicate.Program {
+	vc := v
+	return predicate.Program(sql.FieldNEQ(FieldProgramType, vc))
+}
+
+// ProgramTypeIn applies the In predicate on the "program_type" field.
+func ProgramTypeIn(vs ...enums.ProgramType) predicate.Program {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Program(sql.FieldIn(FieldProgramType, v...))
+}
+
+// ProgramTypeNotIn applies the NotIn predicate on the "program_type" field.
+func ProgramTypeNotIn(vs ...enums.ProgramType) predicate.Program {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Program(sql.FieldNotIn(FieldProgramType, v...))
+}
+
+// FrameworkNameEQ applies the EQ predicate on the "framework_name" field.
+func FrameworkNameEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFrameworkName, v))
+}
+
+// FrameworkNameNEQ applies the NEQ predicate on the "framework_name" field.
+func FrameworkNameNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldFrameworkName, v))
+}
+
+// FrameworkNameIn applies the In predicate on the "framework_name" field.
+func FrameworkNameIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldFrameworkName, vs...))
+}
+
+// FrameworkNameNotIn applies the NotIn predicate on the "framework_name" field.
+func FrameworkNameNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldFrameworkName, vs...))
+}
+
+// FrameworkNameGT applies the GT predicate on the "framework_name" field.
+func FrameworkNameGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldFrameworkName, v))
+}
+
+// FrameworkNameGTE applies the GTE predicate on the "framework_name" field.
+func FrameworkNameGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldFrameworkName, v))
+}
+
+// FrameworkNameLT applies the LT predicate on the "framework_name" field.
+func FrameworkNameLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldFrameworkName, v))
+}
+
+// FrameworkNameLTE applies the LTE predicate on the "framework_name" field.
+func FrameworkNameLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldFrameworkName, v))
+}
+
+// FrameworkNameContains applies the Contains predicate on the "framework_name" field.
+func FrameworkNameContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldFrameworkName, v))
+}
+
+// FrameworkNameHasPrefix applies the HasPrefix predicate on the "framework_name" field.
+func FrameworkNameHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldFrameworkName, v))
+}
+
+// FrameworkNameHasSuffix applies the HasSuffix predicate on the "framework_name" field.
+func FrameworkNameHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldFrameworkName, v))
+}
+
+// FrameworkNameIsNil applies the IsNil predicate on the "framework_name" field.
+func FrameworkNameIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldFrameworkName))
+}
+
+// FrameworkNameNotNil applies the NotNil predicate on the "framework_name" field.
+func FrameworkNameNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldFrameworkName))
+}
+
+// FrameworkNameEqualFold applies the EqualFold predicate on the "framework_name" field.
+func FrameworkNameEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldFrameworkName, v))
+}
+
+// FrameworkNameContainsFold applies the ContainsFold predicate on the "framework_name" field.
+func FrameworkNameContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldFrameworkName, v))
+}
+
 // StartDateEQ applies the EQ predicate on the "start_date" field.
 func StartDateEQ(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldStartDate, v))
@@ -966,6 +1091,231 @@ func AuditorReadCommentsEQ(v bool) predicate.Program {
 // AuditorReadCommentsNEQ applies the NEQ predicate on the "auditor_read_comments" field.
 func AuditorReadCommentsNEQ(v bool) predicate.Program {
 	return predicate.Program(sql.FieldNEQ(FieldAuditorReadComments, v))
+}
+
+// AuditFirmEQ applies the EQ predicate on the "audit_firm" field.
+func AuditFirmEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditFirm, v))
+}
+
+// AuditFirmNEQ applies the NEQ predicate on the "audit_firm" field.
+func AuditFirmNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldAuditFirm, v))
+}
+
+// AuditFirmIn applies the In predicate on the "audit_firm" field.
+func AuditFirmIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldAuditFirm, vs...))
+}
+
+// AuditFirmNotIn applies the NotIn predicate on the "audit_firm" field.
+func AuditFirmNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldAuditFirm, vs...))
+}
+
+// AuditFirmGT applies the GT predicate on the "audit_firm" field.
+func AuditFirmGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldAuditFirm, v))
+}
+
+// AuditFirmGTE applies the GTE predicate on the "audit_firm" field.
+func AuditFirmGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldAuditFirm, v))
+}
+
+// AuditFirmLT applies the LT predicate on the "audit_firm" field.
+func AuditFirmLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldAuditFirm, v))
+}
+
+// AuditFirmLTE applies the LTE predicate on the "audit_firm" field.
+func AuditFirmLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldAuditFirm, v))
+}
+
+// AuditFirmContains applies the Contains predicate on the "audit_firm" field.
+func AuditFirmContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldAuditFirm, v))
+}
+
+// AuditFirmHasPrefix applies the HasPrefix predicate on the "audit_firm" field.
+func AuditFirmHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldAuditFirm, v))
+}
+
+// AuditFirmHasSuffix applies the HasSuffix predicate on the "audit_firm" field.
+func AuditFirmHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldAuditFirm, v))
+}
+
+// AuditFirmIsNil applies the IsNil predicate on the "audit_firm" field.
+func AuditFirmIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldAuditFirm))
+}
+
+// AuditFirmNotNil applies the NotNil predicate on the "audit_firm" field.
+func AuditFirmNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldAuditFirm))
+}
+
+// AuditFirmEqualFold applies the EqualFold predicate on the "audit_firm" field.
+func AuditFirmEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldAuditFirm, v))
+}
+
+// AuditFirmContainsFold applies the ContainsFold predicate on the "audit_firm" field.
+func AuditFirmContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldAuditFirm, v))
+}
+
+// AuditorEQ applies the EQ predicate on the "auditor" field.
+func AuditorEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditor, v))
+}
+
+// AuditorNEQ applies the NEQ predicate on the "auditor" field.
+func AuditorNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldAuditor, v))
+}
+
+// AuditorIn applies the In predicate on the "auditor" field.
+func AuditorIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldAuditor, vs...))
+}
+
+// AuditorNotIn applies the NotIn predicate on the "auditor" field.
+func AuditorNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldAuditor, vs...))
+}
+
+// AuditorGT applies the GT predicate on the "auditor" field.
+func AuditorGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldAuditor, v))
+}
+
+// AuditorGTE applies the GTE predicate on the "auditor" field.
+func AuditorGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldAuditor, v))
+}
+
+// AuditorLT applies the LT predicate on the "auditor" field.
+func AuditorLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldAuditor, v))
+}
+
+// AuditorLTE applies the LTE predicate on the "auditor" field.
+func AuditorLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldAuditor, v))
+}
+
+// AuditorContains applies the Contains predicate on the "auditor" field.
+func AuditorContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldAuditor, v))
+}
+
+// AuditorHasPrefix applies the HasPrefix predicate on the "auditor" field.
+func AuditorHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldAuditor, v))
+}
+
+// AuditorHasSuffix applies the HasSuffix predicate on the "auditor" field.
+func AuditorHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldAuditor, v))
+}
+
+// AuditorIsNil applies the IsNil predicate on the "auditor" field.
+func AuditorIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldAuditor))
+}
+
+// AuditorNotNil applies the NotNil predicate on the "auditor" field.
+func AuditorNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldAuditor))
+}
+
+// AuditorEqualFold applies the EqualFold predicate on the "auditor" field.
+func AuditorEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldAuditor, v))
+}
+
+// AuditorContainsFold applies the ContainsFold predicate on the "auditor" field.
+func AuditorContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldAuditor, v))
+}
+
+// AuditorEmailEQ applies the EQ predicate on the "auditor_email" field.
+func AuditorEmailEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldAuditorEmail, v))
+}
+
+// AuditorEmailNEQ applies the NEQ predicate on the "auditor_email" field.
+func AuditorEmailNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldAuditorEmail, v))
+}
+
+// AuditorEmailIn applies the In predicate on the "auditor_email" field.
+func AuditorEmailIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldAuditorEmail, vs...))
+}
+
+// AuditorEmailNotIn applies the NotIn predicate on the "auditor_email" field.
+func AuditorEmailNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldAuditorEmail, vs...))
+}
+
+// AuditorEmailGT applies the GT predicate on the "auditor_email" field.
+func AuditorEmailGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldAuditorEmail, v))
+}
+
+// AuditorEmailGTE applies the GTE predicate on the "auditor_email" field.
+func AuditorEmailGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldAuditorEmail, v))
+}
+
+// AuditorEmailLT applies the LT predicate on the "auditor_email" field.
+func AuditorEmailLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldAuditorEmail, v))
+}
+
+// AuditorEmailLTE applies the LTE predicate on the "auditor_email" field.
+func AuditorEmailLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldAuditorEmail, v))
+}
+
+// AuditorEmailContains applies the Contains predicate on the "auditor_email" field.
+func AuditorEmailContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldAuditorEmail, v))
+}
+
+// AuditorEmailHasPrefix applies the HasPrefix predicate on the "auditor_email" field.
+func AuditorEmailHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldAuditorEmail, v))
+}
+
+// AuditorEmailHasSuffix applies the HasSuffix predicate on the "auditor_email" field.
+func AuditorEmailHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldAuditorEmail, v))
+}
+
+// AuditorEmailIsNil applies the IsNil predicate on the "auditor_email" field.
+func AuditorEmailIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldAuditorEmail))
+}
+
+// AuditorEmailNotNil applies the NotNil predicate on the "auditor_email" field.
+func AuditorEmailNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldAuditorEmail))
+}
+
+// AuditorEmailEqualFold applies the EqualFold predicate on the "auditor_email" field.
+func AuditorEmailEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldAuditorEmail, v))
+}
+
+// AuditorEmailContainsFold applies the ContainsFold predicate on the "auditor_email" field.
+func AuditorEmailContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldAuditorEmail, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
