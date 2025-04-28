@@ -57,9 +57,8 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	for _, credential := range webAuthns {
 		credentials = append(credentials, webauthn.Credential{
-			ID:              credential.CredentialID,
-			PublicKey:       credential.PublicKey,
-			AttestationType: credential.AttestationType,
+			ID:        credential.CredentialID,
+			PublicKey: credential.PublicKey,
 		})
 	}
 
