@@ -536,5 +536,20 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    webauthns {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
   }
 }

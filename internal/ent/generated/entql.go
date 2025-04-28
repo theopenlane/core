@@ -2385,7 +2385,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldCredentialID:    {Type: field.TypeBytes, Column: webauthn.FieldCredentialID},
 			webauthn.FieldPublicKey:       {Type: field.TypeBytes, Column: webauthn.FieldPublicKey},
 			webauthn.FieldAttestationType: {Type: field.TypeString, Column: webauthn.FieldAttestationType},
-			webauthn.FieldAaguid:          {Type: field.TypeBytes, Column: webauthn.FieldAaguid},
+			webauthn.FieldAaguid:          {Type: field.TypeOther, Column: webauthn.FieldAaguid},
 			webauthn.FieldSignCount:       {Type: field.TypeInt32, Column: webauthn.FieldSignCount},
 			webauthn.FieldTransports:      {Type: field.TypeJSON, Column: webauthn.FieldTransports},
 			webauthn.FieldBackupEligible:  {Type: field.TypeBool, Column: webauthn.FieldBackupEligible},
@@ -5971,12 +5971,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"webauthn",
+		"webauthns",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -19398,14 +19398,14 @@ func (f *UserFilter) WhereHasOrganizationsWith(preds ...predicate.Organization) 
 	})))
 }
 
-// WhereHasWebauthn applies a predicate to check if query has an edge webauthn.
-func (f *UserFilter) WhereHasWebauthn() {
-	f.Where(entql.HasEdge("webauthn"))
+// WhereHasWebauthns applies a predicate to check if query has an edge webauthns.
+func (f *UserFilter) WhereHasWebauthns() {
+	f.Where(entql.HasEdge("webauthns"))
 }
 
-// WhereHasWebauthnWith applies a predicate to check if query has an edge webauthn with a given conditions (other predicates).
-func (f *UserFilter) WhereHasWebauthnWith(preds ...predicate.Webauthn) {
-	f.Where(entql.HasEdgeWith("webauthn", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasWebauthnsWith applies a predicate to check if query has an edge webauthns with a given conditions (other predicates).
+func (f *UserFilter) WhereHasWebauthnsWith(preds ...predicate.Webauthn) {
+	f.Where(entql.HasEdgeWith("webauthns", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -20108,8 +20108,8 @@ func (f *WebauthnFilter) WhereAttestationType(p entql.StringP) {
 	f.Where(p.Field(webauthn.FieldAttestationType))
 }
 
-// WhereAaguid applies the entql []byte predicate on the aaguid field.
-func (f *WebauthnFilter) WhereAaguid(p entql.BytesP) {
+// WhereAaguid applies the entql other predicate on the aaguid field.
+func (f *WebauthnFilter) WhereAaguid(p entql.OtherP) {
 	f.Where(p.Field(webauthn.FieldAaguid))
 }
 

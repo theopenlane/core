@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/google/uuid"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
@@ -53,6 +54,10 @@ type TFASettingBuilder struct {
 	client *client
 
 	totpAllowed *bool
+}
+
+type WebauthnBuilder struct {
+	client *client
 }
 
 type OrgMemberBuilder struct {
@@ -433,6 +438,22 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 
 	return tf.client.db.TFASetting.Create().
 		SetTotpAllowed(*tf.totpAllowed).
+		SaveX(ctx)
+}
+
+// MustNew webauthn settings builder is used to create passkeys without the browser setup process
+func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webauthn {
+	uuidBytes, err := uuid.NewUUID()
+	require.NoError(t, err)
+
+	return w.client.db.Webauthn.Create().
+		SetAaguid(models.ToAAGUID(uuidBytes[:])).
+		SetAttestationType("type").
+		SetBackupEligible(true).
+		SetBackupState(true).
+		SetSignCount(10).
+		SetCredentialID([]byte(uuid.NewString())).
+		SetTransports([]string{uuid.NewString()}).
 		SaveX(ctx)
 }
 

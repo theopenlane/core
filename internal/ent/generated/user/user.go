@@ -74,8 +74,8 @@ const (
 	EdgeGroups = "groups"
 	// EdgeOrganizations holds the string denoting the organizations edge name in mutations.
 	EdgeOrganizations = "organizations"
-	// EdgeWebauthn holds the string denoting the webauthn edge name in mutations.
-	EdgeWebauthn = "webauthn"
+	// EdgeWebauthns holds the string denoting the webauthns edge name in mutations.
+	EdgeWebauthns = "webauthns"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
@@ -145,13 +145,13 @@ const (
 	// OrganizationsInverseTable is the table name for the Organization entity.
 	// It exists in this package in order to avoid circular dependency with the "organization" package.
 	OrganizationsInverseTable = "organizations"
-	// WebauthnTable is the table that holds the webauthn relation/edge.
-	WebauthnTable = "webauthns"
-	// WebauthnInverseTable is the table name for the Webauthn entity.
+	// WebauthnsTable is the table that holds the webauthns relation/edge.
+	WebauthnsTable = "webauthns"
+	// WebauthnsInverseTable is the table name for the Webauthn entity.
 	// It exists in this package in order to avoid circular dependency with the "webauthn" package.
-	WebauthnInverseTable = "webauthns"
-	// WebauthnColumn is the table column denoting the webauthn relation/edge.
-	WebauthnColumn = "owner_id"
+	WebauthnsInverseTable = "webauthns"
+	// WebauthnsColumn is the table column denoting the webauthns relation/edge.
+	WebauthnsColumn = "owner_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "user_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -552,17 +552,17 @@ func ByOrganizations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByWebauthnCount orders the results by webauthn count.
-func ByWebauthnCount(opts ...sql.OrderTermOption) OrderOption {
+// ByWebauthnsCount orders the results by webauthns count.
+func ByWebauthnsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newWebauthnStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newWebauthnsStep(), opts...)
 	}
 }
 
-// ByWebauthn orders the results by webauthn terms.
-func ByWebauthn(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByWebauthns orders the results by webauthns terms.
+func ByWebauthns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newWebauthnStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newWebauthnsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -761,11 +761,11 @@ func newOrganizationsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, OrganizationsTable, OrganizationsPrimaryKey...),
 	)
 }
-func newWebauthnStep() *sqlgraph.Step {
+func newWebauthnsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(WebauthnInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, WebauthnTable, WebauthnColumn),
+		sqlgraph.To(WebauthnsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WebauthnsTable, WebauthnsColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

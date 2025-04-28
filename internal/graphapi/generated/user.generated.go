@@ -117,6 +117,8 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_groups(ctx, field)
 			case "organizations":
 				return ec.fieldContext_User_organizations(ctx, field)
+			case "webauthns":
+				return ec.fieldContext_User_webauthns(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
 			case "avatarFile":
@@ -237,6 +239,8 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_groups(ctx, field)
 			case "organizations":
 				return ec.fieldContext_User_organizations(ctx, field)
+			case "webauthns":
+				return ec.fieldContext_User_webauthns(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
 			case "avatarFile":
@@ -401,6 +405,8 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_groups(ctx, field)
 			case "organizations":
 				return ec.fieldContext_User_organizations(ctx, field)
+			case "webauthns":
+				return ec.fieldContext_User_webauthns(ctx, field)
 			case "files":
 				return ec.fieldContext_User_files(ctx, field)
 			case "avatarFile":

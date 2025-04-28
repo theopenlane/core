@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -108,7 +109,7 @@ func AttestationType(v string) predicate.Webauthn {
 }
 
 // Aaguid applies equality check predicate on the "aaguid" field. It's identical to AaguidEQ.
-func Aaguid(v []byte) predicate.Webauthn {
+func Aaguid(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldEQ(FieldAaguid, v))
 }
 
@@ -638,42 +639,42 @@ func AttestationTypeContainsFold(v string) predicate.Webauthn {
 }
 
 // AaguidEQ applies the EQ predicate on the "aaguid" field.
-func AaguidEQ(v []byte) predicate.Webauthn {
+func AaguidEQ(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldEQ(FieldAaguid, v))
 }
 
 // AaguidNEQ applies the NEQ predicate on the "aaguid" field.
-func AaguidNEQ(v []byte) predicate.Webauthn {
+func AaguidNEQ(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldNEQ(FieldAaguid, v))
 }
 
 // AaguidIn applies the In predicate on the "aaguid" field.
-func AaguidIn(vs ...[]byte) predicate.Webauthn {
+func AaguidIn(vs ...*models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldIn(FieldAaguid, vs...))
 }
 
 // AaguidNotIn applies the NotIn predicate on the "aaguid" field.
-func AaguidNotIn(vs ...[]byte) predicate.Webauthn {
+func AaguidNotIn(vs ...*models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldNotIn(FieldAaguid, vs...))
 }
 
 // AaguidGT applies the GT predicate on the "aaguid" field.
-func AaguidGT(v []byte) predicate.Webauthn {
+func AaguidGT(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldGT(FieldAaguid, v))
 }
 
 // AaguidGTE applies the GTE predicate on the "aaguid" field.
-func AaguidGTE(v []byte) predicate.Webauthn {
+func AaguidGTE(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldGTE(FieldAaguid, v))
 }
 
 // AaguidLT applies the LT predicate on the "aaguid" field.
-func AaguidLT(v []byte) predicate.Webauthn {
+func AaguidLT(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldLT(FieldAaguid, v))
 }
 
 // AaguidLTE applies the LTE predicate on the "aaguid" field.
-func AaguidLTE(v []byte) predicate.Webauthn {
+func AaguidLTE(v *models.AAGUID) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldLTE(FieldAaguid, v))
 }
 

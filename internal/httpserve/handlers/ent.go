@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user and login method used
@@ -198,12 +199,12 @@ func (h *Handler) getUserByID(ctx context.Context, id string) (
 	ctx = setAuthenticatedContext(ctx, user)
 
 	// Add webauthn to the response
-	webAuthns, err := user.QueryWebauthn().All(ctx)
+	webAuthns, err := user.QueryWebauthns().All(ctx)
 	if err != nil {
 		return user, ctx, err
 	}
 
-	user.Edges.Webauthn = webAuthns
+	user.Edges.Webauthns = webAuthns
 
 	return user, ctx, nil
 }
@@ -234,7 +235,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetOwnerID(user.ID).
 		SetTransports(transports).
 		SetAttestationType(credential.AttestationType).
-		SetAaguid(credential.Authenticator.AAGUID).
+		SetAaguid(models.ToAAGUID(credential.Authenticator.AAGUID)).
 		SetCredentialID(credential.ID).
 		SetPublicKey(credential.PublicKey).
 		SetBackupState(credential.Flags.BackupEligible).

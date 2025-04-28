@@ -1858,6 +1858,31 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 	return res, err
 }
 
+// Webauthns is the resolver for the webauthns field.
+func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) (*generated.WebauthnConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).Webauthn.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "webauthn"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWebauthnOrder(orderBy),
+		generated.WithWebauthnFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "webauthn"})
+	}
+
+	return res, err
+}
+
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
 

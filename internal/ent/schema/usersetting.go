@@ -66,6 +66,9 @@ func (UserSetting) Fields() []ent.Field {
 			Comment("whether the user has confirmed their email address"),
 		field.Bool("is_webauthn_allowed").
 			Comment("specifies a user may complete authentication by verifying a WebAuthn capable device").
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
 			Optional().
 			Default(false),
 		field.Bool("is_tfa_enabled").

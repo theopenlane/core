@@ -415,14 +415,14 @@ func (uc *UserCreate) AddOrganizations(o ...*Organization) *UserCreate {
 	return uc.AddOrganizationIDs(ids...)
 }
 
-// AddWebauthnIDs adds the "webauthn" edge to the Webauthn entity by IDs.
+// AddWebauthnIDs adds the "webauthns" edge to the Webauthn entity by IDs.
 func (uc *UserCreate) AddWebauthnIDs(ids ...string) *UserCreate {
 	uc.mutation.AddWebauthnIDs(ids...)
 	return uc
 }
 
-// AddWebauthn adds the "webauthn" edges to the Webauthn entity.
-func (uc *UserCreate) AddWebauthn(w ...*Webauthn) *UserCreate {
+// AddWebauthns adds the "webauthns" edges to the Webauthn entity.
+func (uc *UserCreate) AddWebauthns(w ...*Webauthn) *UserCreate {
 	ids := make([]string, len(w))
 	for i := range w {
 		ids[i] = w[i].ID
@@ -990,12 +990,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.WebauthnIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.WebauthnsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.WebauthnTable,
-			Columns: []string{user.WebauthnColumn},
+			Table:   user.WebauthnsTable,
+			Columns: []string{user.WebauthnsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString),

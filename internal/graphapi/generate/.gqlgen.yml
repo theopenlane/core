@@ -110,3 +110,5 @@ models:
       - github.com/theopenlane/core/pkg/models.VersionBump
   DateTime:
     model: github.com/theopenlane/core/pkg/models.DateTime
+  AAGUID:
+    model: github.com/theopenlane/core/pkg/models.AAGUID

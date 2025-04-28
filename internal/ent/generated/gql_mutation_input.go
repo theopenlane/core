@@ -8350,7 +8350,7 @@ type UpdateUserInput struct {
 	ClearOrganizations              bool
 	AddOrganizationIDs              []string
 	RemoveOrganizationIDs           []string
-	ClearWebauthn                   bool
+	ClearWebauthns                  bool
 	AddWebauthnIDs                  []string
 	RemoveWebauthnIDs               []string
 	ClearFiles                      bool
@@ -8509,8 +8509,8 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveOrganizationIDs; len(v) > 0 {
 		m.RemoveOrganizationIDs(v...)
 	}
-	if i.ClearWebauthn {
-		m.ClearWebauthn()
+	if i.ClearWebauthns {
+		m.ClearWebauthns()
 	}
 	if v := i.AddWebauthnIDs; len(v) > 0 {
 		m.AddWebauthnIDs(v...)
@@ -8603,17 +8603,16 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateUserSettingInput represents a mutation input for creating usersettings.
 type CreateUserSettingInput struct {
-	Tags              []string
-	Locked            *bool
-	SilencedAt        *time.Time
-	SuspendedAt       *time.Time
-	Status            *enums.UserStatus
-	EmailConfirmed    *bool
-	IsWebauthnAllowed *bool
-	IsTfaEnabled      *bool
-	UserID            *string
-	DefaultOrgID      *string
-	FileIDs           []string
+	Tags           []string
+	Locked         *bool
+	SilencedAt     *time.Time
+	SuspendedAt    *time.Time
+	Status         *enums.UserStatus
+	EmailConfirmed *bool
+	IsTfaEnabled   *bool
+	UserID         *string
+	DefaultOrgID   *string
+	FileIDs        []string
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
@@ -8635,9 +8634,6 @@ func (i *CreateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.EmailConfirmed; v != nil {
 		m.SetEmailConfirmed(*v)
-	}
-	if v := i.IsWebauthnAllowed; v != nil {
-		m.SetIsWebauthnAllowed(*v)
 	}
 	if v := i.IsTfaEnabled; v != nil {
 		m.SetIsTfaEnabled(*v)
@@ -8661,27 +8657,25 @@ func (c *UserSettingCreate) SetInput(i CreateUserSettingInput) *UserSettingCreat
 
 // UpdateUserSettingInput represents a mutation input for updating usersettings.
 type UpdateUserSettingInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	Locked                 *bool
-	ClearSilencedAt        bool
-	SilencedAt             *time.Time
-	ClearSuspendedAt       bool
-	SuspendedAt            *time.Time
-	Status                 *enums.UserStatus
-	EmailConfirmed         *bool
-	ClearIsWebauthnAllowed bool
-	IsWebauthnAllowed      *bool
-	ClearIsTfaEnabled      bool
-	IsTfaEnabled           *bool
-	ClearUser              bool
-	UserID                 *string
-	ClearDefaultOrg        bool
-	DefaultOrgID           *string
-	ClearFiles             bool
-	AddFileIDs             []string
-	RemoveFileIDs          []string
+	ClearTags         bool
+	Tags              []string
+	AppendTags        []string
+	Locked            *bool
+	ClearSilencedAt   bool
+	SilencedAt        *time.Time
+	ClearSuspendedAt  bool
+	SuspendedAt       *time.Time
+	Status            *enums.UserStatus
+	EmailConfirmed    *bool
+	ClearIsTfaEnabled bool
+	IsTfaEnabled      *bool
+	ClearUser         bool
+	UserID            *string
+	ClearDefaultOrg   bool
+	DefaultOrgID      *string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -8715,12 +8709,6 @@ func (i *UpdateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.EmailConfirmed; v != nil {
 		m.SetEmailConfirmed(*v)
-	}
-	if i.ClearIsWebauthnAllowed {
-		m.ClearIsWebauthnAllowed()
-	}
-	if v := i.IsWebauthnAllowed; v != nil {
-		m.SetIsWebauthnAllowed(*v)
 	}
 	if i.ClearIsTfaEnabled {
 		m.ClearIsTfaEnabled()
@@ -8759,6 +8747,56 @@ func (c *UserSettingUpdate) SetInput(i UpdateUserSettingInput) *UserSettingUpdat
 
 // SetInput applies the change-set in the UpdateUserSettingInput on the UserSettingUpdateOne builder.
 func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWebauthnInput represents a mutation input for creating webauthns.
+type CreateWebauthnInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateWebauthnInput on the WebauthnMutation builder.
+func (i *CreateWebauthnInput) Mutate(m *WebauthnMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateWebauthnInput on the WebauthnCreate builder.
+func (c *WebauthnCreate) SetInput(i CreateWebauthnInput) *WebauthnCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWebauthnInput represents a mutation input for updating webauthns.
+type UpdateWebauthnInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateWebauthnInput on the WebauthnMutation builder.
+func (i *UpdateWebauthnInput) Mutate(m *WebauthnMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWebauthnInput on the WebauthnUpdate builder.
+func (c *WebauthnUpdate) SetInput(i UpdateWebauthnInput) *WebauthnUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWebauthnInput on the WebauthnUpdateOne builder.
+func (c *WebauthnUpdateOne) SetInput(i UpdateWebauthnInput) *WebauthnUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

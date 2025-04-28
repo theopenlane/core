@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
 
 // Noder wraps the basic Node method.
@@ -459,6 +460,11 @@ var usersettinghistoryImplementors = []string{"UserSettingHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*UserSettingHistory) IsNode() {}
+
+var webauthnImplementors = []string{"Webauthn", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Webauthn) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -1180,6 +1186,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(usersettinghistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usersettinghistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case webauthn.Table:
+		query := c.Webauthn.Query().
+			Where(webauthn.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, webauthnImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2429,6 +2444,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.UserSettingHistory.Query().
 			Where(usersettinghistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, usersettinghistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case webauthn.Table:
+		query := c.Webauthn.Query().
+			Where(webauthn.IDIn(ids...))
+		query, err := query.CollectFields(ctx, webauthnImplementors...)
 		if err != nil {
 			return nil, err
 		}

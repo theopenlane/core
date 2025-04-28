@@ -338,7 +338,7 @@ func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHand
 			WebauthnCredentials: []webauthn.Credential{},
 		}
 
-		for _, cred := range u.Edges.Webauthn {
+		for _, cred := range u.Edges.Webauthns {
 			authnCred := webauthn.Credential{
 				ID:              cred.CredentialID,
 				PublicKey:       cred.PublicKey,

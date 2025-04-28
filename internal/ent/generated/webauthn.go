@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Webauthn is the model entity for the Webauthn schema.
@@ -38,7 +39,7 @@ type Webauthn struct {
 	// The attestation format used (if any) by the authenticator when creating the credential
 	AttestationType string `json:"attestation_type,omitempty"`
 	// The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
-	Aaguid []byte `json:"aaguid,omitempty"`
+	Aaguid *models.AAGUID `json:"aaguid,omitempty"`
 	// SignCount -Upon a new login operation, the Relying Party compares the stored signature counter value with the new signCount value returned in the assertions authenticator data. If this new signCount value is less than or equal to the stored value, a cloned authenticator may exist, or the authenticator may be malfunctioning
 	SignCount int32 `json:"sign_count,omitempty"`
 	// transport
@@ -84,8 +85,10 @@ func (*Webauthn) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case webauthn.FieldTags, webauthn.FieldCredentialID, webauthn.FieldPublicKey, webauthn.FieldAaguid, webauthn.FieldTransports:
+		case webauthn.FieldTags, webauthn.FieldCredentialID, webauthn.FieldPublicKey, webauthn.FieldTransports:
 			values[i] = new([]byte)
+		case webauthn.FieldAaguid:
+			values[i] = new(models.AAGUID)
 		case webauthn.FieldBackupEligible, webauthn.FieldBackupState, webauthn.FieldUserPresent, webauthn.FieldUserVerified:
 			values[i] = new(sql.NullBool)
 		case webauthn.FieldSignCount:
@@ -172,10 +175,10 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 				w.AttestationType = value.String
 			}
 		case webauthn.FieldAaguid:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*models.AAGUID); !ok {
 				return fmt.Errorf("unexpected type %T for field aaguid", values[i])
 			} else if value != nil {
-				w.Aaguid = *value
+				w.Aaguid = value
 			}
 		case webauthn.FieldSignCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

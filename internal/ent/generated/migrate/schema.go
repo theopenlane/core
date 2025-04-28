@@ -3417,7 +3417,7 @@ var (
 		{Name: "credential_id", Type: field.TypeBytes, Unique: true, Nullable: true},
 		{Name: "public_key", Type: field.TypeBytes, Nullable: true},
 		{Name: "attestation_type", Type: field.TypeString, Nullable: true},
-		{Name: "aaguid", Type: field.TypeBytes},
+		{Name: "aaguid", Type: field.TypeOther, SchemaType: map[string]string{"postgres": "bytea"}},
 		{Name: "sign_count", Type: field.TypeInt32},
 		{Name: "transports", Type: field.TypeJSON},
 		{Name: "backup_eligible", Type: field.TypeBool, Default: false},
@@ -3433,7 +3433,7 @@ var (
 		PrimaryKey: []*schema.Column{WebauthnsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "webauthns_users_webauthn",
+				Symbol:     "webauthns_users_webauthns",
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,

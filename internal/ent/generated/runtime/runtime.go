@@ -4237,8 +4237,10 @@ func init() {
 	webauthnMixin := schema.Webauthn{}.Mixin()
 	webauthnMixinHooks0 := webauthnMixin[0].Hooks()
 	webauthnMixinHooks3 := webauthnMixin[3].Hooks()
+	webauthnHooks := schema.Webauthn{}.Hooks()
 	webauthn.Hooks[0] = webauthnMixinHooks0[0]
 	webauthn.Hooks[1] = webauthnMixinHooks3[0]
+	webauthn.Hooks[2] = webauthnHooks[0]
 	webauthnMixinInters3 := webauthnMixin[3].Interceptors()
 	webauthn.Interceptors[0] = webauthnMixinInters3[0]
 	webauthnMixinFields0 := webauthnMixin[0].Fields()

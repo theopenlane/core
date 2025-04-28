@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
 
 var (
@@ -1464,6 +1465,38 @@ func adminSearchUserSettings(ctx context.Context, query string, after *entgql.Cu
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				usersetting.UserIDContainsFold(query), // search by UserID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWebauthn searches for Webauthn based on the query string looking for matches
+func searchWebauthns(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
+	request := withTransactionalMutation(ctx).Webauthn.Query().
+		Where(
+			webauthn.Or(
+				webauthn.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWebauthn searches for Webauthn based on the query string looking for matches
+func adminSearchWebauthns(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
+	request := withTransactionalMutation(ctx).Webauthn.Query().
+		Where(
+			webauthn.Or(
+				webauthn.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
 			),
 		)
 
