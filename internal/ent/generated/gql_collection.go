@@ -31120,6 +31120,11 @@ func (w *WebauthnQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, webauthn.FieldTags)
 				fieldSeen[webauthn.FieldTags] = struct{}{}
 			}
+		case "aaguid":
+			if _, ok := fieldSeen[webauthn.FieldAaguid]; !ok {
+				selectedFields = append(selectedFields, webauthn.FieldAaguid)
+				fieldSeen[webauthn.FieldAaguid] = struct{}{}
+			}
 		case "backupEligible":
 			if _, ok := fieldSeen[webauthn.FieldBackupEligible]; !ok {
 				selectedFields = append(selectedFields, webauthn.FieldBackupEligible)

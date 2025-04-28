@@ -2377,7 +2377,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldCredentialID:    {Type: field.TypeBytes, Column: webauthn.FieldCredentialID},
 			webauthn.FieldPublicKey:       {Type: field.TypeBytes, Column: webauthn.FieldPublicKey},
 			webauthn.FieldAttestationType: {Type: field.TypeString, Column: webauthn.FieldAttestationType},
-			webauthn.FieldAaguid:          {Type: field.TypeBytes, Column: webauthn.FieldAaguid},
+			webauthn.FieldAaguid:          {Type: field.TypeOther, Column: webauthn.FieldAaguid},
 			webauthn.FieldSignCount:       {Type: field.TypeInt32, Column: webauthn.FieldSignCount},
 			webauthn.FieldTransports:      {Type: field.TypeJSON, Column: webauthn.FieldTransports},
 			webauthn.FieldBackupEligible:  {Type: field.TypeBool, Column: webauthn.FieldBackupEligible},
@@ -20060,8 +20060,8 @@ func (f *WebauthnFilter) WhereAttestationType(p entql.StringP) {
 	f.Where(p.Field(webauthn.FieldAttestationType))
 }
 
-// WhereAaguid applies the entql []byte predicate on the aaguid field.
-func (f *WebauthnFilter) WhereAaguid(p entql.BytesP) {
+// WhereAaguid applies the entql other predicate on the aaguid field.
+func (f *WebauthnFilter) WhereAaguid(p entql.OtherP) {
 	f.Where(p.Field(webauthn.FieldAaguid))
 }
 

@@ -24737,6 +24737,8 @@ type Webauthn struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty,omitzero"`
+	// The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
+	Aaguid models.AAGUID `json:"aaguid"`
 	// Flag backup eligible indicates the credential is able to be backed up and/or sync'd between devices. This should NEVER change
 	BackupEligible bool `json:"backupEligible"`
 	// Flag backup state indicates the credential has been backed up and/or sync'd

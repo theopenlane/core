@@ -40,6 +40,22 @@ import (
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAAGUID(ctx context.Context, v any) (*models.AAGUID, error) {
+	var res = new(models.AAGUID)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAAGUID(ctx context.Context, sel ast.SelectionSet, v *models.AAGUID) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, v any) (models.AssessmentMethod, error) {
 	var res models.AssessmentMethod
 	err := res.UnmarshalGQL(v)

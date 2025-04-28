@@ -3,10 +3,13 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
@@ -55,11 +58,15 @@ func (Webauthn) Fields() []ent.Field {
 			).
 			Comment("The attestation format used (if any) by the authenticator when creating the credential").
 			Optional(),
-		field.Bytes("aaguid").
+		field.Other("aaguid", &models.AAGUID{}).
 			Annotations(
-				entgql.Skip(entgql.SkipAll),
+				entgql.Skip(^entgql.SkipType),
 			).
 			Comment("The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought").
+			SchemaType(map[string]string{
+				// keep existing data safe and intact else uuid might have been the best option here
+				dialect.Postgres: "bytea",
+			}).
 			Immutable(),
 		field.Int32("sign_count").
 			Annotations(
@@ -125,6 +132,12 @@ func (Webauthn) Annotations() []schema.Annotation {
 	}
 }
 
-func (w Webauthn) Edges() []ent.Edge {
+func (Webauthn) Edges() []ent.Edge {
 	return []ent.Edge{}
+}
+
+func (Webauthn) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookWebauthDelete(),
+	}
 }

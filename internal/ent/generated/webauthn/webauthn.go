@@ -97,7 +97,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
+	Hooks        [3]ent.Hook
 	Interceptors [1]ent.Interceptor
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -155,6 +155,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByAttestationType orders the results by the attestation_type field.
 func ByAttestationType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAttestationType, opts...).ToFunc()
+}
+
+// ByAaguid orders the results by the aaguid field.
+func ByAaguid(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAaguid, opts...).ToFunc()
 }
 
 // BySignCount orders the results by the sign_count field.

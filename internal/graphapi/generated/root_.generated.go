@@ -3729,6 +3729,7 @@ type ComplexityRoot struct {
 	}
 
 	Webauthn struct {
+		Aaguid         func(childComplexity int) int
 		BackupEligible func(childComplexity int) int
 		BackupState    func(childComplexity int) int
 		CreatedAt      func(childComplexity int) int
@@ -24413,6 +24414,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserUpdatePayload.User(childComplexity), true
+
+	case "Webauthn.aaguid":
+		if e.complexity.Webauthn.Aaguid == nil {
+			break
+		}
+
+		return e.complexity.Webauthn.Aaguid(childComplexity), true
 
 	case "Webauthn.backupEligible":
 		if e.complexity.Webauthn.BackupEligible == nil {
@@ -66145,6 +66153,10 @@ type Webauthn implements Node {
   """
   tags: [String!]
   """
+  The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
+  """
+  aaguid: AAGUID!
+  """
   Flag backup eligible indicates the credential is able to be backed up and/or sync'd between devices. This should NEVER change
   """
   backupEligible: Boolean!
@@ -68801,6 +68813,8 @@ scalar VersionBump
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z ) 
 """
 scalar DateTime
+
+scalar AAGUID
 `, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """

@@ -39616,6 +39616,10 @@ type Webauthn implements Node {
   """
   tags: [String!]
   """
+  The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
+  """
+  aaguid: AAGUID!
+  """
   Flag backup eligible indicates the credential is able to be backed up and/or sync'd between devices. This should NEVER change
   """
   backupEligible: Boolean!

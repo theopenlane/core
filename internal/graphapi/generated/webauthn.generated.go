@@ -77,6 +77,8 @@ func (ec *executionContext) fieldContext_WebauthnBulkCreatePayload_webauthns(_ c
 				return ec.fieldContext_Webauthn_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Webauthn_tags(ctx, field)
+			case "aaguid":
+				return ec.fieldContext_Webauthn_aaguid(ctx, field)
 			case "backupEligible":
 				return ec.fieldContext_Webauthn_backupEligible(ctx, field)
 			case "backupState":
@@ -141,6 +143,8 @@ func (ec *executionContext) fieldContext_WebauthnCreatePayload_webauthn(_ contex
 				return ec.fieldContext_Webauthn_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Webauthn_tags(ctx, field)
+			case "aaguid":
+				return ec.fieldContext_Webauthn_aaguid(ctx, field)
 			case "backupEligible":
 				return ec.fieldContext_Webauthn_backupEligible(ctx, field)
 			case "backupState":
@@ -249,6 +253,8 @@ func (ec *executionContext) fieldContext_WebauthnUpdatePayload_webauthn(_ contex
 				return ec.fieldContext_Webauthn_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Webauthn_tags(ctx, field)
+			case "aaguid":
+				return ec.fieldContext_Webauthn_aaguid(ctx, field)
 			case "backupEligible":
 				return ec.fieldContext_Webauthn_backupEligible(ctx, field)
 			case "backupState":

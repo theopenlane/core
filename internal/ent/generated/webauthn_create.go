@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // WebauthnCreate is the builder for creating a Webauthn entity.
@@ -116,8 +117,8 @@ func (wc *WebauthnCreate) SetNillableAttestationType(s *string) *WebauthnCreate 
 }
 
 // SetAaguid sets the "aaguid" field.
-func (wc *WebauthnCreate) SetAaguid(b []byte) *WebauthnCreate {
-	wc.mutation.SetAaguid(b)
+func (wc *WebauthnCreate) SetAaguid(m *models.AAGUID) *WebauthnCreate {
+	wc.mutation.SetAaguid(m)
 	return wc
 }
 
@@ -387,7 +388,7 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 		_node.AttestationType = value
 	}
 	if value, ok := wc.mutation.Aaguid(); ok {
-		_spec.SetField(webauthn.FieldAaguid, field.TypeBytes, value)
+		_spec.SetField(webauthn.FieldAaguid, field.TypeOther, value)
 		_node.Aaguid = value
 	}
 	if value, ok := wc.mutation.SignCount(); ok {

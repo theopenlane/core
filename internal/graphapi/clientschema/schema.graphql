@@ -1,6 +1,7 @@
 directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+scalar AAGUID
 type APIToken implements Node {
 	id: ID!
 	createdAt: Time
@@ -45364,6 +45365,10 @@ type Webauthn implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
+	"""
+	aaguid: AAGUID!
 	"""
 	Flag backup eligible indicates the credential is able to be backed up and/or sync'd between devices. This should NEVER change
 	"""
