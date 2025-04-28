@@ -4916,8 +4916,6 @@ type CreateUserSettingInput struct {
 	Status *enums.UserStatus `json:"status,omitempty"`
 	// whether the user has confirmed their email address
 	EmailConfirmed *bool `json:"emailConfirmed,omitempty"`
-	// specifies a user may complete authentication by verifying a WebAuthn capable device
-	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
 	IsTfaEnabled *bool    `json:"isTfaEnabled,omitempty"`
 	UserID       *string  `json:"userID,omitempty"`
@@ -23577,9 +23575,6 @@ type UpdateUserSettingInput struct {
 	Status *enums.UserStatus `json:"status,omitempty"`
 	// whether the user has confirmed their email address
 	EmailConfirmed *bool `json:"emailConfirmed,omitempty"`
-	// specifies a user may complete authentication by verifying a WebAuthn capable device
-	IsWebauthnAllowed      *bool `json:"isWebauthnAllowed,omitempty"`
-	ClearIsWebauthnAllowed *bool `json:"clearIsWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
 	IsTfaEnabled      *bool    `json:"isTfaEnabled,omitempty"`
 	ClearIsTfaEnabled *bool    `json:"clearIsTfaEnabled,omitempty"`
@@ -24356,11 +24351,6 @@ type UserSettingHistoryWhereInput struct {
 	// email_confirmed field predicates
 	EmailConfirmed    *bool `json:"emailConfirmed,omitempty"`
 	EmailConfirmedNeq *bool `json:"emailConfirmedNEQ,omitempty"`
-	// is_webauthn_allowed field predicates
-	IsWebauthnAllowed       *bool `json:"isWebauthnAllowed,omitempty"`
-	IsWebauthnAllowedNeq    *bool `json:"isWebauthnAllowedNEQ,omitempty"`
-	IsWebauthnAllowedIsNil  *bool `json:"isWebauthnAllowedIsNil,omitempty"`
-	IsWebauthnAllowedNotNil *bool `json:"isWebauthnAllowedNotNil,omitempty"`
 	// is_tfa_enabled field predicates
 	IsTfaEnabled       *bool `json:"isTfaEnabled,omitempty"`
 	IsTfaEnabledNeq    *bool `json:"isTfaEnabledNEQ,omitempty"`
@@ -24529,11 +24519,6 @@ type UserSettingWhereInput struct {
 	// email_confirmed field predicates
 	EmailConfirmed    *bool `json:"emailConfirmed,omitempty"`
 	EmailConfirmedNeq *bool `json:"emailConfirmedNEQ,omitempty"`
-	// is_webauthn_allowed field predicates
-	IsWebauthnAllowed       *bool `json:"isWebauthnAllowed,omitempty"`
-	IsWebauthnAllowedNeq    *bool `json:"isWebauthnAllowedNEQ,omitempty"`
-	IsWebauthnAllowedIsNil  *bool `json:"isWebauthnAllowedIsNil,omitempty"`
-	IsWebauthnAllowedNotNil *bool `json:"isWebauthnAllowedNotNil,omitempty"`
 	// is_tfa_enabled field predicates
 	IsTfaEnabled       *bool `json:"isTfaEnabled,omitempty"`
 	IsTfaEnabledNeq    *bool `json:"isTfaEnabledNEQ,omitempty"`

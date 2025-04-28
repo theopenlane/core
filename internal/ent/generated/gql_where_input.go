@@ -69939,12 +69939,6 @@ type UserSettingWhereInput struct {
 	EmailConfirmed    *bool `json:"emailConfirmed,omitempty"`
 	EmailConfirmedNEQ *bool `json:"emailConfirmedNEQ,omitempty"`
 
-	// "is_webauthn_allowed" field predicates.
-	IsWebauthnAllowed       *bool `json:"isWebauthnAllowed,omitempty"`
-	IsWebauthnAllowedNEQ    *bool `json:"isWebauthnAllowedNEQ,omitempty"`
-	IsWebauthnAllowedIsNil  bool  `json:"isWebauthnAllowedIsNil,omitempty"`
-	IsWebauthnAllowedNotNil bool  `json:"isWebauthnAllowedNotNil,omitempty"`
-
 	// "is_tfa_enabled" field predicates.
 	IsTfaEnabled       *bool `json:"isTfaEnabled,omitempty"`
 	IsTfaEnabledNEQ    *bool `json:"isTfaEnabledNEQ,omitempty"`
@@ -70419,18 +70413,6 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 	if i.EmailConfirmedNEQ != nil {
 		predicates = append(predicates, usersetting.EmailConfirmedNEQ(*i.EmailConfirmedNEQ))
 	}
-	if i.IsWebauthnAllowed != nil {
-		predicates = append(predicates, usersetting.IsWebauthnAllowedEQ(*i.IsWebauthnAllowed))
-	}
-	if i.IsWebauthnAllowedNEQ != nil {
-		predicates = append(predicates, usersetting.IsWebauthnAllowedNEQ(*i.IsWebauthnAllowedNEQ))
-	}
-	if i.IsWebauthnAllowedIsNil {
-		predicates = append(predicates, usersetting.IsWebauthnAllowedIsNil())
-	}
-	if i.IsWebauthnAllowedNotNil {
-		predicates = append(predicates, usersetting.IsWebauthnAllowedNotNil())
-	}
 	if i.IsTfaEnabled != nil {
 		predicates = append(predicates, usersetting.IsTfaEnabledEQ(*i.IsTfaEnabled))
 	}
@@ -70701,12 +70683,6 @@ type UserSettingHistoryWhereInput struct {
 	// "email_confirmed" field predicates.
 	EmailConfirmed    *bool `json:"emailConfirmed,omitempty"`
 	EmailConfirmedNEQ *bool `json:"emailConfirmedNEQ,omitempty"`
-
-	// "is_webauthn_allowed" field predicates.
-	IsWebauthnAllowed       *bool `json:"isWebauthnAllowed,omitempty"`
-	IsWebauthnAllowedNEQ    *bool `json:"isWebauthnAllowedNEQ,omitempty"`
-	IsWebauthnAllowedIsNil  bool  `json:"isWebauthnAllowedIsNil,omitempty"`
-	IsWebauthnAllowedNotNil bool  `json:"isWebauthnAllowedNotNil,omitempty"`
 
 	// "is_tfa_enabled" field predicates.
 	IsTfaEnabled       *bool `json:"isTfaEnabled,omitempty"`
@@ -71250,18 +71226,6 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	}
 	if i.EmailConfirmedNEQ != nil {
 		predicates = append(predicates, usersettinghistory.EmailConfirmedNEQ(*i.EmailConfirmedNEQ))
-	}
-	if i.IsWebauthnAllowed != nil {
-		predicates = append(predicates, usersettinghistory.IsWebauthnAllowedEQ(*i.IsWebauthnAllowed))
-	}
-	if i.IsWebauthnAllowedNEQ != nil {
-		predicates = append(predicates, usersettinghistory.IsWebauthnAllowedNEQ(*i.IsWebauthnAllowedNEQ))
-	}
-	if i.IsWebauthnAllowedIsNil {
-		predicates = append(predicates, usersettinghistory.IsWebauthnAllowedIsNil())
-	}
-	if i.IsWebauthnAllowedNotNil {
-		predicates = append(predicates, usersettinghistory.IsWebauthnAllowedNotNil())
 	}
 	if i.IsTfaEnabled != nil {
 		predicates = append(predicates, usersettinghistory.IsTfaEnabledEQ(*i.IsTfaEnabled))

@@ -8603,17 +8603,16 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateUserSettingInput represents a mutation input for creating usersettings.
 type CreateUserSettingInput struct {
-	Tags              []string
-	Locked            *bool
-	SilencedAt        *time.Time
-	SuspendedAt       *time.Time
-	Status            *enums.UserStatus
-	EmailConfirmed    *bool
-	IsWebauthnAllowed *bool
-	IsTfaEnabled      *bool
-	UserID            *string
-	DefaultOrgID      *string
-	FileIDs           []string
+	Tags           []string
+	Locked         *bool
+	SilencedAt     *time.Time
+	SuspendedAt    *time.Time
+	Status         *enums.UserStatus
+	EmailConfirmed *bool
+	IsTfaEnabled   *bool
+	UserID         *string
+	DefaultOrgID   *string
+	FileIDs        []string
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
@@ -8635,9 +8634,6 @@ func (i *CreateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.EmailConfirmed; v != nil {
 		m.SetEmailConfirmed(*v)
-	}
-	if v := i.IsWebauthnAllowed; v != nil {
-		m.SetIsWebauthnAllowed(*v)
 	}
 	if v := i.IsTfaEnabled; v != nil {
 		m.SetIsTfaEnabled(*v)
@@ -8661,27 +8657,25 @@ func (c *UserSettingCreate) SetInput(i CreateUserSettingInput) *UserSettingCreat
 
 // UpdateUserSettingInput represents a mutation input for updating usersettings.
 type UpdateUserSettingInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	Locked                 *bool
-	ClearSilencedAt        bool
-	SilencedAt             *time.Time
-	ClearSuspendedAt       bool
-	SuspendedAt            *time.Time
-	Status                 *enums.UserStatus
-	EmailConfirmed         *bool
-	ClearIsWebauthnAllowed bool
-	IsWebauthnAllowed      *bool
-	ClearIsTfaEnabled      bool
-	IsTfaEnabled           *bool
-	ClearUser              bool
-	UserID                 *string
-	ClearDefaultOrg        bool
-	DefaultOrgID           *string
-	ClearFiles             bool
-	AddFileIDs             []string
-	RemoveFileIDs          []string
+	ClearTags         bool
+	Tags              []string
+	AppendTags        []string
+	Locked            *bool
+	ClearSilencedAt   bool
+	SilencedAt        *time.Time
+	ClearSuspendedAt  bool
+	SuspendedAt       *time.Time
+	Status            *enums.UserStatus
+	EmailConfirmed    *bool
+	ClearIsTfaEnabled bool
+	IsTfaEnabled      *bool
+	ClearUser         bool
+	UserID            *string
+	ClearDefaultOrg   bool
+	DefaultOrgID      *string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -8715,12 +8709,6 @@ func (i *UpdateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.EmailConfirmed; v != nil {
 		m.SetEmailConfirmed(*v)
-	}
-	if i.ClearIsWebauthnAllowed {
-		m.ClearIsWebauthnAllowed()
-	}
-	if v := i.IsWebauthnAllowed; v != nil {
-		m.SetIsWebauthnAllowed(*v)
 	}
 	if i.ClearIsTfaEnabled {
 		m.ClearIsTfaEnabled()

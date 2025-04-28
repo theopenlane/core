@@ -34057,10 +34057,6 @@ input CreateUserSettingInput {
   """
   emailConfirmed: Boolean
   """
-  specifies a user may complete authentication by verifying a WebAuthn capable device
-  """
-  isWebauthnAllowed: Boolean
-  """
   whether the user has two factor authentication enabled
   """
   isTfaEnabled: Boolean
@@ -64307,11 +64303,6 @@ input UpdateUserSettingInput {
   """
   emailConfirmed: Boolean
   """
-  specifies a user may complete authentication by verifying a WebAuthn capable device
-  """
-  isWebauthnAllowed: Boolean
-  clearIsWebauthnAllowed: Boolean
-  """
   whether the user has two factor authentication enabled
   """
   isTfaEnabled: Boolean
@@ -65779,13 +65770,6 @@ input UserSettingHistoryWhereInput {
   emailConfirmed: Boolean
   emailConfirmedNEQ: Boolean
   """
-  is_webauthn_allowed field predicates
-  """
-  isWebauthnAllowed: Boolean
-  isWebauthnAllowedNEQ: Boolean
-  isWebauthnAllowedIsNil: Boolean
-  isWebauthnAllowedNotNil: Boolean
-  """
   is_tfa_enabled field predicates
   """
   isTfaEnabled: Boolean
@@ -65998,13 +65982,6 @@ input UserSettingWhereInput {
   """
   emailConfirmed: Boolean
   emailConfirmedNEQ: Boolean
-  """
-  is_webauthn_allowed field predicates
-  """
-  isWebauthnAllowed: Boolean
-  isWebauthnAllowedNEQ: Boolean
-  isWebauthnAllowedIsNil: Boolean
-  isWebauthnAllowedNotNil: Boolean
   """
   is_tfa_enabled field predicates
   """
