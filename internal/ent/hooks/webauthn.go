@@ -6,10 +6,11 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/iam/auth"
 )
 
 // HookWebauthDelete runs on passkey delete mutations to ensure
@@ -17,7 +18,6 @@ import (
 func HookWebauthDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
-
 			userID, err := auth.GetSubjectIDFromContext(ctx)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("could not fetch authenticated user")

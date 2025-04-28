@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 )
@@ -120,8 +119,6 @@ func (w Webauthn) Mixin() []ent.Mixin {
 func (Webauthn) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
-		entx.SchemaSearchable(true),
-		entx.FieldAdminSearchable(true),
 
 		entgql.QueryField(),
 
