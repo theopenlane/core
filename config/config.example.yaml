@@ -78,6 +78,7 @@ email:
         reset: ""
         root: ""
         verify: ""
+        verifyBilling: ""
         verifySubscriber: ""
 entConfig:
     entityTypes: null

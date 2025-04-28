@@ -326,6 +326,9 @@
         },
         "verifySubscriber": {
           "type": "string"
+        },
+        "verifyBilling": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
