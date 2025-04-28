@@ -82,11 +82,20 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 // MarshalGQL writes the datetime as "YYYY-MM-DD"
 func (d DateTime) MarshalGQL(w io.Writer) {
 	t := time.Time(d)
+	if t.IsZero() {
+		_, _ = io.WriteString(w, `""`)
+		return
+	}
 	_, _ = io.WriteString(w, fmt.Sprintf("%q", t.Format(isoDateLayout)))
 }
 
+// String formats the given datetime into a human readable version
 func (d DateTime) String() string {
-	return time.Time(d).Format(isoDateLayout)
+	t := time.Time(d)
+	if t.IsZero() {
+		return ""
+	}
+	return t.Format(isoDateLayout)
 }
 
 func ToDateTime(s string) (*DateTime, error) {
