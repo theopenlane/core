@@ -66,6 +66,11 @@ func (d *DateTime) UnmarshalGQL(v any) error {
 		return ErrUnsupportedDateTimeType
 	}
 
+	if str == "" {
+		*d = DateTime{}
+		return nil
+	}
+
 	if t, err := time.Parse(isoDateLayout, str); err == nil {
 		*d = DateTime(t)
 		return nil
