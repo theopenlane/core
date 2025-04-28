@@ -2,10 +2,15 @@ package models
 
 import (
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"io"
 
 	"github.com/google/uuid"
+)
+
+var (
+	ErrUnsupportedDataType = errors.New("unsupported aaguid format")
 )
 
 // AAGUID is a custom type representing an authenticator attestation uuid.
@@ -15,6 +20,7 @@ func (a AAGUID) Value() (driver.Value, error) {
 	if len(a) == 0 {
 		return nil, nil
 	}
+
 	return []byte(a), nil
 }
 
@@ -31,21 +37,23 @@ func (a *AAGUID) Scan(value interface{}) error {
 	case string:
 		u, err := uuid.Parse(v)
 		if err != nil {
-			return fmt.Errorf("invalid UUID string: %w", err)
+			return ErrUnsupportedDataType
 		}
+
 		*a = AAGUID(u[:])
+
 		return nil
 	default:
-		return fmt.Errorf("failed to scan AAGUID: unexpected type %T", value)
+		return ErrUnsupportedDataType
 	}
 }
 
 func (a AAGUID) String() string {
-	if len(a) != 16 {
-		return "invalid AAGUID"
+	u, err := uuid.FromBytes(a)
+	if err != nil {
+		return ""
 	}
 
-	u, _ := uuid.FromBytes(a)
 	return u.String()
 }
 
@@ -56,15 +64,16 @@ func (a AAGUID) MarshalGQL(w io.Writer) {
 func (a *AAGUID) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("AAGUID must be a string, got %T", v)
+		return ErrUnsupportedDataType
 	}
 
 	u, err := uuid.Parse(str)
 	if err != nil {
-		return fmt.Errorf("invalid AAGUID UUID format: %w", err)
+		return ErrUnsupportedDataType
 	}
 
 	*a = AAGUID(u[:])
+
 	return nil
 }
 

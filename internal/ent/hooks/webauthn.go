@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -15,12 +14,10 @@ import (
 
 func HookWebauthDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		var errIDNotFound = errors.New("could not get owner id of webauthn to delete")
-
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
 			deletedID, ok := m.ID()
 			if !ok {
-				return nil, errIDNotFound
+				return nil, ErrInternalServerError
 			}
 
 			passkey, err := m.Client().Webauthn.Get(ctx, deletedID)
