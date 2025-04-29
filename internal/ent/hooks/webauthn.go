@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
-// HookWebauthDelete runs on passkey delete mutations to ensure
+// HookWebauthnDelete runs on passkey delete mutations to ensure
 // that we update the user's settings if needed
-func HookWebauthDelete() ent.Hook {
+func HookWebauthnDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
 			userID, err := auth.GetSubjectIDFromContext(ctx)
