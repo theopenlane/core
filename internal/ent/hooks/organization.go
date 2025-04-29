@@ -207,13 +207,8 @@ func HookOrganizationDelete() ent.Hook {
 				return v, err
 			}
 
-			// if this is a soft delete, update the org subscription to inactive
-			if entx.CheckIsSoftDelete(ctx) {
-				if err := updateOrgSubscriptionOnDelete(ctx, m); err != nil {
-					return v, err
-				}
-
-				return v, nil
+			if err := updateOrgSubscriptionOnDelete(ctx, m); err != nil {
+				return v, err
 			}
 
 			newOrgID, err := updateUserDefaultOrgOnDelete(ctx, m)
@@ -413,7 +408,7 @@ func updateOrgSubscriptionOnDelete(ctx context.Context, m *generated.Organizatio
 		return nil
 	}
 
-	if err := m.Client().OrgSubscription.Update().Where(orgsubscription.OwnerID(deletedOrgID)).SetActive(false).SetStripeSubscriptionStatus("canceled").SetExpiresAt(time.Now()).Exec(ctx); err != nil {
+	if err := m.Client().OrgSubscription.Update().Where(orgsubscription.OwnerID(deletedOrgID)).SetActive(false).SetExpiresAt(time.Now()).Exec(ctx); err != nil {
 		return err
 	}
 
