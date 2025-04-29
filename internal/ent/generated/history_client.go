@@ -92,6 +92,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*RiskMutation]() {
 		c.Risk.Use(hook)
 	}
+	for _, hook := range history.Hooks[*ScheduledJobMutation]() {
+		c.ScheduledJob.Use(hook)
+	}
 	for _, hook := range history.Hooks[*StandardMutation]() {
 		c.Standard.Use(hook)
 	}

@@ -789,6 +789,54 @@ type RiskUpdatePayload struct {
 	Risk *generated.Risk `json:"risk"`
 }
 
+// Return response for createBulkScheduledJob mutation
+type ScheduledJobBulkCreatePayload struct {
+	// Created scheduledJobs
+	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
+}
+
+// Return response for createScheduledJob mutation
+type ScheduledJobCreatePayload struct {
+	// Created scheduledJob
+	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
+}
+
+// Return response for deleteScheduledJob mutation
+type ScheduledJobDeletePayload struct {
+	// Deleted scheduledJob ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkScheduledJobSetting mutation
+type ScheduledJobSettingBulkCreatePayload struct {
+	// Created scheduledJobSettings
+	ScheduledJobSettings []*generated.ScheduledJobSetting `json:"scheduledJobSettings,omitempty"`
+}
+
+// Return response for createScheduledJobSetting mutation
+type ScheduledJobSettingCreatePayload struct {
+	// Created scheduledJobSetting
+	ScheduledJobSetting *generated.ScheduledJobSetting `json:"scheduledJobSetting"`
+}
+
+// Return response for deleteScheduledJobSetting mutation
+type ScheduledJobSettingDeletePayload struct {
+	// Deleted scheduledJobSetting ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateScheduledJobSetting mutation
+type ScheduledJobSettingUpdatePayload struct {
+	// Updated scheduledJobSetting
+	ScheduledJobSetting *generated.ScheduledJobSetting `json:"scheduledJobSetting"`
+}
+
+// Return response for updateScheduledJob mutation
+type ScheduledJobUpdatePayload struct {
+	// Updated scheduledJob
+	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
+}
+
 type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
@@ -819,6 +867,8 @@ type SearchResults struct {
 	Procedures             *generated.ProcedureConnection             `json:"procedures,omitempty"`
 	Programs               *generated.ProgramConnection               `json:"programs,omitempty"`
 	Risks                  *generated.RiskConnection                  `json:"risks,omitempty"`
+	ScheduledJobs          *generated.ScheduledJobConnection          `json:"scheduledJobs,omitempty"`
+	ScheduledJobSettings   *generated.ScheduledJobSettingConnection   `json:"scheduledJobSettings,omitempty"`
 	Standards              *generated.StandardConnection              `json:"standards,omitempty"`
 	Subcontrols            *generated.SubcontrolConnection            `json:"subcontrols,omitempty"`
 	Subscribers            *generated.SubscriberConnection            `json:"subscribers,omitempty"`

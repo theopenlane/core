@@ -133,6 +133,8 @@ const (
 	EdgeStandards = "standards"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
+	EdgeScheduledJobs = "scheduled_jobs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -424,6 +426,13 @@ const (
 	ActionPlansInverseTable = "action_plans"
 	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
 	ActionPlansColumn = "owner_id"
+	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
+	ScheduledJobsTable = "scheduled_jobs"
+	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobsInverseTable = "scheduled_jobs"
+	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
+	ScheduledJobsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1180,6 +1189,20 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByScheduledJobsCount orders the results by scheduled_jobs count.
+func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
+	}
+}
+
+// ByScheduledJobs orders the results by scheduled_jobs terms.
+func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1492,6 +1515,13 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
+	)
+}
+func newScheduledJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

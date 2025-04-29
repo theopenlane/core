@@ -69,6 +69,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobsetting"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -390,6 +393,21 @@ var riskhistoryImplementors = []string{"RiskHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*RiskHistory) IsNode() {}
+
+var scheduledjobImplementors = []string{"ScheduledJob", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ScheduledJob) IsNode() {}
+
+var scheduledjobhistoryImplementors = []string{"ScheduledJobHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ScheduledJobHistory) IsNode() {}
+
+var scheduledjobsettingImplementors = []string{"ScheduledJobSetting", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ScheduledJobSetting) IsNode() {}
 
 var standardImplementors = []string{"Standard", "Node"}
 
@@ -1060,6 +1078,33 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(riskhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, riskhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case scheduledjob.Table:
+		query := c.ScheduledJob.Query().
+			Where(scheduledjob.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scheduledjobImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case scheduledjobhistory.Table:
+		query := c.ScheduledJobHistory.Query().
+			Where(scheduledjobhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scheduledjobhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case scheduledjobsetting.Table:
+		query := c.ScheduledJobSetting.Query().
+			Where(scheduledjobsetting.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scheduledjobsettingImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2220,6 +2265,54 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.RiskHistory.Query().
 			Where(riskhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, riskhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case scheduledjob.Table:
+		query := c.ScheduledJob.Query().
+			Where(scheduledjob.IDIn(ids...))
+		query, err := query.CollectFields(ctx, scheduledjobImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case scheduledjobhistory.Table:
+		query := c.ScheduledJobHistory.Query().
+			Where(scheduledjobhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, scheduledjobhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case scheduledjobsetting.Table:
+		query := c.ScheduledJobSetting.Query().
+			Where(scheduledjobsetting.IDIn(ids...))
+		query, err := query.CollectFields(ctx, scheduledjobsettingImplementors...)
 		if err != nil {
 			return nil, err
 		}

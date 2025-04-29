@@ -1,0 +1,63 @@
+
+
+query GetAllScheduledJobHistories {
+  scheduledJobHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayID
+        historyTime
+        id
+        jobType
+        operation
+        ownerID
+        ref
+        script
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHistoryWhereInput) {
+  scheduledJobHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayID
+        historyTime
+        id
+        jobType
+        operation
+        ownerID
+        ref
+        script
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

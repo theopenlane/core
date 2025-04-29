@@ -416,6 +416,19 @@ type standard
     # this is used for organization custom standards that are only available to the organization
     define parent: [organization]
 
+# scheduled jobs can be created by any user and permissions are assigned to the creator (assigner) and the assignee
+# jobs can also be associated with a parent object (  controls at this time ) and inherit access from that object
+type scheduled_job
+  relations
+    define can_view: [user, service] or assignee or assigner or can_delete or can_edit or can_view from parent
+    define can_edit: [user, service] or assignee or assigner or editor or can_delete or can_edit from parent
+    define can_delete: [user, service] or assigner or can_delete from parent
+    define assignee: [user]
+    define assigner: [user]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [organization, control]
+    define editor: [organization#owner]
+
 ## Conditions
 # Public groups access; affects the view access of users in the organization
 condition public_group(public: bool) {
