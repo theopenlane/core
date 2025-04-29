@@ -57,8 +57,10 @@ func (r JobCadenceFrequency) MarshalGQL(w io.Writer) {
 func (r *JobCadenceFrequency) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for JobCadenceFrequency, got: %T", v)
+		return fmt.Errorf("wrong type for JobCadenceFrequency, got: %T", v) //nolint:err113
 	}
+
 	*r = JobCadenceFrequency(str)
+
 	return nil
 }

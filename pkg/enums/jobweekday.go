@@ -77,8 +77,10 @@ func (r JobWeekday) MarshalGQL(w io.Writer) {
 func (r *JobWeekday) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for JobWeekday, got: %T", v)
+		return fmt.Errorf("wrong type for JobWeekday, got: %T", v) //nolint:err113
 	}
+
 	*r = JobWeekday(str)
+
 	return nil
 }

@@ -47,8 +47,10 @@ func (r JobType) MarshalGQL(w io.Writer) {
 func (r *JobType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for JobType, got: %T", v)
+		return fmt.Errorf("wrong type for JobType, got: %T", v) //nolint:err113
 	}
+
 	*r = JobType(str)
+
 	return nil
 }
