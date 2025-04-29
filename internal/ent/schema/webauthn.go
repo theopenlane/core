@@ -137,6 +137,6 @@ func (Webauthn) Edges() []ent.Edge {
 
 func (Webauthn) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookWebauthDelete(),
+		hooks.HookWebauthnDelete(),
 	}
 }

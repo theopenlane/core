@@ -6,11 +6,8 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
 // HookWebauthnDelete runs on passkey delete mutations to ensure
@@ -18,13 +15,12 @@ import (
 func HookWebauthnDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WebauthnFunc(func(ctx context.Context, m *generated.WebauthnMutation) (generated.Value, error) {
-			userID, err := auth.GetSubjectIDFromContext(ctx)
+			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Msg("could not fetch authenticated user")
-
 				return nil, err
 			}
 
+			// get the count of webauthns for the user
 			count, err := m.Client().Webauthn.Query().
 				Count(ctx)
 			if err != nil {
@@ -33,19 +29,18 @@ func HookWebauthnDelete() ent.Hook {
 				return nil, err
 			}
 
-			// 1 since this tx is not complete yet
-			if count == 1 {
-				err = m.Client().UserSetting.Update().Where(usersetting.UserID(userID)).
+			// if the count is 0, we need to disable webauthn for the user
+			if count == 0 {
+				if err = m.Client().UserSetting.Update().
 					SetIsWebauthnAllowed(false).
-					Exec(ctx)
-				if err != nil {
+					Exec(ctx); err != nil {
 					zerolog.Ctx(ctx).Error().Err(err).Msg("could not disable webauthn from user")
 
 					return nil, err
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			return retVal, nil
 		})
 	}, ent.OpDeleteOne|ent.OpDelete)
 }
