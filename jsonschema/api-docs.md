@@ -624,6 +624,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**invite**|`string`|||
 |**reset**|`string`|||
 |**verifySubscriber**|`string`|||
+|**verifyBilling**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="sessions"></a>
