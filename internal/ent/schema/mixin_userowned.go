@@ -216,7 +216,7 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 					return err
 				}
 
-				// sets the owner id on the query for the current organization
+				// sets the owner id on the query for the current user
 				userOwned.P(q, userID)
 
 				return nil
