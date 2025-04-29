@@ -192,6 +192,15 @@ type Risk func(*sql.Selector)
 // RiskHistory is the predicate function for riskhistory builders.
 type RiskHistory func(*sql.Selector)
 
+// ScheduledJob is the predicate function for scheduledjob builders.
+type ScheduledJob func(*sql.Selector)
+
+// ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
+type ScheduledJobHistory func(*sql.Selector)
+
+// ScheduledJobSetting is the predicate function for scheduledjobsetting builders.
+type ScheduledJobSetting func(*sql.Selector)
+
 // Standard is the predicate function for standard builders.
 type Standard func(*sql.Selector)
 

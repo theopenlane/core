@@ -41,5 +41,10 @@ scalar VersionBump
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z ) 
 """
 scalar DateTime
-
+"""
+AAGUID allows us store user's passkeys devices as bytes in the db but render as uuids to the frontend
+"""
 scalar AAGUID
+
+scalar JobConfiguration
+scalar JobCadence

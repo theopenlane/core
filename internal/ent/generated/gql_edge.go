@@ -3309,6 +3309,27 @@ func (o *Organization) ActionPlans(
 	return o.QueryActionPlans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) ScheduledJobs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
+) (*ScheduledJobConnection, error) {
+	opts := []ScheduledJobPaginateOption{
+		WithScheduledJobOrder(orderBy),
+		WithScheduledJobFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	if nodes, err := o.NamedScheduledJobs(alias); err == nil || hasTotalCount {
+		pager, err := newScheduledJobPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -3317,7 +3338,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -4140,6 +4161,30 @@ func (r *Risk) Delegate(ctx context.Context) (*Group, error) {
 	result, err := r.Edges.DelegateOrErr()
 	if IsNotLoaded(err) {
 		result, err = r.QueryDelegate().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (sj *ScheduledJob) Owner(ctx context.Context) (*Organization, error) {
+	result, err := sj.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = sj.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (sj *ScheduledJob) ScheduledJobSetting(ctx context.Context) (*ScheduledJobSetting, error) {
+	result, err := sj.Edges.ScheduledJobSettingOrErr()
+	if IsNotLoaded(err) {
+		result, err = sj.QueryScheduledJobSetting().Only(ctx)
+	}
+	return result, err
+}
+
+func (sjs *ScheduledJobSetting) ScheduledJob(ctx context.Context) (*ScheduledJob, error) {
+	result, err := sjs.Edges.ScheduledJobOrErr()
+	if IsNotLoaded(err) {
+		result, err = sjs.QueryScheduledJob().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

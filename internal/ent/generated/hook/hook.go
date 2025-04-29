@@ -753,6 +753,42 @@ func (f RiskHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RiskHistoryMutation", m)
 }
 
+// The ScheduledJobFunc type is an adapter to allow the use of ordinary
+// function as ScheduledJob mutator.
+type ScheduledJobFunc func(context.Context, *generated.ScheduledJobMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScheduledJobMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobMutation", m)
+}
+
+// The ScheduledJobHistoryFunc type is an adapter to allow the use of ordinary
+// function as ScheduledJobHistory mutator.
+type ScheduledJobHistoryFunc func(context.Context, *generated.ScheduledJobHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduledJobHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScheduledJobHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobHistoryMutation", m)
+}
+
+// The ScheduledJobSettingFunc type is an adapter to allow the use of ordinary
+// function as ScheduledJobSetting mutator.
+type ScheduledJobSettingFunc func(context.Context, *generated.ScheduledJobSettingMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduledJobSettingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScheduledJobSettingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobSettingMutation", m)
+}
+
 // The StandardFunc type is an adapter to allow the use of ordinary
 // function as Standard mutator.
 type StandardFunc func(context.Context, *generated.StandardMutation) (generated.Value, error)
