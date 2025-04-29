@@ -11,8 +11,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v81"
-	"github.com/stripe/stripe-go/v81/webhook"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -42,9 +42,6 @@ var supportedEventTypes = map[stripe.EventType]bool{
 	stripe.EventTypeCustomerSubscriptionPaused:       true,
 	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
 	stripe.EventTypePaymentMethodAttached:            true,
-	// TODO: add support for these events so details like billing address can be updated
-	// from stripe back to the database
-	stripe.EventTypeCustomerUpdated: false,
 }
 
 var (
@@ -460,13 +457,11 @@ func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 		}
 	}
 
-	active := subscription.Status == stripe.SubscriptionStatusActive || subscription.Status == stripe.SubscriptionStatusTrialing
-
 	return &ent.OrgSubscription{
 		StripeSubscriptionID:     subscription.ID,
 		TrialExpiresAt:           timePtr(time.Unix(subscription.TrialEnd, 0)),
 		StripeSubscriptionStatus: string(subscription.Status),
-		Active:                   active,
+		Active:                   entitlements.IsSubscriptionActive(subscription.Status),
 		ProductTier:              productName,
 		ProductPrice:             productPrice,
 		Features:                 customer.Features,

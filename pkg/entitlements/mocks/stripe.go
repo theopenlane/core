@@ -4,8 +4,7 @@ import (
 	"bytes"
 
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v81"
-	"github.com/stripe/stripe-go/v81/form"
+	"github.com/stripe/stripe-go/v82"
 )
 
 type FakeStripeClient struct {
@@ -143,7 +142,8 @@ func (m *MockStripeBackend) CallStreaming(method, path, key string, params strip
 }
 
 // CallRaw mock for Call method in Stripe Backend interface
-func (m *MockStripeBackend) CallRaw(method, path, key string, body *form.Values, params *stripe.Params, v stripe.LastResponseSetter) error {
+// v82 introduced breaking changes and modified the behavior of CallRaw https://github.com/stripe/stripe-go/releases/tag/v82.0.0
+func (m *MockStripeBackend) CallRaw(method, path, key string, body []byte, params *stripe.Params, v stripe.LastResponseSetter) error {
 	args := m.Called(method, path, key, params, v)
 
 	return args.Error(0)

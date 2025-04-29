@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -30,7 +30,7 @@ import (
 type Eventer struct {
 	Emitter   *soiree.EventPool
 	Listeners []soiree.Listener
-	Topics    map[string]interface{}
+	Topics    map[string]any
 }
 
 // EventID is used to marshall and unmarshall the ID out of a ent mutation
@@ -60,7 +60,7 @@ func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 }
 
 // WithEventerTopics sets the topics for the Eventer
-func WithEventerTopics(topics map[string]interface{}) EventerOpts {
+func WithEventerTopics(topics map[string]any) EventerOpts {
 	return func(e *Eventer) {
 		e.Topics = topics
 	}
@@ -79,13 +79,15 @@ func WithEventerListeners(topic string, listeners []soiree.Listener) EventerOpts
 }
 
 // NewEventerPool initializes a new Eventer and takes a client to be used as the client for the soiree pool
-func NewEventerPool(client interface{}) *Eventer {
-	pool := soiree.NewEventPool(
-		soiree.WithPool(
-			soiree.NewPondPool(
-				soiree.WithMaxWorkers(100), // nolint:mnd
-				soiree.WithName("ent_event_pool"))),
-		soiree.WithClient(client))
+func NewEventerPool(client any) *Eventer {
+	pondPool := soiree.NewPondPool(
+		soiree.WithMaxWorkers(100), // nolint:mnd
+		soiree.WithName("ent_event_pool"),
+	)
+
+	pondPool.NewStatsCollector()
+
+	pool := soiree.NewEventPool(soiree.WithPool(pondPool), soiree.WithClient(client))
 
 	return NewEventer(WithEventerEmitter(pool))
 }
@@ -191,6 +193,10 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 					return true
 				}
 			}
+		case entgen.TypeOrganization:
+			if m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne) {
+				return true
+			}
 		}
 
 		return false
@@ -200,6 +206,8 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 // OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events; formatted as `type.operation`
 var OrganizationSettingUpdateOne = fmt.Sprintf("%s.%s", entgen.TypeOrganizationSetting, entgen.OpUpdateOne.String())
 var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, entgen.OpCreate.String())
+var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
+var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 
 // RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
@@ -217,6 +225,38 @@ func RegisterListeners(e *Eventer) error {
 	_, err = e.Emitter.On(OrganizationSettingUpdateOne, handleOrganizationSettingsUpdateOne)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	_, err = e.Emitter.On(OrganizationDelete, handleOrganizationDelete)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	_, err = e.Emitter.On(OrganizationDeleteOne, handleOrganizationDelete)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
+	return nil
+}
+
+// handleOrganizationDelete handles the deletion of an organization and deletes the customer in Stripe
+func handleOrganizationDelete(event soiree.Event) error {
+	client := event.Client().(*entgen.Client)
+	entMgr := client.EntitlementManager
+
+	if entMgr == nil {
+		log.Debug().Msg("EntitlementManager not found on client, skipping customer deletion")
+
+		return nil
+	}
+
+	if err := entMgr.FindAndDeactivateCustomerSubscription(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string)); err != nil {
+		log.Err(err).Msg("Failed to deactivate customer subscription")
+
 		return err
 	}
 
@@ -271,7 +311,7 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 }
 
 // updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
-func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) error {
+func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
 	// validate the customer data before updating the organization subscription
 	if len(customer.Prices) > 1 {
 		zerolog.Ctx(ctx).Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
@@ -320,7 +360,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
 // by querying the organization and organization settings
-func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client interface{}, o *entitlements.OrganizationCustomer) error {
+func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client any, o *entitlements.OrganizationCustomer) error {
 	if orgSubs == nil {
 		return ErrNoSubscriptions
 	}
@@ -382,7 +422,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 }
 
 // fetchOrganizationCustomerByOrgSettingID fetches the organization customer data based on the organization setting ID
-func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
+func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID string, client any) (*entitlements.OrganizationCustomer, error) {
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgSettingID)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgSettingID)

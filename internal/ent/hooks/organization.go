@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -203,6 +205,15 @@ func HookOrganizationDelete() ent.Hook {
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
+			}
+
+			// if this is a soft delete, update the org subscription to inactive
+			if entx.CheckIsSoftDelete(ctx) {
+				if err := updateOrgSubscriptionOnDelete(ctx, m); err != nil {
+					return v, err
+				}
+
+				return v, nil
 			}
 
 			newOrgID, err := updateUserDefaultOrgOnDelete(ctx, m)
@@ -393,6 +404,20 @@ func updateUserDefaultOrgOnDelete(ctx context.Context, m *generated.Organization
 	}
 
 	return checkAndUpdateDefaultOrg(ctx, currentUserID, deletedOrgID, m.Client())
+}
+
+// updateOrgSubscriptionOnDelete updates the org subscription to inactive and sets the status to canceled
+func updateOrgSubscriptionOnDelete(ctx context.Context, m *generated.OrganizationMutation) error {
+	deletedOrgID, ok := m.ID()
+	if !ok {
+		return nil
+	}
+
+	if err := m.Client().OrgSubscription.Update().Where(orgsubscription.OwnerID(deletedOrgID)).SetActive(false).SetStripeSubscriptionStatus("canceled").SetExpiresAt(time.Now()).Exec(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // checkAndUpdateDefaultOrg checks if the old organization is the user's default org and updates it if needed

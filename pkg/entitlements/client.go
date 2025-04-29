@@ -1,8 +1,8 @@
 package entitlements
 
 import (
-	"github.com/stripe/stripe-go/v81"
-	"github.com/stripe/stripe-go/v81/client"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/client"
 )
 
 // StripeClient is a client for the Stripe API

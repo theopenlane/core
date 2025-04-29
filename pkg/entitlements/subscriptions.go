@@ -1,10 +1,11 @@
 package entitlements
 
 import (
+	"maps"
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v82"
 )
 
 // CreateSubscription creates a new subscription
@@ -102,6 +103,13 @@ var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
 func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
+	subsMetadata := make(map[string]string)
+	if cust.Metadata != nil {
+		maps.Copy(subsMetadata, cust.Metadata)
+	} else {
+		subsMetadata["organization_id"] = cust.ID
+	}
+
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
@@ -113,7 +121,7 @@ func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscri
 		PaymentSettings: &stripe.SubscriptionPaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
 		},
-		Metadata:         cust.Metadata,
+		Metadata:         subsMetadata,
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 		TrialSettings: &stripe.SubscriptionTrialSettingsParams{
 			EndBehavior: &stripe.SubscriptionTrialSettingsEndBehaviorParams{
@@ -216,8 +224,6 @@ func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscr
 	return &Subscription{
 		ID:               subs.ID,
 		Prices:           prices,
-		StartDate:        subs.CurrentPeriodStart,
-		EndDate:          subs.CurrentPeriodEnd,
 		TrialEnd:         subs.TrialEnd,
 		ProductID:        productID,
 		Status:           string(subs.Status),
@@ -225,5 +231,56 @@ func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscr
 		OrganizationID:   subs.Metadata["organization_id"],
 		DaysUntilDue:     subs.DaysUntilDue,
 		Features:         subscript.Features,
+	}
+}
+
+// subscription moves into active status when trial ends and a payment method has been added
+// if initial payment attempt fails, and moves into incomplete, but then the payment is successful, it moves into active
+// if trial ends and no payment method has been added, subs moves into paused status; if payment method is added + processed, it moves back to active
+// SubscriptionStatusActive            SubscriptionStatus = "active"
+
+// a subscription moves into incomplete if the initial payment attempt fails
+// SubscriptionStatusIncomplete        SubscriptionStatus = "incomplete"
+
+// if the first invoice is not paid within 23 hours, the subscription transitions to incomplete_expired
+// SubscriptionStatusIncompleteExpired SubscriptionStatus = "incomplete_expired"
+
+// when collection_method=charge_automatically, subs becomes past_due when payment is required but cannot be paid (due to failed payment or awaiting additional user actions)
+// SubscriptionStatusPastDue           SubscriptionStatus = "past_due"
+
+// A subscription can only enter a paused status when a trial ends without a payment method
+// SubscriptionStatusPaused            SubscriptionStatus = "paused"
+
+// sbuscription status is in trailing if we create the initial subscription with a trial period
+// SubscriptionStatusTrialing          SubscriptionStatus = "trialing"
+
+// after exhausting all payment retry attempts, the subscription will become canceled or unpaid
+// subscription moves into cancelled if we set cancel_at_period_end: true and the period end passes
+// SubscriptionStatusUnpaid            SubscriptionStatus = "unpaid"
+// SubscriptionStatusCanceled          SubscriptionStatus = "canceled"
+
+func IsSubscriptionActive(status stripe.SubscriptionStatus) bool {
+	// this shouldn't happen but including for sanity
+	if status == "" {
+		return false
+	}
+
+	switch status {
+	case stripe.SubscriptionStatusActive,
+		stripe.SubscriptionStatusTrialing:
+		return true
+	case stripe.SubscriptionStatusPastDue,
+		stripe.SubscriptionStatusIncomplete:
+		// You might want to add a grace period for past_due or incomplete statuses
+		// This could be based on the number of days past due or other criteria
+		return true
+	case stripe.SubscriptionStatusCanceled,
+		stripe.SubscriptionStatusIncompleteExpired,
+		stripe.SubscriptionStatusUnpaid,
+		stripe.SubscriptionStatusPaused:
+		return false
+	default:
+		// If an unknown status is encountered, default to inactive for safety
+		return false
 	}
 }

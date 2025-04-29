@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v81"
+import "github.com/stripe/stripe-go/v82"
 
 // GetProductByID gets a product by ID
 func (sc *StripeClient) GetProductByID(id string) (*stripe.Product, error) {

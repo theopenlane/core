@@ -3,7 +3,7 @@ package entitlements
 import (
 	"strings"
 
-	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -34,28 +34,6 @@ type ContactInfo struct {
 	Line2      *string `form:"line2"`
 	PostalCode *string `form:"postal_code"`
 	State      *string `form:"state"`
-}
-
-func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
-	return &stripe.CustomerParams{
-		Email: &o.Email,
-		Name:  &o.OrganizationID,
-		Phone: &o.Phone,
-		Address: &stripe.AddressParams{
-			Line1:      o.Line1,
-			Line2:      o.Line2,
-			City:       o.City,
-			State:      o.State,
-			PostalCode: o.PostalCode,
-			Country:    o.Country,
-		},
-		Metadata: map[string]string{
-			"organization_id":              o.OrganizationID,
-			"organization_settings_id":     o.OrganizationSettingsID,
-			"organization_name":            o.OrganizationName,
-			"organization_subscription_id": o.OrganizationSubscriptionID,
-		},
-	}
 }
 
 // Validate checks if the OrganizationCustomer contains necessary fields
