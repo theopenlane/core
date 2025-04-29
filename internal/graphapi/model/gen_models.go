@@ -1008,26 +1008,8 @@ type UserUpdatePayload struct {
 	User *generated.User `json:"user"`
 }
 
-// Return response for createBulkWebauthn mutation
-type WebauthnBulkCreatePayload struct {
-	// Created webauthns
-	Webauthns []*generated.Webauthn `json:"webauthns,omitempty"`
-}
-
-// Return response for createWebauthn mutation
-type WebauthnCreatePayload struct {
-	// Created webauthn
-	Webauthn *generated.Webauthn `json:"webauthn"`
-}
-
 // Return response for deleteWebauthn mutation
 type WebauthnDeletePayload struct {
 	// Deleted webauthn ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWebauthn mutation
-type WebauthnUpdatePayload struct {
-	// Updated webauthn
-	Webauthn *generated.Webauthn `json:"webauthn"`
 }

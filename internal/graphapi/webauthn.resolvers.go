@@ -7,31 +7,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
-
-// CreateWebauthn is the resolver for the createWebauthn field.
-func (r *mutationResolver) CreateWebauthn(ctx context.Context, input generated.CreateWebauthnInput) (*model.WebauthnCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkWebauthn is the resolver for the createBulkWebauthn field.
-func (r *mutationResolver) CreateBulkWebauthn(ctx context.Context, input []*generated.CreateWebauthnInput) (*model.WebauthnBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkCSVWebauthn is the resolver for the createBulkCSVWebauthn field.
-func (r *mutationResolver) CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload) (*model.WebauthnBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// UpdateWebauthn is the resolver for the updateWebauthn field.
-func (r *mutationResolver) UpdateWebauthn(ctx context.Context, id string, input generated.UpdateWebauthnInput) (*model.WebauthnUpdatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
 
 // DeleteWebauthn is the resolver for the deleteWebauthn field.
 func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error) {
@@ -46,9 +24,4 @@ func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*mode
 	return &model.WebauthnDeletePayload{
 		DeletedID: id,
 	}, nil
-}
-
-// Webauthn is the resolver for the webauthn field.
-func (r *queryResolver) Webauthn(ctx context.Context, id string) (*generated.Webauthn, error) {
-	return nil, rout.ErrPermissionDenied
 }

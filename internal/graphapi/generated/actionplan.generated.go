@@ -194,10 +194,6 @@ type MutationResolver interface {
 	CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error)
 	CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error)
 	UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error)
-	CreateWebauthn(ctx context.Context, input generated.CreateWebauthnInput) (*model.WebauthnCreatePayload, error)
-	CreateBulkWebauthn(ctx context.Context, input []*generated.CreateWebauthnInput) (*model.WebauthnBulkCreatePayload, error)
-	CreateBulkCSVWebauthn(ctx context.Context, input graphql.Upload) (*model.WebauthnBulkCreatePayload, error)
-	UpdateWebauthn(ctx context.Context, id string, input generated.UpdateWebauthnInput) (*model.WebauthnUpdatePayload, error)
 	DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error)
 }
 
@@ -1157,34 +1153,6 @@ func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVWebauthn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVWebauthn_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVWebauthn_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
-}
-
 func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1966,34 +1934,6 @@ func (ec *executionContext) field_Mutation_createBulkUserSetting_argsInput(
 	}
 
 	var zeroVal []*generated.CreateUserSettingInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createBulkWebauthn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkWebauthn_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkWebauthn_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateWebauthnInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateWebauthnInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateWebauthnInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWebauthnInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateWebauthnInput
 	return zeroVal, nil
 }
 
@@ -3377,34 +3317,6 @@ func (ec *executionContext) field_Mutation_createUser_argsAvatarFile(
 	}
 
 	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createWebauthn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createWebauthn_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createWebauthn_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateWebauthnInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateWebauthnInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateWebauthnInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWebauthnInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateWebauthnInput
 	return zeroVal, nil
 }
 
@@ -6392,57 +6304,6 @@ func (ec *executionContext) field_Mutation_updateUser_argsAvatarFile(
 	}
 
 	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateWebauthn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateWebauthn_argsID(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateWebauthn_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateWebauthn_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateWebauthn_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateWebauthnInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateWebauthnInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateWebauthnInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWebauthnInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateWebauthnInput
 	return zeroVal, nil
 }
 
@@ -17201,242 +17062,6 @@ func (ec *executionContext) fieldContext_Mutation_updateUserSetting(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createWebauthn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateWebauthn(rctx, fc.Args["input"].(generated.CreateWebauthnInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.WebauthnCreatePayload)
-	fc.Result = res
-	return ec.marshalNWebauthnCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnCreatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createWebauthn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "webauthn":
-				return ec.fieldContext_WebauthnCreatePayload_webauthn(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WebauthnCreatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createWebauthn_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createBulkWebauthn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBulkWebauthn(rctx, fc.Args["input"].([]*generated.CreateWebauthnInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.WebauthnBulkCreatePayload)
-	fc.Result = res
-	return ec.marshalNWebauthnBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnBulkCreatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createBulkWebauthn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "webauthns":
-				return ec.fieldContext_WebauthnBulkCreatePayload_webauthns(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WebauthnBulkCreatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkWebauthn_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkCSVWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createBulkCSVWebauthn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBulkCSVWebauthn(rctx, fc.Args["input"].(graphql.Upload))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.WebauthnBulkCreatePayload)
-	fc.Result = res
-	return ec.marshalNWebauthnBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnBulkCreatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createBulkCSVWebauthn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "webauthns":
-				return ec.fieldContext_WebauthnBulkCreatePayload_webauthns(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WebauthnBulkCreatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkCSVWebauthn_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateWebauthn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateWebauthn(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateWebauthnInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.WebauthnUpdatePayload)
-	fc.Result = res
-	return ec.marshalNWebauthnUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnUpdatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateWebauthn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "webauthn":
-				return ec.fieldContext_WebauthnUpdatePayload_webauthn(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WebauthnUpdatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateWebauthn_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_deleteWebauthn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_deleteWebauthn(ctx, field)
 	if err != nil {
@@ -18908,34 +18533,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateUserSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateUserSetting(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createWebauthn":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createWebauthn(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkWebauthn":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkWebauthn(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkCSVWebauthn":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVWebauthn(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateWebauthn":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateWebauthn(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
