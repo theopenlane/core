@@ -130,20 +130,24 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+
 	// create another user to make sure we don't get their settings back
 	(&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		updateInput openlaneclient.UpdateUserSettingInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedRes openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
-		errorMsg    string
+		name          string
+		userSettingID string
+		updateInput   openlaneclient.UpdateUserSettingInput
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedRes   openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
+		errorMsg      string
 	}{
 		{
-			name: "update default org and tags",
+			name:          "update default org and tags",
+			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
 			updateInput: openlaneclient.UpdateUserSettingInput{
 				DefaultOrgID: &org.ID,
 				Tags:         []string{"mitb", "funk"},
@@ -159,7 +163,25 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			},
 		},
 		{
-			name: "update default org to org without access",
+			name:          "update default org and tags for view only user",
+			userSettingID: viewOnlyUser.UserInfo.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateUserSettingInput{
+				DefaultOrgID: &om.OrganizationID,
+				Tags:         []string{"mitb", "funk"},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
+				Status: enums.UserStatusActive,
+				Tags:   []string{"mitb", "funk"},
+				DefaultOrg: &openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg{
+					ID: om.OrganizationID,
+				},
+			},
+		},
+		{
+			name:          "update default org to org without access",
+			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
 			updateInput: openlaneclient.UpdateUserSettingInput{
 				DefaultOrgID: &org2.ID,
 			},
@@ -168,7 +190,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			errorMsg: "Organization with the specified ID was not found",
 		},
 		{
-			name: "update status to invalid",
+			name:          "update status to invalid",
+			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
 			updateInput: openlaneclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusInvalid,
 			},
@@ -177,7 +200,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			errorMsg: "INVALID is not a valid UserSettingUserStatus",
 		},
 		{
-			name: "update status to suspended using personal access token",
+			name:          "update status to suspended using personal access token",
+			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
 			updateInput: openlaneclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusSuspended,
 			},
@@ -193,7 +217,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			// update user
-			resp, err := tc.client.UpdateUserSetting(tc.ctx, testUser1.UserInfo.Edges.Setting.ID, tc.updateInput)
+			resp, err := tc.client.UpdateUserSetting(tc.ctx, tc.userSettingID, tc.updateInput)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)

@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // HookUserSetting runs on user settings mutations and validates input on update
@@ -60,10 +62,18 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		return false
 	}
 
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get authenticated user context")
+
+		return false
+	}
+
 	req := fgax.AccessCheck{
 		SubjectID:   owner.ID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
+		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}
 
 	allow, err := m.Authz.CheckOrgReadAccess(ctx, req)
