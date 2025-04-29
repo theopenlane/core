@@ -81,6 +81,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobsetting"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -241,6 +244,12 @@ type Client struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// ScheduledJob is the client for interacting with the ScheduledJob builders.
+	ScheduledJob *ScheduledJobClient
+	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
+	ScheduledJobHistory *ScheduledJobHistoryClient
+	// ScheduledJobSetting is the client for interacting with the ScheduledJobSetting builders.
+	ScheduledJobSetting *ScheduledJobSettingClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
@@ -353,6 +362,9 @@ func (c *Client) init() {
 	c.ProgramMembershipHistory = NewProgramMembershipHistoryClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
+	c.ScheduledJob = NewScheduledJobClient(c.config)
+	c.ScheduledJobHistory = NewScheduledJobHistoryClient(c.config)
+	c.ScheduledJobSetting = NewScheduledJobSettingClient(c.config)
 	c.Standard = NewStandardClient(c.config)
 	c.StandardHistory = NewStandardHistoryClient(c.config)
 	c.Subcontrol = NewSubcontrolClient(c.config)
@@ -599,6 +611,9 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
 		Risk:                         NewRiskClient(cfg),
 		RiskHistory:                  NewRiskHistoryClient(cfg),
+		ScheduledJob:                 NewScheduledJobClient(cfg),
+		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
+		ScheduledJobSetting:          NewScheduledJobSettingClient(cfg),
 		Standard:                     NewStandardClient(cfg),
 		StandardHistory:              NewStandardHistoryClient(cfg),
 		Subcontrol:                   NewSubcontrolClient(cfg),
@@ -695,6 +710,9 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
 		Risk:                         NewRiskClient(cfg),
 		RiskHistory:                  NewRiskHistoryClient(cfg),
+		ScheduledJob:                 NewScheduledJobClient(cfg),
+		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
+		ScheduledJobSetting:          NewScheduledJobSettingClient(cfg),
 		Standard:                     NewStandardClient(cfg),
 		StandardHistory:              NewStandardHistoryClient(cfg),
 		Subcontrol:                   NewSubcontrolClient(cfg),
@@ -754,7 +772,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
-		c.Risk, c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
+		c.ScheduledJobSetting, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
 		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
@@ -782,7 +801,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
-		c.Risk, c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
+		c.ScheduledJobSetting, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
 		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
@@ -990,6 +1010,12 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Risk.mutate(ctx, m)
 	case *RiskHistoryMutation:
 		return c.RiskHistory.mutate(ctx, m)
+	case *ScheduledJobMutation:
+		return c.ScheduledJob.mutate(ctx, m)
+	case *ScheduledJobHistoryMutation:
+		return c.ScheduledJobHistory.mutate(ctx, m)
+	case *ScheduledJobSettingMutation:
+		return c.ScheduledJobSetting.mutate(ctx, m)
 	case *StandardMutation:
 		return c.Standard.mutate(ctx, m)
 	case *StandardHistoryMutation:
@@ -11482,6 +11508,25 @@ func (c *OrganizationClient) QueryActionPlans(o *Organization) *ActionPlanQuery 
 	return query
 }
 
+// QueryScheduledJobs queries the scheduled_jobs edge of a Organization.
+func (c *OrganizationClient) QueryScheduledJobs(o *Organization) *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobsTable, organization.ScheduledJobsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJob
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -14243,6 +14288,467 @@ func (c *RiskHistoryClient) mutate(ctx context.Context, m *RiskHistoryMutation) 
 		return (&RiskHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown RiskHistory mutation op: %q", m.Op())
+	}
+}
+
+// ScheduledJobClient is a client for the ScheduledJob schema.
+type ScheduledJobClient struct {
+	config
+}
+
+// NewScheduledJobClient returns a client for the ScheduledJob from the given config.
+func NewScheduledJobClient(c config) *ScheduledJobClient {
+	return &ScheduledJobClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scheduledjob.Hooks(f(g(h())))`.
+func (c *ScheduledJobClient) Use(hooks ...Hook) {
+	c.hooks.ScheduledJob = append(c.hooks.ScheduledJob, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scheduledjob.Intercept(f(g(h())))`.
+func (c *ScheduledJobClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScheduledJob = append(c.inters.ScheduledJob, interceptors...)
+}
+
+// Create returns a builder for creating a ScheduledJob entity.
+func (c *ScheduledJobClient) Create() *ScheduledJobCreate {
+	mutation := newScheduledJobMutation(c.config, OpCreate)
+	return &ScheduledJobCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScheduledJob entities.
+func (c *ScheduledJobClient) CreateBulk(builders ...*ScheduledJobCreate) *ScheduledJobCreateBulk {
+	return &ScheduledJobCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduledJobClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobCreate, int)) *ScheduledJobCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduledJobCreateBulk{err: fmt.Errorf("calling to ScheduledJobClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduledJobCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduledJobCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScheduledJob.
+func (c *ScheduledJobClient) Update() *ScheduledJobUpdate {
+	mutation := newScheduledJobMutation(c.config, OpUpdate)
+	return &ScheduledJobUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduledJobClient) UpdateOne(sj *ScheduledJob) *ScheduledJobUpdateOne {
+	mutation := newScheduledJobMutation(c.config, OpUpdateOne, withScheduledJob(sj))
+	return &ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduledJobClient) UpdateOneID(id string) *ScheduledJobUpdateOne {
+	mutation := newScheduledJobMutation(c.config, OpUpdateOne, withScheduledJobID(id))
+	return &ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScheduledJob.
+func (c *ScheduledJobClient) Delete() *ScheduledJobDelete {
+	mutation := newScheduledJobMutation(c.config, OpDelete)
+	return &ScheduledJobDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduledJobClient) DeleteOne(sj *ScheduledJob) *ScheduledJobDeleteOne {
+	return c.DeleteOneID(sj.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduledJobClient) DeleteOneID(id string) *ScheduledJobDeleteOne {
+	builder := c.Delete().Where(scheduledjob.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduledJobDeleteOne{builder}
+}
+
+// Query returns a query builder for ScheduledJob.
+func (c *ScheduledJobClient) Query() *ScheduledJobQuery {
+	return &ScheduledJobQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScheduledJob},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScheduledJob entity by its id.
+func (c *ScheduledJobClient) Get(ctx context.Context, id string) (*ScheduledJob, error) {
+	return c.Query().Where(scheduledjob.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduledJobClient) GetX(ctx context.Context, id string) *ScheduledJob {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a ScheduledJob.
+func (c *ScheduledJobClient) QueryOwner(sj *ScheduledJob) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.OwnerTable, scheduledjob.OwnerColumn),
+		)
+		schemaConfig := sj.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ScheduledJob
+		fromV = sqlgraph.Neighbors(sj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScheduledJobSetting queries the scheduled_job_setting edge of a ScheduledJob.
+func (c *ScheduledJobClient) QueryScheduledJobSetting(sj *ScheduledJob) *ScheduledJobSettingQuery {
+	query := (&ScheduledJobSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
+			sqlgraph.To(scheduledjobsetting.Table, scheduledjobsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, scheduledjob.ScheduledJobSettingTable, scheduledjob.ScheduledJobSettingColumn),
+		)
+		schemaConfig := sj.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJobSetting
+		step.Edge.Schema = schemaConfig.ScheduledJobSetting
+		fromV = sqlgraph.Neighbors(sj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduledJobClient) Hooks() []Hook {
+	hooks := c.hooks.ScheduledJob
+	return append(hooks[:len(hooks):len(hooks)], scheduledjob.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduledJobClient) Interceptors() []Interceptor {
+	inters := c.inters.ScheduledJob
+	return append(inters[:len(inters):len(inters)], scheduledjob.Interceptors[:]...)
+}
+
+func (c *ScheduledJobClient) mutate(ctx context.Context, m *ScheduledJobMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduledJobCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduledJobUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduledJobDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ScheduledJob mutation op: %q", m.Op())
+	}
+}
+
+// ScheduledJobHistoryClient is a client for the ScheduledJobHistory schema.
+type ScheduledJobHistoryClient struct {
+	config
+}
+
+// NewScheduledJobHistoryClient returns a client for the ScheduledJobHistory from the given config.
+func NewScheduledJobHistoryClient(c config) *ScheduledJobHistoryClient {
+	return &ScheduledJobHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scheduledjobhistory.Hooks(f(g(h())))`.
+func (c *ScheduledJobHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ScheduledJobHistory = append(c.hooks.ScheduledJobHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scheduledjobhistory.Intercept(f(g(h())))`.
+func (c *ScheduledJobHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScheduledJobHistory = append(c.inters.ScheduledJobHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ScheduledJobHistory entity.
+func (c *ScheduledJobHistoryClient) Create() *ScheduledJobHistoryCreate {
+	mutation := newScheduledJobHistoryMutation(c.config, OpCreate)
+	return &ScheduledJobHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScheduledJobHistory entities.
+func (c *ScheduledJobHistoryClient) CreateBulk(builders ...*ScheduledJobHistoryCreate) *ScheduledJobHistoryCreateBulk {
+	return &ScheduledJobHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduledJobHistoryClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobHistoryCreate, int)) *ScheduledJobHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduledJobHistoryCreateBulk{err: fmt.Errorf("calling to ScheduledJobHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduledJobHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduledJobHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScheduledJobHistory.
+func (c *ScheduledJobHistoryClient) Update() *ScheduledJobHistoryUpdate {
+	mutation := newScheduledJobHistoryMutation(c.config, OpUpdate)
+	return &ScheduledJobHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduledJobHistoryClient) UpdateOne(sjh *ScheduledJobHistory) *ScheduledJobHistoryUpdateOne {
+	mutation := newScheduledJobHistoryMutation(c.config, OpUpdateOne, withScheduledJobHistory(sjh))
+	return &ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduledJobHistoryClient) UpdateOneID(id string) *ScheduledJobHistoryUpdateOne {
+	mutation := newScheduledJobHistoryMutation(c.config, OpUpdateOne, withScheduledJobHistoryID(id))
+	return &ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScheduledJobHistory.
+func (c *ScheduledJobHistoryClient) Delete() *ScheduledJobHistoryDelete {
+	mutation := newScheduledJobHistoryMutation(c.config, OpDelete)
+	return &ScheduledJobHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduledJobHistoryClient) DeleteOne(sjh *ScheduledJobHistory) *ScheduledJobHistoryDeleteOne {
+	return c.DeleteOneID(sjh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduledJobHistoryClient) DeleteOneID(id string) *ScheduledJobHistoryDeleteOne {
+	builder := c.Delete().Where(scheduledjobhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduledJobHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ScheduledJobHistory.
+func (c *ScheduledJobHistoryClient) Query() *ScheduledJobHistoryQuery {
+	return &ScheduledJobHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScheduledJobHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScheduledJobHistory entity by its id.
+func (c *ScheduledJobHistoryClient) Get(ctx context.Context, id string) (*ScheduledJobHistory, error) {
+	return c.Query().Where(scheduledjobhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduledJobHistoryClient) GetX(ctx context.Context, id string) *ScheduledJobHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduledJobHistoryClient) Hooks() []Hook {
+	return c.hooks.ScheduledJobHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduledJobHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ScheduledJobHistory
+	return append(inters[:len(inters):len(inters)], scheduledjobhistory.Interceptors[:]...)
+}
+
+func (c *ScheduledJobHistoryClient) mutate(ctx context.Context, m *ScheduledJobHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduledJobHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduledJobHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduledJobHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ScheduledJobHistory mutation op: %q", m.Op())
+	}
+}
+
+// ScheduledJobSettingClient is a client for the ScheduledJobSetting schema.
+type ScheduledJobSettingClient struct {
+	config
+}
+
+// NewScheduledJobSettingClient returns a client for the ScheduledJobSetting from the given config.
+func NewScheduledJobSettingClient(c config) *ScheduledJobSettingClient {
+	return &ScheduledJobSettingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scheduledjobsetting.Hooks(f(g(h())))`.
+func (c *ScheduledJobSettingClient) Use(hooks ...Hook) {
+	c.hooks.ScheduledJobSetting = append(c.hooks.ScheduledJobSetting, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scheduledjobsetting.Intercept(f(g(h())))`.
+func (c *ScheduledJobSettingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScheduledJobSetting = append(c.inters.ScheduledJobSetting, interceptors...)
+}
+
+// Create returns a builder for creating a ScheduledJobSetting entity.
+func (c *ScheduledJobSettingClient) Create() *ScheduledJobSettingCreate {
+	mutation := newScheduledJobSettingMutation(c.config, OpCreate)
+	return &ScheduledJobSettingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScheduledJobSetting entities.
+func (c *ScheduledJobSettingClient) CreateBulk(builders ...*ScheduledJobSettingCreate) *ScheduledJobSettingCreateBulk {
+	return &ScheduledJobSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScheduledJobSettingClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobSettingCreate, int)) *ScheduledJobSettingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScheduledJobSettingCreateBulk{err: fmt.Errorf("calling to ScheduledJobSettingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScheduledJobSettingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScheduledJobSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScheduledJobSetting.
+func (c *ScheduledJobSettingClient) Update() *ScheduledJobSettingUpdate {
+	mutation := newScheduledJobSettingMutation(c.config, OpUpdate)
+	return &ScheduledJobSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScheduledJobSettingClient) UpdateOne(sjs *ScheduledJobSetting) *ScheduledJobSettingUpdateOne {
+	mutation := newScheduledJobSettingMutation(c.config, OpUpdateOne, withScheduledJobSetting(sjs))
+	return &ScheduledJobSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScheduledJobSettingClient) UpdateOneID(id string) *ScheduledJobSettingUpdateOne {
+	mutation := newScheduledJobSettingMutation(c.config, OpUpdateOne, withScheduledJobSettingID(id))
+	return &ScheduledJobSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScheduledJobSetting.
+func (c *ScheduledJobSettingClient) Delete() *ScheduledJobSettingDelete {
+	mutation := newScheduledJobSettingMutation(c.config, OpDelete)
+	return &ScheduledJobSettingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScheduledJobSettingClient) DeleteOne(sjs *ScheduledJobSetting) *ScheduledJobSettingDeleteOne {
+	return c.DeleteOneID(sjs.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScheduledJobSettingClient) DeleteOneID(id string) *ScheduledJobSettingDeleteOne {
+	builder := c.Delete().Where(scheduledjobsetting.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScheduledJobSettingDeleteOne{builder}
+}
+
+// Query returns a query builder for ScheduledJobSetting.
+func (c *ScheduledJobSettingClient) Query() *ScheduledJobSettingQuery {
+	return &ScheduledJobSettingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScheduledJobSetting},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScheduledJobSetting entity by its id.
+func (c *ScheduledJobSettingClient) Get(ctx context.Context, id string) (*ScheduledJobSetting, error) {
+	return c.Query().Where(scheduledjobsetting.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScheduledJobSettingClient) GetX(ctx context.Context, id string) *ScheduledJobSetting {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryScheduledJob queries the scheduled_job edge of a ScheduledJobSetting.
+func (c *ScheduledJobSettingClient) QueryScheduledJob(sjs *ScheduledJobSetting) *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sjs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjobsetting.Table, scheduledjobsetting.FieldID, id),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, scheduledjobsetting.ScheduledJobTable, scheduledjobsetting.ScheduledJobColumn),
+		)
+		schemaConfig := sjs.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJobSetting
+		fromV = sqlgraph.Neighbors(sjs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScheduledJobSettingClient) Hooks() []Hook {
+	hooks := c.hooks.ScheduledJobSetting
+	return append(hooks[:len(hooks):len(hooks)], scheduledjobsetting.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScheduledJobSettingClient) Interceptors() []Interceptor {
+	inters := c.inters.ScheduledJobSetting
+	return append(inters[:len(inters):len(inters)], scheduledjobsetting.Interceptors[:]...)
+}
+
+func (c *ScheduledJobSettingClient) mutate(ctx context.Context, m *ScheduledJobSettingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScheduledJobSettingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScheduledJobSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScheduledJobSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScheduledJobSettingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ScheduledJobSetting mutation op: %q", m.Op())
 	}
 }
 
@@ -17364,10 +17870,10 @@ type (
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
+		ScheduledJobSetting, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -17383,10 +17889,10 @@ type (
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
+		ScheduledJobSetting, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

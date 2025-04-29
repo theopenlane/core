@@ -136,6 +136,12 @@ type Tx struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// ScheduledJob is the client for interacting with the ScheduledJob builders.
+	ScheduledJob *ScheduledJobClient
+	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
+	ScheduledJobHistory *ScheduledJobHistoryClient
+	// ScheduledJobSetting is the client for interacting with the ScheduledJobSetting builders.
+	ScheduledJobSetting *ScheduledJobSettingClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
@@ -359,6 +365,9 @@ func (tx *Tx) init() {
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.ScheduledJob = NewScheduledJobClient(tx.config)
+	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
+	tx.ScheduledJobSetting = NewScheduledJobSettingClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)

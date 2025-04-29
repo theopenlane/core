@@ -74,6 +74,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobsetting"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -211,6 +214,9 @@ func checkColumn(table, column string) error {
 			programmembershiphistory.Table:     programmembershiphistory.ValidColumn,
 			risk.Table:                         risk.ValidColumn,
 			riskhistory.Table:                  riskhistory.ValidColumn,
+			scheduledjob.Table:                 scheduledjob.ValidColumn,
+			scheduledjobhistory.Table:          scheduledjobhistory.ValidColumn,
+			scheduledjobsetting.Table:          scheduledjobsetting.ValidColumn,
 			standard.Table:                     standard.ValidColumn,
 			standardhistory.Table:              standardhistory.ValidColumn,
 			subcontrol.Table:                   subcontrol.ValidColumn,

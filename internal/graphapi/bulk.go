@@ -484,6 +484,44 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	}, nil
 }
 
+// bulkCreateScheduledJob uses the CreateBulk function to create multiple ScheduledJob entities
+func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*generated.CreateScheduledJobInput) (*model.ScheduledJobBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ScheduledJobCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ScheduledJob.Create().SetInput(*data)
+	}
+
+	res, err := c.ScheduledJob.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjob"})
+	}
+
+	// return response
+	return &model.ScheduledJobBulkCreatePayload{
+		ScheduledJobs: res,
+	}, nil
+}
+
+// bulkCreateScheduledJobSetting uses the CreateBulk function to create multiple ScheduledJobSetting entities
+func (r *mutationResolver) bulkCreateScheduledJobSetting(ctx context.Context, input []*generated.CreateScheduledJobSettingInput) (*model.ScheduledJobSettingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ScheduledJobSettingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ScheduledJobSetting.Create().SetInput(*data)
+	}
+
+	res, err := c.ScheduledJobSetting.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjobsetting"})
+	}
+
+	// return response
+	return &model.ScheduledJobSettingBulkCreatePayload{
+		ScheduledJobSettings: res,
+	}, nil
+}
+
 // bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
 func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

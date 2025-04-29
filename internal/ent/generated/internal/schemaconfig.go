@@ -144,6 +144,9 @@ type SchemaConfig struct {
 	RiskViewers                      string // Risk-viewers->Group table.
 	RiskActionPlans                  string // Risk-action_plans->ActionPlan table.
 	RiskHistory                      string // RiskHistory table.
+	ScheduledJob                     string // ScheduledJob table.
+	ScheduledJobHistory              string // ScheduledJobHistory table.
+	ScheduledJobSetting              string // ScheduledJobSetting table.
 	Standard                         string // Standard table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.

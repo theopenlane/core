@@ -74,6 +74,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobsetting"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -23138,6 +23141,1128 @@ func (rh *RiskHistory) ToEdge(order *RiskHistoryOrder) *RiskHistoryEdge {
 	return &RiskHistoryEdge{
 		Node:   rh,
 		Cursor: order.Field.toCursor(rh),
+	}
+}
+
+// ScheduledJobEdge is the edge representation of ScheduledJob.
+type ScheduledJobEdge struct {
+	Node   *ScheduledJob `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// ScheduledJobConnection is the connection containing edges to ScheduledJob.
+type ScheduledJobConnection struct {
+	Edges      []*ScheduledJobEdge `json:"edges"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *ScheduledJobConnection) build(nodes []*ScheduledJob, pager *scheduledjobPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ScheduledJob
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ScheduledJob {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ScheduledJob {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ScheduledJobEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ScheduledJobEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ScheduledJobPaginateOption enables pagination customization.
+type ScheduledJobPaginateOption func(*scheduledjobPager) error
+
+// WithScheduledJobOrder configures pagination ordering.
+func WithScheduledJobOrder(order []*ScheduledJobOrder) ScheduledJobPaginateOption {
+	return func(pager *scheduledjobPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithScheduledJobFilter configures pagination filter.
+func WithScheduledJobFilter(filter func(*ScheduledJobQuery) (*ScheduledJobQuery, error)) ScheduledJobPaginateOption {
+	return func(pager *scheduledjobPager) error {
+		if filter == nil {
+			return errors.New("ScheduledJobQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type scheduledjobPager struct {
+	reverse bool
+	order   []*ScheduledJobOrder
+	filter  func(*ScheduledJobQuery) (*ScheduledJobQuery, error)
+}
+
+func newScheduledJobPager(opts []ScheduledJobPaginateOption, reverse bool) (*scheduledjobPager, error) {
+	pager := &scheduledjobPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *scheduledjobPager) applyFilter(query *ScheduledJobQuery) (*ScheduledJobQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobPager) toCursor(sj *ScheduledJob) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(sj).Value)
+	}
+	return Cursor{ID: sj.ID, Value: cs_}
+}
+
+func (p *scheduledjobPager) applyCursors(query *ScheduledJobQuery, after, before *Cursor) (*ScheduledJobQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultScheduledJobOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobPager) applyOrder(query *ScheduledJobQuery) *ScheduledJobQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultScheduledJobOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultScheduledJobOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *scheduledjobPager) orderExpr(query *ScheduledJobQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultScheduledJobOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ScheduledJob.
+func (sj *ScheduledJobQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ScheduledJobPaginateOption,
+) (*ScheduledJobConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newScheduledJobPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if sj, err = pager.applyFilter(sj); err != nil {
+		return nil, err
+	}
+	conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := sj.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if sj, err = pager.applyCursors(sj, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		sj.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := sj.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	sj = pager.applyOrder(sj)
+	nodes, err := sj.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ScheduledJobOrderFieldCreatedAt orders ScheduledJob by created_at.
+	ScheduledJobOrderFieldCreatedAt = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.CreatedAt, nil
+		},
+		column: scheduledjob.FieldCreatedAt,
+		toTerm: scheduledjob.ByCreatedAt,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.CreatedAt,
+			}
+		},
+	}
+	// ScheduledJobOrderFieldUpdatedAt orders ScheduledJob by updated_at.
+	ScheduledJobOrderFieldUpdatedAt = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.UpdatedAt, nil
+		},
+		column: scheduledjob.FieldUpdatedAt,
+		toTerm: scheduledjob.ByUpdatedAt,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.UpdatedAt,
+			}
+		},
+	}
+	// ScheduledJobOrderFieldTitle orders ScheduledJob by title.
+	ScheduledJobOrderFieldTitle = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.Title, nil
+		},
+		column: scheduledjob.FieldTitle,
+		toTerm: scheduledjob.ByTitle,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.Title,
+			}
+		},
+	}
+	// ScheduledJobOrderFieldJobType orders ScheduledJob by job_type.
+	ScheduledJobOrderFieldJobType = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.JobType, nil
+		},
+		column: scheduledjob.FieldJobType,
+		toTerm: scheduledjob.ByJobType,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.JobType,
+			}
+		},
+	}
+	// ScheduledJobOrderFieldEnvironment orders ScheduledJob by environment.
+	ScheduledJobOrderFieldEnvironment = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.Environment, nil
+		},
+		column: scheduledjob.FieldEnvironment,
+		toTerm: scheduledjob.ByEnvironment,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.Environment,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ScheduledJobOrderField) String() string {
+	var str string
+	switch f.column {
+	case ScheduledJobOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ScheduledJobOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ScheduledJobOrderFieldTitle.column:
+		str = "title"
+	case ScheduledJobOrderFieldJobType.column:
+		str = "job_type"
+	case ScheduledJobOrderFieldEnvironment.column:
+		str = "environment"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ScheduledJobOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ScheduledJobOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ScheduledJobOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ScheduledJobOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ScheduledJobOrderFieldUpdatedAt
+	case "title":
+		*f = *ScheduledJobOrderFieldTitle
+	case "job_type":
+		*f = *ScheduledJobOrderFieldJobType
+	case "environment":
+		*f = *ScheduledJobOrderFieldEnvironment
+	default:
+		return fmt.Errorf("%s is not a valid ScheduledJobOrderField", str)
+	}
+	return nil
+}
+
+// ScheduledJobOrderField defines the ordering field of ScheduledJob.
+type ScheduledJobOrderField struct {
+	// Value extracts the ordering value from the given ScheduledJob.
+	Value    func(*ScheduledJob) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) scheduledjob.OrderOption
+	toCursor func(*ScheduledJob) Cursor
+}
+
+// ScheduledJobOrder defines the ordering of ScheduledJob.
+type ScheduledJobOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *ScheduledJobOrderField `json:"field"`
+}
+
+// DefaultScheduledJobOrder is the default ordering of ScheduledJob.
+var DefaultScheduledJobOrder = &ScheduledJobOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.ID, nil
+		},
+		column: scheduledjob.FieldID,
+		toTerm: scheduledjob.ByID,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{ID: sj.ID}
+		},
+	},
+}
+
+// ToEdge converts ScheduledJob into ScheduledJobEdge.
+func (sj *ScheduledJob) ToEdge(order *ScheduledJobOrder) *ScheduledJobEdge {
+	if order == nil {
+		order = DefaultScheduledJobOrder
+	}
+	return &ScheduledJobEdge{
+		Node:   sj,
+		Cursor: order.Field.toCursor(sj),
+	}
+}
+
+// ScheduledJobHistoryEdge is the edge representation of ScheduledJobHistory.
+type ScheduledJobHistoryEdge struct {
+	Node   *ScheduledJobHistory `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// ScheduledJobHistoryConnection is the connection containing edges to ScheduledJobHistory.
+type ScheduledJobHistoryConnection struct {
+	Edges      []*ScheduledJobHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *ScheduledJobHistoryConnection) build(nodes []*ScheduledJobHistory, pager *scheduledjobhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ScheduledJobHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ScheduledJobHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ScheduledJobHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ScheduledJobHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ScheduledJobHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ScheduledJobHistoryPaginateOption enables pagination customization.
+type ScheduledJobHistoryPaginateOption func(*scheduledjobhistoryPager) error
+
+// WithScheduledJobHistoryOrder configures pagination ordering.
+func WithScheduledJobHistoryOrder(order *ScheduledJobHistoryOrder) ScheduledJobHistoryPaginateOption {
+	if order == nil {
+		order = DefaultScheduledJobHistoryOrder
+	}
+	o := *order
+	return func(pager *scheduledjobhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultScheduledJobHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithScheduledJobHistoryFilter configures pagination filter.
+func WithScheduledJobHistoryFilter(filter func(*ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error)) ScheduledJobHistoryPaginateOption {
+	return func(pager *scheduledjobhistoryPager) error {
+		if filter == nil {
+			return errors.New("ScheduledJobHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type scheduledjobhistoryPager struct {
+	reverse bool
+	order   *ScheduledJobHistoryOrder
+	filter  func(*ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error)
+}
+
+func newScheduledJobHistoryPager(opts []ScheduledJobHistoryPaginateOption, reverse bool) (*scheduledjobhistoryPager, error) {
+	pager := &scheduledjobhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultScheduledJobHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *scheduledjobhistoryPager) applyFilter(query *ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobhistoryPager) toCursor(sjh *ScheduledJobHistory) Cursor {
+	return p.order.Field.toCursor(sjh)
+}
+
+func (p *scheduledjobhistoryPager) applyCursors(query *ScheduledJobHistoryQuery, after, before *Cursor) (*ScheduledJobHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultScheduledJobHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobhistoryPager) applyOrder(query *ScheduledJobHistoryQuery) *ScheduledJobHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultScheduledJobHistoryOrder.Field {
+		query = query.Order(DefaultScheduledJobHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *scheduledjobhistoryPager) orderExpr(query *ScheduledJobHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultScheduledJobHistoryOrder.Field {
+			b.Comma().Ident(DefaultScheduledJobHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ScheduledJobHistory.
+func (sjh *ScheduledJobHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ScheduledJobHistoryPaginateOption,
+) (*ScheduledJobHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newScheduledJobHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if sjh, err = pager.applyFilter(sjh); err != nil {
+		return nil, err
+	}
+	conn := &ScheduledJobHistoryConnection{Edges: []*ScheduledJobHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := sjh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if sjh, err = pager.applyCursors(sjh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		sjh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := sjh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	sjh = pager.applyOrder(sjh)
+	nodes, err := sjh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ScheduledJobHistoryOrderFieldCreatedAt orders ScheduledJobHistory by created_at.
+	ScheduledJobHistoryOrderFieldCreatedAt = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.CreatedAt, nil
+		},
+		column: scheduledjobhistory.FieldCreatedAt,
+		toTerm: scheduledjobhistory.ByCreatedAt,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.CreatedAt,
+			}
+		},
+	}
+	// ScheduledJobHistoryOrderFieldUpdatedAt orders ScheduledJobHistory by updated_at.
+	ScheduledJobHistoryOrderFieldUpdatedAt = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.UpdatedAt, nil
+		},
+		column: scheduledjobhistory.FieldUpdatedAt,
+		toTerm: scheduledjobhistory.ByUpdatedAt,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.UpdatedAt,
+			}
+		},
+	}
+	// ScheduledJobHistoryOrderFieldTitle orders ScheduledJobHistory by title.
+	ScheduledJobHistoryOrderFieldTitle = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.Title, nil
+		},
+		column: scheduledjobhistory.FieldTitle,
+		toTerm: scheduledjobhistory.ByTitle,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.Title,
+			}
+		},
+	}
+	// ScheduledJobHistoryOrderFieldJobType orders ScheduledJobHistory by job_type.
+	ScheduledJobHistoryOrderFieldJobType = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.JobType, nil
+		},
+		column: scheduledjobhistory.FieldJobType,
+		toTerm: scheduledjobhistory.ByJobType,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.JobType,
+			}
+		},
+	}
+	// ScheduledJobHistoryOrderFieldEnvironment orders ScheduledJobHistory by environment.
+	ScheduledJobHistoryOrderFieldEnvironment = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.Environment, nil
+		},
+		column: scheduledjobhistory.FieldEnvironment,
+		toTerm: scheduledjobhistory.ByEnvironment,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.Environment,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ScheduledJobHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ScheduledJobHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ScheduledJobHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ScheduledJobHistoryOrderFieldTitle.column:
+		str = "title"
+	case ScheduledJobHistoryOrderFieldJobType.column:
+		str = "job_type"
+	case ScheduledJobHistoryOrderFieldEnvironment.column:
+		str = "environment"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ScheduledJobHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ScheduledJobHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ScheduledJobHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ScheduledJobHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ScheduledJobHistoryOrderFieldUpdatedAt
+	case "title":
+		*f = *ScheduledJobHistoryOrderFieldTitle
+	case "job_type":
+		*f = *ScheduledJobHistoryOrderFieldJobType
+	case "environment":
+		*f = *ScheduledJobHistoryOrderFieldEnvironment
+	default:
+		return fmt.Errorf("%s is not a valid ScheduledJobHistoryOrderField", str)
+	}
+	return nil
+}
+
+// ScheduledJobHistoryOrderField defines the ordering field of ScheduledJobHistory.
+type ScheduledJobHistoryOrderField struct {
+	// Value extracts the ordering value from the given ScheduledJobHistory.
+	Value    func(*ScheduledJobHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) scheduledjobhistory.OrderOption
+	toCursor func(*ScheduledJobHistory) Cursor
+}
+
+// ScheduledJobHistoryOrder defines the ordering of ScheduledJobHistory.
+type ScheduledJobHistoryOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *ScheduledJobHistoryOrderField `json:"field"`
+}
+
+// DefaultScheduledJobHistoryOrder is the default ordering of ScheduledJobHistory.
+var DefaultScheduledJobHistoryOrder = &ScheduledJobHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.ID, nil
+		},
+		column: scheduledjobhistory.FieldID,
+		toTerm: scheduledjobhistory.ByID,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{ID: sjh.ID}
+		},
+	},
+}
+
+// ToEdge converts ScheduledJobHistory into ScheduledJobHistoryEdge.
+func (sjh *ScheduledJobHistory) ToEdge(order *ScheduledJobHistoryOrder) *ScheduledJobHistoryEdge {
+	if order == nil {
+		order = DefaultScheduledJobHistoryOrder
+	}
+	return &ScheduledJobHistoryEdge{
+		Node:   sjh,
+		Cursor: order.Field.toCursor(sjh),
+	}
+}
+
+// ScheduledJobSettingEdge is the edge representation of ScheduledJobSetting.
+type ScheduledJobSettingEdge struct {
+	Node   *ScheduledJobSetting `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// ScheduledJobSettingConnection is the connection containing edges to ScheduledJobSetting.
+type ScheduledJobSettingConnection struct {
+	Edges      []*ScheduledJobSettingEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *ScheduledJobSettingConnection) build(nodes []*ScheduledJobSetting, pager *scheduledjobsettingPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ScheduledJobSetting
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ScheduledJobSetting {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ScheduledJobSetting {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ScheduledJobSettingEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ScheduledJobSettingEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ScheduledJobSettingPaginateOption enables pagination customization.
+type ScheduledJobSettingPaginateOption func(*scheduledjobsettingPager) error
+
+// WithScheduledJobSettingOrder configures pagination ordering.
+func WithScheduledJobSettingOrder(order []*ScheduledJobSettingOrder) ScheduledJobSettingPaginateOption {
+	return func(pager *scheduledjobsettingPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithScheduledJobSettingFilter configures pagination filter.
+func WithScheduledJobSettingFilter(filter func(*ScheduledJobSettingQuery) (*ScheduledJobSettingQuery, error)) ScheduledJobSettingPaginateOption {
+	return func(pager *scheduledjobsettingPager) error {
+		if filter == nil {
+			return errors.New("ScheduledJobSettingQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type scheduledjobsettingPager struct {
+	reverse bool
+	order   []*ScheduledJobSettingOrder
+	filter  func(*ScheduledJobSettingQuery) (*ScheduledJobSettingQuery, error)
+}
+
+func newScheduledJobSettingPager(opts []ScheduledJobSettingPaginateOption, reverse bool) (*scheduledjobsettingPager, error) {
+	pager := &scheduledjobsettingPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *scheduledjobsettingPager) applyFilter(query *ScheduledJobSettingQuery) (*ScheduledJobSettingQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobsettingPager) toCursor(sjs *ScheduledJobSetting) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(sjs).Value)
+	}
+	return Cursor{ID: sjs.ID, Value: cs_}
+}
+
+func (p *scheduledjobsettingPager) applyCursors(query *ScheduledJobSettingQuery, after, before *Cursor) (*ScheduledJobSettingQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultScheduledJobSettingOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *scheduledjobsettingPager) applyOrder(query *ScheduledJobSettingQuery) *ScheduledJobSettingQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultScheduledJobSettingOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultScheduledJobSettingOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *scheduledjobsettingPager) orderExpr(query *ScheduledJobSettingQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultScheduledJobSettingOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ScheduledJobSetting.
+func (sjs *ScheduledJobSettingQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ScheduledJobSettingPaginateOption,
+) (*ScheduledJobSettingConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newScheduledJobSettingPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if sjs, err = pager.applyFilter(sjs); err != nil {
+		return nil, err
+	}
+	conn := &ScheduledJobSettingConnection{Edges: []*ScheduledJobSettingEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := sjs.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if sjs, err = pager.applyCursors(sjs, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		sjs.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := sjs.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	sjs = pager.applyOrder(sjs)
+	nodes, err := sjs.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ScheduledJobSettingOrderFieldCreatedAt orders ScheduledJobSetting by created_at.
+	ScheduledJobSettingOrderFieldCreatedAt = &ScheduledJobSettingOrderField{
+		Value: func(sjs *ScheduledJobSetting) (ent.Value, error) {
+			return sjs.CreatedAt, nil
+		},
+		column: scheduledjobsetting.FieldCreatedAt,
+		toTerm: scheduledjobsetting.ByCreatedAt,
+		toCursor: func(sjs *ScheduledJobSetting) Cursor {
+			return Cursor{
+				ID:    sjs.ID,
+				Value: sjs.CreatedAt,
+			}
+		},
+	}
+	// ScheduledJobSettingOrderFieldUpdatedAt orders ScheduledJobSetting by updated_at.
+	ScheduledJobSettingOrderFieldUpdatedAt = &ScheduledJobSettingOrderField{
+		Value: func(sjs *ScheduledJobSetting) (ent.Value, error) {
+			return sjs.UpdatedAt, nil
+		},
+		column: scheduledjobsetting.FieldUpdatedAt,
+		toTerm: scheduledjobsetting.ByUpdatedAt,
+		toCursor: func(sjs *ScheduledJobSetting) Cursor {
+			return Cursor{
+				ID:    sjs.ID,
+				Value: sjs.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ScheduledJobSettingOrderField) String() string {
+	var str string
+	switch f.column {
+	case ScheduledJobSettingOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ScheduledJobSettingOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ScheduledJobSettingOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ScheduledJobSettingOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ScheduledJobSettingOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ScheduledJobSettingOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ScheduledJobSettingOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid ScheduledJobSettingOrderField", str)
+	}
+	return nil
+}
+
+// ScheduledJobSettingOrderField defines the ordering field of ScheduledJobSetting.
+type ScheduledJobSettingOrderField struct {
+	// Value extracts the ordering value from the given ScheduledJobSetting.
+	Value    func(*ScheduledJobSetting) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) scheduledjobsetting.OrderOption
+	toCursor func(*ScheduledJobSetting) Cursor
+}
+
+// ScheduledJobSettingOrder defines the ordering of ScheduledJobSetting.
+type ScheduledJobSettingOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *ScheduledJobSettingOrderField `json:"field"`
+}
+
+// DefaultScheduledJobSettingOrder is the default ordering of ScheduledJobSetting.
+var DefaultScheduledJobSettingOrder = &ScheduledJobSettingOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ScheduledJobSettingOrderField{
+		Value: func(sjs *ScheduledJobSetting) (ent.Value, error) {
+			return sjs.ID, nil
+		},
+		column: scheduledjobsetting.FieldID,
+		toTerm: scheduledjobsetting.ByID,
+		toCursor: func(sjs *ScheduledJobSetting) Cursor {
+			return Cursor{ID: sjs.ID}
+		},
+	},
+}
+
+// ToEdge converts ScheduledJobSetting into ScheduledJobSettingEdge.
+func (sjs *ScheduledJobSetting) ToEdge(order *ScheduledJobSettingOrder) *ScheduledJobSettingEdge {
+	if order == nil {
+		order = DefaultScheduledJobSettingOrder
+	}
+	return &ScheduledJobSettingEdge{
+		Node:   sjs,
+		Cursor: order.Field.toCursor(sjs),
 	}
 }
 

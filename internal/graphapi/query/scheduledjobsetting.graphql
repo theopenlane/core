@@ -1,0 +1,139 @@
+
+mutation CreateBulkCSVScheduledJobSetting($input: Upload!) {
+  createBulkCSVScheduledJobSetting(input: $input) {
+    scheduledJobSettings {
+      cadence
+      configuration
+      createdAt
+      createdBy
+      cron
+      id
+      scheduledJobID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkScheduledJobSetting($input: [CreateScheduledJobSettingInput!]) {
+  createBulkScheduledJobSetting(input: $input) {
+    scheduledJobSettings {
+      cadence
+      configuration
+      createdAt
+      createdBy
+      cron
+      id
+      scheduledJobID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateScheduledJobSetting($input: CreateScheduledJobSettingInput!) {
+  createScheduledJobSetting(input: $input) {
+    scheduledJobSetting {
+      cadence
+      configuration
+      createdAt
+      createdBy
+      cron
+      id
+      scheduledJobID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteScheduledJobSetting($deleteScheduledJobSettingId: ID!) {
+  deleteScheduledJobSetting(id: $deleteScheduledJobSettingId) {
+    deletedID
+  }
+}
+
+query GetAllScheduledJobSettings {
+  scheduledJobSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        configuration
+        createdAt
+        createdBy
+        cron
+        id
+        scheduledJobID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetScheduledJobSettingByID($scheduledJobSettingId: ID!) {
+  scheduledJobSetting(id: $scheduledJobSettingId) {
+    cadence
+    configuration
+    createdAt
+    createdBy
+    cron
+    id
+    scheduledJobID
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetScheduledJobSettings($first: Int, $last: Int, $where: ScheduledJobSettingWhereInput) {
+  scheduledJobSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        configuration
+        createdAt
+        createdBy
+        cron
+        id
+        scheduledJobID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateScheduledJobSetting($updateScheduledJobSettingId: ID!, $input: UpdateScheduledJobSettingInput!) {
+  updateScheduledJobSetting(id: $updateScheduledJobSettingId, input: $input) {
+    scheduledJobSetting {
+      cadence
+      configuration
+      createdAt
+      createdBy
+      cron
+      id
+      scheduledJobID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

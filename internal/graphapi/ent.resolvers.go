@@ -1508,6 +1508,81 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 	return res, err
 }
 
+// ScheduledJobs is the resolver for the scheduledJobs field.
+func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) (*generated.ScheduledJobConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobOrder(orderBy),
+		generated.WithScheduledJobFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobHistories is the resolver for the scheduledJobHistories field.
+func (r *queryResolver) ScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) (*generated.ScheduledJobHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ScheduledJobHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobHistoryOrder(orderBy),
+		generated.WithScheduledJobHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobSettings is the resolver for the scheduledJobSettings field.
+func (r *queryResolver) ScheduledJobSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobSettingOrder, where *generated.ScheduledJobSettingWhereInput) (*generated.ScheduledJobSettingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ScheduledJobSetting.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobsetting"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobSettingOrder(orderBy),
+		generated.WithScheduledJobSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobsetting"})
+	}
+
+	return res, err
+}
+
 // Standards is the resolver for the standards field.
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
 	// set page limit if nothing was set

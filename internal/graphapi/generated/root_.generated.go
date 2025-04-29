@@ -1745,6 +1745,8 @@ type ComplexityRoot struct {
 		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScheduledJob          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScheduledJobSetting   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTask                  func(childComplexity int, input graphql.Upload) int
@@ -1773,6 +1775,8 @@ type ComplexityRoot struct {
 		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
 		CreateBulkRisk                     func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkScheduledJob             func(childComplexity int, input []*generated.CreateScheduledJobInput) int
+		CreateBulkScheduledJobSetting      func(childComplexity int, input []*generated.CreateScheduledJobSettingInput) int
 		CreateBulkSubcontrol               func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubscriber               func(childComplexity int, input []*generated.CreateSubscriberInput) int
 		CreateBulkTask                     func(childComplexity int, input []*generated.CreateTaskInput) int
@@ -1812,6 +1816,8 @@ type ComplexityRoot struct {
 		CreateProgramMembership            func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers           func(childComplexity int, input model.CreateProgramWithMembersInput) int
 		CreateRisk                         func(childComplexity int, input generated.CreateRiskInput) int
+		CreateScheduledJob                 func(childComplexity int, input generated.CreateScheduledJobInput) int
+		CreateScheduledJobSetting          func(childComplexity int, input generated.CreateScheduledJobSettingInput) int
 		CreateStandard                     func(childComplexity int, input generated.CreateStandardInput) int
 		CreateSubcontrol                   func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubscriber                   func(childComplexity int, input generated.CreateSubscriberInput) int
@@ -1849,6 +1855,8 @@ type ComplexityRoot struct {
 		DeleteProgram                      func(childComplexity int, id string) int
 		DeleteProgramMembership            func(childComplexity int, id string) int
 		DeleteRisk                         func(childComplexity int, id string) int
+		DeleteScheduledJob                 func(childComplexity int, id string) int
+		DeleteScheduledJobSetting          func(childComplexity int, id string) int
 		DeleteStandard                     func(childComplexity int, id string) int
 		DeleteSubcontrol                   func(childComplexity int, id string) int
 		DeleteSubscriber                   func(childComplexity int, email string, ownerID *string) int
@@ -1884,6 +1892,8 @@ type ComplexityRoot struct {
 		UpdateProgram                      func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership            func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRisk                         func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateScheduledJob                 func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
+		UpdateScheduledJobSetting          func(childComplexity int, id string, input generated.UpdateScheduledJobSettingInput) int
 		UpdateStandard                     func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                   func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubscriber                   func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
@@ -2246,6 +2256,7 @@ type ComplexityRoot struct {
 		Programs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskCreators             func(childComplexity int) int
 		Risks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScheduledJobs            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Secrets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Setting                  func(childComplexity int) int
 		Standards                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
@@ -2775,6 +2786,8 @@ type ComplexityRoot struct {
 		AdminProcedureSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminProgramSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminRiskSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminScheduledJobSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminScheduledJobSettingSearch   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminStandardSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubcontrolSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2895,6 +2908,13 @@ type ComplexityRoot struct {
 		RiskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
 		RiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Risks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScheduledJob                     func(childComplexity int, id string) int
+		ScheduledJobHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
+		ScheduledJobSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ScheduledJobSetting              func(childComplexity int, id string) int
+		ScheduledJobSettingSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ScheduledJobSettings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobSettingOrder, where *generated.ScheduledJobSettingWhereInput) int
+		ScheduledJobs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Search                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Self                             func(childComplexity int) int
 		Standard                         func(childComplexity int, id string) int
@@ -3033,6 +3053,128 @@ type ComplexityRoot struct {
 		Risk func(childComplexity int) int
 	}
 
+	ScheduledJob struct {
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		DeletedAt           func(childComplexity int) int
+		DeletedBy           func(childComplexity int) int
+		Description         func(childComplexity int) int
+		DisplayID           func(childComplexity int) int
+		Environment         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		JobType             func(childComplexity int) int
+		Owner               func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		ScheduledJobSetting func(childComplexity int) int
+		Script              func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		Title               func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
+	}
+
+	ScheduledJobBulkCreatePayload struct {
+		ScheduledJobs func(childComplexity int) int
+	}
+
+	ScheduledJobConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ScheduledJobCreatePayload struct {
+		ScheduledJob func(childComplexity int) int
+	}
+
+	ScheduledJobDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ScheduledJobEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ScheduledJobHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		Description func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
+		Environment func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		JobType     func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Script      func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		Title       func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	ScheduledJobHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ScheduledJobHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ScheduledJobSetting struct {
+		Cadence        func(childComplexity int) int
+		Configuration  func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		Cron           func(childComplexity int) int
+		DeletedAt      func(childComplexity int) int
+		DeletedBy      func(childComplexity int) int
+		ID             func(childComplexity int) int
+		ScheduledJob   func(childComplexity int) int
+		ScheduledJobID func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+	}
+
+	ScheduledJobSettingBulkCreatePayload struct {
+		ScheduledJobSettings func(childComplexity int) int
+	}
+
+	ScheduledJobSettingConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ScheduledJobSettingCreatePayload struct {
+		ScheduledJobSetting func(childComplexity int) int
+	}
+
+	ScheduledJobSettingDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ScheduledJobSettingEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ScheduledJobSettingUpdatePayload struct {
+		ScheduledJobSetting func(childComplexity int) int
+	}
+
+	ScheduledJobUpdatePayload struct {
+		ScheduledJob func(childComplexity int) int
+	}
+
 	SearchResults struct {
 		APITokens              func(childComplexity int) int
 		ActionPlans            func(childComplexity int) int
@@ -3060,6 +3202,8 @@ type ComplexityRoot struct {
 		Procedures             func(childComplexity int) int
 		Programs               func(childComplexity int) int
 		Risks                  func(childComplexity int) int
+		ScheduledJobSettings   func(childComplexity int) int
+		ScheduledJobs          func(childComplexity int) int
 		Standards              func(childComplexity int) int
 		Subcontrols            func(childComplexity int) int
 		Subscribers            func(childComplexity int) int
@@ -12004,6 +12148,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVScheduledJob":
+		if e.complexity.Mutation.CreateBulkCSVScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVScheduledJob(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVScheduledJobSetting":
+		if e.complexity.Mutation.CreateBulkCSVScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVScheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVScheduledJobSetting(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVSubcontrol":
 		if e.complexity.Mutation.CreateBulkCSVSubcontrol == nil {
 			break
@@ -12339,6 +12507,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
+
+	case "Mutation.createBulkScheduledJob":
+		if e.complexity.Mutation.CreateBulkScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkScheduledJob(childComplexity, args["input"].([]*generated.CreateScheduledJobInput)), true
+
+	case "Mutation.createBulkScheduledJobSetting":
+		if e.complexity.Mutation.CreateBulkScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkScheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkScheduledJobSetting(childComplexity, args["input"].([]*generated.CreateScheduledJobSettingInput)), true
 
 	case "Mutation.createBulkSubcontrol":
 		if e.complexity.Mutation.CreateBulkSubcontrol == nil {
@@ -12808,6 +13000,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateRisk(childComplexity, args["input"].(generated.CreateRiskInput)), true
 
+	case "Mutation.createScheduledJob":
+		if e.complexity.Mutation.CreateScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateScheduledJob(childComplexity, args["input"].(generated.CreateScheduledJobInput)), true
+
+	case "Mutation.createScheduledJobSetting":
+		if e.complexity.Mutation.CreateScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createScheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateScheduledJobSetting(childComplexity, args["input"].(generated.CreateScheduledJobSettingInput)), true
+
 	case "Mutation.createStandard":
 		if e.complexity.Mutation.CreateStandard == nil {
 			break
@@ -13252,6 +13468,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteRisk(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteScheduledJob":
+		if e.complexity.Mutation.DeleteScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteScheduledJob(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteScheduledJobSetting":
+		if e.complexity.Mutation.DeleteScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteScheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteScheduledJobSetting(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteStandard":
 		if e.complexity.Mutation.DeleteStandard == nil {
 			break
@@ -13671,6 +13911,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateRisk(childComplexity, args["id"].(string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateScheduledJob":
+		if e.complexity.Mutation.UpdateScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateScheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateScheduledJob(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobInput)), true
+
+	case "Mutation.updateScheduledJobSetting":
+		if e.complexity.Mutation.UpdateScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateScheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateScheduledJobSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobSettingInput)), true
 
 	case "Mutation.updateStandard":
 		if e.complexity.Mutation.UpdateStandard == nil {
@@ -15670,6 +15934,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Organization.scheduledJobs":
+		if e.complexity.Organization.ScheduledJobs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_scheduledJobs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 
 	case "Organization.secrets":
 		if e.complexity.Organization.Secrets == nil {
@@ -18471,6 +18747,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminRiskSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminScheduledJobSearch":
+		if e.complexity.Query.AdminScheduledJobSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminScheduledJobSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminScheduledJobSettingSearch":
+		if e.complexity.Query.AdminScheduledJobSettingSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminScheduledJobSettingSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminScheduledJobSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminSearch":
 		if e.complexity.Query.AdminSearch == nil {
 			break
@@ -19911,6 +20211,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Query.scheduledJob":
+		if e.complexity.Query.ScheduledJob == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJob_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJob(childComplexity, args["id"].(string)), true
+
+	case "Query.scheduledJobHistories":
+		if e.complexity.Query.ScheduledJobHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ScheduledJobHistoryOrder), args["where"].(*generated.ScheduledJobHistoryWhereInput)), true
+
+	case "Query.scheduledJobSearch":
+		if e.complexity.Query.ScheduledJobSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.scheduledJobSetting":
+		if e.complexity.Query.ScheduledJobSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobSetting(childComplexity, args["id"].(string)), true
+
+	case "Query.scheduledJobSettingSearch":
+		if e.complexity.Query.ScheduledJobSettingSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobSettingSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.scheduledJobSettings":
+		if e.complexity.Query.ScheduledJobSettings == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobSettings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobSettings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobSettingOrder), args["where"].(*generated.ScheduledJobSettingWhereInput)), true
+
+	case "Query.scheduledJobs":
+		if e.complexity.Query.ScheduledJobs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scheduledJobs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
 	case "Query.search":
 		if e.complexity.Query.Search == nil {
 			break
@@ -20843,6 +21227,503 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskUpdatePayload.Risk(childComplexity), true
 
+	case "ScheduledJob.createdAt":
+		if e.complexity.ScheduledJob.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.CreatedAt(childComplexity), true
+
+	case "ScheduledJob.createdBy":
+		if e.complexity.ScheduledJob.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.CreatedBy(childComplexity), true
+
+	case "ScheduledJob.deletedAt":
+		if e.complexity.ScheduledJob.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.DeletedAt(childComplexity), true
+
+	case "ScheduledJob.deletedBy":
+		if e.complexity.ScheduledJob.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.DeletedBy(childComplexity), true
+
+	case "ScheduledJob.description":
+		if e.complexity.ScheduledJob.Description == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Description(childComplexity), true
+
+	case "ScheduledJob.displayID":
+		if e.complexity.ScheduledJob.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.DisplayID(childComplexity), true
+
+	case "ScheduledJob.environment":
+		if e.complexity.ScheduledJob.Environment == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Environment(childComplexity), true
+
+	case "ScheduledJob.id":
+		if e.complexity.ScheduledJob.ID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.ID(childComplexity), true
+
+	case "ScheduledJob.jobType":
+		if e.complexity.ScheduledJob.JobType == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.JobType(childComplexity), true
+
+	case "ScheduledJob.owner":
+		if e.complexity.ScheduledJob.Owner == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Owner(childComplexity), true
+
+	case "ScheduledJob.ownerID":
+		if e.complexity.ScheduledJob.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.OwnerID(childComplexity), true
+
+	case "ScheduledJob.scheduledJobSetting":
+		if e.complexity.ScheduledJob.ScheduledJobSetting == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.ScheduledJobSetting(childComplexity), true
+
+	case "ScheduledJob.script":
+		if e.complexity.ScheduledJob.Script == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Script(childComplexity), true
+
+	case "ScheduledJob.tags":
+		if e.complexity.ScheduledJob.Tags == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Tags(childComplexity), true
+
+	case "ScheduledJob.title":
+		if e.complexity.ScheduledJob.Title == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Title(childComplexity), true
+
+	case "ScheduledJob.updatedAt":
+		if e.complexity.ScheduledJob.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.UpdatedAt(childComplexity), true
+
+	case "ScheduledJob.updatedBy":
+		if e.complexity.ScheduledJob.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.UpdatedBy(childComplexity), true
+
+	case "ScheduledJobBulkCreatePayload.scheduledJobs":
+		if e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs(childComplexity), true
+
+	case "ScheduledJobConnection.edges":
+		if e.complexity.ScheduledJobConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobConnection.Edges(childComplexity), true
+
+	case "ScheduledJobConnection.pageInfo":
+		if e.complexity.ScheduledJobConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobConnection.PageInfo(childComplexity), true
+
+	case "ScheduledJobConnection.totalCount":
+		if e.complexity.ScheduledJobConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobConnection.TotalCount(childComplexity), true
+
+	case "ScheduledJobCreatePayload.scheduledJob":
+		if e.complexity.ScheduledJobCreatePayload.ScheduledJob == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobCreatePayload.ScheduledJob(childComplexity), true
+
+	case "ScheduledJobDeletePayload.deletedID":
+		if e.complexity.ScheduledJobDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobDeletePayload.DeletedID(childComplexity), true
+
+	case "ScheduledJobEdge.cursor":
+		if e.complexity.ScheduledJobEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobEdge.Cursor(childComplexity), true
+
+	case "ScheduledJobEdge.node":
+		if e.complexity.ScheduledJobEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobEdge.Node(childComplexity), true
+
+	case "ScheduledJobHistory.createdAt":
+		if e.complexity.ScheduledJobHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.CreatedAt(childComplexity), true
+
+	case "ScheduledJobHistory.createdBy":
+		if e.complexity.ScheduledJobHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.CreatedBy(childComplexity), true
+
+	case "ScheduledJobHistory.deletedAt":
+		if e.complexity.ScheduledJobHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.DeletedAt(childComplexity), true
+
+	case "ScheduledJobHistory.deletedBy":
+		if e.complexity.ScheduledJobHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.DeletedBy(childComplexity), true
+
+	case "ScheduledJobHistory.description":
+		if e.complexity.ScheduledJobHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Description(childComplexity), true
+
+	case "ScheduledJobHistory.displayID":
+		if e.complexity.ScheduledJobHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.DisplayID(childComplexity), true
+
+	case "ScheduledJobHistory.environment":
+		if e.complexity.ScheduledJobHistory.Environment == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Environment(childComplexity), true
+
+	case "ScheduledJobHistory.historyTime":
+		if e.complexity.ScheduledJobHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.HistoryTime(childComplexity), true
+
+	case "ScheduledJobHistory.id":
+		if e.complexity.ScheduledJobHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.ID(childComplexity), true
+
+	case "ScheduledJobHistory.jobType":
+		if e.complexity.ScheduledJobHistory.JobType == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.JobType(childComplexity), true
+
+	case "ScheduledJobHistory.operation":
+		if e.complexity.ScheduledJobHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Operation(childComplexity), true
+
+	case "ScheduledJobHistory.ownerID":
+		if e.complexity.ScheduledJobHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.OwnerID(childComplexity), true
+
+	case "ScheduledJobHistory.ref":
+		if e.complexity.ScheduledJobHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Ref(childComplexity), true
+
+	case "ScheduledJobHistory.script":
+		if e.complexity.ScheduledJobHistory.Script == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Script(childComplexity), true
+
+	case "ScheduledJobHistory.tags":
+		if e.complexity.ScheduledJobHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Tags(childComplexity), true
+
+	case "ScheduledJobHistory.title":
+		if e.complexity.ScheduledJobHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Title(childComplexity), true
+
+	case "ScheduledJobHistory.updatedAt":
+		if e.complexity.ScheduledJobHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.UpdatedAt(childComplexity), true
+
+	case "ScheduledJobHistory.updatedBy":
+		if e.complexity.ScheduledJobHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.UpdatedBy(childComplexity), true
+
+	case "ScheduledJobHistoryConnection.edges":
+		if e.complexity.ScheduledJobHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistoryConnection.Edges(childComplexity), true
+
+	case "ScheduledJobHistoryConnection.pageInfo":
+		if e.complexity.ScheduledJobHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistoryConnection.PageInfo(childComplexity), true
+
+	case "ScheduledJobHistoryConnection.totalCount":
+		if e.complexity.ScheduledJobHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistoryConnection.TotalCount(childComplexity), true
+
+	case "ScheduledJobHistoryEdge.cursor":
+		if e.complexity.ScheduledJobHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistoryEdge.Cursor(childComplexity), true
+
+	case "ScheduledJobHistoryEdge.node":
+		if e.complexity.ScheduledJobHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistoryEdge.Node(childComplexity), true
+
+	case "ScheduledJobSetting.cadence":
+		if e.complexity.ScheduledJobSetting.Cadence == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.Cadence(childComplexity), true
+
+	case "ScheduledJobSetting.configuration":
+		if e.complexity.ScheduledJobSetting.Configuration == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.Configuration(childComplexity), true
+
+	case "ScheduledJobSetting.createdAt":
+		if e.complexity.ScheduledJobSetting.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.CreatedAt(childComplexity), true
+
+	case "ScheduledJobSetting.createdBy":
+		if e.complexity.ScheduledJobSetting.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.CreatedBy(childComplexity), true
+
+	case "ScheduledJobSetting.cron":
+		if e.complexity.ScheduledJobSetting.Cron == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.Cron(childComplexity), true
+
+	case "ScheduledJobSetting.deletedAt":
+		if e.complexity.ScheduledJobSetting.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.DeletedAt(childComplexity), true
+
+	case "ScheduledJobSetting.deletedBy":
+		if e.complexity.ScheduledJobSetting.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.DeletedBy(childComplexity), true
+
+	case "ScheduledJobSetting.id":
+		if e.complexity.ScheduledJobSetting.ID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.ID(childComplexity), true
+
+	case "ScheduledJobSetting.scheduledJob":
+		if e.complexity.ScheduledJobSetting.ScheduledJob == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.ScheduledJob(childComplexity), true
+
+	case "ScheduledJobSetting.scheduledJobID":
+		if e.complexity.ScheduledJobSetting.ScheduledJobID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.ScheduledJobID(childComplexity), true
+
+	case "ScheduledJobSetting.tags":
+		if e.complexity.ScheduledJobSetting.Tags == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.Tags(childComplexity), true
+
+	case "ScheduledJobSetting.updatedAt":
+		if e.complexity.ScheduledJobSetting.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.UpdatedAt(childComplexity), true
+
+	case "ScheduledJobSetting.updatedBy":
+		if e.complexity.ScheduledJobSetting.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSetting.UpdatedBy(childComplexity), true
+
+	case "ScheduledJobSettingBulkCreatePayload.scheduledJobSettings":
+		if e.complexity.ScheduledJobSettingBulkCreatePayload.ScheduledJobSettings == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingBulkCreatePayload.ScheduledJobSettings(childComplexity), true
+
+	case "ScheduledJobSettingConnection.edges":
+		if e.complexity.ScheduledJobSettingConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingConnection.Edges(childComplexity), true
+
+	case "ScheduledJobSettingConnection.pageInfo":
+		if e.complexity.ScheduledJobSettingConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingConnection.PageInfo(childComplexity), true
+
+	case "ScheduledJobSettingConnection.totalCount":
+		if e.complexity.ScheduledJobSettingConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingConnection.TotalCount(childComplexity), true
+
+	case "ScheduledJobSettingCreatePayload.scheduledJobSetting":
+		if e.complexity.ScheduledJobSettingCreatePayload.ScheduledJobSetting == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingCreatePayload.ScheduledJobSetting(childComplexity), true
+
+	case "ScheduledJobSettingDeletePayload.deletedID":
+		if e.complexity.ScheduledJobSettingDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingDeletePayload.DeletedID(childComplexity), true
+
+	case "ScheduledJobSettingEdge.cursor":
+		if e.complexity.ScheduledJobSettingEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingEdge.Cursor(childComplexity), true
+
+	case "ScheduledJobSettingEdge.node":
+		if e.complexity.ScheduledJobSettingEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingEdge.Node(childComplexity), true
+
+	case "ScheduledJobSettingUpdatePayload.scheduledJobSetting":
+		if e.complexity.ScheduledJobSettingUpdatePayload.ScheduledJobSetting == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobSettingUpdatePayload.ScheduledJobSetting(childComplexity), true
+
+	case "ScheduledJobUpdatePayload.scheduledJob":
+		if e.complexity.ScheduledJobUpdatePayload.ScheduledJob == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobUpdatePayload.ScheduledJob(childComplexity), true
+
 	case "SearchResults.apiTokens":
 		if e.complexity.SearchResults.APITokens == nil {
 			break
@@ -21024,6 +21905,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Risks(childComplexity), true
+
+	case "SearchResults.scheduledJobSettings":
+		if e.complexity.SearchResults.ScheduledJobSettings == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.ScheduledJobSettings(childComplexity), true
+
+	case "SearchResults.scheduledJobs":
+		if e.complexity.SearchResults.ScheduledJobs == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.ScheduledJobs(childComplexity), true
 
 	case "SearchResults.standards":
 		if e.complexity.SearchResults.Standards == nil {
@@ -24581,6 +25476,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateProgramMembershipInput,
 		ec.unmarshalInputCreateProgramWithMembersInput,
 		ec.unmarshalInputCreateRiskInput,
+		ec.unmarshalInputCreateScheduledJobInput,
+		ec.unmarshalInputCreateScheduledJobSettingInput,
 		ec.unmarshalInputCreateStandardInput,
 		ec.unmarshalInputCreateSubcontrolInput,
 		ec.unmarshalInputCreateSubscriberInput,
@@ -24688,6 +25585,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputRiskHistoryWhereInput,
 		ec.unmarshalInputRiskOrder,
 		ec.unmarshalInputRiskWhereInput,
+		ec.unmarshalInputScheduledJobHistoryOrder,
+		ec.unmarshalInputScheduledJobHistoryWhereInput,
+		ec.unmarshalInputScheduledJobOrder,
+		ec.unmarshalInputScheduledJobSettingOrder,
+		ec.unmarshalInputScheduledJobSettingWhereInput,
+		ec.unmarshalInputScheduledJobWhereInput,
 		ec.unmarshalInputStandardHistoryOrder,
 		ec.unmarshalInputStandardHistoryWhereInput,
 		ec.unmarshalInputStandardOrder,
@@ -24738,6 +25641,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateProgramInput,
 		ec.unmarshalInputUpdateProgramMembershipInput,
 		ec.unmarshalInputUpdateRiskInput,
+		ec.unmarshalInputUpdateScheduledJobInput,
+		ec.unmarshalInputUpdateScheduledJobSettingInput,
 		ec.unmarshalInputUpdateStandardInput,
 		ec.unmarshalInputUpdateSubcontrolInput,
 		ec.unmarshalInputUpdateSubscriberInput,
@@ -25582,6 +26487,56 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): RiskConnection
+    """
+    Search across ScheduledJob objects
+    """
+    adminScheduledJobSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobConnection
+    """
+    Search across ScheduledJobSetting objects
+    """
+    adminScheduledJobSettingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobSettingConnection
     """
     Search across Standard objects
     """
@@ -33312,6 +34267,7 @@ input CreateOrganizationInput {
   evidenceIDs: [ID!]
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
+  scheduledJobIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -33593,6 +34549,61 @@ input CreateRiskInput {
   actionPlanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
+}
+"""
+CreateScheduledJobInput is used for create ScheduledJob object.
+Input was generated by ent.
+"""
+input CreateScheduledJobInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the title of the task
+  """
+  title: String!
+  """
+  the description of the task
+  """
+  description: String
+  """
+  the type of this job
+  """
+  jobType: ScheduledJobJobType
+  """
+  the type of this job
+  """
+  environment: ScheduledJobJobEnvironment
+  """
+  the script to run
+  """
+  script: String
+  ownerID: ID
+  scheduledJobSettingID: ID!
+}
+"""
+CreateScheduledJobSettingInput is used for create ScheduledJobSetting object.
+Input was generated by ent.
+"""
+input CreateScheduledJobSettingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  """
+  cron syntax
+  """
+  cron: String
+  scheduledJobID: ID
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -48195,6 +49206,37 @@ type Organization implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  scheduledJobs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobs returned from the connection.
+    """
+    orderBy: [ScheduledJobOrder!]
+
+    """
+    Filtering options for ScheduledJobs returned from the connection.
+    """
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -49796,6 +50838,11 @@ input OrganizationWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  scheduled_jobs edge predicates
+  """
+  hasScheduledJobs: Boolean
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
   members edge predicates
   """
@@ -55223,6 +56270,99 @@ type Query {
     """
     where: RiskHistoryWhereInput
   ): RiskHistoryConnection!
+  scheduledJobs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobs returned from the connection.
+    """
+    orderBy: [ScheduledJobOrder!]
+
+    """
+    Filtering options for ScheduledJobs returned from the connection.
+    """
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
+  scheduledJobHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobHistories returned from the connection.
+    """
+    orderBy: ScheduledJobHistoryOrder
+
+    """
+    Filtering options for ScheduledJobHistories returned from the connection.
+    """
+    where: ScheduledJobHistoryWhereInput
+  ): ScheduledJobHistoryConnection!
+  scheduledJobSettings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobSettings returned from the connection.
+    """
+    orderBy: [ScheduledJobSettingOrder!]
+
+    """
+    Filtering options for ScheduledJobSettings returned from the connection.
+    """
+    where: ScheduledJobSettingWhereInput
+  ): ScheduledJobSettingConnection!
   standards(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56972,6 +58112,888 @@ input RiskWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+}
+type ScheduledJob implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  the title of the task
+  """
+  title: String!
+  """
+  the description of the task
+  """
+  description: String
+  """
+  the type of this job
+  """
+  jobType: ScheduledJobJobType!
+  """
+  the type of this job
+  """
+  environment: ScheduledJobJobEnvironment!
+  """
+  the script to run
+  """
+  script: String
+  owner: Organization
+  scheduledJobSetting: ScheduledJobSetting!
+}
+"""
+A connection to a list of items.
+"""
+type ScheduledJobConnection {
+  """
+  A list of edges.
+  """
+  edges: [ScheduledJobEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScheduledJobEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ScheduledJob
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type ScheduledJobHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ScheduledJobHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  the title of the task
+  """
+  title: String!
+  """
+  the description of the task
+  """
+  description: String
+  """
+  the type of this job
+  """
+  jobType: ScheduledJobHistoryJobType!
+  """
+  the type of this job
+  """
+  environment: ScheduledJobHistoryJobEnvironment!
+  """
+  the script to run
+  """
+  script: String
+}
+"""
+A connection to a list of items.
+"""
+type ScheduledJobHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ScheduledJobHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScheduledJobHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ScheduledJobHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ScheduledJobHistoryJobEnvironment is enum for the field environment
+"""
+enum ScheduledJobHistoryJobEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.JobEnvironment") {
+  OPENLANE
+  CUSTOMER
+}
+"""
+ScheduledJobHistoryJobType is enum for the field job_type
+"""
+enum ScheduledJobHistoryJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
+  SSL
+}
+"""
+ScheduledJobHistoryOpType is enum for the field operation
+"""
+enum ScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ScheduledJobHistory connections
+"""
+input ScheduledJobHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ScheduledJobHistories.
+  """
+  field: ScheduledJobHistoryOrderField!
+}
+"""
+Properties by which ScheduledJobHistory connections can be ordered.
+"""
+enum ScheduledJobHistoryOrderField {
+  created_at
+  updated_at
+  title
+  job_type
+  environment
+}
+"""
+ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
+Input was generated by ent.
+"""
+input ScheduledJobHistoryWhereInput {
+  not: ScheduledJobHistoryWhereInput
+  and: [ScheduledJobHistoryWhereInput!]
+  or: [ScheduledJobHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ScheduledJobHistoryOpType
+  operationNEQ: ScheduledJobHistoryOpType
+  operationIn: [ScheduledJobHistoryOpType!]
+  operationNotIn: [ScheduledJobHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  job_type field predicates
+  """
+  jobType: ScheduledJobHistoryJobType
+  jobTypeNEQ: ScheduledJobHistoryJobType
+  jobTypeIn: [ScheduledJobHistoryJobType!]
+  jobTypeNotIn: [ScheduledJobHistoryJobType!]
+  """
+  environment field predicates
+  """
+  environment: ScheduledJobHistoryJobEnvironment
+  environmentNEQ: ScheduledJobHistoryJobEnvironment
+  environmentIn: [ScheduledJobHistoryJobEnvironment!]
+  environmentNotIn: [ScheduledJobHistoryJobEnvironment!]
+}
+"""
+ScheduledJobJobEnvironment is enum for the field environment
+"""
+enum ScheduledJobJobEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.JobEnvironment") {
+  OPENLANE
+  CUSTOMER
+}
+"""
+ScheduledJobJobType is enum for the field job_type
+"""
+enum ScheduledJobJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
+  SSL
+}
+"""
+Ordering options for ScheduledJob connections
+"""
+input ScheduledJobOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ScheduledJobs.
+  """
+  field: ScheduledJobOrderField!
+}
+"""
+Properties by which ScheduledJob connections can be ordered.
+"""
+enum ScheduledJobOrderField {
+  created_at
+  updated_at
+  title
+  job_type
+  environment
+}
+type ScheduledJobSetting implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  scheduledJobID: ID
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  """
+  cron syntax
+  """
+  cron: String
+  scheduledJob: ScheduledJob
+}
+"""
+A connection to a list of items.
+"""
+type ScheduledJobSettingConnection {
+  """
+  A list of edges.
+  """
+  edges: [ScheduledJobSettingEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScheduledJobSettingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ScheduledJobSetting
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for ScheduledJobSetting connections
+"""
+input ScheduledJobSettingOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ScheduledJobSettings.
+  """
+  field: ScheduledJobSettingOrderField!
+}
+"""
+Properties by which ScheduledJobSetting connections can be ordered.
+"""
+enum ScheduledJobSettingOrderField {
+  created_at
+  updated_at
+}
+"""
+ScheduledJobSettingWhereInput is used for filtering ScheduledJobSetting objects.
+Input was generated by ent.
+"""
+input ScheduledJobSettingWhereInput {
+  not: ScheduledJobSettingWhereInput
+  and: [ScheduledJobSettingWhereInput!]
+  or: [ScheduledJobSettingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  scheduled_job_id field predicates
+  """
+  scheduledJobID: ID
+  scheduledJobIDNEQ: ID
+  scheduledJobIDIn: [ID!]
+  scheduledJobIDNotIn: [ID!]
+  scheduledJobIDGT: ID
+  scheduledJobIDGTE: ID
+  scheduledJobIDLT: ID
+  scheduledJobIDLTE: ID
+  scheduledJobIDContains: ID
+  scheduledJobIDHasPrefix: ID
+  scheduledJobIDHasSuffix: ID
+  scheduledJobIDIsNil: Boolean
+  scheduledJobIDNotNil: Boolean
+  scheduledJobIDEqualFold: ID
+  scheduledJobIDContainsFold: ID
+  """
+  scheduled_job edge predicates
+  """
+  hasScheduledJob: Boolean
+  hasScheduledJobWith: [ScheduledJobWhereInput!]
+}
+"""
+ScheduledJobWhereInput is used for filtering ScheduledJob objects.
+Input was generated by ent.
+"""
+input ScheduledJobWhereInput {
+  not: ScheduledJobWhereInput
+  and: [ScheduledJobWhereInput!]
+  or: [ScheduledJobWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  job_type field predicates
+  """
+  jobType: ScheduledJobJobType
+  jobTypeNEQ: ScheduledJobJobType
+  jobTypeIn: [ScheduledJobJobType!]
+  jobTypeNotIn: [ScheduledJobJobType!]
+  """
+  environment field predicates
+  """
+  environment: ScheduledJobJobEnvironment
+  environmentNEQ: ScheduledJobJobEnvironment
+  environmentIn: [ScheduledJobJobEnvironment!]
+  environmentNotIn: [ScheduledJobJobEnvironment!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  scheduled_job_setting edge predicates
+  """
+  hasScheduledJobSetting: Boolean
+  hasScheduledJobSettingWith: [ScheduledJobSettingWhereInput!]
 }
 type Standard implements Node {
   id: ID!
@@ -63272,6 +65294,9 @@ input UpdateOrganizationInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  addScheduledJobIDs: [ID!]
+  removeScheduledJobIDs: [ID!]
+  clearScheduledJobs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -63673,6 +65698,69 @@ input UpdateRiskInput {
   clearStakeholder: Boolean
   delegateID: ID
   clearDelegate: Boolean
+}
+"""
+UpdateScheduledJobInput is used for update ScheduledJob object.
+Input was generated by ent.
+"""
+input UpdateScheduledJobInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the title of the task
+  """
+  title: String
+  """
+  the description of the task
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the type of this job
+  """
+  jobType: ScheduledJobJobType
+  """
+  the type of this job
+  """
+  environment: ScheduledJobJobEnvironment
+  """
+  the script to run
+  """
+  script: String
+  clearScript: Boolean
+  scheduledJobSettingID: ID
+}
+"""
+UpdateScheduledJobSettingInput is used for update ScheduledJobSetting object.
+Input was generated by ent.
+"""
+input UpdateScheduledJobSettingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  clearCadence: Boolean
+  """
+  cron syntax
+  """
+  cron: String
+  clearCron: Boolean
+  scheduledJobID: ID
+  clearScheduledJob: Boolean
 }
 """
 UpdateStandardInput is used for update Standard object.
@@ -68943,9 +71031,220 @@ scalar VersionBump
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z ) 
 """
 scalar DateTime
-
+"""
+AAGUID allows us store user's passkeys devices as bytes in the db but render as uuids to the frontend
+"""
 scalar AAGUID
+
+scalar JobConfiguration
+scalar JobCadence
 `, BuiltIn: false},
+	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
+    """
+    Look up scheduledJob by ID
+    """
+     scheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+    ):  ScheduledJob!
+}
+
+extend type Mutation{
+    """
+    Create a new scheduledJob
+    """
+    createScheduledJob(
+        """
+        values of the scheduledJob
+        """
+        input: CreateScheduledJobInput!
+    ): ScheduledJobCreatePayload!
+    """
+    Create multiple new scheduledJobs
+    """
+    createBulkScheduledJob(
+        """
+        values of the scheduledJob
+        """
+        input: [CreateScheduledJobInput!]
+    ): ScheduledJobBulkCreatePayload!
+    """
+    Create multiple new scheduledJobs via file upload
+    """
+    createBulkCSVScheduledJob(
+        """
+        csv file containing values of the scheduledJob
+        """
+        input: Upload!
+    ): ScheduledJobBulkCreatePayload!
+    """
+    Update an existing scheduledJob
+    """
+    updateScheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+        """
+        New values for the scheduledJob
+        """
+        input: UpdateScheduledJobInput!
+    ): ScheduledJobUpdatePayload!
+    """
+    Delete an existing scheduledJob
+    """
+    deleteScheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+    ): ScheduledJobDeletePayload!
+}
+
+"""
+Return response for createScheduledJob mutation
+"""
+type ScheduledJobCreatePayload {
+    """
+    Created scheduledJob
+    """
+    scheduledJob: ScheduledJob!
+}
+
+"""
+Return response for updateScheduledJob mutation
+"""
+type ScheduledJobUpdatePayload {
+    """
+    Updated scheduledJob
+    """
+    scheduledJob: ScheduledJob!
+}
+
+"""
+Return response for deleteScheduledJob mutation
+"""
+type ScheduledJobDeletePayload {
+    """
+    Deleted scheduledJob ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScheduledJob mutation
+"""
+type ScheduledJobBulkCreatePayload {
+    """
+    Created scheduledJobs
+    """
+    scheduledJobs: [ScheduledJob!]
+}`, BuiltIn: false},
+	{Name: "../schema/scheduledjobsetting.graphql", Input: `extend type Query {
+    """
+    Look up scheduledJobSetting by ID
+    """
+     scheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+    ):  ScheduledJobSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new scheduledJobSetting
+    """
+    createScheduledJobSetting(
+        """
+        values of the scheduledJobSetting
+        """
+        input: CreateScheduledJobSettingInput!
+    ): ScheduledJobSettingCreatePayload!
+    """
+    Create multiple new scheduledJobSettings
+    """
+    createBulkScheduledJobSetting(
+        """
+        values of the scheduledJobSetting
+        """
+        input: [CreateScheduledJobSettingInput!]
+    ): ScheduledJobSettingBulkCreatePayload!
+    """
+    Create multiple new scheduledJobSettings via file upload
+    """
+    createBulkCSVScheduledJobSetting(
+        """
+        csv file containing values of the scheduledJobSetting
+        """
+        input: Upload!
+    ): ScheduledJobSettingBulkCreatePayload!
+    """
+    Update an existing scheduledJobSetting
+    """
+    updateScheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+        """
+        New values for the scheduledJobSetting
+        """
+        input: UpdateScheduledJobSettingInput!
+    ): ScheduledJobSettingUpdatePayload!
+    """
+    Delete an existing scheduledJobSetting
+    """
+    deleteScheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+    ): ScheduledJobSettingDeletePayload!
+}
+
+"""
+Return response for createScheduledJobSetting mutation
+"""
+type ScheduledJobSettingCreatePayload {
+    """
+    Created scheduledJobSetting
+    """
+    scheduledJobSetting: ScheduledJobSetting!
+}
+
+"""
+Return response for updateScheduledJobSetting mutation
+"""
+type ScheduledJobSettingUpdatePayload {
+    """
+    Updated scheduledJobSetting
+    """
+    scheduledJobSetting: ScheduledJobSetting!
+}
+
+"""
+Return response for deleteScheduledJobSetting mutation
+"""
+type ScheduledJobSettingDeletePayload {
+    """
+    Deleted scheduledJobSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScheduledJobSetting mutation
+"""
+type ScheduledJobSettingBulkCreatePayload {
+    """
+    Created scheduledJobSettings
+    """
+    scheduledJobSettings: [ScheduledJobSetting!]
+}`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects
@@ -69573,6 +71872,56 @@ scalar AAGUID
         last: Int
     ): RiskConnection
     """
+    Search across ScheduledJob objects
+    """
+    scheduledJobSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobConnection
+    """
+    Search across ScheduledJobSetting objects
+    """
+    scheduledJobSettingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobSettingConnection
+    """
     Search across Standard objects
     """
     standardSearch(
@@ -69807,6 +72156,8 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   risks: RiskConnection
+  scheduledJobs: ScheduledJobConnection
+  scheduledJobSettings: ScheduledJobSettingConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection
   subscribers: SubscriberConnection

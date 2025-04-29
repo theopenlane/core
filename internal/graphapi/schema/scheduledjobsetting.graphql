@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up scheduledJobSetting by ID
+    """
+     scheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+    ):  ScheduledJobSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new scheduledJobSetting
+    """
+    createScheduledJobSetting(
+        """
+        values of the scheduledJobSetting
+        """
+        input: CreateScheduledJobSettingInput!
+    ): ScheduledJobSettingCreatePayload!
+    """
+    Create multiple new scheduledJobSettings
+    """
+    createBulkScheduledJobSetting(
+        """
+        values of the scheduledJobSetting
+        """
+        input: [CreateScheduledJobSettingInput!]
+    ): ScheduledJobSettingBulkCreatePayload!
+    """
+    Create multiple new scheduledJobSettings via file upload
+    """
+    createBulkCSVScheduledJobSetting(
+        """
+        csv file containing values of the scheduledJobSetting
+        """
+        input: Upload!
+    ): ScheduledJobSettingBulkCreatePayload!
+    """
+    Update an existing scheduledJobSetting
+    """
+    updateScheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+        """
+        New values for the scheduledJobSetting
+        """
+        input: UpdateScheduledJobSettingInput!
+    ): ScheduledJobSettingUpdatePayload!
+    """
+    Delete an existing scheduledJobSetting
+    """
+    deleteScheduledJobSetting(
+        """
+        ID of the scheduledJobSetting
+        """
+        id: ID!
+    ): ScheduledJobSettingDeletePayload!
+}
+
+"""
+Return response for createScheduledJobSetting mutation
+"""
+type ScheduledJobSettingCreatePayload {
+    """
+    Created scheduledJobSetting
+    """
+    scheduledJobSetting: ScheduledJobSetting!
+}
+
+"""
+Return response for updateScheduledJobSetting mutation
+"""
+type ScheduledJobSettingUpdatePayload {
+    """
+    Updated scheduledJobSetting
+    """
+    scheduledJobSetting: ScheduledJobSetting!
+}
+
+"""
+Return response for deleteScheduledJobSetting mutation
+"""
+type ScheduledJobSettingDeletePayload {
+    """
+    Deleted scheduledJobSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScheduledJobSetting mutation
+"""
+type ScheduledJobSettingBulkCreatePayload {
+    """
+    Created scheduledJobSettings
+    """
+    scheduledJobSettings: [ScheduledJobSetting!]
+}

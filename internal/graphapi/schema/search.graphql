@@ -625,6 +625,56 @@ extend type Query{
         last: Int
     ): RiskConnection
     """
+    Search across ScheduledJob objects
+    """
+    scheduledJobSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobConnection
+    """
+    Search across ScheduledJobSetting objects
+    """
+    scheduledJobSettingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScheduledJobSettingConnection
+    """
     Search across Standard objects
     """
     standardSearch(
@@ -859,6 +909,8 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   risks: RiskConnection
+  scheduledJobs: ScheduledJobConnection
+  scheduledJobSettings: ScheduledJobSettingConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection
   subscribers: SubscriberConnection

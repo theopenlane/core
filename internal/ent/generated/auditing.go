@@ -40,6 +40,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -2081,6 +2082,75 @@ func (rh *RiskHistory) Diff(history *RiskHistory) (*HistoryDiff[RiskHistory], er
 	return nil, IdenticalHistoryError
 }
 
+func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(sjh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedAt, sjh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(sjh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldUpdatedAt, sjh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(sjh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedBy, sjh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(sjh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedAt, sjh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(sjh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedBy, sjh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(sjh.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDisplayID, sjh.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(sjh.Tags, new.Tags) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldTags, sjh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(sjh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, sjh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(sjh.Title, new.Title) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldTitle, sjh.Title, new.Title))
+	}
+	if !reflect.DeepEqual(sjh.Description, new.Description) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDescription, sjh.Description, new.Description))
+	}
+	if !reflect.DeepEqual(sjh.JobType, new.JobType) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldJobType, sjh.JobType, new.JobType))
+	}
+	if !reflect.DeepEqual(sjh.Environment, new.Environment) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldEnvironment, sjh.Environment, new.Environment))
+	}
+	if !reflect.DeepEqual(sjh.Script, new.Script) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldScript, sjh.Script, new.Script))
+	}
+	return changes
+}
+
+func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
+	if sjh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	sjhUnix, historyUnix := sjh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	sjhOlder := sjhUnix < historyUnix || (sjhUnix == historyUnix && sjh.ID < history.ID)
+	historyOlder := sjhUnix > historyUnix || (sjhUnix == historyUnix && sjh.ID > history.ID)
+
+	if sjhOlder {
+		return &HistoryDiff[ScheduledJobHistory]{
+			Old:     sjh,
+			New:     history,
+			Changes: sjh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ScheduledJobHistory]{
+			Old:     history,
+			New:     sjh,
+			Changes: history.changes(sjh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
@@ -2802,6 +2872,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditScheduledJobHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditStandardHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3093,6 +3169,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("RiskHistory", "History") {
 		record, err = auditRiskHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("ScheduledJobHistory", "History") {
+		record, err = auditScheduledJobHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -4660,6 +4745,59 @@ func auditRiskHistory(ctx context.Context, config config) ([][]string, error) {
 			default:
 				if i == 0 {
 					record.Changes = (&RiskHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type scheduledjobhistoryref struct {
+	Ref string
+}
+
+func auditScheduledJobHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []scheduledjobhistoryref
+	client := NewScheduledJobHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(scheduledjobhistory.ByRef()).
+		Select(scheduledjobhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(scheduledjobhistory.Ref(currRef.Ref)).
+			Order(scheduledjobhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ScheduledJobHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&ScheduledJobHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&ScheduledJobHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ScheduledJobHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}
