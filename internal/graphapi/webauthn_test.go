@@ -49,7 +49,7 @@ func (suite *GraphTestSuite) TestQueryPasskeys() {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetWebauthns(tc.ctx, nil, nil, &openlaneclient.WebauthnWhereInput{})
+			resp, err := tc.client.GetAllWebauthns(tc.ctx)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -121,7 +121,7 @@ func (suite *GraphTestSuite) TestMutationDeletePasskeys() {
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
-			passkeys, err := tc.client.GetWebauthns(tc.ctx, nil, nil, &openlaneclient.WebauthnWhereInput{})
+			passkeys, err := tc.client.GetAllWebauthns(tc.ctx)
 			require.NoError(t, err)
 			require.Len(t, passkeys.Webauthns.Edges, tc.expectedCount)
 		})

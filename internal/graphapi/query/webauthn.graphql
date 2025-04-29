@@ -1,49 +1,3 @@
-
-mutation CreateBulkCSVWebauthn($input: Upload!) {
-  createBulkCSVWebauthn(input: $input) {
-    webauthns {
-      backupEligible
-      backupState
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkWebauthn($input: [CreateWebauthnInput!]) {
-  createBulkWebauthn(input: $input) {
-    webauthns {
-      backupEligible
-      backupState
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateWebauthn($input: CreateWebauthnInput!) {
-  createWebauthn(input: $input) {
-    webauthn {
-      backupEligible
-      backupState
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation DeleteWebauthn($deleteWebauthnId: ID!) {
   deleteWebauthn(id: $deleteWebauthnId) {
     deletedID
@@ -70,56 +24,6 @@ query GetAllWebauthns {
         updatedAt
         updatedBy
       }
-    }
-  }
-}
-query GetWebauthnByID($webauthnId: ID!) {
-  webauthn(id: $webauthnId) {
-    backupEligible
-    backupState
-    createdAt
-    createdBy
-    id
-    tags
-    updatedAt
-    updatedBy
-  }
-}
-
-query GetWebauthns($first: Int, $last: Int, $where: WebauthnWhereInput) {
-  webauthns(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        backupEligible
-        backupState
-        createdAt
-        createdBy
-        id
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
-mutation UpdateWebauthn($updateWebauthnId: ID!, $input: UpdateWebauthnInput!) {
-  updateWebauthn(id: $updateWebauthnId, input: $input) {
-    webauthn {
-      backupEligible
-      backupState
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
     }
   }
 }
