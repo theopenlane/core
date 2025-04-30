@@ -80,6 +80,7 @@ email:
         verify: ""
         verifyBilling: ""
         verifySubscriber: ""
+    year: 0
 entConfig:
     entityTypes: null
 jobQueue:
