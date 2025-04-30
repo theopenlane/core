@@ -4711,6 +4711,7 @@ type CreateScheduledJobInput struct {
 	Environment *enums.JobEnvironment `json:"environment,omitempty"`
 	// the script to run
 	Script                *string `json:"script,omitempty"`
+	IsActive              *bool   `json:"isActive,omitempty"`
 	OwnerID               *string `json:"ownerID,omitempty"`
 	ScheduledJobSettingID string  `json:"scheduledJobSettingID"`
 }
@@ -18538,6 +18539,7 @@ type ScheduledJob struct {
 	Environment enums.JobEnvironment `json:"environment"`
 	// the script to run
 	Script              *string              `json:"script,omitempty,omitzero"`
+	IsActive            bool                 `json:"isActive"`
 	Owner               *Organization        `json:"owner,omitempty,omitzero"`
 	ScheduledJobSetting *ScheduledJobSetting `json:"scheduledJobSetting"`
 }
@@ -18606,7 +18608,8 @@ type ScheduledJobHistory struct {
 	// the type of this job
 	Environment enums.JobEnvironment `json:"environment"`
 	// the script to run
-	Script *string `json:"script,omitempty,omitzero"`
+	Script   *string `json:"script,omitempty,omitzero"`
+	IsActive bool    `json:"isActive"`
 }
 
 func (ScheduledJobHistory) IsNode() {}
@@ -18835,6 +18838,9 @@ type ScheduledJobHistoryWhereInput struct {
 	EnvironmentNeq   *enums.JobEnvironment  `json:"environmentNEQ,omitempty"`
 	EnvironmentIn    []enums.JobEnvironment `json:"environmentIn,omitempty"`
 	EnvironmentNotIn []enums.JobEnvironment `json:"environmentNotIn,omitempty"`
+	// is_active field predicates
+	IsActive    *bool `json:"isActive,omitempty"`
+	IsActiveNeq *bool `json:"isActiveNEQ,omitempty"`
 }
 
 // Ordering options for ScheduledJob connections
@@ -19210,6 +19216,9 @@ type ScheduledJobWhereInput struct {
 	EnvironmentNeq   *enums.JobEnvironment  `json:"environmentNEQ,omitempty"`
 	EnvironmentIn    []enums.JobEnvironment `json:"environmentIn,omitempty"`
 	EnvironmentNotIn []enums.JobEnvironment `json:"environmentNotIn,omitempty"`
+	// is_active field predicates
+	IsActive    *bool `json:"isActive,omitempty"`
+	IsActiveNeq *bool `json:"isActiveNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -23956,6 +23965,7 @@ type UpdateScheduledJobInput struct {
 	// the script to run
 	Script                *string `json:"script,omitempty"`
 	ClearScript           *bool   `json:"clearScript,omitempty"`
+	IsActive              *bool   `json:"isActive,omitempty"`
 	ScheduledJobSettingID *string `json:"scheduledJobSettingID,omitempty"`
 }
 

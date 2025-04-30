@@ -131,6 +131,11 @@ func Script(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldScript, v))
 }
 
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldIsActive, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1064,6 +1069,16 @@ func ScriptEqualFold(v string) predicate.ScheduledJobHistory {
 // ScriptContainsFold applies the ContainsFold predicate on the "script" field.
 func ScriptContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldScript, v))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldIsActive, v))
 }
 
 // And groups predicates with the AND operator between them.

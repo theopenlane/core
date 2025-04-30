@@ -3419,6 +3419,10 @@ func init() {
 	scheduledjobDescTitle := scheduledjobFields[0].Descriptor()
 	// scheduledjob.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	scheduledjob.TitleValidator = scheduledjobDescTitle.Validators[0].(func(string) error)
+	// scheduledjobDescIsActive is the schema descriptor for is_active field.
+	scheduledjobDescIsActive := scheduledjobFields[5].Descriptor()
+	// scheduledjob.DefaultIsActive holds the default value on creation for the is_active field.
+	scheduledjob.DefaultIsActive = scheduledjobDescIsActive.Default.(bool)
 	// scheduledjobDescID is the schema descriptor for id field.
 	scheduledjobDescID := scheduledjobMixinFields2[0].Descriptor()
 	// scheduledjob.DefaultID holds the default value on creation for the id field.
@@ -3445,6 +3449,10 @@ func init() {
 	scheduledjobhistoryDescTags := scheduledjobhistoryFields[11].Descriptor()
 	// scheduledjobhistory.DefaultTags holds the default value on creation for the tags field.
 	scheduledjobhistory.DefaultTags = scheduledjobhistoryDescTags.Default.([]string)
+	// scheduledjobhistoryDescIsActive is the schema descriptor for is_active field.
+	scheduledjobhistoryDescIsActive := scheduledjobhistoryFields[18].Descriptor()
+	// scheduledjobhistory.DefaultIsActive holds the default value on creation for the is_active field.
+	scheduledjobhistory.DefaultIsActive = scheduledjobhistoryDescIsActive.Default.(bool)
 	// scheduledjobhistoryDescID is the schema descriptor for id field.
 	scheduledjobhistoryDescID := scheduledjobhistoryFields[9].Descriptor()
 	// scheduledjobhistory.DefaultID holds the default value on creation for the id field.

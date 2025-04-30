@@ -25077,6 +25077,11 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldScript)
 				fieldSeen[scheduledjob.FieldScript] = struct{}{}
 			}
+		case "isActive":
+			if _, ok := fieldSeen[scheduledjob.FieldIsActive]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldIsActive)
+				fieldSeen[scheduledjob.FieldIsActive] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -25251,6 +25256,11 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldScript)
 				fieldSeen[scheduledjobhistory.FieldScript] = struct{}{}
+			}
+		case "isActive":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldIsActive]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldIsActive)
+				fieldSeen[scheduledjobhistory.FieldIsActive] = struct{}{}
 			}
 		case "id":
 		case "__typename":

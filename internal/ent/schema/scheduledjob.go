@@ -79,6 +79,9 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the script to run").
 			Optional(),
+
+		field.Bool("is_active").
+			Default(true),
 	}
 }
 

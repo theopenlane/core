@@ -95,6 +95,8 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_environment(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "isActive":
+				return ec.fieldContext_ScheduledJob_isActive(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "scheduledJobSetting":
@@ -175,6 +177,8 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_environment(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "isActive":
+				return ec.fieldContext_ScheduledJob_isActive(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "scheduledJobSetting":
@@ -299,6 +303,8 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_environment(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "isActive":
+				return ec.fieldContext_ScheduledJob_isActive(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "scheduledJobSetting":

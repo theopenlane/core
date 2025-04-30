@@ -3062,6 +3062,7 @@ type ComplexityRoot struct {
 		DisplayID           func(childComplexity int) int
 		Environment         func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		IsActive            func(childComplexity int) int
 		JobType             func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
@@ -3106,6 +3107,7 @@ type ComplexityRoot struct {
 		Environment func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
+		IsActive    func(childComplexity int) int
 		JobType     func(childComplexity int) int
 		Operation   func(childComplexity int) int
 		OwnerID     func(childComplexity int) int
@@ -21283,6 +21285,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.ID(childComplexity), true
 
+	case "ScheduledJob.isActive":
+		if e.complexity.ScheduledJob.IsActive == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.IsActive(childComplexity), true
+
 	case "ScheduledJob.jobType":
 		if e.complexity.ScheduledJob.JobType == nil {
 			break
@@ -21464,6 +21473,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.ID(childComplexity), true
+
+	case "ScheduledJobHistory.isActive":
+		if e.complexity.ScheduledJobHistory.IsActive == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.IsActive(childComplexity), true
 
 	case "ScheduledJobHistory.jobType":
 		if e.complexity.ScheduledJobHistory.JobType == nil {
@@ -34579,6 +34595,7 @@ input CreateScheduledJobInput {
   the script to run
   """
   script: String
+  isActive: Boolean
   ownerID: ID
   scheduledJobSettingID: ID!
 }
@@ -58153,6 +58170,7 @@ type ScheduledJob implements Node {
   the script to run
   """
   script: String
+  isActive: Boolean!
   owner: Organization
   scheduledJobSetting: ScheduledJobSetting!
 }
@@ -58229,6 +58247,7 @@ type ScheduledJobHistory implements Node {
   the script to run
   """
   script: String
+  isActive: Boolean!
 }
 """
 A connection to a list of items.
@@ -58536,6 +58555,11 @@ input ScheduledJobHistoryWhereInput {
   environmentNEQ: ScheduledJobHistoryJobEnvironment
   environmentIn: [ScheduledJobHistoryJobEnvironment!]
   environmentNotIn: [ScheduledJobHistoryJobEnvironment!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
 }
 """
 ScheduledJobJobEnvironment is enum for the field environment
@@ -58984,6 +59008,11 @@ input ScheduledJobWhereInput {
   environmentNEQ: ScheduledJobJobEnvironment
   environmentIn: [ScheduledJobJobEnvironment!]
   environmentNotIn: [ScheduledJobJobEnvironment!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
   """
   owner edge predicates
   """
@@ -65732,6 +65761,7 @@ input UpdateScheduledJobInput {
   """
   script: String
   clearScript: Boolean
+  isActive: Boolean
   scheduledJobSettingID: ID
 }
 """

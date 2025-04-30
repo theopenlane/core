@@ -123,6 +123,11 @@ func Script(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldScript, v))
 }
 
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldIsActive, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldCreatedAt, v))
@@ -921,6 +926,16 @@ func ScriptEqualFold(v string) predicate.ScheduledJob {
 // ScriptContainsFold applies the ContainsFold predicate on the "script" field.
 func ScriptContainsFold(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldContainsFold(FieldScript, v))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldIsActive, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

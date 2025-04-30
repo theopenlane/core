@@ -2732,6 +2732,7 @@ var (
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "environment", Type: field.TypeEnum, Enums: []string{"OPENLANE", "CUSTOMER"}, Default: "OPENLANE"},
 		{Name: "script", Type: field.TypeString, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ScheduledJobsTable holds the schema information for the "scheduled_jobs" table.
@@ -2742,7 +2743,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[14]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2756,7 +2757,7 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[14]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[15]},
 			},
 		},
 	}
@@ -2780,6 +2781,7 @@ var (
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "environment", Type: field.TypeEnum, Enums: []string{"OPENLANE", "CUSTOMER"}, Default: "OPENLANE"},
 		{Name: "script", Type: field.TypeString, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
 	}
 	// ScheduledJobHistoryTable holds the schema information for the "scheduled_job_history" table.
 	ScheduledJobHistoryTable = &schema.Table{

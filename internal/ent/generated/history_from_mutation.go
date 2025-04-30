@@ -7096,6 +7096,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetScript(script)
 	}
 
+	if isActive, exists := m.IsActive(); exists {
+		create = create.SetIsActive(isActive)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7210,6 +7214,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetScript(scheduledjob.Script)
 		}
 
+		if isActive, exists := m.IsActive(); exists {
+			create = create.SetIsActive(isActive)
+		} else {
+			create = create.SetIsActive(scheduledjob.IsActive)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7256,6 +7266,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetJobType(scheduledjob.JobType).
 			SetEnvironment(scheduledjob.Environment).
 			SetScript(scheduledjob.Script).
+			SetIsActive(scheduledjob.IsActive).
 			Save(ctx)
 		if err != nil {
 			return err

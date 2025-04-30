@@ -228,6 +228,20 @@ func (sjhc *ScheduledJobHistoryCreate) SetNillableScript(s *string) *ScheduledJo
 	return sjhc
 }
 
+// SetIsActive sets the "is_active" field.
+func (sjhc *ScheduledJobHistoryCreate) SetIsActive(b bool) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetIsActive(b)
+	return sjhc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sjhc *ScheduledJobHistoryCreate) SetNillableIsActive(b *bool) *ScheduledJobHistoryCreate {
+	if b != nil {
+		sjhc.SetIsActive(*b)
+	}
+	return sjhc
+}
+
 // SetID sets the "id" field.
 func (sjhc *ScheduledJobHistoryCreate) SetID(s string) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetID(s)
@@ -301,6 +315,10 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() {
 		v := scheduledjobhistory.DefaultEnvironment
 		sjhc.mutation.SetEnvironment(v)
 	}
+	if _, ok := sjhc.mutation.IsActive(); !ok {
+		v := scheduledjobhistory.DefaultIsActive
+		sjhc.mutation.SetIsActive(v)
+	}
 	if _, ok := sjhc.mutation.ID(); !ok {
 		v := scheduledjobhistory.DefaultID()
 		sjhc.mutation.SetID(v)
@@ -341,6 +359,9 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 		if err := scheduledjobhistory.EnvironmentValidator(v); err != nil {
 			return &ValidationError{Name: "environment", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.environment": %w`, err)}
 		}
+	}
+	if _, ok := sjhc.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "is_active", err: errors.New(`generated: missing required field "ScheduledJobHistory.is_active"`)}
 	}
 	return nil
 }
@@ -445,6 +466,10 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 	if value, ok := sjhc.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjhc.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjobhistory.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
 	}
 	return _node, _spec
 }

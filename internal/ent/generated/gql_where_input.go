@@ -56773,6 +56773,10 @@ type ScheduledJobWhereInput struct {
 	EnvironmentIn    []enums.JobEnvironment `json:"environmentIn,omitempty"`
 	EnvironmentNotIn []enums.JobEnvironment `json:"environmentNotIn,omitempty"`
 
+	// "is_active" field predicates.
+	IsActive    *bool `json:"isActive,omitempty"`
+	IsActiveNEQ *bool `json:"isActiveNEQ,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -57300,6 +57304,12 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	if len(i.EnvironmentNotIn) > 0 {
 		predicates = append(predicates, scheduledjob.EnvironmentNotIn(i.EnvironmentNotIn...))
 	}
+	if i.IsActive != nil {
+		predicates = append(predicates, scheduledjob.IsActiveEQ(*i.IsActive))
+	}
+	if i.IsActiveNEQ != nil {
+		predicates = append(predicates, scheduledjob.IsActiveNEQ(*i.IsActiveNEQ))
+	}
 
 	if i.HasOwner != nil {
 		p := scheduledjob.HasOwner()
@@ -57561,6 +57571,10 @@ type ScheduledJobHistoryWhereInput struct {
 	EnvironmentNEQ   *enums.JobEnvironment  `json:"environmentNEQ,omitempty"`
 	EnvironmentIn    []enums.JobEnvironment `json:"environmentIn,omitempty"`
 	EnvironmentNotIn []enums.JobEnvironment `json:"environmentNotIn,omitempty"`
+
+	// "is_active" field predicates.
+	IsActive    *bool `json:"isActive,omitempty"`
+	IsActiveNEQ *bool `json:"isActiveNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -58161,6 +58175,12 @@ func (i *ScheduledJobHistoryWhereInput) P() (predicate.ScheduledJobHistory, erro
 	}
 	if len(i.EnvironmentNotIn) > 0 {
 		predicates = append(predicates, scheduledjobhistory.EnvironmentNotIn(i.EnvironmentNotIn...))
+	}
+	if i.IsActive != nil {
+		predicates = append(predicates, scheduledjobhistory.IsActiveEQ(*i.IsActive))
+	}
+	if i.IsActiveNEQ != nil {
+		predicates = append(predicates, scheduledjobhistory.IsActiveNEQ(*i.IsActiveNEQ))
 	}
 
 	switch len(predicates) {

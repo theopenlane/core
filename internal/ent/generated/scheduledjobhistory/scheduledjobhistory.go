@@ -52,6 +52,8 @@ const (
 	FieldEnvironment = "environment"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
 	// Table holds the table name of the scheduledjobhistory in the database.
 	Table = "scheduled_job_history"
 )
@@ -76,6 +78,7 @@ var Columns = []string{
 	FieldJobType,
 	FieldEnvironment,
 	FieldScript,
+	FieldIsActive,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -105,6 +108,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultIsActive holds the default value on creation for the "is_active" field.
+	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -229,6 +234,11 @@ func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the is_active field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
 }
 
 var (

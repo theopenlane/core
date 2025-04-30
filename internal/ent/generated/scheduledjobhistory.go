@@ -53,7 +53,9 @@ type ScheduledJobHistory struct {
 	// the type of this job
 	Environment enums.JobEnvironment `json:"environment,omitempty"`
 	// the script to run
-	Script       string `json:"script,omitempty"`
+	Script string `json:"script,omitempty"`
+	// IsActive holds the value of the "is_active" field.
+	IsActive     bool `json:"is_active,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -66,6 +68,8 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case scheduledjobhistory.FieldIsActive:
+			values[i] = new(sql.NullBool)
 		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldEnvironment, scheduledjobhistory.FieldScript:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
@@ -195,6 +199,12 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				sjh.Script = value.String
 			}
+		case scheduledjobhistory.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				sjh.IsActive = value.Bool
+			}
 		default:
 			sjh.selectValues.Set(columns[i], values[i])
 		}
@@ -281,6 +291,9 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sjh.Script)
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", sjh.IsActive))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -7123,6 +7123,7 @@ input CreateScheduledJobInput {
   the script to run
   """
   script: String
+  isActive: Boolean
   ownerID: ID
   scheduledJobSettingID: ID!
 }
@@ -30697,6 +30698,7 @@ type ScheduledJob implements Node {
   the script to run
   """
   script: String
+  isActive: Boolean!
   owner: Organization
   scheduledJobSetting: ScheduledJobSetting!
 }
@@ -30773,6 +30775,7 @@ type ScheduledJobHistory implements Node {
   the script to run
   """
   script: String
+  isActive: Boolean!
 }
 """
 A connection to a list of items.
@@ -31080,6 +31083,11 @@ input ScheduledJobHistoryWhereInput {
   environmentNEQ: ScheduledJobHistoryJobEnvironment
   environmentIn: [ScheduledJobHistoryJobEnvironment!]
   environmentNotIn: [ScheduledJobHistoryJobEnvironment!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
 }
 """
 ScheduledJobJobEnvironment is enum for the field environment
@@ -31528,6 +31536,11 @@ input ScheduledJobWhereInput {
   environmentNEQ: ScheduledJobJobEnvironment
   environmentIn: [ScheduledJobJobEnvironment!]
   environmentNotIn: [ScheduledJobJobEnvironment!]
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
   """
   owner edge predicates
   """
@@ -38276,6 +38289,7 @@ input UpdateScheduledJobInput {
   """
   script: String
   clearScript: Boolean
+  isActive: Boolean
   scheduledJobSettingID: ID
 }
 """

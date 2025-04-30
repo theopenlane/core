@@ -205,6 +205,20 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate 
 	return sjhu
 }
 
+// SetIsActive sets the "is_active" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetIsActive(b bool) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetIsActive(b)
+	return sjhu
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableIsActive(b *bool) *ScheduledJobHistoryUpdate {
+	if b != nil {
+		sjhu.SetIsActive(*b)
+	}
+	return sjhu
+}
+
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
 func (sjhu *ScheduledJobHistoryUpdate) Mutation() *ScheduledJobHistoryMutation {
 	return sjhu.mutation
@@ -346,6 +360,9 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if sjhu.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
+	}
+	if value, ok := sjhu.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjobhistory.FieldIsActive, field.TypeBool, value)
 	}
 	_spec.Node.Schema = sjhu.schemaConfig.ScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, sjhu.schemaConfig)
@@ -543,6 +560,20 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpd
 	return sjhuo
 }
 
+// SetIsActive sets the "is_active" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetIsActive(b bool) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetIsActive(b)
+	return sjhuo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableIsActive(b *bool) *ScheduledJobHistoryUpdateOne {
+	if b != nil {
+		sjhuo.SetIsActive(*b)
+	}
+	return sjhuo
+}
+
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
 func (sjhuo *ScheduledJobHistoryUpdateOne) Mutation() *ScheduledJobHistoryMutation {
 	return sjhuo.mutation
@@ -714,6 +745,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if sjhuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
+	}
+	if value, ok := sjhuo.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjobhistory.FieldIsActive, field.TypeBool, value)
 	}
 	_spec.Node.Schema = sjhuo.schemaConfig.ScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, sjhuo.schemaConfig)

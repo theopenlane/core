@@ -1924,6 +1924,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldJobType:     {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
 			scheduledjob.FieldEnvironment: {Type: field.TypeEnum, Column: scheduledjob.FieldEnvironment},
 			scheduledjob.FieldScript:      {Type: field.TypeString, Column: scheduledjob.FieldScript},
+			scheduledjob.FieldIsActive:    {Type: field.TypeBool, Column: scheduledjob.FieldIsActive},
 		},
 	}
 	graph.Nodes[63] = &sqlgraph.Node{
@@ -1954,6 +1955,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldJobType:     {Type: field.TypeEnum, Column: scheduledjobhistory.FieldJobType},
 			scheduledjobhistory.FieldEnvironment: {Type: field.TypeEnum, Column: scheduledjobhistory.FieldEnvironment},
 			scheduledjobhistory.FieldScript:      {Type: field.TypeString, Column: scheduledjobhistory.FieldScript},
+			scheduledjobhistory.FieldIsActive:    {Type: field.TypeBool, Column: scheduledjobhistory.FieldIsActive},
 		},
 	}
 	graph.Nodes[64] = &sqlgraph.Node{
@@ -17500,6 +17502,11 @@ func (f *ScheduledJobFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldScript))
 }
 
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *ScheduledJobFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjob.FieldIsActive))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ScheduledJobFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -17651,6 +17658,11 @@ func (f *ScheduledJobHistoryFilter) WhereEnvironment(p entql.StringP) {
 // WhereScript applies the entql string predicate on the script field.
 func (f *ScheduledJobHistoryFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldScript))
+}
+
+// WhereIsActive applies the entql bool predicate on the is_active field.
+func (f *ScheduledJobHistoryFilter) WhereIsActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjobhistory.FieldIsActive))
 }
 
 // addPredicate implements the predicateAdder interface.

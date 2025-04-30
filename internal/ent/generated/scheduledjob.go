@@ -49,6 +49,8 @@ type ScheduledJob struct {
 	Environment enums.JobEnvironment `json:"environment,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// IsActive holds the value of the "is_active" field.
+	IsActive bool `json:"is_active,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobQuery when eager-loading is set.
 	Edges        ScheduledJobEdges `json:"edges"`
@@ -97,6 +99,8 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scheduledjob.FieldTags:
 			values[i] = new([]byte)
+		case scheduledjob.FieldIsActive:
+			values[i] = new(sql.NullBool)
 		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldEnvironment, scheduledjob.FieldScript:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
@@ -208,6 +212,12 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sj.Script = value.String
 			}
+		case scheduledjob.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				sj.IsActive = value.Bool
+			}
 		default:
 			sj.selectValues.Set(columns[i], values[i])
 		}
@@ -295,6 +305,9 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sj.Script)
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", sj.IsActive))
 	builder.WriteByte(')')
 	return builder.String()
 }

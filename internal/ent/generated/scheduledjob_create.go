@@ -195,6 +195,20 @@ func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate 
 	return sjc
 }
 
+// SetIsActive sets the "is_active" field.
+func (sjc *ScheduledJobCreate) SetIsActive(b bool) *ScheduledJobCreate {
+	sjc.mutation.SetIsActive(b)
+	return sjc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableIsActive(b *bool) *ScheduledJobCreate {
+	if b != nil {
+		sjc.SetIsActive(*b)
+	}
+	return sjc
+}
+
 // SetID sets the "id" field.
 func (sjc *ScheduledJobCreate) SetID(s string) *ScheduledJobCreate {
 	sjc.mutation.SetID(s)
@@ -288,6 +302,10 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultEnvironment
 		sjc.mutation.SetEnvironment(v)
 	}
+	if _, ok := sjc.mutation.IsActive(); !ok {
+		v := scheduledjob.DefaultIsActive
+		sjc.mutation.SetIsActive(v)
+	}
 	if _, ok := sjc.mutation.ID(); !ok {
 		if scheduledjob.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.DefaultID (forgotten import generated/runtime?)")
@@ -336,6 +354,9 @@ func (sjc *ScheduledJobCreate) check() error {
 		if err := scheduledjob.EnvironmentValidator(v); err != nil {
 			return &ValidationError{Name: "environment", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.environment": %w`, err)}
 		}
+	}
+	if _, ok := sjc.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "is_active", err: errors.New(`generated: missing required field "ScheduledJob.is_active"`)}
 	}
 	if len(sjc.mutation.ScheduledJobSettingIDs()) == 0 {
 		return &ValidationError{Name: "scheduled_job_setting", err: errors.New(`generated: missing required edge "ScheduledJob.scheduled_job_setting"`)}
@@ -427,6 +448,10 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjc.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjob.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
 	}
 	if nodes := sjc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

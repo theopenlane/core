@@ -6933,6 +6933,7 @@ type CreateScheduledJobInput struct {
 	JobType               *enums.JobType
 	Environment           *enums.JobEnvironment
 	Script                *string
+	IsActive              *bool
 	OwnerID               *string
 	ScheduledJobSettingID string
 }
@@ -6954,6 +6955,9 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6979,6 +6983,7 @@ type UpdateScheduledJobInput struct {
 	Environment           *enums.JobEnvironment
 	ClearScript           bool
 	Script                *string
+	IsActive              *bool
 	ScheduledJobSettingID *string
 }
 
@@ -7013,6 +7018,9 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
 	}
 	if v := i.ScheduledJobSettingID; v != nil {
 		m.SetScheduledJobSettingID(*v)

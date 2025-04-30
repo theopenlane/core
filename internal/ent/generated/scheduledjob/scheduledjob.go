@@ -46,6 +46,8 @@ const (
 	FieldEnvironment = "environment"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJobSetting holds the string denoting the scheduled_job_setting edge name in mutations.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldJobType,
 	FieldEnvironment,
 	FieldScript,
+	FieldIsActive,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -120,6 +123,8 @@ var (
 	OwnerIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// DefaultIsActive holds the default value on creation for the "is_active" field.
+	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -219,6 +224,11 @@ func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the is_active field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

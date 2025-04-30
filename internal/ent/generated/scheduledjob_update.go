@@ -206,6 +206,20 @@ func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetIsActive sets the "is_active" field.
+func (sju *ScheduledJobUpdate) SetIsActive(b bool) *ScheduledJobUpdate {
+	sju.mutation.SetIsActive(b)
+	return sju
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableIsActive(b *bool) *ScheduledJobUpdate {
+	if b != nil {
+		sju.SetIsActive(*b)
+	}
+	return sju
+}
+
 // SetScheduledJobSettingID sets the "scheduled_job_setting" edge to the ScheduledJobSetting entity by ID.
 func (sju *ScheduledJobUpdate) SetScheduledJobSettingID(id string) *ScheduledJobUpdate {
 	sju.mutation.SetScheduledJobSettingID(id)
@@ -372,6 +386,9 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sju.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjob.FieldIsActive, field.TypeBool, value)
 	}
 	if sju.mutation.ScheduledJobSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -600,6 +617,20 @@ func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
+// SetIsActive sets the "is_active" field.
+func (sjuo *ScheduledJobUpdateOne) SetIsActive(b bool) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetIsActive(b)
+	return sjuo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableIsActive(b *bool) *ScheduledJobUpdateOne {
+	if b != nil {
+		sjuo.SetIsActive(*b)
+	}
+	return sjuo
+}
+
 // SetScheduledJobSettingID sets the "scheduled_job_setting" edge to the ScheduledJobSetting entity by ID.
 func (sjuo *ScheduledJobUpdateOne) SetScheduledJobSettingID(id string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetScheduledJobSettingID(id)
@@ -796,6 +827,9 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sjuo.mutation.IsActive(); ok {
+		_spec.SetField(scheduledjob.FieldIsActive, field.TypeBool, value)
 	}
 	if sjuo.mutation.ScheduledJobSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
