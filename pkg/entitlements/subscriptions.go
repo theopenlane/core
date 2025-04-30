@@ -239,20 +239,16 @@ func IsSubscriptionActive(status stripe.SubscriptionStatus) bool {
 	switch status {
 	case stripe.SubscriptionStatusActive,
 		stripe.SubscriptionStatusTrialing:
-
 		return true
 	case stripe.SubscriptionStatusPastDue,
 		stripe.SubscriptionStatusIncomplete:
-
 		return true
 	case stripe.SubscriptionStatusCanceled,
 		stripe.SubscriptionStatusIncompleteExpired,
 		stripe.SubscriptionStatusUnpaid,
 		stripe.SubscriptionStatusPaused:
-
 		return false
 	default:
-		// If an unknown status is encountered, default to inactive for safety
 		return false
 	}
 }
