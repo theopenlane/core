@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v82"
 )
 
 // CreateCustomer creates a customer leveraging the openlane organization ID
@@ -82,8 +82,6 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 // FindOrCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
 // name field attribute as well as in the object metadata field
 func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) error {
-	log.Debug().Str("organization_id", o.OrganizationID).Msg("searching for customer")
-
 	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
 		return err
@@ -253,6 +251,58 @@ func (sc *StripeClient) DeleteCustomer(id string) error {
 	_, err := sc.Client.Customers.Del(id, nil)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// FindAndDeactivateCustomerSubscription finds a customer by the organization ID and deactivates their subscription
+// this is used when an organization is deleted - we retain the customer record and keep a referenced to the deactivated subscription
+// we do not delete the customer record in stripe for record / references
+// we also do not delete the subscription record in stripe for record / references
+// a cancelled active subscription will set to cancel at period end, a trialing subscription will be set to end immediately
+func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Context, orgID string) error {
+	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", orgID))
+	if err != nil {
+		return err
+	}
+
+	if len(customers) == 0 {
+		log.Warn().Str("organization_id", orgID).Msg("no customer found, skipping deactivation")
+		return nil
+	}
+
+	if len(customers) > 1 {
+		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", orgID).Interface("customers", customers).Msg("found multiple customers, skipping deactivation")
+		return ErrFoundMultipleCustomers
+	}
+
+	for _, subs := range customers[0].Subscriptions.Data {
+		// Skip subscriptions that are already inactive
+		if subs.Status == stripe.SubscriptionStatusCanceled || subs.Status == stripe.SubscriptionStatusIncompleteExpired {
+			log.Debug().Str("subscription_id", subs.ID).Msg("subscription already inactive, skipping")
+			return nil
+		}
+
+		var endSubsParams *stripe.SubscriptionParams
+
+		switch subs.Status {
+		case stripe.SubscriptionStatusActive:
+			endSubsParams = &stripe.SubscriptionParams{
+				CancelAtPeriodEnd: stripe.Bool(true),
+			}
+		case stripe.SubscriptionStatusTrialing:
+			endSubsParams = &stripe.SubscriptionParams{
+				TrialEndNow: stripe.Bool(true),
+			}
+		}
+
+		// only make the request if we have params to update
+		if endSubsParams != nil {
+			if _, err := sc.Client.Subscriptions.Update(subs.ID, endSubsParams); err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil

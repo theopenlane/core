@@ -1,10 +1,11 @@
 package entitlements
 
 import (
+	"maps"
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v82"
 )
 
 // CreateSubscription creates a new subscription
@@ -102,6 +103,13 @@ var trialdays int64 = 30
 
 // CreateTrialSubscription creates a trial subscription with the configured price
 func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscription, error) {
+	subsMetadata := make(map[string]string)
+	if cust.Metadata != nil {
+		maps.Copy(subsMetadata, cust.Metadata)
+	} else {
+		subsMetadata["organization_id"] = cust.ID
+	}
+
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(cust.ID),
 		Items: []*stripe.SubscriptionItemsParams{
@@ -113,7 +121,7 @@ func (sc *StripeClient) CreateTrialSubscription(cust *stripe.Customer) (*Subscri
 		PaymentSettings: &stripe.SubscriptionPaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
 		},
-		Metadata:         cust.Metadata,
+		Metadata:         subsMetadata,
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 		TrialSettings: &stripe.SubscriptionTrialSettingsParams{
 			EndBehavior: &stripe.SubscriptionTrialSettingsEndBehaviorParams{
@@ -216,8 +224,6 @@ func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscr
 	return &Subscription{
 		ID:               subs.ID,
 		Prices:           prices,
-		StartDate:        subs.CurrentPeriodStart,
-		EndDate:          subs.CurrentPeriodEnd,
 		TrialEnd:         subs.TrialEnd,
 		ProductID:        productID,
 		Status:           string(subs.Status),
@@ -225,5 +231,24 @@ func (sc *StripeClient) MapStripeSubscription(subs *stripe.Subscription) *Subscr
 		OrganizationID:   subs.Metadata["organization_id"],
 		DaysUntilDue:     subs.DaysUntilDue,
 		Features:         subscript.Features,
+	}
+}
+
+// IsSubscriptionActive checks if a subscription is active based on its status
+func IsSubscriptionActive(status stripe.SubscriptionStatus) bool {
+	switch status {
+	case stripe.SubscriptionStatusActive,
+		stripe.SubscriptionStatusTrialing:
+		return true
+	case stripe.SubscriptionStatusPastDue,
+		stripe.SubscriptionStatusIncomplete:
+		return true
+	case stripe.SubscriptionStatusCanceled,
+		stripe.SubscriptionStatusIncompleteExpired,
+		stripe.SubscriptionStatusUnpaid,
+		stripe.SubscriptionStatusPaused:
+		return false
+	default:
+		return false
 	}
 }

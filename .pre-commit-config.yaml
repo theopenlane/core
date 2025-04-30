@@ -11,12 +11,12 @@ repos:
         exclude: jsonschema/api-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql
       - id: detect-private-key
   - repo: https://github.com/google/yamlfmt
-    rev: v0.15.0
+    rev: v0.16.0
     hooks:
       - id: yamlfmt
   - repo: https://github.com/crate-ci/typos
     # ensure this stays in this format, the auto-updater might update to something like typos-dict-v0.11.35 which is not correct
-    rev: v1.29.4
+    rev: v1.31.2
     hooks:
       - id: typos
   - repo: local
@@ -24,7 +24,7 @@ repos:
       - id: format-graphql
         name: Format GraphQL
         description: This hook formats GraphQL schemas
-        entry: npx format-graphql@1.4.0 --write=true
+        entry: npx format-graphql@1.5.0 --write=true
         language: node
         files: 'query/.*\.graphql$'
   - repo: local

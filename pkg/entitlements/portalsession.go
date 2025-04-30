@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v81"
+import "github.com/stripe/stripe-go/v82"
 
 // CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
 func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (*BillingPortalSession, error) {

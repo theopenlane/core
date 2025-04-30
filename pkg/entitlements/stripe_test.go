@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v81"
-	"github.com/stripe/stripe-go/v81/client"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/client"
 
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
@@ -351,11 +351,9 @@ func TestMapStripeSubscription(t *testing.T) {
 				},
 			},
 		},
-		CurrentPeriodStart: 1620000000,
-		CurrentPeriodEnd:   1620000000,
-		TrialEnd:           1620000000,
-		Status:             "active",
-		Customer:           &stripe.Customer{ID: "cus_123"},
+		TrialEnd: 1620000000,
+		Status:   "active",
+		Customer: &stripe.Customer{ID: "cus_123"},
 		Metadata: map[string]string{
 			"organization_id": "org_123",
 		},
@@ -373,8 +371,6 @@ func TestMapStripeSubscription(t *testing.T) {
 				Currency:    "usd",
 			},
 		},
-		StartDate:        1620000000,
-		EndDate:          1620000000,
 		TrialEnd:         1620000000,
 		ProductID:        "prod_123",
 		Status:           "active",

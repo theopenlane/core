@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v81"
+import "github.com/stripe/stripe-go/v82"
 
 // CreatePrice a price for a product in stripe
 func (sc *StripeClient) CreatePrice(productID string, unitAmount int64, currency, interval string) (*stripe.Price, error) {
