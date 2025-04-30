@@ -6930,10 +6930,6 @@ type CreateScheduledJobInput struct {
 	Tags                  []string
 	Title                 string
 	Description           *string
-	JobType               *enums.JobType
-	Environment           *enums.JobEnvironment
-	Script                *string
-	IsActive              *bool
 	OwnerID               *string
 	ScheduledJobSettingID string
 }
@@ -6946,18 +6942,6 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	m.SetTitle(i.Title)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
-	}
-	if v := i.Environment; v != nil {
-		m.SetEnvironment(*v)
-	}
-	if v := i.Script; v != nil {
-		m.SetScript(*v)
-	}
-	if v := i.IsActive; v != nil {
-		m.SetIsActive(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6979,11 +6963,6 @@ type UpdateScheduledJobInput struct {
 	Title                 *string
 	ClearDescription      bool
 	Description           *string
-	JobType               *enums.JobType
-	Environment           *enums.JobEnvironment
-	ClearScript           bool
-	Script                *string
-	IsActive              *bool
 	ScheduledJobSettingID *string
 }
 
@@ -7006,21 +6985,6 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
-	}
-	if v := i.Environment; v != nil {
-		m.SetEnvironment(*v)
-	}
-	if i.ClearScript {
-		m.ClearScript()
-	}
-	if v := i.Script; v != nil {
-		m.SetScript(*v)
-	}
-	if v := i.IsActive; v != nil {
-		m.SetIsActive(*v)
 	}
 	if v := i.ScheduledJobSettingID; v != nil {
 		m.SetScheduledJobSettingID(*v)

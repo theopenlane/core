@@ -4704,14 +4704,7 @@ type CreateScheduledJobInput struct {
 	// the title of the task
 	Title string `json:"title"`
 	// the description of the task
-	Description *string `json:"description,omitempty"`
-	// the type of this job
-	JobType *enums.JobType `json:"jobType,omitempty"`
-	// the type of this job
-	Environment *enums.JobEnvironment `json:"environment,omitempty"`
-	// the script to run
-	Script                *string `json:"script,omitempty"`
-	IsActive              *bool   `json:"isActive,omitempty"`
+	Description           *string `json:"description,omitempty"`
 	OwnerID               *string `json:"ownerID,omitempty"`
 	ScheduledJobSettingID string  `json:"scheduledJobSettingID"`
 }
@@ -23956,16 +23949,8 @@ type UpdateScheduledJobInput struct {
 	// the title of the task
 	Title *string `json:"title,omitempty"`
 	// the description of the task
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the type of this job
-	JobType *enums.JobType `json:"jobType,omitempty"`
-	// the type of this job
-	Environment *enums.JobEnvironment `json:"environment,omitempty"`
-	// the script to run
-	Script                *string `json:"script,omitempty"`
-	ClearScript           *bool   `json:"clearScript,omitempty"`
-	IsActive              *bool   `json:"isActive,omitempty"`
+	Description           *string `json:"description,omitempty"`
+	ClearDescription      *bool   `json:"clearDescription,omitempty"`
 	ScheduledJobSettingID *string `json:"scheduledJobSettingID,omitempty"`
 }
 

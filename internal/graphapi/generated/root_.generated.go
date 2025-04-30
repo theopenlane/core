@@ -34583,19 +34583,6 @@ input CreateScheduledJobInput {
   the description of the task
   """
   description: String
-  """
-  the type of this job
-  """
-  jobType: ScheduledJobJobType
-  """
-  the type of this job
-  """
-  environment: ScheduledJobJobEnvironment
-  """
-  the script to run
-  """
-  script: String
-  isActive: Boolean
   ownerID: ID
   scheduledJobSettingID: ID!
 }
@@ -65748,20 +65735,6 @@ input UpdateScheduledJobInput {
   """
   description: String
   clearDescription: Boolean
-  """
-  the type of this job
-  """
-  jobType: ScheduledJobJobType
-  """
-  the type of this job
-  """
-  environment: ScheduledJobJobEnvironment
-  """
-  the script to run
-  """
-  script: String
-  clearScript: Boolean
-  isActive: Boolean
   scheduledJobSettingID: ID
 }
 """

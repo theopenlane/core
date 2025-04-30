@@ -59,6 +59,10 @@ func (ScheduledJob) Fields() []ent.Field {
 			Default(enums.JobTypeSsl.String()).
 			Annotations(
 				entgql.OrderField("job_type"),
+				entgql.Skip(
+					entgql.SkipMutationCreateInput|
+						entgql.SkipMutationUpdateInput,
+				),
 			).
 			Comment("the type of this job"),
 
@@ -67,20 +71,27 @@ func (ScheduledJob) Fields() []ent.Field {
 			Default(enums.JobEnvironmentOpenlane.String()).
 			Annotations(
 				entgql.OrderField("environment"),
+				entgql.Skip(
+					entgql.SkipMutationCreateInput|
+						entgql.SkipMutationUpdateInput,
+				),
 			).
 			Comment("the type of this job"),
 
 		field.String("script").
 			Annotations(
-				entgql.Skip(
-					entgql.SkipOrderField |
-						entgql.SkipWhereInput,
-				),
+				entgql.Skip(^entgql.SkipType),
 			).
 			Comment("the script to run").
 			Optional(),
 
 		field.Bool("is_active").
+			Annotations(
+				entgql.Skip(
+					entgql.SkipMutationCreateInput |
+						entgql.SkipMutationUpdateInput,
+				),
+			).
 			Default(true),
 	}
 }
