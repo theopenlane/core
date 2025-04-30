@@ -156,8 +156,6 @@ func HookUser() ent.Hook {
 				if err := sendRegisterWelcomeEmail(ctx, userCreated, m); err != nil {
 					zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
 				}
-
-				zerolog.Ctx(ctx).Debug().Msg("welcome email sent")
 			}
 
 			return userCreated, err
@@ -311,13 +309,14 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	return setting, org, nil
 }
 
+// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
 func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
 	zerolog.Ctx(ctx).Debug().Msg("sending welcome email")
 	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
-	}
+	})
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating welcome email")
 
@@ -331,8 +330,6 @@ func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *gene
 
 		return err
 	}
-
-	zerolog.Ctx(ctx).Debug().Msg("welcome email queued")
 
 	return nil
 }

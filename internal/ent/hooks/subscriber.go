@@ -108,7 +108,6 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 	}
 
 	// send the email via the job queue
-	zerolog.Ctx(ctx).Warn().Msg("queueing email verification")
 	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
