@@ -41,6 +41,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
+	if user.Password == nil {
+		return h.BadRequest(ctx, rout.ErrInvalidCredentials)
+	}
+
 	// verify the password is correct
 	valid, err := passwd.VerifyDerivedKey(*user.Password, in.Password)
 	if err != nil || !valid {
