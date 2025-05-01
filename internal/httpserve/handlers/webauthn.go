@@ -34,7 +34,9 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	ctxWithToken := token.NewContextWithOauthTooToken(ctx.Request().Context(), r.Email)
+	reqCtx := ctx.Request().Context()
+
+	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, r.Email)
 
 	// to register a new passkey, the user needs to be created + logged in first
 	// once the the passkey is added to the user's account, they can use it to login
@@ -133,10 +135,12 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// Get sessionID from cookie and check against redis
 	sessionID := h.SessionConfig.SessionManager.GetSessionIDFromCookie(session)
 
-	userID, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), sessionID)
+	userID, err := h.SessionConfig.RedisStore.GetSession(reqCtx, sessionID)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -150,8 +154,6 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	if userIDFromCookie != userID {
 		return h.BadRequest(ctx, err)
 	}
-
-	reqCtx := ctx.Request().Context()
 
 	// get user from the database
 	entUser, userCtx, err := h.getUserByID(reqCtx, userID)
@@ -201,7 +203,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to create new auth session")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -227,6 +229,8 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 		return err
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	setSessionMap := map[string]any{}
 	setSessionMap[sessions.WebAuthnKey] = session
 	setSessionMap[sessions.UserTypeKey] = webauthnLogin
@@ -237,9 +241,9 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 	// having the email at the start
 	setSessionMap[sessions.UserIDKey] = credential.Response.Challenge.String()
 
-	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, setSessionMap, credential.Response.Challenge.String())
+	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(reqCtx, ctx.Response().Writer, setSessionMap, credential.Response.Challenge.String())
 	if err != nil {
-		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to save session")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to save session")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -249,7 +253,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 	// server side
 	s, err := sessions.SessionToken(sessionCtx)
 	if err != nil {
-		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to get session token")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session token")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -265,9 +269,11 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 
 // FinishWebauthnLogin is the request to finish a webauthn login
 func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
+
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
 	if err != nil {
-		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to get session from cookie")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session from cookie")
 
 		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
@@ -282,12 +288,10 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 
 	response, err := protocol.ParseCredentialRequestResponseBody(ctx.Request().Body)
 	if err != nil {
-		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to parse credential request response body")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
 
 		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
-
-	reqCtx := ctx.Request().Context()
 
 	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(reqCtx), wd, response); err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to validate webauthn login")
