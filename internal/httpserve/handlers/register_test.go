@@ -213,7 +213,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 						{
 							Args: jobs.EmailArgs{
 								Message: *newman.NewEmailMessageWithOptions(
-									newman.WithSubject("Please verify your email address to login to Openlane"),
+									newman.WithSubject("Please verify your email address to login to Meow Inc."),
 									newman.WithTo([]string{tc.email}),
 								),
 							},
@@ -221,7 +221,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 						{
 							Args: jobs.EmailArgs{
 								Message: *newman.NewEmailMessageWithOptions(
-									newman.WithSubject("Welcome to !"),
+									newman.WithSubject("Welcome to Meow Inc.!"),
 									newman.WithTo([]string{tc.email}),
 								),
 							},
@@ -231,7 +231,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			} else {
 				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
 					Message: *newman.NewEmailMessageWithOptions(
-						newman.WithSubject("Please verify your email address to login to Openlane"),
+						newman.WithSubject("Please verify your email address to login to Meow Inc"),
 					),
 				}, nil)
 			}
