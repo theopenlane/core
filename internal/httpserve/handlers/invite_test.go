@@ -132,8 +132,12 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			// ensure the email jobs are created
 			// there will be three because the first is the invite email and the second is the welcome
 			// and the 3rd one is the accepted email
-			job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+			//and the 4th is the welcome email
+			job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 				[]rivertest.ExpectedJob{
+					{
+						Args: jobs.EmailArgs{},
+					},
 					{
 						Args: jobs.EmailArgs{},
 					},

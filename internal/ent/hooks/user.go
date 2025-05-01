@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -311,6 +312,13 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 
 // sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
 func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
+	// if there is not job client, we can't send the email
+	if m.Job == nil {
+		log.Info().Msg("no job client, skipping welcome email")
+
+		return nil
+	}
+
 	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
 		Email:     user.Email,
 		FirstName: user.FirstName,

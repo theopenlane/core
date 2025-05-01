@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/entdb"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -91,6 +92,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
+		generated.Emailer(&emailtemplates.Config{}),
 	}
 
 	suite.tf = entdb.NewTestFixture()
