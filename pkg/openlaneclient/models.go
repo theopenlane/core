@@ -16,34 +16,34 @@ import (
 
 type APIToken struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
 	// when the token expires
-	ExpiresAt *time.Time `json:"expiresAt,omitempty,omitzero"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty,omitzero"`
-	Scopes      []string   `json:"scopes,omitempty,omitzero"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty,omitzero"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
-	IsActive *bool `json:"isActive,omitempty,omitzero"`
+	IsActive *bool `json:"isActive,omitempty"`
 	// the reason the token was revoked
-	RevokedReason *string `json:"revokedReason,omitempty,omitzero"`
+	RevokedReason *string `json:"revokedReason,omitempty"`
 	// the user who revoked the token
-	RevokedBy *string `json:"revokedBy,omitempty,omitzero"`
+	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
-	RevokedAt *time.Time    `json:"revokedAt,omitempty,omitzero"`
-	Owner     *Organization `json:"owner,omitempty,omitzero"`
+	RevokedAt *time.Time    `json:"revokedAt,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
 }
 
 func (APIToken) IsNode() {}
@@ -51,13 +51,13 @@ func (APIToken) IsNode() {}
 // Return response for createBulkAPIToken mutation
 type APITokenBulkCreatePayload struct {
 	// Created apiTokens
-	APITokens []*APIToken `json:"apiTokens,omitempty,omitzero"`
+	APITokens []*APIToken `json:"apiTokens,omitempty"`
 }
 
 // A connection to a list of items.
 type APITokenConnection struct {
 	// A list of edges.
-	Edges []*APITokenEdge `json:"edges,omitempty,omitzero"`
+	Edges []*APITokenEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -79,7 +79,7 @@ type APITokenDeletePayload struct {
 // An edge in a connection.
 type APITokenEdge struct {
 	// The item at the end of the edge.
-	Node *APIToken `json:"node,omitempty,omitzero"`
+	Node *APIToken `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -303,47 +303,47 @@ type APITokenWhereInput struct {
 
 type ActionPlan struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType *string `json:"actionPlanType,omitempty,omitzero"`
+	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the action_plan
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the action_plan
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
-	DueDate *time.Time `json:"dueDate,omitempty,omitzero"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
-	Priority *enums.Priority `json:"priority,omitempty,omitzero"`
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
-	Source *string `json:"source,omitempty,omitzero"`
+	Source *string `json:"source,omitempty"`
 	// the group of users who are responsible for approving the action_plan
-	Approver *Group `json:"approver,omitempty,omitzero"`
+	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
-	Delegate *Group             `json:"delegate,omitempty,omitzero"`
-	Owner    *Organization      `json:"owner,omitempty,omitzero"`
+	Delegate *Group             `json:"delegate,omitempty"`
+	Owner    *Organization      `json:"owner,omitempty"`
 	Risks    *RiskConnection    `json:"risks"`
 	Controls *ControlConnection `json:"controls"`
 	Users    *UserConnection    `json:"users"`
@@ -355,13 +355,13 @@ func (ActionPlan) IsNode() {}
 // Return response for createBulkActionPlan mutation
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans
-	ActionPlans []*ActionPlan `json:"actionPlans,omitempty,omitzero"`
+	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
 }
 
 // A connection to a list of items.
 type ActionPlanConnection struct {
 	// A list of edges.
-	Edges []*ActionPlanEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ActionPlanEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -383,7 +383,7 @@ type ActionPlanDeletePayload struct {
 // An edge in a connection.
 type ActionPlanEdge struct {
 	// The item at the end of the edge.
-	Node *ActionPlan `json:"node,omitempty,omitzero"`
+	Node *ActionPlan `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -391,44 +391,44 @@ type ActionPlanEdge struct {
 type ActionPlanHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType *string `json:"actionPlanType,omitempty,omitzero"`
+	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the action_plan
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the action_plan should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the action_plan
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
-	DueDate *time.Time `json:"dueDate,omitempty,omitzero"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
-	Priority *enums.Priority `json:"priority,omitempty,omitzero"`
+	Priority *enums.Priority `json:"priority,omitempty"`
 	// source of the action plan
-	Source *string `json:"source,omitempty,omitzero"`
+	Source *string `json:"source,omitempty"`
 }
 
 func (ActionPlanHistory) IsNode() {}
@@ -436,7 +436,7 @@ func (ActionPlanHistory) IsNode() {}
 // A connection to a list of items.
 type ActionPlanHistoryConnection struct {
 	// A list of edges.
-	Edges []*ActionPlanHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ActionPlanHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -446,7 +446,7 @@ type ActionPlanHistoryConnection struct {
 // An edge in a connection.
 type ActionPlanHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ActionPlanHistory `json:"node,omitempty,omitzero"`
+	Node *ActionPlanHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -1073,12 +1073,12 @@ type ActionPlanWhereInput struct {
 }
 
 type AuditLog struct {
-	Table     *string    `json:"table,omitempty,omitzero"`
-	Time      *time.Time `json:"time,omitempty,omitzero"`
+	Table     *string    `json:"table,omitempty"`
+	Time      *time.Time `json:"time,omitempty"`
 	ID        string     `json:"id"`
-	Operation *string    `json:"operation,omitempty,omitzero"`
-	Changes   []string   `json:"changes,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
+	Operation *string    `json:"operation,omitempty"`
+	Changes   []string   `json:"changes,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
 }
 
 func (AuditLog) IsNode() {}
@@ -1086,7 +1086,7 @@ func (AuditLog) IsNode() {}
 // A connection to a list of items.
 type AuditLogConnection struct {
 	// A list of edges.
-	Edges []*AuditLogEdge `json:"edges,omitempty,omitzero"`
+	Edges []*AuditLogEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -1096,7 +1096,7 @@ type AuditLogConnection struct {
 // An edge in a connection.
 type AuditLogEdge struct {
 	// The item at the end of the edge.
-	Node *AuditLog `json:"node,omitempty,omitzero"`
+	Node *AuditLog `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -1120,31 +1120,31 @@ type CloneControlInput struct {
 
 type Contact struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
 	FullName string `json:"fullName"`
 	// the title of the contact
-	Title *string `json:"title,omitempty,omitzero"`
+	Title *string `json:"title,omitempty"`
 	// the company of the contact
-	Company *string `json:"company,omitempty,omitzero"`
+	Company *string `json:"company,omitempty"`
 	// the email of the contact
-	Email *string `json:"email,omitempty,omitzero"`
+	Email *string `json:"email,omitempty"`
 	// the phone number of the contact
-	PhoneNumber *string `json:"phoneNumber,omitempty,omitzero"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// the address of the contact
-	Address *string `json:"address,omitempty,omitzero"`
+	Address *string `json:"address,omitempty"`
 	// status of the contact
 	Status   enums.UserStatus  `json:"status"`
-	Owner    *Organization     `json:"owner,omitempty,omitzero"`
+	Owner    *Organization     `json:"owner,omitempty"`
 	Entities *EntityConnection `json:"entities"`
 	Files    *FileConnection   `json:"files"`
 }
@@ -1154,13 +1154,13 @@ func (Contact) IsNode() {}
 // Return response for createBulkContact mutation
 type ContactBulkCreatePayload struct {
 	// Created contacts
-	Contacts []*Contact `json:"contacts,omitempty,omitzero"`
+	Contacts []*Contact `json:"contacts,omitempty"`
 }
 
 // A connection to a list of items.
 type ContactConnection struct {
 	// A list of edges.
-	Edges []*ContactEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ContactEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -1182,7 +1182,7 @@ type ContactDeletePayload struct {
 // An edge in a connection.
 type ContactEdge struct {
 	// The item at the end of the edge.
-	Node *Contact `json:"node,omitempty,omitzero"`
+	Node *Contact `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -1190,30 +1190,30 @@ type ContactEdge struct {
 type ContactHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
 	FullName string `json:"fullName"`
 	// the title of the contact
-	Title *string `json:"title,omitempty,omitzero"`
+	Title *string `json:"title,omitempty"`
 	// the company of the contact
-	Company *string `json:"company,omitempty,omitzero"`
+	Company *string `json:"company,omitempty"`
 	// the email of the contact
-	Email *string `json:"email,omitempty,omitzero"`
+	Email *string `json:"email,omitempty"`
 	// the phone number of the contact
-	PhoneNumber *string `json:"phoneNumber,omitempty,omitzero"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// the address of the contact
-	Address *string `json:"address,omitempty,omitzero"`
+	Address *string `json:"address,omitempty"`
 	// status of the contact
 	Status enums.UserStatus `json:"status"`
 }
@@ -1223,7 +1223,7 @@ func (ContactHistory) IsNode() {}
 // A connection to a list of items.
 type ContactHistoryConnection struct {
 	// A list of edges.
-	Edges []*ContactHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ContactHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -1233,7 +1233,7 @@ type ContactHistoryConnection struct {
 // An edge in a connection.
 type ContactHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ContactHistory `json:"node,omitempty,omitzero"`
+	Node *ContactHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -1731,58 +1731,58 @@ type ContactWhereInput struct {
 
 type Control struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
-	ReferenceID *string `json:"referenceID,omitempty,omitzero"`
+	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
-	AuditorReferenceID *string `json:"auditorReferenceID,omitempty,omitzero"`
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *enums.ControlStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty,omitzero"`
+	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// category id of the control
-	CategoryID *string `json:"categoryID,omitempty,omitzero"`
+	CategoryID *string `json:"categoryID,omitempty"`
 	// subcategory of the control
-	Subcategory *string `json:"subcategory,omitempty,omitzero"`
+	Subcategory *string `json:"subcategory,omitempty"`
 	// mapped categories of the control to other standards
-	MappedCategories []string `json:"mappedCategories,omitempty,omitzero"`
+	MappedCategories []string `json:"mappedCategories,omitempty"`
 	// objectives of the audit assessment for the control
-	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty,omitzero"`
+	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty"`
 	// methods used to verify the control implementation during an audit
-	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty,omitzero"`
+	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty"`
 	// questions to ask to verify the control
-	ControlQuestions []string `json:"controlQuestions,omitempty,omitzero"`
+	ControlQuestions []string `json:"controlQuestions,omitempty"`
 	// implementation guidance for the control
-	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty,omitzero"`
+	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty"`
 	// examples of evidence for the control
-	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty,omitzero"`
+	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
-	References []*models.Reference `json:"references,omitempty,omitzero"`
+	References []*models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID *string `json:"controlOwnerID,omitempty,omitzero"`
+	ControlOwnerID *string `json:"controlOwnerID,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the standard that the control belongs to, if applicable
-	StandardID        *string                     `json:"standardID,omitempty,omitzero"`
+	StandardID        *string                     `json:"standardID,omitempty"`
 	Evidence          *EvidenceConnection         `json:"evidence"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Tasks             *TaskConnection             `json:"tasks"`
@@ -1793,17 +1793,17 @@ type Control struct {
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
 	MappedControls    *MappedControlConnection    `json:"mappedControls"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
-	ControlOwner *Group `json:"controlOwner,omitempty,omitzero"`
+	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate *Group        `json:"delegate,omitempty,omitzero"`
-	Owner    *Organization `json:"owner,omitempty,omitzero"`
+	Delegate *Group        `json:"delegate,omitempty"`
+	Owner    *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers                []*Group                         `json:"viewers,omitempty,omitzero"`
-	Standard               *Standard                        `json:"standard,omitempty,omitzero"`
+	Viewers                []*Group                         `json:"viewers,omitempty"`
+	Standard               *Standard                        `json:"standard,omitempty"`
 	Programs               *ProgramConnection               `json:"programs"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
@@ -1814,13 +1814,13 @@ func (Control) IsNode() {}
 // Return response for createBulkControl mutation
 type ControlBulkCreatePayload struct {
 	// Created controls
-	Controls []*Control `json:"controls,omitempty,omitzero"`
+	Controls []*Control `json:"controls,omitempty"`
 }
 
 // A connection to a list of items.
 type ControlConnection struct {
 	// A list of edges.
-	Edges []*ControlEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -1842,7 +1842,7 @@ type ControlDeletePayload struct {
 // An edge in a connection.
 type ControlEdge struct {
 	// The item at the end of the edge.
-	Node *Control `json:"node,omitempty,omitzero"`
+	Node *Control `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -1850,60 +1850,60 @@ type ControlEdge struct {
 type ControlHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
-	ReferenceID *string `json:"referenceID,omitempty,omitzero"`
+	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
-	AuditorReferenceID *string `json:"auditorReferenceID,omitempty,omitzero"`
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *enums.ControlStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty,omitzero"`
+	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// category id of the control
-	CategoryID *string `json:"categoryID,omitempty,omitzero"`
+	CategoryID *string `json:"categoryID,omitempty"`
 	// subcategory of the control
-	Subcategory *string `json:"subcategory,omitempty,omitzero"`
+	Subcategory *string `json:"subcategory,omitempty"`
 	// mapped categories of the control to other standards
-	MappedCategories []string `json:"mappedCategories,omitempty,omitzero"`
+	MappedCategories []string `json:"mappedCategories,omitempty"`
 	// objectives of the audit assessment for the control
-	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty,omitzero"`
+	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty"`
 	// methods used to verify the control implementation during an audit
-	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty,omitzero"`
+	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty"`
 	// questions to ask to verify the control
-	ControlQuestions []string `json:"controlQuestions,omitempty,omitzero"`
+	ControlQuestions []string `json:"controlQuestions,omitempty"`
 	// implementation guidance for the control
-	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty,omitzero"`
+	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty"`
 	// examples of evidence for the control
-	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty,omitzero"`
+	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
-	References []*models.Reference `json:"references,omitempty,omitzero"`
+	References []*models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID *string `json:"controlOwnerID,omitempty,omitzero"`
+	ControlOwnerID *string `json:"controlOwnerID,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the standard that the control belongs to, if applicable
-	StandardID *string `json:"standardID,omitempty,omitzero"`
+	StandardID *string `json:"standardID,omitempty"`
 }
 
 func (ControlHistory) IsNode() {}
@@ -1911,7 +1911,7 @@ func (ControlHistory) IsNode() {}
 // A connection to a list of items.
 type ControlHistoryConnection struct {
 	// A list of edges.
-	Edges []*ControlHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -1921,7 +1921,7 @@ type ControlHistoryConnection struct {
 // An edge in a connection.
 type ControlHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ControlHistory `json:"node,omitempty,omitzero"`
+	Node *ControlHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -2275,27 +2275,27 @@ type ControlHistoryWhereInput struct {
 
 type ControlImplementation struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
-	ImplementationDate *time.Time `json:"implementationDate,omitempty,omitzero"`
+	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// set to true if the control implementation has been verified
-	Verified *bool `json:"verified,omitempty,omitzero"`
+	Verified *bool `json:"verified,omitempty"`
 	// date the control implementation was verified
-	VerificationDate *time.Time `json:"verificationDate,omitempty,omitzero"`
+	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details     *string               `json:"details,omitempty,omitzero"`
-	Owner       *Organization         `json:"owner,omitempty,omitzero"`
+	Details     *string               `json:"details,omitempty"`
+	Owner       *Organization         `json:"owner,omitempty"`
 	Controls    *ControlConnection    `json:"controls"`
 	Subcontrols *SubcontrolConnection `json:"subcontrols"`
 }
@@ -2305,13 +2305,13 @@ func (ControlImplementation) IsNode() {}
 // Return response for createBulkControlImplementation mutation
 type ControlImplementationBulkCreatePayload struct {
 	// Created controlImplementations
-	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty,omitzero"`
+	ControlImplementations []*ControlImplementation `json:"controlImplementations,omitempty"`
 }
 
 // A connection to a list of items.
 type ControlImplementationConnection struct {
 	// A list of edges.
-	Edges []*ControlImplementationEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlImplementationEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -2333,7 +2333,7 @@ type ControlImplementationDeletePayload struct {
 // An edge in a connection.
 type ControlImplementationEdge struct {
 	// The item at the end of the edge.
-	Node *ControlImplementation `json:"node,omitempty,omitzero"`
+	Node *ControlImplementation `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -2341,28 +2341,28 @@ type ControlImplementationEdge struct {
 type ControlImplementationHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
-	ImplementationDate *time.Time `json:"implementationDate,omitempty,omitzero"`
+	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// set to true if the control implementation has been verified
-	Verified *bool `json:"verified,omitempty,omitzero"`
+	Verified *bool `json:"verified,omitempty"`
 	// date the control implementation was verified
-	VerificationDate *time.Time `json:"verificationDate,omitempty,omitzero"`
+	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 }
 
 func (ControlImplementationHistory) IsNode() {}
@@ -2370,7 +2370,7 @@ func (ControlImplementationHistory) IsNode() {}
 // A connection to a list of items.
 type ControlImplementationHistoryConnection struct {
 	// A list of edges.
-	Edges []*ControlImplementationHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlImplementationHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -2380,7 +2380,7 @@ type ControlImplementationHistoryConnection struct {
 // An edge in a connection.
 type ControlImplementationHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ControlImplementationHistory `json:"node,omitempty,omitzero"`
+	Node *ControlImplementationHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -2780,41 +2780,41 @@ type ControlImplementationWhereInput struct {
 
 type ControlObjective struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
-	DesiredOutcome *string `json:"desiredOutcome,omitempty,omitzero"`
+	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
 	// status of the control objective
-	Status *enums.ObjectiveStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
-	ControlObjectiveType *string `json:"controlObjectiveType,omitempty,omitzero"`
+	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// subcategory of the control
-	Subcategory *string       `json:"subcategory,omitempty,omitzero"`
-	Owner       *Organization `json:"owner,omitempty,omitzero"`
+	Subcategory *string       `json:"subcategory,omitempty"`
+	Owner       *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty,omitzero"`
+	Viewers          []*Group                  `json:"viewers,omitempty"`
 	Programs         *ProgramConnection        `json:"programs"`
 	Evidence         *EvidenceConnection       `json:"evidence"`
 	Controls         *ControlConnection        `json:"controls"`
@@ -2831,13 +2831,13 @@ func (ControlObjective) IsNode() {}
 // Return response for createBulkControlObjective mutation
 type ControlObjectiveBulkCreatePayload struct {
 	// Created controlObjectives
-	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty,omitzero"`
+	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 }
 
 // A connection to a list of items.
 type ControlObjectiveConnection struct {
 	// A list of edges.
-	Edges []*ControlObjectiveEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlObjectiveEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -2859,7 +2859,7 @@ type ControlObjectiveDeletePayload struct {
 // An edge in a connection.
 type ControlObjectiveEdge struct {
 	// The item at the end of the edge.
-	Node *ControlObjective `json:"node,omitempty,omitzero"`
+	Node *ControlObjective `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -2867,36 +2867,36 @@ type ControlObjectiveEdge struct {
 type ControlObjectiveHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
-	DesiredOutcome *string `json:"desiredOutcome,omitempty,omitzero"`
+	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
 	// status of the control objective
-	Status *enums.ObjectiveStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control objective e.g. compliance, financial, operational, etc.
-	ControlObjectiveType *string `json:"controlObjectiveType,omitempty,omitzero"`
+	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// subcategory of the control
-	Subcategory *string `json:"subcategory,omitempty,omitzero"`
+	Subcategory *string `json:"subcategory,omitempty"`
 }
 
 func (ControlObjectiveHistory) IsNode() {}
@@ -2904,7 +2904,7 @@ func (ControlObjectiveHistory) IsNode() {}
 // A connection to a list of items.
 type ControlObjectiveHistoryConnection struct {
 	// A list of edges.
-	Edges []*ControlObjectiveHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ControlObjectiveHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -2914,7 +2914,7 @@ type ControlObjectiveHistoryConnection struct {
 // An edge in a connection.
 type ControlObjectiveHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ControlObjectiveHistory `json:"node,omitempty,omitzero"`
+	Node *ControlObjectiveHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -4925,21 +4925,21 @@ type CreateUserSettingInput struct {
 
 type DocumentData struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
 	Data     map[string]any    `json:"data"`
-	Owner    *Organization     `json:"owner,omitempty,omitzero"`
+	Owner    *Organization     `json:"owner,omitempty"`
 	Template *Template         `json:"template"`
 	Entities *EntityConnection `json:"entities"`
 	Files    *FileConnection   `json:"files"`
@@ -4950,13 +4950,13 @@ func (DocumentData) IsNode() {}
 // Return response for createBulkDocumentData mutation
 type DocumentDataBulkCreatePayload struct {
 	// Created documentData
-	DocumentData []*DocumentData `json:"documentData,omitempty,omitzero"`
+	DocumentData []*DocumentData `json:"documentData,omitempty"`
 }
 
 // A connection to a list of items.
 type DocumentDataConnection struct {
 	// A list of edges.
-	Edges []*DocumentDataEdge `json:"edges,omitempty,omitzero"`
+	Edges []*DocumentDataEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -4978,7 +4978,7 @@ type DocumentDataDeletePayload struct {
 // An edge in a connection.
 type DocumentDataEdge struct {
 	// The item at the end of the edge.
-	Node *DocumentData `json:"node,omitempty,omitzero"`
+	Node *DocumentData `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -4986,18 +4986,18 @@ type DocumentDataEdge struct {
 type DocumentDataHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
@@ -5009,7 +5009,7 @@ func (DocumentDataHistory) IsNode() {}
 // A connection to a list of items.
 type DocumentDataHistoryConnection struct {
 	// A list of edges.
-	Edges []*DocumentDataHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*DocumentDataHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -5019,7 +5019,7 @@ type DocumentDataHistoryConnection struct {
 // An edge in a connection.
 type DocumentDataHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *DocumentDataHistory `json:"node,omitempty,omitzero"`
+	Node *DocumentDataHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -5350,34 +5350,34 @@ type DocumentDataWhereInput struct {
 
 type Entity struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
-	Name *string `json:"name,omitempty,omitzero"`
+	Name *string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
-	DisplayName *string `json:"displayName,omitempty,omitzero"`
+	DisplayName *string `json:"displayName,omitempty"`
 	// An optional description of the entity
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// domains associated with the entity
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// The type of the entity
-	EntityTypeID *string `json:"entityTypeID,omitempty,omitzero"`
+	EntityTypeID *string `json:"entityTypeID,omitempty"`
 	// status of the entity
-	Status     *string                 `json:"status,omitempty,omitzero"`
-	Owner      *Organization           `json:"owner,omitempty,omitzero"`
+	Status     *string                 `json:"status,omitempty"`
+	Owner      *Organization           `json:"owner,omitempty"`
 	Contacts   *ContactConnection      `json:"contacts"`
 	Documents  *DocumentDataConnection `json:"documents"`
 	Notes      *NoteConnection         `json:"notes"`
 	Files      *FileConnection         `json:"files"`
-	EntityType *EntityType             `json:"entityType,omitempty,omitzero"`
+	EntityType *EntityType             `json:"entityType,omitempty"`
 }
 
 func (Entity) IsNode() {}
@@ -5385,13 +5385,13 @@ func (Entity) IsNode() {}
 // Return response for createBulkEntity mutation
 type EntityBulkCreatePayload struct {
 	// Created entities
-	Entities []*Entity `json:"entities,omitempty,omitzero"`
+	Entities []*Entity `json:"entities,omitempty"`
 }
 
 // A connection to a list of items.
 type EntityConnection struct {
 	// A list of edges.
-	Edges []*EntityEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EntityEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -5413,7 +5413,7 @@ type EntityDeletePayload struct {
 // An edge in a connection.
 type EntityEdge struct {
 	// The item at the end of the edge.
-	Node *Entity `json:"node,omitempty,omitzero"`
+	Node *Entity `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -5421,30 +5421,30 @@ type EntityEdge struct {
 type EntityHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
-	Name *string `json:"name,omitempty,omitzero"`
+	Name *string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
-	DisplayName *string `json:"displayName,omitempty,omitzero"`
+	DisplayName *string `json:"displayName,omitempty"`
 	// An optional description of the entity
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// domains associated with the entity
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// The type of the entity
-	EntityTypeID *string `json:"entityTypeID,omitempty,omitzero"`
+	EntityTypeID *string `json:"entityTypeID,omitempty"`
 	// status of the entity
-	Status *string `json:"status,omitempty,omitzero"`
+	Status *string `json:"status,omitempty"`
 }
 
 func (EntityHistory) IsNode() {}
@@ -5452,7 +5452,7 @@ func (EntityHistory) IsNode() {}
 // A connection to a list of items.
 type EntityHistoryConnection struct {
 	// A list of edges.
-	Edges []*EntityHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EntityHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -5462,7 +5462,7 @@ type EntityHistoryConnection struct {
 // An edge in a connection.
 type EntityHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *EntityHistory `json:"node,omitempty,omitzero"`
+	Node *EntityHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -5695,19 +5695,19 @@ type EntityOrder struct {
 
 type EntityType struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name     string            `json:"name"`
-	Owner    *Organization     `json:"owner,omitempty,omitzero"`
+	Owner    *Organization     `json:"owner,omitempty"`
 	Entities *EntityConnection `json:"entities"`
 }
 
@@ -5716,13 +5716,13 @@ func (EntityType) IsNode() {}
 // Return response for createBulkEntityType mutation
 type EntityTypeBulkCreatePayload struct {
 	// Created entityTypes
-	EntityTypes []*EntityType `json:"entityTypes,omitempty,omitzero"`
+	EntityTypes []*EntityType `json:"entityTypes,omitempty"`
 }
 
 // A connection to a list of items.
 type EntityTypeConnection struct {
 	// A list of edges.
-	Edges []*EntityTypeEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EntityTypeEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -5744,7 +5744,7 @@ type EntityTypeDeletePayload struct {
 // An edge in a connection.
 type EntityTypeEdge struct {
 	// The item at the end of the edge.
-	Node *EntityType `json:"node,omitempty,omitzero"`
+	Node *EntityType `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -5752,18 +5752,18 @@ type EntityTypeEdge struct {
 type EntityTypeHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name string `json:"name"`
 }
@@ -5773,7 +5773,7 @@ func (EntityTypeHistory) IsNode() {}
 // A connection to a list of items.
 type EntityTypeHistoryConnection struct {
 	// A list of edges.
-	Edges []*EntityTypeHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EntityTypeHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -5783,7 +5783,7 @@ type EntityTypeHistoryConnection struct {
 // An edge in a connection.
 type EntityTypeHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *EntityTypeHistory `json:"node,omitempty,omitzero"`
+	Node *EntityTypeHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -6312,16 +6312,16 @@ type EntityWhereInput struct {
 
 type Event struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags                 []string                       `json:"tags,omitempty,omitzero"`
-	EventID              *string                        `json:"eventID,omitempty,omitzero"`
-	CorrelationID        *string                        `json:"correlationID,omitempty,omitzero"`
+	Tags                 []string                       `json:"tags,omitempty"`
+	EventID              *string                        `json:"eventID,omitempty"`
+	CorrelationID        *string                        `json:"correlationID,omitempty"`
 	EventType            string                         `json:"eventType"`
-	Metadata             map[string]any                 `json:"metadata,omitempty,omitzero"`
+	Metadata             map[string]any                 `json:"metadata,omitempty"`
 	Users                *UserConnection                `json:"users"`
 	Groups               *GroupConnection               `json:"groups"`
 	Integrations         *IntegrationConnection         `json:"integrations"`
@@ -6341,13 +6341,13 @@ func (Event) IsNode() {}
 // Return response for createBulkEvent mutation
 type EventBulkCreatePayload struct {
 	// Created events
-	Events []*Event `json:"events,omitempty,omitzero"`
+	Events []*Event `json:"events,omitempty"`
 }
 
 // A connection to a list of items.
 type EventConnection struct {
 	// A list of edges.
-	Edges []*EventEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EventEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -6369,7 +6369,7 @@ type EventDeletePayload struct {
 // An edge in a connection.
 type EventEdge struct {
 	// The item at the end of the edge.
-	Node *Event `json:"node,omitempty,omitzero"`
+	Node *Event `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -6377,18 +6377,18 @@ type EventEdge struct {
 type EventHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags          []string       `json:"tags,omitempty,omitzero"`
-	EventID       *string        `json:"eventID,omitempty,omitzero"`
-	CorrelationID *string        `json:"correlationID,omitempty,omitzero"`
+	Tags          []string       `json:"tags,omitempty"`
+	EventID       *string        `json:"eventID,omitempty"`
+	CorrelationID *string        `json:"correlationID,omitempty"`
 	EventType     string         `json:"eventType"`
-	Metadata      map[string]any `json:"metadata,omitempty,omitzero"`
+	Metadata      map[string]any `json:"metadata,omitempty"`
 }
 
 func (EventHistory) IsNode() {}
@@ -6396,7 +6396,7 @@ func (EventHistory) IsNode() {}
 // A connection to a list of items.
 type EventHistoryConnection struct {
 	// A list of edges.
-	Edges []*EventHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EventHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -6406,7 +6406,7 @@ type EventHistoryConnection struct {
 // An edge in a connection.
 type EventHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *EventHistory `json:"node,omitempty,omitzero"`
+	Node *EventHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -6739,37 +6739,37 @@ type EventWhereInput struct {
 
 type Evidence struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the evidence
 	Name string `json:"name"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// description of how the evidence was collected
-	CollectionProcedure *string `json:"collectionProcedure,omitempty,omitzero"`
+	CollectionProcedure *string `json:"collectionProcedure,omitempty"`
 	// the date the evidence was retrieved
 	CreationDate time.Time `json:"creationDate"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate *time.Time `json:"renewalDate,omitempty,omitzero"`
+	RenewalDate *time.Time `json:"renewalDate,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
-	Source *string `json:"source,omitempty,omitzero"`
+	Source *string `json:"source,omitempty"`
 	// whether the evidence was automatically generated
-	IsAutomated *bool `json:"isAutomated,omitempty,omitzero"`
+	IsAutomated *bool `json:"isAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
-	URL *string `json:"url,omitempty,omitzero"`
+	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status            *enums.EvidenceStatus       `json:"status,omitempty,omitzero"`
-	Owner             *Organization               `json:"owner,omitempty,omitzero"`
+	Status            *enums.EvidenceStatus       `json:"status,omitempty"`
+	Owner             *Organization               `json:"owner,omitempty"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Controls          *ControlConnection          `json:"controls"`
 	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
@@ -6783,13 +6783,13 @@ func (Evidence) IsNode() {}
 // Return response for createBulkEvidence mutation
 type EvidenceBulkCreatePayload struct {
 	// Created evidences
-	Evidences []*Evidence `json:"evidences,omitempty,omitzero"`
+	Evidences []*Evidence `json:"evidences,omitempty"`
 }
 
 // A connection to a list of items.
 type EvidenceConnection struct {
 	// A list of edges.
-	Edges []*EvidenceEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EvidenceEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -6811,7 +6811,7 @@ type EvidenceDeletePayload struct {
 // An edge in a connection.
 type EvidenceEdge struct {
 	// The item at the end of the edge.
-	Node *Evidence `json:"node,omitempty,omitzero"`
+	Node *Evidence `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -6819,38 +6819,38 @@ type EvidenceEdge struct {
 type EvidenceHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the evidence
 	Name string `json:"name"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// description of how the evidence was collected
-	CollectionProcedure *string `json:"collectionProcedure,omitempty,omitzero"`
+	CollectionProcedure *string `json:"collectionProcedure,omitempty"`
 	// the date the evidence was retrieved
 	CreationDate time.Time `json:"creationDate"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate *time.Time `json:"renewalDate,omitempty,omitzero"`
+	RenewalDate *time.Time `json:"renewalDate,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
-	Source *string `json:"source,omitempty,omitzero"`
+	Source *string `json:"source,omitempty"`
 	// whether the evidence was automatically generated
-	IsAutomated *bool `json:"isAutomated,omitempty,omitzero"`
+	IsAutomated *bool `json:"isAutomated,omitempty"`
 	// the url of the evidence if not uploaded directly to the system
-	URL *string `json:"url,omitempty,omitzero"`
+	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status *enums.EvidenceStatus `json:"status,omitempty,omitzero"`
+	Status *enums.EvidenceStatus `json:"status,omitempty"`
 }
 
 func (EvidenceHistory) IsNode() {}
@@ -6858,7 +6858,7 @@ func (EvidenceHistory) IsNode() {}
 // A connection to a list of items.
 type EvidenceHistoryConnection struct {
 	// A list of edges.
-	Edges []*EvidenceHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*EvidenceHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -6868,7 +6868,7 @@ type EvidenceHistoryConnection struct {
 // An edge in a connection.
 type EvidenceHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *EvidenceHistory `json:"node,omitempty,omitzero"`
+	Node *EvidenceHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -7428,52 +7428,52 @@ type EvidenceWhereInput struct {
 
 type File struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
 	ProvidedFileExtension string `json:"providedFileExtension"`
 	// the computed size of the file in the original http request
-	ProvidedFileSize  *int64 `json:"providedFileSize,omitempty,omitzero"`
-	PersistedFileSize *int64 `json:"persistedFileSize,omitempty,omitzero"`
+	ProvidedFileSize  *int64 `json:"providedFileSize,omitempty"`
+	PersistedFileSize *int64 `json:"persistedFileSize,omitempty"`
 	// the mime type detected by the system
-	DetectedMimeType *string `json:"detectedMimeType,omitempty,omitzero"`
+	DetectedMimeType *string `json:"detectedMimeType,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
-	Md5Hash *string `json:"md5Hash,omitempty,omitzero"`
+	Md5Hash *string `json:"md5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
-	StoreKey *string `json:"storeKey,omitempty,omitzero"`
+	StoreKey *string `json:"storeKey,omitempty"`
 	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty,omitzero"`
+	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
-	URI *string `json:"uri,omitempty,omitzero"`
+	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
-	StorageScheme *string `json:"storageScheme,omitempty,omitzero"`
+	StorageScheme *string `json:"storageScheme,omitempty"`
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
-	StorageVolume *string `json:"storageVolume,omitempty,omitzero"`
+	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath         *string                `json:"storagePath,omitempty,omitzero"`
-	User                []*User                `json:"user,omitempty,omitzero"`
-	Organization        []*Organization        `json:"organization,omitempty,omitzero"`
+	StoragePath         *string                `json:"storagePath,omitempty"`
+	User                []*User                `json:"user,omitempty"`
+	Organization        []*Organization        `json:"organization,omitempty"`
 	Groups              *GroupConnection       `json:"groups"`
-	Contact             []*Contact             `json:"contact,omitempty,omitzero"`
-	Entity              []*Entity              `json:"entity,omitempty,omitzero"`
-	UserSetting         []*UserSetting         `json:"userSetting,omitempty,omitzero"`
-	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty,omitzero"`
-	Template            []*Template            `json:"template,omitempty,omitzero"`
-	Document            []*DocumentData        `json:"document,omitempty,omitzero"`
-	Program             []*Program             `json:"program,omitempty,omitzero"`
-	Evidence            []*Evidence            `json:"evidence,omitempty,omitzero"`
+	Contact             []*Contact             `json:"contact,omitempty"`
+	Entity              []*Entity              `json:"entity,omitempty"`
+	UserSetting         []*UserSetting         `json:"userSetting,omitempty"`
+	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty"`
+	Template            []*Template            `json:"template,omitempty"`
+	Document            []*DocumentData        `json:"document,omitempty"`
+	Program             []*Program             `json:"program,omitempty"`
+	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
-	PresignedURL        *string                `json:"presignedURL,omitempty,omitzero"`
+	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
 func (File) IsNode() {}
@@ -7481,7 +7481,7 @@ func (File) IsNode() {}
 // A connection to a list of items.
 type FileConnection struct {
 	// A list of edges.
-	Edges []*FileEdge `json:"edges,omitempty,omitzero"`
+	Edges []*FileEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -7497,7 +7497,7 @@ type FileDeletePayload struct {
 // An edge in a connection.
 type FileEdge struct {
 	// The item at the end of the edge.
-	Node *File `json:"node,omitempty,omitzero"`
+	Node *File `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -7505,41 +7505,41 @@ type FileEdge struct {
 type FileHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
 	ProvidedFileExtension string `json:"providedFileExtension"`
 	// the computed size of the file in the original http request
-	ProvidedFileSize  *int64 `json:"providedFileSize,omitempty,omitzero"`
-	PersistedFileSize *int64 `json:"persistedFileSize,omitempty,omitzero"`
+	ProvidedFileSize  *int64 `json:"providedFileSize,omitempty"`
+	PersistedFileSize *int64 `json:"persistedFileSize,omitempty"`
 	// the mime type detected by the system
-	DetectedMimeType *string `json:"detectedMimeType,omitempty,omitzero"`
+	DetectedMimeType *string `json:"detectedMimeType,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
-	Md5Hash *string `json:"md5Hash,omitempty,omitzero"`
+	Md5Hash *string `json:"md5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
-	StoreKey *string `json:"storeKey,omitempty,omitzero"`
+	StoreKey *string `json:"storeKey,omitempty"`
 	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty,omitzero"`
+	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
-	URI *string `json:"uri,omitempty,omitzero"`
+	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
-	StorageScheme *string `json:"storageScheme,omitempty,omitzero"`
+	StorageScheme *string `json:"storageScheme,omitempty"`
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
-	StorageVolume *string `json:"storageVolume,omitempty,omitzero"`
+	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath *string `json:"storagePath,omitempty,omitzero"`
+	StoragePath *string `json:"storagePath,omitempty"`
 }
 
 func (FileHistory) IsNode() {}
@@ -7547,7 +7547,7 @@ func (FileHistory) IsNode() {}
 // A connection to a list of items.
 type FileHistoryConnection struct {
 	// A list of edges.
-	Edges []*FileHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*FileHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -7557,7 +7557,7 @@ type FileHistoryConnection struct {
 // An edge in a connection.
 type FileHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *FileHistory `json:"node,omitempty,omitzero"`
+	Node *FileHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -8230,59 +8230,59 @@ type FileWhereInput struct {
 
 type Group struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the group - must be unique within the organization
 	Name string `json:"name"`
 	// the groups description
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// whether the group is managed by the system
-	IsManaged *bool `json:"isManaged,omitempty,omitzero"`
+	IsManaged *bool `json:"isManaged,omitempty"`
 	// the URL to an auto generated gravatar image for the group
-	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty,omitzero"`
+	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
-	LogoURL *string `json:"logoURL,omitempty,omitzero"`
+	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName                   string                 `json:"displayName"`
-	Owner                         *Organization          `json:"owner,omitempty,omitzero"`
-	ProgramEditors                []*Program             `json:"programEditors,omitempty,omitzero"`
-	ProgramBlockedGroups          []*Program             `json:"programBlockedGroups,omitempty,omitzero"`
-	ProgramViewers                []*Program             `json:"programViewers,omitempty,omitzero"`
-	RiskEditors                   []*Risk                `json:"riskEditors,omitempty,omitzero"`
-	RiskBlockedGroups             []*Risk                `json:"riskBlockedGroups,omitempty,omitzero"`
-	RiskViewers                   []*Risk                `json:"riskViewers,omitempty,omitzero"`
-	ControlObjectiveEditors       []*ControlObjective    `json:"controlObjectiveEditors,omitempty,omitzero"`
-	ControlObjectiveBlockedGroups []*ControlObjective    `json:"controlObjectiveBlockedGroups,omitempty,omitzero"`
-	ControlObjectiveViewers       []*ControlObjective    `json:"controlObjectiveViewers,omitempty,omitzero"`
-	ControlEditors                []*Control             `json:"controlEditors,omitempty,omitzero"`
-	ControlBlockedGroups          []*Control             `json:"controlBlockedGroups,omitempty,omitzero"`
-	ControlViewers                []*Control             `json:"controlViewers,omitempty,omitzero"`
-	NarrativeEditors              []*Narrative           `json:"narrativeEditors,omitempty,omitzero"`
-	NarrativeBlockedGroups        []*Narrative           `json:"narrativeBlockedGroups,omitempty,omitzero"`
-	NarrativeViewers              []*Narrative           `json:"narrativeViewers,omitempty,omitzero"`
-	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty,omitzero"`
-	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty,omitzero"`
-	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty,omitzero"`
-	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty,omitzero"`
-	Setting                       *GroupSetting          `json:"setting,omitempty,omitzero"`
-	Users                         []*User                `json:"users,omitempty,omitzero"`
+	Owner                         *Organization          `json:"owner,omitempty"`
+	ProgramEditors                []*Program             `json:"programEditors,omitempty"`
+	ProgramBlockedGroups          []*Program             `json:"programBlockedGroups,omitempty"`
+	ProgramViewers                []*Program             `json:"programViewers,omitempty"`
+	RiskEditors                   []*Risk                `json:"riskEditors,omitempty"`
+	RiskBlockedGroups             []*Risk                `json:"riskBlockedGroups,omitempty"`
+	RiskViewers                   []*Risk                `json:"riskViewers,omitempty"`
+	ControlObjectiveEditors       []*ControlObjective    `json:"controlObjectiveEditors,omitempty"`
+	ControlObjectiveBlockedGroups []*ControlObjective    `json:"controlObjectiveBlockedGroups,omitempty"`
+	ControlObjectiveViewers       []*ControlObjective    `json:"controlObjectiveViewers,omitempty"`
+	ControlEditors                []*Control             `json:"controlEditors,omitempty"`
+	ControlBlockedGroups          []*Control             `json:"controlBlockedGroups,omitempty"`
+	ControlViewers                []*Control             `json:"controlViewers,omitempty"`
+	NarrativeEditors              []*Narrative           `json:"narrativeEditors,omitempty"`
+	NarrativeBlockedGroups        []*Narrative           `json:"narrativeBlockedGroups,omitempty"`
+	NarrativeViewers              []*Narrative           `json:"narrativeViewers,omitempty"`
+	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty"`
+	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty"`
+	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty"`
+	Setting                       *GroupSetting          `json:"setting,omitempty"`
+	Users                         []*User                `json:"users,omitempty"`
 	Events                        *EventConnection       `json:"events"`
 	Integrations                  *IntegrationConnection `json:"integrations"`
 	Files                         *FileConnection        `json:"files"`
 	Tasks                         *TaskConnection        `json:"tasks"`
-	Members                       []*GroupMembership     `json:"members,omitempty,omitzero"`
+	Members                       []*GroupMembership     `json:"members,omitempty"`
 	// permissions the group provides
-	Permissions []*GroupPermissions `json:"permissions,omitempty,omitzero"`
+	Permissions []*GroupPermissions `json:"permissions,omitempty"`
 }
 
 func (Group) IsNode() {}
@@ -8290,13 +8290,13 @@ func (Group) IsNode() {}
 // Return response for createBulkGroup mutation
 type GroupBulkCreatePayload struct {
 	// Created groups
-	Groups []*Group `json:"groups,omitempty,omitzero"`
+	Groups []*Group `json:"groups,omitempty"`
 }
 
 // A connection to a list of items.
 type GroupConnection struct {
 	// A list of edges.
-	Edges []*GroupEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -8318,7 +8318,7 @@ type GroupDeletePayload struct {
 // An edge in a connection.
 type GroupEdge struct {
 	// The item at the end of the edge.
-	Node *Group `json:"node,omitempty,omitzero"`
+	Node *Group `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -8326,30 +8326,30 @@ type GroupEdge struct {
 type GroupHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the group - must be unique within the organization
 	Name string `json:"name"`
 	// the groups description
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// whether the group is managed by the system
-	IsManaged *bool `json:"isManaged,omitempty,omitzero"`
+	IsManaged *bool `json:"isManaged,omitempty"`
 	// the URL to an auto generated gravatar image for the group
-	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty,omitzero"`
+	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
-	LogoURL *string `json:"logoURL,omitempty,omitzero"`
+	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 }
@@ -8359,7 +8359,7 @@ func (GroupHistory) IsNode() {}
 // A connection to a list of items.
 type GroupHistoryConnection struct {
 	// A list of edges.
-	Edges []*GroupHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -8369,7 +8369,7 @@ type GroupHistoryConnection struct {
 // An edge in a connection.
 type GroupHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *GroupHistory `json:"node,omitempty,omitzero"`
+	Node *GroupHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -8584,12 +8584,12 @@ type GroupMembersInput struct {
 
 type GroupMembership struct {
 	ID        string           `json:"id"`
-	CreatedAt *time.Time       `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time       `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string          `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string          `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time       `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string          `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy *string          `json:"createdBy,omitempty"`
+	UpdatedBy *string          `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time       `json:"deletedAt,omitempty"`
+	DeletedBy *string          `json:"deletedBy,omitempty"`
 	Role      enums.Role       `json:"role"`
 	GroupID   string           `json:"groupID"`
 	UserID    string           `json:"userID"`
@@ -8603,13 +8603,13 @@ func (GroupMembership) IsNode() {}
 // Return response for createBulkGroupMembership mutation
 type GroupMembershipBulkCreatePayload struct {
 	// Created groupMemberships
-	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty,omitzero"`
+	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty"`
 }
 
 // A connection to a list of items.
 type GroupMembershipConnection struct {
 	// A list of edges.
-	Edges []*GroupMembershipEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupMembershipEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -8631,7 +8631,7 @@ type GroupMembershipDeletePayload struct {
 // An edge in a connection.
 type GroupMembershipEdge struct {
 	// The item at the end of the edge.
-	Node *GroupMembership `json:"node,omitempty,omitzero"`
+	Node *GroupMembership `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -8639,14 +8639,14 @@ type GroupMembershipEdge struct {
 type GroupMembershipHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	Role        enums.Role     `json:"role"`
 	GroupID     string         `json:"groupID"`
 	UserID      string         `json:"userID"`
@@ -8657,7 +8657,7 @@ func (GroupMembershipHistory) IsNode() {}
 // A connection to a list of items.
 type GroupMembershipHistoryConnection struct {
 	// A list of edges.
-	Edges []*GroupMembershipHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupMembershipHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -8667,7 +8667,7 @@ type GroupMembershipHistoryConnection struct {
 // An edge in a connection.
 type GroupMembershipHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *GroupMembershipHistory `json:"node,omitempty,omitzero"`
+	Node *GroupMembershipHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -8978,30 +8978,30 @@ type GroupOrder struct {
 type GroupPermissions struct {
 	ObjectType  string           `json:"objectType"`
 	Permissions enums.Permission `json:"permissions"`
-	ID          *string          `json:"id,omitempty,omitzero"`
-	DisplayID   *string          `json:"displayID,omitempty,omitzero"`
-	Name        *string          `json:"name,omitempty,omitzero"`
+	ID          *string          `json:"id,omitempty"`
+	DisplayID   *string          `json:"displayID,omitempty"`
+	Name        *string          `json:"name,omitempty"`
 }
 
 type GroupSetting struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
 	JoinPolicy enums.JoinPolicy `json:"joinPolicy"`
 	// whether to sync group members to slack groups
-	SyncToSlack *bool `json:"syncToSlack,omitempty,omitzero"`
+	SyncToSlack *bool `json:"syncToSlack,omitempty"`
 	// whether to sync group members to github groups
-	SyncToGithub *bool `json:"syncToGithub,omitempty,omitzero"`
+	SyncToGithub *bool `json:"syncToGithub,omitempty"`
 	// the group id associated with the settings
-	GroupID *string `json:"groupID,omitempty,omitzero"`
-	Group   *Group  `json:"group,omitempty,omitzero"`
+	GroupID *string `json:"groupID,omitempty"`
+	Group   *Group  `json:"group,omitempty"`
 }
 
 func (GroupSetting) IsNode() {}
@@ -9009,13 +9009,13 @@ func (GroupSetting) IsNode() {}
 // Return response for createBulkGroupSetting mutation
 type GroupSettingBulkCreatePayload struct {
 	// Created groupSettings
-	GroupSettings []*GroupSetting `json:"groupSettings,omitempty,omitzero"`
+	GroupSettings []*GroupSetting `json:"groupSettings,omitempty"`
 }
 
 // A connection to a list of items.
 type GroupSettingConnection struct {
 	// A list of edges.
-	Edges []*GroupSettingEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupSettingEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -9037,7 +9037,7 @@ type GroupSettingDeletePayload struct {
 // An edge in a connection.
 type GroupSettingEdge struct {
 	// The item at the end of the edge.
-	Node *GroupSetting `json:"node,omitempty,omitzero"`
+	Node *GroupSetting `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -9045,24 +9045,24 @@ type GroupSettingEdge struct {
 type GroupSettingHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
 	JoinPolicy enums.JoinPolicy `json:"joinPolicy"`
 	// whether to sync group members to slack groups
-	SyncToSlack *bool `json:"syncToSlack,omitempty,omitzero"`
+	SyncToSlack *bool `json:"syncToSlack,omitempty"`
 	// whether to sync group members to github groups
-	SyncToGithub *bool `json:"syncToGithub,omitempty,omitzero"`
+	SyncToGithub *bool `json:"syncToGithub,omitempty"`
 	// the group id associated with the settings
-	GroupID *string `json:"groupID,omitempty,omitzero"`
+	GroupID *string `json:"groupID,omitempty"`
 }
 
 func (GroupSettingHistory) IsNode() {}
@@ -9070,7 +9070,7 @@ func (GroupSettingHistory) IsNode() {}
 // A connection to a list of items.
 type GroupSettingHistoryConnection struct {
 	// A list of edges.
-	Edges []*GroupSettingHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*GroupSettingHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -9080,7 +9080,7 @@ type GroupSettingHistoryConnection struct {
 // An edge in a connection.
 type GroupSettingHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *GroupSettingHistory `json:"node,omitempty,omitzero"`
+	Node *GroupSettingHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -9664,23 +9664,23 @@ type GroupWhereInput struct {
 
 type Hush struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the kind of secret, such as sshkey, certificate, api token, etc.
-	Kind *string `json:"kind,omitempty,omitzero"`
+	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
-	SecretName   *string                `json:"secretName,omitempty,omitzero"`
-	Owner        *Organization          `json:"owner,omitempty,omitzero"`
+	SecretName   *string                `json:"secretName,omitempty"`
+	Owner        *Organization          `json:"owner,omitempty"`
 	Integrations *IntegrationConnection `json:"integrations"`
 	Events       *EventConnection       `json:"events"`
 }
@@ -9690,13 +9690,13 @@ func (Hush) IsNode() {}
 // Return response for createBulkHush mutation
 type HushBulkCreatePayload struct {
 	// Created hushs
-	Hushes []*Hush `json:"hushes,omitempty,omitzero"`
+	Hushes []*Hush `json:"hushes,omitempty"`
 }
 
 // A connection to a list of items.
 type HushConnection struct {
 	// A list of edges.
-	Edges []*HushEdge `json:"edges,omitempty,omitzero"`
+	Edges []*HushEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -9718,7 +9718,7 @@ type HushDeletePayload struct {
 // An edge in a connection.
 type HushEdge struct {
 	// The item at the end of the edge.
-	Node *Hush `json:"node,omitempty,omitzero"`
+	Node *Hush `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -9726,24 +9726,24 @@ type HushEdge struct {
 type HushHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the kind of secret, such as sshkey, certificate, api token, etc.
-	Kind *string `json:"kind,omitempty,omitzero"`
+	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
-	SecretName *string `json:"secretName,omitempty,omitzero"`
+	SecretName *string `json:"secretName,omitempty"`
 }
 
 func (HushHistory) IsNode() {}
@@ -9751,7 +9751,7 @@ func (HushHistory) IsNode() {}
 // A connection to a list of items.
 type HushHistoryConnection struct {
 	// A list of edges.
-	Edges []*HushHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*HushHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -9761,7 +9761,7 @@ type HushHistoryConnection struct {
 // An edge in a connection.
 type HushHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *HushHistory `json:"node,omitempty,omitzero"`
+	Node *HushHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -10153,22 +10153,22 @@ type HushWhereInput struct {
 
 type Integration struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
 	Name string `json:"name"`
 	// a description of the integration
-	Description *string          `json:"description,omitempty,omitzero"`
-	Kind        *string          `json:"kind,omitempty,omitzero"`
-	Owner       *Organization    `json:"owner,omitempty,omitzero"`
+	Description *string          `json:"description,omitempty"`
+	Kind        *string          `json:"kind,omitempty"`
+	Owner       *Organization    `json:"owner,omitempty"`
 	Secrets     *HushConnection  `json:"secrets"`
 	Events      *EventConnection `json:"events"`
 }
@@ -10178,13 +10178,13 @@ func (Integration) IsNode() {}
 // Return response for createBulkIntegration mutation
 type IntegrationBulkCreatePayload struct {
 	// Created integrations
-	Integrations []*Integration `json:"integrations,omitempty,omitzero"`
+	Integrations []*Integration `json:"integrations,omitempty"`
 }
 
 // A connection to a list of items.
 type IntegrationConnection struct {
 	// A list of edges.
-	Edges []*IntegrationEdge `json:"edges,omitempty,omitzero"`
+	Edges []*IntegrationEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -10206,7 +10206,7 @@ type IntegrationDeletePayload struct {
 // An edge in a connection.
 type IntegrationEdge struct {
 	// The item at the end of the edge.
-	Node *Integration `json:"node,omitempty,omitzero"`
+	Node *Integration `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -10214,23 +10214,23 @@ type IntegrationEdge struct {
 type IntegrationHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
 	Name string `json:"name"`
 	// a description of the integration
-	Description *string `json:"description,omitempty,omitzero"`
-	Kind        *string `json:"kind,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
+	Kind        *string `json:"kind,omitempty"`
 }
 
 func (IntegrationHistory) IsNode() {}
@@ -10238,7 +10238,7 @@ func (IntegrationHistory) IsNode() {}
 // A connection to a list of items.
 type IntegrationHistoryConnection struct {
 	// A list of edges.
-	Edges []*IntegrationHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*IntegrationHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -10248,7 +10248,7 @@ type IntegrationHistoryConnection struct {
 // An edge in a connection.
 type IntegrationHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *IntegrationHistory `json:"node,omitempty,omitzero"`
+	Node *IntegrationHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -10608,47 +10608,47 @@ type IntegrationWhereInput struct {
 
 type InternalPolicy struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the policy, e.g. compliance, operational, health and safety, etc.
-	PolicyType *string `json:"policyType,omitempty,omitzero"`
+	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the policy
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the policy
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
-	DelegateID *string       `json:"delegateID,omitempty,omitzero"`
-	Owner      *Organization `json:"owner,omitempty,omitzero"`
+	DelegateID *string       `json:"delegateID,omitempty"`
+	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// the group of users who are responsible for approving the policy
-	Approver *Group `json:"approver,omitempty,omitzero"`
+	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
-	Delegate          *Group                      `json:"delegate,omitempty,omitzero"`
+	Delegate          *Group                      `json:"delegate,omitempty"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Controls          *ControlConnection          `json:"controls"`
 	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
@@ -10664,13 +10664,13 @@ func (InternalPolicy) IsNode() {}
 // Return response for createBulkInternalPolicy mutation
 type InternalPolicyBulkCreatePayload struct {
 	// Created internalPolicys
-	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty,omitzero"`
+	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
 }
 
 // A connection to a list of items.
 type InternalPolicyConnection struct {
 	// A list of edges.
-	Edges []*InternalPolicyEdge `json:"edges,omitempty,omitzero"`
+	Edges []*InternalPolicyEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -10692,7 +10692,7 @@ type InternalPolicyDeletePayload struct {
 // An edge in a connection.
 type InternalPolicyEdge struct {
 	// The item at the end of the edge.
-	Node *InternalPolicy `json:"node,omitempty,omitzero"`
+	Node *InternalPolicy `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -10700,40 +10700,40 @@ type InternalPolicyEdge struct {
 type InternalPolicyHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the policy, e.g. compliance, operational, health and safety, etc.
-	PolicyType *string `json:"policyType,omitempty,omitzero"`
+	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the policy
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the policy should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the policy
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -10741,7 +10741,7 @@ func (InternalPolicyHistory) IsNode() {}
 // A connection to a list of items.
 type InternalPolicyHistoryConnection struct {
 	// A list of edges.
-	Edges []*InternalPolicyHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*InternalPolicyHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -10751,7 +10751,7 @@ type InternalPolicyHistoryConnection struct {
 // An edge in a connection.
 type InternalPolicyHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *InternalPolicyHistory `json:"node,omitempty,omitzero"`
+	Node *InternalPolicyHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -11357,16 +11357,16 @@ type InternalPolicyWhereInput struct {
 
 type Invite struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the expiration date of the invitation token which defaults to 14 days in the future from creation
-	Expires *time.Time `json:"expires,omitempty,omitzero"`
+	Expires *time.Time `json:"expires,omitempty"`
 	// the email used as input to generate the invitation token and is the destination person the invitation is sent to who is required to accept to join the organization
 	Recipient string `json:"recipient"`
 	// the status of the invitation
@@ -11375,8 +11375,8 @@ type Invite struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
 	// the user who initiated the invitation
-	RequestorID *string          `json:"requestorID,omitempty,omitzero"`
-	Owner       *Organization    `json:"owner,omitempty,omitzero"`
+	RequestorID *string          `json:"requestorID,omitempty"`
+	Owner       *Organization    `json:"owner,omitempty"`
 	Events      *EventConnection `json:"events"`
 }
 
@@ -11385,13 +11385,13 @@ func (Invite) IsNode() {}
 // Return response for createBulkInvite mutation
 type InviteBulkCreatePayload struct {
 	// Created invites
-	Invites []*Invite `json:"invites,omitempty,omitzero"`
+	Invites []*Invite `json:"invites,omitempty"`
 }
 
 // A connection to a list of items.
 type InviteConnection struct {
 	// A list of edges.
-	Edges []*InviteEdge `json:"edges,omitempty,omitzero"`
+	Edges []*InviteEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -11413,7 +11413,7 @@ type InviteDeletePayload struct {
 // An edge in a connection.
 type InviteEdge struct {
 	// The item at the end of the edge.
-	Node *Invite `json:"node,omitempty,omitzero"`
+	Node *Invite `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -11616,18 +11616,18 @@ type InviteWhereInput struct {
 
 type MappedControl struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType *string `json:"mappingType,omitempty,omitzero"`
+	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation    *string               `json:"relation,omitempty,omitzero"`
+	Relation    *string               `json:"relation,omitempty"`
 	Controls    *ControlConnection    `json:"controls"`
 	Subcontrols *SubcontrolConnection `json:"subcontrols"`
 }
@@ -11637,13 +11637,13 @@ func (MappedControl) IsNode() {}
 // Return response for createBulkMappedControl mutation
 type MappedControlBulkCreatePayload struct {
 	// Created mappedControls
-	MappedControls []*MappedControl `json:"mappedControls,omitempty,omitzero"`
+	MappedControls []*MappedControl `json:"mappedControls,omitempty"`
 }
 
 // A connection to a list of items.
 type MappedControlConnection struct {
 	// A list of edges.
-	Edges []*MappedControlEdge `json:"edges,omitempty,omitzero"`
+	Edges []*MappedControlEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -11665,7 +11665,7 @@ type MappedControlDeletePayload struct {
 // An edge in a connection.
 type MappedControlEdge struct {
 	// The item at the end of the edge.
-	Node *MappedControl `json:"node,omitempty,omitzero"`
+	Node *MappedControl `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -11673,20 +11673,20 @@ type MappedControlEdge struct {
 type MappedControlHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType *string `json:"mappingType,omitempty,omitzero"`
+	MappingType *string `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation *string `json:"relation,omitempty,omitzero"`
+	Relation *string `json:"relation,omitempty"`
 }
 
 func (MappedControlHistory) IsNode() {}
@@ -11694,7 +11694,7 @@ func (MappedControlHistory) IsNode() {}
 // A connection to a list of items.
 type MappedControlHistoryConnection struct {
 	// A list of edges.
-	Edges []*MappedControlHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*MappedControlHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -11704,7 +11704,7 @@ type MappedControlHistoryConnection struct {
 // An edge in a connection.
 type MappedControlHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *MappedControlHistory `json:"node,omitempty,omitzero"`
+	Node *MappedControlHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -12036,31 +12036,31 @@ type Mutation struct {
 
 type Narrative struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// text data for the narrative document
-	Details *string       `json:"details,omitempty,omitzero"`
-	Owner   *Organization `json:"owner,omitempty,omitzero"`
+	Details *string       `json:"details,omitempty"`
+	Owner   *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty,omitzero"`
+	Viewers          []*Group                  `json:"viewers,omitempty"`
 	Satisfies        *ControlConnection        `json:"satisfies"`
 	Programs         *ProgramConnection        `json:"programs"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
@@ -12072,13 +12072,13 @@ func (Narrative) IsNode() {}
 // Return response for createBulkNarrative mutation
 type NarrativeBulkCreatePayload struct {
 	// Created narratives
-	Narratives []*Narrative `json:"narratives,omitempty,omitzero"`
+	Narratives []*Narrative `json:"narratives,omitempty"`
 }
 
 // A connection to a list of items.
 type NarrativeConnection struct {
 	// A list of edges.
-	Edges []*NarrativeEdge `json:"edges,omitempty,omitzero"`
+	Edges []*NarrativeEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -12100,7 +12100,7 @@ type NarrativeDeletePayload struct {
 // An edge in a connection.
 type NarrativeEdge struct {
 	// The item at the end of the edge.
-	Node *Narrative `json:"node,omitempty,omitzero"`
+	Node *Narrative `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -12108,26 +12108,26 @@ type NarrativeEdge struct {
 type NarrativeHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// text data for the narrative document
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 }
 
 func (NarrativeHistory) IsNode() {}
@@ -12135,7 +12135,7 @@ func (NarrativeHistory) IsNode() {}
 // A connection to a list of items.
 type NarrativeHistoryConnection struct {
 	// A list of edges.
-	Edges []*NarrativeHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*NarrativeHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -12145,7 +12145,7 @@ type NarrativeHistoryConnection struct {
 // An edge in a connection.
 type NarrativeHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *NarrativeHistory `json:"node,omitempty,omitzero"`
+	Node *NarrativeHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -12580,20 +12580,20 @@ type NarrativeWhereInput struct {
 
 type Note struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text  string          `json:"text"`
-	Owner *Organization   `json:"owner,omitempty,omitzero"`
-	Task  *Task           `json:"task,omitempty,omitzero"`
+	Owner *Organization   `json:"owner,omitempty"`
+	Task  *Task           `json:"task,omitempty"`
 	Files *FileConnection `json:"files"`
 }
 
@@ -12602,7 +12602,7 @@ func (Note) IsNode() {}
 // A connection to a list of items.
 type NoteConnection struct {
 	// A list of edges.
-	Edges []*NoteEdge `json:"edges,omitempty,omitzero"`
+	Edges []*NoteEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -12612,7 +12612,7 @@ type NoteConnection struct {
 // An edge in a connection.
 type NoteEdge struct {
 	// The item at the end of the edge.
-	Node *Note `json:"node,omitempty,omitzero"`
+	Node *Note `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -12620,18 +12620,18 @@ type NoteEdge struct {
 type NoteHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text string `json:"text"`
 }
@@ -12641,7 +12641,7 @@ func (NoteHistory) IsNode() {}
 // A connection to a list of items.
 type NoteHistoryConnection struct {
 	// A list of edges.
-	Edges []*NoteHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*NoteHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -12651,7 +12651,7 @@ type NoteHistoryConnection struct {
 // An edge in a connection.
 type NoteHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *NoteHistory `json:"node,omitempty,omitzero"`
+	Node *NoteHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -13001,20 +13001,20 @@ type NoteWhereInput struct {
 
 type Onboarding struct {
 	ID             string     `json:"id"`
-	DeletedAt      *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy      *string    `json:"deletedBy,omitempty,omitzero"`
-	OrganizationID *string    `json:"organizationID,omitempty,omitzero"`
+	DeletedAt      *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy      *string    `json:"deletedBy,omitempty"`
+	OrganizationID *string    `json:"organizationID,omitempty"`
 	// name of the company
 	CompanyName string `json:"companyName"`
 	// domains associated with the company
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// details given about the company during the onboarding process, including things such as company size, sector, etc
-	CompanyDetails map[string]any `json:"companyDetails,omitempty,omitzero"`
+	CompanyDetails map[string]any `json:"companyDetails,omitempty"`
 	// details given about the user during the onboarding process, including things such as name, job title, department, etc
-	UserDetails map[string]any `json:"userDetails,omitempty,omitzero"`
+	UserDetails map[string]any `json:"userDetails,omitempty"`
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
-	Compliance   map[string]any `json:"compliance,omitempty,omitzero"`
-	Organization *Organization  `json:"organization,omitempty,omitzero"`
+	Compliance   map[string]any `json:"compliance,omitempty"`
+	Organization *Organization  `json:"organization,omitempty"`
 }
 
 func (Onboarding) IsNode() {}
@@ -13113,12 +13113,12 @@ type OrgMembersInput struct {
 
 type OrgMembership struct {
 	ID             string           `json:"id"`
-	CreatedAt      *time.Time       `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt      *time.Time       `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy      *string          `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy      *string          `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt      *time.Time       `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy      *string          `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt      *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt      *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy      *string          `json:"createdBy,omitempty"`
+	UpdatedBy      *string          `json:"updatedBy,omitempty"`
+	DeletedAt      *time.Time       `json:"deletedAt,omitempty"`
+	DeletedBy      *string          `json:"deletedBy,omitempty"`
 	Role           enums.Role       `json:"role"`
 	OrganizationID string           `json:"organizationID"`
 	UserID         string           `json:"userID"`
@@ -13132,13 +13132,13 @@ func (OrgMembership) IsNode() {}
 // Return response for createBulkOrgMembership mutation
 type OrgMembershipBulkCreatePayload struct {
 	// Created orgMemberships
-	OrgMemberships []*OrgMembership `json:"orgMemberships,omitempty,omitzero"`
+	OrgMemberships []*OrgMembership `json:"orgMemberships,omitempty"`
 }
 
 // A connection to a list of items.
 type OrgMembershipConnection struct {
 	// A list of edges.
-	Edges []*OrgMembershipEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrgMembershipEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -13160,7 +13160,7 @@ type OrgMembershipDeletePayload struct {
 // An edge in a connection.
 type OrgMembershipEdge struct {
 	// The item at the end of the edge.
-	Node *OrgMembership `json:"node,omitempty,omitzero"`
+	Node *OrgMembership `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -13168,14 +13168,14 @@ type OrgMembershipEdge struct {
 type OrgMembershipHistory struct {
 	ID             string         `json:"id"`
 	HistoryTime    time.Time      `json:"historyTime"`
-	Ref            *string        `json:"ref,omitempty,omitzero"`
+	Ref            *string        `json:"ref,omitempty"`
 	Operation      history.OpType `json:"operation"`
-	CreatedAt      *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt      *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy      *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy      *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt      *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy      *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt      *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt      *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy      *string        `json:"createdBy,omitempty"`
+	UpdatedBy      *string        `json:"updatedBy,omitempty"`
+	DeletedAt      *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy      *string        `json:"deletedBy,omitempty"`
 	Role           enums.Role     `json:"role"`
 	OrganizationID string         `json:"organizationID"`
 	UserID         string         `json:"userID"`
@@ -13186,7 +13186,7 @@ func (OrgMembershipHistory) IsNode() {}
 // A connection to a list of items.
 type OrgMembershipHistoryConnection struct {
 	// A list of edges.
-	Edges []*OrgMembershipHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrgMembershipHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -13196,7 +13196,7 @@ type OrgMembershipHistoryConnection struct {
 // An edge in a connection.
 type OrgMembershipHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *OrgMembershipHistory `json:"node,omitempty,omitzero"`
+	Node *OrgMembershipHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -13496,47 +13496,47 @@ type OrgMembershipWhereInput struct {
 
 type OrgSubscription struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
-	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty,omitzero"`
+	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
 	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier *string `json:"productTier,omitempty,omitzero"`
+	ProductTier *string `json:"productTier,omitempty"`
 	// the price of the product tier
-	ProductPrice *models.Price `json:"productPrice,omitempty,omitzero"`
+	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the product id that represents the tier in stripe
-	StripeProductTierID *string `json:"stripeProductTierID,omitempty,omitzero"`
+	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
-	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty,omitzero"`
+	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
 	Active bool `json:"active"`
 	// the customer ID the subscription is associated to
-	StripeCustomerID *string `json:"stripeCustomerID,omitempty,omitzero"`
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
-	ExpiresAt *time.Time `json:"expiresAt,omitempty,omitzero"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the time the trial is set to expire
-	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty,omitzero"`
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
-	DaysUntilDue *string `json:"daysUntilDue,omitempty,omitzero"`
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
 	// whether or not a payment method has been added to the account
-	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty,omitzero"`
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
-	Features []string `json:"features,omitempty,omitzero"`
+	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys    []string         `json:"featureLookupKeys,omitempty,omitzero"`
-	Owner                *Organization    `json:"owner,omitempty,omitzero"`
+	FeatureLookupKeys    []string         `json:"featureLookupKeys,omitempty"`
+	Owner                *Organization    `json:"owner,omitempty"`
 	Events               *EventConnection `json:"events"`
-	SubscriptionURL      *string          `json:"subscriptionURL,omitempty,omitzero"`
-	ManagePaymentMethods *string          `json:"managePaymentMethods,omitempty,omitzero"`
-	Cancellation         *string          `json:"cancellation,omitempty,omitzero"`
+	SubscriptionURL      *string          `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods *string          `json:"managePaymentMethods,omitempty"`
+	Cancellation         *string          `json:"cancellation,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}
@@ -13544,7 +13544,7 @@ func (OrgSubscription) IsNode() {}
 // A connection to a list of items.
 type OrgSubscriptionConnection struct {
 	// A list of edges.
-	Edges []*OrgSubscriptionEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrgSubscriptionEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -13554,7 +13554,7 @@ type OrgSubscriptionConnection struct {
 // An edge in a connection.
 type OrgSubscriptionEdge struct {
 	// The item at the end of the edge.
-	Node *OrgSubscription `json:"node,omitempty,omitzero"`
+	Node *OrgSubscription `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -13562,44 +13562,44 @@ type OrgSubscriptionEdge struct {
 type OrgSubscriptionHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
-	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty,omitzero"`
+	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
 	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier *string `json:"productTier,omitempty,omitzero"`
+	ProductTier *string `json:"productTier,omitempty"`
 	// the price of the product tier
-	ProductPrice *models.Price `json:"productPrice,omitempty,omitzero"`
+	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the product id that represents the tier in stripe
-	StripeProductTierID *string `json:"stripeProductTierID,omitempty,omitzero"`
+	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
-	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty,omitzero"`
+	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
 	Active bool `json:"active"`
 	// the customer ID the subscription is associated to
-	StripeCustomerID *string `json:"stripeCustomerID,omitempty,omitzero"`
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
-	ExpiresAt *time.Time `json:"expiresAt,omitempty,omitzero"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the time the trial is set to expire
-	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty,omitzero"`
+	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
-	DaysUntilDue *string `json:"daysUntilDue,omitempty,omitzero"`
+	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
 	// whether or not a payment method has been added to the account
-	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty,omitzero"`
+	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
-	Features []string `json:"features,omitempty,omitzero"`
+	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
-	FeatureLookupKeys []string `json:"featureLookupKeys,omitempty,omitzero"`
+	FeatureLookupKeys []string `json:"featureLookupKeys,omitempty"`
 }
 
 func (OrgSubscriptionHistory) IsNode() {}
@@ -13607,7 +13607,7 @@ func (OrgSubscriptionHistory) IsNode() {}
 // A connection to a list of items.
 type OrgSubscriptionHistoryConnection struct {
 	// A list of edges.
-	Edges []*OrgSubscriptionHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrgSubscriptionHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -13617,7 +13617,7 @@ type OrgSubscriptionHistoryConnection struct {
 // An edge in a connection.
 type OrgSubscriptionHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *OrgSubscriptionHistory `json:"node,omitempty,omitzero"`
+	Node *OrgSubscriptionHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -14160,63 +14160,63 @@ type OrgSubscriptionWhereInput struct {
 
 type Organization struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 	// An optional description of the organization
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// orgs directly associated with a user
-	PersonalOrg *bool `json:"personalOrg,omitempty,omitzero"`
+	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty,omitzero"`
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The organizations's local avatar file id, takes precedence over the avatar remote URL
-	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty,omitzero"`
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
 	// groups that are allowed to create controls
-	ControlCreators []*Group `json:"controlCreators,omitempty,omitzero"`
+	ControlCreators []*Group `json:"controlCreators,omitempty"`
 	// groups that are allowed to create control_objectives
-	ControlObjectiveCreators []*Group `json:"controlObjectiveCreators,omitempty,omitzero"`
+	ControlObjectiveCreators []*Group `json:"controlObjectiveCreators,omitempty"`
 	// groups that are allowed to create groups
-	GroupCreators []*Group `json:"groupCreators,omitempty,omitzero"`
+	GroupCreators []*Group `json:"groupCreators,omitempty"`
 	// groups that are allowed to create internal_policys
-	InternalPolicyCreators []*Group `json:"internalPolicyCreators,omitempty,omitzero"`
+	InternalPolicyCreators []*Group `json:"internalPolicyCreators,omitempty"`
 	// groups that are allowed to create narratives
-	NarrativeCreators []*Group `json:"narrativeCreators,omitempty,omitzero"`
+	NarrativeCreators []*Group `json:"narrativeCreators,omitempty"`
 	// groups that are allowed to create procedures
-	ProcedureCreators []*Group `json:"procedureCreators,omitempty,omitzero"`
+	ProcedureCreators []*Group `json:"procedureCreators,omitempty"`
 	// groups that are allowed to create programs
-	ProgramCreators []*Group `json:"programCreators,omitempty,omitzero"`
+	ProgramCreators []*Group `json:"programCreators,omitempty"`
 	// groups that are allowed to create risks
-	RiskCreators []*Group `json:"riskCreators,omitempty,omitzero"`
+	RiskCreators []*Group `json:"riskCreators,omitempty"`
 	// groups that are allowed to create templates
-	TemplateCreators       []*Group                         `json:"templateCreators,omitempty,omitzero"`
-	Parent                 *Organization                    `json:"parent,omitempty,omitzero"`
+	TemplateCreators       []*Group                         `json:"templateCreators,omitempty"`
+	Parent                 *Organization                    `json:"parent,omitempty"`
 	Children               *OrganizationConnection          `json:"children"`
-	Setting                *OrganizationSetting             `json:"setting,omitempty,omitzero"`
+	Setting                *OrganizationSetting             `json:"setting,omitempty"`
 	PersonalAccessTokens   *PersonalAccessTokenConnection   `json:"personalAccessTokens"`
 	APITokens              *APITokenConnection              `json:"apiTokens"`
 	Users                  *UserConnection                  `json:"users"`
 	Files                  *FileConnection                  `json:"files"`
 	Events                 *EventConnection                 `json:"events"`
 	Secrets                *HushConnection                  `json:"secrets"`
-	AvatarFile             *File                            `json:"avatarFile,omitempty,omitzero"`
+	AvatarFile             *File                            `json:"avatarFile,omitempty"`
 	Groups                 *GroupConnection                 `json:"groups"`
 	Templates              *TemplateConnection              `json:"templates"`
 	Integrations           *IntegrationConnection           `json:"integrations"`
 	Documents              *DocumentDataConnection          `json:"documents"`
-	OrgSubscriptions       []*OrgSubscription               `json:"orgSubscriptions,omitempty,omitzero"`
+	OrgSubscriptions       []*OrgSubscription               `json:"orgSubscriptions,omitempty"`
 	Invites                *InviteConnection                `json:"invites"`
 	Subscribers            *SubscriberConnection            `json:"subscribers"`
 	Entities               *EntityConnection                `json:"entities"`
@@ -14244,13 +14244,13 @@ func (Organization) IsNode() {}
 // Return response for createBulkOrganization mutation
 type OrganizationBulkCreatePayload struct {
 	// Created organizations
-	Organizations []*Organization `json:"organizations,omitempty,omitzero"`
+	Organizations []*Organization `json:"organizations,omitempty"`
 }
 
 // A connection to a list of items.
 type OrganizationConnection struct {
 	// A list of edges.
-	Edges []*OrganizationEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrganizationEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -14272,7 +14272,7 @@ type OrganizationDeletePayload struct {
 // An edge in a connection.
 type OrganizationEdge struct {
 	// The item at the end of the edge.
-	Node *Organization `json:"node,omitempty,omitzero"`
+	Node *Organization `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -14280,30 +14280,30 @@ type OrganizationEdge struct {
 type OrganizationHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 	// An optional description of the organization
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// orgs directly associated with a user
-	PersonalOrg *bool `json:"personalOrg,omitempty,omitzero"`
+	PersonalOrg *bool `json:"personalOrg,omitempty"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty,omitzero"`
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The organizations's local avatar file id, takes precedence over the avatar remote URL
-	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty,omitzero"`
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
 }
@@ -14313,7 +14313,7 @@ func (OrganizationHistory) IsNode() {}
 // A connection to a list of items.
 type OrganizationHistoryConnection struct {
 	// A list of edges.
-	Edges []*OrganizationHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrganizationHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -14323,7 +14323,7 @@ type OrganizationHistoryConnection struct {
 // An edge in a connection.
 type OrganizationHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *OrganizationHistory `json:"node,omitempty,omitzero"`
+	Node *OrganizationHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -14554,35 +14554,35 @@ type OrganizationOrder struct {
 
 type OrganizationSetting struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// domains associated with the organization
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
-	BillingContact *string `json:"billingContact,omitempty,omitzero"`
+	BillingContact *string `json:"billingContact,omitempty"`
 	// Email address of the person to contact for billing
-	BillingEmail *string `json:"billingEmail,omitempty,omitzero"`
+	BillingEmail *string `json:"billingEmail,omitempty"`
 	// Phone number to contact for billing
-	BillingPhone *string `json:"billingPhone,omitempty,omitzero"`
+	BillingPhone *string `json:"billingPhone,omitempty"`
 	// the billing address to send billing information to
-	BillingAddress *models.Address `json:"billingAddress,omitempty,omitzero"`
+	BillingAddress *models.Address `json:"billingAddress,omitempty"`
 	// Usually government-issued tax ID or business ID such as ABN in Australia
-	TaxIdentifier *string `json:"taxIdentifier,omitempty,omitzero"`
+	TaxIdentifier *string `json:"taxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation *enums.Region `json:"geoLocation,omitempty,omitzero"`
+	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
-	OrganizationID *string `json:"organizationID,omitempty,omitzero"`
+	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 	// domains allowed to access the organization, if empty all domains are allowed
-	AllowedEmailDomains []string        `json:"allowedEmailDomains,omitempty,omitzero"`
-	Organization        *Organization   `json:"organization,omitempty,omitzero"`
+	AllowedEmailDomains []string        `json:"allowedEmailDomains,omitempty"`
+	Organization        *Organization   `json:"organization,omitempty"`
 	Files               *FileConnection `json:"files"`
 }
 
@@ -14591,13 +14591,13 @@ func (OrganizationSetting) IsNode() {}
 // Return response for createBulkOrganizationSetting mutation
 type OrganizationSettingBulkCreatePayload struct {
 	// Created organizationSettings
-	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty,omitzero"`
+	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
 }
 
 // A connection to a list of items.
 type OrganizationSettingConnection struct {
 	// A list of edges.
-	Edges []*OrganizationSettingEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrganizationSettingEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -14619,7 +14619,7 @@ type OrganizationSettingDeletePayload struct {
 // An edge in a connection.
 type OrganizationSettingEdge struct {
 	// The item at the end of the edge.
-	Node *OrganizationSetting `json:"node,omitempty,omitzero"`
+	Node *OrganizationSetting `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -14627,36 +14627,36 @@ type OrganizationSettingEdge struct {
 type OrganizationSettingHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// domains associated with the organization
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
-	BillingContact *string `json:"billingContact,omitempty,omitzero"`
+	BillingContact *string `json:"billingContact,omitempty"`
 	// Email address of the person to contact for billing
-	BillingEmail *string `json:"billingEmail,omitempty,omitzero"`
+	BillingEmail *string `json:"billingEmail,omitempty"`
 	// Phone number to contact for billing
-	BillingPhone *string `json:"billingPhone,omitempty,omitzero"`
+	BillingPhone *string `json:"billingPhone,omitempty"`
 	// the billing address to send billing information to
-	BillingAddress *models.Address `json:"billingAddress,omitempty,omitzero"`
+	BillingAddress *models.Address `json:"billingAddress,omitempty"`
 	// Usually government-issued tax ID or business ID such as ABN in Australia
-	TaxIdentifier *string `json:"taxIdentifier,omitempty,omitzero"`
+	TaxIdentifier *string `json:"taxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation *enums.Region `json:"geoLocation,omitempty,omitzero"`
+	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
-	OrganizationID *string `json:"organizationID,omitempty,omitzero"`
+	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 	// domains allowed to access the organization, if empty all domains are allowed
-	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty,omitzero"`
+	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -14664,7 +14664,7 @@ func (OrganizationSettingHistory) IsNode() {}
 // A connection to a list of items.
 type OrganizationSettingHistoryConnection struct {
 	// A list of edges.
-	Edges []*OrganizationSettingHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*OrganizationSettingHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -14674,7 +14674,7 @@ type OrganizationSettingHistoryConnection struct {
 // An edge in a connection.
 type OrganizationSettingHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *OrganizationSettingHistory `json:"node,omitempty,omitzero"`
+	Node *OrganizationSettingHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -15441,38 +15441,38 @@ type PageInfo struct {
 	// When paginating backwards, are there more items?
 	HasPreviousPage bool `json:"hasPreviousPage"`
 	// When paginating backwards, the cursor to continue.
-	StartCursor *string `json:"startCursor,omitempty,omitzero"`
+	StartCursor *string `json:"startCursor,omitempty"`
 	// When paginating forwards, the cursor to continue.
-	EndCursor *string `json:"endCursor,omitempty,omitzero"`
+	EndCursor *string `json:"endCursor,omitempty"`
 }
 
 type PersonalAccessToken struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
 	// when the token expires
-	ExpiresAt *time.Time `json:"expiresAt,omitempty,omitzero"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty,omitzero"`
-	Scopes      []string   `json:"scopes,omitempty,omitzero"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty,omitzero"`
+	Description *string    `json:"description,omitempty"`
+	Scopes      []string   `json:"scopes,omitempty"`
+	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
-	IsActive *bool `json:"isActive,omitempty,omitzero"`
+	IsActive *bool `json:"isActive,omitempty"`
 	// the reason the token was revoked
-	RevokedReason *string `json:"revokedReason,omitempty,omitzero"`
+	RevokedReason *string `json:"revokedReason,omitempty"`
 	// the user who revoked the token
-	RevokedBy *string `json:"revokedBy,omitempty,omitzero"`
+	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
-	RevokedAt     *time.Time              `json:"revokedAt,omitempty,omitzero"`
+	RevokedAt     *time.Time              `json:"revokedAt,omitempty"`
 	Owner         *User                   `json:"owner"`
 	Organizations *OrganizationConnection `json:"organizations"`
 	Events        *EventConnection        `json:"events"`
@@ -15483,13 +15483,13 @@ func (PersonalAccessToken) IsNode() {}
 // Return response for createBulkPersonalAccessToken mutation
 type PersonalAccessTokenBulkCreatePayload struct {
 	// Created personalAccessTokens
-	PersonalAccessTokens []*PersonalAccessToken `json:"personalAccessTokens,omitempty,omitzero"`
+	PersonalAccessTokens []*PersonalAccessToken `json:"personalAccessTokens,omitempty"`
 }
 
 // A connection to a list of items.
 type PersonalAccessTokenConnection struct {
 	// A list of edges.
-	Edges []*PersonalAccessTokenEdge `json:"edges,omitempty,omitzero"`
+	Edges []*PersonalAccessTokenEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -15511,7 +15511,7 @@ type PersonalAccessTokenDeletePayload struct {
 // An edge in a connection.
 type PersonalAccessTokenEdge struct {
 	// The item at the end of the edge.
-	Node *PersonalAccessToken `json:"node,omitempty,omitzero"`
+	Node *PersonalAccessToken `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -15725,47 +15725,47 @@ type PersonalAccessTokenWhereInput struct {
 
 type Procedure struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType *string `json:"procedureType,omitempty,omitzero"`
+	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the procedure
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the procedure
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
-	DelegateID *string       `json:"delegateID,omitempty,omitzero"`
-	Owner      *Organization `json:"owner,omitempty,omitzero"`
+	DelegateID *string       `json:"delegateID,omitempty"`
+	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// the group of users who are responsible for approving the procedure
-	Approver *Group `json:"approver,omitempty,omitzero"`
+	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
-	Delegate         *Group                    `json:"delegate,omitempty,omitzero"`
+	Delegate         *Group                    `json:"delegate,omitempty"`
 	Controls         *ControlConnection        `json:"controls"`
 	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
@@ -15780,13 +15780,13 @@ func (Procedure) IsNode() {}
 // Return response for createBulkProcedure mutation
 type ProcedureBulkCreatePayload struct {
 	// Created procedures
-	Procedures []*Procedure `json:"procedures,omitempty,omitzero"`
+	Procedures []*Procedure `json:"procedures,omitempty"`
 }
 
 // A connection to a list of items.
 type ProcedureConnection struct {
 	// A list of edges.
-	Edges []*ProcedureEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProcedureEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -15808,7 +15808,7 @@ type ProcedureDeletePayload struct {
 // An edge in a connection.
 type ProcedureEdge struct {
 	// The item at the end of the edge.
-	Node *Procedure `json:"node,omitempty,omitzero"`
+	Node *Procedure `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -15816,40 +15816,40 @@ type ProcedureEdge struct {
 type ProcedureHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
-	Status *enums.DocumentStatus `json:"status,omitempty,omitzero"`
+	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType *string `json:"procedureType,omitempty,omitzero"`
+	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// whether approval is required for edits to the procedure
-	ApprovalRequired *bool `json:"approvalRequired,omitempty,omitzero"`
+	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
-	ReviewDue *time.Time `json:"reviewDue,omitempty,omitzero"`
+	ReviewDue *time.Time `json:"reviewDue,omitempty"`
 	// the frequency at which the procedure should be reviewed, used to calculate the review_due date
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty,omitzero"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// the id of the group responsible for approving the procedure
-	ApproverID *string `json:"approverID,omitempty,omitzero"`
+	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -15857,7 +15857,7 @@ func (ProcedureHistory) IsNode() {}
 // A connection to a list of items.
 type ProcedureHistoryConnection struct {
 	// A list of edges.
-	Edges []*ProcedureHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProcedureHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -15867,7 +15867,7 @@ type ProcedureHistoryConnection struct {
 // An edge in a connection.
 type ProcedureHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ProcedureHistory `json:"node,omitempty,omitzero"`
+	Node *ProcedureHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -16470,32 +16470,32 @@ type ProcedureWhereInput struct {
 
 type Program struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the program
 	Name string `json:"name"`
 	// the description of the program
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
 	// the type of the program
 	ProgramType enums.ProgramType `json:"programType"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
-	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
+	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
-	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
+	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
-	EndDate *time.Time `json:"endDate,omitempty,omitzero"`
+	EndDate *time.Time `json:"endDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -16503,18 +16503,18 @@ type Program struct {
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditorReadComments"`
 	// the name of the audit firm conducting the audit
-	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	AuditFirm *string `json:"auditFirm,omitempty"`
 	// the full name of the auditor conducting the audit
-	Auditor *string `json:"auditor,omitempty,omitzero"`
+	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
-	AuditorEmail *string       `json:"auditorEmail,omitempty,omitzero"`
-	Owner        *Organization `json:"owner,omitempty,omitzero"`
+	AuditorEmail *string       `json:"auditorEmail,omitempty"`
+	Owner        *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers           []*Group                     `json:"viewers,omitempty,omitzero"`
+	Viewers           []*Group                     `json:"viewers,omitempty"`
 	Controls          *ControlConnection           `json:"controls"`
 	Subcontrols       *SubcontrolConnection        `json:"subcontrols"`
 	ControlObjectives *ControlObjectiveConnection  `json:"controlObjectives"`
@@ -16536,13 +16536,13 @@ func (Program) IsNode() {}
 // Return response for createBulkProgram mutation
 type ProgramBulkCreatePayload struct {
 	// Created programs
-	Programs []*Program `json:"programs,omitempty,omitzero"`
+	Programs []*Program `json:"programs,omitempty"`
 }
 
 // A connection to a list of items.
 type ProgramConnection struct {
 	// A list of edges.
-	Edges []*ProgramEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProgramEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -16564,7 +16564,7 @@ type ProgramDeletePayload struct {
 // An edge in a connection.
 type ProgramEdge struct {
 	// The item at the end of the edge.
-	Node *Program `json:"node,omitempty,omitzero"`
+	Node *Program `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -16572,34 +16572,34 @@ type ProgramEdge struct {
 type ProgramHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the program
 	Name string `json:"name"`
 	// the description of the program
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
 	// the type of the program
 	ProgramType enums.ProgramType `json:"programType"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
-	FrameworkName *string `json:"frameworkName,omitempty,omitzero"`
+	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
-	StartDate *time.Time `json:"startDate,omitempty,omitzero"`
+	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
-	EndDate *time.Time `json:"endDate,omitempty,omitzero"`
+	EndDate *time.Time `json:"endDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -16607,11 +16607,11 @@ type ProgramHistory struct {
 	// can the auditor read comments
 	AuditorReadComments bool `json:"auditorReadComments"`
 	// the name of the audit firm conducting the audit
-	AuditFirm *string `json:"auditFirm,omitempty,omitzero"`
+	AuditFirm *string `json:"auditFirm,omitempty"`
 	// the full name of the auditor conducting the audit
-	Auditor *string `json:"auditor,omitempty,omitzero"`
+	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
-	AuditorEmail *string `json:"auditorEmail,omitempty,omitzero"`
+	AuditorEmail *string `json:"auditorEmail,omitempty"`
 }
 
 func (ProgramHistory) IsNode() {}
@@ -16619,7 +16619,7 @@ func (ProgramHistory) IsNode() {}
 // A connection to a list of items.
 type ProgramHistoryConnection struct {
 	// A list of edges.
-	Edges []*ProgramHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProgramHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -16629,7 +16629,7 @@ type ProgramHistoryConnection struct {
 // An edge in a connection.
 type ProgramHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ProgramHistory `json:"node,omitempty,omitzero"`
+	Node *ProgramHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -16939,12 +16939,12 @@ type ProgramHistoryWhereInput struct {
 
 type ProgramMembership struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	Role      enums.Role `json:"role"`
 	ProgramID string     `json:"programID"`
 	UserID    string     `json:"userID"`
@@ -16957,13 +16957,13 @@ func (ProgramMembership) IsNode() {}
 // Return response for createBulkProgramMembership mutation
 type ProgramMembershipBulkCreatePayload struct {
 	// Created programMemberships
-	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty,omitzero"`
+	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty"`
 }
 
 // A connection to a list of items.
 type ProgramMembershipConnection struct {
 	// A list of edges.
-	Edges []*ProgramMembershipEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProgramMembershipEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -16985,7 +16985,7 @@ type ProgramMembershipDeletePayload struct {
 // An edge in a connection.
 type ProgramMembershipEdge struct {
 	// The item at the end of the edge.
-	Node *ProgramMembership `json:"node,omitempty,omitzero"`
+	Node *ProgramMembership `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -16993,14 +16993,14 @@ type ProgramMembershipEdge struct {
 type ProgramMembershipHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	Role        enums.Role     `json:"role"`
 	ProgramID   string         `json:"programID"`
 	UserID      string         `json:"userID"`
@@ -17011,7 +17011,7 @@ func (ProgramMembershipHistory) IsNode() {}
 // A connection to a list of items.
 type ProgramMembershipHistoryConnection struct {
 	// A list of edges.
-	Edges []*ProgramMembershipHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*ProgramMembershipHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -17021,7 +17021,7 @@ type ProgramMembershipHistoryConnection struct {
 // An edge in a connection.
 type ProgramMembershipHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *ProgramMembershipHistory `json:"node,omitempty,omitzero"`
+	Node *ProgramMembershipHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -17656,49 +17656,49 @@ type Query struct {
 
 type Risk struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
 	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
-	Status *enums.RiskStatus `json:"status,omitempty,omitzero"`
+	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType *string `json:"riskType,omitempty,omitzero"`
+	RiskType *string `json:"riskType,omitempty"`
 	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
-	Impact *enums.RiskImpact `json:"impact,omitempty,omitzero"`
+	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
-	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty,omitzero"`
+	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
 	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
-	Score *int64 `json:"score,omitempty,omitzero"`
+	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
-	Mitigation *string `json:"mitigation,omitempty,omitzero"`
+	Mitigation *string `json:"mitigation,omitempty"`
 	// details of the risk
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// business costs associated with the risk
-	BusinessCosts *string `json:"businessCosts,omitempty,omitzero"`
+	BusinessCosts *string `json:"businessCosts,omitempty"`
 	// the id of the group responsible for risk oversight
-	StakeholderID *string `json:"stakeholderID,omitempty,omitzero"`
+	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
-	DelegateID *string       `json:"delegateID,omitempty,omitzero"`
-	Owner      *Organization `json:"owner,omitempty,omitzero"`
+	DelegateID *string       `json:"delegateID,omitempty"`
+	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty,omitzero"`
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty,omitzero"`
+	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty,omitzero"`
+	Viewers          []*Group                  `json:"viewers,omitempty"`
 	Controls         *ControlConnection        `json:"controls"`
 	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
 	Procedures       *ProcedureConnection      `json:"procedures"`
@@ -17706,9 +17706,9 @@ type Risk struct {
 	Programs         *ProgramConnection        `json:"programs"`
 	ActionPlans      *ActionPlanConnection     `json:"actionPlans"`
 	// the group of users who are responsible for risk oversight
-	Stakeholder *Group `json:"stakeholder,omitempty,omitzero"`
+	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
-	Delegate *Group `json:"delegate,omitempty,omitzero"`
+	Delegate *Group `json:"delegate,omitempty"`
 }
 
 func (Risk) IsNode() {}
@@ -17716,13 +17716,13 @@ func (Risk) IsNode() {}
 // Return response for createBulkRisk mutation
 type RiskBulkCreatePayload struct {
 	// Created risks
-	Risks []*Risk `json:"risks,omitempty,omitzero"`
+	Risks []*Risk `json:"risks,omitempty"`
 }
 
 // A connection to a list of items.
 type RiskConnection struct {
 	// A list of edges.
-	Edges []*RiskEdge `json:"edges,omitempty,omitzero"`
+	Edges []*RiskEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -17744,7 +17744,7 @@ type RiskDeletePayload struct {
 // An edge in a connection.
 type RiskEdge struct {
 	// The item at the end of the edge.
-	Node *Risk `json:"node,omitempty,omitzero"`
+	Node *Risk `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -17752,44 +17752,44 @@ type RiskEdge struct {
 type RiskHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
 	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
-	Status *enums.RiskStatus `json:"status,omitempty,omitzero"`
+	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType *string `json:"riskType,omitempty,omitzero"`
+	RiskType *string `json:"riskType,omitempty"`
 	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
-	Impact *enums.RiskImpact `json:"impact,omitempty,omitzero"`
+	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
-	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty,omitzero"`
+	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
 	// score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
-	Score *int64 `json:"score,omitempty,omitzero"`
+	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
-	Mitigation *string `json:"mitigation,omitempty,omitzero"`
+	Mitigation *string `json:"mitigation,omitempty"`
 	// details of the risk
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// business costs associated with the risk
-	BusinessCosts *string `json:"businessCosts,omitempty,omitzero"`
+	BusinessCosts *string `json:"businessCosts,omitempty"`
 	// the id of the group responsible for risk oversight
-	StakeholderID *string `json:"stakeholderID,omitempty,omitzero"`
+	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 }
 
 func (RiskHistory) IsNode() {}
@@ -17797,7 +17797,7 @@ func (RiskHistory) IsNode() {}
 // A connection to a list of items.
 type RiskHistoryConnection struct {
 	// A list of edges.
-	Edges []*RiskHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*RiskHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -17807,7 +17807,7 @@ type RiskHistoryConnection struct {
 // An edge in a connection.
 type RiskHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *RiskHistory `json:"node,omitempty,omitzero"`
+	Node *RiskHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -18481,84 +18481,84 @@ type SearchResults struct {
 	Page *PageInfo `json:"page"`
 	// Identifies the total count of items in the connection.
 	TotalCount             int64                            `json:"totalCount"`
-	APITokens              *APITokenConnection              `json:"apiTokens,omitempty,omitzero"`
-	ActionPlans            *ActionPlanConnection            `json:"actionPlans,omitempty,omitzero"`
-	Contacts               *ContactConnection               `json:"contacts,omitempty,omitzero"`
-	Controls               *ControlConnection               `json:"controls,omitempty,omitzero"`
-	ControlImplementations *ControlImplementationConnection `json:"controlImplementations,omitempty,omitzero"`
-	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives,omitempty,omitzero"`
-	DocumentData           *DocumentDataConnection          `json:"documentData,omitempty,omitzero"`
-	Entities               *EntityConnection                `json:"entities,omitempty,omitzero"`
-	EntityTypes            *EntityTypeConnection            `json:"entityTypes,omitempty,omitzero"`
-	Events                 *EventConnection                 `json:"events,omitempty,omitzero"`
-	Evidences              *EvidenceConnection              `json:"evidences,omitempty,omitzero"`
-	Files                  *FileConnection                  `json:"files,omitempty,omitzero"`
-	Groups                 *GroupConnection                 `json:"groups,omitempty,omitzero"`
-	Integrations           *IntegrationConnection           `json:"integrations,omitempty,omitzero"`
-	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies,omitempty,omitzero"`
-	Invites                *InviteConnection                `json:"invites,omitempty,omitzero"`
-	MappedControls         *MappedControlConnection         `json:"mappedControls,omitempty,omitzero"`
-	Narratives             *NarrativeConnection             `json:"narratives,omitempty,omitzero"`
-	OrgSubscriptions       *OrgSubscriptionConnection       `json:"orgSubscriptions,omitempty,omitzero"`
-	Organizations          *OrganizationConnection          `json:"organizations,omitempty,omitzero"`
-	OrganizationSettings   *OrganizationSettingConnection   `json:"organizationSettings,omitempty,omitzero"`
-	PersonalAccessTokens   *PersonalAccessTokenConnection   `json:"personalAccessTokens,omitempty,omitzero"`
-	Procedures             *ProcedureConnection             `json:"procedures,omitempty,omitzero"`
-	Programs               *ProgramConnection               `json:"programs,omitempty,omitzero"`
-	Risks                  *RiskConnection                  `json:"risks,omitempty,omitzero"`
-	Standards              *StandardConnection              `json:"standards,omitempty,omitzero"`
-	Subcontrols            *SubcontrolConnection            `json:"subcontrols,omitempty,omitzero"`
-	Subscribers            *SubscriberConnection            `json:"subscribers,omitempty,omitzero"`
-	Tasks                  *TaskConnection                  `json:"tasks,omitempty,omitzero"`
-	Templates              *TemplateConnection              `json:"templates,omitempty,omitzero"`
-	Users                  *UserConnection                  `json:"users,omitempty,omitzero"`
-	UserSettings           *UserSettingConnection           `json:"userSettings,omitempty,omitzero"`
-	Webauthns              *WebauthnConnection              `json:"webauthns,omitempty,omitzero"`
+	APITokens              *APITokenConnection              `json:"apiTokens,omitempty"`
+	ActionPlans            *ActionPlanConnection            `json:"actionPlans,omitempty"`
+	Contacts               *ContactConnection               `json:"contacts,omitempty"`
+	Controls               *ControlConnection               `json:"controls,omitempty"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations,omitempty"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives,omitempty"`
+	DocumentData           *DocumentDataConnection          `json:"documentData,omitempty"`
+	Entities               *EntityConnection                `json:"entities,omitempty"`
+	EntityTypes            *EntityTypeConnection            `json:"entityTypes,omitempty"`
+	Events                 *EventConnection                 `json:"events,omitempty"`
+	Evidences              *EvidenceConnection              `json:"evidences,omitempty"`
+	Files                  *FileConnection                  `json:"files,omitempty"`
+	Groups                 *GroupConnection                 `json:"groups,omitempty"`
+	Integrations           *IntegrationConnection           `json:"integrations,omitempty"`
+	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies,omitempty"`
+	Invites                *InviteConnection                `json:"invites,omitempty"`
+	MappedControls         *MappedControlConnection         `json:"mappedControls,omitempty"`
+	Narratives             *NarrativeConnection             `json:"narratives,omitempty"`
+	OrgSubscriptions       *OrgSubscriptionConnection       `json:"orgSubscriptions,omitempty"`
+	Organizations          *OrganizationConnection          `json:"organizations,omitempty"`
+	OrganizationSettings   *OrganizationSettingConnection   `json:"organizationSettings,omitempty"`
+	PersonalAccessTokens   *PersonalAccessTokenConnection   `json:"personalAccessTokens,omitempty"`
+	Procedures             *ProcedureConnection             `json:"procedures,omitempty"`
+	Programs               *ProgramConnection               `json:"programs,omitempty"`
+	Risks                  *RiskConnection                  `json:"risks,omitempty"`
+	Standards              *StandardConnection              `json:"standards,omitempty"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols,omitempty"`
+	Subscribers            *SubscriberConnection            `json:"subscribers,omitempty"`
+	Tasks                  *TaskConnection                  `json:"tasks,omitempty"`
+	Templates              *TemplateConnection              `json:"templates,omitempty"`
+	Users                  *UserConnection                  `json:"users,omitempty"`
+	UserSettings           *UserSettingConnection           `json:"userSettings,omitempty"`
+	Webauthns              *WebauthnConnection              `json:"webauthns,omitempty"`
 }
 
 type Standard struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
-	SystemOwned *bool `json:"systemOwned,omitempty,omitzero"`
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
-	ShortName *string `json:"shortName,omitempty,omitzero"`
+	ShortName *string `json:"shortName,omitempty"`
 	// unique identifier of the standard with version
-	Framework *string `json:"framework,omitempty,omitzero"`
+	Framework *string `json:"framework,omitempty"`
 	// long description of the standard with details of what is covered
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// URL to the logo of the governing body
-	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty,omitzero"`
+	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
-	GoverningBody *string `json:"governingBody,omitempty,omitzero"`
+	GoverningBody *string `json:"governingBody,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
-	Link *string `json:"link,omitempty,omitzero"`
+	Link *string `json:"link,omitempty"`
 	// status of the standard - active, draft, and archived
-	Status *enums.StandardStatus `json:"status,omitempty,omitzero"`
+	Status *enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for system owned standards
-	IsPublic *bool `json:"isPublic,omitempty,omitzero"`
+	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for system owned standards
-	FreeToUse *bool `json:"freeToUse,omitempty,omitzero"`
+	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
-	StandardType *string `json:"standardType,omitempty,omitzero"`
+	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version  *string            `json:"version,omitempty,omitzero"`
-	Owner    *Organization      `json:"owner,omitempty,omitzero"`
+	Version  *string            `json:"version,omitempty"`
+	Owner    *Organization      `json:"owner,omitempty"`
 	Controls *ControlConnection `json:"controls"`
 }
 
@@ -18567,13 +18567,13 @@ func (Standard) IsNode() {}
 // Return response for createBulkStandard mutation
 type StandardBulkCreatePayload struct {
 	// Created standards
-	Standards []*Standard `json:"standards,omitempty,omitzero"`
+	Standards []*Standard `json:"standards,omitempty"`
 }
 
 // A connection to a list of items.
 type StandardConnection struct {
 	// A list of edges.
-	Edges []*StandardEdge `json:"edges,omitempty,omitzero"`
+	Edges []*StandardEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -18595,7 +18595,7 @@ type StandardDeletePayload struct {
 // An edge in a connection.
 type StandardEdge struct {
 	// The item at the end of the edge.
-	Node *Standard `json:"node,omitempty,omitzero"`
+	Node *Standard `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -18603,48 +18603,48 @@ type StandardEdge struct {
 type StandardHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
-	Revision *string `json:"revision,omitempty,omitzero"`
+	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
-	SystemOwned *bool `json:"systemOwned,omitempty,omitzero"`
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
-	ShortName *string `json:"shortName,omitempty,omitzero"`
+	ShortName *string `json:"shortName,omitempty"`
 	// unique identifier of the standard with version
-	Framework *string `json:"framework,omitempty,omitzero"`
+	Framework *string `json:"framework,omitempty"`
 	// long description of the standard with details of what is covered
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// URL to the logo of the governing body
-	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty,omitzero"`
+	GoverningBodyLogoURL *string `json:"governingBodyLogoURL,omitempty"`
 	// governing body of the standard, e.g. AICPA, etc.
-	GoverningBody *string `json:"governingBody,omitempty,omitzero"`
+	GoverningBody *string `json:"governingBody,omitempty"`
 	// domains the standard covers, e.g. availability, confidentiality, etc.
-	Domains []string `json:"domains,omitempty,omitzero"`
+	Domains []string `json:"domains,omitempty"`
 	// link to the official standard documentation
-	Link *string `json:"link,omitempty,omitzero"`
+	Link *string `json:"link,omitempty"`
 	// status of the standard - active, draft, and archived
-	Status *enums.StandardStatus `json:"status,omitempty,omitzero"`
+	Status *enums.StandardStatus `json:"status,omitempty"`
 	// indicates if the standard should be made available to all users, only for system owned standards
-	IsPublic *bool `json:"isPublic,omitempty,omitzero"`
+	IsPublic *bool `json:"isPublic,omitempty"`
 	// indicates if the standard is freely distributable under a trial license, only for system owned standards
-	FreeToUse *bool `json:"freeToUse,omitempty,omitzero"`
+	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
-	StandardType *string `json:"standardType,omitempty,omitzero"`
+	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version *string `json:"version,omitempty,omitzero"`
+	Version *string `json:"version,omitempty"`
 }
 
 func (StandardHistory) IsNode() {}
@@ -18652,7 +18652,7 @@ func (StandardHistory) IsNode() {}
 // A connection to a list of items.
 type StandardHistoryConnection struct {
 	// A list of edges.
-	Edges []*StandardHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*StandardHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -18662,7 +18662,7 @@ type StandardHistoryConnection struct {
 // An edge in a connection.
 type StandardHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *StandardHistory `json:"node,omitempty,omitzero"`
+	Node *StandardHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -19319,54 +19319,54 @@ type StandardWhereInput struct {
 
 type Subcontrol struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
-	ReferenceID *string `json:"referenceID,omitempty,omitzero"`
+	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
-	AuditorReferenceID *string `json:"auditorReferenceID,omitempty,omitzero"`
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *enums.ControlStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty,omitzero"`
+	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// category id of the control
-	CategoryID *string `json:"categoryID,omitempty,omitzero"`
+	CategoryID *string `json:"categoryID,omitempty"`
 	// subcategory of the control
-	Subcategory *string `json:"subcategory,omitempty,omitzero"`
+	Subcategory *string `json:"subcategory,omitempty"`
 	// mapped categories of the control to other standards
-	MappedCategories []string `json:"mappedCategories,omitempty,omitzero"`
+	MappedCategories []string `json:"mappedCategories,omitempty"`
 	// objectives of the audit assessment for the control
-	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty,omitzero"`
+	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty"`
 	// methods used to verify the control implementation during an audit
-	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty,omitzero"`
+	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty"`
 	// questions to ask to verify the control
-	ControlQuestions []string `json:"controlQuestions,omitempty,omitzero"`
+	ControlQuestions []string `json:"controlQuestions,omitempty"`
 	// implementation guidance for the control
-	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty,omitzero"`
+	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty"`
 	// examples of evidence for the control
-	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty,omitzero"`
+	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
-	References []*models.Reference `json:"references,omitempty,omitzero"`
+	References []*models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID *string `json:"controlOwnerID,omitempty,omitzero"`
+	ControlOwnerID *string `json:"controlOwnerID,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
@@ -19381,10 +19381,10 @@ type Subcontrol struct {
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
 	MappedControls    *MappedControlConnection    `json:"mappedControls"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
-	ControlOwner *Group `json:"controlOwner,omitempty,omitzero"`
+	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate               *Group                           `json:"delegate,omitempty,omitzero"`
-	Owner                  *Organization                    `json:"owner,omitempty,omitzero"`
+	Delegate               *Group                           `json:"delegate,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
 	Control                *Control                         `json:"control"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 }
@@ -19394,13 +19394,13 @@ func (Subcontrol) IsNode() {}
 // Return response for createBulkSubcontrol mutation
 type SubcontrolBulkCreatePayload struct {
 	// Created subcontrols
-	Subcontrols []*Subcontrol `json:"subcontrols,omitempty,omitzero"`
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 }
 
 // A connection to a list of items.
 type SubcontrolConnection struct {
 	// A list of edges.
-	Edges []*SubcontrolEdge `json:"edges,omitempty,omitzero"`
+	Edges []*SubcontrolEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -19422,7 +19422,7 @@ type SubcontrolDeletePayload struct {
 // An edge in a connection.
 type SubcontrolEdge struct {
 	// The item at the end of the edge.
-	Node *Subcontrol `json:"node,omitempty,omitzero"`
+	Node *Subcontrol `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -19430,56 +19430,56 @@ type SubcontrolEdge struct {
 type SubcontrolHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// description of what the control is supposed to accomplish
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
-	ReferenceID *string `json:"referenceID,omitempty,omitzero"`
+	ReferenceID *string `json:"referenceID,omitempty"`
 	// external auditor id of the control, can be used to map to external audit partner mappings
-	AuditorReferenceID *string `json:"auditorReferenceID,omitempty,omitzero"`
+	AuditorReferenceID *string `json:"auditorReferenceID,omitempty"`
 	// status of the control
-	Status *enums.ControlStatus `json:"status,omitempty,omitzero"`
+	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
-	Source *enums.ControlSource `json:"source,omitempty,omitzero"`
+	Source *enums.ControlSource `json:"source,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty,omitzero"`
+	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// category id of the control
-	CategoryID *string `json:"categoryID,omitempty,omitzero"`
+	CategoryID *string `json:"categoryID,omitempty"`
 	// subcategory of the control
-	Subcategory *string `json:"subcategory,omitempty,omitzero"`
+	Subcategory *string `json:"subcategory,omitempty"`
 	// mapped categories of the control to other standards
-	MappedCategories []string `json:"mappedCategories,omitempty,omitzero"`
+	MappedCategories []string `json:"mappedCategories,omitempty"`
 	// objectives of the audit assessment for the control
-	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty,omitzero"`
+	AssessmentObjectives []*models.AssessmentObjective `json:"assessmentObjectives,omitempty"`
 	// methods used to verify the control implementation during an audit
-	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty,omitzero"`
+	AssessmentMethods []*models.AssessmentMethod `json:"assessmentMethods,omitempty"`
 	// questions to ask to verify the control
-	ControlQuestions []string `json:"controlQuestions,omitempty,omitzero"`
+	ControlQuestions []string `json:"controlQuestions,omitempty"`
 	// implementation guidance for the control
-	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty,omitzero"`
+	ImplementationGuidance []*models.ImplementationGuidance `json:"implementationGuidance,omitempty"`
 	// examples of evidence for the control
-	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty,omitzero"`
+	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
-	References []*models.Reference `json:"references,omitempty,omitzero"`
+	References []*models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID *string `json:"controlOwnerID,omitempty,omitzero"`
+	ControlOwnerID *string `json:"controlOwnerID,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
-	DelegateID *string `json:"delegateID,omitempty,omitzero"`
+	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
@@ -19491,7 +19491,7 @@ func (SubcontrolHistory) IsNode() {}
 // A connection to a list of items.
 type SubcontrolHistoryConnection struct {
 	// A list of edges.
-	Edges []*SubcontrolHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*SubcontrolHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -19501,7 +19501,7 @@ type SubcontrolHistoryConnection struct {
 // An edge in a connection.
 type SubcontrolHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *SubcontrolHistory `json:"node,omitempty,omitzero"`
+	Node *SubcontrolHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -20216,20 +20216,20 @@ type SubcontrolWhereInput struct {
 
 type Subscriber struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
-	PhoneNumber *string `json:"phoneNumber,omitempty,omitzero"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// indicates if the email address has been verified
 	VerifiedEmail bool `json:"verifiedEmail"`
 	// indicates if the phone number has been verified
@@ -20240,7 +20240,7 @@ type Subscriber struct {
 	Unsubscribed bool `json:"unsubscribed"`
 	// the number of attempts made to perform email send of the subscription, maximum of 5
 	SendAttempts int64            `json:"sendAttempts"`
-	Owner        *Organization    `json:"owner,omitempty,omitzero"`
+	Owner        *Organization    `json:"owner,omitempty"`
 	Events       *EventConnection `json:"events"`
 }
 
@@ -20249,13 +20249,13 @@ func (Subscriber) IsNode() {}
 // Return response for createBulkSubscriber mutation
 type SubscriberBulkCreatePayload struct {
 	// Created subscribers
-	Subscribers []*Subscriber `json:"subscribers,omitempty,omitzero"`
+	Subscribers []*Subscriber `json:"subscribers,omitempty"`
 }
 
 // A connection to a list of items.
 type SubscriberConnection struct {
 	// A list of edges.
-	Edges []*SubscriberEdge `json:"edges,omitempty,omitzero"`
+	Edges []*SubscriberEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -20277,7 +20277,7 @@ type SubscriberDeletePayload struct {
 // An edge in a connection.
 type SubscriberEdge struct {
 	// The item at the end of the edge.
-	Node *Subscriber `json:"node,omitempty,omitzero"`
+	Node *Subscriber `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -20471,17 +20471,17 @@ type SubscriberWhereInput struct {
 
 type TFASetting struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// specifies if the TFA device has been verified
 	Verified bool `json:"verified"`
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
-	TotpAllowed *bool `json:"totpAllowed,omitempty,omitzero"`
-	Owner       *User `json:"owner,omitempty,omitzero"`
+	TotpAllowed *bool `json:"totpAllowed,omitempty"`
+	Owner       *User `json:"owner,omitempty"`
 }
 
 func (TFASetting) IsNode() {}
@@ -20489,7 +20489,7 @@ func (TFASetting) IsNode() {}
 // A connection to a list of items.
 type TFASettingConnection struct {
 	// A list of edges.
-	Edges []*TFASettingEdge `json:"edges,omitempty,omitzero"`
+	Edges []*TFASettingEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -20500,14 +20500,14 @@ type TFASettingConnection struct {
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *TFASetting `json:"tfaSetting"`
-	TfaSecret  *string     `json:"tfaSecret,omitempty,omitzero"`
-	QRCode     *string     `json:"qrCode,omitempty,omitzero"`
+	TfaSecret  *string     `json:"tfaSecret,omitempty"`
+	QRCode     *string     `json:"qrCode,omitempty"`
 }
 
 // An edge in a connection.
 type TFASettingEdge struct {
 	// The item at the end of the edge.
-	Node *TFASetting `json:"node,omitempty,omitzero"`
+	Node *TFASetting `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -20524,9 +20524,9 @@ type TFASettingOrder struct {
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
 	TfaSetting    *TFASetting `json:"tfaSetting"`
-	TfaSecret     *string     `json:"tfaSecret,omitempty,omitzero"`
-	QRCode        *string     `json:"qrCode,omitempty,omitzero"`
-	RecoveryCodes []string    `json:"recoveryCodes,omitempty,omitzero"`
+	TfaSecret     *string     `json:"tfaSecret,omitempty"`
+	QRCode        *string     `json:"qrCode,omitempty"`
+	RecoveryCodes []string    `json:"recoveryCodes,omitempty"`
 }
 
 // TFASettingWhereInput is used for filtering TFASetting objects.
@@ -20642,37 +20642,37 @@ type TFASettingWhereInput struct {
 
 type Task struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the title of the task
 	Title string `json:"title"`
 	// the details of the task
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// the due date of the task
-	Due *models.DateTime `json:"due,omitempty,omitzero"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed *models.DateTime `json:"completed,omitempty,omitzero"`
+	Completed *models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
-	AssigneeID *string `json:"assigneeID,omitempty,omitzero"`
+	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
-	AssignerID        *string                     `json:"assignerID,omitempty,omitzero"`
-	Owner             *Organization               `json:"owner,omitempty,omitzero"`
-	Assigner          *User                       `json:"assigner,omitempty,omitzero"`
-	Assignee          *User                       `json:"assignee,omitempty,omitzero"`
+	AssignerID        *string                     `json:"assignerID,omitempty"`
+	Owner             *Organization               `json:"owner,omitempty"`
+	Assigner          *User                       `json:"assigner,omitempty"`
+	Assignee          *User                       `json:"assignee,omitempty"`
 	Comments          *NoteConnection             `json:"comments"`
 	Groups            *GroupConnection            `json:"groups"`
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
@@ -20689,13 +20689,13 @@ func (Task) IsNode() {}
 // Return response for createBulkTask mutation
 type TaskBulkCreatePayload struct {
 	// Created tasks
-	Tasks []*Task `json:"tasks,omitempty,omitzero"`
+	Tasks []*Task `json:"tasks,omitempty"`
 }
 
 // A connection to a list of items.
 type TaskConnection struct {
 	// A list of edges.
-	Edges []*TaskEdge `json:"edges,omitempty,omitzero"`
+	Edges []*TaskEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -20717,7 +20717,7 @@ type TaskDeletePayload struct {
 // An edge in a connection.
 type TaskEdge struct {
 	// The item at the end of the edge.
-	Node *Task `json:"node,omitempty,omitzero"`
+	Node *Task `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -20725,36 +20725,36 @@ type TaskEdge struct {
 type TaskHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the title of the task
 	Title string `json:"title"`
 	// the details of the task
-	Details *string `json:"details,omitempty,omitzero"`
+	Details *string `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category *string `json:"category,omitempty,omitzero"`
+	Category *string `json:"category,omitempty"`
 	// the due date of the task
-	Due *models.DateTime `json:"due,omitempty,omitzero"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed *models.DateTime `json:"completed,omitempty,omitzero"`
+	Completed *models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
-	AssigneeID *string `json:"assigneeID,omitempty,omitzero"`
+	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
-	AssignerID *string `json:"assignerID,omitempty,omitzero"`
+	AssignerID *string `json:"assignerID,omitempty"`
 }
 
 func (TaskHistory) IsNode() {}
@@ -20762,7 +20762,7 @@ func (TaskHistory) IsNode() {}
 // A connection to a list of items.
 type TaskHistoryConnection struct {
 	// A list of edges.
-	Edges []*TaskHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*TaskHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -20772,7 +20772,7 @@ type TaskHistoryConnection struct {
 // An edge in a connection.
 type TaskHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *TaskHistory `json:"node,omitempty,omitzero"`
+	Node *TaskHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -21337,27 +21337,27 @@ type TaskWhereInput struct {
 
 type Template struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
 	TemplateType enums.DocumentType `json:"templateType"`
 	// the description of the template
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema  map[string]any          `json:"uischema,omitempty,omitzero"`
-	Owner     *Organization           `json:"owner,omitempty,omitzero"`
+	Uischema  map[string]any          `json:"uischema,omitempty"`
+	Owner     *Organization           `json:"owner,omitempty"`
 	Documents *DocumentDataConnection `json:"documents"`
 	Files     *FileConnection         `json:"files"`
 }
@@ -21367,13 +21367,13 @@ func (Template) IsNode() {}
 // Return response for createBulkTemplate mutation
 type TemplateBulkCreatePayload struct {
 	// Created templates
-	Templates []*Template `json:"templates,omitempty,omitzero"`
+	Templates []*Template `json:"templates,omitempty"`
 }
 
 // A connection to a list of items.
 type TemplateConnection struct {
 	// A list of edges.
-	Edges []*TemplateEdge `json:"edges,omitempty,omitzero"`
+	Edges []*TemplateEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -21395,7 +21395,7 @@ type TemplateDeletePayload struct {
 // An edge in a connection.
 type TemplateEdge struct {
 	// The item at the end of the edge.
-	Node *Template `json:"node,omitempty,omitzero"`
+	Node *Template `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -21403,28 +21403,28 @@ type TemplateEdge struct {
 type TemplateHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
 	TemplateType enums.DocumentType `json:"templateType"`
 	// the description of the template
-	Description *string `json:"description,omitempty,omitzero"`
+	Description *string `json:"description,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema map[string]any `json:"uischema,omitempty,omitzero"`
+	Uischema map[string]any `json:"uischema,omitempty"`
 }
 
 func (TemplateHistory) IsNode() {}
@@ -21432,7 +21432,7 @@ func (TemplateHistory) IsNode() {}
 // A connection to a list of items.
 type TemplateHistoryConnection struct {
 	// A list of edges.
-	Edges []*TemplateHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*TemplateHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -21442,7 +21442,7 @@ type TemplateHistoryConnection struct {
 // An edge in a connection.
 type TemplateHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *TemplateHistory `json:"node,omitempty,omitzero"`
+	Node *TemplateHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -23582,37 +23582,37 @@ type UpdateUserSettingInput struct {
 
 type User struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags      []string `json:"tags,omitempty,omitzero"`
+	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
-	FirstName *string  `json:"firstName,omitempty,omitzero"`
-	LastName  *string  `json:"lastName,omitempty,omitzero"`
+	FirstName *string  `json:"firstName,omitempty"`
+	LastName  *string  `json:"lastName,omitempty"`
 	// The user's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty,omitzero"`
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The user's local avatar file id, takes precedence over the avatar remote URL
-	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty,omitzero"`
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the time the user was last seen
-	LastSeen *time.Time `json:"lastSeen,omitempty,omitzero"`
+	LastSeen *time.Time `json:"lastSeen,omitempty"`
 	// the last auth provider used to login
-	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty,omitzero"`
+	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty"`
 	// the Subject of the user JWT
-	Sub *string `json:"sub,omitempty,omitzero"`
+	Sub *string `json:"sub,omitempty"`
 	// auth provider used to register the account
 	AuthProvider enums.AuthProvider `json:"authProvider"`
 	// the user's role
-	Role                 *enums.Role                    `json:"role,omitempty,omitzero"`
+	Role                 *enums.Role                    `json:"role,omitempty"`
 	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	TfaSettings          *TFASettingConnection          `json:"tfaSettings"`
 	Setting              *UserSetting                   `json:"setting"`
@@ -23620,16 +23620,16 @@ type User struct {
 	Organizations        *OrganizationConnection        `json:"organizations"`
 	Webauthns            *WebauthnConnection            `json:"webauthns"`
 	Files                *FileConnection                `json:"files"`
-	AvatarFile           *File                          `json:"avatarFile,omitempty,omitzero"`
+	AvatarFile           *File                          `json:"avatarFile,omitempty"`
 	Events               *EventConnection               `json:"events"`
 	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
 	Subcontrols          *SubcontrolConnection          `json:"subcontrols"`
 	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
-	Programs             []*Program                     `json:"programs,omitempty,omitzero"`
+	Programs             []*Program                     `json:"programs,omitempty"`
 	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
-	ProgramMemberships   []*ProgramMembership           `json:"programMemberships,omitempty,omitzero"`
+	ProgramMemberships   []*ProgramMembership           `json:"programMemberships,omitempty"`
 }
 
 func (User) IsNode() {}
@@ -23637,13 +23637,13 @@ func (User) IsNode() {}
 // Return response for createBulkUser mutation
 type UserBulkCreatePayload struct {
 	// Created users
-	Users []*User `json:"users,omitempty,omitzero"`
+	Users []*User `json:"users,omitempty"`
 }
 
 // A connection to a list of items.
 type UserConnection struct {
 	// A list of edges.
-	Edges []*UserEdge `json:"edges,omitempty,omitzero"`
+	Edges []*UserEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -23665,7 +23665,7 @@ type UserDeletePayload struct {
 // An edge in a connection.
 type UserEdge struct {
 	// The item at the end of the edge.
-	Node *User `json:"node,omitempty,omitzero"`
+	Node *User `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -23673,39 +23673,39 @@ type UserEdge struct {
 type UserHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
-	Tags      []string `json:"tags,omitempty,omitzero"`
+	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
-	FirstName *string  `json:"firstName,omitempty,omitzero"`
-	LastName  *string  `json:"lastName,omitempty,omitzero"`
+	FirstName *string  `json:"firstName,omitempty"`
+	LastName  *string  `json:"lastName,omitempty"`
 	// The user's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty,omitzero"`
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The user's local avatar file id, takes precedence over the avatar remote URL
-	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty,omitzero"`
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty,omitzero"`
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the time the user was last seen
-	LastSeen *time.Time `json:"lastSeen,omitempty,omitzero"`
+	LastSeen *time.Time `json:"lastSeen,omitempty"`
 	// the last auth provider used to login
-	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty,omitzero"`
+	LastLoginProvider *enums.AuthProvider `json:"lastLoginProvider,omitempty"`
 	// the Subject of the user JWT
-	Sub *string `json:"sub,omitempty,omitzero"`
+	Sub *string `json:"sub,omitempty"`
 	// auth provider used to register the account
 	AuthProvider enums.AuthProvider `json:"authProvider"`
 	// the user's role
-	Role *enums.Role `json:"role,omitempty,omitzero"`
+	Role *enums.Role `json:"role,omitempty"`
 }
 
 func (UserHistory) IsNode() {}
@@ -23713,7 +23713,7 @@ func (UserHistory) IsNode() {}
 // A connection to a list of items.
 type UserHistoryConnection struct {
 	// A list of edges.
-	Edges []*UserHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*UserHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -23723,7 +23723,7 @@ type UserHistoryConnection struct {
 // An edge in a connection.
 type UserHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *UserHistory `json:"node,omitempty,omitzero"`
+	Node *UserHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -24039,32 +24039,32 @@ type UserOrder struct {
 
 type UserSetting struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy *string    `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags   []string `json:"tags,omitempty,omitzero"`
-	UserID *string  `json:"userID,omitempty,omitzero"`
+	Tags   []string `json:"tags,omitempty"`
+	UserID *string  `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
-	SilencedAt *time.Time `json:"silencedAt,omitempty,omitzero"`
+	SilencedAt *time.Time `json:"silencedAt,omitempty"`
 	// The time the user was suspended
-	SuspendedAt *time.Time `json:"suspendedAt,omitempty,omitzero"`
+	SuspendedAt *time.Time `json:"suspendedAt,omitempty"`
 	// status of the user account
 	Status enums.UserStatus `json:"status"`
 	// whether the user has confirmed their email address
 	EmailConfirmed bool `json:"emailConfirmed"`
 	// specifies a user may complete authentication by verifying a WebAuthn capable device
-	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty,omitzero"`
+	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
-	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty,omitzero"`
-	User         *User `json:"user,omitempty,omitzero"`
+	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty"`
+	User         *User `json:"user,omitempty"`
 	// organization to load on user login
-	DefaultOrg *Organization   `json:"defaultOrg,omitempty,omitzero"`
+	DefaultOrg *Organization   `json:"defaultOrg,omitempty"`
 	Files      *FileConnection `json:"files"`
 }
 
@@ -24073,13 +24073,13 @@ func (UserSetting) IsNode() {}
 // Return response for createBulkUserSetting mutation
 type UserSettingBulkCreatePayload struct {
 	// Created userSettings
-	UserSettings []*UserSetting `json:"userSettings,omitempty,omitzero"`
+	UserSettings []*UserSetting `json:"userSettings,omitempty"`
 }
 
 // A connection to a list of items.
 type UserSettingConnection struct {
 	// A list of edges.
-	Edges []*UserSettingEdge `json:"edges,omitempty,omitzero"`
+	Edges []*UserSettingEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -24095,7 +24095,7 @@ type UserSettingCreatePayload struct {
 // An edge in a connection.
 type UserSettingEdge struct {
 	// The item at the end of the edge.
-	Node *UserSetting `json:"node,omitempty,omitzero"`
+	Node *UserSetting `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -24103,31 +24103,31 @@ type UserSettingEdge struct {
 type UserSettingHistory struct {
 	ID          string         `json:"id"`
 	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty,omitzero"`
+	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy   *string        `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty,omitzero"`
-	DeletedAt   *time.Time     `json:"deletedAt,omitempty,omitzero"`
-	DeletedBy   *string        `json:"deletedBy,omitempty,omitzero"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
-	Tags   []string `json:"tags,omitempty,omitzero"`
-	UserID *string  `json:"userID,omitempty,omitzero"`
+	Tags   []string `json:"tags,omitempty"`
+	UserID *string  `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
-	SilencedAt *time.Time `json:"silencedAt,omitempty,omitzero"`
+	SilencedAt *time.Time `json:"silencedAt,omitempty"`
 	// The time the user was suspended
-	SuspendedAt *time.Time `json:"suspendedAt,omitempty,omitzero"`
+	SuspendedAt *time.Time `json:"suspendedAt,omitempty"`
 	// status of the user account
 	Status enums.UserStatus `json:"status"`
 	// whether the user has confirmed their email address
 	EmailConfirmed bool `json:"emailConfirmed"`
 	// specifies a user may complete authentication by verifying a WebAuthn capable device
-	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty,omitzero"`
+	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
-	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty,omitzero"`
+	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty"`
 }
 
 func (UserSettingHistory) IsNode() {}
@@ -24135,7 +24135,7 @@ func (UserSettingHistory) IsNode() {}
 // A connection to a list of items.
 type UserSettingHistoryConnection struct {
 	// A list of edges.
-	Edges []*UserSettingHistoryEdge `json:"edges,omitempty,omitzero"`
+	Edges []*UserSettingHistoryEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -24145,7 +24145,7 @@ type UserSettingHistoryConnection struct {
 // An edge in a connection.
 type UserSettingHistoryEdge struct {
 	// The item at the end of the edge.
-	Node *UserSettingHistory `json:"node,omitempty,omitzero"`
+	Node *UserSettingHistory `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
@@ -24841,12 +24841,12 @@ type UserWhereInput struct {
 
 type Webauthn struct {
 	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty,omitzero"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty,omitzero"`
-	CreatedBy *string    `json:"createdBy,omitempty,omitzero"`
-	UpdatedBy *string    `json:"updatedBy,omitempty,omitzero"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags []string `json:"tags,omitempty,omitzero"`
+	Tags []string `json:"tags,omitempty"`
 	// The AAGUID of the authenticator; AAGUID is defined as an array containing the globally unique identifier of the authenticator model being sought
 	Aaguid models.AAGUID `json:"aaguid"`
 	// Flag backup eligible indicates the credential is able to be backed up and/or sync'd between devices. This should NEVER change
@@ -24861,7 +24861,7 @@ func (Webauthn) IsNode() {}
 // A connection to a list of items.
 type WebauthnConnection struct {
 	// A list of edges.
-	Edges []*WebauthnEdge `json:"edges,omitempty,omitzero"`
+	Edges []*WebauthnEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
@@ -24877,7 +24877,7 @@ type WebauthnDeletePayload struct {
 // An edge in a connection.
 type WebauthnEdge struct {
 	// The item at the end of the edge.
-	Node *Webauthn `json:"node,omitempty,omitzero"`
+	Node *Webauthn `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
