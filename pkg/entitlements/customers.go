@@ -67,10 +67,6 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 
 	result := sc.Client.V1Customers.Search(ctx, params)
 
-	if seq2IsEmpty(result) {
-		return nil, ErrCustomerSearchFailed
-	}
-
 	for customer, err := range result {
 		if err != nil {
 			log.Err(err).Msg("failed to search customers")
