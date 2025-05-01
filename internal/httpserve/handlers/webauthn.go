@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -202,7 +201,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		zerolog.Ctx(ctx.Request().Context()).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}
