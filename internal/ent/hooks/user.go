@@ -8,7 +8,10 @@ import (
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
@@ -148,6 +151,11 @@ func HookUser() ent.Hook {
 				// create a subscription for the personal org
 				if err := createOrgSubscription(ctx, org, m); err != nil {
 					return nil, err
+				}
+
+				// send a welcome email to the user
+				if err := sendRegisterWelcomeEmail(ctx, userCreated, m); err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("could not send welcome email")
 				}
 			}
 
@@ -300,6 +308,37 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	}
 
 	return setting, org, nil
+}
+
+// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
+func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
+	// if there is not job client, we can't send the email
+	if m.Job == nil {
+		log.Info().Msg("no job client, skipping welcome email")
+
+		return nil
+	}
+
+	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	})
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating welcome email")
+
+		return err
+	}
+
+	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
 func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) error {

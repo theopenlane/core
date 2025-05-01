@@ -130,6 +130,8 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 				require.NoError(t, err)
 			}
 
+			suite.ClearTestData()
+
 			req := httptest.NewRequest(http.MethodPost, "/password-reset", strings.NewReader(string(body)))
 			req.Header.Set("Content-Type", "application/json")
 
@@ -156,7 +158,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			if tc.expectedStatus != http.StatusOK {
 				assert.Contains(t, out.Error, tc.expectedResp)
 			} else {
-				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
+				job := rivertest.RequireInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
 					Message: *newman.NewEmailMessageWithOptions(
 						newman.WithSubject("Openlane Password Reset - Action Required"),
 					),

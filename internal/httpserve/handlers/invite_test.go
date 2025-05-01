@@ -79,7 +79,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer suite.ClearTestData()
+			suite.ClearTestData()
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
@@ -130,13 +130,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
 			// ensure the email jobs are created
-			// there will be three because the first is the invite email and the second is the welcome
-			// and the 3rd one is the accepted email
-			job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+			// there will be two because the first is the invite email
+			// and the 2nd one is the accepted email
+			job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 				[]rivertest.ExpectedJob{
-					{
-						Args: jobs.EmailArgs{},
-					},
 					{
 						Args: jobs.EmailArgs{},
 					},
@@ -149,7 +146,6 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			// We cannot determine the order of which they will be processed really especially for job 2 and 3
 			// So just check and make sure they all contain these values at some point
 			expectedSnippets := []string{
-				"We've created a personal Organization just",
 				"Join your team",
 				"You've been added to an organization",
 			}
@@ -160,11 +156,12 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 				for _, snippet := range expectedSnippets {
 					if strings.Contains(string(v.EncodedArgs), snippet) {
 						found[snippet] = true
+						break
 					}
 				}
 			}
 
-			assert.Len(t, found, 3)
+			assert.Len(t, found, 2)
 
 			for _, snippet := range expectedSnippets {
 				assert.True(t, found[snippet], "expected snippet not found: %s", snippet)

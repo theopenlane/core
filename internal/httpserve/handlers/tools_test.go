@@ -117,7 +117,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
-		ent.Emailer(&emailtemplates.Config{}),
+		ent.Emailer(&emailtemplates.Config{
+			CompanyName: "Meow Inc.",
+		}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{}),

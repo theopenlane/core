@@ -603,6 +603,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**companyName**|`string`|||
 |**companyAddress**|`string`|||
 |**corporation**|`string`|||
+|**year**|`integer`|||
 |**fromEmail**|`string`|||
 |**supportEmail**|`string`|||
 |**logoURL**|`string`|||

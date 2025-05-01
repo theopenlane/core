@@ -84,7 +84,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer suite.ClearTestData()
+			suite.ClearTestData()
 
 			resendJSON := models.ForgotPasswordRequest{
 				Email: tc.email,

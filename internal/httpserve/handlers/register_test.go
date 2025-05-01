@@ -208,17 +208,30 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 			// wait for messages
 			if tc.emailExpected {
-				job := rivertest.RequireInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
-					Message: *newman.NewEmailMessageWithOptions(
-						newman.WithSubject("Please verify your email address to login to Openlane"),
-					),
-				}, nil)
+				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{
+								Message: *newman.NewEmailMessageWithOptions(
+									newman.WithSubject("Please verify your email address to login to Meow Inc."),
+									newman.WithTo([]string{tc.email}),
+								),
+							},
+						},
+						{
+							Args: jobs.EmailArgs{
+								Message: *newman.NewEmailMessageWithOptions(
+									newman.WithSubject("Welcome to Meow Inc.!"),
+									newman.WithTo([]string{tc.email}),
+								),
+							},
+						},
+					})
 				require.NotNil(t, job)
-				require.Equal(t, []string{tc.email}, job.Args.Message.To)
 			} else {
 				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
 					Message: *newman.NewEmailMessageWithOptions(
-						newman.WithSubject("Please verify your email address to login to Openlane"),
+						newman.WithSubject("Please verify your email address to login to Meow Inc"),
 					),
 				}, nil)
 			}

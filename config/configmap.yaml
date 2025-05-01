@@ -135,6 +135,7 @@ data:
   CORE_EMAIL_COMPANYNAME: {{ .Values.core.email.companyName }}
   CORE_EMAIL_COMPANYADDRESS: {{ .Values.core.email.companyAddress }}
   CORE_EMAIL_CORPORATION: {{ .Values.core.email.corporation }}
+  CORE_EMAIL_YEAR: {{ .Values.core.email.year }}
   CORE_EMAIL_FROMEMAIL: {{ .Values.core.email.fromEmail }}
   CORE_EMAIL_SUPPORTEMAIL: {{ .Values.core.email.supportEmail }}
   CORE_EMAIL_LOGOURL: {{ .Values.core.email.logoURL }}
