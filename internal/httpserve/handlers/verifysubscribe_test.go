@@ -68,6 +68,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			suite.ClearTestData()
+
 			sub := suite.createTestSubscriber(t, testUser1.OrganizationID, tc.email, tc.ttl)
 
 			target := "/subscribe/verify"
@@ -100,20 +102,16 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 			}
 
 			// ensure email job was created
-			// the first job is the subscriber verification email and the following is the subscribed email
 			if tc.emailExpected {
-				job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{},
-						},
+
 						{
 							Args: jobs.EmailArgs{},
 						},
 					})
 				require.NotNil(t, job)
-				assert.Contains(t, string(job[0].EncodedArgs), "Thank you for subscribing") // first email is the invite email
-				assert.Contains(t, string(job[1].EncodedArgs), "You've been subscribed to") // second email is the accepted invite email
+				assert.Contains(t, string(job[0].EncodedArgs), "You've been subscribed to") // second email is the accepted invite email
 			}
 		})
 	}
