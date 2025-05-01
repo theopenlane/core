@@ -311,7 +311,6 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 
 // sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
 func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
-	zerolog.Ctx(ctx).Debug().Msg("sending welcome email")
 	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
 		Email:     user.Email,
 		FirstName: user.FirstName,
