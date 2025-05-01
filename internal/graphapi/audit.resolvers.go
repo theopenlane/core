@@ -52,7 +52,7 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 		objectID := auditLog[1]
 
 		// Thu Jul 18 17:30:19 2024
-		ts, err := time.Parse("Mon Jan 02 15:04:05 2006", auditLog[2])
+		ts, err := time.Parse(time.ANSIC, auditLog[2])
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
 		}
