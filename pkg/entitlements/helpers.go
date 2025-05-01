@@ -10,8 +10,9 @@ import (
 
 // GetUpdatedFields checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
 // and a boolean indicating whether there are updates
-func GetUpdatedFields(props map[string]interface{}, orgCustomer *OrganizationCustomer) (params *stripe.CustomerParams) {
-	params = &stripe.CustomerParams{}
+func GetUpdatedFields(props map[string]interface{}, orgCustomer *OrganizationCustomer) (params *stripe.CustomerUpdateParams) {
+	// Initialize params to avoid nil dereference
+	params = &stripe.CustomerUpdateParams{}
 
 	// if its in the properties, it has been updated
 	// use the current value from orgCustomer
@@ -72,4 +73,13 @@ func WriteTuplesToYaml(tuples []TupleStruct, filename string) error {
 	}
 
 	return nil
+}
+
+// seq2IsEmpty checks if a stripe.Seq2 is empty
+func seq2IsEmpty[K any, V error](seq stripe.Seq2[K, V]) bool {
+	seq(func(_ K, _ V) bool {
+		return false
+	})
+
+	return true
 }

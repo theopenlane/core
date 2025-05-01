@@ -336,8 +336,10 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 	}
 
 	expiresAt := time.Unix(0, 0)
-	if customer.EndDate != 0 {
+	if customer.EndDate > 0 {
 		expiresAt = time.Unix(customer.EndDate, 0)
+	} else if customer.Status == string(stripe.SubscriptionStatusTrialing) {
+		expiresAt = time.Unix(customer.TrialEnd, 0)
 	}
 
 	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
@@ -352,8 +354,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		SetFeatureLookupKeys(customer.Features).
 		SetStripeProductTierID(customer.Subscription.ProductID).
 		SetProductPrice(productPrice).
-		SetExpiresAt(expiresAt).
-		Exec(ctx)
+		SetExpiresAt(expiresAt).Exec(ctx)
 }
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
@@ -408,7 +409,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	if orgCust.StripeCustomerID != "" {
 		params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
 		if params != nil {
-			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+			if _, err := entMgr.UpdateCustomer(event.Context(), orgCust.StripeCustomerID, params); err != nil {
 				zerolog.Ctx(event.Context()).Err(err).Msg("Failed to update customer")
 
 				return err

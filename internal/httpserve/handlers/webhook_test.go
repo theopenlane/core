@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -256,7 +257,7 @@ var mockCustomer = &stripe.Customer{
 // orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
 func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	// setup mocks for search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.CustomerSearchResult)
 
 		data := []*stripe.Customer{}
@@ -268,7 +269,7 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for get customer by id
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
 		*mockCustomerSearchResult = *mockCustomer
@@ -276,7 +277,7 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for getting entitlements
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
 
 		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{

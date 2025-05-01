@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"sort"
 
 	"github.com/rs/zerolog/log"
@@ -10,14 +11,16 @@ import (
 
 // main is a test script to fetch plans from Stripe and write them to a YAML file
 func main() {
+	ctx := context.Background()
+
 	// Get the list of plans
 	client := initStripeClient()
 
-	plans := client.GetAllProductPricesMapped()
+	plans := client.GetAllProductPricesMapped(ctx)
 
 	sortPlansByFeatureCount(plans)
 
-	tuplestruct := client.CreateTupleStruct()
+	tuplestruct := client.CreateTupleStruct(ctx)
 
 	log.Warn().Msgf("TupleStruct: %v", tuplestruct)
 

@@ -1,13 +1,13 @@
 package entitlements_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
-	"github.com/stripe/stripe-go/v82/client"
 
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
@@ -134,13 +134,15 @@ func TestCreateCustomer(t *testing.T) {
 		*mockCustomerResult = *expectedCustomer
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
-	customer, err := service.CreateCustomer(orgCustomer)
+	ctx := context.Background()
+
+	customer, err := service.CreateCustomer(ctx, orgCustomer)
 	c.NoError(err)
 	c.Equal(expectedCustomer, customer)
 }
@@ -154,7 +156,7 @@ func TestUpdateCustomer(t *testing.T) {
 		Phone: "0987654321",
 	}
 
-	updateParams := &stripe.CustomerParams{
+	updateParams := &stripe.CustomerUpdateParams{
 		Email: stripe.String("updated@example.com"),
 		Phone: stripe.String("0987654321"),
 	}
@@ -182,7 +184,7 @@ func TestUpdateCustomer(t *testing.T) {
 		Client: mockStripeClient.Client,
 	}
 
-	customer, err := service.UpdateCustomer("cus_123", updateParams)
+	customer, err := service.UpdateCustomer(context.Background(), "cus_123", updateParams)
 	c.NoError(err)
 	c.Equal(expectedCustomer, customer)
 }
@@ -217,7 +219,7 @@ func TestDeleteCustomer(t *testing.T) {
 		Client: mockStripeClient.Client,
 	}
 
-	err = service.DeleteCustomer("cus_123")
+	err = service.DeleteCustomer(context.Background(), "cus_123")
 	c.NoError(err)
 }
 
@@ -228,9 +230,9 @@ func TestCreateSubscription(t *testing.T) {
 		ID: "sub_123",
 	}
 
-	subscriptionParams := &stripe.SubscriptionParams{
+	subscriptionParams := &stripe.SubscriptionCreateParams{
 		Customer: stripe.String("cus_123"),
-		Items: []*stripe.SubscriptionItemsParams{
+		Items: []*stripe.SubscriptionCreateItemParams{
 			{
 				Price: stripe.String("price_123"),
 			},
@@ -250,13 +252,13 @@ func TestCreateSubscription(t *testing.T) {
 		*mockSubscriptionResult = *expectedSubscription
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
-	subscription, err := service.CreateSubscription(subscriptionParams)
+	subscription, err := service.CreateSubscription(context.Background(), subscriptionParams)
 	c.NoError(err)
 	c.Equal(expectedSubscription, subscription)
 }
@@ -268,8 +270,8 @@ func TestUpdateSubscription(t *testing.T) {
 		ID: "sub_123",
 	}
 
-	updateParams := &stripe.SubscriptionParams{
-		Items: []*stripe.SubscriptionItemsParams{
+	updateParams := &stripe.SubscriptionUpdateParams{
+		Items: []*stripe.SubscriptionUpdateItemParams{
 			{
 				Price: stripe.String("price_456"),
 			},
@@ -289,13 +291,13 @@ func TestUpdateSubscription(t *testing.T) {
 		*mockSubscriptionResult = *expectedSubscription
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
-	subscription, err := service.UpdateSubscription("sub_123", updateParams)
+	subscription, err := service.UpdateSubscription(context.Background(), "sub_123", updateParams)
 	c.NoError(err)
 	c.Equal(expectedSubscription, subscription)
 }
@@ -322,13 +324,13 @@ func TestCancelSubscription(t *testing.T) {
 		*mockSubscriptionResult = *expectedSubscription
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
-	subscription, err := service.CancelSubscription("sub_123", cancelParams)
+	subscription, err := service.CancelSubscription(context.Background(), "sub_123", cancelParams)
 	c.NoError(err)
 	c.Equal(expectedSubscription, subscription)
 }
@@ -394,12 +396,12 @@ func TestMapStripeSubscription(t *testing.T) {
 		}
 	}).Return(nil)
 
-	mockStripeClient := client.New("sk_test", stripeTestBackends)
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient,
 	}
 
-	subscription := service.MapStripeSubscription(stripeSubscription)
+	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription)
 	c.Equal(expectedSubscription, subscription)
 }
