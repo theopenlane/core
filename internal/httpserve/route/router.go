@@ -206,6 +206,7 @@ func RegisterRoutes(router *Router) error {
 		register2faHandler,
 		registerExampleCSVHandler,
 		registerWebAuthnWellKnownHandler,
+		registerCustomDomainHandler,
 	}
 
 	if router.LocalFilePath != "" {
