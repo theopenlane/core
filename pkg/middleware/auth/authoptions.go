@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/lestrrat-go/jwx/v2/jwk"
+	"github.com/lestrrat-go/httprc/v3"
+	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/theopenlane/echox/middleware"
 
 	"github.com/theopenlane/iam/sessions"
@@ -86,14 +87,18 @@ func (conf *Options) Validator() (tokens.Validator, error) {
 		return conf.validator, nil
 	}
 
-	cache := jwk.NewCache(conf.Context)
+	httprcclient := httprc.NewClient()
 
-	err := cache.Register(conf.KeysURL, jwk.WithMinRefreshInterval(conf.MinRefreshInterval))
+	cache, err := jwk.NewCache(conf.Context, httprcclient)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := cache.Register(conf.Context, conf.KeysURL, jwk.WithMinInterval(conf.MinRefreshInterval)); err != nil {
 		return nil, ErrUnableToConstructValidator
 	}
 
-	conf.validator, err = tokens.NewCachedJWKSValidator(conf.Context, cache, conf.KeysURL, conf.Audience, conf.Issuer)
+	conf.validator, err = tokens.NewCachedJWKSValidator(cache, conf.KeysURL, conf.Audience, conf.Issuer)
 	if err != nil {
 		return nil, err
 	}
@@ -108,9 +113,14 @@ func (conf *Options) WithLocalValidator() error {
 		return nil
 	}
 
-	cache := jwk.NewCache(conf.Context)
+	httprcclient := httprc.NewClient()
 
-	if err := cache.Register(conf.KeysURL, jwk.WithMinRefreshInterval(conf.MinRefreshInterval)); err != nil {
+	cache, err := jwk.NewCache(conf.Context, httprcclient)
+	if err != nil {
+		return err
+	}
+
+	if err := cache.Register(conf.Context, conf.KeysURL, jwk.WithMinInterval(conf.MinRefreshInterval)); err != nil {
 		return ErrUnableToConstructValidator
 	}
 
