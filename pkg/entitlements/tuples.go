@@ -1,17 +1,20 @@
 package entitlements
 
 import (
+	"context"
 	"fmt"
 )
 
+// TupleStruct represents a tuple of user, relation, and object
 type TupleStruct struct {
 	User     string `yaml:"user"`
 	Relation string `yaml:"relation"`
 	Object   string `yaml:"object"`
 }
 
-func (sc *StripeClient) CreateTupleStruct() []TupleStruct {
-	products := sc.GetAllProductPricesMapped()
+// CreateTupleStruct creates a tuple struct for each feature of each product
+func (sc *StripeClient) CreateTupleStruct(ctx context.Context) []TupleStruct {
+	products := sc.GetAllProductPricesMapped(ctx)
 
 	tuples := []TupleStruct{}
 	// Iterate over products and features to create the tuple struct

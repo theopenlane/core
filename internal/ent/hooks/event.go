@@ -408,7 +408,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	if orgCust.StripeCustomerID != "" {
 		params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
 		if params != nil {
-			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+			if _, err := entMgr.UpdateCustomer(event.Context(), orgCust.StripeCustomerID, params); err != nil {
 				zerolog.Ctx(event.Context()).Err(err).Msg("Failed to update customer")
 
 				return err

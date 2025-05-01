@@ -13,7 +13,7 @@ func TestGetUpdatedFields(t *testing.T) {
 		name           string
 		props          map[string]interface{}
 		stripeCustomer *entitlements.OrganizationCustomer
-		expectedParams *stripe.CustomerParams
+		expectedParams *stripe.CustomerUpdateParams
 	}{
 		{
 			name:  "No updates",
@@ -24,7 +24,7 @@ func TestGetUpdatedFields(t *testing.T) {
 					Phone: "1234567890",
 				},
 			},
-			expectedParams: &stripe.CustomerParams{},
+			expectedParams: &stripe.CustomerUpdateParams{},
 		},
 		{
 			name: "Update email",
@@ -37,7 +37,7 @@ func TestGetUpdatedFields(t *testing.T) {
 					Phone: "1234567890",
 				},
 			},
-			expectedParams: &stripe.CustomerParams{
+			expectedParams: &stripe.CustomerUpdateParams{
 				Email: stripe.String("test@example.com"),
 			},
 		},
@@ -52,7 +52,7 @@ func TestGetUpdatedFields(t *testing.T) {
 					Phone: "1234567890",
 				},
 			},
-			expectedParams: &stripe.CustomerParams{
+			expectedParams: &stripe.CustomerUpdateParams{
 				Phone: stripe.String("1234567890"),
 			},
 		},

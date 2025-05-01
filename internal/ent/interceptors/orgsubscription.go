@@ -74,21 +74,21 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 	}
 
 	// create a billing portal session
-	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create update subscription billing portal session type")
 
 		return err
 	}
 
-	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create cancel subscription billing portal session type")
 
 		return err
 	}
 
-	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(orgSub.StripeCustomerID)
+	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(ctx, orgSub.StripeCustomerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
 

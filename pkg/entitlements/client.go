@@ -2,13 +2,12 @@ package entitlements
 
 import (
 	"github.com/stripe/stripe-go/v82"
-	"github.com/stripe/stripe-go/v82/client"
 )
 
 // StripeClient is a client for the Stripe API
 type StripeClient struct {
 	// Client is the Stripe client and is used for accessing all subsequent stripe objects, e.g. products, prices, etc.
-	Client *client.API
+	Client *stripe.Client
 	// apikey is the Stripe API key
 	apikey string
 	// config is the configuration for the Stripe client
@@ -28,7 +27,7 @@ func NewStripeClient(opts ...StripeOptions) (*StripeClient, error) {
 		return nil, ErrMissingAPIKey
 	}
 
-	sc.Client = client.New(sc.apikey, sc.backends)
+	sc.Client = stripe.NewClient(sc.apikey, stripe.WithBackends(sc.backends))
 
 	return sc, nil
 }

@@ -1,55 +1,58 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v82"
+import (
+	"context"
+
+	"github.com/stripe/stripe-go/v82"
+)
 
 // CreatePrice a price for a product in stripe
-func (sc *StripeClient) CreatePrice(productID string, unitAmount int64, currency, interval string) (*stripe.Price, error) {
-	params := &stripe.PriceParams{
+func (sc *StripeClient) CreatePrice(ctx context.Context, productID string, unitAmount int64, currency, interval string) (*stripe.Price, error) {
+	params := &stripe.PriceCreateParams{
 		Product:    stripe.String(productID),
 		UnitAmount: stripe.Int64(unitAmount),
 		Currency:   stripe.String(currency),
-		Recurring: &stripe.PriceRecurringParams{
+		Recurring: &stripe.PriceCreateRecurringParams{
 			Interval: stripe.String(interval),
 		},
 	}
 
-	return sc.Client.Prices.New(params)
+	return sc.Client.V1Prices.Create(ctx, params)
 }
 
 // GetPrice retrieves a price from stripe by its ID
-func (sc *StripeClient) GetPrice(priceID string) (*stripe.Price, error) {
-	return sc.Client.Prices.Get(priceID, nil)
+func (sc *StripeClient) GetPrice(ctx context.Context, priceID string) (*stripe.Price, error) {
+	return sc.Client.V1Prices.Retrieve(ctx, priceID, nil)
 }
 
 // ListPrices retrieves all prices from stripe
-func (sc *StripeClient) ListPrices() ([]*stripe.Price, error) {
+func (sc *StripeClient) ListPrices(ctx context.Context) ([]*stripe.Price, error) {
 	var prices []*stripe.Price
 
 	params := &stripe.PriceListParams{}
-	i := sc.Client.Prices.List(params)
+	result := sc.Client.V1Prices.List(ctx, params)
 
-	for i.Next() {
-		p := i.Price()
-		prices = append(prices, p)
-	}
+	for price, err := range result {
+		if err != nil {
+			return nil, err
+		}
 
-	if err := i.Err(); err != nil {
-		return nil, err
+		prices = append(prices, price)
 	}
 
 	return prices, nil
 }
 
 // GetPricesMapped retrieves all prices from stripe which are active and maps them into a []Price struct
-func (sc *StripeClient) GetPricesMapped() []Price {
+func (sc *StripeClient) GetPricesMapped(ctx context.Context) (prices []Price) {
 	priceParams := &stripe.PriceListParams{}
 
-	iter := sc.Client.Prices.List(priceParams)
-	prices := []Price{}
+	result := sc.Client.V1Prices.List(ctx, priceParams)
 
-	for iter.Next() {
-		priceData := iter.Price()
-		if priceData.Product == nil {
+	for priceData, err := range result {
+		// TODO: see if we need to actually handle errors here
+		// note: we are ignoring any errors here, and returning prices that are valid
+		if err != nil || priceData.Product == nil {
 			continue
 		}
 

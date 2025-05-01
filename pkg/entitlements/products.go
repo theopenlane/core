@@ -1,85 +1,91 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v82"
+import (
+	"context"
+
+	"github.com/stripe/stripe-go/v82"
+)
 
 // GetProductByID gets a product by ID
-func (sc *StripeClient) GetProductByID(id string) (*stripe.Product, error) {
-	product, err := sc.Client.Products.Get(id, &stripe.ProductParams{})
-	if err != nil {
-		return nil, err
-	}
-
-	return product, nil
+func (sc *StripeClient) GetProductByID(ctx context.Context, id string) (*stripe.Product, error) {
+	return sc.Client.V1Products.Retrieve(ctx, id, &stripe.ProductRetrieveParams{})
 }
 
 // CreateProduct creates a new product in Stripe
-func (sc *StripeClient) CreateProduct(name, description string) (*stripe.Product, error) {
-	params := &stripe.ProductParams{
+func (sc *StripeClient) CreateProduct(ctx context.Context, name, description string) (*stripe.Product, error) {
+	params := &stripe.ProductCreateParams{
 		Name:        stripe.String(name),
 		Description: stripe.String(description),
 	}
 
-	return sc.Client.Products.New(params)
+	return sc.Client.V1Products.Create(ctx, params)
 }
 
 // ListProducts lists all products in Stripe
-func (sc *StripeClient) ListProducts() ([]*stripe.Product, error) {
-	var products []*stripe.Product
-
+func (sc *StripeClient) ListProducts(ctx context.Context) (products []*stripe.Product, err error) {
 	params := &stripe.ProductListParams{}
-	i := sc.Client.Products.List(params)
+	result := sc.Client.V1Products.List(ctx, params)
 
-	for i.Next() {
-		p := i.Product()
-		products = append(products, p)
+	if result == nil {
+		return nil, ErrProductListFailed
 	}
 
-	if err := i.Err(); err != nil {
-		return nil, err
+	for product, err := range result {
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, product)
 	}
 
-	return products, nil
+	return
 }
 
 // GetProduct retrieves a product by its ID
-func (sc *StripeClient) GetProduct(productID string) (*stripe.Product, error) {
-	return sc.Client.Products.Get(productID, nil)
+func (sc *StripeClient) GetProduct(ctx context.Context, productID string) (*stripe.Product, error) {
+	return sc.Client.V1Products.Retrieve(ctx, productID, nil)
 }
 
 // UpdateProduct updates a product in Stripe
-func (sc *StripeClient) UpdateProduct(productID, name, description string) (*stripe.Product, error) {
-	params := &stripe.ProductParams{
+func (sc *StripeClient) UpdateProduct(ctx context.Context, productID, name, description string) (*stripe.Product, error) {
+	params := &stripe.ProductUpdateParams{
 		Name:        stripe.String(name),
 		Description: stripe.String(description),
 	}
 
-	return sc.Client.Products.Update(productID, params)
+	return sc.Client.V1Products.Update(ctx, productID, params)
 }
 
 // DeleteProduct deletes a product in Stripe
-func (sc *StripeClient) DeleteProduct(productID string) (*stripe.Product, error) {
-	return sc.Client.Products.Del(productID, nil)
+func (sc *StripeClient) DeleteProduct(ctx context.Context, productID string) (*stripe.Product, error) {
+	return sc.Client.V1Products.Delete(ctx, productID, nil)
 }
 
 // GetAllProductPricesMapped retrieves all products and prices from stripe which are active
-func (sc *StripeClient) GetAllProductPricesMapped() []Product {
+func (sc *StripeClient) GetAllProductPricesMapped(ctx context.Context) (products []Product) {
 	productParams := &stripe.ProductListParams{}
 	productParams.Filters.AddFilter("active", "", "true")
 
-	iter := sc.Client.Products.List(productParams)
-	products := []Product{}
+	result := sc.Client.V1Products.List(ctx, productParams)
 
-	for iter.Next() {
-		productData := iter.Product()
-		if productData.DefaultPrice == nil {
+	if result == nil {
+		return
+	}
+
+	for product, err := range result {
+		if err != nil {
 			continue
 		}
 
-		priceData := sc.GetPricesMapped()
+		if product.DefaultPrice == nil {
+			continue
+		}
+
+		priceData := sc.GetPricesMapped(ctx)
 		prices := []Price{}
 
 		for _, price := range priceData {
-			if price.ProductID == productData.ID {
+			if price.ProductID == product.ID {
 				prices = append(prices, Price{
 					ID:        price.ID,
 					Price:     price.Price,
@@ -89,7 +95,7 @@ func (sc *StripeClient) GetAllProductPricesMapped() []Product {
 			}
 		}
 
-		featureData := sc.GetFeaturesByProductID(productData.ID)
+		featureData := sc.GetFeaturesByProductID(ctx, product.ID)
 		features := []Feature{}
 
 		for _, feature := range featureData {
@@ -105,9 +111,9 @@ func (sc *StripeClient) GetAllProductPricesMapped() []Product {
 		}
 
 		products = append(products, Product{
-			ID:          productData.ID,
-			Name:        productData.Name,
-			Description: productData.Description,
+			ID:          product.ID,
+			Name:        product.Name,
+			Description: product.Description,
 			Prices:      prices,
 			Features:    features,
 		})
@@ -117,25 +123,31 @@ func (sc *StripeClient) GetAllProductPricesMapped() []Product {
 }
 
 // GetFeaturesByProductID retrieves all product features from stripe which are active and maps them into a []ProductFeature struct
-func (sc *StripeClient) GetFeaturesByProductID(productID string) []ProductFeature {
+func (sc *StripeClient) GetFeaturesByProductID(ctx context.Context, productID string) []ProductFeature {
 	productfeatures := []ProductFeature{
 		{
 			ProductID: productID,
 		},
 	}
 
-	list := sc.Client.ProductFeatures.List(&stripe.ProductFeatureListParams{
+	result := sc.Client.V1ProductFeatures.List(ctx, &stripe.ProductFeatureListParams{
 		Product: stripe.String(productID),
 	})
 
-	for list.Next() {
-		if list.ProductFeature().ID != "" {
-			productfeatures = append(productfeatures, ProductFeature{
-				FeatureID: list.ProductFeature().EntitlementFeature.ID,
-				Name:      list.ProductFeature().EntitlementFeature.Name,
-				Lookupkey: list.ProductFeature().EntitlementFeature.LookupKey,
-			})
+	for feature, err := range result {
+		if err != nil {
+			continue
 		}
+
+		if feature.ID == "" {
+			continue
+		}
+
+		productfeatures = append(productfeatures, ProductFeature{
+			FeatureID: feature.EntitlementFeature.ID,
+			Name:      feature.EntitlementFeature.Name,
+			Lookupkey: feature.EntitlementFeature.LookupKey,
+		})
 	}
 
 	return productfeatures

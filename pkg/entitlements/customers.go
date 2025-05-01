@@ -12,13 +12,13 @@ import (
 // CreateCustomer creates a customer leveraging the openlane organization ID
 // as the organization name, and the email provided as the billing email
 // we assume that the billing email will be changed, so lookups are performed by the organization ID
-func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
+func (sc *StripeClient) CreateCustomer(ctx context.Context, c *OrganizationCustomer) (*stripe.Customer, error) {
 	if err := c.Validate(); err != nil {
 		return nil, err
 	}
 
 	start := time.Now()
-	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
+	customer, err := sc.Client.V1Customers.Create(ctx, &stripe.CustomerCreateParams{
 		Email: &c.Email,
 		Name:  &c.OrganizationID,
 		Phone: &c.Phone,
@@ -65,15 +65,20 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 		},
 	}
 
-	iter := sc.Client.Customers.Search(params)
+	result := sc.Client.V1Customers.Search(ctx, params)
 
-	for iter.Next() {
-		customers = append(customers, iter.Customer())
+	if seq2IsEmpty(result) {
+		return nil, ErrCustomerSearchFailed
 	}
 
-	if iter.Err() != nil {
-		log.Err(iter.Err()).Msg("failed to find customers")
-		return nil, iter.Err()
+	for customer, err := range result {
+		if err != nil {
+			log.Err(err).Msg("failed to search customers")
+
+			return nil, err
+		}
+
+		customers = append(customers, customer)
 	}
 
 	return customers, nil
@@ -91,7 +96,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 	case 0:
 		log.Debug().Str("organization_id", o.OrganizationID).Msg("no customer found, creating")
 
-		customer, err := sc.CreateCustomer(o)
+		customer, err := sc.CreateCustomer(ctx, o)
 		if err != nil {
 			return err
 		}
@@ -105,14 +110,14 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		var subscription *Subscription
 
 		if o.PersonalOrg {
-			subscription, err = sc.CreatePersonalOrgFreeTierSubs(customer.ID)
+			subscription, err = sc.CreatePersonalOrgFreeTierSubs(ctx, customer.ID)
 			if err != nil {
 				return err
 			}
 
 			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("personal org subscription created")
 		} else {
-			subscription, err = sc.CreateTrialSubscription(customer)
+			subscription, err = sc.CreateTrialSubscription(ctx, customer)
 			if err != nil {
 				return nil
 			}
@@ -124,7 +129,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		o.Subscription = *subscription
 
 		// update the features and feature names
-		if err := sc.retrieveFeatureLists(o); err != nil {
+		if err := sc.retrieveFeatureLists(ctx, o); err != nil {
 			return ErrCustomerNotFound
 		}
 
@@ -133,7 +138,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
 
-		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
+		feats, featNames, err := sc.retrieveActiveEntitlements(ctx, customers[0].ID)
 		if err != nil {
 			return err
 		}
@@ -159,7 +164,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 }
 
 // retrieveFeatureLists retrieves the features for a customer
-func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) error {
+func (sc *StripeClient) retrieveFeatureLists(ctx context.Context, o *OrganizationCustomer) error {
 	var feats, featNames []string
 
 	const maxRetries = 5
@@ -167,7 +172,7 @@ func (sc *StripeClient) retrieveFeatureLists(o *OrganizationCustomer) error {
 	for i := range maxRetries {
 		var err error
 
-		feats, featNames, err = sc.retrieveActiveEntitlements(o.StripeCustomerID)
+		feats, featNames, err = sc.retrieveActiveEntitlements(ctx, o.StripeCustomerID)
 		if err != nil {
 			return err
 		}
@@ -203,7 +208,7 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 	}
 
 	start := time.Now()
-	customer, err := sc.Client.Customers.Get(customerID, &stripe.CustomerParams{
+	customer, err := sc.Client.V1Customers.Retrieve(ctx, customerID, &stripe.CustomerRetrieveParams{
 		Params: stripe.Params{
 			Context: ctx,
 			Expand:  []*string{stripe.String("tax"), stripe.String("subscriptions")},
@@ -233,12 +238,12 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 }
 
 // UpdateCustomer updates a customer in stripe with the provided params and ID
-func (sc *StripeClient) UpdateCustomer(id string, params *stripe.CustomerParams) (*stripe.Customer, error) {
+func (sc *StripeClient) UpdateCustomer(ctx context.Context, id string, params *stripe.CustomerUpdateParams) (*stripe.Customer, error) {
 	if id == "" || params == nil {
 		return nil, ErrCustomerIDRequired
 	}
 
-	cust, err := sc.Client.Customers.Update(id, params)
+	cust, err := sc.Client.V1Customers.Update(ctx, id, params)
 	if err != nil {
 		return nil, err
 	}
@@ -247,8 +252,8 @@ func (sc *StripeClient) UpdateCustomer(id string, params *stripe.CustomerParams)
 }
 
 // DeleteCustomer deletes a customer by ID from stripe
-func (sc *StripeClient) DeleteCustomer(id string) error {
-	_, err := sc.Client.Customers.Del(id, nil)
+func (sc *StripeClient) DeleteCustomer(ctx context.Context, id string) error {
+	_, err := sc.Client.V1Customers.Delete(ctx, id, nil)
 	if err != nil {
 		return err
 	}
@@ -284,22 +289,22 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 			return nil
 		}
 
-		var endSubsParams *stripe.SubscriptionParams
+		var endSubsParams *stripe.SubscriptionUpdateParams
 
 		switch subs.Status {
 		case stripe.SubscriptionStatusActive:
-			endSubsParams = &stripe.SubscriptionParams{
+			endSubsParams = &stripe.SubscriptionUpdateParams{
 				CancelAtPeriodEnd: stripe.Bool(true),
 			}
 		case stripe.SubscriptionStatusTrialing:
-			endSubsParams = &stripe.SubscriptionParams{
+			endSubsParams = &stripe.SubscriptionUpdateParams{
 				TrialEndNow: stripe.Bool(true),
 			}
 		}
 
 		// only make the request if we have params to update
 		if endSubsParams != nil {
-			if _, err := sc.Client.Subscriptions.Update(subs.ID, endSubsParams); err != nil {
+			if _, err := sc.Client.V1Subscriptions.Update(ctx, subs.ID, endSubsParams); err != nil {
 				return err
 			}
 		}
