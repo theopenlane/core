@@ -165,9 +165,9 @@ const (
 func paginateLimit(first, last *int) int {
 	var limit int
 	if first != nil {
-		limit = *first + 1
+		limit = *first * 10
 	} else if last != nil {
-		limit = *last + 1
+		limit = *last * 10
 	}
 	return limit
 }
