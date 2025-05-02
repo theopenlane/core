@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -34,7 +34,9 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	ctxWithToken := token.NewContextWithOauthTooToken(ctx.Request().Context(), r.Email)
+	reqCtx := ctx.Request().Context()
+
+	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, r.Email)
 
 	// to register a new passkey, the user needs to be created + logged in first
 	// once the the passkey is added to the user's account, they can use it to login
@@ -133,10 +135,12 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// Get sessionID from cookie and check against redis
 	sessionID := h.SessionConfig.SessionManager.GetSessionIDFromCookie(session)
 
-	userID, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), sessionID)
+	userID, err := h.SessionConfig.RedisStore.GetSession(reqCtx, sessionID)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -150,8 +154,6 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	if userIDFromCookie != userID {
 		return h.BadRequest(ctx, err)
 	}
-
-	reqCtx := ctx.Request().Context()
 
 	// get user from the database
 	entUser, userCtx, err := h.getUserByID(reqCtx, userID)
@@ -201,7 +203,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -227,32 +229,23 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 		return err
 	}
 
-	// get the user here and add it to the session
-	// so when we complete the passkey verificaton
-	// we can be certain it is the same user
-	// Else you can really just start this sign in process with any random email address
-	// but if you use your passkeys for another account that is valid in the system
-	// it gets you into the account for the passkeys and ignore the random email address you added
-	//
-	// If you start your sign in with "oops@oops.com", the passkey we should validate is only that for oops@oops.com
-	//
-	// Ideally this should be fine if we have nameless passkeys login but if the user selects an email
-	// we need to validate that surely
-	user, err := h.getUserByEmail(ctx.Request().Context(), r.Email)
-	if err != nil {
-		// 400 or 500 really but we do not want to return 500 for a simple "user not found" error
-		return h.BadRequest(ctx, err)
-	}
+	reqCtx := ctx.Request().Context()
 
 	setSessionMap := map[string]any{}
 	setSessionMap[sessions.WebAuthnKey] = session
 	setSessionMap[sessions.UserTypeKey] = webauthnLogin
-	setSessionMap[sessions.EmailKey] = user.Email
-	setSessionMap[sessions.UserIDKey] = user.ID
+	setSessionMap[sessions.EmailKey] = r.Email
 
-	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, setSessionMap, user.ID)
+	// set the user id to the challenge so we can verify it later
+	// this allows to ensure the start and finish is the same user without
+	// having the email at the start
+	setSessionMap[sessions.UserIDKey] = credential.Response.Challenge.String()
+
+	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(reqCtx, ctx.Response().Writer, setSessionMap, credential.Response.Challenge.String())
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to save session")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// return the session value for the UI to use
@@ -260,7 +253,9 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 	// server side
 	s, err := sessions.SessionToken(sessionCtx)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session token")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnBeginLoginResponse{
@@ -274,9 +269,13 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
 
 // FinishWebauthnLogin is the request to finish a webauthn login
 func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
+
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get session from cookie")
+
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	sessionData := h.SessionConfig.SessionManager.GetSessionDataFromCookie(session)
@@ -289,43 +288,49 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 
 	response, err := protocol.ParseCredentialRequestResponseBody(ctx.Request().Body)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
+
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
-	reqCtx := ctx.Request().Context()
-
 	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(reqCtx), wd, response); err != nil {
-		return h.BadRequest(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to validate webauthn login")
+
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	userID := string(response.Response.UserHandle)
 
 	userIDFromCookie := sessionData.(map[string]any)[sessions.UserIDKey]
 
-	// ensure the user is the same as the one who started the login
-	if userIDFromCookie != userID {
-		return h.BadRequest(ctx, err)
+	// ensure the user is the same as the one who started the login based on the challenge
+	if userIDFromCookie != response.Response.CollectedClientData.Challenge {
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("challenge ids do not match")
+
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	// get user from the database
 	entUser, reqCtx, err := h.getUserByID(reqCtx, userID)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to get user by id")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// create claims for verified user
 	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// set the last seen for the user
 	if err := h.updateUserLastSeen(reqCtx, userID, enums.AuthProviderCredentials); err != nil {
-		log.Error().Err(err).Msg("unable to update last seen")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to update last seen")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnLoginResponse{
