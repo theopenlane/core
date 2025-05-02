@@ -25725,12 +25725,12 @@ type TaskConnection struct {
 func (c *TaskConnection) build(nodes []*Task, pager *taskPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && *first+1 == len(nodes) {
+	if first != nil && len(nodes) > *first+1 {
 		c.PageInfo.HasNextPage = true
-		nodes = nodes[:len(nodes)-1]
-	} else if last != nil && *last+1 == len(nodes) {
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) > *last+1  {
 		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:len(nodes)-1]
+		nodes = nodes[:*last]
 	}
 	var nodeAt func(int) *Task
 	if last != nil {

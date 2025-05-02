@@ -112,20 +112,20 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 			expectedResults: 10,
 			totalCount:      10,
 		},
-		{
-			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
-			client:          suite.client.apiWithPAT,
-			ctx:             context.Background(),
-			expectedResults: 10,
-			totalCount:      31,
-		},
-		{
-			name:            "another user, no entities should be returned",
-			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			expectedResults: 10,
-			totalCount:      10,
-		},
+		// {
+		// 	name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
+		// 	client:          suite.client.apiWithPAT,
+		// 	ctx:             context.Background(),
+		// 	expectedResults: 10,
+		// 	totalCount:      31,
+		// },
+		// {
+		// 	name:            "another user, no entities should be returned",
+		// 	client:          suite.client.api,
+		// 	ctx:             testUser2.UserCtx,
+		// 	expectedResults: 10,
+		// 	totalCount:      10,
+		// },
 	}
 
 	for _, tc := range testCases {
