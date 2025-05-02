@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // ScheduledJobHistory holds the schema definition for the ScheduledJobHistory entity.
@@ -34,6 +35,11 @@ func (ScheduledJobHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "scheduled_job",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -93,6 +99,6 @@ func (ScheduledJobHistory) Indexes() []ent.Index {
 // Interceptors of the ScheduledJobHistory
 func (ScheduledJobHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

@@ -42,8 +42,10 @@ type ScheduledJobHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the ID of the organization owner of the object
+	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the description of the task
@@ -68,7 +70,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case scheduledjobhistory.FieldIsActive:
+		case scheduledjobhistory.FieldSystemOwned, scheduledjobhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
 		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldEnvironment, scheduledjobhistory.FieldScript:
 			values[i] = new(sql.NullString)
@@ -168,6 +170,12 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				sjh.OwnerID = value.String
+			}
+		case scheduledjobhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				sjh.SystemOwned = value.Bool
 			}
 		case scheduledjobhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -276,6 +284,9 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(sjh.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", sjh.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(sjh.Title)

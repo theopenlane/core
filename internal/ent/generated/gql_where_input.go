@@ -56729,6 +56729,12 @@ type ScheduledJobWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
 	TitleNEQ          *string  `json:"titleNEQ,omitempty"`
@@ -57196,6 +57202,18 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, scheduledjob.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, scheduledjob.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, scheduledjob.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, scheduledjob.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, scheduledjob.SystemOwnedNotNil())
+	}
 	if i.Title != nil {
 		predicates = append(predicates, scheduledjob.TitleEQ(*i.Title))
 	}
@@ -57527,6 +57545,12 @@ type ScheduledJobHistoryWhereInput struct {
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
@@ -58067,6 +58091,18 @@ func (i *ScheduledJobHistoryWhereInput) P() (predicate.ScheduledJobHistory, erro
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, scheduledjobhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, scheduledjobhistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, scheduledjobhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, scheduledjobhistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, scheduledjobhistory.SystemOwnedNotNil())
 	}
 	if i.Title != nil {
 		predicates = append(predicates, scheduledjobhistory.TitleEQ(*i.Title))

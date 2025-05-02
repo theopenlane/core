@@ -2108,6 +2108,9 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	if !reflect.DeepEqual(sjh.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, sjh.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(sjh.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldSystemOwned, sjh.SystemOwned, new.SystemOwned))
+	}
 	if !reflect.DeepEqual(sjh.Title, new.Title) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldTitle, sjh.Title, new.Title))
 	}

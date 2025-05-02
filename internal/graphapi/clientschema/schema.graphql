@@ -36258,9 +36258,13 @@ type ScheduledJob implements Node {
 	"""
 	tags: [String!]
 	"""
-	the ID of the organization owner of the object
+	the organization id that owns the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
 	"""
 	the title of the task
 	"""
@@ -36362,9 +36366,13 @@ type ScheduledJobHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the ID of the organization owner of the object
+	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
 	"""
 	the title of the task
 	"""
@@ -36645,6 +36653,13 @@ input ScheduledJobHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
 	"""
 	title field predicates
 	"""
@@ -37143,6 +37158,13 @@ input ScheduledJobWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
 	"""
 	title field predicates
 	"""
@@ -44197,6 +44219,8 @@ input UpdateScheduledJobInput {
 	"""
 	description: String
 	clearDescription: Boolean
+	ownerID: ID
+	clearOwner: Boolean
 	scheduledJobSettingID: ID
 }
 """

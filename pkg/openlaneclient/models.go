@@ -18520,8 +18520,10 @@ type ScheduledJob struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty,omitzero"`
-	// the ID of the organization owner of the object
+	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
 	// the description of the task
@@ -18590,8 +18592,10 @@ type ScheduledJobHistory struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty,omitzero"`
-	// the ID of the organization owner of the object
+	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty,omitzero"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty,omitzero"`
 	// the title of the task
 	Title string `json:"title"`
 	// the description of the task
@@ -18791,6 +18795,11 @@ type ScheduledJobHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -19169,6 +19178,11 @@ type ScheduledJobWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -23951,6 +23965,8 @@ type UpdateScheduledJobInput struct {
 	// the description of the task
 	Description           *string `json:"description,omitempty"`
 	ClearDescription      *bool   `json:"clearDescription,omitempty"`
+	OwnerID               *string `json:"ownerID,omitempty"`
+	ClearOwner            *bool   `json:"clearOwner,omitempty"`
 	ScheduledJobSettingID *string `json:"scheduledJobSettingID,omitempty"`
 }
 

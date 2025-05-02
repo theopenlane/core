@@ -36,6 +36,8 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldSystemOwned,
 	FieldTitle,
 	FieldDescription,
 	FieldJobType,
@@ -106,8 +109,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [6]ent.Hook
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -119,8 +122,8 @@ var (
 	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
@@ -199,6 +202,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

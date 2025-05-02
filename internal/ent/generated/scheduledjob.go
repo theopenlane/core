@@ -37,8 +37,10 @@ type ScheduledJob struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the ID of the organization owner of the object
+	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the description of the task
@@ -99,7 +101,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scheduledjob.FieldTags:
 			values[i] = new([]byte)
-		case scheduledjob.FieldIsActive:
+		case scheduledjob.FieldSystemOwned, scheduledjob.FieldIsActive:
 			values[i] = new(sql.NullBool)
 		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldEnvironment, scheduledjob.FieldScript:
 			values[i] = new(sql.NullString)
@@ -181,6 +183,12 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				sj.OwnerID = value.String
+			}
+		case scheduledjob.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				sj.SystemOwned = value.Bool
 			}
 		case scheduledjob.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -290,6 +298,9 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(sj.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", sj.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(sj.Title)

@@ -133,6 +133,20 @@ func (sjc *ScheduledJobCreate) SetNillableOwnerID(s *string) *ScheduledJobCreate
 	return sjc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (sjc *ScheduledJobCreate) SetSystemOwned(b bool) *ScheduledJobCreate {
+	sjc.mutation.SetSystemOwned(b)
+	return sjc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableSystemOwned(b *bool) *ScheduledJobCreate {
+	if b != nil {
+		sjc.SetSystemOwned(*b)
+	}
+	return sjc
+}
+
 // SetTitle sets the "title" field.
 func (sjc *ScheduledJobCreate) SetTitle(s string) *ScheduledJobCreate {
 	sjc.mutation.SetTitle(s)
@@ -294,6 +308,10 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultTags
 		sjc.mutation.SetTags(v)
 	}
+	if _, ok := sjc.mutation.SystemOwned(); !ok {
+		v := scheduledjob.DefaultSystemOwned
+		sjc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := sjc.mutation.JobType(); !ok {
 		v := scheduledjob.DefaultJobType
 		sjc.mutation.SetJobType(v)
@@ -324,11 +342,6 @@ func (sjc *ScheduledJobCreate) check() error {
 	if v, ok := sjc.mutation.DisplayID(); ok {
 		if err := scheduledjob.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.display_id": %w`, err)}
-		}
-	}
-	if v, ok := sjc.mutation.OwnerID(); ok {
-		if err := scheduledjob.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.owner_id": %w`, err)}
 		}
 	}
 	if _, ok := sjc.mutation.Title(); !ok {
@@ -428,6 +441,10 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Tags(); ok {
 		_spec.SetField(scheduledjob.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := sjc.mutation.SystemOwned(); ok {
+		_spec.SetField(scheduledjob.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := sjc.mutation.Title(); ok {
 		_spec.SetField(scheduledjob.FieldTitle, field.TypeString, value)

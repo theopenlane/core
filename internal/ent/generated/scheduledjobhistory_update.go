@@ -123,6 +123,26 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearTags() *ScheduledJobHistoryUpdate {
 	return sjhu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetOwnerID(s string) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetOwnerID(s)
+	return sjhu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableOwnerID(s *string) *ScheduledJobHistoryUpdate {
+	if s != nil {
+		sjhu.SetOwnerID(*s)
+	}
+	return sjhu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (sjhu *ScheduledJobHistoryUpdate) ClearOwnerID() *ScheduledJobHistoryUpdate {
+	sjhu.mutation.ClearOwnerID()
+	return sjhu
+}
+
 // SetTitle sets the "title" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetTitle(s string) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetTitle(s)
@@ -337,8 +357,14 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if sjhu.mutation.TagsCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := sjhu.mutation.OwnerID(); ok {
+		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
+	}
 	if sjhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
+	}
+	if sjhu.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := sjhu.mutation.Title(); ok {
 		_spec.SetField(scheduledjobhistory.FieldTitle, field.TypeString, value)
@@ -475,6 +501,26 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) AppendTags(s []string) *ScheduledJobH
 // ClearTags clears the value of the "tags" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) ClearTags() *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.ClearTags()
+	return sjhuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetOwnerID(s string) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetOwnerID(s)
+	return sjhuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableOwnerID(s *string) *ScheduledJobHistoryUpdateOne {
+	if s != nil {
+		sjhuo.SetOwnerID(*s)
+	}
+	return sjhuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) ClearOwnerID() *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.ClearOwnerID()
 	return sjhuo
 }
 
@@ -722,8 +768,14 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if sjhuo.mutation.TagsCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := sjhuo.mutation.OwnerID(); ok {
+		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
+	}
 	if sjhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
+	}
+	if sjhuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := sjhuo.mutation.Title(); ok {
 		_spec.SetField(scheduledjobhistory.FieldTitle, field.TypeString, value)

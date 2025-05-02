@@ -25052,6 +25052,11 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldOwnerID)
 				fieldSeen[scheduledjob.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scheduledjob.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldSystemOwned)
+				fieldSeen[scheduledjob.FieldSystemOwned] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[scheduledjob.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldTitle)
@@ -25231,6 +25236,11 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldOwnerID)
 				fieldSeen[scheduledjobhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldSystemOwned)
+				fieldSeen[scheduledjobhistory.FieldSystemOwned] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldTitle]; !ok {

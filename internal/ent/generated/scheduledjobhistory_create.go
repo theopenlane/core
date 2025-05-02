@@ -166,6 +166,20 @@ func (sjhc *ScheduledJobHistoryCreate) SetNillableOwnerID(s *string) *ScheduledJ
 	return sjhc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (sjhc *ScheduledJobHistoryCreate) SetSystemOwned(b bool) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetSystemOwned(b)
+	return sjhc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (sjhc *ScheduledJobHistoryCreate) SetNillableSystemOwned(b *bool) *ScheduledJobHistoryCreate {
+	if b != nil {
+		sjhc.SetSystemOwned(*b)
+	}
+	return sjhc
+}
+
 // SetTitle sets the "title" field.
 func (sjhc *ScheduledJobHistoryCreate) SetTitle(s string) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetTitle(s)
@@ -307,6 +321,10 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() {
 		v := scheduledjobhistory.DefaultTags
 		sjhc.mutation.SetTags(v)
 	}
+	if _, ok := sjhc.mutation.SystemOwned(); !ok {
+		v := scheduledjobhistory.DefaultSystemOwned
+		sjhc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := sjhc.mutation.JobType(); !ok {
 		v := scheduledjobhistory.DefaultJobType
 		sjhc.mutation.SetJobType(v)
@@ -446,6 +464,10 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 	if value, ok := sjhc.mutation.OwnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := sjhc.mutation.SystemOwned(); ok {
+		_spec.SetField(scheduledjobhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := sjhc.mutation.Title(); ok {
 		_spec.SetField(scheduledjobhistory.FieldTitle, field.TypeString, value)

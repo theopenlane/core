@@ -6963,6 +6963,8 @@ type UpdateScheduledJobInput struct {
 	Title                 *string
 	ClearDescription      bool
 	Description           *string
+	ClearOwner            bool
+	OwnerID               *string
 	ScheduledJobSettingID *string
 }
 
@@ -6985,6 +6987,12 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.ScheduledJobSettingID; v != nil {
 		m.SetScheduledJobSettingID(*v)

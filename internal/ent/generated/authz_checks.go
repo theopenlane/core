@@ -4748,6 +4748,79 @@ func (m *ScheduledJobMutation) CheckAccessForDelete(ctx context.Context) error {
 	return ErrPermissionDenied
 }
 
+func (q *ScheduledJobHistoryQuery) CheckAccess(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user id from context")
+
+		return err
+	}
+
+	var objectID string
+
+	// check id from graphql arg context
+	// when all objects are requested, the interceptor will check object access
+	// check the where input first
+	whereArg := gCtx.Args["where"]
+	if whereArg != nil {
+		where, ok := whereArg.(*ScheduledJobHistoryWhereInput)
+		if ok && where != nil && where.Ref != nil {
+			objectID = *where.Ref
+		}
+	}
+
+	// if that doesn't work, check for the id in the request args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["ref"].(string)
+	}
+
+	// if we still don't have an object id, run the query and grab the object ID
+	// from the result
+	// this happens on join tables where we have the join ID (for updates and deletes)
+	// and not the actual object id
+	if objectID == "" {
+		// allow this query to run
+		reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+		ob, err := q.Clone().Only(reqCtx)
+		if err != nil {
+			return privacy.Allowf("nil request, bypassing auth check")
+		}
+
+		objectID = ob.Ref
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	// check if the user has access to the object requested
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanViewAuditLog,
+		ObjectType:  "scheduled_job",
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   subjectID,
+		ObjectID:    objectID,
+	}
+
+	access, err := q.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	// Skip to the next privacy rule (equivalent to return nil)
+	return privacy.Skip
+}
+
 func (q *SubcontrolQuery) CheckAccess(ctx context.Context) error {
 	gCtx := graphql.GetFieldContext(ctx)
 

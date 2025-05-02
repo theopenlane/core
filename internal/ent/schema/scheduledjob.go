@@ -9,10 +9,10 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -101,10 +101,10 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "JOB",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[generated.ScheduledJob](s,
-				withParents(Control{}),
-				withOrganizationOwner(true),
+			newOrgOwnedMixin(s,
+				withSkipForSystemAdmin(true),
 			),
+			mixin.SystemOwnedMixin{},
 		},
 	}.getMixins()
 }
@@ -132,20 +132,12 @@ func (ScheduledJob) Indexes() []ent.Index {
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		history.Annotations{
-			Exclude: true,
-		},
 	}
 }
 
 // Hooks of the ScheduledJob
 func (ScheduledJob) Hooks() []ent.Hook {
 	return []ent.Hook{}
-}
-
-// Interceptors of the ScheduledJob
-func (ScheduledJob) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
 }
 
 // Policy of the ScheduledJob

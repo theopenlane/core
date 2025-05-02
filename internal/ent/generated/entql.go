@@ -1919,6 +1919,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldDisplayID:   {Type: field.TypeString, Column: scheduledjob.FieldDisplayID},
 			scheduledjob.FieldTags:        {Type: field.TypeJSON, Column: scheduledjob.FieldTags},
 			scheduledjob.FieldOwnerID:     {Type: field.TypeString, Column: scheduledjob.FieldOwnerID},
+			scheduledjob.FieldSystemOwned: {Type: field.TypeBool, Column: scheduledjob.FieldSystemOwned},
 			scheduledjob.FieldTitle:       {Type: field.TypeString, Column: scheduledjob.FieldTitle},
 			scheduledjob.FieldDescription: {Type: field.TypeString, Column: scheduledjob.FieldDescription},
 			scheduledjob.FieldJobType:     {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
@@ -1950,6 +1951,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldDisplayID:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDisplayID},
 			scheduledjobhistory.FieldTags:        {Type: field.TypeJSON, Column: scheduledjobhistory.FieldTags},
 			scheduledjobhistory.FieldOwnerID:     {Type: field.TypeString, Column: scheduledjobhistory.FieldOwnerID},
+			scheduledjobhistory.FieldSystemOwned: {Type: field.TypeBool, Column: scheduledjobhistory.FieldSystemOwned},
 			scheduledjobhistory.FieldTitle:       {Type: field.TypeString, Column: scheduledjobhistory.FieldTitle},
 			scheduledjobhistory.FieldDescription: {Type: field.TypeString, Column: scheduledjobhistory.FieldDescription},
 			scheduledjobhistory.FieldJobType:     {Type: field.TypeEnum, Column: scheduledjobhistory.FieldJobType},
@@ -17477,6 +17479,11 @@ func (f *ScheduledJobFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldOwnerID))
 }
 
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ScheduledJobFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(scheduledjob.FieldSystemOwned))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *ScheduledJobFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldTitle))
@@ -17633,6 +17640,11 @@ func (f *ScheduledJobHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScheduledJobHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ScheduledJobHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(scheduledjobhistory.FieldSystemOwned))
 }
 
 // WhereTitle applies the entql string predicate on the title field.

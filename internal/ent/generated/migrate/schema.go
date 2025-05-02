@@ -2727,6 +2727,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
@@ -2743,7 +2744,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[15]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2757,7 +2758,7 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[15]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[16]},
 			},
 		},
 	}
@@ -2776,6 +2777,7 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},

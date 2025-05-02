@@ -3068,6 +3068,7 @@ type ComplexityRoot struct {
 		OwnerID             func(childComplexity int) int
 		ScheduledJobSetting func(childComplexity int) int
 		Script              func(childComplexity int) int
+		SystemOwned         func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
@@ -3113,6 +3114,7 @@ type ComplexityRoot struct {
 		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		Script      func(childComplexity int) int
+		SystemOwned func(childComplexity int) int
 		Tags        func(childComplexity int) int
 		Title       func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
@@ -21327,6 +21329,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.Script(childComplexity), true
 
+	case "ScheduledJob.systemOwned":
+		if e.complexity.ScheduledJob.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.SystemOwned(childComplexity), true
+
 	case "ScheduledJob.tags":
 		if e.complexity.ScheduledJob.Tags == nil {
 			break
@@ -21515,6 +21524,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.Script(childComplexity), true
+
+	case "ScheduledJobHistory.systemOwned":
+		if e.complexity.ScheduledJobHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.SystemOwned(childComplexity), true
 
 	case "ScheduledJobHistory.tags":
 		if e.complexity.ScheduledJobHistory.Tags == nil {
@@ -58134,9 +58150,13 @@ type ScheduledJob implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
+  the organization id that owns the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
   """
   the title of the task
   """
@@ -58211,9 +58231,13 @@ type ScheduledJobHistory implements Node {
   """
   tags: [String!]
   """
-  the ID of the organization owner of the object
+  the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
   """
   the title of the task
   """
@@ -58494,6 +58518,13 @@ input ScheduledJobHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
   """
   title field predicates
   """
@@ -58947,6 +58978,13 @@ input ScheduledJobWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
   """
   title field predicates
   """
@@ -65735,6 +65773,8 @@ input UpdateScheduledJobInput {
   """
   description: String
   clearDescription: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   scheduledJobSettingID: ID
 }
 """

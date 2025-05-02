@@ -3366,6 +3366,7 @@ func init() {
 	scheduledjobMixinHooks1 := scheduledjobMixin[1].Hooks()
 	scheduledjobMixinHooks2 := scheduledjobMixin[2].Hooks()
 	scheduledjobMixinHooks5 := scheduledjobMixin[5].Hooks()
+	scheduledjobMixinHooks6 := scheduledjobMixin[6].Hooks()
 
 	scheduledjob.Hooks[1] = scheduledjobMixinHooks0[0]
 
@@ -3375,22 +3376,19 @@ func init() {
 
 	scheduledjob.Hooks[4] = scheduledjobMixinHooks5[0]
 
-	scheduledjob.Hooks[5] = scheduledjobMixinHooks5[1]
-
-	scheduledjob.Hooks[6] = scheduledjobMixinHooks5[2]
+	scheduledjob.Hooks[5] = scheduledjobMixinHooks6[0]
 	scheduledjobMixinInters1 := scheduledjobMixin[1].Interceptors()
 	scheduledjobMixinInters5 := scheduledjobMixin[5].Interceptors()
 	scheduledjob.Interceptors[0] = scheduledjobMixinInters1[0]
 	scheduledjob.Interceptors[1] = scheduledjobMixinInters5[0]
-	scheduledjob.Interceptors[2] = scheduledjobMixinInters5[1]
 	scheduledjobMixinFields0 := scheduledjobMixin[0].Fields()
 	_ = scheduledjobMixinFields0
 	scheduledjobMixinFields2 := scheduledjobMixin[2].Fields()
 	_ = scheduledjobMixinFields2
 	scheduledjobMixinFields3 := scheduledjobMixin[3].Fields()
 	_ = scheduledjobMixinFields3
-	scheduledjobMixinFields5 := scheduledjobMixin[5].Fields()
-	_ = scheduledjobMixinFields5
+	scheduledjobMixinFields6 := scheduledjobMixin[6].Fields()
+	_ = scheduledjobMixinFields6
 	scheduledjobFields := schema.ScheduledJob{}.Fields()
 	_ = scheduledjobFields
 	// scheduledjobDescCreatedAt is the schema descriptor for created_at field.
@@ -3411,10 +3409,10 @@ func init() {
 	scheduledjobDescTags := scheduledjobMixinFields3[0].Descriptor()
 	// scheduledjob.DefaultTags holds the default value on creation for the tags field.
 	scheduledjob.DefaultTags = scheduledjobDescTags.Default.([]string)
-	// scheduledjobDescOwnerID is the schema descriptor for owner_id field.
-	scheduledjobDescOwnerID := scheduledjobMixinFields5[0].Descriptor()
-	// scheduledjob.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	scheduledjob.OwnerIDValidator = scheduledjobDescOwnerID.Validators[0].(func(string) error)
+	// scheduledjobDescSystemOwned is the schema descriptor for system_owned field.
+	scheduledjobDescSystemOwned := scheduledjobMixinFields6[0].Descriptor()
+	// scheduledjob.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scheduledjob.DefaultSystemOwned = scheduledjobDescSystemOwned.Default.(bool)
 	// scheduledjobDescTitle is the schema descriptor for title field.
 	scheduledjobDescTitle := scheduledjobFields[0].Descriptor()
 	// scheduledjob.TitleValidator is a validator for the "title" field. It is called by the builders before save.
@@ -3449,8 +3447,12 @@ func init() {
 	scheduledjobhistoryDescTags := scheduledjobhistoryFields[11].Descriptor()
 	// scheduledjobhistory.DefaultTags holds the default value on creation for the tags field.
 	scheduledjobhistory.DefaultTags = scheduledjobhistoryDescTags.Default.([]string)
+	// scheduledjobhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	scheduledjobhistoryDescSystemOwned := scheduledjobhistoryFields[13].Descriptor()
+	// scheduledjobhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scheduledjobhistory.DefaultSystemOwned = scheduledjobhistoryDescSystemOwned.Default.(bool)
 	// scheduledjobhistoryDescIsActive is the schema descriptor for is_active field.
-	scheduledjobhistoryDescIsActive := scheduledjobhistoryFields[18].Descriptor()
+	scheduledjobhistoryDescIsActive := scheduledjobhistoryFields[19].Descriptor()
 	// scheduledjobhistory.DefaultIsActive holds the default value on creation for the is_active field.
 	scheduledjobhistory.DefaultIsActive = scheduledjobhistoryDescIsActive.Default.(bool)
 	// scheduledjobhistoryDescID is the schema descriptor for id field.

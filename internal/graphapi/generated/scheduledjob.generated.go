@@ -85,6 +85,8 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
 			case "title":
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":
@@ -167,6 +169,8 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
 			case "title":
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":
@@ -293,6 +297,8 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
 			case "title":
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":

@@ -7076,6 +7076,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -7184,6 +7188,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetOwnerID(scheduledjob.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(scheduledjob.SystemOwned)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -7261,6 +7271,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDisplayID(scheduledjob.DisplayID).
 			SetTags(scheduledjob.Tags).
 			SetOwnerID(scheduledjob.OwnerID).
+			SetSystemOwned(scheduledjob.SystemOwned).
 			SetTitle(scheduledjob.Title).
 			SetDescription(scheduledjob.Description).
 			SetJobType(scheduledjob.JobType).

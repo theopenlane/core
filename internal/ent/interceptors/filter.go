@@ -3,6 +3,7 @@ package interceptors
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"entgo.io/ent"
@@ -378,7 +379,9 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		checks = append(checks, ac)
 	}
 
+	fmt.Println(checks)
 	allowedIDs, err := utils.AuthzClientFromContext(ctx).BatchCheckObjectAccess(ctx, checks)
+	fmt.Println(allowedIDs)
 	if err != nil {
 		return []string{}, err
 	}

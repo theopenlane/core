@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobsetting"
@@ -124,6 +125,26 @@ func (sju *ScheduledJobUpdate) ClearTags() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (sju *ScheduledJobUpdate) SetOwnerID(s string) *ScheduledJobUpdate {
+	sju.mutation.SetOwnerID(s)
+	return sju
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableOwnerID(s *string) *ScheduledJobUpdate {
+	if s != nil {
+		sju.SetOwnerID(*s)
+	}
+	return sju
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (sju *ScheduledJobUpdate) ClearOwnerID() *ScheduledJobUpdate {
+	sju.mutation.ClearOwnerID()
+	return sju
+}
+
 // SetTitle sets the "title" field.
 func (sju *ScheduledJobUpdate) SetTitle(s string) *ScheduledJobUpdate {
 	sju.mutation.SetTitle(s)
@@ -220,6 +241,11 @@ func (sju *ScheduledJobUpdate) SetNillableIsActive(b *bool) *ScheduledJobUpdate 
 	return sju
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sju *ScheduledJobUpdate) SetOwner(o *Organization) *ScheduledJobUpdate {
+	return sju.SetOwnerID(o.ID)
+}
+
 // SetScheduledJobSettingID sets the "scheduled_job_setting" edge to the ScheduledJobSetting entity by ID.
 func (sju *ScheduledJobUpdate) SetScheduledJobSettingID(id string) *ScheduledJobUpdate {
 	sju.mutation.SetScheduledJobSettingID(id)
@@ -234,6 +260,12 @@ func (sju *ScheduledJobUpdate) SetScheduledJobSetting(s *ScheduledJobSetting) *S
 // Mutation returns the ScheduledJobMutation object of the builder.
 func (sju *ScheduledJobUpdate) Mutation() *ScheduledJobMutation {
 	return sju.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (sju *ScheduledJobUpdate) ClearOwner() *ScheduledJobUpdate {
+	sju.mutation.ClearOwner()
+	return sju
 }
 
 // ClearScheduledJobSetting clears the "scheduled_job_setting" edge to the ScheduledJobSetting entity.
@@ -366,6 +398,9 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if sju.mutation.TagsCleared() {
 		_spec.ClearField(scheduledjob.FieldTags, field.TypeJSON)
 	}
+	if sju.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scheduledjob.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := sju.mutation.Title(); ok {
 		_spec.SetField(scheduledjob.FieldTitle, field.TypeString, value)
 	}
@@ -389,6 +424,37 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := sju.mutation.IsActive(); ok {
 		_spec.SetField(scheduledjob.FieldIsActive, field.TypeBool, value)
+	}
+	if sju.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.OwnerTable,
+			Columns: []string{scheduledjob.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sju.schemaConfig.ScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := sju.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.OwnerTable,
+			Columns: []string{scheduledjob.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sju.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if sju.mutation.ScheduledJobSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -535,6 +601,26 @@ func (sjuo *ScheduledJobUpdateOne) ClearTags() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (sjuo *ScheduledJobUpdateOne) SetOwnerID(s string) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetOwnerID(s)
+	return sjuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableOwnerID(s *string) *ScheduledJobUpdateOne {
+	if s != nil {
+		sjuo.SetOwnerID(*s)
+	}
+	return sjuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (sjuo *ScheduledJobUpdateOne) ClearOwnerID() *ScheduledJobUpdateOne {
+	sjuo.mutation.ClearOwnerID()
+	return sjuo
+}
+
 // SetTitle sets the "title" field.
 func (sjuo *ScheduledJobUpdateOne) SetTitle(s string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetTitle(s)
@@ -631,6 +717,11 @@ func (sjuo *ScheduledJobUpdateOne) SetNillableIsActive(b *bool) *ScheduledJobUpd
 	return sjuo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sjuo *ScheduledJobUpdateOne) SetOwner(o *Organization) *ScheduledJobUpdateOne {
+	return sjuo.SetOwnerID(o.ID)
+}
+
 // SetScheduledJobSettingID sets the "scheduled_job_setting" edge to the ScheduledJobSetting entity by ID.
 func (sjuo *ScheduledJobUpdateOne) SetScheduledJobSettingID(id string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetScheduledJobSettingID(id)
@@ -645,6 +736,12 @@ func (sjuo *ScheduledJobUpdateOne) SetScheduledJobSetting(s *ScheduledJobSetting
 // Mutation returns the ScheduledJobMutation object of the builder.
 func (sjuo *ScheduledJobUpdateOne) Mutation() *ScheduledJobMutation {
 	return sjuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (sjuo *ScheduledJobUpdateOne) ClearOwner() *ScheduledJobUpdateOne {
+	sjuo.mutation.ClearOwner()
+	return sjuo
 }
 
 // ClearScheduledJobSetting clears the "scheduled_job_setting" edge to the ScheduledJobSetting entity.
@@ -807,6 +904,9 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	if sjuo.mutation.TagsCleared() {
 		_spec.ClearField(scheduledjob.FieldTags, field.TypeJSON)
 	}
+	if sjuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scheduledjob.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := sjuo.mutation.Title(); ok {
 		_spec.SetField(scheduledjob.FieldTitle, field.TypeString, value)
 	}
@@ -830,6 +930,37 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if value, ok := sjuo.mutation.IsActive(); ok {
 		_spec.SetField(scheduledjob.FieldIsActive, field.TypeBool, value)
+	}
+	if sjuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.OwnerTable,
+			Columns: []string{scheduledjob.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := sjuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.OwnerTable,
+			Columns: []string{scheduledjob.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if sjuo.mutation.ScheduledJobSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{

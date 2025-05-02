@@ -108,6 +108,11 @@ func OwnerID(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldSystemOwned, v))
+}
+
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldTitle, v))
@@ -651,6 +656,26 @@ func OwnerIDEqualFold(v string) predicate.ScheduledJob {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNotNull(FieldSystemOwned))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.
