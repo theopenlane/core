@@ -147,10 +147,10 @@ func (c *{{ $conn }}) build(nodes []*{{ $name }}, pager *{{ $pager }}, after *Cu
 	c.PageInfo.HasPreviousPage = after != nil
 	if first != nil && len(nodes) > *first+1  {
 		c.PageInfo.HasNextPage = true
-		nodes = nodes[:len(nodes)-1]
+		nodes = nodes[:*first]
 	} else if last != nil && len(nodes) > *last+1 {
 		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:len(nodes)-1]
+		nodes = nodes[:*last]
 	}
 	var nodeAt func(int) *{{ $name }}
 	if last != nil {
