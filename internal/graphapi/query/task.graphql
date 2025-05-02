@@ -136,6 +136,13 @@ mutation DeleteTask($deleteTaskId: ID!) {
 
 query GetAllTasks {
   tasks {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         assignee {
@@ -248,8 +255,15 @@ query GetTaskByID($taskId: ID!) {
   }
 }
 
-query GetTasks($where: TaskWhereInput) {
-  tasks(where: $where) {
+query GetTasks($first: Int, $last: Int, $where: TaskWhereInput) {
+  tasks(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         assignee {
@@ -347,7 +361,11 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
 }
 
 mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
-  updateTaskComment(id: $updateTaskCommentId, input: $input, noteFiles: $noteFiles) {
+  updateTaskComment(
+    id: $updateTaskCommentId
+    input: $input
+    noteFiles: $noteFiles
+  ) {
     task {
       assignee {
         id

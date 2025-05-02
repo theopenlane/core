@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func (suite *GraphTestSuite) TestQueryTask() {
@@ -77,8 +78,15 @@ func (suite *GraphTestSuite) TestQueryTask() {
 func (suite *GraphTestSuite) TestQueryTasks() {
 	t := suite.T()
 
-	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create a bunch to test the pagination with different users
+	// works with overfetching
+	numTasks := 10
+	for range numTasks {
+		(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		(&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser.UserCtx, t)
+		(&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+		(&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	}
 
 	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.PersonalOrgID)
 
@@ -91,34 +99,47 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
+		totalCount      int64
 	}{
 		{
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 2,
+			expectedResults: testutils.MaxResultLimit,
+			totalCount:      30,
+		},
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             viewOnlyUser.UserCtx,
+			expectedResults: testutils.MaxResultLimit,
+			totalCount:      10,
 		},
 		{
 			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 3,
+			expectedResults: testutils.MaxResultLimit,
+			totalCount:      31,
 		},
 		{
 			name:            "another user, no entities should be returned",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
-			expectedResults: 0,
+			expectedResults: testutils.MaxResultLimit,
+			totalCount:      10,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllTasks(tc.ctx)
+			first := int64(10)
+			resp, err := tc.client.GetTasks(tc.ctx, &first, nil, nil)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
 			assert.Len(t, resp.Tasks.Edges, tc.expectedResults)
+			assert.Equal(t, tc.totalCount, resp.Tasks.TotalCount)
 		})
 	}
 }

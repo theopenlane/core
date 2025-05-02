@@ -325,7 +325,7 @@ type OpenlaneGraphClient interface {
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
 	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
-	GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
+	GetTasks(ctx context.Context, first *int64, last *int64, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
 	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
 	UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error)
 	GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error)
@@ -60528,6 +60528,38 @@ func (t *DeleteTask_DeleteTask) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllTasks_Tasks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTasks_Tasks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTasks_Tasks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTasks_Tasks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTasks_Tasks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTasks_Tasks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTasks_Tasks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllTasks_Tasks_Edges_Node_Assignee struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -60867,7 +60899,9 @@ func (t *GetAllTasks_Tasks_Edges) GetNode() *GetAllTasks_Tasks_Edges_Node {
 }
 
 type GetAllTasks_Tasks struct {
-	Edges []*GetAllTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTasks_Tasks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                      "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllTasks_Tasks) GetEdges() []*GetAllTasks_Tasks_Edges {
@@ -60875,6 +60909,18 @@ func (t *GetAllTasks_Tasks) GetEdges() []*GetAllTasks_Tasks_Edges {
 		t = &GetAllTasks_Tasks{}
 	}
 	return t.Edges
+}
+func (t *GetAllTasks_Tasks) GetPageInfo() *GetAllTasks_Tasks_PageInfo {
+	if t == nil {
+		t = &GetAllTasks_Tasks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTasks_Tasks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTasks_Tasks{}
+	}
+	return t.TotalCount
 }
 
 type GetTaskByID_Task_Assignee struct {
@@ -61204,6 +61250,38 @@ func (t *GetTaskByID_Task) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
+type GetTasks_Tasks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTasks_Tasks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTasks_Tasks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTasks_Tasks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTasks_Tasks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTasks_Tasks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTasks_Tasks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetTasks_Tasks_Edges_Node_Assignee struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -61518,7 +61596,9 @@ func (t *GetTasks_Tasks_Edges) GetNode() *GetTasks_Tasks_Edges_Node {
 }
 
 type GetTasks_Tasks struct {
-	Edges []*GetTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTasks_Tasks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                   "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetTasks_Tasks) GetEdges() []*GetTasks_Tasks_Edges {
@@ -61526,6 +61606,18 @@ func (t *GetTasks_Tasks) GetEdges() []*GetTasks_Tasks_Edges {
 		t = &GetTasks_Tasks{}
 	}
 	return t.Edges
+}
+func (t *GetTasks_Tasks) GetPageInfo() *GetTasks_Tasks_PageInfo {
+	if t == nil {
+		t = &GetTasks_Tasks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTasks_Tasks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTasks_Tasks{}
+	}
+	return t.TotalCount
 }
 
 type UpdateTask_UpdateTask_Task_Assignee struct {
@@ -86312,6 +86404,13 @@ func (c *Client) DeleteTask(ctx context.Context, deleteTaskID string, intercepto
 
 const GetAllTasksDocument = `query GetAllTasks {
 	tasks {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				assignee {
@@ -86458,8 +86557,15 @@ func (c *Client) GetTaskByID(ctx context.Context, taskID string, interceptors ..
 	return &res, nil
 }
 
-const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
-	tasks(where: $where) {
+const GetTasksDocument = `query GetTasks ($first: Int, $last: Int, $where: TaskWhereInput) {
+	tasks(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				assignee {
@@ -86514,8 +86620,10 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 }
 `
 
-func (c *Client) GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error) {
+func (c *Client) GetTasks(ctx context.Context, first *int64, last *int64, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error) {
 	vars := map[string]any{
+		"first": first,
+		"last":  last,
 		"where": where,
 	}
 

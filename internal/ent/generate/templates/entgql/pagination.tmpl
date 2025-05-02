@@ -100,12 +100,15 @@ const (
 	{{- end }}
 )
 
+// paginateLimit calculates the limit for pagination based on the first and last arguments.
+// and returns the limit multiplied by 10.
+// This is to ensure we overfetch the data to get the number of requested results.
 func paginateLimit(first, last *int) int {
 	var limit int
 	if first != nil {
-		limit = *first+1
+		limit = *first * 10
 	} else if last != nil {
-		limit = *last+1
+		limit = *last * 10
 	}
 	return limit
 }
@@ -142,12 +145,12 @@ type {{ $conn }} struct {
 func (c *{{ $conn }}) build(nodes []*{{ $name }}, pager *{{ $pager }}, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && *first+1 == len(nodes) {
+	if first != nil && len(nodes) >= *first+1  {
 		c.PageInfo.HasNextPage = true
-		nodes = nodes[:len(nodes)-1]
-	} else if last != nil && *last+1 == len(nodes) {
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:len(nodes)-1]
+		nodes = nodes[:*last]
 	}
 	var nodeAt func(int) *{{ $name }}
 	if last != nil {

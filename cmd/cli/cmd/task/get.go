@@ -56,7 +56,7 @@ func get(ctx context.Context) error {
 
 	}
 
-	o, err := client.GetTasks(ctx, &openlaneclient.TaskWhereInput{
+	o, err := client.GetTasks(ctx, nil, nil, &openlaneclient.TaskWhereInput{
 		CompletedIsNil: &includeCompleted,
 	})
 
