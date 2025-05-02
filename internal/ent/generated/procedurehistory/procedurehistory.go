@@ -62,6 +62,8 @@ const (
 	FieldApproverID = "approver_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldSummary holds the string denoting the summary field in the database.
+	FieldSummary = "summary"
 	// Table holds the table name of the procedurehistory in the database.
 	Table = "procedure_history"
 )
@@ -91,6 +93,7 @@ var Columns = []string{
 	FieldReviewFrequency,
 	FieldApproverID,
 	FieldDelegateID,
+	FieldSummary,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -275,6 +278,11 @@ func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// BySummary orders the results by the summary field.
+func BySummary(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
 var (

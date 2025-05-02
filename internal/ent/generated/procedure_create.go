@@ -272,6 +272,12 @@ func (pc *ProcedureCreate) SetNillableDelegateID(s *string) *ProcedureCreate {
 	return pc
 }
 
+// SetSummary sets the "summary" field.
+func (pc *ProcedureCreate) SetSummary(s string) *ProcedureCreate {
+	pc.mutation.SetSummary(s)
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProcedureCreate) SetID(s string) *ProcedureCreate {
 	pc.mutation.SetID(s)
@@ -559,6 +565,9 @@ func (pc *ProcedureCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
 		}
 	}
+	if _, ok := pc.mutation.Summary(); !ok {
+		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "Procedure.summary"`)}
+	}
 	return nil
 }
 
@@ -658,6 +667,10 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := pc.mutation.Summary(); ok {
+		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

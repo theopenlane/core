@@ -56,6 +56,8 @@ const (
 	FieldApproverID = "approver_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldSummary holds the string denoting the summary field in the database.
+	FieldSummary = "summary"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -179,6 +181,7 @@ var Columns = []string{
 	FieldReviewFrequency,
 	FieldApproverID,
 	FieldDelegateID,
+	FieldSummary,
 }
 
 var (
@@ -379,6 +382,11 @@ func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// BySummary orders the results by the summary field.
+func BySummary(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

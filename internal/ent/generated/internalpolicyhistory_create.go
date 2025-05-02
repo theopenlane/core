@@ -298,6 +298,12 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableDelegateID(s *string) *Inter
 	return iphc
 }
 
+// SetSummary sets the "summary" field.
+func (iphc *InternalPolicyHistoryCreate) SetSummary(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetSummary(s)
+	return iphc
+}
+
 // SetID sets the "id" field.
 func (iphc *InternalPolicyHistoryCreate) SetID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetID(s)
@@ -417,6 +423,9 @@ func (iphc *InternalPolicyHistoryCreate) check() error {
 		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
 		}
+	}
+	if _, ok := iphc.mutation.Summary(); !ok {
+		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "InternalPolicyHistory.summary"`)}
 	}
 	return nil
 }
@@ -541,6 +550,10 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.DelegateID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := iphc.mutation.Summary(); ok {
+		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	return _node, _spec
 }

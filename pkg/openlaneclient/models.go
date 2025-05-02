@@ -10640,6 +10640,7 @@ type InternalPolicy struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
 	DelegateID *string       `json:"delegateID,omitempty"`
+	Summary    string        `json:"summary"`
 	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
@@ -10734,6 +10735,7 @@ type InternalPolicyHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    string  `json:"summary"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -15757,6 +15759,7 @@ type Procedure struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
 	DelegateID *string       `json:"delegateID,omitempty"`
+	Summary    string        `json:"summary"`
 	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
@@ -15850,6 +15853,7 @@ type ProcedureHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    string  `json:"summary"`
 }
 
 func (ProcedureHistory) IsNode() {}

@@ -346,6 +346,20 @@ func (pu *ProcedureUpdate) ClearDelegateID() *ProcedureUpdate {
 	return pu
 }
 
+// SetSummary sets the "summary" field.
+func (pu *ProcedureUpdate) SetSummary(s string) *ProcedureUpdate {
+	pu.mutation.SetSummary(s)
+	return pu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableSummary(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetSummary(*s)
+	}
+	return pu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -883,6 +897,9 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := pu.mutation.Summary(); ok {
+		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1737,6 +1754,20 @@ func (puo *ProcedureUpdateOne) ClearDelegateID() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetSummary sets the "summary" field.
+func (puo *ProcedureUpdateOne) SetSummary(s string) *ProcedureUpdateOne {
+	puo.mutation.SetSummary(s)
+	return puo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableSummary(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetSummary(*s)
+	}
+	return puo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -2304,6 +2335,9 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedure.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := puo.mutation.Summary(); ok {
+		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

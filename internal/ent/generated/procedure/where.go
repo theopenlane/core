@@ -148,6 +148,11 @@ func DelegateID(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDelegateID, v))
 }
 
+// Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
+func Summary(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldSummary, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldCreatedAt, v))
@@ -1261,6 +1266,71 @@ func DelegateIDEqualFold(v string) predicate.Procedure {
 // DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
 func DelegateIDContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// SummaryEQ applies the EQ predicate on the "summary" field.
+func SummaryEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldSummary, v))
+}
+
+// SummaryNEQ applies the NEQ predicate on the "summary" field.
+func SummaryNEQ(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldSummary, v))
+}
+
+// SummaryIn applies the In predicate on the "summary" field.
+func SummaryIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldIn(FieldSummary, vs...))
+}
+
+// SummaryNotIn applies the NotIn predicate on the "summary" field.
+func SummaryNotIn(vs ...string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotIn(FieldSummary, vs...))
+}
+
+// SummaryGT applies the GT predicate on the "summary" field.
+func SummaryGT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGT(FieldSummary, v))
+}
+
+// SummaryGTE applies the GTE predicate on the "summary" field.
+func SummaryGTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldGTE(FieldSummary, v))
+}
+
+// SummaryLT applies the LT predicate on the "summary" field.
+func SummaryLT(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLT(FieldSummary, v))
+}
+
+// SummaryLTE applies the LTE predicate on the "summary" field.
+func SummaryLTE(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldLTE(FieldSummary, v))
+}
+
+// SummaryContains applies the Contains predicate on the "summary" field.
+func SummaryContains(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContains(FieldSummary, v))
+}
+
+// SummaryHasPrefix applies the HasPrefix predicate on the "summary" field.
+func SummaryHasPrefix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasPrefix(FieldSummary, v))
+}
+
+// SummaryHasSuffix applies the HasSuffix predicate on the "summary" field.
+func SummaryHasSuffix(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldHasSuffix(FieldSummary, v))
+}
+
+// SummaryEqualFold applies the EqualFold predicate on the "summary" field.
+func SummaryEqualFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEqualFold(FieldSummary, v))
+}
+
+// SummaryContainsFold applies the ContainsFold predicate on the "summary" field.
+func SummaryContainsFold(v string) predicate.Procedure {
+	return predicate.Procedure(sql.FieldContainsFold(FieldSummary, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

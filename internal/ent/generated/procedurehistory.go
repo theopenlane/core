@@ -63,7 +63,9 @@ type ProcedureHistory struct {
 	// the id of the group responsible for approving the procedure
 	ApproverID string `json:"approver_id,omitempty"`
 	// the id of the group responsible for approving the procedure
-	DelegateID   string `json:"delegate_id,omitempty"`
+	DelegateID string `json:"delegate_id,omitempty"`
+	// Summary holds the value of the "summary" field.
+	Summary      string `json:"summary,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -78,7 +80,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -237,6 +239,12 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.DelegateID = value.String
 			}
+		case procedurehistory.FieldSummary:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field summary", values[i])
+			} else if value.Valid {
+				ph.Summary = value.String
+			}
 		default:
 			ph.selectValues.Set(columns[i], values[i])
 		}
@@ -338,6 +346,9 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(ph.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("summary=")
+	builder.WriteString(ph.Summary)
 	builder.WriteByte(')')
 	return builder.String()
 }

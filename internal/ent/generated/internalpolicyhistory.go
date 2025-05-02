@@ -63,7 +63,9 @@ type InternalPolicyHistory struct {
 	// the id of the group responsible for approving the policy
 	ApproverID string `json:"approver_id,omitempty"`
 	// the id of the group responsible for approving the policy
-	DelegateID   string `json:"delegate_id,omitempty"`
+	DelegateID string `json:"delegate_id,omitempty"`
+	// Summary holds the value of the "summary" field.
+	Summary      string `json:"summary,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -78,7 +80,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -237,6 +239,12 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.DelegateID = value.String
 			}
+		case internalpolicyhistory.FieldSummary:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field summary", values[i])
+			} else if value.Valid {
+				iph.Summary = value.String
+			}
 		default:
 			iph.selectValues.Set(columns[i], values[i])
 		}
@@ -338,6 +346,9 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(iph.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("summary=")
+	builder.WriteString(iph.Summary)
 	builder.WriteByte(')')
 	return builder.String()
 }

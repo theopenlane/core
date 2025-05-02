@@ -13396,6 +13396,11 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldDelegateID)
 				fieldSeen[internalpolicy.FieldDelegateID] = struct{}{}
 			}
+		case "summary":
+			if _, ok := fieldSeen[internalpolicy.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldSummary)
+				fieldSeen[internalpolicy.FieldSummary] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -13595,6 +13600,11 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDelegateID)
 				fieldSeen[internalpolicyhistory.FieldDelegateID] = struct{}{}
+			}
+		case "summary":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSummary)
+				fieldSeen[internalpolicyhistory.FieldSummary] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -21502,6 +21512,11 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldDelegateID)
 				fieldSeen[procedure.FieldDelegateID] = struct{}{}
 			}
+		case "summary":
+			if _, ok := fieldSeen[procedure.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldSummary)
+				fieldSeen[procedure.FieldSummary] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -21701,6 +21716,11 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDelegateID)
 				fieldSeen[procedurehistory.FieldDelegateID] = struct{}{}
+			}
+		case "summary":
+			if _, ok := fieldSeen[procedurehistory.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSummary)
+				fieldSeen[procedurehistory.FieldSummary] = struct{}{}
 			}
 		case "id":
 		case "__typename":

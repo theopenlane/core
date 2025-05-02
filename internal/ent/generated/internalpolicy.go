@@ -59,6 +59,8 @@ type InternalPolicy struct {
 	ApproverID string `json:"approver_id,omitempty"`
 	// the id of the group responsible for approving the policy
 	DelegateID string `json:"delegate_id,omitempty"`
+	// Summary holds the value of the "summary" field.
+	Summary string `json:"summary,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
@@ -243,7 +245,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -383,6 +385,12 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
 				ip.DelegateID = value.String
+			}
+		case internalpolicy.FieldSummary:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field summary", values[i])
+			} else if value.Valid {
+				ip.Summary = value.String
 			}
 		default:
 			ip.selectValues.Set(columns[i], values[i])
@@ -541,6 +549,9 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(ip.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("summary=")
+	builder.WriteString(ip.Summary)
 	builder.WriteByte(')')
 	return builder.String()
 }

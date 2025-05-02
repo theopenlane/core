@@ -298,6 +298,12 @@ func (phc *ProcedureHistoryCreate) SetNillableDelegateID(s *string) *ProcedureHi
 	return phc
 }
 
+// SetSummary sets the "summary" field.
+func (phc *ProcedureHistoryCreate) SetSummary(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetSummary(s)
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -417,6 +423,9 @@ func (phc *ProcedureHistoryCreate) check() error {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
 		}
+	}
+	if _, ok := phc.mutation.Summary(); !ok {
+		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "ProcedureHistory.summary"`)}
 	}
 	return nil
 }
@@ -541,6 +550,10 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.DelegateID(); ok {
 		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := phc.mutation.Summary(); ok {
+		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	return _node, _spec
 }

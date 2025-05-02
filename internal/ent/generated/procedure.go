@@ -59,6 +59,8 @@ type Procedure struct {
 	ApproverID string `json:"approver_id,omitempty"`
 	// the id of the group responsible for approving the procedure
 	DelegateID string `json:"delegate_id,omitempty"`
+	// Summary holds the value of the "summary" field.
+	Summary string `json:"summary,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -232,7 +234,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -374,6 +376,12 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
 				pr.DelegateID = value.String
+			}
+		case procedure.FieldSummary:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field summary", values[i])
+			} else if value.Valid {
+				pr.Summary = value.String
 			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -534,6 +542,9 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(pr.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("summary=")
+	builder.WriteString(pr.Summary)
 	builder.WriteByte(')')
 	return builder.String()
 }

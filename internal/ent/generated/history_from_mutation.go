@@ -4071,6 +4071,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if summary, exists := m.Summary(); exists {
+		create = create.SetSummary(summary)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4215,6 +4219,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDelegateID(internalpolicy.DelegateID)
 		}
 
+		if summary, exists := m.Summary(); exists {
+			create = create.SetSummary(summary)
+		} else {
+			create = create.SetSummary(internalpolicy.Summary)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4266,6 +4276,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetReviewFrequency(internalpolicy.ReviewFrequency).
 			SetApproverID(internalpolicy.ApproverID).
 			SetDelegateID(internalpolicy.DelegateID).
+			SetSummary(internalpolicy.Summary).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5991,6 +6002,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if summary, exists := m.Summary(); exists {
+		create = create.SetSummary(summary)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6135,6 +6150,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateID(procedure.DelegateID)
 		}
 
+		if summary, exists := m.Summary(); exists {
+			create = create.SetSummary(summary)
+		} else {
+			create = create.SetSummary(procedure.Summary)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6186,6 +6207,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetReviewFrequency(procedure.ReviewFrequency).
 			SetApproverID(procedure.ApproverID).
 			SetDelegateID(procedure.DelegateID).
+			SetSummary(procedure.Summary).
 			Save(ctx)
 		if err != nil {
 			return err

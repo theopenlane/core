@@ -156,6 +156,11 @@ func DelegateID(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldDelegateID, v))
 }
 
+// Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
+func Summary(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldSummary, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1404,6 +1409,71 @@ func DelegateIDEqualFold(v string) predicate.InternalPolicyHistory {
 // DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
 func DelegateIDContainsFold(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// SummaryEQ applies the EQ predicate on the "summary" field.
+func SummaryEQ(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldSummary, v))
+}
+
+// SummaryNEQ applies the NEQ predicate on the "summary" field.
+func SummaryNEQ(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNEQ(FieldSummary, v))
+}
+
+// SummaryIn applies the In predicate on the "summary" field.
+func SummaryIn(vs ...string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIn(FieldSummary, vs...))
+}
+
+// SummaryNotIn applies the NotIn predicate on the "summary" field.
+func SummaryNotIn(vs ...string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotIn(FieldSummary, vs...))
+}
+
+// SummaryGT applies the GT predicate on the "summary" field.
+func SummaryGT(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldGT(FieldSummary, v))
+}
+
+// SummaryGTE applies the GTE predicate on the "summary" field.
+func SummaryGTE(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldGTE(FieldSummary, v))
+}
+
+// SummaryLT applies the LT predicate on the "summary" field.
+func SummaryLT(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldLT(FieldSummary, v))
+}
+
+// SummaryLTE applies the LTE predicate on the "summary" field.
+func SummaryLTE(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldLTE(FieldSummary, v))
+}
+
+// SummaryContains applies the Contains predicate on the "summary" field.
+func SummaryContains(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldContains(FieldSummary, v))
+}
+
+// SummaryHasPrefix applies the HasPrefix predicate on the "summary" field.
+func SummaryHasPrefix(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldHasPrefix(FieldSummary, v))
+}
+
+// SummaryHasSuffix applies the HasSuffix predicate on the "summary" field.
+func SummaryHasSuffix(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldHasSuffix(FieldSummary, v))
+}
+
+// SummaryEqualFold applies the EqualFold predicate on the "summary" field.
+func SummaryEqualFold(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEqualFold(FieldSummary, v))
+}
+
+// SummaryContainsFold applies the ContainsFold predicate on the "summary" field.
+func SummaryContainsFold(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldContainsFold(FieldSummary, v))
 }
 
 // And groups predicates with the AND operator between them.
