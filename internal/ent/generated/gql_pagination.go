@@ -191,10 +191,10 @@ type APITokenConnection struct {
 func (c *APITokenConnection) build(nodes []*APIToken, pager *apitokenPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -613,10 +613,10 @@ type ActionPlanConnection struct {
 func (c *ActionPlanConnection) build(nodes []*ActionPlan, pager *actionplanPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -1107,10 +1107,10 @@ type ActionPlanHistoryConnection struct {
 func (c *ActionPlanHistoryConnection) build(nodes []*ActionPlanHistory, pager *actionplanhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -1565,10 +1565,10 @@ type ContactConnection struct {
 func (c *ContactConnection) build(nodes []*Contact, pager *contactPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -2005,10 +2005,10 @@ type ContactHistoryConnection struct {
 func (c *ContactHistoryConnection) build(nodes []*ContactHistory, pager *contacthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -2409,10 +2409,10 @@ type ControlConnection struct {
 func (c *ControlConnection) build(nodes []*Control, pager *controlPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -2867,10 +2867,10 @@ type ControlHistoryConnection struct {
 func (c *ControlHistoryConnection) build(nodes []*ControlHistory, pager *controlhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -3289,10 +3289,10 @@ type ControlImplementationConnection struct {
 func (c *ControlImplementationConnection) build(nodes []*ControlImplementation, pager *controlimplementationPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -3711,10 +3711,10 @@ type ControlImplementationHistoryConnection struct {
 func (c *ControlImplementationHistoryConnection) build(nodes []*ControlImplementationHistory, pager *controlimplementationhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -4097,10 +4097,10 @@ type ControlObjectiveConnection struct {
 func (c *ControlObjectiveConnection) build(nodes []*ControlObjective, pager *controlobjectivePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -4573,10 +4573,10 @@ type ControlObjectiveHistoryConnection struct {
 func (c *ControlObjectiveHistoryConnection) build(nodes []*ControlObjectiveHistory, pager *controlobjectivehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -5013,10 +5013,10 @@ type DocumentDataConnection struct {
 func (c *DocumentDataConnection) build(nodes []*DocumentData, pager *documentdataPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -5363,10 +5363,10 @@ type DocumentDataHistoryConnection struct {
 func (c *DocumentDataHistoryConnection) build(nodes []*DocumentDataHistory, pager *documentdatahistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -5677,10 +5677,10 @@ type EntityConnection struct {
 func (c *EntityConnection) build(nodes []*Entity, pager *entityPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -6081,10 +6081,10 @@ type EntityHistoryConnection struct {
 func (c *EntityHistoryConnection) build(nodes []*EntityHistory, pager *entityhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -6449,10 +6449,10 @@ type EntityTypeConnection struct {
 func (c *EntityTypeConnection) build(nodes []*EntityType, pager *entitytypePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -6817,10 +6817,10 @@ type EntityTypeHistoryConnection struct {
 func (c *EntityTypeHistoryConnection) build(nodes []*EntityTypeHistory, pager *entitytypehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -7149,10 +7149,10 @@ type EventConnection struct {
 func (c *EventConnection) build(nodes []*Event, pager *eventPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -7499,10 +7499,10 @@ type EventHistoryConnection struct {
 func (c *EventHistoryConnection) build(nodes []*EventHistory, pager *eventhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -7813,10 +7813,10 @@ type EvidenceConnection struct {
 func (c *EvidenceConnection) build(nodes []*Evidence, pager *evidencePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -8235,10 +8235,10 @@ type EvidenceHistoryConnection struct {
 func (c *EvidenceHistoryConnection) build(nodes []*EvidenceHistory, pager *evidencehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -8621,10 +8621,10 @@ type FileConnection struct {
 func (c *FileConnection) build(nodes []*File, pager *filePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -8971,10 +8971,10 @@ type FileHistoryConnection struct {
 func (c *FileHistoryConnection) build(nodes []*FileHistory, pager *filehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -9285,10 +9285,10 @@ type GroupConnection struct {
 func (c *GroupConnection) build(nodes []*Group, pager *groupPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -9671,10 +9671,10 @@ type GroupHistoryConnection struct {
 func (c *GroupHistoryConnection) build(nodes []*GroupHistory, pager *grouphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -10021,10 +10021,10 @@ type GroupMembershipConnection struct {
 func (c *GroupMembershipConnection) build(nodes []*GroupMembership, pager *groupmembershipPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -10389,10 +10389,10 @@ type GroupMembershipHistoryConnection struct {
 func (c *GroupMembershipHistoryConnection) build(nodes []*GroupMembershipHistory, pager *groupmembershiphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -10721,10 +10721,10 @@ type GroupSettingConnection struct {
 func (c *GroupSettingConnection) build(nodes []*GroupSetting, pager *groupsettingPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -11071,10 +11071,10 @@ type GroupSettingHistoryConnection struct {
 func (c *GroupSettingHistoryConnection) build(nodes []*GroupSettingHistory, pager *groupsettinghistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -11385,10 +11385,10 @@ type HushConnection struct {
 func (c *HushConnection) build(nodes []*Hush, pager *hushPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -11771,10 +11771,10 @@ type HushHistoryConnection struct {
 func (c *HushHistoryConnection) build(nodes []*HushHistory, pager *hushhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -12121,10 +12121,10 @@ type IntegrationConnection struct {
 func (c *IntegrationConnection) build(nodes []*Integration, pager *integrationPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -12507,10 +12507,10 @@ type IntegrationHistoryConnection struct {
 func (c *IntegrationHistoryConnection) build(nodes []*IntegrationHistory, pager *integrationhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -12857,10 +12857,10 @@ type InternalPolicyConnection struct {
 func (c *InternalPolicyConnection) build(nodes []*InternalPolicy, pager *internalpolicyPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -13297,10 +13297,10 @@ type InternalPolicyHistoryConnection struct {
 func (c *InternalPolicyHistoryConnection) build(nodes []*InternalPolicyHistory, pager *internalpolicyhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -13701,10 +13701,10 @@ type InviteConnection struct {
 func (c *InviteConnection) build(nodes []*Invite, pager *invitePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -14105,10 +14105,10 @@ type MappedControlConnection struct {
 func (c *MappedControlConnection) build(nodes []*MappedControl, pager *mappedcontrolPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -14473,10 +14473,10 @@ type MappedControlHistoryConnection struct {
 func (c *MappedControlHistoryConnection) build(nodes []*MappedControlHistory, pager *mappedcontrolhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -14805,10 +14805,10 @@ type NarrativeConnection struct {
 func (c *NarrativeConnection) build(nodes []*Narrative, pager *narrativePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -15173,10 +15173,10 @@ type NarrativeHistoryConnection struct {
 func (c *NarrativeHistoryConnection) build(nodes []*NarrativeHistory, pager *narrativehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -15505,10 +15505,10 @@ type NoteConnection struct {
 func (c *NoteConnection) build(nodes []*Note, pager *notePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -15855,10 +15855,10 @@ type NoteHistoryConnection struct {
 func (c *NoteHistoryConnection) build(nodes []*NoteHistory, pager *notehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -16169,10 +16169,10 @@ type OnboardingConnection struct {
 func (c *OnboardingConnection) build(nodes []*Onboarding, pager *onboardingPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -16418,10 +16418,10 @@ type OrgMembershipConnection struct {
 func (c *OrgMembershipConnection) build(nodes []*OrgMembership, pager *orgmembershipPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -16786,10 +16786,10 @@ type OrgMembershipHistoryConnection struct {
 func (c *OrgMembershipHistoryConnection) build(nodes []*OrgMembershipHistory, pager *orgmembershiphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -17118,10 +17118,10 @@ type OrgSubscriptionConnection struct {
 func (c *OrgSubscriptionConnection) build(nodes []*OrgSubscription, pager *orgsubscriptionPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -17540,10 +17540,10 @@ type OrgSubscriptionHistoryConnection struct {
 func (c *OrgSubscriptionHistoryConnection) build(nodes []*OrgSubscriptionHistory, pager *orgsubscriptionhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -17962,10 +17962,10 @@ type OrganizationConnection struct {
 func (c *OrganizationConnection) build(nodes []*Organization, pager *organizationPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -18348,10 +18348,10 @@ type OrganizationHistoryConnection struct {
 func (c *OrganizationHistoryConnection) build(nodes []*OrganizationHistory, pager *organizationhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -18698,10 +18698,10 @@ type OrganizationSettingConnection struct {
 func (c *OrganizationSettingConnection) build(nodes []*OrganizationSetting, pager *organizationsettingPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -19048,10 +19048,10 @@ type OrganizationSettingHistoryConnection struct {
 func (c *OrganizationSettingHistoryConnection) build(nodes []*OrganizationSettingHistory, pager *organizationsettinghistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -19362,10 +19362,10 @@ type PersonalAccessTokenConnection struct {
 func (c *PersonalAccessTokenConnection) build(nodes []*PersonalAccessToken, pager *personalaccesstokenPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -19784,10 +19784,10 @@ type ProcedureConnection struct {
 func (c *ProcedureConnection) build(nodes []*Procedure, pager *procedurePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -20224,10 +20224,10 @@ type ProcedureHistoryConnection struct {
 func (c *ProcedureHistoryConnection) build(nodes []*ProcedureHistory, pager *procedurehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -20628,10 +20628,10 @@ type ProgramConnection struct {
 func (c *ProgramConnection) build(nodes []*Program, pager *programPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -21086,10 +21086,10 @@ type ProgramHistoryConnection struct {
 func (c *ProgramHistoryConnection) build(nodes []*ProgramHistory, pager *programhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -21508,10 +21508,10 @@ type ProgramMembershipConnection struct {
 func (c *ProgramMembershipConnection) build(nodes []*ProgramMembership, pager *programmembershipPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -21876,10 +21876,10 @@ type ProgramMembershipHistoryConnection struct {
 func (c *ProgramMembershipHistoryConnection) build(nodes []*ProgramMembershipHistory, pager *programmembershiphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -22208,10 +22208,10 @@ type RiskConnection struct {
 func (c *RiskConnection) build(nodes []*Risk, pager *riskPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -22702,10 +22702,10 @@ type RiskHistoryConnection struct {
 func (c *RiskHistoryConnection) build(nodes []*RiskHistory, pager *riskhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -23160,10 +23160,10 @@ type StandardConnection struct {
 func (c *StandardConnection) build(nodes []*Standard, pager *standardPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -23636,10 +23636,10 @@ type StandardHistoryConnection struct {
 func (c *StandardHistoryConnection) build(nodes []*StandardHistory, pager *standardhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -24076,10 +24076,10 @@ type SubcontrolConnection struct {
 func (c *SubcontrolConnection) build(nodes []*Subcontrol, pager *subcontrolPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -24534,10 +24534,10 @@ type SubcontrolHistoryConnection struct {
 func (c *SubcontrolHistoryConnection) build(nodes []*SubcontrolHistory, pager *subcontrolhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -24956,10 +24956,10 @@ type SubscriberConnection struct {
 func (c *SubscriberConnection) build(nodes []*Subscriber, pager *subscriberPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -25378,10 +25378,10 @@ type TFASettingConnection struct {
 func (c *TFASettingConnection) build(nodes []*TFASetting, pager *tfasettingPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -25728,10 +25728,10 @@ type TaskConnection struct {
 func (c *TaskConnection) build(nodes []*Task, pager *taskPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -26168,10 +26168,10 @@ type TaskHistoryConnection struct {
 func (c *TaskHistoryConnection) build(nodes []*TaskHistory, pager *taskhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -26572,10 +26572,10 @@ type TemplateConnection struct {
 func (c *TemplateConnection) build(nodes []*Template, pager *templatePager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -26958,10 +26958,10 @@ type TemplateHistoryConnection struct {
 func (c *TemplateHistoryConnection) build(nodes []*TemplateHistory, pager *templatehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -27308,10 +27308,10 @@ type UserConnection struct {
 func (c *UserConnection) build(nodes []*User, pager *userPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -27712,10 +27712,10 @@ type UserHistoryConnection struct {
 func (c *UserHistoryConnection) build(nodes []*UserHistory, pager *userhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -28080,10 +28080,10 @@ type UserSettingConnection struct {
 func (c *UserSettingConnection) build(nodes []*UserSetting, pager *usersettingPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -28430,10 +28430,10 @@ type UserSettingHistoryConnection struct {
 func (c *UserSettingHistoryConnection) build(nodes []*UserSettingHistory, pager *usersettinghistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
@@ -28744,10 +28744,10 @@ type WebauthnConnection struct {
 func (c *WebauthnConnection) build(nodes []*Webauthn, pager *webauthnPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) > *first+1 {
+	if first != nil && len(nodes) >= *first+1 {
 		c.PageInfo.HasNextPage = true
 		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) > *last+1 {
+	} else if last != nil && len(nodes) >= *last+1 {
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:*last]
 	}
