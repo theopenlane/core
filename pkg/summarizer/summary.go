@@ -21,6 +21,7 @@ type Client struct {
 	sanitizer *bluemonday.Policy
 }
 
+// NewSummarizer returns a configured client based on the provided configuration
 func NewSummarizer(cfg entconfig.Config) (*Client, error) {
 	sanitizer := bluemonday.StrictPolicy()
 
