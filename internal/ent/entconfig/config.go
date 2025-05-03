@@ -30,6 +30,7 @@ type SummarizerLLM struct {
 }
 
 type Summarizer struct {
-	Type SummarizerType `json:"type" koanf:"type" default:"lexrank"`
-	LLM  SummarizerLLM  `json:"llm" koanf:"llm"`
+	Type             SummarizerType `json:"type" koanf:"type" default:"lexrank"`
+	LLM              SummarizerLLM  `json:"llm" koanf:"llm"`
+	MaximumCharacter int            `json:"maximumCharacter" koanf:"maximumCharacter" default:50`
 }
