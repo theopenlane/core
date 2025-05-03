@@ -83,6 +83,11 @@ email:
     year: 0
 entConfig:
     entityTypes: null
+    summarizer:
+        llm:
+            provider: ""
+        maximumCharacter: 0
+        type: lexrank
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

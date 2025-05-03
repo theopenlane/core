@@ -51,6 +51,9 @@ data:
   CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.core.server.complexityLimit | default 100 }}
   CORE_SERVER_MAXRESULTLIMIT: {{ .Values.core.server.maxResultLimit | default 100 }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
+  CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
+  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMCHARACTER: {{ .Values.core.entConfig.summarizer.maximumCharacter }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
   CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
   CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.core.auth.token.audience | default "https://theopenlane.io" }}
