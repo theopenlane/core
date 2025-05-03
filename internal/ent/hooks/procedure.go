@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 
@@ -16,7 +15,7 @@ func HookProcedureSummarize() ent.Hook {
 		return hook.ProcedureFunc(func(ctx context.Context, m *generated.ProcedureMutation) (generated.Value, error) {
 			details, ok := m.Details()
 			if !ok {
-				return nil, fmt.Errorf("details does not exists") // nolint:err113
+				return next.Mutate(ctx, m)
 			}
 
 			summarized, err := m.Summarizer.Summarize(ctx, details)

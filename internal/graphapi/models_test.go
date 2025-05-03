@@ -825,8 +825,7 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 	}
 
 	mutation := p.client.db.Procedure.Create().
-		SetName(p.Name).
-		SetDetails(gofakeit.Sentence(100))
+		SetName(p.Name)
 
 	if p.GroupID != "" {
 		mutation.AddEditorIDs(p.GroupID)
