@@ -14,19 +14,19 @@ type summarizer interface {
 	Summarize(context.Context, string) (string, error)
 }
 
-// SummarizerClient takes in texts, strips out all html tags and
+// Client takes in texts, strips out all html tags and
 // tries to summarize it to be human readable and short
-type SummarizerClient struct {
+type Client struct {
 	impl      summarizer
 	sanitizer *bluemonday.Policy
 }
 
-func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
+func NewSummarizer(cfg entconfig.Config) (*Client, error) {
 	sanitizer := bluemonday.StrictPolicy()
 
 	switch cfg.Summarizer.Type {
 	case entconfig.SummarizerTypeLexrank:
-		return &SummarizerClient{
+		return &Client{
 			impl:      newLexRankSummarizer(cfg.Summarizer.MaximumSentences),
 			sanitizer: sanitizer,
 		}, nil
@@ -37,7 +37,7 @@ func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
 			return nil, err
 		}
 
-		return &SummarizerClient{
+		return &Client{
 			impl:      impl,
 			sanitizer: sanitizer,
 		}, nil
@@ -47,7 +47,7 @@ func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
 }
 
 // Summarize returns a shortened version of the provided string using the lexrank algorithm
-func (s *SummarizerClient) Summarize(ctx context.Context, sentence string) (string, error) {
+func (s *Client) Summarize(ctx context.Context, sentence string) (string, error) {
 	sanitizedSentence := s.sanitizer.Sanitize(sentence)
 
 	return s.impl.Summarize(ctx, sanitizedSentence)

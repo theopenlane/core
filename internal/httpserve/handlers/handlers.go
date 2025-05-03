@@ -54,7 +54,7 @@ type Handler struct {
 	// Entitlements contains the entitlements client
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
-	Summarizer *summarizer.SummarizerClient
+	Summarizer *summarizer.Client
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

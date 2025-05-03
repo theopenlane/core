@@ -25,7 +25,7 @@ func newLexRankSummarizer(maxSentences int) *lexRankSummarizer {
 }
 
 // Summarize returns a shortened version of the provided string using the lexrank algorithm
-func (l *lexRankSummarizer) Summarize(ctx context.Context, s string) (string, error) {
+func (l *lexRankSummarizer) Summarize(_ context.Context, s string) (string, error) {
 	if strings.TrimSpace(s) == "" {
 		return "", ErrSentenceEmpty
 	}
