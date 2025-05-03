@@ -53,21 +53,21 @@ data:
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.core.entConfig.summarizer.llm.anthropic.betaHeader }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.core.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.core.entConfig.summarizer.llm.anthropic.baseURL }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_MISTRAL_URL: {{ .Values.core.entConfig.summarizer.llm.mistral.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSPATH: {{ .Values.core.entConfig.summarizer.llm.gemini.credentialsPath }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSJSON: {{ .Values.core.entConfig.summarizer.llm.gemini.credentialsJSON }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_MAXTOKENS: {{ .Values.core.entConfig.summarizer.llm.gemini.maxTokens }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_HUGGINGFACE_URL: {{ .Values.core.entConfig.summarizer.llm.huggingFace.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_MODEL: {{ .Values.core.entConfig.summarizer.llm.ollama.model }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_URL: {{ .Values.core.entConfig.summarizer.llm.ollama.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: {{ .Values.core.entConfig.summarizer.llm.cloudflare.accountID }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.core.entConfig.summarizer.llm.cloudflare.serverURL }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.core.entConfig.summarizer.llm.openai.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.core.entConfig.summarizer.llm.openai.organizationID }}
   CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.core.entConfig.summarizer.maximumSentences | default 60 }}
-  CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_BETAHEADER: {{ .Values.core.entConfig.summarizer.anthropic.betaHeader }}
-  CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.core.entConfig.summarizer.anthropic.legacyTextCompletion }}
-  CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_BASEURL: {{ .Values.core.entConfig.summarizer.anthropic.baseURL }}
-  CORE_ENTCONFIG_SUMMARIZER_MISTRAL_URL: {{ .Values.core.entConfig.summarizer.mistral.url }}
-  CORE_ENTCONFIG_SUMMARIZER_GEMINI_CREDENTIALSPATH: {{ .Values.core.entConfig.summarizer.gemini.credentialsPath }}
-  CORE_ENTCONFIG_SUMMARIZER_GEMINI_CREDENTIALSJSON: {{ .Values.core.entConfig.summarizer.gemini.credentialsJSON }}
-  CORE_ENTCONFIG_SUMMARIZER_GEMINI_MAXTOKENS: {{ .Values.core.entConfig.summarizer.gemini.maxTokens }}
-  CORE_ENTCONFIG_SUMMARIZER_HUGGINGFACE_URL: {{ .Values.core.entConfig.summarizer.huggingFace.url }}
-  CORE_ENTCONFIG_SUMMARIZER_OLLAMA_MODEL: {{ .Values.core.entConfig.summarizer.ollama.model }}
-  CORE_ENTCONFIG_SUMMARIZER_OLLAMA_URL: {{ .Values.core.entConfig.summarizer.ollama.url }}
-  CORE_ENTCONFIG_SUMMARIZER_CLOUDFLARE_ACCOUNTID: {{ .Values.core.entConfig.summarizer.cloudflare.accountID }}
-  CORE_ENTCONFIG_SUMMARIZER_CLOUDFLARE_SERVERURL: {{ .Values.core.entConfig.summarizer.cloudflare.serverURL }}
-  CORE_ENTCONFIG_SUMMARIZER_OPENAI_URL: {{ .Values.core.entConfig.summarizer.openai.url }}
-  CORE_ENTCONFIG_SUMMARIZER_OPENAI_ORGANIZATIONID: {{ .Values.core.entConfig.summarizer.openai.organizationID }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
   CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
   CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.core.auth.token.audience | default "https://theopenlane.io" }}

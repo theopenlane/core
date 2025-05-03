@@ -9,16 +9,9 @@ type Config struct {
 }
 
 type Summarizer struct {
-	Type             SummarizerType    `json:"type" koanf:"type" default:"lexrank"`
-	LLM              SummarizerLLM     `json:"llm" koanf:"llm"`
-	MaximumSentences int               `json:"maximumSentences" koanf:"maximumSentences" default:"60"`
-	Anthropic        AnthropicConfig   `json:"anthropic" koanf:"anthropic"`
-	Mistral          MistralConfig     `json:"mistral" koanf:"mistral"`
-	Gemini           GeminiConfig      `json:"gemini" koanf:"gemini"`
-	HuggingFace      HuggingFaceConfig `json:"huggingFace" koanf:"huggingFace"`
-	Ollama           OllamaConfig      `json:"ollama" koanf:"ollama"`
-	Cloudflare       CloudflareConfig  `json:"cloudflare" koanf:"cloudflare"`
-	OpenAI           OpenAIConfig      `json:"openai" koanf:"openai"`
+	Type             SummarizerType `json:"type" koanf:"type" default:"lexrank"`
+	LLM              SummarizerLLM  `json:"llm" koanf:"llm"`
+	MaximumSentences int            `json:"maximumSentences" koanf:"maximumSentences" default:"60"`
 }
 
 // ENUM(lexrank,llm)
@@ -29,6 +22,14 @@ type LLMProvider string
 
 type SummarizerLLM struct {
 	Provider LLMProvider `json:"provider" koanf:"provider"`
+
+	Anthropic   AnthropicConfig   `json:"anthropic" koanf:"anthropic"`
+	Mistral     MistralConfig     `json:"mistral" koanf:"mistral"`
+	Gemini      GeminiConfig      `json:"gemini" koanf:"gemini"`
+	HuggingFace HuggingFaceConfig `json:"huggingFace" koanf:"huggingFace"`
+	Ollama      OllamaConfig      `json:"ollama" koanf:"ollama"`
+	Cloudflare  CloudflareConfig  `json:"cloudflare" koanf:"cloudflare"`
+	OpenAI      OpenAIConfig      `json:"openai" koanf:"openai"`
 }
 
 type GenericLLMConfig struct {

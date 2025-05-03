@@ -232,13 +232,6 @@ Config holds the configuration for the ent server
 |**type**|`string`|||
 |[**llm**](#entconfigsummarizerllm)|`object`|||
 |**maximumSentences**|`integer`|||
-|[**anthropic**](#entconfigsummarizeranthropic)|`object`|||
-|[**mistral**](#entconfigsummarizermistral)|`object`|||
-|[**gemini**](#entconfigsummarizergemini)|`object`|||
-|[**huggingFace**](#entconfigsummarizerhuggingface)|`object`|||
-|[**ollama**](#entconfigsummarizerollama)|`object`|||
-|[**cloudflare**](#entconfigsummarizercloudflare)|`object`|||
-|[**openai**](#entconfigsummarizeropenai)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigsummarizerllm"></a>
@@ -249,10 +242,17 @@ Config holds the configuration for the ent server
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**provider**|`string`|||
+|[**anthropic**](#entconfigsummarizerllmanthropic)|`object`|||
+|[**mistral**](#entconfigsummarizerllmmistral)|`object`|||
+|[**gemini**](#entconfigsummarizerllmgemini)|`object`|||
+|[**huggingFace**](#entconfigsummarizerllmhuggingface)|`object`|||
+|[**ollama**](#entconfigsummarizerllmollama)|`object`|||
+|[**cloudflare**](#entconfigsummarizerllmcloudflare)|`object`|||
+|[**openai**](#entconfigsummarizerllmopenai)|`object`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizeranthropic"></a>
-#### entConfig\.summarizer\.anthropic: object
+<a name="entconfigsummarizerllmanthropic"></a>
+##### entConfig\.summarizer\.llm\.anthropic: object
 
 **Properties**
 
@@ -265,8 +265,8 @@ Config holds the configuration for the ent server
 |**apiKey**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizermistral"></a>
-#### entConfig\.summarizer\.mistral: object
+<a name="entconfigsummarizerllmmistral"></a>
+##### entConfig\.summarizer\.llm\.mistral: object
 
 **Properties**
 
@@ -277,8 +277,8 @@ Config holds the configuration for the ent server
 |**url**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizergemini"></a>
-#### entConfig\.summarizer\.gemini: object
+<a name="entconfigsummarizerllmgemini"></a>
+##### entConfig\.summarizer\.llm\.gemini: object
 
 **Properties**
 
@@ -291,8 +291,8 @@ Config holds the configuration for the ent server
 |**maxTokens**|`integer`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizerhuggingface"></a>
-#### entConfig\.summarizer\.huggingFace: object
+<a name="entconfigsummarizerllmhuggingface"></a>
+##### entConfig\.summarizer\.llm\.huggingFace: object
 
 **Properties**
 
@@ -303,8 +303,8 @@ Config holds the configuration for the ent server
 |**url**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizerollama"></a>
-#### entConfig\.summarizer\.ollama: object
+<a name="entconfigsummarizerllmollama"></a>
+##### entConfig\.summarizer\.llm\.ollama: object
 
 **Properties**
 
@@ -314,8 +314,8 @@ Config holds the configuration for the ent server
 |**url**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizercloudflare"></a>
-#### entConfig\.summarizer\.cloudflare: object
+<a name="entconfigsummarizerllmcloudflare"></a>
+##### entConfig\.summarizer\.llm\.cloudflare: object
 
 **Properties**
 
@@ -327,8 +327,8 @@ Config holds the configuration for the ent server
 |**serverURL**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="entconfigsummarizeropenai"></a>
-#### entConfig\.summarizer\.openai: object
+<a name="entconfigsummarizerllmopenai"></a>
+##### entConfig\.summarizer\.llm\.openai: object
 
 **Properties**
 

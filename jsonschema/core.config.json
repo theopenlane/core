@@ -481,6 +481,15 @@
         },
         "maximumSentences": {
           "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.SummarizerLLM": {
+      "properties": {
+        "provider": {
+          "type": "string"
         },
         "anthropic": {
           "$ref": "#/$defs/entconfig.AnthropicConfig"
@@ -502,15 +511,6 @@
         },
         "openai": {
           "$ref": "#/$defs/entconfig.OpenAIConfig"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "entconfig.SummarizerLLM": {
-      "properties": {
-        "provider": {
-          "type": "string"
         }
       },
       "additionalProperties": false,

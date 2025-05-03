@@ -1,11 +1,77 @@
 package summarizer
 
 import (
+	"os"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 )
+
+func TestLLM_Summarize(t *testing.T) {
+
+	apiKey := os.Getenv("OPENAI_API_KEY")
+
+	if apiKey == "" {
+		t.Skip("Skipping llm tests as open ai key not present")
+	}
+
+	tt := []struct {
+		name     string
+		sentence string
+		hasError bool
+	}{
+		{
+			name:     "empty string",
+			hasError: true,
+		},
+		{
+			name:     "short string",
+			sentence: gofakeit.Sentence(200),
+		},
+		{
+			name:     "long string",
+			sentence: gofakeit.Sentence(1000),
+		},
+		{
+			name:     "really long string",
+			sentence: gofakeit.Sentence(10000),
+		},
+	}
+
+	summarizer, err := newLLMSummarizer(entconfig.Config{
+		Summarizer: entconfig.Summarizer{
+			Type: entconfig.SummarizerTypeLlm,
+			LLM: entconfig.SummarizerLLM{
+				Provider: entconfig.LLMProviderOpenai,
+				OpenAI: entconfig.OpenAIConfig{
+					GenericLLMConfig: entconfig.GenericLLMConfig{
+						Model:  "gpt-4",
+						APIKey: apiKey,
+					},
+				},
+			},
+		},
+	})
+
+	require.NoError(t, err)
+
+	for _, v := range tt {
+		t.Run("Test "+v.name, func(t *testing.T) {
+
+			summarized, err := summarizer.Summarize(t.Context(), v.sentence)
+			if v.hasError {
+				require.Error(t, err)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotEmpty(t, summarized)
+			require.NotEqual(t, summarized, v.sentence)
+		})
+	}
+}
 
 func TestNewLLMSummarizer(t *testing.T) {
 	tests := []struct {
@@ -19,14 +85,14 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderAnthropic,
-					},
-					Anthropic: entconfig.AnthropicConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "claude-2",
-							APIKey: "test-key",
+						Anthropic: entconfig.AnthropicConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "claude-2",
+								APIKey: "test-key",
+							},
+							BetaHeader:           "beta-header",
+							LegacyTextCompletion: true,
 						},
-						BetaHeader:           "beta-header",
-						LegacyTextCompletion: true,
 					},
 				},
 			},
@@ -38,14 +104,14 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderCloudflare,
-					},
-					Cloudflare: entconfig.CloudflareConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "@cf/meta/llama-2-7b-chat-int8",
-							APIKey: "test-key",
+						Cloudflare: entconfig.CloudflareConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "@cf/meta/llama-2-7b-chat-int8",
+								APIKey: "test-key",
+							},
+							AccountID: "account-id",
+							ServerURL: "https://api.cloudflare.com",
 						},
-						AccountID: "account-id",
-						ServerURL: "https://api.cloudflare.com",
 					},
 				},
 			},
@@ -57,11 +123,11 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderMistral,
-					},
-					Mistal: entconfig.MistralConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "mistral-tiny",
-							APIKey: "test-key",
+						Mistral: entconfig.MistralConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "mistral-tiny",
+								APIKey: "test-key",
+							},
 						},
 					},
 				},
@@ -74,13 +140,13 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderGemini,
-					},
-					Gemini: entconfig.GeminiConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "gemini-pro",
-							APIKey: "test-key",
+						Gemini: entconfig.GeminiConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "gemini-pro",
+								APIKey: "test-key",
+							},
+							MaxTokens: 1000,
 						},
-						MaxTokens: 1000,
 					},
 				},
 			},
@@ -92,14 +158,14 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderGemini,
-					},
-					Gemini: entconfig.GeminiConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "gemini-pro",
-							APIKey: "test-key",
+						Gemini: entconfig.GeminiConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "gemini-pro",
+								APIKey: "test-key",
+							},
+							CredentialsJSON: `{"key": "value"}`,
+							MaxTokens:       1000,
 						},
-						CredentialsJSON: `{"key": "value"}`,
-						MaxTokens:       1000,
 					},
 				},
 			},
@@ -111,11 +177,11 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderHuggingface,
-					},
-					HuggingFace: entconfig.HuggingFaceConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "facebook/opt-1.3b",
-							APIKey: "test-key",
+						HuggingFace: entconfig.HuggingFaceConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "facebook/opt-1.3b",
+								APIKey: "test-key",
+							},
 						},
 					},
 				},
@@ -128,10 +194,10 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderOllama,
-					},
-					Ollama: entconfig.OllamaConfig{
-						Model: "llama2",
-						URL:   "http://localhost:11434",
+						Ollama: entconfig.OllamaConfig{
+							Model: "llama2",
+							URL:   "http://localhost:11434",
+						},
 					},
 				},
 			},
@@ -143,13 +209,13 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderOpenai,
-					},
-					OpenAI: entconfig.OpenAIConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model:  "gpt-4",
-							APIKey: "test-key",
+						OpenAI: entconfig.OpenAIConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model:  "gpt-4",
+								APIKey: "test-key",
+							},
+							OrganizationID: "org-123",
 						},
-						OrganizationID: "org-123",
 					},
 				},
 			},
@@ -172,10 +238,10 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderAnthropic,
-					},
-					Anthropic: entconfig.AnthropicConfig{
-						GenericLLMConfig: entconfig.GenericLLMConfig{
-							Model: "claude-2",
+						Anthropic: entconfig.AnthropicConfig{
+							GenericLLMConfig: entconfig.GenericLLMConfig{
+								Model: "claude-2",
+							},
 						},
 					},
 				},
@@ -188,9 +254,9 @@ func TestNewLLMSummarizer(t *testing.T) {
 				Summarizer: entconfig.Summarizer{
 					LLM: entconfig.SummarizerLLM{
 						Provider: entconfig.LLMProviderOllama,
-					},
-					Ollama: entconfig.OllamaConfig{
-						Model: "llama2",
+						Ollama: entconfig.OllamaConfig{
+							Model: "llama2",
+						},
 					},
 				},
 			},
@@ -200,7 +266,7 @@ func TestNewLLMSummarizer(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			summarizer, err := NewLLMSummarizer(tt.cfg)
+			summarizer, err := newLLMSummarizer(tt.cfg)
 			if tt.wantErr {
 				require.Error(t, err)
 				require.Nil(t, summarizer)

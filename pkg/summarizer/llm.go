@@ -49,23 +49,23 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderAnthropic:
 		opts := make([]anthropic.Option, 0)
 
-		if cfg.Summarizer.Anthropic.APIKey != "" {
-			opts = append(opts, anthropic.WithToken(cfg.Summarizer.Anthropic.APIKey))
+		if cfg.Summarizer.LLM.Anthropic.APIKey != "" {
+			opts = append(opts, anthropic.WithToken(cfg.Summarizer.LLM.Anthropic.APIKey))
 		}
 
-		if cfg.Summarizer.Anthropic.Model != "" {
-			opts = append(opts, anthropic.WithModel(cfg.Summarizer.Anthropic.Model))
+		if cfg.Summarizer.LLM.Anthropic.Model != "" {
+			opts = append(opts, anthropic.WithModel(cfg.Summarizer.LLM.Anthropic.Model))
 		}
 
-		if cfg.Summarizer.Anthropic.BaseURL != "" {
-			opts = append(opts, anthropic.WithBaseURL(cfg.Summarizer.Anthropic.BaseURL))
+		if cfg.Summarizer.LLM.Anthropic.BaseURL != "" {
+			opts = append(opts, anthropic.WithBaseURL(cfg.Summarizer.LLM.Anthropic.BaseURL))
 		}
 
-		if cfg.Summarizer.Anthropic.BetaHeader != "" {
-			opts = append(opts, anthropic.WithAnthropicBetaHeader(cfg.Summarizer.Anthropic.BetaHeader))
+		if cfg.Summarizer.LLM.Anthropic.BetaHeader != "" {
+			opts = append(opts, anthropic.WithAnthropicBetaHeader(cfg.Summarizer.LLM.Anthropic.BetaHeader))
 		}
 
-		if cfg.Summarizer.Anthropic.LegacyTextCompletion {
+		if cfg.Summarizer.LLM.Anthropic.LegacyTextCompletion {
 			opts = append(opts, anthropic.WithLegacyTextCompletionsAPI())
 		}
 
@@ -74,20 +74,20 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderCloudflare:
 		opts := make([]cloudflare.Option, 0)
 
-		if cfg.Summarizer.Cloudflare.APIKey != "" {
-			opts = append(opts, cloudflare.WithToken(cfg.Summarizer.Cloudflare.APIKey))
+		if cfg.Summarizer.LLM.Cloudflare.APIKey != "" {
+			opts = append(opts, cloudflare.WithToken(cfg.Summarizer.LLM.Cloudflare.APIKey))
 		}
 
-		if cfg.Summarizer.Cloudflare.AccountID != "" {
-			opts = append(opts, cloudflare.WithAccountID(cfg.Summarizer.Cloudflare.AccountID))
+		if cfg.Summarizer.LLM.Cloudflare.AccountID != "" {
+			opts = append(opts, cloudflare.WithAccountID(cfg.Summarizer.LLM.Cloudflare.AccountID))
 		}
 
-		if cfg.Summarizer.Cloudflare.Model != "" {
-			opts = append(opts, cloudflare.WithModel(cfg.Summarizer.Cloudflare.Model))
+		if cfg.Summarizer.LLM.Cloudflare.Model != "" {
+			opts = append(opts, cloudflare.WithModel(cfg.Summarizer.LLM.Cloudflare.Model))
 		}
 
-		if cfg.Summarizer.Cloudflare.ServerURL != "" {
-			opts = append(opts, cloudflare.WithServerURL(cfg.Summarizer.Cloudflare.ServerURL))
+		if cfg.Summarizer.LLM.Cloudflare.ServerURL != "" {
+			opts = append(opts, cloudflare.WithServerURL(cfg.Summarizer.LLM.Cloudflare.ServerURL))
 		}
 
 		return cloudflare.New(opts...)
@@ -95,40 +95,40 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderMistral:
 		opts := make([]mistral.Option, 0)
 
-		if cfg.Summarizer.Mistral.APIKey != "" {
-			opts = append(opts, mistral.WithAPIKey(cfg.Summarizer.Mistral.APIKey))
+		if cfg.Summarizer.LLM.Mistral.APIKey != "" {
+			opts = append(opts, mistral.WithAPIKey(cfg.Summarizer.LLM.Mistral.APIKey))
 		}
 
-		if cfg.Summarizer.Mistral.Model != "" {
-			opts = append(opts, mistral.WithModel(cfg.Summarizer.Mistral.Model))
+		if cfg.Summarizer.LLM.Mistral.Model != "" {
+			opts = append(opts, mistral.WithModel(cfg.Summarizer.LLM.Mistral.Model))
 		}
 
-		if cfg.Summarizer.Mistral.URL != "" {
-			opts = append(opts, mistral.WithEndpoint(cfg.Summarizer.Mistral.URL))
+		if cfg.Summarizer.LLM.Mistral.URL != "" {
+			opts = append(opts, mistral.WithEndpoint(cfg.Summarizer.LLM.Mistral.URL))
 		}
 
 		return mistral.New(opts...)
 
 	case entconfig.LLMProviderGemini:
 		opts := make([]googleai.Option, 0)
-		if cfg.Summarizer.Gemini.APIKey != "" {
-			opts = append(opts, googleai.WithAPIKey(cfg.Summarizer.Gemini.APIKey))
+		if cfg.Summarizer.LLM.Gemini.APIKey != "" {
+			opts = append(opts, googleai.WithAPIKey(cfg.Summarizer.LLM.Gemini.APIKey))
 		}
 
-		if cfg.Summarizer.Gemini.Model != "" {
-			opts = append(opts, googleai.WithDefaultModel(cfg.Summarizer.Gemini.Model))
+		if cfg.Summarizer.LLM.Gemini.Model != "" {
+			opts = append(opts, googleai.WithDefaultModel(cfg.Summarizer.LLM.Gemini.Model))
 		}
 
-		if cfg.Summarizer.Gemini.MaxTokens != 0 {
-			opts = append(opts, googleai.WithDefaultMaxTokens(cfg.Summarizer.Gemini.MaxTokens))
+		if cfg.Summarizer.LLM.Gemini.MaxTokens != 0 {
+			opts = append(opts, googleai.WithDefaultMaxTokens(cfg.Summarizer.LLM.Gemini.MaxTokens))
 		}
 
-		if cfg.Summarizer.Gemini.CredentialsJSON != "" {
-			opts = append(opts, googleai.WithCredentialsJSON([]byte(cfg.Summarizer.Gemini.CredentialsJSON)))
+		if cfg.Summarizer.LLM.Gemini.CredentialsJSON != "" {
+			opts = append(opts, googleai.WithCredentialsJSON([]byte(cfg.Summarizer.LLM.Gemini.CredentialsJSON)))
 		}
 
-		if cfg.Summarizer.Gemini.CredentialsPath != "" {
-			opts = append(opts, googleai.WithCredentialsFile(cfg.Summarizer.Gemini.CredentialsPath))
+		if cfg.Summarizer.LLM.Gemini.CredentialsPath != "" {
+			opts = append(opts, googleai.WithCredentialsFile(cfg.Summarizer.LLM.Gemini.CredentialsPath))
 		}
 
 		return googleai.New(context.Background(), opts...)
@@ -136,16 +136,16 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderHuggingface:
 		opts := make([]huggingface.Option, 0)
 
-		if cfg.Summarizer.HuggingFace.APIKey != "" {
-			opts = append(opts, huggingface.WithToken(cfg.Summarizer.HuggingFace.APIKey))
+		if cfg.Summarizer.LLM.HuggingFace.APIKey != "" {
+			opts = append(opts, huggingface.WithToken(cfg.Summarizer.LLM.HuggingFace.APIKey))
 		}
 
-		if cfg.Summarizer.HuggingFace.Model != "" {
-			opts = append(opts, huggingface.WithModel(cfg.Summarizer.HuggingFace.Model))
+		if cfg.Summarizer.LLM.HuggingFace.Model != "" {
+			opts = append(opts, huggingface.WithModel(cfg.Summarizer.LLM.HuggingFace.Model))
 		}
 
-		if cfg.Summarizer.HuggingFace.URL != "" {
-			opts = append(opts, huggingface.WithURL(cfg.Summarizer.HuggingFace.URL))
+		if cfg.Summarizer.LLM.HuggingFace.URL != "" {
+			opts = append(opts, huggingface.WithURL(cfg.Summarizer.LLM.HuggingFace.URL))
 		}
 
 		return huggingface.New(opts...)
@@ -153,12 +153,12 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderOllama:
 		opts := make([]ollama.Option, 0)
 
-		if cfg.Summarizer.Ollama.Model != "" {
-			opts = append(opts, ollama.WithModel(cfg.Summarizer.Ollama.Model))
+		if cfg.Summarizer.LLM.Ollama.Model != "" {
+			opts = append(opts, ollama.WithModel(cfg.Summarizer.LLM.Ollama.Model))
 		}
 
-		if cfg.Summarizer.Ollama.URL != "" {
-			opts = append(opts, ollama.WithServerURL(cfg.Summarizer.Ollama.URL))
+		if cfg.Summarizer.LLM.Ollama.URL != "" {
+			opts = append(opts, ollama.WithServerURL(cfg.Summarizer.LLM.Ollama.URL))
 		}
 
 		return ollama.New(opts...)
@@ -166,20 +166,20 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderOpenai:
 		opts := make([]openai.Option, 0)
 
-		if cfg.Summarizer.OpenAI.APIKey != "" {
-			opts = append(opts, openai.WithToken(cfg.Summarizer.OpenAI.APIKey))
+		if cfg.Summarizer.LLM.OpenAI.APIKey != "" {
+			opts = append(opts, openai.WithToken(cfg.Summarizer.LLM.OpenAI.APIKey))
 		}
 
-		if cfg.Summarizer.OpenAI.Model != "" {
-			opts = append(opts, openai.WithModel(cfg.Summarizer.OpenAI.Model))
+		if cfg.Summarizer.LLM.OpenAI.Model != "" {
+			opts = append(opts, openai.WithModel(cfg.Summarizer.LLM.OpenAI.Model))
 		}
 
-		if cfg.Summarizer.OpenAI.URL != "" {
-			opts = append(opts, openai.WithBaseURL(cfg.Summarizer.OpenAI.URL))
+		if cfg.Summarizer.LLM.OpenAI.URL != "" {
+			opts = append(opts, openai.WithBaseURL(cfg.Summarizer.LLM.OpenAI.URL))
 		}
 
-		if cfg.Summarizer.OpenAI.OrganizationID != "" {
-			opts = append(opts, openai.WithOrganization(cfg.Summarizer.OpenAI.OrganizationID))
+		if cfg.Summarizer.LLM.OpenAI.OrganizationID != "" {
+			opts = append(opts, openai.WithOrganization(cfg.Summarizer.LLM.OpenAI.OrganizationID))
 		}
 
 		return openai.New(opts...)
