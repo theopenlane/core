@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
+// HookPolicySummarize summarizes the policy and produces a short human readable copy
 func HookPolicySummarize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InternalPolicyFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) (generated.Value, error) {

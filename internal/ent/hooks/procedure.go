@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
+// HookProcedureSummarize summarizes the procedure and produces a short human readable copy
 func HookProcedureSummarize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ProcedureFunc(func(ctx context.Context, m *generated.ProcedureMutation) (generated.Value, error) {
