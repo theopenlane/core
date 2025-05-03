@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
@@ -12,7 +13,6 @@ import (
 func HookPolicySummarize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InternalPolicyFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) (generated.Value, error) {
-
 			details, ok := m.Details()
 			if !ok {
 				return nil, fmt.Errorf("details does not exists") // nolint:err113

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/microcosm-cc/bluemonday"
+
 	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
@@ -21,7 +22,6 @@ type SummarizerClient struct {
 }
 
 func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
-
 	sanitizer := bluemonday.StrictPolicy()
 
 	switch cfg.Summarizer.Type {
@@ -32,7 +32,6 @@ func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
 		}, nil
 
 	case entconfig.SummarizerTypeLlm:
-
 		impl, err := newLLMSummarizer(cfg)
 		if err != nil {
 			return nil, err
