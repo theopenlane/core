@@ -94,7 +94,14 @@ Config holds the cors configuration settings
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**Additional Properties**](#servercorsprefixesadditionalproperties)|`string[]`|||
 
+<a name="servercorsprefixesadditionalproperties"></a>
+##### server\.cors\.prefixes\.additionalProperties: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="servercorsalloworigins"></a>
 #### server\.cors\.allowOrigins: array
 
@@ -144,6 +151,7 @@ Config contains the types used in executing redirects via the redirect middlewar
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="servercachecontrol"></a>
 ### server\.cacheControl: object
@@ -167,6 +175,7 @@ Config is the config values for the cache-control middleware
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="servercachecontroletagheaders"></a>
 #### server\.cacheControl\.etagHeaders: array
@@ -382,6 +391,7 @@ Auth settings including oauth2 providers and token configuration
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="authsupportedproviders"></a>
 ### auth\.supportedProviders: array
@@ -600,7 +610,18 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**Additional Properties**](#jobqueueriverconfqueuesadditionalproperties)|`object`|||
 
+<a name="jobqueueriverconfqueuesadditionalproperties"></a>
+##### jobQueue\.riverConf\.Queues\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**MaxWorkers**|`integer`|||
+
+**Additional Properties:** not allowed  
 <a name="jobqueueriverconftest"></a>
 #### jobQueue\.riverConf\.Test: object
 
