@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/pkg/summarizer"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
@@ -118,6 +119,17 @@ func (suite *GraphTestSuite) SetupSuite() {
 
 	otpMan := totp.NewOTP(otpOpts...)
 
+	entCfg := &entconfig.Config{
+		EntityTypes: []string{"vendor"},
+		Summarizer: entconfig.Summarizer{
+			Type:             entconfig.SummarizerTypeLexrank,
+			MaximumSentences: 60,
+		},
+	}
+
+	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
+	require.NoError(t, err)
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}), // add noop email config
@@ -126,9 +138,8 @@ func (suite *GraphTestSuite) SetupSuite() {
 		}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
-		ent.EntConfig(&entconfig.Config{
-			EntityTypes: []string{"vendor"},
-		}),
+		ent.EntConfig(entCfg),
+		ent.Summarizer(summarizerClient),
 	}
 
 	// create database connection
