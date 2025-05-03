@@ -43,6 +43,7 @@ func (Procedure) Fields() []ent.Field {
 	// other fields are defined in the mixins
 	return []ent.Field{
 		field.String("summary").
+			Optional().
 			Annotations(
 				entgql.Skip(^entgql.SkipType),
 			),
@@ -91,6 +92,7 @@ func (Procedure) Hooks() []ent.Hook {
 			hooks.HookOrgOwnedTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+		hooks.HookProcedureSummarize(),
 	}
 }
 
