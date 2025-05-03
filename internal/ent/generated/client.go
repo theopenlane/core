@@ -98,6 +98,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -392,6 +393,7 @@ type (
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
+		Summarizer         *summarizer.LexRankSummarizer
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -500,6 +502,13 @@ func EntitlementManager(v *entitlements.StripeClient) Option {
 func ObjectManager(v *objects.Objects) Option {
 	return func(c *config) {
 		c.ObjectManager = v
+	}
+}
+
+// Summarizer configures the Summarizer.
+func Summarizer(v *summarizer.LexRankSummarizer) Option {
+	return func(c *config) {
+		c.Summarizer = v
 	}
 }
 
