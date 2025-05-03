@@ -57,6 +57,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithCORS(),
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
+		serveropts.WithSummarizer(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -109,6 +110,7 @@ func serve(ctx context.Context) error {
 		ent.Emailer(&so.Config.Settings.Email),
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.ObjectManager),
+		ent.Summarizer(so.Config.Handler.Summarizer),
 	)
 
 	// Setup DB connection

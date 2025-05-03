@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/anthropic"
 	"github.com/tmc/langchaingo/llms/cloudflare"
@@ -14,6 +13,8 @@ import (
 	"github.com/tmc/langchaingo/llms/mistral"
 	"github.com/tmc/langchaingo/llms/ollama"
 	"github.com/tmc/langchaingo/llms/openai"
+
+	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
 // maybe make a config value too?
@@ -27,8 +28,7 @@ type LLMSummarizer struct {
 	llmClient llms.Model
 }
 
-func NewLLMSummarizer(cfg entconfig.Config) (*LLMSummarizer, error) {
-
+func newLLMSummarizer(cfg entconfig.Config) (*LLMSummarizer, error) {
 	client, err := getClient(cfg)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,6 @@ func (l *LLMSummarizer) Summarize(ctx context.Context, s string) (string, error)
 }
 
 func getClient(cfg entconfig.Config) (llms.Model, error) {
-
 	switch cfg.Summarizer.LLM.Provider {
 	case entconfig.LLMProviderAnthropic:
 		opts := make([]anthropic.Option, 0)

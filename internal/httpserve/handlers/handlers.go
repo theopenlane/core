@@ -18,6 +18,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/summarizer"
 )
 
 // Handler contains configuration options for handlers
@@ -52,6 +53,8 @@ type Handler struct {
 	Emailer emailtemplates.Config
 	// Entitlements contains the entitlements client
 	Entitlements *entitlements.StripeClient
+	// Summarizer contains the summarizing client
+	Summarizer *summarizer.SummarizerClient
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

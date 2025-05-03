@@ -43,6 +43,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/summarizer"
 )
 
 type ServerOption interface {
@@ -487,5 +488,17 @@ func WithEntitlements() ServerOption {
 
 			s.Config.Handler.Entitlements = client
 		}
+	})
+}
+
+// WithSummarizer sets up the logic for summarizing long blurbs of texts
+func WithSummarizer() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		client, err := summarizer.NewSummarizer(s.Config.Settings.EntConfig)
+		if err != nil {
+			log.Panic().Err(err).Msg("error creating Summarizer client")
+		}
+
+		s.Config.Handler.Summarizer = client
 	})
 }

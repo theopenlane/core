@@ -2,22 +2,28 @@ package summarizer
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"sync"
 
 	"github.com/didasy/tldr"
 )
 
-type LexRankSummarizer struct {
+var (
+	ErrSentenceEmpty             = errors.New("you cannot summarize an empty string")
+	ErrUnsupportedSummarizerType = errors.New("unsupported summarizer type")
+)
+
+type lexRankSummarizer struct {
 	maxSentences int
 	bag          *tldr.Bag
 	// *tldr.Bag is not thread-safe
 	mu sync.Mutex
 }
 
-// NewLexRankSummarizer returns a summarization engine using the lexrank algorithm
-func NewLexRankSummarizer(maxSentences int) *LexRankSummarizer {
-	return &LexRankSummarizer{
+// newLexRankSummarizer returns a summarization engine using the lexrank algorithm
+func newLexRankSummarizer(maxSentences int) *lexRankSummarizer {
+	return &lexRankSummarizer{
 		bag:          tldr.New(),
 		mu:           sync.Mutex{},
 		maxSentences: maxSentences,
@@ -25,7 +31,7 @@ func NewLexRankSummarizer(maxSentences int) *LexRankSummarizer {
 }
 
 // Summarize returns a shortened version of the provided string using the lexrank algorithm
-func (l *LexRankSummarizer) Summarize(ctx context.Context, s string) (string, error) {
+func (l *lexRankSummarizer) Summarize(ctx context.Context, s string) (string, error) {
 	if strings.TrimSpace(s) == "" {
 		return "", ErrSentenceEmpty
 	}

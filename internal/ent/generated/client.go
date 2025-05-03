@@ -393,7 +393,7 @@ type (
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
-		Summarizer         *summarizer.LexRankSummarizer
+		Summarizer         *summarizer.SummarizerClient
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -506,7 +506,7 @@ func ObjectManager(v *objects.Objects) Option {
 }
 
 // Summarizer configures the Summarizer.
-func Summarizer(v *summarizer.LexRankSummarizer) Option {
+func Summarizer(v *summarizer.SummarizerClient) Option {
 	return func(c *config) {
 		c.Summarizer = v
 	}

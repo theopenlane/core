@@ -2,15 +2,39 @@ package summarizer
 
 import (
 	"context"
-	"errors"
+
+	"github.com/theopenlane/core/internal/ent/entconfig"
 )
 
-var (
-	ErrSentenceEmpty = errors.New("you cannot summarize an empty string")
-)
-
-type Summarizer interface {
+type summarizer interface {
 	// Summarize takes in a long text and returns a summarized
 	// version of the text.
 	Summarize(context.Context, string) (string, error)
+}
+
+type SummarizerClient struct {
+	impl summarizer
+}
+
+func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
+
+	switch cfg.Summarizer.Type {
+	case entconfig.SummarizerTypeLexrank:
+		return &SummarizerClient{
+			impl: newLexRankSummarizer(cfg.Summarizer.MaximumCharacter),
+		}, nil
+
+	case entconfig.SummarizerTypeLlm:
+
+		impl, err := newLLMSummarizer(cfg)
+		if err != nil {
+			return nil, err
+		}
+
+		return &SummarizerClient{
+			impl: impl,
+		}, nil
+	}
+
+	return nil, ErrUnsupportedSummarizerType
 }

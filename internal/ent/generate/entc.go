@@ -138,7 +138,7 @@ func main() {
 		),
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),
-			entc.DependencyType(&summarizer.LexRankSummarizer{}),
+			entc.DependencyType(&summarizer.SummarizerClient{}),
 		),
 		entc.TemplateDir(templateDir),
 		entc.Extensions(
