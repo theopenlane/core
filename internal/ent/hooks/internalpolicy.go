@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -10,11 +11,21 @@ import (
 
 func HookPolicySummarize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.ProcedureFunc(func(ctx context.Context, m *generated.ProcedureMutation) (generated.Value, error) {
+		return hook.InternalPolicyFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) (generated.Value, error) {
 
-			retValue, err := next.Mutate(ctx, m)
+			details, ok := m.Details()
+			if !ok {
+				return nil, fmt.Errorf("details does not exists") // nolint:err113
+			}
 
-			return retValue, err
+			summarized, err := m.Summarizer.Summarize(ctx, details)
+			if err != nil {
+				return nil, err
+			}
+
+			m.SetSummary(summarized)
+
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }

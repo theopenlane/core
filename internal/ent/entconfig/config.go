@@ -11,7 +11,7 @@ type Config struct {
 type Summarizer struct {
 	Type             SummarizerType    `json:"type" koanf:"type" default:"lexrank"`
 	LLM              SummarizerLLM     `json:"llm" koanf:"llm"`
-	MaximumSentences int               `json:"maximumSentences" koanf:"maximumSentences" default:"50"`
+	MaximumSentences int               `json:"maximumSentences" koanf:"maximumSentences" default:"60"`
 	Anthropic        AnthropicConfig   `json:"anthropic" koanf:"anthropic"`
 	Mistral          MistralConfig     `json:"mistral" koanf:"mistral"`
 	Gemini           GeminiConfig      `json:"gemini" koanf:"gemini"`

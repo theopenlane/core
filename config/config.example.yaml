@@ -107,7 +107,7 @@ entConfig:
             url: ""
         llm:
             provider: ""
-        maximumSentences: 50
+        maximumSentences: 60
         mistral:
             apiKey: ""
             model: ""

@@ -34,7 +34,7 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 		},
 	}
 
-	summarizer := NewLexRankSummarizer(maxSentences)
+	summarizer := newLexRankSummarizer(maxSentences)
 
 	for _, v := range tt {
 		t.Run("Test "+v.name, func(t *testing.T) {

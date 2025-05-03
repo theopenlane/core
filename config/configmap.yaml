@@ -53,7 +53,7 @@ data:
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
-  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.core.entConfig.summarizer.maximumSentences | default 50 }}
+  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.core.entConfig.summarizer.maximumSentences | default 60 }}
   CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_BETAHEADER: {{ .Values.core.entConfig.summarizer.anthropic.betaHeader }}
   CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.core.entConfig.summarizer.anthropic.legacyTextCompletion }}
   CORE_ENTCONFIG_SUMMARIZER_ANTHROPIC_BASEURL: {{ .Values.core.entConfig.summarizer.anthropic.baseURL }}
