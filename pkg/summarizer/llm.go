@@ -95,16 +95,16 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 	case entconfig.LLMProviderMistral:
 		opts := make([]mistral.Option, 0)
 
-		if cfg.Summarizer.Mistal.APIKey != "" {
-			opts = append(opts, mistral.WithAPIKey(cfg.Summarizer.Mistal.APIKey))
+		if cfg.Summarizer.Mistral.APIKey != "" {
+			opts = append(opts, mistral.WithAPIKey(cfg.Summarizer.Mistral.APIKey))
 		}
 
-		if cfg.Summarizer.Mistal.Model != "" {
-			opts = append(opts, mistral.WithModel(cfg.Summarizer.Mistal.Model))
+		if cfg.Summarizer.Mistral.Model != "" {
+			opts = append(opts, mistral.WithModel(cfg.Summarizer.Mistral.Model))
 		}
 
-		if cfg.Summarizer.Mistal.URL != "" {
-			opts = append(opts, mistral.WithEndpoint(cfg.Summarizer.Mistal.URL))
+		if cfg.Summarizer.Mistral.URL != "" {
+			opts = append(opts, mistral.WithEndpoint(cfg.Summarizer.Mistral.URL))
 		}
 
 		return mistral.New(opts...)

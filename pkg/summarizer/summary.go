@@ -21,7 +21,7 @@ func NewSummarizer(cfg entconfig.Config) (*SummarizerClient, error) {
 	switch cfg.Summarizer.Type {
 	case entconfig.SummarizerTypeLexrank:
 		return &SummarizerClient{
-			impl: newLexRankSummarizer(cfg.Summarizer.MaximumCharacter),
+			impl: newLexRankSummarizer(cfg.Summarizer.MaximumSentences),
 		}, nil
 
 	case entconfig.SummarizerTypeLlm:

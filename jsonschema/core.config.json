@@ -337,6 +337,45 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "entconfig.AnthropicConfig": {
+      "properties": {
+        "betaHeader": {
+          "type": "string"
+        },
+        "legacyTextCompletion": {
+          "type": "boolean"
+        },
+        "baseURL": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.CloudflareConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "accountID": {
+          "type": "string"
+        },
+        "serverURL": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "entconfig.Config": {
       "properties": {
         "entityTypes": {
@@ -351,6 +390,87 @@
       "type": "object",
       "description": "Config holds the configuration for the ent server"
     },
+    "entconfig.GeminiConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "credentialsPath": {
+          "type": "string"
+        },
+        "credentialsJSON": {
+          "type": "string"
+        },
+        "maxTokens": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.HuggingFaceConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.MistralConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.OllamaConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.OpenAIConfig": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "organizationID": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "entconfig.Summarizer": {
       "properties": {
         "type": {
@@ -359,8 +479,29 @@
         "llm": {
           "$ref": "#/$defs/entconfig.SummarizerLLM"
         },
-        "maximumCharacter": {
+        "maximumSentences": {
           "type": "integer"
+        },
+        "anthropic": {
+          "$ref": "#/$defs/entconfig.AnthropicConfig"
+        },
+        "mistral": {
+          "$ref": "#/$defs/entconfig.MistralConfig"
+        },
+        "gemini": {
+          "$ref": "#/$defs/entconfig.GeminiConfig"
+        },
+        "huggingFace": {
+          "$ref": "#/$defs/entconfig.HuggingFaceConfig"
+        },
+        "ollama": {
+          "$ref": "#/$defs/entconfig.OllamaConfig"
+        },
+        "cloudflare": {
+          "$ref": "#/$defs/entconfig.CloudflareConfig"
+        },
+        "openai": {
+          "$ref": "#/$defs/entconfig.OpenAIConfig"
         }
       },
       "additionalProperties": false,

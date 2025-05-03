@@ -231,7 +231,14 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |**type**|`string`|||
 |[**llm**](#entconfigsummarizerllm)|`object`|||
-|**maximumCharacter**|`integer`|||
+|**maximumSentences**|`integer`|||
+|[**anthropic**](#entconfigsummarizeranthropic)|`object`|||
+|[**mistral**](#entconfigsummarizermistral)|`object`|||
+|[**gemini**](#entconfigsummarizergemini)|`object`|||
+|[**huggingFace**](#entconfigsummarizerhuggingface)|`object`|||
+|[**ollama**](#entconfigsummarizerollama)|`object`|||
+|[**cloudflare**](#entconfigsummarizercloudflare)|`object`|||
+|[**openai**](#entconfigsummarizeropenai)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigsummarizerllm"></a>
@@ -242,6 +249,95 @@ Config holds the configuration for the ent server
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**provider**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizeranthropic"></a>
+#### entConfig\.summarizer\.anthropic: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**betaHeader**|`string`|||
+|**legacyTextCompletion**|`boolean`|||
+|**baseURL**|`string`|||
+|**model**|`string`|||
+|**apiKey**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizermistral"></a>
+#### entConfig\.summarizer\.mistral: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**apiKey**|`string`|||
+|**url**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizergemini"></a>
+#### entConfig\.summarizer\.gemini: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**apiKey**|`string`|||
+|**credentialsPath**|`string`|||
+|**credentialsJSON**|`string`|||
+|**maxTokens**|`integer`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizerhuggingface"></a>
+#### entConfig\.summarizer\.huggingFace: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**apiKey**|`string`|||
+|**url**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizerollama"></a>
+#### entConfig\.summarizer\.ollama: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**url**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizercloudflare"></a>
+#### entConfig\.summarizer\.cloudflare: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**apiKey**|`string`|||
+|**accountID**|`string`|||
+|**serverURL**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="entconfigsummarizeropenai"></a>
+#### entConfig\.summarizer\.openai: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**model**|`string`|||
+|**apiKey**|`string`|||
+|**url**|`string`|||
+|**organizationID**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

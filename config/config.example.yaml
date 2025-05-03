@@ -84,9 +84,42 @@ email:
 entConfig:
     entityTypes: null
     summarizer:
+        anthropic:
+            apiKey: ""
+            baseURL: ""
+            betaHeader: ""
+            legacyTextCompletion: false
+            model: ""
+        cloudflare:
+            accountID: ""
+            apiKey: ""
+            model: ""
+            serverURL: ""
+        gemini:
+            apiKey: ""
+            credentialsJSON: ""
+            credentialsPath: ""
+            maxTokens: 0
+            model: ""
+        huggingFace:
+            apiKey: ""
+            model: ""
+            url: ""
         llm:
             provider: ""
-        maximumCharacter: 0
+        maximumSentences: 50
+        mistral:
+            apiKey: ""
+            model: ""
+            url: ""
+        ollama:
+            model: ""
+            url: ""
+        openai:
+            apiKey: ""
+            model: ""
+            organizationID: ""
+            url: ""
         type: lexrank
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
