@@ -1,0 +1,214 @@
+package summarizer
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/entconfig"
+)
+
+func TestNewLLMSummarizer(t *testing.T) {
+	tests := []struct {
+		name    string
+		cfg     entconfig.Config
+		wantErr bool
+	}{
+		{
+			name: "anthropic with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderAnthropic,
+					},
+					Anthropic: entconfig.AnthropicConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "claude-2",
+							APIKey: "test-key",
+						},
+						BetaHeader:           "beta-header",
+						LegacyTextCompletion: true,
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "cloudflare with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderCloudflare,
+					},
+					Cloudflare: entconfig.CloudflareConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "@cf/meta/llama-2-7b-chat-int8",
+							APIKey: "test-key",
+						},
+						AccountID: "account-id",
+						ServerURL: "https://api.cloudflare.com",
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "mistral with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderMistral,
+					},
+					Mistal: entconfig.MistralConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "mistral-tiny",
+							APIKey: "test-key",
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "gemini with options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderGemini,
+					},
+					Gemini: entconfig.GeminiConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "gemini-pro",
+							APIKey: "test-key",
+						},
+						MaxTokens: 1000,
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "gemini with multiple credential options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderGemini,
+					},
+					Gemini: entconfig.GeminiConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "gemini-pro",
+							APIKey: "test-key",
+						},
+						CredentialsJSON: `{"key": "value"}`,
+						MaxTokens:       1000,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "huggingface with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderHuggingface,
+					},
+					HuggingFace: entconfig.HuggingFaceConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "facebook/opt-1.3b",
+							APIKey: "test-key",
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "ollama with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderOllama,
+					},
+					Ollama: entconfig.OllamaConfig{
+						Model: "llama2",
+						URL:   "http://localhost:11434",
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "openai with all options",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderOpenai,
+					},
+					OpenAI: entconfig.OpenAIConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model:  "gpt-4",
+							APIKey: "test-key",
+						},
+						OrganizationID: "org-123",
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "unsupported provider",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: "unsupported",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "missing required api key for anthropic",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderAnthropic,
+					},
+					Anthropic: entconfig.AnthropicConfig{
+						GenericLLMConfig: entconfig.GenericLLMConfig{
+							Model: "claude-2",
+						},
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "minimal config for ollama",
+			cfg: entconfig.Config{
+				Summarizer: entconfig.Summarizer{
+					LLM: entconfig.SummarizerLLM{
+						Provider: entconfig.LLMProviderOllama,
+					},
+					Ollama: entconfig.OllamaConfig{
+						Model: "llama2",
+					},
+				},
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			summarizer, err := NewLLMSummarizer(tt.cfg)
+			if tt.wantErr {
+				require.Error(t, err)
+				require.Nil(t, summarizer)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, summarizer)
+		})
+	}
+}

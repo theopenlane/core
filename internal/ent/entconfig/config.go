@@ -11,7 +11,14 @@ type Config struct {
 type Summarizer struct {
 	Type             SummarizerType `json:"type" koanf:"type" default:"lexrank"`
 	LLM              SummarizerLLM  `json:"llm" koanf:"llm"`
-	MaximumCharacter int            `json:"maximumCharacter" koanf:"maximumCharacter" default:50`
+	MaximumCharacter int            `json:"maximumCharacter" koanf:"maximumCharacter"`
+	Anthropic        AnthropicConfig
+	Mistal           MistralConfig
+	Gemini           GeminiConfig
+	HuggingFace      HuggingFaceConfig
+	Ollama           OllamaConfig
+	Cloudflare       CloudflareConfig
+	OpenAI           OpenAIConfig
 }
 
 // ENUM(lexrank,llm)
@@ -24,47 +31,48 @@ type SummarizerLLM struct {
 	Provider LLMProvider `json:"provider" koanf:"provider"`
 }
 
-type genericLLMConfig struct {
+type GenericLLMConfig struct {
 	Model  string `json:"model" koanf:"model"`
 	APIKey string `json:"apiKey" koanf:"apiKey"`
 }
 
 type GeminiConfig struct {
-	genericLLMConfig
-	CredentialsPath string
-	CredentialsJSON string
-	MaxTokens       int
+	GenericLLMConfig
+	CredentialsPath string `json:"credentialsPath" koanf:"credentialsPath"`
+	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
+	MaxTokens       int    `json:"maxTokens" koanf:"maxTokens"`
 }
 
 type HuggingFaceConfig struct {
-	genericLLMConfig
-	URL string
+	GenericLLMConfig
+	URL string `json:"url" koanf:"url"`
 }
 
 type MistralConfig struct {
-	genericLLMConfig
-	URL string
+	GenericLLMConfig
+	URL string `json:"url" koanf:"url"`
 }
 
 type OllamaConfig struct {
 	Model string `json:"model" koanf:"model"`
-	URL   string
+	URL   string `json:"url" koanf:"url"`
 }
 
 type AnthropicConfig struct {
-	BetaHeader           string
-	LegacyTextCompletion bool
-	BaseURL              string
+	BetaHeader           string `json:"betaHeader" koanf:"betaHeader"`
+	LegacyTextCompletion bool   `json:"legacyTextCompletion" koanf:"legacyTextCompletion"`
+	BaseURL              string `json:"baseURL" koanf:"baseURL"`
+	GenericLLMConfig
 }
 
 type CloudflareConfig struct {
-	genericLLMConfig
-	AccountID string
-	ServerURL string
+	GenericLLMConfig
+	AccountID string `json:"accountID" koanf:"accountID"`
+	ServerURL string `json:"serverURL" koanf:"serverURL"`
 }
 
 type OpenAIConfig struct {
-	genericLLMConfig
-	URL            string
-	OrganizationID string
+	GenericLLMConfig
+	URL            string `json:"url" koanf:"url"`
+	OrganizationID string `json:"organizationID" koanf:"organizationID"`
 }
