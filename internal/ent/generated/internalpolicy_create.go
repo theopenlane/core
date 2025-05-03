@@ -279,6 +279,14 @@ func (ipc *InternalPolicyCreate) SetSummary(s string) *InternalPolicyCreate {
 	return ipc
 }
 
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableSummary(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetSummary(*s)
+	}
+	return ipc
+}
+
 // SetID sets the "id" field.
 func (ipc *InternalPolicyCreate) SetID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetID(s)
@@ -580,9 +588,6 @@ func (ipc *InternalPolicyCreate) check() error {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
-	}
-	if _, ok := ipc.mutation.Summary(); !ok {
-		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "InternalPolicy.summary"`)}
 	}
 	return nil
 }

@@ -278,6 +278,14 @@ func (pc *ProcedureCreate) SetSummary(s string) *ProcedureCreate {
 	return pc
 }
 
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableSummary(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetSummary(*s)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProcedureCreate) SetID(s string) *ProcedureCreate {
 	pc.mutation.SetID(s)
@@ -564,9 +572,6 @@ func (pc *ProcedureCreate) check() error {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
 		}
-	}
-	if _, ok := pc.mutation.Summary(); !ok {
-		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "Procedure.summary"`)}
 	}
 	return nil
 }

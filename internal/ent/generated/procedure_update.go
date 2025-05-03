@@ -360,6 +360,12 @@ func (pu *ProcedureUpdate) SetNillableSummary(s *string) *ProcedureUpdate {
 	return pu
 }
 
+// ClearSummary clears the value of the "summary" field.
+func (pu *ProcedureUpdate) ClearSummary() *ProcedureUpdate {
+	pu.mutation.ClearSummary()
+	return pu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -900,6 +906,9 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.Summary(); ok {
 		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
+	}
+	if pu.mutation.SummaryCleared() {
+		_spec.ClearField(procedure.FieldSummary, field.TypeString)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1768,6 +1777,12 @@ func (puo *ProcedureUpdateOne) SetNillableSummary(s *string) *ProcedureUpdateOne
 	return puo
 }
 
+// ClearSummary clears the value of the "summary" field.
+func (puo *ProcedureUpdateOne) ClearSummary() *ProcedureUpdateOne {
+	puo.mutation.ClearSummary()
+	return puo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -2338,6 +2353,9 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if value, ok := puo.mutation.Summary(); ok {
 		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
+	}
+	if puo.mutation.SummaryCleared() {
+		_spec.ClearField(procedure.FieldSummary, field.TypeString)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -42219,7 +42219,7 @@ type InternalPolicy implements Node {
   the id of the group responsible for approving the policy
   """
   delegateID: ID
-  summary: String!
+  summary: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -42598,7 +42598,7 @@ type InternalPolicyHistory implements Node {
   the id of the group responsible for approving the policy
   """
   delegateID: String
-  summary: String!
+  summary: String
 }
 """
 A connection to a list of items.
@@ -50307,7 +50307,7 @@ type Procedure implements Node {
   the id of the group responsible for approving the procedure
   """
   delegateID: ID
-  summary: String!
+  summary: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -50655,7 +50655,7 @@ type ProcedureHistory implements Node {
   the id of the group responsible for approving the procedure
   """
   delegateID: String
-  summary: String!
+  summary: String
 }
 """
 A connection to a list of items.

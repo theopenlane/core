@@ -304,6 +304,14 @@ func (phc *ProcedureHistoryCreate) SetSummary(s string) *ProcedureHistoryCreate 
 	return phc
 }
 
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableSummary(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetSummary(*s)
+	}
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -423,9 +431,6 @@ func (phc *ProcedureHistoryCreate) check() error {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
 		}
-	}
-	if _, ok := phc.mutation.Summary(); !ok {
-		return &ValidationError{Name: "summary", err: errors.New(`generated: missing required field "ProcedureHistory.summary"`)}
 	}
 	return nil
 }

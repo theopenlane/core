@@ -1466,6 +1466,16 @@ func SummaryHasSuffix(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldSummary, v))
 }
 
+// SummaryIsNil applies the IsNil predicate on the "summary" field.
+func SummaryIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldSummary))
+}
+
+// SummaryNotNil applies the NotNil predicate on the "summary" field.
+func SummaryNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldSummary))
+}
+
 // SummaryEqualFold applies the EqualFold predicate on the "summary" field.
 func SummaryEqualFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldSummary, v))

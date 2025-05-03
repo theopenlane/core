@@ -1466,6 +1466,16 @@ func SummaryHasSuffix(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldHasSuffix(FieldSummary, v))
 }
 
+// SummaryIsNil applies the IsNil predicate on the "summary" field.
+func SummaryIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldSummary))
+}
+
+// SummaryNotNil applies the NotNil predicate on the "summary" field.
+func SummaryNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldSummary))
+}
+
 // SummaryEqualFold applies the EqualFold predicate on the "summary" field.
 func SummaryEqualFold(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEqualFold(FieldSummary, v))

@@ -1323,6 +1323,16 @@ func SummaryHasSuffix(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldHasSuffix(FieldSummary, v))
 }
 
+// SummaryIsNil applies the IsNil predicate on the "summary" field.
+func SummaryIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldSummary))
+}
+
+// SummaryNotNil applies the NotNil predicate on the "summary" field.
+func SummaryNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldSummary))
+}
+
 // SummaryEqualFold applies the EqualFold predicate on the "summary" field.
 func SummaryEqualFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEqualFold(FieldSummary, v))

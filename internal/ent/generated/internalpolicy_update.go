@@ -361,6 +361,12 @@ func (ipu *InternalPolicyUpdate) SetNillableSummary(s *string) *InternalPolicyUp
 	return ipu
 }
 
+// ClearSummary clears the value of the "summary" field.
+func (ipu *InternalPolicyUpdate) ClearSummary() *InternalPolicyUpdate {
+	ipu.mutation.ClearSummary()
+	return ipu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
 	return ipu.SetOwnerID(o.ID)
@@ -937,6 +943,9 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := ipu.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
+	}
+	if ipu.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
 	if ipu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1853,6 +1862,12 @@ func (ipuo *InternalPolicyUpdateOne) SetNillableSummary(s *string) *InternalPoli
 	return ipuo
 }
 
+// ClearSummary clears the value of the "summary" field.
+func (ipuo *InternalPolicyUpdateOne) ClearSummary() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearSummary()
+	return ipuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
 	return ipuo.SetOwnerID(o.ID)
@@ -2459,6 +2474,9 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if value, ok := ipuo.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
+	}
+	if ipuo.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
 	if ipuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

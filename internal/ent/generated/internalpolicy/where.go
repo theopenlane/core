@@ -1323,6 +1323,16 @@ func SummaryHasSuffix(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldSummary, v))
 }
 
+// SummaryIsNil applies the IsNil predicate on the "summary" field.
+func SummaryIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldSummary))
+}
+
+// SummaryNotNil applies the NotNil predicate on the "summary" field.
+func SummaryNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldSummary))
+}
+
 // SummaryEqualFold applies the EqualFold predicate on the "summary" field.
 func SummaryEqualFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEqualFold(FieldSummary, v))
