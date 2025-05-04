@@ -1,6 +1,6 @@
 all: true
 dir: mocks
-filename: mocks_test.go
+filename: mocks.go
 force-file-write: true
 formatter: goimports
 log-level: info
