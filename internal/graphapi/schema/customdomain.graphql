@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up customDomain by ID
+    """
+     customDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+    ):  CustomDomain!
+}
+
+extend type Mutation{
+    """
+    Create a new customDomain
+    """
+    createCustomDomain(
+        """
+        values of the customDomain
+        """
+        input: CreateCustomDomainInput!
+    ): CustomDomainCreatePayload!
+    """
+    Create multiple new customDomains
+    """
+    createBulkCustomDomain(
+        """
+        values of the customDomain
+        """
+        input: [CreateCustomDomainInput!]
+    ): CustomDomainBulkCreatePayload!
+    """
+    Create multiple new customDomains via file upload
+    """
+    createBulkCSVCustomDomain(
+        """
+        csv file containing values of the customDomain
+        """
+        input: Upload!
+    ): CustomDomainBulkCreatePayload!
+    """
+    Update an existing customDomain
+    """
+    updateCustomDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+        """
+        New values for the customDomain
+        """
+        input: UpdateCustomDomainInput!
+    ): CustomDomainUpdatePayload!
+    """
+    Delete an existing customDomain
+    """
+    deleteCustomDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+    ): CustomDomainDeletePayload!
+}
+
+"""
+Return response for createCustomDomain mutation
+"""
+type CustomDomainCreatePayload {
+    """
+    Created customDomain
+    """
+    customDomain: CustomDomain!
+}
+
+"""
+Return response for updateCustomDomain mutation
+"""
+type CustomDomainUpdatePayload {
+    """
+    Updated customDomain
+    """
+    customDomain: CustomDomain!
+}
+
+"""
+Return response for deleteCustomDomain mutation
+"""
+type CustomDomainDeletePayload {
+    """
+    Deleted customDomain ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCustomDomain mutation
+"""
+type CustomDomainBulkCreatePayload {
+    """
+    Created customDomains
+    """
+    customDomains: [CustomDomain!]
+}

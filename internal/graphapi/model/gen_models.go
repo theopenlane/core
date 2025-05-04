@@ -224,6 +224,30 @@ type CreateProgramWithMembersInput struct {
 	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
 }
 
+// Return response for createBulkCustomDomain mutation
+type CustomDomainBulkCreatePayload struct {
+	// Created customDomains
+	CustomDomains []*generated.CustomDomain `json:"customDomains,omitempty"`
+}
+
+// Return response for createCustomDomain mutation
+type CustomDomainCreatePayload struct {
+	// Created customDomain
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
+// Return response for deleteCustomDomain mutation
+type CustomDomainDeletePayload struct {
+	// Deleted customDomain ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateCustomDomain mutation
+type CustomDomainUpdatePayload struct {
+	// Updated customDomain
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
 // Return response for createBulkDocumentData mutation
 type DocumentDataBulkCreatePayload struct {
 	// Created documentData
@@ -536,6 +560,30 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
+// Return response for createBulkMappableDomain mutation
+type MappableDomainBulkCreatePayload struct {
+	// Created mappableDomains
+	MappableDomains []*generated.MappableDomain `json:"mappableDomains,omitempty"`
+}
+
+// Return response for createMappableDomain mutation
+type MappableDomainCreatePayload struct {
+	// Created mappableDomain
+	MappableDomain *generated.MappableDomain `json:"mappableDomain"`
+}
+
+// Return response for deleteMappableDomain mutation
+type MappableDomainDeletePayload struct {
+	// Deleted mappableDomain ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateMappableDomain mutation
+type MappableDomainUpdatePayload struct {
+	// Updated mappableDomain
+	MappableDomain *generated.MappableDomain `json:"mappableDomain"`
+}
+
 // Return response for createBulkMappedControl mutation
 type MappedControlBulkCreatePayload struct {
 	// Created mappedControls
@@ -800,6 +848,7 @@ type SearchResults struct {
 	Controls               *generated.ControlConnection               `json:"controls,omitempty"`
 	ControlImplementations *generated.ControlImplementationConnection `json:"controlImplementations,omitempty"`
 	ControlObjectives      *generated.ControlObjectiveConnection      `json:"controlObjectives,omitempty"`
+	CustomDomains          *generated.CustomDomainConnection          `json:"customDomains,omitempty"`
 	DocumentData           *generated.DocumentDataConnection          `json:"documentData,omitempty"`
 	Entities               *generated.EntityConnection                `json:"entities,omitempty"`
 	EntityTypes            *generated.EntityTypeConnection            `json:"entityTypes,omitempty"`
@@ -810,6 +859,7 @@ type SearchResults struct {
 	Integrations           *generated.IntegrationConnection           `json:"integrations,omitempty"`
 	InternalPolicies       *generated.InternalPolicyConnection        `json:"internalPolicies,omitempty"`
 	Invites                *generated.InviteConnection                `json:"invites,omitempty"`
+	MappableDomains        *generated.MappableDomainConnection        `json:"mappableDomains,omitempty"`
 	MappedControls         *generated.MappedControlConnection         `json:"mappedControls,omitempty"`
 	Narratives             *generated.NarrativeConnection             `json:"narratives,omitempty"`
 	OrgSubscriptions       *generated.OrgSubscriptionConnection       `json:"orgSubscriptions,omitempty"`

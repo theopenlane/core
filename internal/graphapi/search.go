@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -337,6 +339,42 @@ func adminSearchControlObjectives(ctx context.Context, query string, after *entg
 				controlobjective.ControlObjectiveTypeContainsFold(query), // search by ControlObjectiveType
 				controlobjective.CategoryContainsFold(query),             // search by Category
 				controlobjective.SubcategoryContainsFold(query),          // search by Subcategory
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCustomDomain searches for CustomDomain based on the query string looking for matches
+func searchCustomDomains(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomDomainConnection, error) {
+	request := withTransactionalMutation(ctx).CustomDomain.Query().
+		Where(
+			customdomain.Or(
+				customdomain.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchCustomDomain searches for CustomDomain based on the query string looking for matches
+func adminSearchCustomDomains(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomDomainConnection, error) {
+	request := withTransactionalMutation(ctx).CustomDomain.Query().
+		Where(
+			customdomain.Or(
+				customdomain.DeletedByContainsFold(query), // search by DeletedBy
+				customdomain.ID(query),                    // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				customdomain.OwnerIDContainsFold(query),          // search by OwnerID
+				customdomain.CnameRecordContainsFold(query),      // search by CnameRecord
+				customdomain.MappableDomainIDContainsFold(query), // search by MappableDomainID
 			),
 		)
 
@@ -731,6 +769,40 @@ func adminSearchInvites(ctx context.Context, query string, after *entgql.Cursor[
 				invite.OwnerIDContainsFold(query),     // search by OwnerID
 				invite.RecipientContainsFold(query),   // search by Recipient
 				invite.RequestorIDContainsFold(query), // search by RequestorID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchMappableDomain searches for MappableDomain based on the query string looking for matches
+func searchMappableDomains(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
+	request := withTransactionalMutation(ctx).MappableDomain.Query().
+		Where(
+			mappabledomain.Or(
+				mappabledomain.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchMappableDomain searches for MappableDomain based on the query string looking for matches
+func adminSearchMappableDomains(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
+	request := withTransactionalMutation(ctx).MappableDomain.Query().
+		Where(
+			mappabledomain.Or(
+				mappabledomain.DeletedByContainsFold(query), // search by DeletedBy
+				mappabledomain.ID(query),                    // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				mappabledomain.NameContainsFold(query), // search by Name
 			),
 		)
 

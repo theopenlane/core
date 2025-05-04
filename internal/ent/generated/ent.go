@@ -23,6 +23,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -49,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -160,6 +164,8 @@ func checkColumn(table, column string) error {
 			controlimplementationhistory.Table: controlimplementationhistory.ValidColumn,
 			controlobjective.Table:             controlobjective.ValidColumn,
 			controlobjectivehistory.Table:      controlobjectivehistory.ValidColumn,
+			customdomain.Table:                 customdomain.ValidColumn,
+			customdomainhistory.Table:          customdomainhistory.ValidColumn,
 			documentdata.Table:                 documentdata.ValidColumn,
 			documentdatahistory.Table:          documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:       emailverificationtoken.ValidColumn,
@@ -186,6 +192,8 @@ func checkColumn(table, column string) error {
 			internalpolicy.Table:               internalpolicy.ValidColumn,
 			internalpolicyhistory.Table:        internalpolicyhistory.ValidColumn,
 			invite.Table:                       invite.ValidColumn,
+			mappabledomain.Table:               mappabledomain.ValidColumn,
+			mappabledomainhistory.Table:        mappabledomainhistory.ValidColumn,
 			mappedcontrol.Table:                mappedcontrol.ValidColumn,
 			mappedcontrolhistory.Table:         mappedcontrolhistory.ValidColumn,
 			narrative.Table:                    narrative.ValidColumn,

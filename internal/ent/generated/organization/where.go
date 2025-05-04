@@ -2284,6 +2284,35 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Organization {
 	})
 }
 
+// HasCustomDomains applies the HasEdge predicate on the "custom_domains" edge.
+func HasCustomDomains() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainsTable, CustomDomainsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCustomDomainsWith applies the HasEdge predicate on the "custom_domains" edge with a given conditions (other predicates).
+func HasCustomDomainsWith(preds ...predicate.CustomDomain) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newCustomDomainsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

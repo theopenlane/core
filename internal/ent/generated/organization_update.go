@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -906,6 +907,21 @@ func (ou *OrganizationUpdate) AddActionPlans(a ...*ActionPlan) *OrganizationUpda
 	return ou.AddActionPlanIDs(ids...)
 }
 
+// AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
+func (ou *OrganizationUpdate) AddCustomDomainIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddCustomDomainIDs(ids...)
+	return ou
+}
+
+// AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
+func (ou *OrganizationUpdate) AddCustomDomains(c ...*CustomDomain) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.AddCustomDomainIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1776,6 +1792,27 @@ func (ou *OrganizationUpdate) RemoveActionPlans(a ...*ActionPlan) *OrganizationU
 		ids[i] = a[i].ID
 	}
 	return ou.RemoveActionPlanIDs(ids...)
+}
+
+// ClearCustomDomains clears all "custom_domains" edges to the CustomDomain entity.
+func (ou *OrganizationUpdate) ClearCustomDomains() *OrganizationUpdate {
+	ou.mutation.ClearCustomDomains()
+	return ou
+}
+
+// RemoveCustomDomainIDs removes the "custom_domains" edge to CustomDomain entities by IDs.
+func (ou *OrganizationUpdate) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveCustomDomainIDs(ids...)
+	return ou
+}
+
+// RemoveCustomDomains removes "custom_domains" edges to CustomDomain entities.
+func (ou *OrganizationUpdate) RemoveCustomDomains(c ...*CustomDomain) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.RemoveCustomDomainIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -3960,6 +3997,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.CustomDomainsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.CustomDomain
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !ou.mutation.CustomDomainsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4874,6 +4959,21 @@ func (ouo *OrganizationUpdateOne) AddActionPlans(a ...*ActionPlan) *Organization
 	return ouo.AddActionPlanIDs(ids...)
 }
 
+// AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
+func (ouo *OrganizationUpdateOne) AddCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddCustomDomainIDs(ids...)
+	return ouo
+}
+
+// AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
+func (ouo *OrganizationUpdateOne) AddCustomDomains(c ...*CustomDomain) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.AddCustomDomainIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -5744,6 +5844,27 @@ func (ouo *OrganizationUpdateOne) RemoveActionPlans(a ...*ActionPlan) *Organizat
 		ids[i] = a[i].ID
 	}
 	return ouo.RemoveActionPlanIDs(ids...)
+}
+
+// ClearCustomDomains clears all "custom_domains" edges to the CustomDomain entity.
+func (ouo *OrganizationUpdateOne) ClearCustomDomains() *OrganizationUpdateOne {
+	ouo.mutation.ClearCustomDomains()
+	return ouo
+}
+
+// RemoveCustomDomainIDs removes the "custom_domains" edge to CustomDomain entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveCustomDomainIDs(ids...)
+	return ouo
+}
+
+// RemoveCustomDomains removes "custom_domains" edges to CustomDomain entities.
+func (ouo *OrganizationUpdateOne) RemoveCustomDomains(c ...*CustomDomain) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.RemoveCustomDomainIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -7953,6 +8074,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.CustomDomainsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.CustomDomain
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !ouo.mutation.CustomDomainsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

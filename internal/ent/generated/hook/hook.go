@@ -141,6 +141,30 @@ func (f ControlObjectiveHistoryFunc) Mutate(ctx context.Context, m generated.Mut
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlObjectiveHistoryMutation", m)
 }
 
+// The CustomDomainFunc type is an adapter to allow the use of ordinary
+// function as CustomDomain mutator.
+type CustomDomainFunc func(context.Context, *generated.CustomDomainMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CustomDomainFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CustomDomainMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CustomDomainMutation", m)
+}
+
+// The CustomDomainHistoryFunc type is an adapter to allow the use of ordinary
+// function as CustomDomainHistory mutator.
+type CustomDomainHistoryFunc func(context.Context, *generated.CustomDomainHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CustomDomainHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CustomDomainHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CustomDomainHistoryMutation", m)
+}
+
 // The DocumentDataFunc type is an adapter to allow the use of ordinary
 // function as DocumentData mutator.
 type DocumentDataFunc func(context.Context, *generated.DocumentDataMutation) (generated.Value, error)
@@ -451,6 +475,30 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
+}
+
+// The MappableDomainFunc type is an adapter to allow the use of ordinary
+// function as MappableDomain mutator.
+type MappableDomainFunc func(context.Context, *generated.MappableDomainMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MappableDomainFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.MappableDomainMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.MappableDomainMutation", m)
+}
+
+// The MappableDomainHistoryFunc type is an adapter to allow the use of ordinary
+// function as MappableDomainHistory mutator.
+type MappableDomainHistoryFunc func(context.Context, *generated.MappableDomainHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MappableDomainHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.MappableDomainHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.MappableDomainHistoryMutation", m)
 }
 
 // The MappedControlFunc type is an adapter to allow the use of ordinary
