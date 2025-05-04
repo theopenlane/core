@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
-	github.com/99designs/gqlgen v0.17.72
+	github.com/99designs/gqlgen v0.17.73
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.32.1
 	github.com/alicebob/miniredis/v2 v2.34.0
@@ -51,15 +51,15 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.16
+	github.com/projectdiscovery/cdncheck v1.1.17
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.18
 	github.com/prometheus/client_golang v1.22.0
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.8.0
-	github.com/riverqueue/river v0.20.2
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.2
+	github.com/riverqueue/river v0.21.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.21.0
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.50.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -521,15 +521,15 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.7.1
-	github.com/projectdiscovery/wappalyzergo v0.2.26
+	github.com/projectdiscovery/wappalyzergo v0.2.27
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.17.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.20.2 // indirect
-	github.com/riverqueue/river/rivershared v0.20.2 // indirect
-	github.com/riverqueue/river/rivertype v0.20.2 // indirect
+	github.com/riverqueue/river/riverdriver v0.21.0 // indirect
+	github.com/riverqueue/river/rivershared v0.21.0 // indirect
+	github.com/riverqueue/river/rivertype v0.21.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
