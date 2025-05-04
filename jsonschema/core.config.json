@@ -862,6 +862,9 @@
           "type": "integer"
         },
         "RetryPolicy": true,
+        "Schema": {
+          "type": "string"
+        },
         "SkipUnknownJobCheck": {
           "type": "boolean"
         },
