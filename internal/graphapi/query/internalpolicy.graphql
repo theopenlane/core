@@ -76,6 +76,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       reviewFrequency
       revision
       status
+      summary
       tags
       updatedAt
       updatedBy
@@ -122,6 +123,7 @@ query GetAllInternalPolicies {
         reviewFrequency
         revision
         status
+        summary
         tags
         updatedAt
         updatedBy

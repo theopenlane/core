@@ -58,6 +58,8 @@ const (
 	FieldApproverID = "approver_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldSummary holds the string denoting the summary field in the database.
+	FieldSummary = "summary"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
@@ -93,6 +95,7 @@ var Columns = []string{
 	FieldReviewFrequency,
 	FieldApproverID,
 	FieldDelegateID,
+	FieldSummary,
 	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
@@ -281,6 +284,11 @@ func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// BySummary orders the results by the summary field.
+func BySummary(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

@@ -135,6 +135,7 @@ type ComplexityRoot struct {
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source           func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -187,6 +188,7 @@ type ComplexityRoot struct {
 		Revision         func(childComplexity int) int
 		Source           func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -4176,6 +4178,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Status(childComplexity), true
 
+	case "ActionPlan.summary":
+		if e.complexity.ActionPlan.Summary == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Summary(childComplexity), true
+
 	case "ActionPlan.tags":
 		if e.complexity.ActionPlan.Tags == nil {
 			break
@@ -4418,6 +4427,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Status(childComplexity), true
+
+	case "ActionPlanHistory.summary":
+		if e.complexity.ActionPlanHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Summary(childComplexity), true
 
 	case "ActionPlanHistory.tags":
 		if e.complexity.ActionPlanHistory.Tags == nil {
@@ -26924,6 +26940,7 @@ type ActionPlan implements Node {
   the id of the group responsible for approving the action_plan
   """
   delegateID: ID
+  summary: String
   """
   the organization id that owns the object
   """
@@ -27178,6 +27195,7 @@ type ActionPlanHistory implements Node {
   the id of the group responsible for approving the action_plan
   """
   delegateID: String
+  summary: String
   """
   the organization id that owns the object
   """

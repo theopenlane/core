@@ -429,6 +429,7 @@ type ActionPlan implements Node {
 	the id of the group responsible for approving the action_plan
 	"""
 	delegateID: ID
+	summary: String
 	"""
 	the organization id that owns the object
 	"""
@@ -710,6 +711,7 @@ type ActionPlanHistory implements Node {
 	the id of the group responsible for approving the action_plan
 	"""
 	delegateID: String
+	summary: String
 	"""
 	the organization id that owns the object
 	"""

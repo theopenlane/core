@@ -805,6 +805,11 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldDelegateID)
 				fieldSeen[actionplan.FieldDelegateID] = struct{}{}
 			}
+		case "summary":
+			if _, ok := fieldSeen[actionplan.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldSummary)
+				fieldSeen[actionplan.FieldSummary] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[actionplan.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldOwnerID)
@@ -1014,6 +1019,11 @@ func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[actionplanhistory.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldDelegateID)
 				fieldSeen[actionplanhistory.FieldDelegateID] = struct{}{}
+			}
+		case "summary":
+			if _, ok := fieldSeen[actionplanhistory.FieldSummary]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSummary)
+				fieldSeen[actionplanhistory.FieldSummary] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[actionplanhistory.FieldOwnerID]; !ok {

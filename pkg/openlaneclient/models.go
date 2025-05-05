@@ -331,6 +331,7 @@ type ActionPlan struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
@@ -421,6 +422,7 @@ type ActionPlanHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan

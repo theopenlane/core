@@ -113,6 +113,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if summary, exists := m.Summary(); exists {
+		create = create.SetSummary(summary)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -261,6 +265,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDelegateID(actionplan.DelegateID)
 		}
 
+		if summary, exists := m.Summary(); exists {
+			create = create.SetSummary(summary)
+		} else {
+			create = create.SetSummary(actionplan.Summary)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -334,6 +344,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetReviewFrequency(actionplan.ReviewFrequency).
 			SetApproverID(actionplan.ApproverID).
 			SetDelegateID(actionplan.DelegateID).
+			SetSummary(actionplan.Summary).
 			SetOwnerID(actionplan.OwnerID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).

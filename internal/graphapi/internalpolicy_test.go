@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -189,6 +190,20 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, long details",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:       "Releasing a new version",
+				Status:     &enums.DocumentDraft,
+				PolicyType: lo.ToPtr("sop"),
+				Revision:   lo.ToPtr("v1.1.0"),
+				Details:    lo.ToPtr(gofakeit.Sentence(1000)),
+				ApproverID: &approverGroup.ID,
+				DelegateID: &delegateGroup.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "happy path, with control edges",
 			request: openlaneclient.CreateInternalPolicyInput{
 				Name:          "Releasing a new version",
@@ -344,7 +359,7 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.CreateInternalPolicy.InternalPolicy.Details)
-				// assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
+				assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.Summary)
 			} else {
 				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
 			}

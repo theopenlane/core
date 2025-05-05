@@ -150,6 +150,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldReviewFrequency:  {Type: field.TypeEnum, Column: actionplan.FieldReviewFrequency},
 			actionplan.FieldApproverID:       {Type: field.TypeString, Column: actionplan.FieldApproverID},
 			actionplan.FieldDelegateID:       {Type: field.TypeString, Column: actionplan.FieldDelegateID},
+			actionplan.FieldSummary:          {Type: field.TypeString, Column: actionplan.FieldSummary},
 			actionplan.FieldOwnerID:          {Type: field.TypeString, Column: actionplan.FieldOwnerID},
 			actionplan.FieldDueDate:          {Type: field.TypeTime, Column: actionplan.FieldDueDate},
 			actionplan.FieldPriority:         {Type: field.TypeEnum, Column: actionplan.FieldPriority},
@@ -187,6 +188,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldReviewFrequency:  {Type: field.TypeEnum, Column: actionplanhistory.FieldReviewFrequency},
 			actionplanhistory.FieldApproverID:       {Type: field.TypeString, Column: actionplanhistory.FieldApproverID},
 			actionplanhistory.FieldDelegateID:       {Type: field.TypeString, Column: actionplanhistory.FieldDelegateID},
+			actionplanhistory.FieldSummary:          {Type: field.TypeString, Column: actionplanhistory.FieldSummary},
 			actionplanhistory.FieldOwnerID:          {Type: field.TypeString, Column: actionplanhistory.FieldOwnerID},
 			actionplanhistory.FieldDueDate:          {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
 			actionplanhistory.FieldPriority:         {Type: field.TypeEnum, Column: actionplanhistory.FieldPriority},
@@ -6444,6 +6446,11 @@ func (f *ActionPlanFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDelegateID))
 }
 
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ActionPlanFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldSummary))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ActionPlanFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldOwnerID))
@@ -6700,6 +6707,11 @@ func (f *ActionPlanHistoryFilter) WhereApproverID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *ActionPlanHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldDelegateID))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ActionPlanHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldSummary))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.

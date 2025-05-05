@@ -124,6 +124,9 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.DelegateID, new.DelegateID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDelegateID, aph.DelegateID, new.DelegateID))
 	}
+	if !reflect.DeepEqual(aph.Summary, new.Summary) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSummary, aph.Summary, new.Summary))
+	}
 	if !reflect.DeepEqual(aph.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, aph.OwnerID, new.OwnerID))
 	}
