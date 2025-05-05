@@ -28,11 +28,16 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 		errMsg           string
 	}{
 		{
-			name: "happy path, default roles access",
+			name: "happy path, feature access",
 			request: models.AccountFeaturesRequest{
 				ID: testUser1.OrganizationID,
 			},
 			expectedFeatures: dummyFeatures,
+		},
+		{
+			name:    "no id provided",
+			request: models.AccountFeaturesRequest{},
+			errMsg:  "organization id is required",
 		},
 	}
 
