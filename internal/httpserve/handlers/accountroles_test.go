@@ -48,14 +48,14 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			request: models.AccountRolesRequest{
 				ObjectType: "organization",
 			},
-			errMsg: "objectId is required",
+			errMsg: "object_id is required",
 		},
 		{
 			name: "missing object type",
 			request: models.AccountRolesRequest{
 				ObjectID: "org-id",
 			},
-			errMsg: "objectType is required",
+			errMsg: "object_type is required",
 		},
 	}
 
