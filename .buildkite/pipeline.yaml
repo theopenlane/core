@@ -47,6 +47,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
+          location: "SAT"
         cancel_on_build_failing: true
         timeout_in_minutes: 20
         key: "lint"
@@ -62,6 +63,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
+          location: "SAT"
         key: "go_test"
         cancel_on_build_failing: true
         env:
