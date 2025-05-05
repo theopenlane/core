@@ -35,9 +35,9 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 			expectedFeatures: dummyFeatures,
 		},
 		{
-			name:    "no id provided",
-			request: models.AccountFeaturesRequest{},
-			errMsg:  "organization id is required",
+			name:             "no id provided, get from context",
+			request:          models.AccountFeaturesRequest{},
+			expectedFeatures: dummyFeatures,
 		},
 	}
 

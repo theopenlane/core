@@ -24,10 +24,6 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
 	reqCtx := ctx.Request().Context()
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
