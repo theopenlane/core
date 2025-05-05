@@ -51,7 +51,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 				ObjectType: "organization",
 				Relation:   "can_delete",
 			},
-			errMsg: "objectId is required",
+			errMsg: "object_id is required",
 		},
 		{
 			name: "missing object type",
@@ -59,7 +59,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 				ObjectID: "org-id",
 				Relation: "can_delete",
 			},
-			errMsg: "objectType is required",
+			errMsg: "object_type is required",
 		},
 		{
 			name: "missing relation",
