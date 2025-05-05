@@ -762,11 +762,11 @@ type AccountFeaturesRequest struct {
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// AccountRolesOrganizationReply holds the fields that are sent on a response to the `/account/roles/organization` endpoint
+// AccountFeaturesReply holds the fields that are sent on a response to the `/account/features` endpoint
 type AccountFeaturesReply struct {
 	rout.Reply
-	Features       []string `json:"features" description:"The roles the user has in the organization, e.g. policy-and-procedure-module, compliance-module" example:"policy-and-procedure-module, centralized-audit-documentation, risk-management, compliance-module"`
-	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module" example:"policy-and-procedure-module, centralized-audit-documentation, risk-management, compliance-module"`
+	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // Validate ensures the required fields are set on the AccountFeaturesRequest
