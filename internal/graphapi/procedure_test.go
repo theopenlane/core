@@ -535,6 +535,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.UpdateProcedure.Procedure.Details)
 				assert.NotEmpty(t, resp.UpdateProcedure.Procedure.Summary)
+				assert.NotEqual(t, resp.UpdateProcedure.Procedure.Summary, Procedure.Summary)
 			}
 
 			if tc.request.ApproverID != nil {

@@ -58,6 +58,7 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 			}, "delegate"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+		hooks.HookSummarizeDetails(),
 	}
 }
 

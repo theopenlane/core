@@ -84,7 +84,6 @@ func (Procedure) Hooks() []ent.Hook {
 			hooks.HookOrgOwnedTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
-		hooks.HookSummarizeDetails(),
 	}
 }
 
