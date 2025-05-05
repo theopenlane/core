@@ -201,6 +201,7 @@ func RegisterRoutes(router *Router) error {
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
 		registerAccountRolesOrganizationHandler,
+		registerAccountFeaturesHandler,
 		registerAppleMerchantHandler,
 		registerWebhookHandler,
 		register2faHandler,

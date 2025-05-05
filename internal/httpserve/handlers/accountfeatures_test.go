@@ -15,53 +15,30 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-func (suite *HandlerTestSuite) TestAccountRolesHandler() {
+func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 	t := suite.T()
 
 	// add handler
-	suite.e.POST("account/roles", suite.h.AccountRolesHandler)
+	suite.e.POST("account/features", suite.h.AccountFeaturesHandler)
 
 	testCases := []struct {
-		name          string
-		request       models.AccountRolesRequest
-		expectedRoles []string
-		errMsg        string
+		name             string
+		request          models.AccountFeaturesRequest
+		expectedFeatures []string
+		errMsg           string
 	}{
 		{
 			name: "happy path, default roles access",
-			request: models.AccountRolesRequest{
-				ObjectID:   testUser1.OrganizationID,
-				ObjectType: "organization",
+			request: models.AccountFeaturesRequest{
+				ID: testUser1.OrganizationID,
 			},
-		},
-		{
-			name: "happy path, provide roles",
-			request: models.AccountRolesRequest{
-				ObjectID:   testUser1.OrganizationID,
-				ObjectType: "organization",
-				Relations:  []string{"owner"},
-			},
-			expectedRoles: []string{"owner"},
-		},
-		{
-			name: "missing object id",
-			request: models.AccountRolesRequest{
-				ObjectType: "organization",
-			},
-			errMsg: "objectId is required",
-		},
-		{
-			name: "missing object type",
-			request: models.AccountRolesRequest{
-				ObjectID: "org-id",
-			},
-			errMsg: "objectType is required",
+			expectedFeatures: dummyFeatures,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			target := "/account/roles"
+			target := "/account/features"
 
 			body, err := json.Marshal(tc.request)
 			if err != nil {
@@ -80,7 +57,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountRolesReply
+			var out *models.AccountFeaturesReply
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -97,14 +74,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			assert.True(t, out.Success)
-
-			// if no roles are provided we expect all the roles, adding a number to assume its higher
-			// than our current model has
-			if len(tc.expectedRoles) == 0 {
-				assert.Greater(t, len(out.Roles), 5)
-			} else {
-				assert.ElementsMatch(t, tc.expectedRoles, out.Roles)
-			}
+			assert.ElementsMatch(t, tc.expectedFeatures, out.Features)
 		})
 	}
 }

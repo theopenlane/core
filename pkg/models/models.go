@@ -732,7 +732,7 @@ type AccountRolesOrganizationReply struct {
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// Validate ensures the required fields are set on the AccountAccessRequest
+// Validate ensures the required fields are set on the AccountRolesOrganizationRequest
 func (r *AccountRolesOrganizationRequest) Validate() error {
 	if r.ID == "" {
 		return rout.NewMissingRequiredFieldError("organization id")
@@ -750,6 +750,43 @@ var ExampleAccountRolesOrganizationRequest = AccountRolesOrganizationRequest{
 var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 	Reply:          rout.Reply{Success: true},
 	Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
+	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// =========
+// ACCOUNT/FEATURES
+// =========
+
+// AccountFeaturesRequest holds the fields that should be included on a request to the `/account/features` endpoint
+type AccountFeaturesRequest struct {
+	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// AccountRolesOrganizationReply holds the fields that are sent on a response to the `/account/roles/organization` endpoint
+type AccountFeaturesReply struct {
+	rout.Reply
+	Features       []string `json:"features" description:"The roles the user has in the organization, e.g. policy-and-procedure-module, compliance-module" example:"policy-and-procedure-module, centralized-audit-documentation, risk-management, compliance-module"`
+	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// Validate ensures the required fields are set on the AccountFeaturesRequest
+func (r *AccountFeaturesRequest) Validate() error {
+	if r.ID == "" {
+		return rout.NewMissingRequiredFieldError("organization id")
+	}
+
+	return nil
+}
+
+// ExampleAccountFeaturesRequest is an example of a successful `/account/features` request for OpenAPI documentation
+var ExampleAccountFeaturesRequest = AccountFeaturesRequest{
+	ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// ExampleAccountFeaturesReply is an example of a successful `/account/features` response for OpenAPI documentation
+var ExampleAccountFeaturesReply = AccountFeaturesReply{
+	Reply:          rout.Reply{Success: true},
+	Features:       []string{},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
