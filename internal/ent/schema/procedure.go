@@ -1,11 +1,9 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
@@ -41,13 +39,7 @@ func (Procedure) PluralName() string {
 // Fields returns procedure fields.
 func (Procedure) Fields() []ent.Field {
 	// other fields are defined in the mixins
-	return []ent.Field{
-		field.String("summary").
-			Optional().
-			Annotations(
-				entgql.Skip(^entgql.SkipType),
-			),
-	}
+	return []ent.Field{}
 }
 
 // Edges of the Procedure
@@ -92,7 +84,7 @@ func (Procedure) Hooks() []ent.Hook {
 			hooks.HookOrgOwnedTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
-		hooks.HookProcedureSummarize(),
+		hooks.HookSummarizeDetails(),
 	}
 }
 

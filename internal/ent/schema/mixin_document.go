@@ -116,6 +116,11 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Unique().
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)),
+		field.String("summary").
+			Optional().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			),
 	}
 }
 

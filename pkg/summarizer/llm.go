@@ -19,28 +19,28 @@ import (
 
 // maybe make a config value too?
 const prompt = `
-	Summarise the following text in the line below. Be brief, concise and precise. 
+	Summarize the following text in the line below. Be brief, concise and precise. 
 
 	%s
 	`
 
-type LLMSummarizer struct {
+type llmSummarizer struct {
 	llmClient llms.Model
 }
 
-func newLLMSummarizer(cfg entconfig.Config) (*LLMSummarizer, error) {
+func newLLMSummarizer(cfg entconfig.Config) (*llmSummarizer, error) {
 	client, err := getClient(cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	return &LLMSummarizer{
+	return &llmSummarizer{
 		llmClient: client,
 	}, nil
 }
 
 // Summarize returns a shortened version of the provided string using the selected llm
-func (l *LLMSummarizer) Summarize(ctx context.Context, s string) (string, error) {
+func (l *llmSummarizer) Summarize(ctx context.Context, s string) (string, error) {
 	return llms.GenerateFromSinglePrompt(ctx, l.llmClient, fmt.Sprintf(prompt, s))
 }
 
