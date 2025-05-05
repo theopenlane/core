@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -219,6 +220,16 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path with details, using pat",
+			request: openlaneclient.CreateProcedureInput{
+				Name:    "Test Procedure",
+				OwnerID: &testUser1.OrganizationID,
+				Details: lo.ToPtr(gofakeit.Sentence(1000)),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
 			name: "happy path, using api token",
 			request: openlaneclient.CreateProcedureInput{
 				Name: "Test Procedure",
@@ -306,8 +317,10 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.CreateProcedure.Procedure.Details)
+				assert.NotEmpty(t, resp.CreateProcedure.Procedure.Summary)
 			} else {
 				assert.Empty(t, resp.CreateProcedure.Procedure.Details)
+				assert.Empty(t, resp.CreateProcedure.Procedure.Summary)
 			}
 
 			if tc.request.EditorIDs != nil {
@@ -416,6 +429,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "update allowed, details updated",
+			request: openlaneclient.UpdateProcedureInput{
+				Details: lo.ToPtr(gofakeit.Sentence(1000)),
+			},
+			client: suite.client.api,
+			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
+		},
+		{
 			name: "update allowed, user in editor group",
 			request: openlaneclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
@@ -513,6 +534,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.UpdateProcedure.Procedure.Details)
+				assert.NotEmpty(t, resp.UpdateProcedure.Procedure.Summary)
 			}
 
 			if tc.request.ApproverID != nil {

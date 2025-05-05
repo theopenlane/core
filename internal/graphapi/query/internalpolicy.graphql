@@ -242,6 +242,7 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       reviewFrequency
       revision
       status
+      summary
       tags
       updatedAt
       updatedBy

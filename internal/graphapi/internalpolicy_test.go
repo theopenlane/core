@@ -417,6 +417,14 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 		expectedErr string
 	}{
 		{
+			name: "happy path, update details field",
+			request: openlaneclient.UpdateInternalPolicyInput{
+				Details: lo.ToPtr(gofakeit.Sentence(200)),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "happy path, update name field",
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name:         lo.ToPtr("Updated InternalPolicy Name"),
@@ -525,6 +533,10 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 			// check updated fields
 			if tc.request.Name != nil {
 				assert.Equal(t, *tc.request.Name, resp.UpdateInternalPolicy.InternalPolicy.Name)
+			}
+
+			if tc.request.Details != nil {
+				assert.NotEmpty(t, resp.UpdateInternalPolicy.InternalPolicy.Summary)
 			}
 
 			if tc.request.Status != nil {
