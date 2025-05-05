@@ -15,8 +15,7 @@ repos:
     hooks:
       - id: yamlfmt
   - repo: https://github.com/crate-ci/typos
-    # ensure this stays in this format, the auto-updater might update to something like typos-dict-v0.11.35 which is not correct
-    rev: v1.31.2
+    rev: v1.32.0
     hooks:
       - id: typos
   - repo: local
