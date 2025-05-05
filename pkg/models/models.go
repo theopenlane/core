@@ -621,10 +621,10 @@ type OauthTokenRequest struct {
 
 // AccountAccessRequest holds the fields that should be included on a request to the `/account/access` endpoint
 type AccountAccessRequest struct {
-	ObjectID    string `json:"objectId" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	ObjectType  string `json:"objectType" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
+	ObjectID    string `json:"object_id" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectType  string `json:"object_type" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
 	Relation    string `json:"relation" description:"The relation to check access for, e.g. can_view, can_edit" example:"can_view"`
-	SubjectType string `json:"subjectType,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
+	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
 }
 
 // AccountAccessReply holds the fields that are sent on a response to the `/account/access` endpoint
@@ -636,11 +636,11 @@ type AccountAccessReply struct {
 // Validate ensures the required fields are set on the AccountAccessRequest
 func (r *AccountAccessRequest) Validate() error {
 	if r.ObjectID == "" {
-		return rout.NewMissingRequiredFieldError("objectId")
+		return rout.NewMissingRequiredFieldError("object_id")
 	}
 
 	if r.ObjectType == "" {
-		return rout.NewMissingRequiredFieldError("objectType")
+		return rout.NewMissingRequiredFieldError("object_type")
 	}
 
 	if r.Relation == "" {
@@ -674,9 +674,9 @@ var ExampleAccountAccessReply = AccountAccessReply{
 
 // AccountRolesRequest holds the fields that should be included on a request to the `/account/roles` endpoint
 type AccountRolesRequest struct {
-	ObjectID    string   `json:"objectId" description:"The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	ObjectType  string   `json:"objectType" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
-	SubjectType string   `json:"subjectType,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
+	ObjectID    string   `json:"object_id" description:"The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectType  string   `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
+	SubjectType string   `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
 	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit" example:"can_view"`
 }
 
@@ -689,11 +689,11 @@ type AccountRolesReply struct {
 // Validate ensures the required fields are set on the AccountAccessRequest
 func (r *AccountRolesRequest) Validate() error {
 	if r.ObjectID == "" {
-		return rout.NewMissingRequiredFieldError("objectId")
+		return rout.NewMissingRequiredFieldError("object_id")
 	}
 
 	if r.ObjectType == "" {
-		return rout.NewMissingRequiredFieldError("objectType")
+		return rout.NewMissingRequiredFieldError("object_type")
 	}
 
 	// Default to user if not set, only when using an API token should this be overwritten and set to service
@@ -732,7 +732,7 @@ type AccountRolesOrganizationReply struct {
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// Validate ensures the required fields are set on the AccountAccessRequest
+// Validate ensures the required fields are set on the AccountRolesOrganizationRequest
 func (r *AccountRolesOrganizationRequest) Validate() error {
 	if r.ID == "" {
 		return rout.NewMissingRequiredFieldError("organization id")
@@ -750,6 +750,43 @@ var ExampleAccountRolesOrganizationRequest = AccountRolesOrganizationRequest{
 var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 	Reply:          rout.Reply{Success: true},
 	Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
+	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// =========
+// ACCOUNT/FEATURES
+// =========
+
+// AccountFeaturesRequest holds the fields that should be included on a request to the `/account/features` endpoint
+type AccountFeaturesRequest struct {
+	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// AccountFeaturesReply holds the fields that are sent on a response to the `/account/features` endpoint
+type AccountFeaturesReply struct {
+	rout.Reply
+	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module" example:"policy-and-procedure-module, centralized-audit-documentation, risk-management, compliance-module"`
+	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// Validate ensures the required fields are set on the AccountFeaturesRequest
+func (r *AccountFeaturesRequest) Validate() error {
+	if r.ID == "" {
+		return rout.NewMissingRequiredFieldError("organization id")
+	}
+
+	return nil
+}
+
+// ExampleAccountFeaturesRequest is an example of a successful `/account/features` request for OpenAPI documentation
+var ExampleAccountFeaturesRequest = AccountFeaturesRequest{
+	ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// ExampleAccountFeaturesReply is an example of a successful `/account/features` response for OpenAPI documentation
+var ExampleAccountFeaturesReply = AccountFeaturesReply{
+	Reply:          rout.Reply{Success: true},
+	Features:       []string{},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 

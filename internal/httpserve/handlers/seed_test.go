@@ -7,13 +7,15 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
 )
 
 var (
-	testUser1 testUserDetails
+	testUser1     testUserDetails
+	dummyFeatures = []string{"feature1", "feature2"}
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -114,6 +116,12 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		SaveX(userCtx)
 
 	testUser.OrganizationID = testOrg.ID
+
+	// add dummy subscription to the organization
+	err = suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(testOrg.ID)).
+		SetFeatureLookupKeys(dummyFeatures).
+		Exec(userCtx)
+	require.NoError(t, err)
 
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)

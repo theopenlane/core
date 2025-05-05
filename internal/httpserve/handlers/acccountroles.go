@@ -4,28 +4,17 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
-
-// DefaultAllRelations is the default list of relations to check
-// these come from the fga/model/model.fga file relations
-// TODO (sfunk): look into a way to get this from the fga model
-var DefaultAllRelations = []string{
-	"can_view",
-	"can_edit",
-	"can_delete",
-	"audit_log_viewer",
-	"can_invite_admins",
-	"can_invite_members",
-}
 
 // AccountAccessHandler list roles a subject has access to in relation an object
 func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
@@ -38,32 +27,29 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	reqCtx := ctx.Request().Context()
+
+	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
+	if err != nil {
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+
+		return h.InternalServerError(ctx, err)
+	}
+
 	req := fgax.ListAccess{
 		SubjectType: in.SubjectType,
+		SubjectID:   au.SubjectID,
 		ObjectID:    in.ObjectID,
 		ObjectType:  fgax.Kind(in.ObjectType),
 		Relations:   in.Relations,
+		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}
 
-	// if no relations are provided, default to all relations
-	if len(req.Relations) == 0 {
-		req.Relations = DefaultAllRelations
-	}
-
-	subjectID, err := auth.GetSubjectIDFromContext(ctx.Request().Context())
+	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting user id from context")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error checking access")
 
-		return h.InternalServerError(ctx, err)
-	}
-
-	req.SubjectID = subjectID
-
-	roles, err := h.DBClient.Authz.ListRelations(ctx.Request().Context(), req)
-	if err != nil {
-		log.Error().Err(err).Msg("error checking access")
-
-		return h.InternalServerError(ctx, err)
+		return h.BadRequest(ctx, ErrInvalidInput)
 	}
 
 	return h.Success(ctx, models.AccountRolesReply{

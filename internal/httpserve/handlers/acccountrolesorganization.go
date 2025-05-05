@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -12,9 +12,9 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
-
-	sliceutil "github.com/theopenlane/utils/slice"
 )
 
 // AccountRolesOrganizationHandler lists roles a subject has in relation to an organization
@@ -28,12 +28,12 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting authenticated user")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, err)
 	}
 
-	in.ID, err = h.getOrganizationID(in, au)
+	in.ID, err = h.getOrganizationID(in.ID, au)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -47,13 +47,13 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 		SubjectType: auth.GetAuthzSubjectType(reqCtx),
 		SubjectID:   au.SubjectID,
 		ObjectID:    in.ID,
-		ObjectType:  fgax.Kind("organization"),
-		Relations:   DefaultAllRelations,
+		ObjectType:  fgax.Kind(generated.TypeOrganization),
+		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
 	}
 
-	roles, err := h.DBClient.Authz.ListRelations(ctx.Request().Context(), req)
+	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking access")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error checking access")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -63,30 +63,6 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 		Roles:          roles,
 		OrganizationID: req.ObjectID,
 	})
-}
-
-// getOrganizationID returns the organization ID to use for the request based on the input and authenticated user
-func (h *Handler) getOrganizationID(in models.AccountRolesOrganizationRequest, au *auth.AuthenticatedUser) (string, error) {
-	// if an ID is provided, check if the authenticated user has access to it
-	if in.ID != "" {
-		if !sliceutil.Contains(au.OrganizationIDs, in.ID) {
-			return "", ErrInvalidInput
-		}
-
-		return in.ID, nil
-	}
-
-	// if no ID is provided, default to the authenticated organization
-	if au.OrganizationID != "" {
-		return au.OrganizationID, nil
-	}
-
-	// if it is still empty, and the personal access token only has one organization use that
-	if len(au.OrganizationIDs) == 1 {
-		return au.OrganizationIDs[0], nil
-	}
-
-	return "", nil
 }
 
 // BindAccountRolesOrganization returns the OpenAPI3 operation for accepting an account roles organization request

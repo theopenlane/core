@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -27,9 +27,11 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	subject, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
+	reqCtx := ctx.Request().Context()
+
+	subject, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting user id from context")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting user id from context")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -43,11 +45,11 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
 		Context:     utils.NewOrganizationContextKey(subject.SubjectEmail),
 	}
 
-	allow, err := h.DBClient.Authz.CheckAccess(ctx.Request().Context(), req)
+	allow, err := h.DBClient.Authz.CheckAccess(reqCtx, req)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking access")
+		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error checking access")
 
-		return h.InternalServerError(ctx, err)
+		return h.BadRequest(ctx, ErrInvalidInput)
 	}
 
 	return h.Success(ctx, models.AccountAccessReply{
