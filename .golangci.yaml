@@ -3,6 +3,8 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
+issues:
+  fix: true
 linters:
   enable:
     - bodyclose
@@ -24,6 +26,15 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+    rules:
+      # Exclude some linters from running on tests files.
+      - path: _test\.go
+        linters:
+          - gocyclo
+          - errcheck
+          - dupl
+          - gosec
+          - wsl
     paths:
       - internal/graphapi/model/gen_models.go
       - pkg/openlaneclient/graphclient.go
