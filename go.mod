@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
-	github.com/99designs/gqlgen v0.17.72
+	github.com/99designs/gqlgen v0.17.73
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.32.1
 	github.com/alicebob/miniredis/v2 v2.34.0
@@ -41,7 +41,7 @@ require (
 	github.com/knadh/koanf/v2 v2.2.0
 	github.com/labstack/echo-contrib v0.17.3
 	github.com/labstack/echo/v4 v4.13.3
-	github.com/lestrrat-go/jwx/v2 v2.1.6
+	github.com/lestrrat-go/httprc/v3 v3.0.0-beta2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/miekg/dns v1.1.65
@@ -52,15 +52,15 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.2
-	github.com/projectdiscovery/cdncheck v1.1.16
+	github.com/projectdiscovery/cdncheck v1.1.17
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.18
 	github.com/prometheus/client_golang v1.22.0
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.8.0
-	github.com/riverqueue/river v0.20.2
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.20.2
+	github.com/riverqueue/river v0.21.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.21.0
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.50.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -75,7 +75,7 @@ require (
 	github.com/theopenlane/entx v0.7.2
 	github.com/theopenlane/gqlgen-plugins v0.6.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.12.1
+	github.com/theopenlane/iam v0.12.3
 	github.com/theopenlane/newman v0.1.4
 	github.com/theopenlane/riverboat v0.0.10
 	github.com/theopenlane/utils v0.4.5
@@ -427,7 +427,7 @@ require (
 
 require (
 	ariga.io/atlas v0.31.1-0.20250212144724-069be8033e83 // indirect
-	cloud.google.com/go/auth v0.16.0 // indirect
+	cloud.google.com/go/auth v0.16.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.6.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
@@ -502,8 +502,7 @@ require (
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/blackmagic v1.0.3 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
-	github.com/lestrrat-go/httprc v1.0.6 // indirect
-	github.com/lestrrat-go/iter v1.0.2 // indirect
+	github.com/lestrrat-go/jwx/v3 v3.0.1
 	github.com/lestrrat-go/option v1.0.1 // indirect
 	github.com/lib/pq v1.10.9
 	github.com/magiconair/properties v1.8.10 // indirect
@@ -536,15 +535,15 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.7.1
-	github.com/projectdiscovery/wappalyzergo v0.2.26
+	github.com/projectdiscovery/wappalyzergo v0.2.27
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/pterm/pterm v0.12.80
 	github.com/resend/resend-go/v2 v2.17.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.20.2 // indirect
-	github.com/riverqueue/river/rivershared v0.20.2 // indirect
-	github.com/riverqueue/river/rivertype v0.20.2 // indirect
+	github.com/riverqueue/river/riverdriver v0.21.0 // indirect
+	github.com/riverqueue/river/rivershared v0.21.0 // indirect
+	github.com/riverqueue/river/rivertype v0.21.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
@@ -596,9 +595,9 @@ require (
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/api v0.230.0 // indirect
+	google.golang.org/api v0.231.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250324211829-b45e905df463 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250414145226-207652e42e2e // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250425173222-7b384671a197 // indirect
 	google.golang.org/grpc v1.72.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7

@@ -145,6 +145,7 @@ jobQueue:
         ReindexerSchedule: null
         RescueStuckJobsAfter: 0
         RetryPolicy: null
+        Schema: ""
         SkipUnknownJobCheck: false
         Test:
             DisableUniqueEnforcement: false

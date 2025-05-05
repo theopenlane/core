@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/go-webauthn/webauthn/webauthn"
-	"github.com/lestrrat-go/jwx/v2/jwk"
+	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"

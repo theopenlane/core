@@ -27,8 +27,7 @@ type Storage interface {
 }
 
 //go:generate_input *.go
-//go:generate_output mocks/*.go
-//go:generate mockery --config .mockery.yaml
+//go:generate mockery --config .mockery.yml
 
 // Objects is the definition for handling objects and file uploads
 type Objects struct {

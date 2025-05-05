@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/tokens"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -101,11 +102,10 @@ func createAuthConfig(c *ent.Client) *auth.Options {
 	// setup auth middleware
 	opts := []auth.Option{
 		auth.WithDBClient(c),
+		auth.WithValidator(&tokens.MockValidator{}),
 	}
 
 	authConfig := auth.NewAuthOptions(opts...)
-
-	authConfig.WithLocalValidator()
 
 	return &authConfig
 }
