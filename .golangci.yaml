@@ -3,6 +3,10 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
+  concurrency: 8
+  build-tags:
+    - "!lint"
+    - "!ignore"
 issues:
   fix: true
 linters:

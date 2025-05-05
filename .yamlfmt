@@ -1,4 +1,0 @@
-exclude:
-  - config/
-formatter:
-  retain_line_breaks: true
