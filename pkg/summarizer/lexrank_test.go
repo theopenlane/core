@@ -21,6 +21,10 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 			hasError: true,
 		},
 		{
+			name:     "extremly short string",
+			sentence: gofakeit.Sentence(2),
+		},
+		{
 			name:     "short string",
 			sentence: gofakeit.Sentence(200),
 		},
@@ -47,7 +51,6 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 
 			require.NoError(t, err)
 			require.NotEmpty(t, summarized)
-			require.NotEqual(t, summarized, v.sentence)
 		})
 	}
 }

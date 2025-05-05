@@ -344,6 +344,7 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.CreateInternalPolicy.InternalPolicy.Details)
+				// assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
 			} else {
 				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
 			}

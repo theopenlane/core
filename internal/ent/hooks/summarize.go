@@ -23,7 +23,7 @@ func HookSummarizeDetails() ent.Hook {
 			mut := m.(detailsMutation)
 
 			details, ok := mut.Details()
-			if ok && details != "" {
+			if !ok || details == "" {
 				return next.Mutate(ctx, m)
 			}
 
@@ -38,6 +38,7 @@ func HookSummarizeDetails() ent.Hook {
 			}
 
 			mut.SetSummary(summary)
+
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))

@@ -38,5 +38,13 @@ func (l *lexRankSummarizer) Summarize(_ context.Context, s string) (string, erro
 		return "", err
 	}
 
-	return strings.Join(vals, " "), nil
+	summarized := strings.Join(vals, " ")
+	// very very short strings like <= 30 chars cannot be summarized with this algorithm
+	// so just return the same details here. It is short already
+	// so works fine as a "summary"
+	if len(summarized) == 0 {
+		summarized = s
+	}
+
+	return summarized, nil
 }
