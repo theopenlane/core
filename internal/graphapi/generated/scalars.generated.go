@@ -122,6 +122,7 @@ func (ec *executionContext) unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgen�
 }
 
 func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, sel ast.SelectionSet, v graphql.Upload) graphql.Marshaler {
+	_ = sel
 	res := graphql.MarshalUpload(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -143,6 +144,7 @@ func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 		}
 		return graphql.Null
 	}
+	_ = sel
 	res := graphql.MarshalUpload(*v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -478,6 +480,8 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	if v == nil {
 		return graphql.Null
 	}
+	_ = sel
+	_ = ctx
 	res := graphql.MarshalUpload(*v)
 	return res
 }
