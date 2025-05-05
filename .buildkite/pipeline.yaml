@@ -11,7 +11,6 @@ env:
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
-
 steps:
   - group: ":knife: Pre-check"
     key: "precheck"
@@ -24,7 +23,7 @@ steps:
         cancel_on_build_failing: true
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               command: ["task", "ci"]
               environment:
@@ -34,7 +33,7 @@ steps:
         cancel_on_build_failing: true
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               command: ["task", "config:ci"]
               environment:
@@ -52,7 +51,7 @@ steps:
         key: "lint"
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               command: ["task", "go:lint:ci"]
               always_pull: true
               environment:
@@ -72,7 +71,7 @@ steps:
               - 17-alpine
         plugins:
           - docker#v5.12.0:
-              image: ghcr.io/theopenlane/build-image:latest
+              image: ghcr.io/theopenlane/build-image:108-90e006f0
               always_pull: true
               command: ["task", "go:test:cover"]
               environment:
@@ -145,7 +144,7 @@ steps:
           size: $RUNNER_LARGE
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               environment:
                 - CGO_ENABLED=0
@@ -160,7 +159,7 @@ steps:
         artifact_paths: "bin/openlane-cli"
         plugins:
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               environment:
                 - GOOS=darwin
@@ -223,7 +222,7 @@ steps:
               variables:
                 APOLLO_KEY: APOLLO_KEY
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               propagate-environment: true
               environment:
@@ -324,7 +323,7 @@ steps:
               variables:
                 APOLLO_KEY: APOLLO_KEY
           - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
+              image: "ghcr.io/theopenlane/build-image:108-90e006f0"
               always_pull: true
               propagate-environment: true
               environment:
