@@ -33710,6 +33710,7 @@ input CreateStandardInput {
   """
   version: String
   ownerID: ID
+  controlIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -63811,6 +63812,9 @@ input UpdateStandardInput {
   clearVersion: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.

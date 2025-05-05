@@ -413,6 +413,8 @@ type standard
     define parent_editor: admin from parent or owner from parent
     define viewer: [user, service] or editor
     define editor: [user, service]
+    # Add permission to create controls under this standard
+    define can_create_control: can_edit or parent_editor
     # this is used for organization custom standards that are only available to the organization
     define parent: [organization]
 

@@ -122,13 +122,10 @@ func (Standard) Fields() []ent.Field {
 func (s Standard) Edges() []ent.Edge {
 	return []ent.Edge{
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema: s,
-			edgeSchema: Control{},
+			fromSchema:  s,
+			edgeSchema:  Control{},
 			annotations: []schema.Annotation{
-				// skip the ability to create and update controls via the standard
-				// TODO: (sfunk) implement permissions on parent edge to allow children to be created
-				// and have the permissions added to fga
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				// entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			},
 		}),
 	}

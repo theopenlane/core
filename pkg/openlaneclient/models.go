@@ -4729,8 +4729,9 @@ type CreateStandardInput struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version *string `json:"version,omitempty"`
-	OwnerID *string `json:"ownerID,omitempty"`
+	Version    *string  `json:"version,omitempty"`
+	OwnerID    *string  `json:"ownerID,omitempty"`
+	ControlIDs []string `json:"controlIDs,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -23243,11 +23244,14 @@ type UpdateStandardInput struct {
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`
 	// version of the standard
-	Version      *string             `json:"version,omitempty"`
-	ClearVersion *bool               `json:"clearVersion,omitempty"`
-	OwnerID      *string             `json:"ownerID,omitempty"`
-	ClearOwner   *bool               `json:"clearOwner,omitempty"`
-	RevisionBump *models.VersionBump `json:"RevisionBump,omitempty"`
+	Version          *string             `json:"version,omitempty"`
+	ClearVersion     *bool               `json:"clearVersion,omitempty"`
+	OwnerID          *string             `json:"ownerID,omitempty"`
+	ClearOwner       *bool               `json:"clearOwner,omitempty"`
+	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
+	ClearControls    *bool               `json:"clearControls,omitempty"`
+	RevisionBump     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateSubcontrolInput is used for update Subcontrol object.

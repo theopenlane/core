@@ -6927,6 +6927,7 @@ type CreateStandardInput struct {
 	StandardType         *string
 	Version              *string
 	OwnerID              *string
+	ControlIDs           []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -6977,6 +6978,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
@@ -7020,6 +7024,9 @@ type UpdateStandardInput struct {
 	Version                   *string
 	ClearOwner                bool
 	OwnerID                   *string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -7122,6 +7129,15 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
 	}
 }
 
