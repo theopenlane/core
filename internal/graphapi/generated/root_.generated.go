@@ -135,6 +135,7 @@ type ComplexityRoot struct {
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Source           func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -187,6 +188,7 @@ type ComplexityRoot struct {
 		Revision         func(childComplexity int) int
 		Source           func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -1530,6 +1532,7 @@ type ComplexityRoot struct {
 		Risks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status            func(childComplexity int) int
 		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary           func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt         func(childComplexity int) int
@@ -1580,6 +1583,7 @@ type ComplexityRoot struct {
 		ReviewFrequency  func(childComplexity int) int
 		Revision         func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -2492,6 +2496,7 @@ type ComplexityRoot struct {
 		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
@@ -2542,6 +2547,7 @@ type ComplexityRoot struct {
 		ReviewFrequency  func(childComplexity int) int
 		Revision         func(childComplexity int) int
 		Status           func(childComplexity int) int
+		Summary          func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -4172,6 +4178,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Status(childComplexity), true
 
+	case "ActionPlan.summary":
+		if e.complexity.ActionPlan.Summary == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.Summary(childComplexity), true
+
 	case "ActionPlan.tags":
 		if e.complexity.ActionPlan.Tags == nil {
 			break
@@ -4414,6 +4427,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Status(childComplexity), true
+
+	case "ActionPlanHistory.summary":
+		if e.complexity.ActionPlanHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.Summary(childComplexity), true
 
 	case "ActionPlanHistory.tags":
 		if e.complexity.ActionPlanHistory.Tags == nil {
@@ -10901,6 +10921,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "InternalPolicy.summary":
+		if e.complexity.InternalPolicy.Summary == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.Summary(childComplexity), true
+
 	case "InternalPolicy.tags":
 		if e.complexity.InternalPolicy.Tags == nil {
 			break
@@ -11129,6 +11156,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Status(childComplexity), true
+
+	case "InternalPolicyHistory.summary":
+		if e.complexity.InternalPolicyHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.Summary(childComplexity), true
 
 	case "InternalPolicyHistory.tags":
 		if e.complexity.InternalPolicyHistory.Tags == nil {
@@ -16885,6 +16919,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "Procedure.summary":
+		if e.complexity.Procedure.Summary == nil {
+			break
+		}
+
+		return e.complexity.Procedure.Summary(childComplexity), true
+
 	case "Procedure.tags":
 		if e.complexity.Procedure.Tags == nil {
 			break
@@ -17113,6 +17154,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Status(childComplexity), true
+
+	case "ProcedureHistory.summary":
+		if e.complexity.ProcedureHistory.Summary == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.Summary(childComplexity), true
 
 	case "ProcedureHistory.tags":
 		if e.complexity.ProcedureHistory.Tags == nil {
@@ -26892,6 +26940,7 @@ type ActionPlan implements Node {
   the id of the group responsible for approving the action_plan
   """
   delegateID: ID
+  summary: String
   """
   the organization id that owns the object
   """
@@ -27146,6 +27195,7 @@ type ActionPlanHistory implements Node {
   the id of the group responsible for approving the action_plan
   """
   delegateID: String
+  summary: String
   """
   the organization id that owns the object
   """
@@ -42187,6 +42237,7 @@ type InternalPolicy implements Node {
   the id of the group responsible for approving the policy
   """
   delegateID: ID
+  summary: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -42565,6 +42616,7 @@ type InternalPolicyHistory implements Node {
   the id of the group responsible for approving the policy
   """
   delegateID: String
+  summary: String
 }
 """
 A connection to a list of items.
@@ -50273,6 +50325,7 @@ type Procedure implements Node {
   the id of the group responsible for approving the procedure
   """
   delegateID: ID
+  summary: String
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -50620,6 +50673,7 @@ type ProcedureHistory implements Node {
   the id of the group responsible for approving the procedure
   """
   delegateID: String
+  summary: String
 }
 """
 A connection to a list of items.

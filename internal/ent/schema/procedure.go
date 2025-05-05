@@ -38,7 +38,8 @@ func (Procedure) PluralName() string {
 
 // Fields returns procedure fields.
 func (Procedure) Fields() []ent.Field {
-	return []ent.Field{} // fields are defined in the mixin
+	// other fields are defined in the mixins
+	return []ent.Field{}
 }
 
 // Edges of the Procedure

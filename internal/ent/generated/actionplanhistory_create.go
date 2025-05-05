@@ -278,6 +278,20 @@ func (aphc *ActionPlanHistoryCreate) SetNillableDelegateID(s *string) *ActionPla
 	return aphc
 }
 
+// SetSummary sets the "summary" field.
+func (aphc *ActionPlanHistoryCreate) SetSummary(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetSummary(s)
+	return aphc
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableSummary(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetSummary(*s)
+	}
+	return aphc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphc *ActionPlanHistoryCreate) SetOwnerID(s string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetOwnerID(s)
@@ -571,6 +585,10 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.DelegateID(); ok {
 		_spec.SetField(actionplanhistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := aphc.mutation.Summary(); ok {
+		_spec.SetField(actionplanhistory.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	if value, ok := aphc.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

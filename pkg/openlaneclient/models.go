@@ -331,6 +331,7 @@ type ActionPlan struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
@@ -421,6 +422,7 @@ type ActionPlanHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the action_plan
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// due date of the action plan
@@ -10640,6 +10642,7 @@ type InternalPolicy struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
 	DelegateID *string       `json:"delegateID,omitempty"`
+	Summary    *string       `json:"summary,omitempty"`
 	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
@@ -10734,6 +10737,7 @@ type InternalPolicyHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -15757,6 +15761,7 @@ type Procedure struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
 	DelegateID *string       `json:"delegateID,omitempty"`
+	Summary    *string       `json:"summary,omitempty"`
 	Owner      *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
@@ -15850,6 +15855,7 @@ type ProcedureHistory struct {
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
 	DelegateID *string `json:"delegateID,omitempty"`
+	Summary    *string `json:"summary,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}

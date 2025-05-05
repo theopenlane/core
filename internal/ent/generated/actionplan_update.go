@@ -323,6 +323,26 @@ func (apu *ActionPlanUpdate) ClearDelegateID() *ActionPlanUpdate {
 	return apu
 }
 
+// SetSummary sets the "summary" field.
+func (apu *ActionPlanUpdate) SetSummary(s string) *ActionPlanUpdate {
+	apu.mutation.SetSummary(s)
+	return apu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableSummary(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetSummary(*s)
+	}
+	return apu
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (apu *ActionPlanUpdate) ClearSummary() *ActionPlanUpdate {
+	apu.mutation.ClearSummary()
+	return apu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apu *ActionPlanUpdate) SetOwnerID(s string) *ActionPlanUpdate {
 	apu.mutation.SetOwnerID(s)
@@ -765,6 +785,12 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if apu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := apu.mutation.Summary(); ok {
+		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
+	}
+	if apu.mutation.SummaryCleared() {
+		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
 	}
 	if value, ok := apu.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -1377,6 +1403,26 @@ func (apuo *ActionPlanUpdateOne) ClearDelegateID() *ActionPlanUpdateOne {
 	return apuo
 }
 
+// SetSummary sets the "summary" field.
+func (apuo *ActionPlanUpdateOne) SetSummary(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetSummary(s)
+	return apuo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableSummary(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetSummary(*s)
+	}
+	return apuo
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (apuo *ActionPlanUpdateOne) ClearSummary() *ActionPlanUpdateOne {
+	apuo.mutation.ClearSummary()
+	return apuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apuo *ActionPlanUpdateOne) SetOwnerID(s string) *ActionPlanUpdateOne {
 	apuo.mutation.SetOwnerID(s)
@@ -1849,6 +1895,12 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if apuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := apuo.mutation.Summary(); ok {
+		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
+	}
+	if apuo.mutation.SummaryCleared() {
+		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
 	}
 	if value, ok := apuo.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/summarizer"
 
 	"github.com/theopenlane/core/internal/genhelpers"
 )
@@ -134,6 +135,10 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Objects{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("Summarizer"),
+			entc.DependencyType(&summarizer.Client{}),
 		),
 		entc.TemplateDir(templateDir),
 		entc.Extensions(

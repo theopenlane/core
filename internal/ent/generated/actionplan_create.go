@@ -249,6 +249,20 @@ func (apc *ActionPlanCreate) SetNillableDelegateID(s *string) *ActionPlanCreate 
 	return apc
 }
 
+// SetSummary sets the "summary" field.
+func (apc *ActionPlanCreate) SetSummary(s string) *ActionPlanCreate {
+	apc.mutation.SetSummary(s)
+	return apc
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableSummary(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetSummary(*s)
+	}
+	return apc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apc *ActionPlanCreate) SetOwnerID(s string) *ActionPlanCreate {
 	apc.mutation.SetOwnerID(s)
@@ -609,6 +623,10 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplan.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := apc.mutation.Summary(); ok {
+		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	if value, ok := apc.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

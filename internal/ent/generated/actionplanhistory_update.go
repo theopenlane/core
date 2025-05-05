@@ -317,6 +317,26 @@ func (aphu *ActionPlanHistoryUpdate) ClearDelegateID() *ActionPlanHistoryUpdate 
 	return aphu
 }
 
+// SetSummary sets the "summary" field.
+func (aphu *ActionPlanHistoryUpdate) SetSummary(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetSummary(s)
+	return aphu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableSummary(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetSummary(*s)
+	}
+	return aphu
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (aphu *ActionPlanHistoryUpdate) ClearSummary() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearSummary()
+	return aphu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphu *ActionPlanHistoryUpdate) SetOwnerID(s string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetOwnerID(s)
@@ -576,6 +596,12 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if aphu.mutation.DelegateIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := aphu.mutation.Summary(); ok {
+		_spec.SetField(actionplanhistory.FieldSummary, field.TypeString, value)
+	}
+	if aphu.mutation.SummaryCleared() {
+		_spec.ClearField(actionplanhistory.FieldSummary, field.TypeString)
 	}
 	if value, ok := aphu.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
@@ -909,6 +935,26 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearDelegateID() *ActionPlanHistoryUpd
 	return aphuo
 }
 
+// SetSummary sets the "summary" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetSummary(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetSummary(s)
+	return aphuo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableSummary(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetSummary(*s)
+	}
+	return aphuo
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearSummary() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearSummary()
+	return aphuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphuo *ActionPlanHistoryUpdateOne) SetOwnerID(s string) *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.SetOwnerID(s)
@@ -1198,6 +1244,12 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if aphuo.mutation.DelegateIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.Summary(); ok {
+		_spec.SetField(actionplanhistory.FieldSummary, field.TypeString, value)
+	}
+	if aphuo.mutation.SummaryCleared() {
+		_spec.ClearField(actionplanhistory.FieldSummary, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

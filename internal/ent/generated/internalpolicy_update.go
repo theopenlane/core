@@ -347,6 +347,26 @@ func (ipu *InternalPolicyUpdate) ClearDelegateID() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetSummary sets the "summary" field.
+func (ipu *InternalPolicyUpdate) SetSummary(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetSummary(s)
+	return ipu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableSummary(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetSummary(*s)
+	}
+	return ipu
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (ipu *InternalPolicyUpdate) ClearSummary() *InternalPolicyUpdate {
+	ipu.mutation.ClearSummary()
+	return ipu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
 	return ipu.SetOwnerID(o.ID)
@@ -920,6 +940,12 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := ipu.mutation.Summary(); ok {
+		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
+	}
+	if ipu.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
 	if ipu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1822,6 +1848,26 @@ func (ipuo *InternalPolicyUpdateOne) ClearDelegateID() *InternalPolicyUpdateOne 
 	return ipuo
 }
 
+// SetSummary sets the "summary" field.
+func (ipuo *InternalPolicyUpdateOne) SetSummary(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetSummary(s)
+	return ipuo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableSummary(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetSummary(*s)
+	}
+	return ipuo
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (ipuo *InternalPolicyUpdateOne) ClearSummary() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearSummary()
+	return ipuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
 	return ipuo.SetOwnerID(o.ID)
@@ -2425,6 +2471,12 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := ipuo.mutation.Summary(); ok {
+		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
+	}
+	if ipuo.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
 	if ipuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

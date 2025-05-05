@@ -156,6 +156,11 @@ func DelegateID(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldDelegateID, v))
 }
 
+// Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
+func Summary(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldSummary, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1404,6 +1409,81 @@ func DelegateIDEqualFold(v string) predicate.ProcedureHistory {
 // DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
 func DelegateIDContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// SummaryEQ applies the EQ predicate on the "summary" field.
+func SummaryEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldSummary, v))
+}
+
+// SummaryNEQ applies the NEQ predicate on the "summary" field.
+func SummaryNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldSummary, v))
+}
+
+// SummaryIn applies the In predicate on the "summary" field.
+func SummaryIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldSummary, vs...))
+}
+
+// SummaryNotIn applies the NotIn predicate on the "summary" field.
+func SummaryNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldSummary, vs...))
+}
+
+// SummaryGT applies the GT predicate on the "summary" field.
+func SummaryGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldSummary, v))
+}
+
+// SummaryGTE applies the GTE predicate on the "summary" field.
+func SummaryGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldSummary, v))
+}
+
+// SummaryLT applies the LT predicate on the "summary" field.
+func SummaryLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldSummary, v))
+}
+
+// SummaryLTE applies the LTE predicate on the "summary" field.
+func SummaryLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldSummary, v))
+}
+
+// SummaryContains applies the Contains predicate on the "summary" field.
+func SummaryContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldSummary, v))
+}
+
+// SummaryHasPrefix applies the HasPrefix predicate on the "summary" field.
+func SummaryHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldSummary, v))
+}
+
+// SummaryHasSuffix applies the HasSuffix predicate on the "summary" field.
+func SummaryHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldSummary, v))
+}
+
+// SummaryIsNil applies the IsNil predicate on the "summary" field.
+func SummaryIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldSummary))
+}
+
+// SummaryNotNil applies the NotNil predicate on the "summary" field.
+func SummaryNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldSummary))
+}
+
+// SummaryEqualFold applies the EqualFold predicate on the "summary" field.
+func SummaryEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldSummary, v))
+}
+
+// SummaryContainsFold applies the ContainsFold predicate on the "summary" field.
+func SummaryContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldSummary, v))
 }
 
 // And groups predicates with the AND operator between them.

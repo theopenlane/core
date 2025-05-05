@@ -273,6 +273,20 @@ func (ipc *InternalPolicyCreate) SetNillableDelegateID(s *string) *InternalPolic
 	return ipc
 }
 
+// SetSummary sets the "summary" field.
+func (ipc *InternalPolicyCreate) SetSummary(s string) *InternalPolicyCreate {
+	ipc.mutation.SetSummary(s)
+	return ipc
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableSummary(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetSummary(*s)
+	}
+	return ipc
+}
+
 // SetID sets the "id" field.
 func (ipc *InternalPolicyCreate) SetID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetID(s)
@@ -674,6 +688,10 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := ipc.mutation.Summary(); ok {
+		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

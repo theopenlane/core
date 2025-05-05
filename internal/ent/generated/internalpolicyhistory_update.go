@@ -337,6 +337,26 @@ func (iphu *InternalPolicyHistoryUpdate) ClearDelegateID() *InternalPolicyHistor
 	return iphu
 }
 
+// SetSummary sets the "summary" field.
+func (iphu *InternalPolicyHistoryUpdate) SetSummary(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetSummary(s)
+	return iphu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableSummary(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetSummary(*s)
+	}
+	return iphu
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearSummary() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearSummary()
+	return iphu
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return iphu.mutation
@@ -517,6 +537,12 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if iphu.mutation.DelegateIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := iphu.mutation.Summary(); ok {
+		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
+	}
+	if iphu.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
 	}
 	_spec.Node.Schema = iphu.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphu.schemaConfig)
@@ -846,6 +872,26 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearDelegateID() *InternalPolicyHi
 	return iphuo
 }
 
+// SetSummary sets the "summary" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetSummary(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetSummary(s)
+	return iphuo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableSummary(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetSummary(*s)
+	}
+	return iphuo
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearSummary() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearSummary()
+	return iphuo
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphuo *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return iphuo.mutation
@@ -1056,6 +1102,12 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if iphuo.mutation.DelegateIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.Summary(); ok {
+		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
+	}
+	if iphuo.mutation.SummaryCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
 	}
 	_spec.Node.Schema = iphuo.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphuo.schemaConfig)

@@ -124,6 +124,9 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.DelegateID, new.DelegateID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDelegateID, aph.DelegateID, new.DelegateID))
 	}
+	if !reflect.DeepEqual(aph.Summary, new.Summary) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSummary, aph.Summary, new.Summary))
+	}
 	if !reflect.DeepEqual(aph.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, aph.OwnerID, new.OwnerID))
 	}
@@ -1264,6 +1267,9 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(iph.DelegateID, new.DelegateID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldDelegateID, iph.DelegateID, new.DelegateID))
 	}
+	if !reflect.DeepEqual(iph.Summary, new.Summary) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldSummary, iph.Summary, new.Summary))
+	}
 	return changes
 }
 
@@ -1815,6 +1821,9 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(ph.DelegateID, new.DelegateID) {
 		changes = append(changes, NewChange(procedurehistory.FieldDelegateID, ph.DelegateID, new.DelegateID))
+	}
+	if !reflect.DeepEqual(ph.Summary, new.Summary) {
+		changes = append(changes, NewChange(procedurehistory.FieldSummary, ph.Summary, new.Summary))
 	}
 	return changes
 }

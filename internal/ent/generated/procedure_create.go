@@ -272,6 +272,20 @@ func (pc *ProcedureCreate) SetNillableDelegateID(s *string) *ProcedureCreate {
 	return pc
 }
 
+// SetSummary sets the "summary" field.
+func (pc *ProcedureCreate) SetSummary(s string) *ProcedureCreate {
+	pc.mutation.SetSummary(s)
+	return pc
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableSummary(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetSummary(*s)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProcedureCreate) SetID(s string) *ProcedureCreate {
 	pc.mutation.SetID(s)
@@ -658,6 +672,10 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedure.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := pc.mutation.Summary(); ok {
+		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

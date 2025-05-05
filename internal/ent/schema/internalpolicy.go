@@ -38,7 +38,8 @@ func (InternalPolicy) PluralName() string {
 
 // Fields returns policy fields.
 func (InternalPolicy) Fields() []ent.Field {
-	return []ent.Field{} // fields are defined in the mixins
+	// other fields are defined in the mixins
+	return []ent.Field{}
 }
 
 // Edges of the InternalPolicy

@@ -298,6 +298,20 @@ func (phc *ProcedureHistoryCreate) SetNillableDelegateID(s *string) *ProcedureHi
 	return phc
 }
 
+// SetSummary sets the "summary" field.
+func (phc *ProcedureHistoryCreate) SetSummary(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetSummary(s)
+	return phc
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableSummary(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetSummary(*s)
+	}
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -541,6 +555,10 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.DelegateID(); ok {
 		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := phc.mutation.Summary(); ok {
+		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
+		_node.Summary = value
 	}
 	return _node, _spec
 }

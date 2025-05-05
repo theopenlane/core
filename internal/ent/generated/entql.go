@@ -150,6 +150,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldReviewFrequency:  {Type: field.TypeEnum, Column: actionplan.FieldReviewFrequency},
 			actionplan.FieldApproverID:       {Type: field.TypeString, Column: actionplan.FieldApproverID},
 			actionplan.FieldDelegateID:       {Type: field.TypeString, Column: actionplan.FieldDelegateID},
+			actionplan.FieldSummary:          {Type: field.TypeString, Column: actionplan.FieldSummary},
 			actionplan.FieldOwnerID:          {Type: field.TypeString, Column: actionplan.FieldOwnerID},
 			actionplan.FieldDueDate:          {Type: field.TypeTime, Column: actionplan.FieldDueDate},
 			actionplan.FieldPriority:         {Type: field.TypeEnum, Column: actionplan.FieldPriority},
@@ -187,6 +188,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldReviewFrequency:  {Type: field.TypeEnum, Column: actionplanhistory.FieldReviewFrequency},
 			actionplanhistory.FieldApproverID:       {Type: field.TypeString, Column: actionplanhistory.FieldApproverID},
 			actionplanhistory.FieldDelegateID:       {Type: field.TypeString, Column: actionplanhistory.FieldDelegateID},
+			actionplanhistory.FieldSummary:          {Type: field.TypeString, Column: actionplanhistory.FieldSummary},
 			actionplanhistory.FieldOwnerID:          {Type: field.TypeString, Column: actionplanhistory.FieldOwnerID},
 			actionplanhistory.FieldDueDate:          {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
 			actionplanhistory.FieldPriority:         {Type: field.TypeEnum, Column: actionplanhistory.FieldPriority},
@@ -1108,6 +1110,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldReviewFrequency:  {Type: field.TypeEnum, Column: internalpolicy.FieldReviewFrequency},
 			internalpolicy.FieldApproverID:       {Type: field.TypeString, Column: internalpolicy.FieldApproverID},
 			internalpolicy.FieldDelegateID:       {Type: field.TypeString, Column: internalpolicy.FieldDelegateID},
+			internalpolicy.FieldSummary:          {Type: field.TypeString, Column: internalpolicy.FieldSummary},
 		},
 	}
 	graph.Nodes[35] = &sqlgraph.Node{
@@ -1143,6 +1146,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldReviewFrequency:  {Type: field.TypeEnum, Column: internalpolicyhistory.FieldReviewFrequency},
 			internalpolicyhistory.FieldApproverID:       {Type: field.TypeString, Column: internalpolicyhistory.FieldApproverID},
 			internalpolicyhistory.FieldDelegateID:       {Type: field.TypeString, Column: internalpolicyhistory.FieldDelegateID},
+			internalpolicyhistory.FieldSummary:          {Type: field.TypeString, Column: internalpolicyhistory.FieldSummary},
 		},
 	}
 	graph.Nodes[36] = &sqlgraph.Node{
@@ -1668,6 +1672,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldReviewFrequency:  {Type: field.TypeEnum, Column: procedure.FieldReviewFrequency},
 			procedure.FieldApproverID:       {Type: field.TypeString, Column: procedure.FieldApproverID},
 			procedure.FieldDelegateID:       {Type: field.TypeString, Column: procedure.FieldDelegateID},
+			procedure.FieldSummary:          {Type: field.TypeString, Column: procedure.FieldSummary},
 		},
 	}
 	graph.Nodes[55] = &sqlgraph.Node{
@@ -1703,6 +1708,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldReviewFrequency:  {Type: field.TypeEnum, Column: procedurehistory.FieldReviewFrequency},
 			procedurehistory.FieldApproverID:       {Type: field.TypeString, Column: procedurehistory.FieldApproverID},
 			procedurehistory.FieldDelegateID:       {Type: field.TypeString, Column: procedurehistory.FieldDelegateID},
+			procedurehistory.FieldSummary:          {Type: field.TypeString, Column: procedurehistory.FieldSummary},
 		},
 	}
 	graph.Nodes[56] = &sqlgraph.Node{
@@ -6440,6 +6446,11 @@ func (f *ActionPlanFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDelegateID))
 }
 
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ActionPlanFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldSummary))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ActionPlanFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldOwnerID))
@@ -6696,6 +6707,11 @@ func (f *ActionPlanHistoryFilter) WhereApproverID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *ActionPlanHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldDelegateID))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ActionPlanHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldSummary))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -12183,6 +12199,11 @@ func (f *InternalPolicyFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldDelegateID))
 }
 
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *InternalPolicyFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldSummary))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *InternalPolicyFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -12513,6 +12534,11 @@ func (f *InternalPolicyHistoryFilter) WhereApproverID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *InternalPolicyHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldDelegateID))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *InternalPolicyHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldSummary))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15659,6 +15685,11 @@ func (f *ProcedureFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldDelegateID))
 }
 
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ProcedureFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldSummary))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ProcedureFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -15975,6 +16006,11 @@ func (f *ProcedureHistoryFilter) WhereApproverID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *ProcedureHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldDelegateID))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ProcedureHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldSummary))
 }
 
 // addPredicate implements the predicateAdder interface.

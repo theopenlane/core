@@ -30649,6 +30649,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	ReviewFrequency  *enums.Frequency                                                          "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                                   "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -30755,6 +30756,12 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetStatus() *
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.Status
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetSummary() *string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.Summary
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetTags() []string {
 	if t == nil {
@@ -30887,6 +30894,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	ReviewFrequency  *enums.Frequency                                                    "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                             "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                               "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                             "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -30993,6 +31001,12 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *enums.
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.Status
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetSummary() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Summary
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -31579,6 +31593,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	ReviewFrequency  *enums.Frequency                                                          "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                                     "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                                   "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -31685,6 +31700,12 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetStatus() *
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.Status
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetSummary() *string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.Summary
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetTags() []string {
 	if t == nil {
@@ -42928,6 +42949,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	ReviewFrequency  *enums.Frequency                                           "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                    "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                    "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -43034,6 +43056,12 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetStatus() *enums.DocumentS
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.Status
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetSummary() *string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.Summary
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetTags() []string {
 	if t == nil {
@@ -43166,6 +43194,7 @@ type GetAllProcedures_Procedures_Edges_Node struct {
 	ReviewFrequency  *enums.Frequency                                        "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                 "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                   "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                 "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -43272,6 +43301,12 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetStatus() *enums.DocumentStat
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
 	return t.Status
+}
+func (t *GetAllProcedures_Procedures_Edges_Node) GetSummary() *string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.Summary
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -43404,6 +43439,7 @@ type GetProcedureByID_Procedure struct {
 	ReviewFrequency  *enums.Frequency                            "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                     "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                       "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                     "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -43510,6 +43546,12 @@ func (t *GetProcedureByID_Procedure) GetStatus() *enums.DocumentStatus {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.Status
+}
+func (t *GetProcedureByID_Procedure) GetSummary() *string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.Summary
 }
 func (t *GetProcedureByID_Procedure) GetTags() []string {
 	if t == nil {
@@ -43858,6 +43900,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	ReviewFrequency  *enums.Frequency                                           "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	Revision         *string                                                    "json:\"revision,omitempty\" graphql:\"revision\""
 	Status           *enums.DocumentStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                    "json:\"summary,omitempty\" graphql:\"summary\""
 	Tags             []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt        *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy        *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -43964,6 +44007,12 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetStatus() *enums.DocumentS
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.Status
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetSummary() *string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.Summary
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetTags() []string {
 	if t == nil {
@@ -78424,6 +78473,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			reviewFrequency
 			revision
 			status
+			summary
 			tags
 			updatedAt
 			updatedBy
@@ -78506,6 +78556,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				reviewFrequency
 				revision
 				status
+				summary
 				tags
 				updatedAt
 				updatedBy
@@ -78676,6 +78727,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			reviewFrequency
 			revision
 			status
+			summary
 			tags
 			updatedAt
 			updatedBy
@@ -81966,6 +82018,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			reviewFrequency
 			revision
 			status
+			summary
 			tags
 			updatedAt
 			updatedBy
@@ -82048,6 +82101,7 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				reviewFrequency
 				revision
 				status
+				summary
 				tags
 				updatedAt
 				updatedBy
@@ -82103,6 +82157,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		reviewFrequency
 		revision
 		status
+		summary
 		tags
 		updatedAt
 		updatedBy
@@ -82218,6 +82273,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			reviewFrequency
 			revision
 			status
+			summary
 			tags
 			updatedAt
 			updatedBy

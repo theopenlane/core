@@ -337,6 +337,26 @@ func (phu *ProcedureHistoryUpdate) ClearDelegateID() *ProcedureHistoryUpdate {
 	return phu
 }
 
+// SetSummary sets the "summary" field.
+func (phu *ProcedureHistoryUpdate) SetSummary(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetSummary(s)
+	return phu
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableSummary(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetSummary(*s)
+	}
+	return phu
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (phu *ProcedureHistoryUpdate) ClearSummary() *ProcedureHistoryUpdate {
+	phu.mutation.ClearSummary()
+	return phu
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return phu.mutation
@@ -517,6 +537,12 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := phu.mutation.Summary(); ok {
+		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
+	}
+	if phu.mutation.SummaryCleared() {
+		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -846,6 +872,26 @@ func (phuo *ProcedureHistoryUpdateOne) ClearDelegateID() *ProcedureHistoryUpdate
 	return phuo
 }
 
+// SetSummary sets the "summary" field.
+func (phuo *ProcedureHistoryUpdateOne) SetSummary(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetSummary(s)
+	return phuo
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableSummary(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetSummary(*s)
+	}
+	return phuo
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearSummary() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearSummary()
+	return phuo
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phuo *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return phuo.mutation
@@ -1056,6 +1102,12 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
+	}
+	if value, ok := phuo.mutation.Summary(); ok {
+		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
+	}
+	if phuo.mutation.SummaryCleared() {
+		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)
