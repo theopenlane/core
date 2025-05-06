@@ -31,7 +31,7 @@ type EmailVerificationToken struct {
 	ent.Schema
 }
 
-const SchemaEmailVerificationToken = "email_verification_token"
+const SchemaEmailVerificationToken = "email_verification_token" // nolint:gosec
 
 func (EmailVerificationToken) Name() string {
 	return SchemaEmailVerificationToken

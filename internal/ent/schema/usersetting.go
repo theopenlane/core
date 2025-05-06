@@ -118,7 +118,7 @@ func (UserSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the UserSetting.
-func (d UserSetting) Interceptors() []ent.Interceptor {
+func (UserSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorUserSetting(),
 	}

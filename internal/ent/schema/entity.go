@@ -47,7 +47,7 @@ func (Entity) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}).
-			MinLen(3).
+			MinLen(minNameLength).
 			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),

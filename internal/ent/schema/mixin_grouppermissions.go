@@ -6,9 +6,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
+
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // GroupPermissionsMixin is a mixin for group permissions on an entity
@@ -134,10 +136,6 @@ func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	return
 }
 
-// groupReadWriteHooks are the hooks that are used to add the editor, blocked, and viewer tuples
-// based on a group
-var groupReadWriteHooks = append(groupWriteOnlyHooks, groupReadOnlyHooks...)
-
 // groupReadOnlyHooks are the hooks that are used to add the viewer tuples
 // based on a group
 var groupReadOnlyHooks = []ent.Hook{
@@ -172,6 +170,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 
 	for _, schema := range g.EdgeInfo {
 		sch := toSchemaFuncs(schema.Schema)
+
 		var defaultReverseEdges = []ent.Edge{
 			edge.From(fmt.Sprintf("%s_editors", sch.Name()), sch.GetType()).
 				Ref("editors"),

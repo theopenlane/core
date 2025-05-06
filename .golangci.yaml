@@ -3,8 +3,6 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
-  build-tags:
-    - codeanalysis
 linters:
   enable:
     - bodyclose
@@ -29,31 +27,17 @@ linters:
     paths:
       - internal/graphapi/model/gen_models.go
       - pkg/openlaneclient/graphclient.go
-      - schema.graphql
       - pkg/testutils/*
-      - .buildkite/*
-      - .github/*
-      - docker/*
       - internal/ent/generated/*
       - internal/ent/templates/*
       - jsonschema/templates/*
       - pkg/objects/mocks/*
-      - schema/*
-      - query/*
-      - fga/model/*
-      - fga/tests/*
-      - docs/*
       - internal/graphapi/generate/*
       - internal/graphapi/generated/*
-      - db/migrations/*
-      - db/migrations-goose-postgres/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
       - pkg/sleuth/static/*
       - pkg/entitlements/mocks/*
-      - third_party$
-      - builtin$
-      - examples$
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
 formatters:
@@ -68,31 +52,3 @@ formatters:
         - github.com/theopenlane/core
   exclusions:
     generated: lax
-    paths:
-      - internal/graphapi/model/gen_models.go
-      - pkg/openlaneclient/graphclient.go
-      - schema.graphql
-      - pkg/testutils/*
-      - .buildkite/*
-      - .github/*
-      - docker/*
-      - internal/ent/generated/*
-      - internal/ent/templates/*
-      - jsonschema/templates/*
-      - pkg/objects/mocks/*
-      - schema/*
-      - query/*
-      - fga/model/*
-      - fga/tests/*
-      - docs/*
-      - internal/graphapi/generate/*
-      - internal/graphapi/generated/*
-      - db/migrations/*
-      - db/migrations-goose-postgres/*
-      - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
-      - pkg/entitlements/mocks/*
-      - third_party$
-      - builtin$
-      - examples$

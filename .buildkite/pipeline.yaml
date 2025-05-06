@@ -4,13 +4,16 @@ env:
   GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
-  GOFLAGS: -buildvcs=false
   LARGE_RUNNER_QUEUE: self-hosted-garage-vms
   SMALL_RUNNER_QUEUE: self-hosted-garage-vms
   RUNNER_LARGE: "large"
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
+  BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "$BUILDKITE_BUILD_PATH/.cache"
+  GOFLAGS: -buildvcs=false
+  GOCACHE: $BUILDKITE_BUILD_PATH/.cache/go-build
+  GOLANGCI_LINT_CACHE: $BUILDKITE_BUILD_PATH/.cache/golangci-lint
 
 steps:
   - group: ":knife: Pre-check"
@@ -23,10 +26,20 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $GOCACHE
+              restore: pipeline
+              save:
+                - file
+                - branch
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "ci"]
+              propagate-environment: true
               environment:
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
@@ -37,6 +50,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "config:ci"]
+              propagate-environment: true
               environment:
                 - "GOTOOLCHAIN=auto"
   - group: ":test_tube: Tests"
@@ -52,10 +66,29 @@ steps:
         timeout_in_minutes: 20
         key: "lint"
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $GOCACHE
+              restore: pipeline
+              save:
+                - file
+                - branch
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $GOLANGCI_LINT_CACHE
+              restore: pipeline
+              save:
+                - file
+                - branch
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
+              propagate-environment: true
               environment:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
@@ -68,15 +101,27 @@ steps:
         cancel_on_build_failing: true
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+          GOMODCACHE: $HOME/.cache/go-build
         matrix:
           setup:
             version:
               - 17-alpine
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $GOCACHE
+              restore: pipeline
+              save:
+                - file
+                - branch
+              key-extra: "{{matrix.version}}"
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:test:cover"]
+              propagate-environment: true
               environment:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
@@ -94,6 +139,7 @@ steps:
         plugins:
           - docker#v5.12.0:
               image: openfga/cli:v0.5.1
+              propagate-environment: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
@@ -113,6 +159,7 @@ steps:
               step: "go_test"
           - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
+              propagate-environment: true
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -131,6 +178,7 @@ steps:
               step: "go_test"
           - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
+              propagate-environment: true
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -149,6 +197,7 @@ steps:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
+              propagate-environment: true
               environment:
                 - CGO_ENABLED=0
                 - GOOS=linux
@@ -164,6 +213,7 @@ steps:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
+              propagate-environment: true
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64
@@ -306,6 +356,15 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $GOCACHE
+              restore: pipeline
+              save:
+                - file
+                - branch
       - trigger: "core-deploy"
         depends_on: "docker-build-and-tag"
         label: ":rocket: trigger core-deploy"

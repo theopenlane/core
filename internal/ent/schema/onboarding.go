@@ -5,15 +5,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-
 	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 )
 
 // Onboarding holds the schema definition for the Onboarding entity

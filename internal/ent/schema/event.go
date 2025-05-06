@@ -5,8 +5,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	emixin "github.com/theopenlane/entx/mixin"
+
+	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
 // Event holds the schema definition for the Event entity
