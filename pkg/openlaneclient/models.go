@@ -4225,6 +4225,7 @@ type CreateFullProgramInput struct {
 	InternalPolicies []*CreateInternalPolicyInput         `json:"internalPolicies,omitempty"`
 	Procedures       []*CreateProcedureInput              `json:"procedures,omitempty"`
 	Members          []*CreateMemberWithProgramInput      `json:"members,omitempty"`
+	StandardID       string                               `json:"standardID"`
 }
 
 // CreateGroupInput is used for create Group object.

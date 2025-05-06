@@ -68,7 +68,7 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"program", "controls", "risks", "internalPolicies", "procedures", "members"}
+	fieldsInOrder := [...]string{"program", "controls", "risks", "internalPolicies", "procedures", "members", "standardID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -117,6 +117,13 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 				return it, err
 			}
 			it.Members = data
+		case "standardID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardID = data
 		}
 	}
 

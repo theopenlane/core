@@ -6715,6 +6715,7 @@ input CreateFullProgramInput {
 	internalPolicies: [CreateInternalPolicyInput!]
 	procedures: [CreateProcedureInput!]
 	members: [CreateMemberWithProgramInput!]
+	standardID: ID!
 }
 """
 CreateGroupInput is used for create Group object.

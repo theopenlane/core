@@ -68691,6 +68691,7 @@ input CreateFullProgramInput{
   internalPolicies: [CreateInternalPolicyInput!]
   procedures: [CreateProcedureInput!]
   members: [CreateMemberWithProgramInput!]
+  standardID: ID!
 }
 
 input CreateProgramWithMembersInput{
@@ -68731,7 +68732,8 @@ extend type Mutation{
         """
         input: CreateControlWithSubcontrolsInput!
     ): ControlCreatePayload!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/programmembership.graphql", Input: `extend type Query {
     """
     Look up programMembership by ID

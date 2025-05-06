@@ -20,6 +20,7 @@ input CreateFullProgramInput{
   internalPolicies: [CreateInternalPolicyInput!]
   procedures: [CreateProcedureInput!]
   members: [CreateMemberWithProgramInput!]
+  standardID: ID!
 }
 
 input CreateProgramWithMembersInput{
