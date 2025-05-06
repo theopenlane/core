@@ -15,7 +15,7 @@ env:
 
 steps:
   - name: ":golangci-lint: lint"
-    command: golangci-lint --config=.golangci.yaml --verbose
+    command: golangci-lint run --config=.golangci.yaml --verbose
     plugins:
       - docker-compose#v5.2.0:
           config: .buildkite/docker-compose.yaml
