@@ -267,7 +267,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 			return err
 		}
 
-		inviterName = requestor.FirstName
+		inviterName = requestor.DisplayName
 
 	case auth.ServiceSubjectType:
 		// default to org name
@@ -276,6 +276,10 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	default:
 		// should never really get here
 		return ErrInternalServerError
+	}
+
+	if inviterName != "" {
+		inviterName = strings.ToUpper(string(inviterName[0])) + inviterName[1:]
 	}
 
 	invite := emailtemplates.InviteTemplateData{
