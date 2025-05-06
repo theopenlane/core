@@ -117,6 +117,74 @@ func (suite *GraphTestSuite) TestQueryMappableDomains() {
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain2.ID}).MustDelete(t.Context(), suite)
 }
 
+func (suite *GraphTestSuite) TestGetAllMappableDomains() {
+	t := suite.T()
+
+	// Create test mappable domains with different users
+	mappableDomain1 := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	mappableDomain3 := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
+	testCases := []struct {
+		name            string
+		client          *openlaneclient.OpenlaneClient
+		ctx             context.Context
+		expectedResults int
+		expectedErr     string
+	}{
+		{
+			name:            "happy path - system admin can see all domains",
+			client:          suite.client.api,
+			ctx:             systemAdminUser.UserCtx,
+			expectedResults: 3,
+		},
+		{
+			name:            "regular user",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 3,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetAllMappableDomains(tc.ctx)
+
+			if tc.expectedErr != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Nil(t, resp)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			require.NotNil(t, resp.MappableDomains)
+			require.NotNil(t, resp.MappableDomains.Edges)
+
+			// Verify the number of results
+			assert.Len(t, resp.MappableDomains.Edges, tc.expectedResults)
+			assert.Equal(t, int64(tc.expectedResults), resp.MappableDomains.TotalCount)
+
+			// Verify pagination info
+			assert.NotNil(t, resp.MappableDomains.PageInfo)
+
+			// If we have results, verify the structure of the first result
+			if tc.expectedResults > 0 {
+				firstNode := resp.MappableDomains.Edges[0].Node
+				assert.NotEmpty(t, firstNode.ID)
+				assert.NotEmpty(t, firstNode.Name)
+				assert.NotNil(t, firstNode.CreatedAt)
+			}
+		})
+	}
+
+	// Clean up created domains
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain1.ID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain2.ID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain3.ID}).MustDelete(t.Context(), suite)
+}
+
 func (suite *GraphTestSuite) TestMutationCreateMappableDomain() {
 	t := suite.T()
 	testCases := []struct {
@@ -169,6 +237,109 @@ func (suite *GraphTestSuite) TestMutationCreateMappableDomain() {
 
 			assert.Equal(t, tc.request.Name, resp.CreateMappableDomain.MappableDomain.Name)
 			(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: resp.CreateMappableDomain.MappableDomain.ID}).MustDelete(tc.ctx, suite)
+		})
+	}
+}
+
+func (suite *GraphTestSuite) TestMutationCreateBulkMappableDomain() {
+	t := suite.T()
+	testCases := []struct {
+		name        string
+		requests    []*openlaneclient.CreateMappableDomainInput
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+		numExpected int
+	}{
+		{
+			name: "happy path - multiple domains",
+			requests: []*openlaneclient.CreateMappableDomainInput{
+				{
+					Name: "bulk1.theopenlane.io",
+				},
+				{
+					Name: "bulk2.theopenlane.io",
+				},
+				{
+					Name: "bulk3.theopenlane.io",
+				},
+			},
+			client:      suite.client.api,
+			ctx:         systemAdminUser.UserCtx,
+			numExpected: 3,
+		},
+		{
+			name: "happy path - single domain",
+			requests: []*openlaneclient.CreateMappableDomainInput{
+				{
+					Name: "singlebulk.theopenlane.io",
+				},
+			},
+			client:      suite.client.api,
+			ctx:         systemAdminUser.UserCtx,
+			numExpected: 1,
+		},
+		{
+			name: "invalid domain in batch",
+			requests: []*openlaneclient.CreateMappableDomainInput{
+				{
+					Name: "valid.theopenlane.io",
+				},
+				{
+					Name: "!invalid-domain",
+				},
+			},
+			client:      suite.client.api,
+			ctx:         systemAdminUser.UserCtx,
+			expectedErr: "invalid or unparsable field: url",
+		},
+		{
+			name: "not system admin, unauthorized",
+			requests: []*openlaneclient.CreateMappableDomainInput{
+				{
+					Name: "unauthorized.theopenlane.io",
+				},
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:        "empty input",
+			requests:    []*openlaneclient.CreateMappableDomainInput{},
+			client:      suite.client.api,
+			ctx:         systemAdminUser.UserCtx,
+			expectedErr: "input is required",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateBulkMappableDomain(tc.ctx, tc.requests)
+			if tc.expectedErr != "" {
+				require.Error(t, err)
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Nil(t, resp)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+			require.Len(t, resp.CreateBulkMappableDomain.MappableDomains, tc.numExpected)
+
+			// Verify each domain was created correctly
+			for i, request := range tc.requests {
+				assert.Equal(t, request.Name, resp.CreateBulkMappableDomain.MappableDomains[i].Name)
+			}
+
+			// Clean up created domains
+			for _, domain := range resp.CreateBulkMappableDomain.MappableDomains {
+				(&Cleanup[*generated.MappableDomainDeleteOne]{
+					client: suite.client.db.MappableDomain,
+					ID:     domain.ID,
+				}).MustDelete(tc.ctx, suite)
+			}
 		})
 	}
 }

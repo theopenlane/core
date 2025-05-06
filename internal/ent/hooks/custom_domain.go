@@ -50,7 +50,7 @@ func HookCustomDomain() ent.Hook {
 				return u, err
 			})
 		},
-		hook.HasFields("txt_record_value"),
+		hook.HasOp(ent.OpCreate),
 	)
 }
 

@@ -61,9 +61,6 @@ func (CustomDomain) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
 			Default("_olverify").
 			NotEmpty().
 			Immutable().
