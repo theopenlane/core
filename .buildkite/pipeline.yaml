@@ -12,6 +12,8 @@ env:
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
   BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/.cache"
+  GOCACHE: "$HOME/.cache/go-build"
+  GOLANGCI_LINT_CACHE: "$HOME/.cache/golangci-lint"
 
 steps:
   - group: ":knife: Pre-check"
@@ -23,10 +25,6 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
-        commands: |
-          #!/bin/bash
-          mkdir $HOME/.cache/go-build
-          mkdir $HOME/.cache/golangci-lint
         plugins:
           - cache#v1.6.0:
               manifest:
@@ -43,7 +41,6 @@ steps:
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
-                - "GOCACHE=$HOME/.cache/go-build"
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
@@ -79,7 +76,6 @@ steps:
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
-                - "GOCACHE=$HOME/.cache/go-build"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
