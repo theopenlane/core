@@ -3,8 +3,6 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
-  build-tags:
-    - codeanalysis
 linters:
   enable:
     - bodyclose
