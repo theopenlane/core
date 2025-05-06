@@ -55,6 +55,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
+              cpus: 8
               environment:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
@@ -74,6 +75,7 @@ steps:
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
+              cpus: 8
               command: ["task", "go:test:cover"]
               environment:
                 - "TEST_DB_URL"
