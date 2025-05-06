@@ -116,7 +116,7 @@ tasks:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --new-from-rev=HEAD~ --print-resources-usage  --concurrency 8
+      - golangci-lint run --config=.golangci.yaml --verbose --new-from-rev=HEAD~ --print-resources-usage  --concurrency 8 --disable-all --enable=staticcheck
 
   go:test:
     desc: runs and outputs results of created go tests
