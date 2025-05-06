@@ -12,8 +12,6 @@ env:
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
   BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/.cache"
-  GOCACHE: "$HOME/.cache/go-build"
-  GOLANGCI_LINT_CACHE: "$HOME/.cache/golangci-lint"
 
 steps:
   - group: ":knife: Pre-check"
@@ -41,6 +39,8 @@ steps:
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=$HOME/.cache/go-build"
+                - "GOLANGCI_LINT_CACHE=$HOME/.cache/golangci-lint"
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
@@ -76,6 +76,8 @@ steps:
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=$HOME/.cache/go-build"
+                - "GOLANGCI_LINT_CACHE=$HOME/.cache/golangci-lint"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
@@ -86,11 +88,20 @@ steps:
         cancel_on_build_failing: true
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+          GOMODCACHE: pkg/cache
         matrix:
           setup:
             version:
               - 17-alpine
         plugins:
+          - cache#v1.6.0:
+              path: pkg/cache
+              manifest:
+                - go.mod
+                - go.sum
+              restore: file
+              save: file
+              key-extra: "{{matrix.version}}"
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
