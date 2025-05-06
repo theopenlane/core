@@ -1063,8 +1063,8 @@ github.com/remeh/sizedwaitgroup v1.0.0 h1:VNGGFwNo/R5+MJBf6yrsr110p0m4/OX4S3DCy7
 github.com/remeh/sizedwaitgroup v1.0.0/go.mod h1:3j2R4OIe/SeS6YDhICBy22RWjJC5eNCJ1V+9+NVNYlo=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
-github.com/resend/resend-go/v2 v2.17.0 h1:vychSeuonMeNpHpi09VvjUkRwLEzolB1TtV0fBXGHB4=
-github.com/resend/resend-go/v2 v2.17.0/go.mod h1:3YCb8c8+pLiqhtRFXTyFwlLvfjQtluxOr9HEh2BwCkQ=
+github.com/resend/resend-go/v2 v2.19.0 h1:cYKJKD05SWHBEU6q7dM3r7u4WxnkfnHgPNEQihiAo/Q=
+github.com/resend/resend-go/v2 v2.19.0/go.mod h1:3YCb8c8+pLiqhtRFXTyFwlLvfjQtluxOr9HEh2BwCkQ=
 github.com/riverqueue/river v0.21.0 h1:8bTEI664KIOFF18yFb2DX5ReyKb6YJ8MZIJArmbToNI=
 github.com/riverqueue/river v0.21.0/go.mod h1:I5Fk3PvBl9i+fSjGLwLbVOWx7oTkrho5X6de67zQonA=
 github.com/riverqueue/river/riverdriver v0.21.0 h1:DgluUSBiTcNOMNCJ3U7LHqAqYO5uQl1I5lupiXddYwY=
@@ -1229,8 +1229,8 @@ github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.12.4 h1:QdKeYnEJFDJTo9CpkKNFmYgqIbm10TJon/Xn7c2/Ry8=
 github.com/theopenlane/iam v0.12.4/go.mod h1:5b51FdGYaH5yZp2iFfv7r6ZLjmb6JsTOR53RNHwYaag=
-github.com/theopenlane/newman v0.1.4 h1:LO1BuARRhMti904AWT0JvG7daGE9opzS7ivmjt5YC84=
-github.com/theopenlane/newman v0.1.4/go.mod h1:teuFLhRs7E1mgdAmt84t5D2wA4eHBWlg/Dlbb2xGkew=
+github.com/theopenlane/newman v0.1.5 h1:Fazl+wY0LqTXFNNR8OESv5pn90AtGmzy8Q5LoAu67U8=
+github.com/theopenlane/newman v0.1.5/go.mod h1:LO8wJEX6zxxQloOSyRZ/Qo0yQCYRoN+FRhcTYQfPZkA=
 github.com/theopenlane/riverboat v0.0.10 h1:PTAuBVl2uiO+tEhGPo2ksBahbLHkf/dQwJTtHYUmO/g=
 github.com/theopenlane/riverboat v0.0.10/go.mod h1:pZQeIUDUtAr7MyuyPlU1kqkIHRE66sRoZk26Pto7Mjc=
 github.com/theopenlane/utils v0.4.5 h1:afS6VqnaNGHHZZ08b9roSEkfJls7fqx8QbJFi6B3f4w=
