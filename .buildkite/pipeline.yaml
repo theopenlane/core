@@ -11,6 +11,7 @@ env:
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
+  BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/.cache"
 
 steps:
   - group: ":knife: Pre-check"
@@ -22,6 +23,10 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
+        commands: |
+          #!/bin/bash
+          mkdir $HOME/.cache/go-build
+          mkdir $HOME/.cache/golangci-lint
         plugins:
           - cache#v1.6.0:
               manifest:
