@@ -23,12 +23,22 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $HOME/.cache/go-build
+              restore: pipeline
+              save:
+                - file
+                - branch
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=$HOME/.cache/go-build"
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
@@ -52,12 +62,19 @@ steps:
         timeout_in_minutes: 20
         key: "lint"
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $HOME/.cache/go-build
+              restore: file
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=$HOME/.cache/go-build"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
@@ -306,6 +323,15 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: $HOME/.cache/go-build
+              restore: file
+              save:
+                - pipeline
+                - all
       - trigger: "core-deploy"
         depends_on: "docker-build-and-tag"
         label: ":rocket: trigger core-deploy"
