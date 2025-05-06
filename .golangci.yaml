@@ -21,11 +21,32 @@ linters:
     - wsl
   exclusions:
     generated: lax
+    warn-unused: true
     presets:
-      - comments
       - common-false-positives
       - legacy
-      - std-error-handling
+    rules:
+      # Exclude some linters from running on tests files.
+      - path: _test\.go
+        linters:
+          - wsl
+          - whitespace
+      - path: internal/ent/generated/*.go
+        linters:
+          - wsl
+          - whitespace
+      - path: internal/graphapi/generated/*.go
+        linters:
+          - wsl
+          - whitespace
+      - path: internal/graphapi/model/*.go
+        linters:
+          - wsl
+          - whitespace
+      - path: pkg/objects/mocks/*.go
+        linters:
+          - wsl
+          - whitespace
     paths:
       - internal/graphapi/model/gen_models.go
       - pkg/openlaneclient/graphclient.go
@@ -58,11 +79,12 @@ linters:
       - pkg/middleware/ratelimiter/examples/*
 formatters:
   enable:
+    - gci
     - gofmt
+    - gofumpt
     - goimports
+    - golines
   settings:
-    gofumpt:
-      extra-rules: true
     goimports:
       local-prefixes:
         - github.com/theopenlane/core

@@ -79,10 +79,10 @@ func (suite *GraphTestSuite) SetupSuite() {
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
 
-	// setup openFGA container
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
-
 	ctx := context.Background()
+
+	// setup openFGA container
+	suite.ofgaTF = fgatest.NewFGATestcontainer(ctx, fgatest.WithModelFile(fgaModelFile))
 
 	t := suite.T()
 
