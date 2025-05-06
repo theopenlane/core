@@ -3,6 +3,18 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
+  skip-dirs:
+    - internal/ent/generated
+    - internal/graphapi/generated
+    - internal/graphapi/model
+    - pkg/entitlements/mocks
+    - pkg/entitlements/test
+    - pkg/objects/mocks
+    - pkg/sleuth/static
+    - pkg/testutils
+    - cmd/cli/cmd
+    - pkg/events/soiree/examples
+    - pkg/middleware/ratelimiter/examples
 linters:
   enable:
     - bodyclose
@@ -39,7 +51,6 @@ linters:
       - pkg/middleware/ratelimiter/examples/*
 formatters:
   enable:
-    - gci
     - gofmt
     - gofumpt
     - goimports
