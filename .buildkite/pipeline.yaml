@@ -14,6 +14,13 @@ env:
   BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/.cache"
 
 steps:
+  - name: ":golangci-lint: lint"
+    command: golangci-lint --config=.golangci.yaml --verbose
+    plugins:
+      - docker-compose#v5.2.0:
+          config: .buildkite/docker-compose.yaml
+          run: golangci-lint
+          tty: true
   - group: ":knife: Pre-check"
     key: "precheck"
     steps:
