@@ -280,6 +280,13 @@ type ControlImplementationBuilder struct {
 	SubcontrolIDs      []string
 }
 
+type MappableDomainBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -1112,4 +1119,63 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 	require.NoError(t, err)
 
 	return controlImplementation
+}
+
+// MustNew mappable domain builder is used to create, without authz checks, mappable domains in the database
+func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappableDomain {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if e.Name == "" {
+		e.Name = gofakeit.DomainName()
+	}
+
+	mappableDomain, err := e.client.db.MappableDomain.Create().
+		SetName(e.Name).
+		Save(ctx)
+	require.NoError(t, err)
+
+	return mappableDomain
+}
+
+// CustomDomainBuilder is used to create custom domains
+type CustomDomainBuilder struct {
+	client *client
+
+	// Fields
+	CnameRecord      string
+	MappableDomainID string
+	OwnerID          string
+}
+
+// MustNew custom domain builder is used to create, without authz checks, custom domains in the database
+func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status *enums.CustomDomainStatus) *ent.CustomDomain {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if c.CnameRecord == "" {
+		c.CnameRecord = gofakeit.DomainName()
+	}
+
+	if c.MappableDomainID == "" {
+		mappableDomain := (&MappableDomainBuilder{client: c.client}).MustNew(ctx, t)
+		c.MappableDomainID = mappableDomain.ID
+	}
+
+	if c.OwnerID == "" {
+		// Use the organization ID from the test user
+		c.OwnerID = testUser1.OrganizationID
+	}
+
+	if status == nil {
+		status = lo.ToPtr(enums.CustomDomainStatusPending)
+	}
+
+	customDomain, err := c.client.db.CustomDomain.Create().
+		SetCnameRecord(c.CnameRecord).
+		SetMappableDomainID(c.MappableDomainID).
+		SetOwnerID(c.OwnerID).
+		SetStatus(*status).
+		Save(ctx)
+	require.NoError(t, err)
+
+	return customDomain
 }

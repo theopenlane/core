@@ -183,6 +183,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_standards(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Organization_actionPlans(ctx, field)
+			case "customDomains":
+				return ec.fieldContext_Organization_customDomains(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -349,6 +351,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_standards(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Organization_actionPlans(ctx, field)
+			case "customDomains":
+				return ec.fieldContext_Organization_customDomains(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -559,6 +563,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_standards(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Organization_actionPlans(ctx, field)
+			case "customDomains":
+				return ec.fieldContext_Organization_customDomains(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

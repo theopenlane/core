@@ -150,6 +150,31 @@ extend type Query{
         last: Int
     ): ControlObjectiveConnection
     """
+    Search across CustomDomain objects
+    """
+    customDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CustomDomainConnection
+    """
     Search across DocumentData objects
     """
     documentDataSearch(
@@ -399,6 +424,31 @@ extend type Query{
         """
         last: Int
     ): InviteConnection
+    """
+    Search across MappableDomain objects
+    """
+    mappableDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): MappableDomainConnection
     """
     Search across MappedControl objects
     """
@@ -840,6 +890,7 @@ type SearchResults{
   controls: ControlConnection
   controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
+  customDomains: CustomDomainConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
   entityTypes: EntityTypeConnection
@@ -850,6 +901,7 @@ type SearchResults{
   integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
+  mappableDomains: MappableDomainConnection
   mappedControls: MappedControlConnection
   narratives: NarrativeConnection
   orgSubscriptions: OrgSubscriptionConnection

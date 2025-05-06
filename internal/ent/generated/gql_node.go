@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -45,6 +47,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -145,6 +149,16 @@ var controlobjectivehistoryImplementors = []string{"ControlObjectiveHistory", "N
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ControlObjectiveHistory) IsNode() {}
+
+var customdomainImplementors = []string{"CustomDomain", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CustomDomain) IsNode() {}
+
+var customdomainhistoryImplementors = []string{"CustomDomainHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CustomDomainHistory) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -270,6 +284,16 @@ var inviteImplementors = []string{"Invite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Invite) IsNode() {}
+
+var mappabledomainImplementors = []string{"MappableDomain", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*MappableDomain) IsNode() {}
+
+var mappabledomainhistoryImplementors = []string{"MappableDomainHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*MappableDomainHistory) IsNode() {}
 
 var mappedcontrolImplementors = []string{"MappedControl", "Node"}
 
@@ -623,6 +647,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case customdomain.Table:
+		query := c.CustomDomain.Query().
+			Where(customdomain.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, customdomainImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case customdomainhistory.Table:
+		query := c.CustomDomainHistory.Query().
+			Where(customdomainhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, customdomainhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case documentdata.Table:
 		query := c.DocumentData.Query().
 			Where(documentdata.ID(id))
@@ -844,6 +886,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(invite.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, inviteImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case mappabledomain.Table:
+		query := c.MappableDomain.Query().
+			Where(mappabledomain.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, mappabledomainImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case mappabledomainhistory.Table:
+		query := c.MappableDomainHistory.Query().
+			Where(mappabledomainhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, mappabledomainhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1448,6 +1508,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case customdomain.Table:
+		query := c.CustomDomain.Query().
+			Where(customdomain.IDIn(ids...))
+		query, err := query.CollectFields(ctx, customdomainImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case customdomainhistory.Table:
+		query := c.CustomDomainHistory.Query().
+			Where(customdomainhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, customdomainhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case documentdata.Table:
 		query := c.DocumentData.Query().
 			Where(documentdata.IDIn(ids...))
@@ -1836,6 +1928,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Invite.Query().
 			Where(invite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, inviteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case mappabledomain.Table:
+		query := c.MappableDomain.Query().
+			Where(mappabledomain.IDIn(ids...))
+		query, err := query.CollectFields(ctx, mappabledomainImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case mappabledomainhistory.Table:
+		query := c.MappableDomainHistory.Query().
+			Where(mappabledomainhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, mappabledomainhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

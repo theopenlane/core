@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -120,6 +121,18 @@ func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
 
 func ControlObjectiveHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func CustomDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomainhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -290,6 +303,18 @@ func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func MappableDomainEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomain edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func MappableDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomainhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -576,6 +601,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).ActionPlan.Query().Where((actionplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if actionplanCount, err := FromContext(ctx).ActionPlan.Delete().Where(actionplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", actionplanCount).Msg("deleting actionplan")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if customdomainCount, err := FromContext(ctx).CustomDomain.Delete().Where(customdomain.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", customdomainCount).Msg("deleting customdomain")
 			return err
 		}
 	}

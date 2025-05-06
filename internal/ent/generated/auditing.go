@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
@@ -29,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
@@ -492,6 +494,72 @@ func (coh *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*His
 			Old:     history,
 			New:     coh,
 			Changes: history.changes(coh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(cdh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCreatedAt, cdh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(cdh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldUpdatedAt, cdh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(cdh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCreatedBy, cdh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(cdh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDeletedAt, cdh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(cdh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDeletedBy, cdh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(cdh.Tags, new.Tags) {
+		changes = append(changes, NewChange(customdomainhistory.FieldTags, cdh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(cdh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldOwnerID, cdh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(cdh.CnameRecord, new.CnameRecord) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCnameRecord, cdh.CnameRecord, new.CnameRecord))
+	}
+	if !reflect.DeepEqual(cdh.MappableDomainID, new.MappableDomainID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldMappableDomainID, cdh.MappableDomainID, new.MappableDomainID))
+	}
+	if !reflect.DeepEqual(cdh.TxtRecordSubdomain, new.TxtRecordSubdomain) {
+		changes = append(changes, NewChange(customdomainhistory.FieldTxtRecordSubdomain, cdh.TxtRecordSubdomain, new.TxtRecordSubdomain))
+	}
+	if !reflect.DeepEqual(cdh.TxtRecordValue, new.TxtRecordValue) {
+		changes = append(changes, NewChange(customdomainhistory.FieldTxtRecordValue, cdh.TxtRecordValue, new.TxtRecordValue))
+	}
+	if !reflect.DeepEqual(cdh.Status, new.Status) {
+		changes = append(changes, NewChange(customdomainhistory.FieldStatus, cdh.Status, new.Status))
+	}
+	return changes
+}
+
+func (cdh *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff[CustomDomainHistory], error) {
+	if cdh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	cdhUnix, historyUnix := cdh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	cdhOlder := cdhUnix < historyUnix || (cdhUnix == historyUnix && cdh.ID < history.ID)
+	historyOlder := cdhUnix > historyUnix || (cdhUnix == historyUnix && cdh.ID > history.ID)
+
+	if cdhOlder {
+		return &HistoryDiff[CustomDomainHistory]{
+			Old:     cdh,
+			New:     history,
+			Changes: cdh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[CustomDomainHistory]{
+			Old:     history,
+			New:     cdh,
+			Changes: history.changes(cdh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -1293,6 +1361,57 @@ func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*History
 			Old:     history,
 			New:     iph,
 			Changes: history.changes(iph),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(mdh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedAt, mdh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(mdh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldUpdatedAt, mdh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(mdh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedBy, mdh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(mdh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedAt, mdh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(mdh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedBy, mdh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(mdh.Tags, new.Tags) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldTags, mdh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(mdh.Name, new.Name) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldName, mdh.Name, new.Name))
+	}
+	return changes
+}
+
+func (mdh *MappableDomainHistory) Diff(history *MappableDomainHistory) (*HistoryDiff[MappableDomainHistory], error) {
+	if mdh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	mdhUnix, historyUnix := mdh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	mdhOlder := mdhUnix < historyUnix || (mdhUnix == historyUnix && mdh.ID < history.ID)
+	historyOlder := mdhUnix > historyUnix || (mdhUnix == historyUnix && mdh.ID > history.ID)
+
+	if mdhOlder {
+		return &HistoryDiff[MappableDomainHistory]{
+			Old:     mdh,
+			New:     history,
+			Changes: mdh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[MappableDomainHistory]{
+			Old:     history,
+			New:     mdh,
+			Changes: history.changes(mdh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -2673,6 +2792,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditCustomDomainHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditDocumentDataHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2740,6 +2865,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records = append(records, record...)
 
 	record, err = auditInternalPolicyHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditMappableDomainHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
@@ -2902,6 +3033,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 		records = append(records, record...)
 	}
 
+	if tableName == "" || tableName == strings.TrimSuffix("CustomDomainHistory", "History") {
+		record, err = auditCustomDomainHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
 	if tableName == "" || tableName == strings.TrimSuffix("DocumentDataHistory", "History") {
 		record, err = auditDocumentDataHistory(ctx, c.config)
 		if err != nil {
@@ -3003,6 +3143,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("InternalPolicyHistory", "History") {
 		record, err = auditInternalPolicyHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("MappableDomainHistory", "History") {
+		record, err = auditMappableDomainHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3450,6 +3599,59 @@ func auditControlObjectiveHistory(ctx context.Context, config config) ([][]strin
 			default:
 				if i == 0 {
 					record.Changes = (&ControlObjectiveHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type customdomainhistoryref struct {
+	Ref string
+}
+
+func auditCustomDomainHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []customdomainhistoryref
+	client := NewCustomDomainHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(customdomainhistory.ByRef()).
+		Select(customdomainhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(customdomainhistory.Ref(currRef.Ref)).
+			Order(customdomainhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "CustomDomainHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&CustomDomainHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&CustomDomainHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&CustomDomainHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}
@@ -4086,6 +4288,59 @@ func auditInternalPolicyHistory(ctx context.Context, config config) ([][]string,
 			default:
 				if i == 0 {
 					record.Changes = (&InternalPolicyHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type mappabledomainhistoryref struct {
+	Ref string
+}
+
+func auditMappableDomainHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []mappabledomainhistoryref
+	client := NewMappableDomainHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(mappabledomainhistory.ByRef()).
+		Select(mappabledomainhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(mappabledomainhistory.Ref(currRef.Ref)).
+			Order(mappabledomainhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "MappableDomainHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&MappableDomainHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&MappableDomainHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&MappableDomainHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

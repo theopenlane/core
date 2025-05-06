@@ -34,6 +34,10 @@ type Tx struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
+	// CustomDomain is the client for interacting with the CustomDomain builders.
+	CustomDomain *CustomDomainClient
+	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
+	CustomDomainHistory *CustomDomainHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -86,6 +90,10 @@ type Tx struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// MappableDomain is the client for interacting with the MappableDomain builders.
+	MappableDomain *MappableDomainClient
+	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
+	MappableDomainHistory *MappableDomainHistoryClient
 	// MappedControl is the client for interacting with the MappedControl builders.
 	MappedControl *MappedControlClient
 	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
@@ -308,6 +316,8 @@ func (tx *Tx) init() {
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
+	tx.CustomDomain = NewCustomDomainClient(tx.config)
+	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
@@ -334,6 +344,8 @@ func (tx *Tx) init() {
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
+	tx.MappableDomain = NewMappableDomainClient(tx.config)
+	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)
 	tx.MappedControlHistory = NewMappedControlHistoryClient(tx.config)
 	tx.Narrative = NewNarrativeClient(tx.config)
