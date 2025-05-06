@@ -91,6 +91,19 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	t := suite.T()
 
+	numControls := 5
+	controlIDs := []string{}
+	for range numControls {
+		control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		controlIDs = append(controlIDs, control.ID)
+	}
+
+	resp, err := suite.client.api.CreateStandard(testUser1.UserCtx, openlaneclient.CreateStandardInput{
+		Name:       "Super Awesome Standard",
+		ControlIDs: controlIDs,
+	})
+	require.NoError(t, err)
+
 	members := []*openlaneclient.CreateMemberWithProgramInput{
 		{
 			UserID: viewOnlyUser.ID,
@@ -109,6 +122,18 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 		ctx         context.Context
 		expectedErr string
 	}{
+		{
+			name: "happy path, standard id",
+			request: openlaneclient.CreateFullProgramInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "test program",
+				},
+				Members:    members,
+				StandardID: resp.CreateStandard.Standard.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 		{
 			name: "happy path, all the fields",
 			request: openlaneclient.CreateFullProgramInput{
@@ -178,11 +203,15 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			// the creator is automatically added as an admin, and the members are added in addition
 			assert.Len(t, resp.CreateFullProgram.Program.Members.Edges, len(tc.request.Members)+1)
 
-			require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
-			assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
+			if tc.request.StandardID == "" {
+				require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
+				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
 
-			assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
-			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
+				assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
+				assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
+			} else {
+				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, numControls)
+			}
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Risks.Edges)
 			assert.Len(t, resp.CreateFullProgram.Program.Risks.Edges, len(tc.request.Risks))
