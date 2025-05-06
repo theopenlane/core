@@ -117,7 +117,7 @@ tasks:
     ## do not use --fix in CI
     ## do not run formatters in ci
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --new-from-rev=HEAD~ --print-resources-usage --disable=gofmt,gofumpt,goimports,golines
+      - golangci-lint run --config=.golangci.ci.yaml --verbose --new-from-rev=HEAD~ --print-resources-usage
 
   go:test:
     desc: runs and outputs results of created go tests
